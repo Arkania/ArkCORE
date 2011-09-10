@@ -147,7 +147,7 @@ void Vehicle::Uninstall()
             if (passenger->HasUnitTypeMask(UNIT_MASK_ACCESSORY))
                 passenger->ToTempSummon()->UnSummon();
 
-    RemoveAllPassengers();
+    this->RemoveAllPassengers();
 
     if (GetBase()->GetTypeId() == TYPEID_UNIT)
         sScriptMgr->OnUninstall(this);
@@ -161,7 +161,7 @@ void Vehicle::Die()
             if (passenger->HasUnitTypeMask(UNIT_MASK_ACCESSORY))
                 passenger->setDeathState(JUST_DIED);
 
-    RemoveAllPassengers();
+    this->RemoveAllPassengers();
 
     if (GetBase()->GetTypeId() == TYPEID_UNIT)
         sScriptMgr->OnDie(this);
@@ -204,7 +204,8 @@ void Vehicle::RemoveAllPassengers()
             }
 
             // creature passengers mounted on player mounts should be despawned at dismount
-            if (GetBase()->GetTypeId() == TYPEID_PLAYER && passenger->ToCreature())
+            if (GetBase()->IsOnVehicle(passenger) && 
+		GetBase()->GetTypeId() == TYPEID_PLAYER && passenger->ToCreature())
                 passenger->ToCreature()->ForcedDespawn();
         }
 }
@@ -447,12 +448,17 @@ void Vehicle::RelocatePassengers(float x, float y, float z, float ang)
     for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
         if (Unit *passenger = itr->second.passenger)
         {
-            float px = x + passenger->m_movementInfo.t_pos.m_positionX;
-            float py = y + passenger->m_movementInfo.t_pos.m_positionY;
-            float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
-            float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
-
-            passenger->SetPosition(px, py, pz, po);
+            if (!passenger)
+		return;
+	    if ( this->GetBase()->IsOnVehicle(passenger))
+	    {
+            	float px = x + passenger->m_movementInfo.t_pos.m_positionX;
+            	float py = y + passenger->m_movementInfo.t_pos.m_positionY;
+                float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
+                float po = ang + 
+passenger->m_movementInfo.t_pos.m_orientation;
+                passenger->SetPosition(px, py, pz, po);
+            }
         }
 }
 
