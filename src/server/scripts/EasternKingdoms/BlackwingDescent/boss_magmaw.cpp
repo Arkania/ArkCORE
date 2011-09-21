@@ -195,7 +195,7 @@ public:
 				}
 				else
 					m_uiSpellTimerSummTwister -= uiDiff;
-
+/*
 				Map::PlayerList const &PlayerList = pInstance->instance->GetPlayers();
 				for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
 					if (Player *pPlayer = i->getSource())
@@ -206,7 +206,7 @@ public:
 						else 
 							DoCast(pPlayer,  SPELL_MAGMA_SPIT_N10);
 					}
-
+*/
             					
         DoMeleeAttackIfReady();
     }
