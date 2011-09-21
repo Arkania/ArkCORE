@@ -27,7 +27,7 @@ enum SharedSpells
 enum Data
 {
     //Encounters
-    DATA_MAGMAW                  = 0, 
+    DATA_MAGMAW_EVENT            = 0, 
     DATA_OMNOTRON_DEFENSE_SYSTEM = 1, 
     DATA_MALORIAK                = 2, 
     DATA_ATRAMEDES               = 3, 
@@ -41,9 +41,16 @@ enum Data
     DATA_TOXITRON_GUID           = 9, 
     DATA_ONYXIA_GUID             = 10, 
     DATA_BILE_O_TRON_800         = 11, 
+	};
+
+
+enum Data64
+{
+    DATA_MAGMAW			= 0,
+   
 };
 
-enum Creatures
+enum CreatureIds
 {
     NPC_MAGMAW               = 41570, 
     NPC_ARCANOTRON           = 42166, 
