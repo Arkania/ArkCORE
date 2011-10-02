@@ -455,8 +455,7 @@ void Vehicle::RelocatePassengers(float x, float y, float z, float ang)
             	float px = x + passenger->m_movementInfo.t_pos.m_positionX;
             	float py = y + passenger->m_movementInfo.t_pos.m_positionY;
                 float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
-                float po = ang + 
-passenger->m_movementInfo.t_pos.m_orientation;
+                float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
                 passenger->SetPosition(px, py, pz, po);
             }
         }
