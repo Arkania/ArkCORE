@@ -179,7 +179,7 @@ public:
 					//Cast spell one on our current target.
 					DoCast(me->getVictim(), SPELL_MOLTEN_TANTRUM);
 
-					m_uiSpellTimerLB = urand(10000,20000);
+					m_uiSpellTimerLB = urand(30000,40000);
 				}
 				else
 					m_uiSpellTimerLB -= uiDiff;
@@ -188,7 +188,7 @@ public:
 				if (m_uiSpellTimerSummTwister <= uiDiff)
 				{
 					//Cast spell one on our current target.
-					me->SummonCreature(41806, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+					me->SummonCreature(42321, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                     DoCast(me->getVictim(), SPELL_PILLAR_OF_FLAME);
 
 					m_uiSpellTimerSummTwister = 10000;
