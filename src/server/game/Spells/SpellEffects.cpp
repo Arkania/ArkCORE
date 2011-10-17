@@ -6185,10 +6185,31 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         m_caster->CastSpell(unitTarget, 55095, true);
                 }
             }
+
+			// Festering Strike
+			if (m_spellInfo->Id == 85948)
+            {
+				int32 r = urand(2, 6);
+				if (unitTarget->HasAura(45524)) // Chains of Ice
+				{
+					unitTarget->GetAura(45524)->RefreshDuration();
+					unitTarget->GetAura(45524)->SetDuration((unitTarget->GetAura(45524)->GetDuration() + r * 1000), true);
+				}
+				if (unitTarget->HasAura(55095)) // Frost Fever
+				{
+					unitTarget->GetAura(55095)->RefreshDuration();
+                    unitTarget->GetAura(55095)->SetDuration((unitTarget->GetAura(55095)->GetDuration() + r * 1000), true);
+				}
+				if (unitTarget->HasAura(55078)) // Blood Plague
+				{
+					unitTarget->GetAura(55078)->RefreshDuration();
+                    unitTarget->GetAura(55078)->SetDuration((unitTarget->GetAura(55078)->GetDuration() + r * 1000), true);
+				}
+			}
             break;
         }
         case SPELLFAMILY_WARRIOR:
-        {
+		{
             // Shattering Throw
             if (m_spellInfo->SpellFamilyFlags[1] & 0x00400000)
             {
