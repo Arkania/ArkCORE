@@ -28,7 +28,6 @@
 class Unit;
 class TargetedMovementGeneratorBase;
 
-class FollowerRefManager : public RefManager<Unit, TargetedMovementGeneratorBase>
-{
+class FollowerRefManager: public RefManager<Unit, TargetedMovementGeneratorBase> {
 };
 #endif

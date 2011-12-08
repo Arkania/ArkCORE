@@ -23,6 +23,5 @@
 #include "gamePCH.h"
 #include "MovementGenerator.h"
 
-MovementGenerator::~MovementGenerator()
-{
+MovementGenerator::~MovementGenerator() {
 }

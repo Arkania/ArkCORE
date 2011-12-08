@@ -29,20 +29,19 @@
 class Creature;
 class Totem;
 
-class TotemAI : public CreatureAI
-{
-    public:
+class TotemAI: public CreatureAI {
+public:
 
-        explicit TotemAI(Creature *c);
+	explicit TotemAI(Creature *c);
 
-        void MoveInLineOfSight(Unit *);
-        void AttackStart(Unit *);
-        void EnterEvadeMode();
+	void MoveInLineOfSight(Unit *);
+	void AttackStart(Unit *);
+	void EnterEvadeMode();
 
-        void UpdateAI(const uint32);
-        static int Permissible(const Creature *);
+	void UpdateAI(const uint32);
+	static int Permissible(const Creature *);
 
-    private:
-        uint64 i_victimGuid;
+private:
+	uint64 i_victimGuid;
 };
 #endif
