@@ -484,6 +484,7 @@ void AddSC_icecrown_citadel_teleport();
 void AddSC_instance_icecrown_citadel();
 void AddSC_icecrown_citadel();
 
+void AddSC_argen_tournament();
 void AddSC_dalaran();
 void AddSC_borean_tundra();
 void AddSC_dragonblight();
@@ -1196,6 +1197,7 @@ void AddNorthrendScripts() {
 	AddSC_instance_icecrown_citadel();
 	AddSC_icecrown_citadel();
 
+	AddSC_argen_tournament();
 	AddSC_dalaran();
 	AddSC_borean_tundra();
 	AddSC_dragonblight();
