@@ -1219,11 +1219,12 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
 			break;
 		case SPELLFAMILY_MAGE:
 			switch (GetId()) {
-			case 66: // Invisibility
-				if (removeMode != AURA_REMOVE_BY_EXPIRE)
-					break;
-				target->CastSpell(target, 32612, true, NULL, GetEffect(1));
-				break;
+                    case 66: // Invisibility
+                        if (removeMode != AURA_REMOVE_BY_EXPIRE)
+                            break;
+                        target->CastSpell(target, 32612, true, NULL, GetEffect(1));
+                        target->CombatStop(); // Mague: Fix Invisibility
+                        break;
 			case 74396: // Fingers of Frost
 				// Remove the IGNORE_AURASTATE aura
 				target->RemoveAurasDueToSpell(44544);
