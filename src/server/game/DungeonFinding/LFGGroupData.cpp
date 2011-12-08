@@ -45,6 +45,7 @@ void LfgGroupData::SetState(LfgState state)
                     // No break on purpose
         default:
             m_State = state;
+        break;
     }
 }
 

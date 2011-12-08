@@ -239,32 +239,34 @@ bool DisableMgr::IsDisabledFor(DisableType type, uint32 entry, Unit const* pUnit
                 {
                     if (flags & SPELL_DISABLE_MAP)
                     {
-                        std::set<uint32> const& mapIds = itr->second.params[0];
-                        if (mapIds.find(pUnit->GetMapId()) != mapIds.end())
-                            return true;                                        // Spell is disabled on current map
+                        const std::set<uint32> & mapIds = itr->second.params[0];
+                        if(mapIds.find(pUnit->GetMapId()) != mapIds.end())
+                            return true; // Spell is disabled on current map
 
-                        if (!(flags & SPELL_DISABLE_AREA))
-                            return false;                                       // Spell is disabled on another map, but not this one, return false
+                        if(!(flags & SPELL_DISABLE_AREA))
+                            return false; // Spell is disabled on another map, but not this one, return false
 
                         // Spell is disabled in an area, but not explicitly our current mapId. Continue processing.
                     }
+                    if(flags & SPELL_DISABLE_AREA){
+                        const std::set<uint32> & areaIds = itr->second.params[1];
+                        if(areaIds.find(pUnit->GetAreaId()) != areaIds.end())
+                            return true; // Spell is disabled in this area
 
-                    if (flags & SPELL_DISABLE_AREA)
-                    {
-                        std::set<uint32> const& areaIds = itr->second.params[1];
-                        if (areaIds.find(pUnit->GetAreaId()) != areaIds.end())
-                            return true;                                        // Spell is disabled in this area
-                        return false;                                           // Spell is disabled in another area, but not this one, return false
-                    }
+                        return false; // Spell is disabled in another area, but not this one, return false
+                    }else
+                        return true; // Spell disabled for all maps
 
-                    else
-                        return true;                                            // Spell disabled for all maps
                 }
-
                 return false;
             }
-            else if (flags & SPELL_DISABLE_DEPRECATED_SPELL)    // call not from spellcast
-                return true;
+            else
+                if(flags & SPELL_DISABLE_DEPRECATED_SPELL)
+                    // call not from spellcast
+                    return true;
+
+
+            break;
         }
         case DISABLE_TYPE_MAP:
             if (Player const* pPlayer = pUnit->ToPlayer())

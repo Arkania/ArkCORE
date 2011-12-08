@@ -219,6 +219,7 @@ namespace Trinity
                     case 5:
                     default:
                         rate = 1.4f;
+                    break;
                 }
             }
 

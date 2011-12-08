@@ -186,25 +186,26 @@ class DBCStorage
                                 switch(fmt[columnNumber])
                                 {
                                     case FT_FLOAT:
-                                        *((float*)(&sqlDataTable[offset]))=fields[sqlColumnNumber].GetFloat();
-                                        offset+=4;
-                                        break;
-                                    case FT_IND:
-                                    case FT_INT:
-                                        *((uint32*)(&sqlDataTable[offset]))=fields[sqlColumnNumber].GetUInt32();
-                                        offset+=4;
-                                        break;
-                                    case FT_BYTE:
-                                        *((uint8*)(&sqlDataTable[offset]))=fields[sqlColumnNumber].GetUInt8();
-                                        offset+=1;
-                                        break;
-                                    case FT_STRING:
-                                        sLog->outError("Unsupported data type in table '%s' at char %d", sql->sqlTableName.c_str(), columnNumber);
-                                        return false;
-                                    case FT_SORT:
-                                        break;
-                                    default:
-                                        validSqlColumn = false;
+                                        *((float*)((&sqlDataTable[offset]))) = fields[sqlColumnNumber].GetFloat();
+                                    offset += 4;
+                                    break;
+                                case FT_IND:
+                                case FT_INT:
+                                    *((uint32*)((&sqlDataTable[offset]))) = fields[sqlColumnNumber].GetUInt32();
+                                    offset += 4;
+                                    break;
+                                case FT_BYTE:
+                                    *((uint8*)((&sqlDataTable[offset]))) = fields[sqlColumnNumber].GetUInt8();
+                                    offset += 1;
+                                    break;
+                                case FT_STRING:
+                                    sLog->outError("Unsupported data type in table '%s' at char %d", sql->sqlTableName.c_str(), columnNumber);
+                                    return false;
+                                case FT_SORT:
+                                    break;
+                                default:
+                                    validSqlColumn = false;
+                                    break;
                                 }
                                 if (validSqlColumn && (columnNumber != (sql->formatString->size()-1)))
                                     sqlColumnNumber++;

@@ -324,6 +324,7 @@ void GameObject::Update(uint32 diff)
                     m_lootState = GO_READY;                         // for other GOis same switched without delay to GO_READY
                     break;
             }
+            break;
             // NO BREAK for switch (m_lootState)
         }
         case GO_READY:

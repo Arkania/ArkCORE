@@ -397,91 +397,92 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket *data, Battleground *bg)
                 {
                     case 489:
                         data->put(extraFields, 2);                                                      // count of next fields
-                        *data << uint32(((BattlegroundWGScore*)itr2->second)->FlagCaptures);            // flag captures
-                        *data << uint32(((BattlegroundWGScore*)itr2->second)->FlagReturns);             // flag returns
-                        break;
-                    case 566:
-                        data->put(extraFields, 1);                                                      // count of next fields
-                        *data << uint32(((BattlegroundEYScore*)itr2->second)->FlagCaptures);            // flag captures
-                        break;
-                    case 529:
-                        data->put(extraFields, 1);                                                      // count of next fields
-                        *data << uint32(((BattlegroundABScore*)itr2->second)->BasesAssaulted);          // bases asssulted
-                        *data << uint32(((BattlegroundABScore*)itr2->second)->BasesDefended);           // bases defended
-                        break;
-                    case 30:
-                        data->put(extraFields, 5);                                                      // count of next fields
-                        *data << uint32(((BattlegroundAVScore*)itr2->second)->GraveyardsAssaulted);     // GraveyardsAssaulted
-                        *data << uint32(((BattlegroundAVScore*)itr2->second)->GraveyardsDefended);      // GraveyardsDefended
-                        *data << uint32(((BattlegroundAVScore*)itr2->second)->TowersAssaulted);         // TowersAssaulted
-                        *data << uint32(((BattlegroundAVScore*)itr2->second)->TowersDefended);          // TowersDefended
-                        *data << uint32(((BattlegroundAVScore*)itr2->second)->MinesCaptured);           // MinesCaptured
-                        break;
-                    case 607:
-                        data->put(extraFields, 2);                                                      // count of next fields
-                        *data << uint32(((BattlegroundSAScore*)itr2->second)->demolishers_destroyed);
-                        *data << uint32(((BattlegroundSAScore*)itr2->second)->gates_destroyed);
-                        break;
-                    case 628:
-                        data->put(extraFields, 2);                                                      // count of next fields
-                        *data << uint32(((BattlegroundICScore*)itr2->second)->BasesAssaulted);          // bases asssulted
-                        *data << uint32(((BattlegroundICScore*)itr2->second)->BasesDefended);           // bases defended
-                        break;
-                    case 726:
-                        data->put(extraFields, 2);                                                      // count of next fields
-                        *data << uint32(((BattlegroundTPScore*)itr2->second)->FlagCaptures);            // flag captures
-                        *data << uint32(((BattlegroundTPScore*)itr2->second)->FlagReturns);             // flag returns
-                        break;
-                    case 761:
-                        data->put(extraFields, 2);                                                      // count of next fields
-                        *data << uint32(((BattlegroundBGScore*)itr2->second)->BasesAssaulted);          // bases asssulted
-                        *data << uint32(((BattlegroundBGScore*)itr2->second)->BasesDefended);           // bases defended
-                        break;
-                    default:
-                        data->put(extraFields, 0);                                                      // count of next fields
-                        break;
-                }
-            case BATTLEGROUND_AV:
-                data->put(extraFields, 5);                                                     // count of next fields
-                *data << uint32(((BattlegroundAVScore*)itr2->second)->GraveyardsAssaulted);    // GraveyardsAssaulted
-                *data << uint32(((BattlegroundAVScore*)itr2->second)->GraveyardsDefended);     // GraveyardsDefended
-                *data << uint32(((BattlegroundAVScore*)itr2->second)->TowersAssaulted);        // TowersAssaulted
-                *data << uint32(((BattlegroundAVScore*)itr2->second)->TowersDefended);         // TowersDefended
-                *data << uint32(((BattlegroundAVScore*)itr2->second)->MinesCaptured);          // MinesCaptured
-                break;
-            case BATTLEGROUND_WS:
-                data->put(extraFields, 2);                                                     // count of next fields
-                *data << uint32(((BattlegroundWGScore*)itr2->second)->FlagCaptures);           // flag captures
-                *data << uint32(((BattlegroundWGScore*)itr2->second)->FlagReturns);            // flag returns
-                break;
-            case BATTLEGROUND_AB:
-                data->put(extraFields, 2);                                                     // count of next fields
-                *data << uint32(((BattlegroundABScore*)itr2->second)->BasesAssaulted);         // bases asssulted
-                *data << uint32(((BattlegroundABScore*)itr2->second)->BasesDefended);          // bases defended
-                break;
-            case BATTLEGROUND_EY:
-                data->put(extraFields, 1);                                                     // count of next fields
-                *data << uint32(((BattlegroundEYScore*)itr2->second)->FlagCaptures);           // flag captures
-                break;
-            case BATTLEGROUND_SA:
-                data->put(extraFields, 2);                                                     // count of next fields
-                *data << uint32(((BattlegroundSAScore*)itr2->second)->demolishers_destroyed);
-                *data << uint32(((BattlegroundSAScore*)itr2->second)->gates_destroyed);
-                break;
-            case BATTLEGROUND_IC:
-                data->put(extraFields, 2);                                                     // count of next fields
-                *data << uint32(((BattlegroundICScore*)itr2->second)->BasesAssaulted);         // bases asssulted
-                *data << uint32(((BattlegroundICScore*)itr2->second)->BasesDefended);          // bases defended
-                break;
-            case BATTLEGROUND_TP:                                                              // Twin Peaks
-                data->put(extraFields, 2);                                                     // count of next fields
-                *data << uint32(((BattlegroundTPScore*)itr2->second)->FlagCaptures);           // flag captures
-                *data << uint32(((BattlegroundTPScore*)itr2->second)->FlagReturns);            // flag returns
-                break;
-            case BATTLEGROUND_BG:                                                              // Battle of Gilneas
-                data->put(extraFields, 2);                                                     // count of next fields
-                *data << uint32(((BattlegroundBGScore*)itr2->second)->BasesAssaulted);         // bases asssulted
-                *data << uint32(((BattlegroundBGScore*)itr2->second)->BasesDefended);          // bases defended
+                        *data << uint32(((BattlegroundWGScore*)(itr2->second))->FlagCaptures); // flag captures
+                    *data << uint32(((BattlegroundWGScore*)(itr2->second))->FlagReturns); // flag returns
+                    break;
+                case 566:
+                    data->put(extraFields, 1); // count of next fields
+                    *data << uint32(((BattlegroundEYScore*)(itr2->second))->FlagCaptures); // flag captures
+                    break;
+                case 529:
+                    data->put(extraFields, 1); // count of next fields
+                    *data << uint32(((BattlegroundABScore*)(itr2->second))->BasesAssaulted); // bases asssulted
+                    *data << uint32(((BattlegroundABScore*)(itr2->second))->BasesDefended); // bases defended
+                    break;
+                case 30:
+                    data->put(extraFields, 5); // count of next fields
+                    *data << uint32(((BattlegroundAVScore*)(itr2->second))->GraveyardsAssaulted); // GraveyardsAssaulted
+                    *data << uint32(((BattlegroundAVScore*)(itr2->second))->GraveyardsDefended); // GraveyardsDefended
+                    *data << uint32(((BattlegroundAVScore*)(itr2->second))->TowersAssaulted); // TowersAssaulted
+                    *data << uint32(((BattlegroundAVScore*)(itr2->second))->TowersDefended); // TowersDefended
+                    *data << uint32(((BattlegroundAVScore*)(itr2->second))->MinesCaptured); // MinesCaptured
+                    break;
+                case 607:
+                    data->put(extraFields, 2); // count of next fields
+                    *data << uint32(((BattlegroundSAScore*)(itr2->second))->demolishers_destroyed);
+                    *data << uint32(((BattlegroundSAScore*)(itr2->second))->gates_destroyed);
+                    break;
+                case 628:
+                    data->put(extraFields, 2); // count of next fields
+                    *data << uint32(((BattlegroundICScore*)(itr2->second))->BasesAssaulted); // bases asssulted
+                    *data << uint32(((BattlegroundICScore*)(itr2->second))->BasesDefended); // bases defended
+                    break;
+                case 726:
+                    data->put(extraFields, 2); // count of next fields
+                    *data << uint32(((BattlegroundTPScore*)(itr2->second))->FlagCaptures); // flag captures
+                    *data << uint32(((BattlegroundTPScore*)(itr2->second))->FlagReturns); // flag returns
+                    break;
+                case 761:
+                    data->put(extraFields, 2); // count of next fields
+                    *data << uint32(((BattlegroundBGScore*)(itr2->second))->BasesAssaulted); // bases asssulted
+                    *data << uint32(((BattlegroundBGScore*)(itr2->second))->BasesDefended); // bases defended
+                    break;
+                default:
+                    data->put(extraFields, 0); // count of next fields
+                    break;
+            }
+            break;
+        case BATTLEGROUND_AV:
+            data->put(extraFields, 5); // count of next fields
+            *data << uint32(((BattlegroundAVScore*)(itr2->second))->GraveyardsAssaulted); // GraveyardsAssaulted
+            *data << uint32(((BattlegroundAVScore*)(itr2->second))->GraveyardsDefended); // GraveyardsDefended
+            *data << uint32(((BattlegroundAVScore*)(itr2->second))->TowersAssaulted); // TowersAssaulted
+            *data << uint32(((BattlegroundAVScore*)(itr2->second))->TowersDefended); // TowersDefended
+            *data << uint32(((BattlegroundAVScore*)(itr2->second))->MinesCaptured); // MinesCaptured
+            break;
+        case BATTLEGROUND_WS:
+            data->put(extraFields, 2); // count of next fields
+            *data << uint32(((BattlegroundWGScore*)(itr2->second))->FlagCaptures); // flag captures
+            *data << uint32(((BattlegroundWGScore*)(itr2->second))->FlagReturns); // flag returns
+            break;
+        case BATTLEGROUND_AB:
+            data->put(extraFields, 2); // count of next fields
+            *data << uint32(((BattlegroundABScore*)(itr2->second))->BasesAssaulted); // bases asssulted
+            *data << uint32(((BattlegroundABScore*)(itr2->second))->BasesDefended); // bases defended
+            break;
+        case BATTLEGROUND_EY:
+            data->put(extraFields, 1); // count of next fields
+            *data << uint32(((BattlegroundEYScore*)(itr2->second))->FlagCaptures); // flag captures
+            break;
+        case BATTLEGROUND_SA:
+            data->put(extraFields, 2); // count of next fields
+            *data << uint32(((BattlegroundSAScore*)(itr2->second))->demolishers_destroyed);
+            *data << uint32(((BattlegroundSAScore*)(itr2->second))->gates_destroyed);
+            break;
+        case BATTLEGROUND_IC:
+            data->put(extraFields, 2); // count of next fields
+            *data << uint32(((BattlegroundICScore*)(itr2->second))->BasesAssaulted); // bases asssulted
+            *data << uint32(((BattlegroundICScore*)(itr2->second))->BasesDefended); // bases defended
+            break;
+        case BATTLEGROUND_TP: // Twin Peaks
+            data->put(extraFields, 2); // count of next fields
+            *data << uint32(((BattlegroundTPScore*)(itr2->second))->FlagCaptures); // flag captures
+            *data << uint32(((BattlegroundTPScore*)(itr2->second))->FlagReturns); // flag returns
+            break;
+        case BATTLEGROUND_BG: // Battle of Gilneas
+            data->put(extraFields, 2); // count of next fields
+            *data << uint32(((BattlegroundBGScore*)(itr2->second))->BasesAssaulted); // bases asssulted
+            *data << uint32(((BattlegroundBGScore*)(itr2->second))->BasesDefended);          // bases defended
                 break;
             case BATTLEGROUND_NA:
             case BATTLEGROUND_BE:

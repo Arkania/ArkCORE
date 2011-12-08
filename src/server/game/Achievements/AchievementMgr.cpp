@@ -2264,13 +2264,12 @@ void AchievementGlobalMgr::LoadAchievementCriteriaData()
                 break;                                      // any cases
             case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST:
             {
-                AchievementEntry const* achievement = sAchievementStore.LookupEntry(criteria->referredAchievement);
-                if (!achievement)
+                const AchievementEntry *achievement = sAchievementStore.LookupEntry(criteria->referredAchievement);
+                if(!achievement)
                     continue;
 
                 // exist many achievements with this criteria, use at this moment hardcoded check to skil simple case
-                switch (achievement->ID)
-                {
+                switch (achievement->ID){
                     case 31:
                     case 1275:
                     case 1276:
@@ -2281,6 +2280,7 @@ void AchievementGlobalMgr::LoadAchievementCriteriaData()
                     default:
                         continue;
                 }
+                break;
             }
             case ACHIEVEMENT_CRITERIA_TYPE_FALL_WITHOUT_DYING:
                 break;                                      // any cases
