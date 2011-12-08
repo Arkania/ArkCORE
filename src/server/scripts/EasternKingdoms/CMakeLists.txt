@@ -217,9 +217,14 @@ set(scripts_STAT_SRCS
   EasternKingdoms/GrimBatol/instance_grim_batol.cpp
   EasternKingdoms/ThroneOfTheTides/throne_of_the_tides.h
   EasternKingdoms/ThroneOfTheTides/instance_throne_of_the_tides.cpp
-  EasternKingdoms/BlackwingDescent/blackwing_descent.h
   EasternKingdoms/BlackwingDescent/instance_blackwing_descent.cpp
+  EasternKingdoms/BlackwingDescent/boss_omnotron.cpp
+  EasternKingdoms/BlackwingDescent/boss_nefarian.cpp
+  EasternKingdoms/BlackwingDescent/boss_maloriak.cpp
   EasternKingdoms/BlackwingDescent/boss_magmaw.cpp
+  EasternKingdoms/BlackwingDescent/boss_chimaeron.cpp
+  EasternKingdoms/BlackwingDescent/boss_atramedes.cpp
+  EasternKingdoms/BlackwingDescent/blackwing_descent.h 
 )
 
 message("  -> Prepared: Eastern Kingdoms")

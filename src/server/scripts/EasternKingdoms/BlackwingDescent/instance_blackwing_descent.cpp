@@ -1,5 +1,9 @@
 /*
- * Copyright (C) 2010-2011 SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2005 - 2011 MaNGOS <http://www.getmangos.org/>
+ *
+ * Copyright (C) 2008 - 2011 TrinityCore <http://www.trinitycore.org/>
+ *
+ * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,246 +19,114 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScriptPCH.h"
 #include "blackwing_descent.h"
+#include "ScriptPCH.h"
 
-#define ENCOUNTERS 10
+class instance_blackwing_descent : public InstanceMapScript
+{
+    public:
+        instance_blackwing_descent() : InstanceMapScript("instance_blackwing_descent", 669) { }
 
-/* Boss Encounters
- ------------------
- Arcanotron
- Atramedes
- Chimaeron
- Electron
- Magmatron
- Magmaw
- Maloriak
- Nefarian
- Onyxia
- Toxitron
- */
+        struct instance_blackwing_descent_InstanceMapScript : public InstanceScript
+        {
+            instance_blackwing_descent_InstanceMapScript(InstanceMap* map) : InstanceScript(map)
+            {
+                memset(&Encounter, 0, sizeof(Encounter));
+            }
 
-class instance_blackwing_descent: public InstanceMapScript {
-public:
-	instance_blackwing_descent() :
-			InstanceMapScript("instance_blackwing_descent", 669) {
-	}
+            void OnCreatureCreate(Creature* creature)
+            {
+            }
 
-	InstanceScript* GetInstanceScript(InstanceMap* map) const {
-		return new instance_blackwing_descent_InstanceMapScript(map);
-	}
+            void OnGameObjectCreate(GameObject* go)
+            {
+            }
 
-	struct instance_blackwing_descent_InstanceMapScript: public InstanceScript {
-		instance_blackwing_descent_InstanceMapScript(InstanceMap* map) :
-				InstanceScript(map) {
-		}
+            uint64 GetData64(uint32 type)
+            {
+                return 0;
+            }
 
-		uint32 uiEncounter[ENCOUNTERS];
+            uint32 GetData(uint32 type)
+            {
+                return Encounter[type];
+            }
 
-		uint64 uiArcanotron;
-		uint64 uiAtramedes;
-		uint64 uiChimaeron;
-		uint64 uiElectron;
-		uint64 uiMagmatron;
-		uint64 uiMagmaw;
-		uint64 uiMaloriak;
-		uint64 uiNefarian;
-		uint64 uiOnyxia;
-		uint64 uiToxitron;
+            void SetData(uint32 Type, uint32 Data)
+            {
+                Encounter[Type] = Data;
 
-		void Initialize() {
-			uiArcanotron = 0;
-			uiAtramedes = 0;
-			uiChimaeron = 0;
-			uiElectron = 0;
-			uiMagmatron = 0;
-			uiMagmaw = 0;
-			uiMaloriak = 0;
-			uiNefarian = 0;
-			uiOnyxia = 0;
-			uiToxitron = 0;
+                if (Data == DONE)
+                {
+                    RewardValorPoints();
+                    SaveToDB();
+                }
+            }
 
-			for (uint8 i = 0; i < ENCOUNTERS; ++i)
-				uiEncounter[i] = NOT_STARTED;
-		}
+            std::string GetSaveData()
+            {
+                OUT_SAVE_INST_DATA;
 
-		bool IsEncounterInProgress() const {
-			for (uint8 i = 0; i < ENCOUNTERS; ++i) {
-				if (uiEncounter[i] == IN_PROGRESS)
-					return true;
-			}
+                std::ostringstream saveStream;
+                saveStream << "B D " << GetBossSaveData();
 
-			return false;
-		}
+                OUT_SAVE_INST_DATA_COMPLETE;
+                return saveStream.str();
+            }
 
-		void OnCreatureCreate(Creature* pCreature, bool) {
-			switch (pCreature->GetEntry()) {
-			case NPC_ARCANOTRON:
-				uiArcanotron = pCreature->GetGUID();
-				break;
-			case NPC_ATRAMEDES:
-				uiAtramedes = pCreature->GetGUID();
-				break;
-			case NPC_CHIMAERON:
-				uiChimaeron = pCreature->GetGUID();
-				break;
-			case NPC_ELECTRON:
-				uiElectron = pCreature->GetGUID();
-				break;
-			case NPC_MAGMATRON:
-				uiMagmatron = pCreature->GetGUID();
-				break;
-			case NPC_MAGMAW:
-				uiMagmaw = pCreature->GetGUID();
-				break;
-			case NPC_MALORIAK:
-				uiMaloriak = pCreature->GetGUID();
-				break;
-			case NPC_NEFARIAN:
-				uiNefarian = pCreature->GetGUID();
-				break;
-			case NPC_ONYXIA:
-				uiOnyxia = pCreature->GetGUID();
-				break;
-			case NPC_TOXITRON:
-				uiToxitron = pCreature->GetGUID();
-				break;
-			}
-		}
+            void RewardValorPoints()
+            {
+                Map::PlayerList const &PlList = instance->GetPlayers();
 
-		uint64 GetData64(uint32 identifier) {
-			switch (identifier) {
-			case DATA_ARCANOTRON_GUID:
-				return uiArcanotron;
-			case DATA_ATRAMEDES:
-				return uiAtramedes;
-			case DATA_CHIMAERON:
-				return uiChimaeron;
-			case DATA_ELECTRON_GUID:
-				return uiElectron;
-			case DATA_MAGMATRON_GUID:
-				return uiMagmatron;
-			case DATA_MAGMAW:
-				return uiMagmaw;
-			case DATA_MALORIAK:
-				return uiMaloriak;
-			case DATA_NEFARIAN:
-				return uiNefarian;
-			case DATA_ONYXIA_GUID:
-				return uiOnyxia;
-			case DATA_TOXITRON_GUID:
-				return uiToxitron;
-			}
-			return 0;
-		}
+                if (PlList.isEmpty())
+                    return;
 
-		void SetData(uint32 type, uint32 data) {
-			switch (type) {
-			case DATA_ARCANOTRON_GUID:
-				uiEncounter[0] = data;
-				break;
-			case DATA_ATRAMEDES:
-				uiEncounter[1] = data;
-				break;
-			case DATA_CHIMAERON:
-				uiEncounter[2] = data;
-				break;
-			case DATA_ELECTRON_GUID:
-				uiEncounter[3] = data;
-				break;
-			case DATA_MAGMATRON_GUID:
-				uiEncounter[4] = data;
-				break;
-			case DATA_MAGMAW:
-				uiEncounter[5] = data;
-				break;
-			case DATA_MALORIAK:
-				uiEncounter[6] = data;
-				break;
-			case DATA_NEFARIAN:
-				uiEncounter[7] = data;
-				break;
-			case DATA_ONYXIA_GUID:
-				uiEncounter[8] = data;
-				break;
-			case DATA_TOXITRON_GUID:
-				uiEncounter[9] = data;
-				break;
-			}
+                for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
+                    if (Player* player = i->getSource())
+                        player->ModifyCurrency(396, 7000);
+            }
 
-			if (data == DONE)
-				SaveToDB();
-		}
+            void Load(const char* in)
+            {
+                if (!in)
+                {
+                    OUT_LOAD_INST_DATA_FAIL;
+                    return;
+                }
 
-		uint32 GetData(uint32 type) {
-			switch (type) {
-			case DATA_ARCANOTRON_GUID:
-				return uiEncounter[0];
-			case DATA_ATRAMEDES:
-				return uiEncounter[1];
-			case DATA_CHIMAERON:
-				return uiEncounter[2];
-			case DATA_ELECTRON_GUID:
-				return uiEncounter[3];
-			case DATA_MAGMATRON_GUID:
-				return uiEncounter[4];
-			case DATA_MAGMAW_EVENT:
-				return uiEncounter[5];
-			case DATA_MALORIAK:
-				return uiEncounter[6];
-			case DATA_NEFARIAN:
-				return uiEncounter[7];
-			case DATA_ONYXIA_GUID:
-				return uiEncounter[8];
-			case DATA_TOXITRON_GUID:
-				return uiEncounter[9];
-			}
-			return 0;
-		}
+                OUT_LOAD_INST_DATA(in);
 
-		std::string GetSaveData() {
-			OUT_SAVE_INST_DATA;
+                char dataHead1, dataHead2;
 
-			std::string str_data;
-			std::ostringstream saveStream;
-			saveStream << "V P" << uiEncounter[0] << " " << uiEncounter[1]
-					<< " " << uiEncounter[2];
-			str_data = saveStream.str();
+                std::istringstream loadStream(in);
+                loadStream >> dataHead1 >> dataHead2;
 
-			OUT_SAVE_INST_DATA_COMPLETE;
-			return str_data;
-		}
+                if (dataHead1 == 'B' && dataHead2 == 'D')
+                {
+                    for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+                    {
+                        uint32 tmpState;
+                        loadStream >> tmpState;
+                        if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
+                            tmpState = NOT_STARTED;
+                        Encounter[i] = tmpState;
+                    }
+                } else OUT_LOAD_INST_DATA_FAIL;
 
-		void Load(const char* in) {
-			if (!in) {
-				OUT_LOAD_INST_DATA_FAIL;
-				return;
-			}
+                OUT_LOAD_INST_DATA_COMPLETE;
+            }
 
-			OUT_LOAD_INST_DATA(in);
+        private:
+            uint32 Encounter[MAX_ENCOUNTER];
+        };
 
-			char dataHead1, dataHead2;
-			uint16 data0, data1, data2;
-
-			std::istringstream loadStream(in);
-			loadStream >> dataHead1 >> dataHead2 >> data0 >> data1 >> data2;
-
-			if (dataHead1 == 'V' && dataHead2 == 'P') {
-				uiEncounter[0] = data0;
-				uiEncounter[1] = data1;
-				uiEncounter[2] = data2;
-
-				for (uint8 i = 0; i < ENCOUNTERS; ++i)
-					if (uiEncounter[i] == IN_PROGRESS)
-						uiEncounter[i] = NOT_STARTED;
-			} else
-				OUT_LOAD_INST_DATA_FAIL;
-
-			OUT_LOAD_INST_DATA_COMPLETE;
-		}
-	};
+        InstanceScript* GetInstanceScript(InstanceMap* map) const
+        {
+            return new instance_blackwing_descent_InstanceMapScript(map);
+        }
 };
 
-void AddSC_instance_blackwing_descent() {
-	new instance_blackwing_descent();
+void AddSC_instance_blackwing_descent()
+{
+    new instance_blackwing_descent();
 }

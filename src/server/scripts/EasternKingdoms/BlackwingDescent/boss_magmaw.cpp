@@ -1,5 +1,9 @@
-/* 
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+/*
+ * Copyright (C) 2005 - 2011 MaNGOS <http://www.getmangos.org/>
+ *
+ * Copyright (C) 2008 - 2011 TrinityCore <http://www.trinitycore.org/>
+ *
+ * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,192 +19,194 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include"ScriptPCH.h"
-#include"WorldPacket.h"
-#include"blackwing_descent.h"
-#include"ScriptMgr.h"
-#include"ScriptedCreature.h"
-#include"SpellScript.h"
-#include"SpellAuraEffects.h"
+#include "ScriptPCH.h"
+#include "blackwing_descent.h"
 
-enum Spells {
-	SPELL_BERSERK = 26662,
-	SPELL_LAVA_SPEW_H10 = 91931,
-	SPELL_LAVA_SPEW_N25 = 91919,
-	SPELL_LAVA_SPEW_H25 = 91932,
-	SPELL_LAVA_SPEW_N10 = 77690,
-	SPELL_MAGMA_SPIT_H10 = 91927,
-	SPELL_MAGMA_SPIT_H25 = 91928,
-	SPELL_MAGMA_SPIT_N25 = 91917,
-	SPELL_MAGMA_SPIT_N10 = 78068,
-	SPELL_MANGLE_N10 = 89773,
-	SPELL_MANGLE_H25 = 94617,
-	SPELL_MANGLE_H10 = 94616,
-	SPELL_MANGLE_N25 = 91912,
-	SPELL_MOLTEN_TANTRUM = 78403,
-	SPELL_PILLAR_OF_FLAME = 78006,
+enum eSpells
+{
+    SPELL_LAVA_SPEW = 77690,
+    SPELL_MAGMA_SPIT = 77690,
 };
 
-class boss_magmaw: public CreatureScript {
+class boss_magmaw : public CreatureScript
+{
 public:
-	boss_magmaw() :
-			CreatureScript("boss_magmaw") {
-	}
+    boss_magmaw() : CreatureScript("boss_magmaw") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_magmawAI(pCreature);
-	}
-	struct boss_magmawAI: public ScriptedAI {
-		boss_magmawAI(Creature* pCreature) :
-				ScriptedAI(pCreature), Summons(me) {
-			pInstance = pCreature->GetInstanceScript();
-		}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new boss_magmawAI (creature);
+    }
 
-		InstanceScript *pInstance;
-		EventMap events;
-		SummonList Summons;
-		bool check_in;
+    struct boss_magmawAI : public ScriptedAI
+    {
+        boss_magmawAI(Creature* creature) : ScriptedAI(creature)
+        {
+            pInstance = creature->GetInstanceScript();
+        }
 
-		uint32 m_uiSayTimer; // Timer for random chat
-		uint32 m_uiRebuffTimer; // Timer for rebuffing
-		uint32 m_uiSpellTimerCTW; // Timer for start spell Call The Wind when in combat
-		uint32 m_uiSpellTimerCTW_stop; // Timer for stop spell Call The Wind when in combat
+        InstanceScript* pInstance;
 
-		uint32 m_uiSpellTimerLB; // Timer for spell 1 when in combat
-		uint32 m_uiSpellTimerCB; // Timer until we go into Beserk (enraged) mode
+        uint32 uiLavaSpewTimer;
+        uint32 uiMagmaSpitTimer;
+        uint32 uiLavaParasiteSummonTimer;
 
-		uint32 m_uiSpellTimerSummTwister;
+        void Reset()
+        {
+            pInstance->SetData(DATA_MAGMAW, NOT_STARTED);
 
-		uint32 m_uiPhase; // The current battle phase we are in
-		uint32 m_uiPhaseTimer; // Timer until phase transition
-		bool isCTW;
-		float windOrientation;
-		float windDiffOrientation;
+            uiLavaSpewTimer = 10*IN_MILLISECONDS;
+            uiMagmaSpitTimer = 14*IN_MILLISECONDS;
+            uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;
 
-		void Reset() {
-			events.Reset();
+            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
+            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+        }
 
-			m_uiPhase = 1; // Start in phase 1
-			m_uiPhaseTimer = 60000; // 60 seconds
+        void EnterCombat(Unit* /*pWho*/)
+        {
+            pInstance->SetData(DATA_MAGMAW, IN_PROGRESS);
+        }
 
-			m_uiSpellTimerCTW = urand(10000, 15000); // between 10 and 15 seconds
-			m_uiSpellTimerCTW_stop = urand(2000, 5000); // between 2 and 5 seconds
+        void JustReachedHome()
+        {
+            pInstance->SetData(DATA_MAGMAW, FAIL);
+        }
 
-			m_uiSpellTimerLB = urand(10000, 20000); // between 10 and 20 seconds
-			m_uiSpellTimerCB = urand(10000, 20000); // between 10 and 20 seconds
+        void JustDied(Unit* /*Killer*/)
+        {
+            pInstance->SetData(DATA_MAGMAW, DONE);
+        }
 
-			m_uiSpellTimerSummTwister = 10000; //  2 minutes
+        void SummonCreatureWithRandomTarget(uint32 creatureId)
+        {
+            Unit* Summoned = me->SummonCreature(creatureId, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000);
+            if (Summoned)
+            {
+                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                if (target)
+                    Summoned->AddThreat(target, 1.0f);
+            }
+        }
 
-			if (pInstance
-					&& (pInstance->GetData(DATA_MAGMAW_EVENT) != DONE
-							&& !check_in))
-				pInstance->SetData(DATA_MAGMAW_EVENT, NOT_STARTED);
+        void UpdateAI(const uint32 Diff)
+        {
+            if (!UpdateVictim())
+                return;
 
-			check_in = false;
-			isCTW = false;
-		}
+            if (uiLavaSpewTimer <= Diff)
+            {
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    me->CastSpell(target, SPELL_LAVA_SPEW, true);
 
-		void JustDied(Unit* /*Kill*/) {
+                uiLavaSpewTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
+            } else uiLavaSpewTimer -= Diff;
 
-			if (pInstance)
-				pInstance->SetData(DATA_MAGMAW_EVENT, DONE);
-		}
-		void KilledUnit(Unit* /*Killed*/) {
-//            DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
-		}
+            if (uiMagmaSpitTimer <= Diff)
+            {
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    me->CastSpell(target, SPELL_MAGMA_SPIT , true);
 
-		void EnterCombat(Unit* /*Ent*/) {
+                uiMagmaSpitTimer = urand(12*IN_MILLISECONDS, 14*IN_MILLISECONDS);
+            } else uiMagmaSpitTimer -= Diff;
 
-			DoZoneInCombat();
+            if (uiLavaParasiteSummonTimer <= Diff)
+            {
+                for (int i = 0; i < 2; ++i)
+                    SummonCreatureWithRandomTarget(42321);
 
-			if (pInstance)
-				pInstance->SetData(DATA_MAGMAW_EVENT, IN_PROGRESS);
+                uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;
+            } else uiLavaParasiteSummonTimer -= Diff;
 
-		}
-
-		void UpdateAI(const uint32 uiDiff) {
-
-			if (!UpdateVictim()) /* No target to kill */
-				return;
-
-			events.Update(uiDiff);
-
-			if (me->HasUnitState(UNIT_STAT_CASTING))
-				return;
-
-			//Spell CTW timer
-			if (m_uiSpellTimerCTW <= uiDiff) {
-				if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-					DoCast(pTarget, SPELL_LAVA_SPEW_N10);
-
-				DoCast(me, SPELL_LAVA_SPEW_N10);
-				windOrientation = me->GetOrientation();
-
-				m_uiSpellTimerCTW = 19000;
-				isCTW = true;
-			} else {
-				m_uiSpellTimerCTW -= uiDiff;
-				me->SetUnitMovementFlags(MOVEMENTFLAG_LEVITATING);
-				me->setActive(true);
-				//me->GetMotionMaster()->MoveIdle();
-			}
-
-			//Spell STOP CTW timer
-			// if (m_uiSpellTimerCTW <= uiDiff && isCTW)
-			// {
-			// DoCast(me, SPELL_STOP_CALL_THE_WIND);
-			// m_uiSpellTimerCTW_stop = urand(2000,5000);
-			// isCTW = false;
-			// }
-			// else if ( isCTW )
-			// m_uiSpellTimerCTW -= uiDiff;
-
-			//Spell CB timer
-			if (m_uiSpellTimerCB <= uiDiff) {
-				//Cast spell two on our current target.
-				DoCast(me->getVictim(), SPELL_MAGMA_SPIT_N10);
-				m_uiSpellTimerCB = urand(10000, 20000);
-			} else
-				m_uiSpellTimerCB -= uiDiff;
-
-			//Spell LB timer
-			if (m_uiSpellTimerLB <= uiDiff) {
-				//Cast spell one on our current target.
-				DoCast(me->getVictim(), SPELL_MOLTEN_TANTRUM);
-
-				m_uiSpellTimerLB = urand(30000, 40000);
-			} else
-				m_uiSpellTimerLB -= uiDiff;
-
-			//Spell m_uiSpellTimerSummTwister timer
-			if (m_uiSpellTimerSummTwister <= uiDiff) {
-				//Cast spell one on our current target.
-				me->SummonCreature(42321, 0.0f, 0.0f, 0.0f, 0,
-						TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-				DoCast(me->getVictim(), SPELL_PILLAR_OF_FLAME);
-
-				m_uiSpellTimerSummTwister = 10000;
-			} else
-				m_uiSpellTimerSummTwister -= uiDiff;
-			/*
-			 Map::PlayerList const &PlayerList = pInstance->instance->GetPlayers();
-			 for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-			 if (Player *pPlayer = i->getSource())
-			 {
-			 //DoCast(pPlayer,  78068);
-			 if ( windDiffOrientation < 1.5f )
-			 DoCast(pPlayer,  SPELL_MAGMA_SPIT_N10);
-			 else
-			 DoCast(pPlayer,  SPELL_MAGMA_SPIT_N10);
-			 }
-			 */
-
-			DoMeleeAttackIfReady();
-		}
-	};
-
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_magmaw() {
-	new boss_magmaw();
+class mobs_lava_parasite : public CreatureScript
+{
+public:
+    mobs_lava_parasite() : CreatureScript("mobs_lava_parasite") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new mobs_lava_parasiteAI (creature);
+    }
+
+    struct mobs_lava_parasiteAI : public ScriptedAI
+    {
+        mobs_lava_parasiteAI(Creature* creature) : ScriptedAI(creature) { }
+
+        uint32 uiCheckDistanceTimer;
+
+        void Reset()
+        {
+            uiCheckDistanceTimer = 2*IN_MILLISECONDS;
+        }
+
+        void EnterCombat(Unit* /*pWho*/) { }
+
+        void JustDied(Unit* /*Killer*/) {}
+
+        void UpdateAI(const uint32 Diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (me->IsWithinDistInMap(me->getVictim(), 2.0f))
+            {
+                if (uiCheckDistanceTimer <= Diff)
+                {
+                    me->CastSpell(me->getVictim(), 94679 , true);
+
+                    uiCheckDistanceTimer = 86400*IN_MILLISECONDS;
+                } else uiCheckDistanceTimer -= Diff;
+            }
+
+            DoMeleeAttackIfReady();
+        }
+    };
+};
+
+class spell_parasitic_infection : public SpellScriptLoader
+{
+    public:
+        spell_parasitic_infection() : SpellScriptLoader("spell_parasitic_infection") { }
+
+        class spell_parasitic_infection_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_parasitic_infection_AuraScript);
+
+            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                Unit * caster = GetCaster();
+                for (int i = 0; i < 2; ++i)
+                {
+                    Unit* Summoned = caster->SummonCreature(42321, caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000);
+                    /*if (Summoned)
+{
+Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+if (pTarget)
+Summoned->AddThreat(pTarget, 1.0f);
+}*/
+                }
+            }
+
+            void Register()
+            {
+                OnEffectRemove += AuraEffectRemoveFn(spell_parasitic_infection_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_parasitic_infection_AuraScript();
+        }
+};
+
+void AddSC_boss_magmaw()
+{
+    new boss_magmaw();
+    new mobs_lava_parasite();
+    new spell_parasitic_infection();
 }
