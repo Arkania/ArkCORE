@@ -1632,6 +1632,8 @@ public:
 	bool isFrozen() const;
 
 	bool isTargetableForAttack() const;
+    bool IsValidAttackTarget(Unit const* target) const;
+    bool _IsValidAttackTarget(Unit const* target, SpellEntry const* bySpell) const;
 	bool isAttackableByAOE(bool requireDeadTarget = false) const;
 	bool canAttack(Unit const* target, bool force = true) const;
 	virtual bool IsInWater() const;

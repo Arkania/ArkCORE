@@ -12660,6 +12660,11 @@ bool Unit::isTargetableForAttack() const {
 	return isAttackableByAOE() && !HasUnitState(UNIT_STAT_DIED);
 }
 
+bool Unit::IsValidAttackTarget(Unit const* target) const
+{
+    return canAttack(target, NULL);
+}
+
 bool Unit::canAttack(Unit const* target, bool force) const {
 	ASSERT(target);
 
