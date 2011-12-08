@@ -602,6 +602,11 @@ void AddSC_instance_the_vortex_pinnacle();	//The Vortex Pinnacle
 void AddSC_instance_grim_batol();			//Grim Batol
 void AddSC_instance_throne_of_the_tides();	//Throne of the Tides
 void AddSC_instance_blackrock_caverns();	//Blackrock Caverns
+void AddSC_boss_chogall(); 					//BastionOfTwilight
+void AddSC_boss_ascendant_council();
+void AddSC_boss_halfus_wyrmbreaker();
+void AddSC_boss_theralion();
+void AddSC_instance_the_bastion_of_twilight();
 
 // battlegrounds
 
@@ -726,6 +731,11 @@ void AddEasternKingdomsScripts() {
 	AddSC_boss_moira_bronzebeard();
 	AddSC_boss_tomb_of_seven();
 	AddSC_instance_blackrock_depths();
+	AddSC_boss_chogall(); 					//BastionOfTwilight
+	AddSC_boss_ascendant_council();
+	AddSC_boss_halfus_wyrmbreaker();
+	AddSC_boss_theralion();
+	AddSC_instance_the_bastion_of_twilight();	
 	AddSC_boss_drakkisath();//Blackrock Spire
 	AddSC_boss_halycon();
 	AddSC_boss_highlordomokk();
