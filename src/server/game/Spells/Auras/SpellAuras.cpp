@@ -369,7 +369,7 @@ void Aura::_InitEffects(uint8 effMask, Unit * caster, int32 *baseAmount) {
 
 	// Mixology
 	if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_POTION && caster /*&& caster->IsPlayer()*/
-			&& caster->HasAura(53042)) {
+	&& caster->HasAura(53042)) {
 		if (sSpellMgr->IsSpellMemberOfSpellGroup(GetSpellProto()->Id,
 				SPELL_GROUP_ELIXIR_BATTLE)
 				|| sSpellMgr->IsSpellMemberOfSpellGroup(GetSpellProto()->Id,
@@ -1219,12 +1219,12 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
 			break;
 		case SPELLFAMILY_MAGE:
 			switch (GetId()) {
-                    case 66: // Invisibility
-                        if (removeMode != AURA_REMOVE_BY_EXPIRE)
-                            break;
-                        target->CastSpell(target, 32612, true, NULL, GetEffect(1));
-                        target->CombatStop(); // Mague: Fix Invisibility
-                        break;
+			case 66: // Invisibility
+				if (removeMode != AURA_REMOVE_BY_EXPIRE)
+					break;
+				target->CastSpell(target, 32612, true, NULL, GetEffect(1));
+				target->CombatStop(); // Mague: Fix Invisibility
+				break;
 			case 74396: // Fingers of Frost
 				// Remove the IGNORE_AURASTATE aura
 				target->RemoveAurasDueToSpell(44544);

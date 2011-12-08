@@ -16324,6 +16324,16 @@ void Player::SendQuestFailed(uint32 quest_id) {
 	}
 }
 
+void Player::SendQuestWindowClose(uint32 questId)
+{
+    if (questId)
+    {
+        WorldPacket data(SMSG_QUESTGIVER_QUEST_FAILED, 4 + 4);
+        GetSession()->SendPacket(&data);
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_FAILED for WindowClose");
+    }
+}
+
 void Player::SendQuestTimerFailed(uint32 quest_id) {
 	if (quest_id) {
 		WorldPacket data(SMSG_QUESTUPDATE_FAILEDTIMER, 4);

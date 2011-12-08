@@ -1682,6 +1682,7 @@ public:
 	void SendQuestComplete(uint32 quest_id);
 	void SendQuestReward(Quest const *pQuest, uint32 XP, Object* questGiver);
 	void SendQuestFailed(uint32 quest_id);
+	void SendQuestWindowClose(uint32 questId);
 	void SendQuestTimerFailed(uint32 quest_id);
 	void SendCanTakeQuestResponse(uint32 msg);
 	void SendQuestConfirmAccept(Quest const* pQuest, Player* pReceiver);
