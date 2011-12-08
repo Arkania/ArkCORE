@@ -583,10 +583,14 @@ void AddSC_zangarmarsh();
 
 void AddSC_the_stonecore();//TheStonecore
 void AddSC_instance_the_stonecore();
-void AddSC_instance_halls_of_origination();//Halls of Origination
+void AddSC_instance_halls_of_origination();  //Halls of Origination
 void AddSC_boss_temple_guardian_anhuur();
-void AddSC_boss_earthrager_ptah();
+void AddSC_boss_ptah();
 void AddSC_boss_anraphet();
+void AddSC_boss_ammunae();
+void AddSC_boss_setesh();
+void AddSC_boss_rajh();
+void AddSC_boss_isiset();
 void AddSC_instance_baradin_hold();//Baradin Hold
 void AddSC_boss_argaloth();
 void AddSC_lost_city_of_the_tolvir();//The Lost City of the Tol'vir
@@ -1213,10 +1217,14 @@ void AddNorthrendScripts() {
 	// Cataclysm Scripts
 	AddSC_the_stonecore();//The Stonecore
 	AddSC_instance_the_stonecore();
-	AddSC_instance_halls_of_origination();//Halls of Origination
-	AddSC_boss_temple_guardian_anhuur();
-	AddSC_boss_earthrager_ptah();
-	AddSC_boss_anraphet();
+    AddSC_instance_halls_of_origination();  //Halls of Origination
+    AddSC_boss_temple_guardian_anhuur();
+    AddSC_boss_ptah();
+    AddSC_boss_anraphet();
+    AddSC_boss_ammunae();
+    AddSC_boss_setesh();
+    AddSC_boss_rajh();
+    AddSC_boss_isiset();
 	AddSC_instance_baradin_hold();//Baradin Hold
 	AddSC_boss_argaloth();
 	AddSC_lost_city_of_the_tolvir();//Lost City of the Tol'vir

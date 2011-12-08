@@ -2668,7 +2668,11 @@ public:
 		m_AbsorbHeal = heal;
 	}
 	;
-
+    void SetTarget(uint64 guid)
+    {
+        if (!_targetLocked)
+            SetUInt64Value(UNIT_FIELD_TARGET, guid);
+    }
 protected:
 	explicit Unit();
 
@@ -2814,6 +2818,8 @@ private:
 
 	bool m_cleanupDone; // lock made to not add stuff after cleanup before delete
 	bool m_duringRemoveFromWorld; // lock made to not add stuff after begining removing from world
+    Spell const* _focusSpell;
+    bool _targetLocked; // locks the target during spell cast for proper facing
 };
 
 namespace Trinity {
