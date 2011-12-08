@@ -563,7 +563,7 @@ void AddSC_boss_void_reaver();
 void AddSC_boss_high_astromancer_solarian();
 void AddSC_instance_the_eye();
 void AddSC_the_eye();
-void AddSC_boss_gatewatcher_iron_hand();//TK The Mechanar
+void AddSC_boss_gatewatcher_iron_hand();	//TK The Mechanar
 void AddSC_boss_nethermancer_sepethrea();
 void AddSC_boss_pathaleon_the_calculator();
 void AddSC_instance_mechanar();
@@ -581,7 +581,7 @@ void AddSC_zangarmarsh();
 
 // Cataclysm Scripts
 
-void AddSC_the_stonecore();//TheStonecore
+void AddSC_the_stonecore();					 //TheStonecore
 void AddSC_instance_the_stonecore();
 void AddSC_instance_halls_of_origination();  //Halls of Origination
 void AddSC_boss_temple_guardian_anhuur();
@@ -591,16 +591,17 @@ void AddSC_boss_ammunae();
 void AddSC_boss_setesh();
 void AddSC_boss_rajh();
 void AddSC_boss_isiset();
-void AddSC_instance_baradin_hold();//Baradin Hold
+void AddSC_instance_baradin_hold();          //Baradin Hold
 void AddSC_boss_argaloth();
-void AddSC_lost_city_of_the_tolvir();//The Lost City of the Tol'vir
+void AddSC_boss_occuthar();
+void AddSC_lost_city_of_the_tolvir();		//The Lost City of the Tol'vir
 void AddSC_instance_lost_city_of_the_tolvir();
 void AddSC_boss_lockmaw();
 void AddSC_boss_high_prophet_barim();
-void AddSC_instance_the_vortex_pinnacle();//The Vortex Pinnacle
-void AddSC_instance_grim_batol();//Grim Batol
-void AddSC_instance_throne_of_the_tides();//Throne of the Tides
-void AddSC_instance_blackrock_caverns();//Blackrock Caverns
+void AddSC_instance_the_vortex_pinnacle();	//The Vortex Pinnacle
+void AddSC_instance_grim_batol();			//Grim Batol
+void AddSC_instance_throne_of_the_tides();	//Throne of the Tides
+void AddSC_instance_blackrock_caverns();	//Blackrock Caverns
 
 // battlegrounds
 

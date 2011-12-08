@@ -200,9 +200,10 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Karazhan/boss_terestian_illhoof.cpp
   EasternKingdoms/Karazhan/karazhan.h
   EasternKingdoms/Gilneas/gilneas.cpp
-  EasternKingdoms/BaradinHold/baradin_hold.h
-  EasternKingdoms/BaradinHold/instance_baradin_hold.cpp
+  EasternKingdoms/BaradinHold/instance_baradinhold.cpp
   EasternKingdoms/BaradinHold/boss_argaloth.cpp
+  EasternKingdoms/BaradinHold/boss_occu'thar.cpp
+  EasternKingdoms/BaradinHold/baradin_hold.h
   EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
   EasternKingdoms/BlackrockCaverns/instance_blackrock_caverns.cpp
   EasternKingdoms/GrimBatol/grim_batol.h

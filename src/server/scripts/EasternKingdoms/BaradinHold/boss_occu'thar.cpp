@@ -19,20 +19,43 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEF_BARADIN_HOLD_H_
-#define DEF_BARADIN_HOLD_H_
+#include "ScriptPCH.h"
+#include "baradin_hold.h"
 
-enum Creatures
+class boss_occuthar : public CreatureScript
 {
-    CREATURE_ARGALOTH = 47120,
-    CREATURE_OCCUTHAR = 52363, // will be in 4.2
+public:
+    boss_occuthar() : CreatureScript("boss_occuthar") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new boss_occutharAI (creature);
+    }
+
+    struct boss_occutharAI : public ScriptedAI
+    {
+        boss_occutharAI(Creature* creature) : ScriptedAI(creature)
+        {
+            pInstance = creature->GetInstanceScript();
+        }
+
+        InstanceScript* pInstance;
+
+        void Reset() {}
+
+        void EnterCombat(Unit* /*pWho*/) {}
+
+        void UpdateAI(const uint32 Diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-enum Data
+void AddSC_boss_occuthar()
 {
-    DATA_ARGALOTH,
-    DATA_OCCUTHAR,
-    MAX_ENCOUNTER
-};
-
-#endif
+    new boss_occuthar();
+}
