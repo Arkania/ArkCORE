@@ -47,8 +47,8 @@ class SummonList : public std::list<uint64>
         explicit SummonList(Creature* creature) : me(creature) {}
         void Summon(Creature *summon) { push_back(summon->GetGUID()); }
         void Despawn(Creature *summon) { remove(summon->GetGUID()); }
-        void DespawnEntry(uint32 entry);
-        void DespawnAll();
+        void DespawnEntry(uint32 entry, uint32 msTimeToDespawn = 0);
+        void DespawnAll(uint32 msTimeToDespawn = 0);
         bool HasEntry(uint32 entry);
         void RemoveNotExisting();
         void DoAction(uint32 entry, uint32 info);

@@ -509,11 +509,11 @@ class spell_argent_cannon : public SpellScriptLoader
         {
             PrepareSpellScript(spell_argent_cannon_SpellScript);
 
-            bool Validate(SpellInfo const* /*spellInfo*/)
+            bool Validate(SpellEntry const* /*spellInfo*/)
             {
-                if (!sSpellMgr->GetSpellInfo(SPELL_ARGENT_CANNON_SHOOT_TRIGGER))
+                if (!sSpellStore.LookupEntry(SPELL_ARGENT_CANNON_SHOOT_TRIGGER))
                     return false;
-                if (!sSpellMgr->GetSpellInfo(SPELL_RECONING_BOMB_TRIGGER))
+                if (!sSpellStore.LookupEntry(SPELL_RECONING_BOMB_TRIGGER)) //sSpellStore.LookupEntry = GetSpellInfo
                     return false;
                 return true;
             }
@@ -850,7 +850,7 @@ class npc_captured_crusader : public CreatureScript
                 DoCast(me, SPELL_NERUBIAN_WEBS, true);
             }
 
-            void SpellHit(Unit* caster, SpellInfo const* spell)
+            void SpellHit(Unit* caster, SpellEntry const* spell)
             {
                 if (spell->Id == SPELL_GRAB_CAPTURED_CRUSADER)
                 {
@@ -1153,7 +1153,7 @@ public:
             }
         }
 
-        void SpellHit(Unit* caster, SpellInfo const* spell)
+        void SpellHit(Unit* caster, SpellEntry const* spell)
         {
             if (spell->Id == SPELL_SOVEREIGN_ROD_TRIGGERED)
             {
@@ -1295,7 +1295,7 @@ public:
                 {
                     creature->AI()->DoAction(ACTION_ENRAGED);
                     creature->setFaction(16);
-                    creature->CastSpell(creature,SPELL_SLAVE_ENRAGE);
+                    //FIXME creature->CastSpell(creature,SPELL_SLAVE_ENRAGE);
                     creature->AI()->AttackStart(player);
                 }else creature->AI()->DoAction(ACTION_INSANE);
             }
@@ -1532,7 +1532,7 @@ public:
             ResetTimer = 10000;
         }
 
-        void SpellHit(Unit* caster, const SpellInfo* spell)
+        void SpellHit(Unit* caster, const SpellEntry* spell)
         {
             Player* playercaster = NULL;
             if(!caster || !caster->ToPlayer())
@@ -3031,7 +3031,7 @@ public:
             credited = false;
         }
 
-        void SpellHit(Unit* caster, const SpellInfo* spellinfo)
+        void SpellHit(Unit* caster, const SpellEntry* spellinfo)
         {
             if(credited)
                 return;
