@@ -7041,26 +7041,35 @@ void Spell::EffectLeap(SpellEffIndex /*effIndex*/) {
 			m_targets.m_dstPos.GetOrientation(), unitTarget == m_caster);
 }
 
-void Spell::EffectReputation(SpellEffIndex effIndex) {
-	if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
-		return;
+void Spell::EffectReputation(SpellEffIndex effIndex)
+{
+    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
+        return;
 
-	Player *_player = (Player*) unitTarget;
+    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+        return;
 
-	int32 rep_change = damage; //+1;           // field store reputation change -1
+    Player* _player = unitTarget->ToPlayer();
 
-	uint32 faction_id = m_spellInfo->EffectMiscValue[effIndex];
+    int32  rep_change = damage;
 
-	FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction_id);
+    uint32 faction_id = m_spellInfo->EffectMiscValue[effIndex];
 
-	if (!factionEntry)
-		return;
+    FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction_id);
 
-	if (RepRewardRate const* repData = sObjectMgr->GetRepRewardRate(faction_id)) {
-		rep_change = int32((float) rep_change * repData->spell_rate);
-	}
+    if (!factionEntry)
+        return;
 
-	_player->GetReputationMgr().ModifyReputation(factionEntry, rep_change);
+    if (RepRewardRate const* repData = sObjectMgr->GetRepRewardRate(faction_id))
+    {
+        rep_change = int32((float)rep_change * repData->spell_rate);
+    }
+
+    // Bonus from spells that increase reputation gain
+    float bonus = rep_change * _player->GetTotalAuraModifier(SPELL_AURA_MOD_REPUTATION_GAIN) / 100.0f; // 10%
+    rep_change += (int32)bonus;
+
+    _player->GetReputationMgr().ModifyReputation(factionEntry, rep_change);
 }
 
 void Spell::EffectQuestComplete(SpellEffIndex effIndex) {
