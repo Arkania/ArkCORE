@@ -26,122 +26,108 @@
 #include "violet_hold.h"
 
 //Spells
-enum Spells
-{
-    SPELL_CORROSIVE_SALIVA                     = 54527,
-    SPELL_OPTIC_LINK                           = 54396
+enum Spells {
+	SPELL_CORROSIVE_SALIVA = 54527, SPELL_OPTIC_LINK = 54396
 };
 
-class boss_moragg : public CreatureScript
-{
+class boss_moragg: public CreatureScript {
 public:
-    boss_moragg() : CreatureScript("boss_moragg") { }
+	boss_moragg() :
+			CreatureScript("boss_moragg") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_moraggAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_moraggAI(pCreature);
+	}
 
-    struct boss_moraggAI : public BossAI
-    {
-        boss_moraggAI(Creature *c) : BossAI(c, BOSS_MORAGG)
-        {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-        }
+	struct boss_moraggAI: public BossAI {
+		boss_moraggAI(Creature *c) :
+				BossAI(c, BOSS_MORAGG) {
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        uint32 uiOpticLinkTimer;
-        uint32 uiCorrosiveSalivaTimer;
+		uint32 uiOpticLinkTimer;
+		uint32 uiCorrosiveSalivaTimer;
 
-        void Reset()
-        {
-            uiOpticLinkTimer = 10000;
-            uiCorrosiveSalivaTimer = 5000;
+		void Reset() {
+			uiOpticLinkTimer = 10000;
+			uiCorrosiveSalivaTimer = 5000;
 
-            if (instance)
-            {
-                if (instance->GetData(DATA_WAVE_COUNT) == 6)
-                    instance->SetData(DATA_1ST_BOSS_EVENT, NOT_STARTED);
-                else if (instance->GetData(DATA_WAVE_COUNT) == 12)
-                    instance->SetData(DATA_2ND_BOSS_EVENT, NOT_STARTED);
-            }
-        }
+			if (instance) {
+				if (instance->GetData(DATA_WAVE_COUNT) == 6)
+					instance->SetData(DATA_1ST_BOSS_EVENT, NOT_STARTED);
+				else if (instance->GetData(DATA_WAVE_COUNT) == 12)
+					instance->SetData(DATA_2ND_BOSS_EVENT, NOT_STARTED);
+			}
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            if (instance)
-            {
-                if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_MORAGG_CELL)))
-                    if (pDoor->GetGoState() == GO_STATE_READY)
-                   {
-                        EnterEvadeMode();
-                        return;
-                    }
-                if (instance->GetData(DATA_WAVE_COUNT) == 6)
-                    instance->SetData(DATA_1ST_BOSS_EVENT, IN_PROGRESS);
-                else if (instance->GetData(DATA_WAVE_COUNT) == 12)
-                    instance->SetData(DATA_2ND_BOSS_EVENT, IN_PROGRESS);
-            }
-        }
+		void EnterCombat(Unit* /*who*/) {
+			if (instance) {
+				if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_MORAGG_CELL)))
+					if (pDoor->GetGoState() == GO_STATE_READY) {
+						EnterEvadeMode();
+						return;
+					}
+				if (instance->GetData(DATA_WAVE_COUNT) == 6)
+					instance->SetData(DATA_1ST_BOSS_EVENT, IN_PROGRESS);
+				else if (instance->GetData(DATA_WAVE_COUNT) == 12)
+					instance->SetData(DATA_2ND_BOSS_EVENT, IN_PROGRESS);
+			}
+		}
 
-        void AttackStart(Unit* pWho)
-        {
-            if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
-                return;
+		void AttackStart(Unit* pWho) {
+			if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE)
+					|| me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+				return;
 
-            if (me->Attack(pWho, true))
-            {
-                me->AddThreat(pWho, 0.0f);
-                me->SetInCombatWith(pWho);
-                pWho->SetInCombatWith(me);
-                DoStartMovement(pWho);
-            }
-        }
+			if (me->Attack(pWho, true)) {
+				me->AddThreat(pWho, 0.0f);
+				me->SetInCombatWith(pWho);
+				pWho->SetInCombatWith(me);
+				DoStartMovement(pWho);
+			}
+		}
 
-        void MoveInLineOfSight(Unit* /*who*/) {}
+		void MoveInLineOfSight(Unit* /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (uiOpticLinkTimer <= diff)
-            {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_OPTIC_LINK);
-                uiOpticLinkTimer = 15000;
-            } else uiOpticLinkTimer -= diff;
+			if (uiOpticLinkTimer <= diff) {
+				if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					DoCast(pTarget, SPELL_OPTIC_LINK);
+				uiOpticLinkTimer = 15000;
+			} else
+				uiOpticLinkTimer -= diff;
 
-            if (uiCorrosiveSalivaTimer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_CORROSIVE_SALIVA);
-                uiCorrosiveSalivaTimer = 10000;
-            } else uiCorrosiveSalivaTimer -= diff;
+			if (uiCorrosiveSalivaTimer <= diff) {
+				DoCast(me->getVictim(), SPELL_CORROSIVE_SALIVA);
+				uiCorrosiveSalivaTimer = 10000;
+			} else
+				uiCorrosiveSalivaTimer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-        void JustDied(Unit* /*killer*/)
-        {
+			DoMeleeAttackIfReady();
+		}
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            if (instance)
-            {
-                if (instance->GetData(DATA_WAVE_COUNT) == 6)
-                {
-                    instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
-                    instance->SetData(DATA_WAVE_COUNT, 7);
-                }
-                else if (instance->GetData(DATA_WAVE_COUNT) == 12)
-                {
-                    instance->SetData(DATA_2ND_BOSS_EVENT, DONE);
-                    instance->SetData(DATA_WAVE_COUNT, 13);
-                }
-            }
-        }
-    };
+			if (instance) {
+				if (instance->GetData(DATA_WAVE_COUNT) == 6) {
+					instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
+					instance->SetData(DATA_WAVE_COUNT, 7);
+				} else if (instance->GetData(DATA_WAVE_COUNT) == 12) {
+					instance->SetData(DATA_2ND_BOSS_EVENT, DONE);
+					instance->SetData(DATA_WAVE_COUNT, 13);
+				}
+			}
+		}
+	};
 };
 
-void AddSC_boss_moragg()
-{
-    new boss_moragg();
+void AddSC_boss_moragg() {
+	new boss_moragg();
 }

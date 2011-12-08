@@ -26,270 +26,246 @@
 #include "gundrak.h"
 
 //Spells
-enum Spells
-{
-    SPELL_ENRAGE                                  = 55285,
-    H_SPELL_ENRAGE                                = 59828,
-    SPELL_IMPALING_CHARGE                         = 54956,
-    H_SPELL_IMPALING_CHARGE                       = 59827,
-    SPELL_STOMP                                   = 55292,
-    H_SPELL_STOMP                                 = 59829,
-    SPELL_PUNCTURE                                = 55276,
-    H_SPELL_PUNCTURE                              = 59826,
-    SPELL_STAMPEDE                                = 55218,
-    SPELL_WHIRLING_SLASH                          = 55250,
-    H_SPELL_WHIRLING_SLASH                        = 59824,
-    SPELL_ECK_RESIDUE                             = 55817
+enum Spells {
+	SPELL_ENRAGE = 55285,
+	H_SPELL_ENRAGE = 59828,
+	SPELL_IMPALING_CHARGE = 54956,
+	H_SPELL_IMPALING_CHARGE = 59827,
+	SPELL_STOMP = 55292,
+	H_SPELL_STOMP = 59829,
+	SPELL_PUNCTURE = 55276,
+	H_SPELL_PUNCTURE = 59826,
+	SPELL_STAMPEDE = 55218,
+	SPELL_WHIRLING_SLASH = 55250,
+	H_SPELL_WHIRLING_SLASH = 59824,
+	SPELL_ECK_RESIDUE = 55817
 };
 
 //Yells
-enum Yells
-{
-    SAY_AGGRO                                     = -1604000,
-    SAY_SLAY_1                                    = -1604001,
-    SAY_SLAY_2                                    = -1604002,
-    SAY_SLAY_3                                    = -1604003,
-    SAY_DEATH                                     = -1604004,
-    SAY_SUMMON_RHINO_1                            = -1604005,
-    SAY_SUMMON_RHINO_2                            = -1604006,
-    SAY_SUMMON_RHINO_3                            = -1604007,
-    SAY_TRANSFORM_1                               = -1604008,  //Phase change
-    SAY_TRANSFORM_2                               = -1604009
+enum Yells {
+	SAY_AGGRO = -1604000,
+	SAY_SLAY_1 = -1604001,
+	SAY_SLAY_2 = -1604002,
+	SAY_SLAY_3 = -1604003,
+	SAY_DEATH = -1604004,
+	SAY_SUMMON_RHINO_1 = -1604005,
+	SAY_SUMMON_RHINO_2 = -1604006,
+	SAY_SUMMON_RHINO_3 = -1604007,
+	SAY_TRANSFORM_1 = -1604008, //Phase change
+	SAY_TRANSFORM_2 = -1604009
 };
 
-enum Achievements
-{
-    ACHIEV_WHAT_THE_ECK                           = 1864,
-    ACHIEV_SHARE_THE_LOVE                         = 2152
+enum Achievements {
+	ACHIEV_WHAT_THE_ECK = 1864, ACHIEV_SHARE_THE_LOVE = 2152
 };
 
-enum Displays
-{
-    DISPLAY_RHINO                                 = 26265,
-    DISPLAY_TROLL                                 = 27061
+enum Displays {
+	DISPLAY_RHINO = 26265, DISPLAY_TROLL = 27061
 };
 
-enum CombatPhase
-{
-    TROLL,
-    RHINO
+enum CombatPhase {
+	TROLL, RHINO
 };
 
-class boss_gal_darah : public CreatureScript
-{
+class boss_gal_darah: public CreatureScript {
 public:
-    boss_gal_darah() : CreatureScript("boss_gal_darah") { }
+	boss_gal_darah() :
+			CreatureScript("boss_gal_darah") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_gal_darahAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_gal_darahAI(pCreature);
+	}
 
-    struct boss_gal_darahAI : public BossAI
-    {
-        boss_gal_darahAI(Creature *c) : BossAI(c, DATA_GAL_DARAH_EVENT)
-        {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-        }
+	struct boss_gal_darahAI: public BossAI {
+		boss_gal_darahAI(Creature *c) :
+				BossAI(c, DATA_GAL_DARAH_EVENT) {
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        uint32 uiStampedeTimer;
-        uint32 uiWhirlingSlashTimer;
-        uint32 uiPunctureTimer;
-        uint32 uiEnrageTimer;
-        uint32 uiImpalingChargeTimer;
-        uint32 uiStompTimer;
-        uint32 uiTransformationTimer;
-        std::set<uint64> lImpaledPlayers;
+		uint32 uiStampedeTimer;
+		uint32 uiWhirlingSlashTimer;
+		uint32 uiPunctureTimer;
+		uint32 uiEnrageTimer;
+		uint32 uiImpalingChargeTimer;
+		uint32 uiStompTimer;
+		uint32 uiTransformationTimer;
+		std::set<uint64> lImpaledPlayers;
 
-        CombatPhase Phase;
+		CombatPhase Phase;
 
-        uint8 uiPhaseCounter;
+		uint8 uiPhaseCounter;
 
-        bool bStartOfTransformation;
+		bool bStartOfTransformation;
 
-        void Reset()
-        {
-            uiStampedeTimer = 10*IN_MILLISECONDS;
-            uiWhirlingSlashTimer = 21*IN_MILLISECONDS;
-            uiPunctureTimer = 10*IN_MILLISECONDS;
-            uiEnrageTimer = 15*IN_MILLISECONDS;
-            uiImpalingChargeTimer = 21*IN_MILLISECONDS;
-            uiStompTimer = 25*IN_MILLISECONDS;
-            uiTransformationTimer = 9*IN_MILLISECONDS;
-            uiPhaseCounter = 0;
+		void Reset() {
+			uiStampedeTimer = 10 * IN_MILLISECONDS;
+			uiWhirlingSlashTimer = 21 * IN_MILLISECONDS;
+			uiPunctureTimer = 10 * IN_MILLISECONDS;
+			uiEnrageTimer = 15 * IN_MILLISECONDS;
+			uiImpalingChargeTimer = 21 * IN_MILLISECONDS;
+			uiStompTimer = 25 * IN_MILLISECONDS;
+			uiTransformationTimer = 9 * IN_MILLISECONDS;
+			uiPhaseCounter = 0;
 
-            lImpaledPlayers.clear();
+			lImpaledPlayers.clear();
 
-            bStartOfTransformation = true;
+			bStartOfTransformation = true;
 
-            Phase = TROLL;
+			Phase = TROLL;
 
-            me->SetDisplayId(DISPLAY_TROLL);
+			me->SetDisplayId(DISPLAY_TROLL);
 
-            if (instance)
-                instance->SetData(DATA_GAL_DARAH_EVENT, NOT_STARTED);
-        }
+			if (instance)
+				instance->SetData(DATA_GAL_DARAH_EVENT, NOT_STARTED);
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
 
-            if (instance)
-                instance->SetData(DATA_GAL_DARAH_EVENT, IN_PROGRESS);
-        }
+			if (instance)
+				instance->SetData(DATA_GAL_DARAH_EVENT, IN_PROGRESS);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            switch (Phase)
-            {
-                case TROLL:
-                    if (uiPhaseCounter == 2)
-                    {
-                        if (uiTransformationTimer <= diff)
-                        {
-                            me->SetDisplayId(DISPLAY_RHINO);
-                            Phase = RHINO;
-                            uiPhaseCounter = 0;
-                            DoScriptText(SAY_TRANSFORM_1, me);
-                            uiTransformationTimer = 5*IN_MILLISECONDS;
-                            bStartOfTransformation = true;
-                            me->ClearUnitState(UNIT_STAT_STUNNED|UNIT_STAT_ROOT);
-                            me->SetReactState(REACT_AGGRESSIVE);
-                        }
-                        else
-                        {
-                            uiTransformationTimer -= diff;
+			switch (Phase) {
+			case TROLL:
+				if (uiPhaseCounter == 2) {
+					if (uiTransformationTimer <= diff) {
+						me->SetDisplayId(DISPLAY_RHINO);
+						Phase = RHINO;
+						uiPhaseCounter = 0;
+						DoScriptText(SAY_TRANSFORM_1, me);
+						uiTransformationTimer = 5 * IN_MILLISECONDS;
+						bStartOfTransformation = true;
+						me->ClearUnitState(UNIT_STAT_STUNNED | UNIT_STAT_ROOT);
+						me->SetReactState(REACT_AGGRESSIVE);
+					} else {
+						uiTransformationTimer -= diff;
 
-                            if (bStartOfTransformation)
-                            {
-                                bStartOfTransformation = false;
-                                me->AddUnitState(UNIT_STAT_STUNNED|UNIT_STAT_ROOT);
-                                me->SetReactState(REACT_PASSIVE);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (uiStampedeTimer <= diff)
-                        {
-                            DoCast(me, SPELL_STAMPEDE);
-                            DoScriptText(RAND(SAY_SUMMON_RHINO_1, SAY_SUMMON_RHINO_2, SAY_SUMMON_RHINO_3), me);
-                            uiStampedeTimer = 15*IN_MILLISECONDS;
-                        } else uiStampedeTimer -= diff;
+						if (bStartOfTransformation) {
+							bStartOfTransformation = false;
+							me->AddUnitState(
+									UNIT_STAT_STUNNED | UNIT_STAT_ROOT);
+							me->SetReactState(REACT_PASSIVE);
+						}
+					}
+				} else {
+					if (uiStampedeTimer <= diff) {
+						DoCast(me, SPELL_STAMPEDE);
+						DoScriptText(
+								RAND(SAY_SUMMON_RHINO_1, SAY_SUMMON_RHINO_2,
+										SAY_SUMMON_RHINO_3), me);
+						uiStampedeTimer = 15 * IN_MILLISECONDS;
+					} else
+						uiStampedeTimer -= diff;
 
-                        if (uiWhirlingSlashTimer <= diff)
-                        {
-                            DoCast(me->getVictim(), SPELL_WHIRLING_SLASH);
-                            uiWhirlingSlashTimer = 21*IN_MILLISECONDS;
-                            ++uiPhaseCounter;
-                        } else uiWhirlingSlashTimer -= diff;
-                    }
-                break;
-                case RHINO:
-                    if (uiPhaseCounter == 2)
-                    {
-                        if (uiTransformationTimer <= diff)
-                        {
-                            me->SetDisplayId(DISPLAY_TROLL);
-                            Phase = TROLL;
-                            uiPhaseCounter = 0;
-                            DoScriptText(SAY_TRANSFORM_2, me);
-                            uiTransformationTimer = 9*IN_MILLISECONDS;
-                            bStartOfTransformation = true;
-                            me->ClearUnitState(UNIT_STAT_STUNNED|UNIT_STAT_ROOT);
-                            me->SetReactState(REACT_AGGRESSIVE);
-                        }
-                        else
-                        {
-                            uiTransformationTimer -= diff;
+					if (uiWhirlingSlashTimer <= diff) {
+						DoCast(me->getVictim(), SPELL_WHIRLING_SLASH);
+						uiWhirlingSlashTimer = 21 * IN_MILLISECONDS;
+						++uiPhaseCounter;
+					} else
+						uiWhirlingSlashTimer -= diff;
+				}
+				break;
+			case RHINO:
+				if (uiPhaseCounter == 2) {
+					if (uiTransformationTimer <= diff) {
+						me->SetDisplayId(DISPLAY_TROLL);
+						Phase = TROLL;
+						uiPhaseCounter = 0;
+						DoScriptText(SAY_TRANSFORM_2, me);
+						uiTransformationTimer = 9 * IN_MILLISECONDS;
+						bStartOfTransformation = true;
+						me->ClearUnitState(UNIT_STAT_STUNNED | UNIT_STAT_ROOT);
+						me->SetReactState(REACT_AGGRESSIVE);
+					} else {
+						uiTransformationTimer -= diff;
 
-                            if (bStartOfTransformation)
-                            {
-                                bStartOfTransformation = false;
-                                me->AddUnitState(UNIT_STAT_STUNNED|UNIT_STAT_ROOT);
-                                me->SetReactState(REACT_PASSIVE);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (uiPunctureTimer <= diff)
-                        {
-                            DoCast(me->getVictim(), SPELL_PUNCTURE);
-                            uiPunctureTimer = 8*IN_MILLISECONDS;
-                        } else uiPunctureTimer -= diff;
+						if (bStartOfTransformation) {
+							bStartOfTransformation = false;
+							me->AddUnitState(
+									UNIT_STAT_STUNNED | UNIT_STAT_ROOT);
+							me->SetReactState(REACT_PASSIVE);
+						}
+					}
+				} else {
+					if (uiPunctureTimer <= diff) {
+						DoCast(me->getVictim(), SPELL_PUNCTURE);
+						uiPunctureTimer = 8 * IN_MILLISECONDS;
+					} else
+						uiPunctureTimer -= diff;
 
-                        if (uiEnrageTimer <= diff)
-                        {
-                            DoCast(me->getVictim(), SPELL_ENRAGE);
-                            uiEnrageTimer = 20*IN_MILLISECONDS;
-                        } else uiEnrageTimer -= diff;
+					if (uiEnrageTimer <= diff) {
+						DoCast(me->getVictim(), SPELL_ENRAGE);
+						uiEnrageTimer = 20 * IN_MILLISECONDS;
+					} else
+						uiEnrageTimer -= diff;
 
-                        if (uiStompTimer <= diff)
-                        {
-                            DoCast(me->getVictim(), SPELL_STOMP);
-                            uiStompTimer = 20*IN_MILLISECONDS;
-                        } else uiStompTimer -= diff;
+					if (uiStompTimer <= diff) {
+						DoCast(me->getVictim(), SPELL_STOMP);
+						uiStompTimer = 20 * IN_MILLISECONDS;
+					} else
+						uiStompTimer -= diff;
 
-                        if (uiImpalingChargeTimer <= diff)
-                        {
-                            if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                            {
-                                DoCast(pTarget, SPELL_IMPALING_CHARGE);
-                                lImpaledPlayers.insert(pTarget->GetGUID());
-                            }
-                            uiImpalingChargeTimer = 31*IN_MILLISECONDS;
-                            ++uiPhaseCounter;
-                        } else uiImpalingChargeTimer -= diff;
-                    }
-                break;
-            }
+					if (uiImpalingChargeTimer <= diff) {
+						if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)) {
+							DoCast(pTarget, SPELL_IMPALING_CHARGE);
+							lImpaledPlayers.insert(pTarget->GetGUID());
+						}
+						uiImpalingChargeTimer = 31 * IN_MILLISECONDS;
+						++uiPhaseCounter;
+					} else
+						uiImpalingChargeTimer -= diff;
+				}
+				break;
+			}
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-            {
-                if (IsHeroic())
-                {
-                    if (lImpaledPlayers.size() == 5)
-                        instance->DoCompleteAchievement(ACHIEV_SHARE_THE_LOVE);
+			if (instance) {
+				if (IsHeroic()) {
+					if (lImpaledPlayers.size() == 5)
+						instance->DoCompleteAchievement(ACHIEV_SHARE_THE_LOVE);
 
-                    AchievementEntry const *achievWhatTheEck = GetAchievementStore()->LookupEntry(ACHIEV_WHAT_THE_ECK);
-                    if (achievWhatTheEck)
-                    {
-                        Map::PlayerList const &players = instance->instance->GetPlayers();
-                        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (itr->getSource()->HasAura(SPELL_ECK_RESIDUE))
-                                itr->getSource()->CompletedAchievement(achievWhatTheEck);
-                    }
-                }
+					AchievementEntry const *achievWhatTheEck =
+							GetAchievementStore()->LookupEntry(
+									ACHIEV_WHAT_THE_ECK);
+					if (achievWhatTheEck) {
+						Map::PlayerList const &players =
+								instance->instance->GetPlayers();
+						for (Map::PlayerList::const_iterator itr =
+								players.begin(); itr != players.end(); ++itr)
+							if (itr->getSource()->HasAura(SPELL_ECK_RESIDUE))
+								itr->getSource()->CompletedAchievement(
+										achievWhatTheEck);
+					}
+				}
 
-                instance->SetData(DATA_GAL_DARAH_EVENT, DONE);
-            }
-        }
+				instance->SetData(DATA_GAL_DARAH_EVENT, DONE);
+			}
+		}
 
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
 
-            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
-        }
-    };
+			DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
+		}
+	};
 };
 
-void AddSC_boss_gal_darah()
-{
-    new boss_gal_darah();
+void AddSC_boss_gal_darah() {
+	new boss_gal_darah();
 }

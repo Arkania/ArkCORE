@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Flamegor
-SD%Complete: 100
-SDComment:
-SDCategory: Blackwing Lair
-EndScriptData */
+ SDName: Boss_Flamegor
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Blackwing Lair
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -36,73 +36,69 @@ EndScriptData */
 #define SPELL_SHADOWFLAME        22539
 #define SPELL_WINGBUFFET         23339
 #define SPELL_FRENZY             23342                      //This spell periodically triggers fire nova
-
-class boss_flamegor : public CreatureScript
-{
+class boss_flamegor: public CreatureScript {
 public:
-    boss_flamegor() : CreatureScript("boss_flamegor") { }
+	boss_flamegor() :
+			CreatureScript("boss_flamegor") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_flamegorAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_flamegorAI(pCreature);
+	}
 
-    struct boss_flamegorAI : public ScriptedAI
-    {
-        boss_flamegorAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_flamegorAI: public ScriptedAI {
+		boss_flamegorAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 ShadowFlame_Timer;
-        uint32 WingBuffet_Timer;
-        uint32 Frenzy_Timer;
+		uint32 ShadowFlame_Timer;
+		uint32 WingBuffet_Timer;
+		uint32 Frenzy_Timer;
 
-        void Reset()
-        {
-            ShadowFlame_Timer = 21000;                          //These times are probably wrong
-            WingBuffet_Timer = 35000;
-            Frenzy_Timer = 10000;
-        }
+		void Reset() {
+			ShadowFlame_Timer = 21000; //These times are probably wrong
+			WingBuffet_Timer = 35000;
+			Frenzy_Timer = 10000;
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-            DoZoneInCombat();
-        }
+		void EnterCombat(Unit * /*who*/) {
+			DoZoneInCombat();
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //ShadowFlame_Timer
-            if (ShadowFlame_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_SHADOWFLAME);
-                ShadowFlame_Timer = 15000 + rand()%7000;
-            } else ShadowFlame_Timer -= diff;
+			//ShadowFlame_Timer
+			if (ShadowFlame_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_SHADOWFLAME);
+				ShadowFlame_Timer = 15000 + rand() % 7000;
+			} else
+				ShadowFlame_Timer -= diff;
 
-            //WingBuffet_Timer
-            if (WingBuffet_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_WINGBUFFET);
-                if (DoGetThreat(me->getVictim()))
-                    DoModifyThreatPercent(me->getVictim(), -75);
+			//WingBuffet_Timer
+			if (WingBuffet_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_WINGBUFFET);
+				if (DoGetThreat(me->getVictim()))
+					DoModifyThreatPercent(me->getVictim(), -75);
 
-                WingBuffet_Timer = 25000;
-            } else WingBuffet_Timer -= diff;
+				WingBuffet_Timer = 25000;
+			} else
+				WingBuffet_Timer -= diff;
 
-            //Frenzy_Timer
-            if (Frenzy_Timer <= diff)
-            {
-                DoScriptText(EMOTE_FRENZY, me);
-                DoCast(me, SPELL_FRENZY);
-                Frenzy_Timer = urand(8000, 10000);
-            } else Frenzy_Timer -= diff;
+			//Frenzy_Timer
+			if (Frenzy_Timer <= diff) {
+				DoScriptText(EMOTE_FRENZY, me);
+				DoCast(me, SPELL_FRENZY);
+				Frenzy_Timer = urand(8000, 10000);
+			} else
+				Frenzy_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_flamegor()
-{
-    new boss_flamegor();
+void AddSC_boss_flamegor() {
+	new boss_flamegor();
 }

@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Lord_Alexei_Barov
-SD%Complete: 100
-SDComment: aura applied/defined in database
-SDCategory: Scholomance
-EndScriptData */
+ SDName: Boss_Lord_Alexei_Barov
+ SD%Complete: 100
+ SDComment: aura applied/defined in database
+ SDCategory: Scholomance
+ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "scholomance.h"
@@ -35,75 +35,72 @@ EndScriptData */
 #define SPELL_IMMOLATE             20294                    // Old ID  was 15570
 #define SPELL_VEILOFSHADOW         17820
 
-class boss_lord_alexei_barov : public CreatureScript
-{
+class boss_lord_alexei_barov: public CreatureScript {
 public:
-    boss_lord_alexei_barov() : CreatureScript("boss_lord_alexei_barov") { }
+	boss_lord_alexei_barov() :
+			CreatureScript("boss_lord_alexei_barov") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_lordalexeibarovAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_lordalexeibarovAI(pCreature);
+	}
 
-    struct boss_lordalexeibarovAI : public ScriptedAI
-    {
-        boss_lordalexeibarovAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_lordalexeibarovAI: public ScriptedAI {
+		boss_lordalexeibarovAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 Immolate_Timer;
-        uint32 VeilofShadow_Timer;
+		uint32 Immolate_Timer;
+		uint32 VeilofShadow_Timer;
 
-        void Reset()
-        {
-            Immolate_Timer = 7000;
-            VeilofShadow_Timer = 15000;
+		void Reset() {
+			Immolate_Timer = 7000;
+			VeilofShadow_Timer = 15000;
 
-            me->LoadCreaturesAddon();
-        }
+			me->LoadCreaturesAddon();
+		}
 
-        void JustDied(Unit * /*killer*/)
-        {
-            InstanceScript *pInstance = me->GetInstanceScript();
-            if (pInstance)
-            {
-                pInstance->SetData(DATA_LORDALEXEIBAROV_DEATH, 0);
+		void JustDied(Unit * /*killer*/) {
+			InstanceScript *pInstance = me->GetInstanceScript();
+			if (pInstance) {
+				pInstance->SetData(DATA_LORDALEXEIBAROV_DEATH, 0);
 
-                if (pInstance->GetData(TYPE_GANDLING) == IN_PROGRESS)
-                    me->SummonCreature(1853, 180.73f, -9.43856f, 75.507f, 1.61399f, TEMPSUMMON_DEAD_DESPAWN, 0);
-            }
-        }
+				if (pInstance->GetData(TYPE_GANDLING) == IN_PROGRESS)
+					me->SummonCreature(1853, 180.73f, -9.43856f, 75.507f,
+							1.61399f, TEMPSUMMON_DEAD_DESPAWN, 0);
+			}
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-        }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //Immolate_Timer
-            if (Immolate_Timer <= diff)
-            {
-                Unit *pTarget = NULL;
-                pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
-                if (pTarget) DoCast(pTarget, SPELL_IMMOLATE);
+			//Immolate_Timer
+			if (Immolate_Timer <= diff) {
+				Unit *pTarget = NULL;
+				pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+				if (pTarget)
+					DoCast(pTarget, SPELL_IMMOLATE);
 
-                Immolate_Timer = 12000;
-            } else Immolate_Timer -= diff;
+				Immolate_Timer = 12000;
+			} else
+				Immolate_Timer -= diff;
 
-            //VeilofShadow_Timer
-            if (VeilofShadow_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_VEILOFSHADOW);
-                VeilofShadow_Timer = 20000;
-            } else VeilofShadow_Timer -= diff;
+			//VeilofShadow_Timer
+			if (VeilofShadow_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_VEILOFSHADOW);
+				VeilofShadow_Timer = 20000;
+			} else
+				VeilofShadow_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_lordalexeibarov()
-{
-    new boss_lord_alexei_barov();
+void AddSC_boss_lordalexeibarov() {
+	new boss_lord_alexei_barov();
 }

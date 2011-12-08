@@ -28,127 +28,115 @@
 #define MAX_ENCOUNTER 2
 
 /* Forge of Souls encounters:
-0- Bronjahm, The Godfather of Souls
-1- The Devourer of Souls
-*/
+ 0- Bronjahm, The Godfather of Souls
+ 1- The Devourer of Souls
+ */
 
-class instance_forge_of_souls : public InstanceMapScript
-{
-    public:
-        instance_forge_of_souls() : InstanceMapScript(FoSScriptName, 632) { }
+class instance_forge_of_souls: public InstanceMapScript {
+public:
+	instance_forge_of_souls() :
+			InstanceMapScript(FoSScriptName, 632) {
+	}
 
-        struct instance_forge_of_souls_InstanceScript : public InstanceScript
-        {
-            instance_forge_of_souls_InstanceScript(Map* map) : InstanceScript(map)
-            {
-                SetBossNumber(MAX_ENCOUNTER);
-                bronjahm = 0;
-                devourerOfSouls = 0;
+	struct instance_forge_of_souls_InstanceScript: public InstanceScript {
+		instance_forge_of_souls_InstanceScript(Map* map) :
+				InstanceScript(map) {
+			SetBossNumber(MAX_ENCOUNTER);
+			bronjahm = 0;
+			devourerOfSouls = 0;
 
-                teamInInstance = 0;
-            }
+			teamInInstance = 0;
+		}
 
-            void OnCreatureCreate(Creature* creature, bool /*add*/)
-            {
-                Map::PlayerList const &players = instance->GetPlayers();
-                if (!players.isEmpty())
-                    if (Player* player = players.begin()->getSource())
-                        teamInInstance = player->GetTeamId();
+		void OnCreatureCreate(Creature* creature, bool /*add*/) {
+			Map::PlayerList const &players = instance->GetPlayers();
+			if (!players.isEmpty())
+				if (Player* player = players.begin()->getSource())
+					teamInInstance = player->GetTeamId();
 
-                switch (creature->GetEntry())
-                {
-                    case CREATURE_BRONJAHM:
-                        bronjahm = creature->GetGUID();
-                        break;
-                    case CREATURE_DEVOURER:
-                        devourerOfSouls = creature->GetGUID();
-                        break;
-                }
-            }
+			switch (creature->GetEntry()) {
+			case CREATURE_BRONJAHM:
+				bronjahm = creature->GetGUID();
+				break;
+			case CREATURE_DEVOURER:
+				devourerOfSouls = creature->GetGUID();
+				break;
+			}
+		}
 
-            uint32 GetData(uint32 type)
-            {
-                switch (type)
-                {
-                    case DATA_TEAM_IN_INSTANCE:
-                        return teamInInstance;
-                    default:
-                        break;
-                }
+		uint32 GetData(uint32 type) {
+			switch (type) {
+			case DATA_TEAM_IN_INSTANCE:
+				return teamInInstance;
+			default:
+				break;
+			}
 
-                return 0;
-            }
+			return 0;
+		}
 
-            uint64 GetData64(uint32 type)
-            {
-                switch (type)
-                {
-                    case DATA_BRONJAHM:
-                        return bronjahm;
-                    case DATA_DEVOURER:
-                        return devourerOfSouls;
-                    default:
-                        break;
-                }
+		uint64 GetData64(uint32 type) {
+			switch (type) {
+			case DATA_BRONJAHM:
+				return bronjahm;
+			case DATA_DEVOURER:
+				return devourerOfSouls;
+			default:
+				break;
+			}
 
-                return 0;
-            }
+			return 0;
+		}
 
-            std::string GetSaveData()
-            {
-                OUT_SAVE_INST_DATA;
+		std::string GetSaveData() {
+			OUT_SAVE_INST_DATA;
 
-                std::ostringstream saveStream;
-                saveStream << "F S " << GetBossSaveData();
+			std::ostringstream saveStream;
+			saveStream << "F S " << GetBossSaveData();
 
-                OUT_SAVE_INST_DATA_COMPLETE;
-                return saveStream.str();
-            }
+			OUT_SAVE_INST_DATA_COMPLETE;
+			return saveStream.str();
+		}
 
-            void Load(const char* in)
-            {
-                if (!in)
-                {
-                    OUT_LOAD_INST_DATA_FAIL;
-                    return;
-                }
+		void Load(const char* in) {
+			if (!in) {
+				OUT_LOAD_INST_DATA_FAIL;
+				return;
+			}
 
-                OUT_LOAD_INST_DATA(in);
+			OUT_LOAD_INST_DATA(in);
 
-                char dataHead1, dataHead2;
+			char dataHead1, dataHead2;
 
-                std::istringstream loadStream(in);
-                loadStream >> dataHead1 >> dataHead2;
+			std::istringstream loadStream(in);
+			loadStream >> dataHead1 >> dataHead2;
 
-                if (dataHead1 == 'F' && dataHead2 == 'S')
-                {
-                    for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                    {
-                        uint32 tmpState;
-                        loadStream >> tmpState;
-                        if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
-                            tmpState = NOT_STARTED;
-                        SetBossState(i, EncounterState(tmpState));
-                    }
-                } else OUT_LOAD_INST_DATA_FAIL;
+			if (dataHead1 == 'F' && dataHead2 == 'S') {
+				for (uint8 i = 0; i < MAX_ENCOUNTER; ++i) {
+					uint32 tmpState;
+					loadStream >> tmpState;
+					if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
+						tmpState = NOT_STARTED;
+					SetBossState(i, EncounterState(tmpState));
+				}
+			} else
+				OUT_LOAD_INST_DATA_FAIL;
 
-                OUT_LOAD_INST_DATA_COMPLETE;
-            }
+			OUT_LOAD_INST_DATA_COMPLETE;
+		}
 
-        private:
-            uint64 bronjahm;
-            uint64 devourerOfSouls;
+	private:
+		uint64 bronjahm;
+		uint64 devourerOfSouls;
 
-            uint32 teamInInstance;
-        };
+		uint32 teamInInstance;
+	};
 
-        InstanceScript* GetInstanceScript(InstanceMap *map) const
-        {
-            return new instance_forge_of_souls_InstanceScript(map);
-        }
+	InstanceScript* GetInstanceScript(InstanceMap *map) const {
+		return new instance_forge_of_souls_InstanceScript(map);
+	}
 };
 
-void AddSC_instance_forge_of_souls()
-{
-    new instance_forge_of_souls();
+void AddSC_instance_forge_of_souls() {
+	new instance_forge_of_souls();
 }

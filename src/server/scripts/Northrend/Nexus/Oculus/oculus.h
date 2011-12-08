@@ -18,46 +18,34 @@
 #ifndef DEF_OCULUS_H
 #define DEF_OCULUS_H
 
-enum Data
-{
-    DATA_DRAKOS_EVENT,
-    DATA_VAROS_EVENT,
-    DATA_UROM_EVENT,
-    DATA_EREGOS_EVENT,
-    DATA_UROM_PLATAFORM
+enum Data {
+	DATA_DRAKOS_EVENT,
+	DATA_VAROS_EVENT,
+	DATA_UROM_EVENT,
+	DATA_EREGOS_EVENT,
+	DATA_UROM_PLATAFORM
 };
 
-enum Data64
-{
-    DATA_DRAKOS,
-    DATA_VAROS,
-    DATA_UROM,
-    DATA_EREGOS
+enum Data64 {
+	DATA_DRAKOS, DATA_VAROS, DATA_UROM, DATA_EREGOS
 };
 
-enum Bosses
-{
-    NPC_DRAKOS                  = 27654,
-    NPC_VAROS                   = 27447,
-    NPC_UROM                    = 27655,
-    NPC_EREGOS                  = 27656,
+enum Bosses {
+	NPC_DRAKOS = 27654, NPC_VAROS = 27447, NPC_UROM = 27655, NPC_EREGOS = 27656,
 
-    NPC_AZURE_RING_GUARDIAN     = 27638
+	NPC_AZURE_RING_GUARDIAN = 27638
 };
 
-enum GameObjects
-{
-    GO_DRAGON_CAGE_DOOR                           = 193995
+enum GameObjects {
+	GO_DRAGON_CAGE_DOOR = 193995
 };
 
-enum SpellEvents
-{
-    EVENT_CALL_DRAGON = 12229
+enum SpellEvents {
+	EVENT_CALL_DRAGON = 12229
 };
 
-enum CreatureActions
-{
-    ACTION_CALL_DRAGON_EVENT = 1
+enum CreatureActions {
+	ACTION_CALL_DRAGON_EVENT = 1
 };
 
 #endif

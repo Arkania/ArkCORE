@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Halycon
-SD%Complete: 100
-SDComment:
-SDCategory: Blackrock Spire
-EndScriptData */
+ SDName: Boss_Halycon
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Blackrock Spire
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -39,68 +39,65 @@ EndScriptData */
 #define ADD_1Z                  64.401443f
 #define ADD_1O                  3.124724f
 
-class boss_halycon : public CreatureScript
-{
+class boss_halycon: public CreatureScript {
 public:
-    boss_halycon() : CreatureScript("boss_halycon") { }
+	boss_halycon() :
+			CreatureScript("boss_halycon") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_halyconAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_halyconAI(pCreature);
+	}
 
-    struct boss_halyconAI : public ScriptedAI
-    {
-        boss_halyconAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_halyconAI: public ScriptedAI {
+		boss_halyconAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 CrowdPummel_Timer;
-        uint32 MightyBlow_Timer;
-        bool Summoned;
+		uint32 CrowdPummel_Timer;
+		uint32 MightyBlow_Timer;
+		bool Summoned;
 
-        void Reset()
-        {
-            CrowdPummel_Timer = 8000;
-            MightyBlow_Timer = 14000;
-            Summoned = false;
-        }
+		void Reset() {
+			CrowdPummel_Timer = 8000;
+			MightyBlow_Timer = 14000;
+			Summoned = false;
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-        }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            //CrowdPummel_Timer
-            if (CrowdPummel_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_CROWDPUMMEL);
-                CrowdPummel_Timer = 14000;
-            } else CrowdPummel_Timer -= diff;
+			//CrowdPummel_Timer
+			if (CrowdPummel_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_CROWDPUMMEL);
+				CrowdPummel_Timer = 14000;
+			} else
+				CrowdPummel_Timer -= diff;
 
-            //MightyBlow_Timer
-            if (MightyBlow_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_MIGHTYBLOW);
-                MightyBlow_Timer = 10000;
-            } else MightyBlow_Timer -= diff;
+			//MightyBlow_Timer
+			if (MightyBlow_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_MIGHTYBLOW);
+				MightyBlow_Timer = 10000;
+			} else
+				MightyBlow_Timer -= diff;
 
-            //Summon Gizrul
-            if (!Summoned && HealthBelowPct(25))
-            {
-                me->SummonCreature(10268, ADD_1X, ADD_1Y, ADD_1Z, ADD_1O, TEMPSUMMON_TIMED_DESPAWN, 300000);
-                Summoned = true;
-            }
+			//Summon Gizrul
+			if (!Summoned && HealthBelowPct(25)) {
+				me->SummonCreature(10268, ADD_1X, ADD_1Y, ADD_1Z, ADD_1O,
+						TEMPSUMMON_TIMED_DESPAWN, 300000);
+				Summoned = true;
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_halycon()
-{
-    new boss_halycon();
+void AddSC_boss_halycon() {
+	new boss_halycon();
 }

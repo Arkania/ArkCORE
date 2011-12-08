@@ -23,299 +23,280 @@
  */
 
 /* Script Data Start
-SDName: Boss sjonnir
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:
-SDCategory:
-Script Data End */
+ SDName: Boss sjonnir
+ SDAuthor: LordVanMartin
+ SD%Complete:
+ SDComment:
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
 
-enum Spells
-{
-    SPELL_LIGHTING_RING                                    = 51849, //Periodic Trigger (interval 2s) spell = 50841
-    H_SPELL_LIGHTING_RING                                  = 59861, //Periodic Trigger (interval 2s) spell = 59849
-    SPELL_LIGHTING_RING_1                                  = 50840, //Periodic Trigger (interval 2s) spell = 50841
-    H_SPELL_LIGHTING_RING_1                                = 59848, //Periodic Trigger (interval 2s) spell = 59849
-    SPELL_STATIC_CHARGE                                    = 50834, //Periodic Trigger 2s interval, spell =50835
-    H_SPELL_STATIC_CHARGE                                  = 59846, //Periodic Trigger 2s interval, spell =50847
-    SPELL_CHAIN_LIGHTING                                   = 50830,
-    H_SPELL_CHAIN_LIGHTING                                 = 59844,
-    SPELL_LIGHTING_SHIELD                                  = 50831,
-    H_SPELL_LIGHTING_SHIELD                                = 59845,
-    SPELL_FRENZY                                           = 28747
+enum Spells {
+	SPELL_LIGHTING_RING = 51849, //Periodic Trigger (interval 2s) spell = 50841
+	H_SPELL_LIGHTING_RING = 59861, //Periodic Trigger (interval 2s) spell = 59849
+	SPELL_LIGHTING_RING_1 = 50840, //Periodic Trigger (interval 2s) spell = 50841
+	H_SPELL_LIGHTING_RING_1 = 59848, //Periodic Trigger (interval 2s) spell = 59849
+	SPELL_STATIC_CHARGE = 50834, //Periodic Trigger 2s interval, spell =50835
+	H_SPELL_STATIC_CHARGE = 59846, //Periodic Trigger 2s interval, spell =50847
+	SPELL_CHAIN_LIGHTING = 50830,
+	H_SPELL_CHAIN_LIGHTING = 59844,
+	SPELL_LIGHTING_SHIELD = 50831,
+	H_SPELL_LIGHTING_SHIELD = 59845,
+	SPELL_FRENZY = 28747
 };
 
-enum Yells
-{
-    SAY_AGGRO                                              = -1599011,
-    SAY_SLAY_1                                             = -1599012,
-    SAY_SLAY_2                                             = -1599013,
-    SAY_SLAY_3                                             = -1599014,
-    SAY_DEATH                                              = -1599015
+enum Yells {
+	SAY_AGGRO = -1599011,
+	SAY_SLAY_1 = -1599012,
+	SAY_SLAY_2 = -1599013,
+	SAY_SLAY_3 = -1599014,
+	SAY_DEATH = -1599015
 };
 
 #define EMOTE_GENERIC_FRENZY                               -1000002
 
-enum SjonnirCreatures
-{
-    CREATURE_FORGED_IRON_TROGG                             = 27979,
-    CREATURE_MALFORMED_OOZE                                = 27981,
-    CREATURE_FORGED_IRON_DWARF                             = 27982,
-    CREATURE_IRON_SLUDGE                                   = 28165
+enum SjonnirCreatures {
+	CREATURE_FORGED_IRON_TROGG = 27979,
+	CREATURE_MALFORMED_OOZE = 27981,
+	CREATURE_FORGED_IRON_DWARF = 27982,
+	CREATURE_IRON_SLUDGE = 28165
 };
 
-enum Misc
-{
-    DATA_TIME_BEFORE_OOZE                                  = 150000, //2min 30 secs
-    ACHIEV_ABUSE_THE_OOZE                                  = 2155
+enum Misc {
+	DATA_TIME_BEFORE_OOZE = 150000, //2min 30 secs
+	ACHIEV_ABUSE_THE_OOZE = 2155
 };
 
-struct Locations
-{
-    float x, y, z;
+struct Locations {
+	float x, y, z;
 };
 
-static Locations PipeLocations[] =
-{
-  {1295.44f, 734.07f, 200.3f}, //left
-  {1297.7f,  595.6f,  199.9f} //right
+static Locations PipeLocations[] = { { 1295.44f, 734.07f, 200.3f }, //left
+		{ 1297.7f, 595.6f, 199.9f } //right
 };
 
-static Locations CenterPoint = {1295.21f, 667.157f, 189.691f};
+static Locations CenterPoint = { 1295.21f, 667.157f, 189.691f };
 
-class boss_sjonnir : public CreatureScript
-{
+class boss_sjonnir: public CreatureScript {
 public:
-    boss_sjonnir() : CreatureScript("boss_sjonnir") { }
+	boss_sjonnir() :
+			CreatureScript("boss_sjonnir") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_sjonnirAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_sjonnirAI(pCreature);
+	}
 
-    struct boss_sjonnirAI : public BossAI
-    {
-        boss_sjonnirAI(Creature *c) : BossAI(c, DATA_SJONNIR_EVENT)
-        {
-        }
+	struct boss_sjonnirAI: public BossAI {
+		boss_sjonnirAI(Creature *c) :
+				BossAI(c, DATA_SJONNIR_EVENT) {
+		}
 
-        bool bIsFrenzy;
+		bool bIsFrenzy;
 
-        uint32 uiChainLightningTimer;
-        uint32 uiLightningShieldTimer;
-        uint32 uiStaticChargeTimer;
-        uint32 uiLightningRingTimer;
-        uint32 uiSummonTimer;
-        uint32 uiFrenzyTimer;
-        uint32 uiEncounterTimer;
-        uint32 uiKilledIronSludges;
+		uint32 uiChainLightningTimer;
+		uint32 uiLightningShieldTimer;
+		uint32 uiStaticChargeTimer;
+		uint32 uiLightningRingTimer;
+		uint32 uiSummonTimer;
+		uint32 uiFrenzyTimer;
+		uint32 uiEncounterTimer;
+		uint32 uiKilledIronSludges;
 
-        void Reset()
-        {
-            bIsFrenzy = false;
+		void Reset() {
+			bIsFrenzy = false;
 
-            uiEncounterTimer = 0;
-            uiChainLightningTimer = 3000 + rand()%5000;
-            uiLightningShieldTimer = 20000 + rand()%5000;
-            uiStaticChargeTimer = 20000 + rand()%5000;
-            uiLightningRingTimer = 30000 + rand()%5000;
-            uiSummonTimer = 5000;
-            uiFrenzyTimer = 300000; //5 minutes
-            uiKilledIronSludges = 0;
+			uiEncounterTimer = 0;
+			uiChainLightningTimer = 3000 + rand() % 5000;
+			uiLightningShieldTimer = 20000 + rand() % 5000;
+			uiStaticChargeTimer = 20000 + rand() % 5000;
+			uiLightningRingTimer = 30000 + rand() % 5000;
+			uiSummonTimer = 5000;
+			uiFrenzyTimer = 300000; //5 minutes
+			uiKilledIronSludges = 0;
 
-            summons.DespawnAll();
+			summons.DespawnAll();
 
-            if (instance)
-                instance->SetData(DATA_SJONNIR_EVENT, NOT_STARTED);
-        }
+			if (instance)
+				instance->SetData(DATA_SJONNIR_EVENT, NOT_STARTED);
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
 
-            uiEncounterTimer = 0;
+			uiEncounterTimer = 0;
 
-            if (instance)
-            {
-                if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_SJONNIR_DOOR)))
-                    if (pDoor->GetGoState() == GO_STATE_READY)
-                    {
-                        EnterEvadeMode();
-                        return;
-                    }
+			if (instance) {
+				if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_SJONNIR_DOOR)))
+					if (pDoor->GetGoState() == GO_STATE_READY) {
+						EnterEvadeMode();
+						return;
+					}
 
-                instance->SetData(DATA_SJONNIR_EVENT, IN_PROGRESS);
-            }
-        }
+				instance->SetData(DATA_SJONNIR_EVENT, IN_PROGRESS);
+			}
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (uiChainLightningTimer <= diff)
-            {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_CHAIN_LIGHTING);
-                uiChainLightningTimer = 10000 + rand()%5000;
-            } else uiChainLightningTimer -= diff;
+			if (uiChainLightningTimer <= diff) {
+				if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					DoCast(pTarget, SPELL_CHAIN_LIGHTING);
+				uiChainLightningTimer = 10000 + rand() % 5000;
+			} else
+				uiChainLightningTimer -= diff;
 
-            if (uiLightningShieldTimer <= diff)
-            {
-                DoCast(me, SPELL_LIGHTING_SHIELD);
-                uiLightningShieldTimer -= diff;
-            }
+			if (uiLightningShieldTimer <= diff) {
+				DoCast(me, SPELL_LIGHTING_SHIELD);
+				uiLightningShieldTimer -= diff;
+			}
 
-            if (uiStaticChargeTimer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_STATIC_CHARGE);
-                uiStaticChargeTimer = 20000 + rand()%5000;
-            } uiStaticChargeTimer -= diff;
+			if (uiStaticChargeTimer <= diff) {
+				DoCast(me->getVictim(), SPELL_STATIC_CHARGE);
+				uiStaticChargeTimer = 20000 + rand() % 5000;
+			}
+			uiStaticChargeTimer -= diff;
 
-            if (uiLightningRingTimer <= diff)
-            {
-                if (me->IsNonMeleeSpellCasted(false))
-                    me->InterruptNonMeleeSpells(false);
-                DoCast(me, SPELL_LIGHTING_RING);
-                uiLightningRingTimer = 30000 + rand()%5000;
-            } else uiLightningRingTimer -= diff;
+			if (uiLightningRingTimer <= diff) {
+				if (me->IsNonMeleeSpellCasted(false))
+					me->InterruptNonMeleeSpells(false);
+				DoCast(me, SPELL_LIGHTING_RING);
+				uiLightningRingTimer = 30000 + rand() % 5000;
+			} else
+				uiLightningRingTimer -= diff;
 
-            if (uiSummonTimer <= diff)
-            {
-                uint32 uiSummonPipe = rand()%2;
-                me->SummonCreature(uiEncounterTimer > DATA_TIME_BEFORE_OOZE ? CREATURE_MALFORMED_OOZE :
-                                           RAND(CREATURE_FORGED_IRON_DWARF, CREATURE_FORGED_IRON_TROGG),
-                                           PipeLocations[uiSummonPipe].x, PipeLocations[uiSummonPipe].y, PipeLocations[uiSummonPipe].z, 0.0f,
-                                           TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
-                uiSummonTimer = 20000;
-            } else uiSummonTimer -= diff;
+			if (uiSummonTimer <= diff) {
+				uint32 uiSummonPipe = rand() % 2;
+				me->SummonCreature(
+						uiEncounterTimer > DATA_TIME_BEFORE_OOZE ?
+								CREATURE_MALFORMED_OOZE :
+								RAND(CREATURE_FORGED_IRON_DWARF,
+										CREATURE_FORGED_IRON_TROGG),
+						PipeLocations[uiSummonPipe].x,
+						PipeLocations[uiSummonPipe].y,
+						PipeLocations[uiSummonPipe].z, 0.0f,
+						TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
+				uiSummonTimer = 20000;
+			} else
+				uiSummonTimer -= diff;
 
-            if (!bIsFrenzy)
-            {
-              if (uiFrenzyTimer <= diff)
-              {
-                  DoCast(me, SPELL_FRENZY);
-                  bIsFrenzy = true;
-              }
-              else uiFrenzyTimer -= diff;
-            }
+			if (!bIsFrenzy) {
+				if (uiFrenzyTimer <= diff) {
+					DoCast(me, SPELL_FRENZY);
+					bIsFrenzy = true;
+				} else
+					uiFrenzyTimer -= diff;
+			}
 
-            uiEncounterTimer +=diff;
+			uiEncounterTimer += diff;
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustSummoned(Creature* summon)
-        {
-            summon->GetMotionMaster()->MovePoint(0, CenterPoint.x, CenterPoint.y, CenterPoint.z);
-            /*if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                summon->AI()->AttackStart(pTarget);*/
-            summons.Summon(summon);
-        }
+		void JustSummoned(Creature* summon) {
+			summon->GetMotionMaster()->MovePoint(0, CenterPoint.x,
+					CenterPoint.y, CenterPoint.z);
+			/*if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+			 summon->AI()->AttackStart(pTarget);*/
+			summons.Summon(summon);
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-            {
-                instance->SetData(DATA_SJONNIR_EVENT, DONE);
-                if (IsHeroic() && uiKilledIronSludges > 4)
-                    instance->DoCompleteAchievement(ACHIEV_ABUSE_THE_OOZE);
-            }
-        }
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
-            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
-        }
+			if (instance) {
+				instance->SetData(DATA_SJONNIR_EVENT, DONE);
+				if (IsHeroic() && uiKilledIronSludges > 4)
+					instance->DoCompleteAchievement(ACHIEV_ABUSE_THE_OOZE);
+			}
+		}
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
+			DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
+		}
 
-        void KilledIronSludge()
-        {
-            ++uiKilledIronSludges;
-        }
-    };
+		void KilledIronSludge() {
+			++uiKilledIronSludges;
+		}
+	};
 };
 
-class mob_malformed_ooze : public CreatureScript
-{
+class mob_malformed_ooze: public CreatureScript {
 public:
-    mob_malformed_ooze() : CreatureScript("mob_malformed_ooze") { }
+	mob_malformed_ooze() :
+			CreatureScript("mob_malformed_ooze") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_malformed_oozeAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_malformed_oozeAI(pCreature);
+	}
 
-    struct mob_malformed_oozeAI : public ScriptedAI
-    {
-        mob_malformed_oozeAI(Creature *c) : ScriptedAI(c) {}
+	struct mob_malformed_oozeAI: public ScriptedAI {
+		mob_malformed_oozeAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 uiMergeTimer;
+		uint32 uiMergeTimer;
 
-        void Reset()
-        {
-            uiMergeTimer = 10000;
-        }
+		void Reset() {
+			uiMergeTimer = 10000;
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (uiMergeTimer <= diff)
-            {
-                if (Creature* pTemp = me->FindNearestCreature(CREATURE_MALFORMED_OOZE, 3.0f, true))
-                {
-                    DoSpawnCreature(CREATURE_IRON_SLUDGE, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
-                    pTemp->DisappearAndDie();
-                    me->DisappearAndDie();
-                }
-                uiMergeTimer = 3000;
-            } else uiMergeTimer -= diff;
+		void UpdateAI(const uint32 diff) {
+			if (uiMergeTimer <= diff) {
+				if (Creature* pTemp = me->FindNearestCreature(CREATURE_MALFORMED_OOZE, 3.0f, true)) {
+					DoSpawnCreature(CREATURE_IRON_SLUDGE, 0, 0, 0, 0,
+							TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+					pTemp->DisappearAndDie();
+					me->DisappearAndDie();
+				}
+				uiMergeTimer = 3000;
+			} else
+				uiMergeTimer -= diff;
 
-            if (!UpdateVictim())
-                return;
+			if (!UpdateVictim())
+				return;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_iron_sludge : public CreatureScript
-{
+class mob_iron_sludge: public CreatureScript {
 public:
-    mob_iron_sludge() : CreatureScript("mob_iron_sludge") { }
+	mob_iron_sludge() :
+			CreatureScript("mob_iron_sludge") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_iron_sludgeAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_iron_sludgeAI(pCreature);
+	}
 
-    struct mob_iron_sludgeAI : public ScriptedAI
-    {
-        mob_iron_sludgeAI(Creature *c) : ScriptedAI(c)
-        {
-            pInstance = c->GetInstanceScript();
-        }
+	struct mob_iron_sludgeAI: public ScriptedAI {
+		mob_iron_sludgeAI(Creature *c) :
+				ScriptedAI(c) {
+			pInstance = c->GetInstanceScript();
+		}
 
-        InstanceScript* pInstance;
+		InstanceScript* pInstance;
 
-        void JustDied(Unit* /*pKiller*/)
-        {
-            if (pInstance)
-                if (Creature* pSjonnir = Unit::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
-                    CAST_AI(boss_sjonnir::boss_sjonnirAI, pSjonnir->AI())->KilledIronSludge();
-        }
-    };
+		void JustDied(Unit* /*pKiller*/) {
+			if (pInstance)
+				if (Creature* pSjonnir = Unit::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
+					CAST_AI(boss_sjonnir::boss_sjonnirAI, pSjonnir->AI())->KilledIronSludge();
+		}
+	};
 };
 
-void AddSC_boss_sjonnir()
-{
-    new boss_sjonnir();
-    new mob_malformed_ooze();
-    new mob_iron_sludge();
+void AddSC_boss_sjonnir() {
+	new boss_sjonnir();
+	new mob_malformed_ooze();
+	new mob_iron_sludge();
 }

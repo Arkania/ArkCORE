@@ -23,153 +23,155 @@
  */
 
 /* ScriptData
-SDName: Instance_Temple_of_Ahnqiraj
-SD%Complete: 80
-SDComment:
-SDCategory: Temple of Ahn'Qiraj
-EndScriptData */
+ SDName: Instance_Temple_of_Ahnqiraj
+ SD%Complete: 80
+ SDComment:
+ SDCategory: Temple of Ahn'Qiraj
+ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "temple_of_ahnqiraj.h"
 
-class instance_temple_of_ahnqiraj : public InstanceMapScript
-{
+class instance_temple_of_ahnqiraj: public InstanceMapScript {
 public:
-    instance_temple_of_ahnqiraj() : InstanceMapScript("instance_temple_of_ahnqiraj", 531) { }
+	instance_temple_of_ahnqiraj() :
+			InstanceMapScript("instance_temple_of_ahnqiraj", 531) {
+	}
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
-    {
-        return new instance_temple_of_ahnqiraj_InstanceMapScript(pMap);
-    }
+	InstanceScript* GetInstanceScript(InstanceMap* pMap) const {
+		return new instance_temple_of_ahnqiraj_InstanceMapScript(pMap);
+	}
 
-    struct instance_temple_of_ahnqiraj_InstanceMapScript : public InstanceScript
-    {
-        instance_temple_of_ahnqiraj_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {Initialize();};
+	struct instance_temple_of_ahnqiraj_InstanceMapScript: public InstanceScript {
+		instance_temple_of_ahnqiraj_InstanceMapScript(Map* pMap) :
+				InstanceScript(pMap) {
+			Initialize();
+		}
+		;
 
-        //If Vem is dead...
-        bool IsBossDied[3];
+		//If Vem is dead...
+		bool IsBossDied[3];
 
-        //Storing Skeram, Vem and Kri.
-        uint64 SkeramGUID;
-        uint64 VemGUID;
-        uint64 KriGUID;
-        uint64 VeklorGUID;
-        uint64 VeknilashGUID;
+		//Storing Skeram, Vem and Kri.
+		uint64 SkeramGUID;
+		uint64 VemGUID;
+		uint64 KriGUID;
+		uint64 VeklorGUID;
+		uint64 VeknilashGUID;
 
-        uint32 BugTrioDeathCount;
+		uint32 BugTrioDeathCount;
 
-        uint32 CthunPhase;
+		uint32 CthunPhase;
 
-        void Initialize()
-        {
-            IsBossDied[0] = false;
-            IsBossDied[1] = false;
-            IsBossDied[2] = false;
+		void Initialize() {
+			IsBossDied[0] = false;
+			IsBossDied[1] = false;
+			IsBossDied[2] = false;
 
-            SkeramGUID = 0;
-            VemGUID = 0;
-            KriGUID = 0;
-            VeklorGUID = 0;
-            VeknilashGUID = 0;
+			SkeramGUID = 0;
+			VemGUID = 0;
+			KriGUID = 0;
+			VeklorGUID = 0;
+			VeknilashGUID = 0;
 
-            BugTrioDeathCount = 0;
+			BugTrioDeathCount = 0;
 
-            CthunPhase = 0;
-        }
+			CthunPhase = 0;
+		}
 
-        void OnCreatureCreate(Creature* pCreature, bool /*add*/)
-        {
-            switch (pCreature->GetEntry())
-            {
-                case 15263: SkeramGUID = pCreature->GetGUID(); break;
-                case 15544: VemGUID = pCreature->GetGUID(); break;
-                case 15511: KriGUID = pCreature->GetGUID(); break;
-                case 15276: VeklorGUID = pCreature->GetGUID(); break;
-                case 15275: VeknilashGUID = pCreature->GetGUID(); break;
-            }
-        }
+		void OnCreatureCreate(Creature* pCreature, bool /*add*/) {
+			switch (pCreature->GetEntry()) {
+			case 15263:
+				SkeramGUID = pCreature->GetGUID();
+				break;
+			case 15544:
+				VemGUID = pCreature->GetGUID();
+				break;
+			case 15511:
+				KriGUID = pCreature->GetGUID();
+				break;
+			case 15276:
+				VeklorGUID = pCreature->GetGUID();
+				break;
+			case 15275:
+				VeknilashGUID = pCreature->GetGUID();
+				break;
+			}
+		}
 
-        bool IsEncounterInProgress() const
-        {
-            //not active in AQ40
-            return false;
-        }
+		bool IsEncounterInProgress() const {
+			//not active in AQ40
+			return false;
+		}
 
-        uint32 GetData(uint32 type)
-        {
-            switch(type)
-            {
-                case DATA_VEMISDEAD:
-                    if (IsBossDied[0])
-                        return 1;
-                    break;
+		uint32 GetData(uint32 type) {
+			switch (type) {
+			case DATA_VEMISDEAD:
+				if (IsBossDied[0])
+					return 1;
+				break;
 
-                case DATA_VEKLORISDEAD:
-                    if (IsBossDied[1])
-                        return 1;
-                    break;
+			case DATA_VEKLORISDEAD:
+				if (IsBossDied[1])
+					return 1;
+				break;
 
-                case DATA_VEKNILASHISDEAD:
-                    if (IsBossDied[2])
-                        return 1;
-                    break;
+			case DATA_VEKNILASHISDEAD:
+				if (IsBossDied[2])
+					return 1;
+				break;
 
-                case DATA_BUG_TRIO_DEATH:
-                    return BugTrioDeathCount;
+			case DATA_BUG_TRIO_DEATH:
+				return BugTrioDeathCount;
 
-                case DATA_CTHUN_PHASE:
-                    return CthunPhase;
-            }
-            return 0;
-        }
+			case DATA_CTHUN_PHASE:
+				return CthunPhase;
+			}
+			return 0;
+		}
 
-        uint64 GetData64 (uint32 identifier)
-        {
-            switch(identifier)
-            {
-                case DATA_SKERAM:
-                    return SkeramGUID;
-                case DATA_VEM:
-                    return VemGUID;
-                case DATA_KRI:
-                    return KriGUID;
-                case DATA_VEKLOR:
-                    return VeklorGUID;
-                case DATA_VEKNILASH:
-                    return VeknilashGUID;
-            }
-            return 0;
-        }                                                       // end GetData64
+		uint64 GetData64(uint32 identifier) {
+			switch (identifier) {
+			case DATA_SKERAM:
+				return SkeramGUID;
+			case DATA_VEM:
+				return VemGUID;
+			case DATA_KRI:
+				return KriGUID;
+			case DATA_VEKLOR:
+				return VeklorGUID;
+			case DATA_VEKNILASH:
+				return VeknilashGUID;
+			}
+			return 0;
+		} // end GetData64
 
-        void SetData(uint32 type, uint32 data)
-        {
-            switch(type)
-            {
-                case DATA_VEM_DEATH:
-                    IsBossDied[0] = true;
-                    break;
+		void SetData(uint32 type, uint32 data) {
+			switch (type) {
+			case DATA_VEM_DEATH:
+				IsBossDied[0] = true;
+				break;
 
-                case DATA_BUG_TRIO_DEATH:
-                    ++BugTrioDeathCount;
-                    break;
+			case DATA_BUG_TRIO_DEATH:
+				++BugTrioDeathCount;
+				break;
 
-                case DATA_VEKLOR_DEATH:
-                    IsBossDied[1] = true;
-                    break;
+			case DATA_VEKLOR_DEATH:
+				IsBossDied[1] = true;
+				break;
 
-                case DATA_VEKNILASH_DEATH:
-                    IsBossDied[2] = true;
-                    break;
+			case DATA_VEKNILASH_DEATH:
+				IsBossDied[2] = true;
+				break;
 
-                case DATA_CTHUN_PHASE:
-                    CthunPhase = data;
-                    break;
-            }
-        }
-    };
+			case DATA_CTHUN_PHASE:
+				CthunPhase = data;
+				break;
+			}
+		}
+	};
 };
 
-void AddSC_instance_temple_of_ahnqiraj()
-{
-    new instance_temple_of_ahnqiraj();
+void AddSC_instance_temple_of_ahnqiraj() {
+	new instance_temple_of_ahnqiraj();
 }

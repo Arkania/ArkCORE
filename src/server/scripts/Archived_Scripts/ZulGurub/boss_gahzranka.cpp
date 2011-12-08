@@ -17,11 +17,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Gahz'ranka
-SD%Complete: 85
-SDComment: Massive Geyser with knockback not working. Spell buggy.
-SDCategory: Zul'Gurub
-EndScriptData */
+ SDName: Boss_Gahz'ranka
+ SD%Complete: 85
+ SDComment: Massive Geyser with knockback not working. Spell buggy.
+ SDCategory: Zul'Gurub
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -29,74 +29,68 @@ EndScriptData */
 #define SPELL_MASSIVEGEYSER          22421                  //Not working. Cause its a summon...
 #define SPELL_SLAM                   24326
 
-class boss_gahzranka : public CreatureScript
-{
-    public:
+class boss_gahzranka: public CreatureScript {
+public:
 
-        boss_gahzranka()
-            : CreatureScript("boss_gahzranka")
-        {
-        }
+	boss_gahzranka() :
+			CreatureScript("boss_gahzranka") {
+	}
 
-        struct boss_gahzrankaAI : public ScriptedAI
-        {
-            boss_gahzrankaAI(Creature *c) : ScriptedAI(c) {}
-            uint32 Frostbreath_Timer;
-            uint32 MassiveGeyser_Timer;
-            uint32 Slam_Timer;
+	struct boss_gahzrankaAI: public ScriptedAI {
+		boss_gahzrankaAI(Creature *c) :
+				ScriptedAI(c) {
+		}
+		uint32 Frostbreath_Timer;
+		uint32 MassiveGeyser_Timer;
+		uint32 Slam_Timer;
 
-            void Reset()
-            {
-                Frostbreath_Timer = 8000;
-                MassiveGeyser_Timer = 25000;
-                Slam_Timer = 17000;
-            }
+		void Reset() {
+			Frostbreath_Timer = 8000;
+			MassiveGeyser_Timer = 25000;
+			Slam_Timer = 17000;
+		}
 
-            void EnterCombat(Unit * /*who*/)
-            {
-            }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-            void UpdateAI(const uint32 diff)
-            {
-                //Return since we have no target
-                if (!UpdateVictim())
-                    return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-                //Frostbreath_Timer
-                if (Frostbreath_Timer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_FROSTBREATH);
-                    Frostbreath_Timer = 7000 + rand()%4000;
-                } else Frostbreath_Timer -= diff;
+			//Frostbreath_Timer
+			if (Frostbreath_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_FROSTBREATH);
+				Frostbreath_Timer = 7000 + rand() % 4000;
+			} else
+				Frostbreath_Timer -= diff;
 
-                //MassiveGeyser_Timer
-                if (MassiveGeyser_Timer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_MASSIVEGEYSER);
-                    DoResetThreat();
+			//MassiveGeyser_Timer
+			if (MassiveGeyser_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_MASSIVEGEYSER);
+				DoResetThreat();
 
-                    MassiveGeyser_Timer = 22000 + rand()%10000;
-                } else MassiveGeyser_Timer -= diff;
+				MassiveGeyser_Timer = 22000 + rand() % 10000;
+			} else
+				MassiveGeyser_Timer -= diff;
 
-                //Slam_Timer
-                if (Slam_Timer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_SLAM);
-                    Slam_Timer = 12000 + rand()%8000;
-                } else Slam_Timer -= diff;
+			//Slam_Timer
+			if (Slam_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_SLAM);
+				Slam_Timer = 12000 + rand() % 8000;
+			} else
+				Slam_Timer -= diff;
 
-                DoMeleeAttackIfReady();
-            }
-        };
+			DoMeleeAttackIfReady();
+		}
+	};
 
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new boss_gahzrankaAI(creature);
-        }
+	CreatureAI* GetAI(Creature* creature) const {
+		return new boss_gahzrankaAI(creature);
+	}
 };
 
-void AddSC_boss_gahzranka()
-{
-    new boss_gahzranka();
+void AddSC_boss_gahzranka() {
+	new boss_gahzranka();
 }
 

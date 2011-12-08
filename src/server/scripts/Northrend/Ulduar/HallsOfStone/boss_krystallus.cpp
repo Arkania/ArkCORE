@@ -23,174 +23,164 @@
  */
 
 /* Script Data Start
-SDName: Boss krystallus
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:
-SDCategory:
-Script Data End */
+ SDName: Boss krystallus
+ SDAuthor: LordVanMartin
+ SD%Complete:
+ SDComment:
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
 
-enum Spells
-{
-    SPELL_BOULDER_TOSS                             = 50843,
-    H_SPELL_BOULDER_TOSS                           = 59742,
-    SPELL_GROUND_SPIKE                             = 59750,
-    SPELL_GROUND_SLAM                              = 50827,
-    SPELL_SHATTER                                  = 50810,
-    H_SPELL_SHATTER                                = 61546,
-    SPELL_SHATTER_EFFECT                           = 50811,
-    H_SPELL_SHATTER_EFFECT                         = 61547,
-    SPELL_STONED                                   = 50812,
-    SPELL_STOMP                                    = 48131,
-    H_SPELL_STOMP                                  = 59744
+enum Spells {
+	SPELL_BOULDER_TOSS = 50843,
+	H_SPELL_BOULDER_TOSS = 59742,
+	SPELL_GROUND_SPIKE = 59750,
+	SPELL_GROUND_SLAM = 50827,
+	SPELL_SHATTER = 50810,
+	H_SPELL_SHATTER = 61546,
+	SPELL_SHATTER_EFFECT = 50811,
+	H_SPELL_SHATTER_EFFECT = 61547,
+	SPELL_STONED = 50812,
+	SPELL_STOMP = 48131,
+	H_SPELL_STOMP = 59744
 };
 
-enum Yells
-{
-    SAY_AGGRO                                   = -1599007,
-    SAY_KILL                                    = -1599008,
-    SAY_DEATH                                   = -1599009,
-    SAY_SHATTER                                 = -1599010
+enum Yells {
+	SAY_AGGRO = -1599007,
+	SAY_KILL = -1599008,
+	SAY_DEATH = -1599009,
+	SAY_SHATTER = -1599010
 };
 
-class boss_krystallus : public CreatureScript
-{
+class boss_krystallus: public CreatureScript {
 public:
-    boss_krystallus() : CreatureScript("boss_krystallus") { }
+	boss_krystallus() :
+			CreatureScript("boss_krystallus") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_krystallusAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_krystallusAI(pCreature);
+	}
 
-    struct boss_krystallusAI : public BossAI
-    {
-        boss_krystallusAI(Creature *c) : BossAI(c, DATA_KRYSTALLUS_EVENT)
-        {
-        }
+	struct boss_krystallusAI: public BossAI {
+		boss_krystallusAI(Creature *c) :
+				BossAI(c, DATA_KRYSTALLUS_EVENT) {
+		}
 
-        uint32 uiBoulderTossTimer;
-        uint32 uiGroundSpikeTimer;
-        uint32 uiGroundSlamTimer;
-        uint32 uiShatterTimer;
-        uint32 uiStompTimer;
+		uint32 uiBoulderTossTimer;
+		uint32 uiGroundSpikeTimer;
+		uint32 uiGroundSlamTimer;
+		uint32 uiShatterTimer;
+		uint32 uiStompTimer;
 
-        bool bIsSlam;
+		bool bIsSlam;
 
-        void Reset()
-        {
-            bIsSlam = false;
+		void Reset() {
+			bIsSlam = false;
 
-            uiBoulderTossTimer = 3000 + rand()%6000;
-            uiGroundSpikeTimer = 9000 + rand()%5000;
-            uiGroundSlamTimer = 15000 + rand()%3000;
-            uiStompTimer = 20000 + rand()%9000;
-            uiShatterTimer = 0;
+			uiBoulderTossTimer = 3000 + rand() % 6000;
+			uiGroundSpikeTimer = 9000 + rand() % 5000;
+			uiGroundSlamTimer = 15000 + rand() % 3000;
+			uiStompTimer = 20000 + rand() % 9000;
+			uiShatterTimer = 0;
 
-            if (instance)
-                instance->SetData(DATA_KRYSTALLUS_EVENT, NOT_STARTED);
-        }
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
+			if (instance)
+				instance->SetData(DATA_KRYSTALLUS_EVENT, NOT_STARTED);
+		}
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
 
-            if (instance)
-                instance->SetData(DATA_KRYSTALLUS_EVENT, IN_PROGRESS);
-        }
+			if (instance)
+				instance->SetData(DATA_KRYSTALLUS_EVENT, IN_PROGRESS);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (uiBoulderTossTimer <= diff)
-            {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_BOULDER_TOSS);
-                uiBoulderTossTimer = 9000 + rand()%6000;
-            } else uiBoulderTossTimer -= diff;
+			if (uiBoulderTossTimer <= diff) {
+				if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					DoCast(pTarget, SPELL_BOULDER_TOSS);
+				uiBoulderTossTimer = 9000 + rand() % 6000;
+			} else
+				uiBoulderTossTimer -= diff;
 
-            if (uiGroundSpikeTimer <= diff)
-            {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_GROUND_SPIKE);
-                uiGroundSpikeTimer = 12000 + rand()%5000;
-            } else uiGroundSpikeTimer -= diff;
+			if (uiGroundSpikeTimer <= diff) {
+				if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					DoCast(pTarget, SPELL_GROUND_SPIKE);
+				uiGroundSpikeTimer = 12000 + rand() % 5000;
+			} else
+				uiGroundSpikeTimer -= diff;
 
-            if (uiStompTimer <= diff)
-            {
-                DoCast(me, SPELL_STOMP);
-                uiStompTimer = 20000 + rand()%9000;
-            } else uiStompTimer -= diff;
+			if (uiStompTimer <= diff) {
+				DoCast(me, SPELL_STOMP);
+				uiStompTimer = 20000 + rand() % 9000;
+			} else
+				uiStompTimer -= diff;
 
-            if (uiGroundSlamTimer <= diff)
-            {
-                DoCast(me, SPELL_GROUND_SLAM);
-                bIsSlam = true;
-                uiShatterTimer = 10000;
-                uiGroundSlamTimer = 15000 + rand()%3000;
-            } else uiGroundSlamTimer -= diff;
+			if (uiGroundSlamTimer <= diff) {
+				DoCast(me, SPELL_GROUND_SLAM);
+				bIsSlam = true;
+				uiShatterTimer = 10000;
+				uiGroundSlamTimer = 15000 + rand() % 3000;
+			} else
+				uiGroundSlamTimer -= diff;
 
-            if (bIsSlam)
-            {
-                if (uiShatterTimer <= diff)
-                {
-                    DoCast(me, DUNGEON_MODE(SPELL_SHATTER, H_SPELL_SHATTER));
-                } else uiShatterTimer -= diff;
-            }
+			if (bIsSlam) {
+				if (uiShatterTimer <= diff) {
+					DoCast(me, DUNGEON_MODE(SPELL_SHATTER, H_SPELL_SHATTER));
+				} else
+					uiShatterTimer -= diff;
+			}
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-                instance->SetData(DATA_KRYSTALLUS_EVENT, DONE);
-        }
+			if (instance)
+				instance->SetData(DATA_KRYSTALLUS_EVENT, DONE);
+		}
 
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
-            DoScriptText(SAY_KILL, me);
-        }
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
+			DoScriptText(SAY_KILL, me);
+		}
 
-        void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
-        {
-            //this part should be in the core
-            if (pSpell->Id == SPELL_SHATTER || pSpell->Id == H_SPELL_SHATTER)
-            {
-                //this spell must have custom handling in the core, dealing damage based on distance
-                pTarget->CastSpell(pTarget, DUNGEON_MODE(SPELL_SHATTER_EFFECT, H_SPELL_SHATTER_EFFECT), true);
+		void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell) {
+			//this part should be in the core
+			if (pSpell->Id == SPELL_SHATTER || pSpell->Id == H_SPELL_SHATTER) {
+				//this spell must have custom handling in the core, dealing damage based on distance
+				pTarget->CastSpell(
+						pTarget,
+						DUNGEON_MODE(SPELL_SHATTER_EFFECT,
+								H_SPELL_SHATTER_EFFECT), true);
 
-                if (pTarget->HasAura(SPELL_STONED))
-                    pTarget->RemoveAurasDueToSpell(SPELL_STONED);
+				if (pTarget->HasAura(SPELL_STONED))
+					pTarget->RemoveAurasDueToSpell(SPELL_STONED);
 
-                //clear this, if we are still performing
-                if (bIsSlam)
-                {
-                    bIsSlam = false;
+				//clear this, if we are still performing
+				if (bIsSlam) {
+					bIsSlam = false;
 
-                    //and correct movement, if not already
-                    if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() != TARGETED_MOTION_TYPE)
-                    {
-                        if (me->getVictim())
-                            me->GetMotionMaster()->MoveChase(me->getVictim());
-                    }
-                }
-            }
-        }
-    };
+					//and correct movement, if not already
+					if (me->GetMotionMaster()->GetCurrentMovementGeneratorType()
+							!= TARGETED_MOTION_TYPE) {
+						if (me->getVictim())
+							me->GetMotionMaster()->MoveChase(me->getVictim());
+					}
+				}
+			}
+		}
+	};
 };
 
-void AddSC_boss_krystallus()
-{
-    new boss_krystallus();
+void AddSC_boss_krystallus() {
+	new boss_krystallus();
 }

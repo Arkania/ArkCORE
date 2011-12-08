@@ -23,12 +23,12 @@
  */
 
 /* Script Data Start
-SDName: Boss Commander Stoutbeard
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:  Only Horde Heroic
-SDCategory:
-Script Data End */
+ SDName: Boss Commander Stoutbeard
+ SDAuthor: LordVanMartin
+ SD%Complete:
+ SDComment:  Only Horde Heroic
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 #include "nexus.h"
@@ -45,46 +45,47 @@ Script Data End */
 #define SAY_KILL                                               -1576022
 #define SAY_DEATH                                              -1576023
 
-class boss_commander_stoutbeard : public CreatureScript
-{
+class boss_commander_stoutbeard: public CreatureScript {
 public:
-    boss_commander_stoutbeard() : CreatureScript("boss_commander_stoutbeard") { }
+	boss_commander_stoutbeard() :
+			CreatureScript("boss_commander_stoutbeard") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_commander_stoutbeardAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_commander_stoutbeardAI(pCreature);
+	}
 
-    struct boss_commander_stoutbeardAI : public BossAI
-    {
-        boss_commander_stoutbeardAI(Creature *c) : BossAI(c, DATA_STOUTBEARD) {
-        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-        me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);}
+	struct boss_commander_stoutbeardAI: public BossAI {
+		boss_commander_stoutbeardAI(Creature *c) :
+				BossAI(c, DATA_STOUTBEARD) {
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        void Reset() {}
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
-        }
-        void AttackStart(Unit* /*who*/) {}
-        void MoveInLineOfSight(Unit* /*who*/) {}
-        void UpdateAI(const uint32 /*diff*/)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void Reset() {
+		}
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
+		}
+		void AttackStart(Unit* /*who*/) {
+		}
+		void MoveInLineOfSight(Unit* /*who*/) {
+		}
+		void UpdateAI(const uint32 /*diff*/) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            DoMeleeAttackIfReady();
-        }
-        void JustDied(Unit* /*killer*/)
-        {
+			DoMeleeAttackIfReady();
+		}
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
-        }
-    };
+			DoScriptText(SAY_DEATH, me);
+		}
+	};
 };
 
-void AddSC_boss_commander_stoutbeard()
-{
-    new boss_commander_stoutbeard();
+void AddSC_boss_commander_stoutbeard() {
+	new boss_commander_stoutbeard();
 }

@@ -82,1054 +82,956 @@
 #define SPELL_LEAPING_FACE_MAUL           DUNGEON_MODE(69504, 70271)
 
 /****************************************EVENTS************************************/
-enum eEvents
-{
-    EVENT_NONE,
+enum eEvents {
+	EVENT_NONE,
 
-    // Ymirjar Wrathbringer
-    EVENT_BLIGHT,
+	// Ymirjar Wrathbringer
+	EVENT_BLIGHT,
 
-    // Ymirjar Skycaller
-    EVENT_FROSTBLADE,
-    EVENT_GLACIAL_STRIKE,
+	// Ymirjar Skycaller
+	EVENT_FROSTBLADE,
+	EVENT_GLACIAL_STRIKE,
 
-    // Ymirjar Flamebearer
-    EVENT_FIREBALL,
-    EVENT_HELLFIRE,
-    EVENT_TACTICAL_BLINK,
+	// Ymirjar Flamebearer
+	EVENT_FIREBALL,
+	EVENT_HELLFIRE,
+	EVENT_TACTICAL_BLINK,
 
-    //Ymirjar Deathbringer
-    EVENT_EMPOWERED_SHADOW_BOLT,
-    EVENT_SUMMON_UNDEAD,
+	//Ymirjar Deathbringer
+	EVENT_EMPOWERED_SHADOW_BOLT,
+	EVENT_SUMMON_UNDEAD,
 
-    //Wrathbone Laborer
-    EVENT_BLINDING_DIRT,
-    EVENT_PUNCTURE_WOUND,
-    EVENT_SHOVELLED,
+	//Wrathbone Laborer
+	EVENT_BLINDING_DIRT,
+	EVENT_PUNCTURE_WOUND,
+	EVENT_SHOVELLED,
 
-    //Wrathbone Coldwraith
-    EVENT_FREEZING_CIRCLE,
-    EVENT_FROSTBOLT,
+	//Wrathbone Coldwraith
+	EVENT_FREEZING_CIRCLE,
+	EVENT_FROSTBOLT,
 
-    //Stonespine Gargoyle
-    EVENT_GARGOYLE_STRIKE,
-    EVENT_STONEFORM,
+	//Stonespine Gargoyle
+	EVENT_GARGOYLE_STRIKE,
+	EVENT_STONEFORM,
 
-    //Plagueborn Horror
-    EVENT_BLIGHT_BOMB,
-    EVENT_PUSTULANT_FLESH,
-    EVENT_TOXIC_WASTE,
+	//Plagueborn Horror
+	EVENT_BLIGHT_BOMB,
+	EVENT_PUSTULANT_FLESH,
+	EVENT_TOXIC_WASTE,
 
-    //Iceborn Proto-Drake
-    EVENT_FROST_BREATH,
+	//Iceborn Proto-Drake
+	EVENT_FROST_BREATH,
 
-    //Hungering Ghoul
-    EVENT_DEVOUR_FLESH,
+	//Hungering Ghoul
+	EVENT_DEVOUR_FLESH,
 
-    //Fallen Warrior
-    EVENT_ARCING_SLICE,
-    EVENT_DEMORALIZING_SHOUT,
-    EVENT_SHIELD_BLOCK,
+	//Fallen Warrior
+	EVENT_ARCING_SLICE,
+	EVENT_DEMORALIZING_SHOUT,
+	EVENT_SHIELD_BLOCK,
 
-    //Deathwhisper Torturer
-    EVENT_BLACK_BRAND,
-    EVENT_CURSE_OF_AGONY,
+	//Deathwhisper Torturer
+	EVENT_BLACK_BRAND,
+	EVENT_CURSE_OF_AGONY,
 
-    //Deathwhisper Shadowcaster
-    EVENT_SHADOW_BOLT,
+	//Deathwhisper Shadowcaster
+	EVENT_SHADOW_BOLT,
 
-    //Deathwhisper Necrolyte
-    EVENT_CONVERSION_BEAM,
-    EVENT_SHADOW_BOLT_2,
+	//Deathwhisper Necrolyte
+	EVENT_CONVERSION_BEAM,
+	EVENT_SHADOW_BOLT_2,
 
-    EVENT_SHADOW_BOLT_3,
+	EVENT_SHADOW_BOLT_3,
 
-    //Geist Ambusher
-    EVENT_LEAPING_FACE_MAUL,
+	//Geist Ambusher
+	EVENT_LEAPING_FACE_MAUL,
 };
 
 /****************************************AI****************************************/
 
-class mob_ymirjar_wrathbringer : public CreatureScript
-{
+class mob_ymirjar_wrathbringer: public CreatureScript {
 public:
-    mob_ymirjar_wrathbringer() : CreatureScript("mob_ymirjar_wrathbringer") { }
+	mob_ymirjar_wrathbringer() :
+			CreatureScript("mob_ymirjar_wrathbringer") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_ymirjar_wrathbringerAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_ymirjar_wrathbringerAI(pCreature);
+	}
 
-    struct mob_ymirjar_wrathbringerAI : public ScriptedAI
-    {
-        mob_ymirjar_wrathbringerAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_ymirjar_wrathbringerAI: public ScriptedAI {
+		mob_ymirjar_wrathbringerAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_BLIGHT, 7000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_BLIGHT, 7000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_BLIGHT:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_BLIGHT);
-                        events.RescheduleEvent(EVENT_BLIGHT, 8000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_BLIGHT:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_BLIGHT);
+					events.RescheduleEvent(EVENT_BLIGHT, 8000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_ymirjar_skycaller : public CreatureScript
-{
+class mob_ymirjar_skycaller: public CreatureScript {
 public:
-    mob_ymirjar_skycaller() : CreatureScript("mob_ymirjar_skycaller") { }
+	mob_ymirjar_skycaller() :
+			CreatureScript("mob_ymirjar_skycaller") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_ymirjar_skyCallerAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_ymirjar_skyCallerAI(pCreature);
+	}
 
-    struct mob_ymirjar_skyCallerAI: public ScriptedAI
-    {
-        mob_ymirjar_skyCallerAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_ymirjar_skyCallerAI: public ScriptedAI {
+		mob_ymirjar_skyCallerAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_FROSTBLADE, 1);
-            events.ScheduleEvent(EVENT_GLACIAL_STRIKE, 8000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_FROSTBLADE, 1);
+			events.ScheduleEvent(EVENT_GLACIAL_STRIKE, 8000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_GLACIAL_STRIKE:
-                        DoCast(me->getVictim(), SPELL_GLACIAL_STRIKE);
-                        events.RescheduleEvent(EVENT_GLACIAL_STRIKE, 8000);
-                        return;
-                    case EVENT_FROSTBLADE:
-                        DoCast(me, SPELL_FROSTBLADE);
-                        events.CancelEvent(EVENT_FROSTBLADE);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_GLACIAL_STRIKE:
+					DoCast(me->getVictim(), SPELL_GLACIAL_STRIKE);
+					events.RescheduleEvent(EVENT_GLACIAL_STRIKE, 8000);
+					return;
+				case EVENT_FROSTBLADE:
+					DoCast(me, SPELL_FROSTBLADE);
+					events.CancelEvent(EVENT_FROSTBLADE);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_ymirjar_flamebearer : public CreatureScript
-{
+class mob_ymirjar_flamebearer: public CreatureScript {
 public:
-    mob_ymirjar_flamebearer() : CreatureScript("mob_ymirjar_flamebearer") { }
+	mob_ymirjar_flamebearer() :
+			CreatureScript("mob_ymirjar_flamebearer") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_ymirjar_flamebearerAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_ymirjar_flamebearerAI(pCreature);
+	}
 
-    struct mob_ymirjar_flamebearerAI: public ScriptedAI
-    {
-        mob_ymirjar_flamebearerAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_ymirjar_flamebearerAI: public ScriptedAI {
+		mob_ymirjar_flamebearerAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_FIREBALL, 4000);
-            events.ScheduleEvent(EVENT_HELLFIRE, 8000);
-            events.ScheduleEvent(EVENT_TACTICAL_BLINK, 15000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_FIREBALL, 4000);
+			events.ScheduleEvent(EVENT_HELLFIRE, 8000);
+			events.ScheduleEvent(EVENT_TACTICAL_BLINK, 15000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_FIREBALL:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_FIREBALL);
-                        events.RescheduleEvent(EVENT_FIREBALL, 5000);
-                        return;
-                    case EVENT_HELLFIRE:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_HELLFIRE);
-                        events.RescheduleEvent(EVENT_HELLFIRE, 10000);
-                        return;
-                    case EVENT_TACTICAL_BLINK:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_TACTICAL_BLINK);
-                        events.RescheduleEvent(EVENT_TACTICAL_BLINK, 12000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_FIREBALL:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_FIREBALL);
+					events.RescheduleEvent(EVENT_FIREBALL, 5000);
+					return;
+				case EVENT_HELLFIRE:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_HELLFIRE);
+					events.RescheduleEvent(EVENT_HELLFIRE, 10000);
+					return;
+				case EVENT_TACTICAL_BLINK:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_TACTICAL_BLINK);
+					events.RescheduleEvent(EVENT_TACTICAL_BLINK, 12000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_ymirjar_deathbringer : public CreatureScript
-{
+class mob_ymirjar_deathbringer: public CreatureScript {
 public:
-    mob_ymirjar_deathbringer() : CreatureScript("mob_ymirjar_deathbringer") { }
+	mob_ymirjar_deathbringer() :
+			CreatureScript("mob_ymirjar_deathbringer") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_ymirjar_deathbringerAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_ymirjar_deathbringerAI(pCreature);
+	}
 
-    struct mob_ymirjar_deathbringerAI: public ScriptedAI
-    {
-        mob_ymirjar_deathbringerAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_ymirjar_deathbringerAI: public ScriptedAI {
+		mob_ymirjar_deathbringerAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_EMPOWERED_SHADOW_BOLT, 8000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_EMPOWERED_SHADOW_BOLT, 8000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_EMPOWERED_SHADOW_BOLT:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_EMPOWERED_SHADOW_BOLT);
-                        events.RescheduleEvent(EVENT_EMPOWERED_SHADOW_BOLT, 8000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_EMPOWERED_SHADOW_BOLT:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_EMPOWERED_SHADOW_BOLT);
+					events.RescheduleEvent(EVENT_EMPOWERED_SHADOW_BOLT, 8000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_wrathbone_laborer : public CreatureScript
-{
+class mob_wrathbone_laborer: public CreatureScript {
 public:
-    mob_wrathbone_laborer() : CreatureScript("mob_wrathbone_laborer") { }
+	mob_wrathbone_laborer() :
+			CreatureScript("mob_wrathbone_laborer") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_wrathbone_laborerAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_wrathbone_laborerAI(pCreature);
+	}
 
-    struct mob_wrathbone_laborerAI: public ScriptedAI
-    {
-        mob_wrathbone_laborerAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_wrathbone_laborerAI: public ScriptedAI {
+		mob_wrathbone_laborerAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_BLINDING_DIRT, 8000);
-            events.ScheduleEvent(EVENT_PUNCTURE_WOUND, 9000);
-            events.ScheduleEvent(EVENT_SHOVELLED, 5000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_BLINDING_DIRT, 8000);
+			events.ScheduleEvent(EVENT_PUNCTURE_WOUND, 9000);
+			events.ScheduleEvent(EVENT_SHOVELLED, 5000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_BLINDING_DIRT:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_BLINDING_DIRT);
-                        events.RescheduleEvent(EVENT_BLINDING_DIRT, 10000);
-                        return;
-                    case EVENT_PUNCTURE_WOUND:
-                        DoCast(me->getVictim(), SPELL_PUNCTURE_WOUND);
-                        events.RescheduleEvent(EVENT_PUNCTURE_WOUND, 9000);
-                        return;
-                    case EVENT_SHOVELLED:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_SHOVELLED);
-                        events.RescheduleEvent(EVENT_SHOVELLED, 7000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_BLINDING_DIRT:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_BLINDING_DIRT);
+					events.RescheduleEvent(EVENT_BLINDING_DIRT, 10000);
+					return;
+				case EVENT_PUNCTURE_WOUND:
+					DoCast(me->getVictim(), SPELL_PUNCTURE_WOUND);
+					events.RescheduleEvent(EVENT_PUNCTURE_WOUND, 9000);
+					return;
+				case EVENT_SHOVELLED:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_SHOVELLED);
+					events.RescheduleEvent(EVENT_SHOVELLED, 7000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_wrathbone_coldwraith : public CreatureScript
-{
+class mob_wrathbone_coldwraith: public CreatureScript {
 public:
-    mob_wrathbone_coldwraith() : CreatureScript("mob_wrathbone_coldwraith") { }
+	mob_wrathbone_coldwraith() :
+			CreatureScript("mob_wrathbone_coldwraith") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_wrathbone_coldwraithAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_wrathbone_coldwraithAI(pCreature);
+	}
 
-    struct mob_wrathbone_coldwraithAI: public ScriptedAI
-    {
-        mob_wrathbone_coldwraithAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_wrathbone_coldwraithAI: public ScriptedAI {
+		mob_wrathbone_coldwraithAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_FREEZING_CIRCLE, 9000);
-            events.ScheduleEvent(EVENT_FROSTBOLT, 5000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_FREEZING_CIRCLE, 9000);
+			events.ScheduleEvent(EVENT_FROSTBOLT, 5000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_FREEZING_CIRCLE:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_FREEZING_CIRCLE);
-                        events.RescheduleEvent(EVENT_FREEZING_CIRCLE, 9000);
-                        return;
-                    case EVENT_FROSTBOLT:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_FROSTBOLT);
-                        events.RescheduleEvent(EVENT_FROSTBOLT, 5000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_FREEZING_CIRCLE:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_FREEZING_CIRCLE);
+					events.RescheduleEvent(EVENT_FREEZING_CIRCLE, 9000);
+					return;
+				case EVENT_FROSTBOLT:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_FROSTBOLT);
+					events.RescheduleEvent(EVENT_FROSTBOLT, 5000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_stonespine_gargoyle : public CreatureScript
-{
+class mob_stonespine_gargoyle: public CreatureScript {
 public:
-    mob_stonespine_gargoyle() : CreatureScript("mob_stonespine_gargoyle") { }
+	mob_stonespine_gargoyle() :
+			CreatureScript("mob_stonespine_gargoyle") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_stonespine_gargoyleAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_stonespine_gargoyleAI(pCreature);
+	}
 
-    struct mob_stonespine_gargoyleAI: public ScriptedAI
-    {
-        mob_stonespine_gargoyleAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_stonespine_gargoyleAI: public ScriptedAI {
+		mob_stonespine_gargoyleAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_GARGOYLE_STRIKE, 5000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_GARGOYLE_STRIKE, 5000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_GARGOYLE_STRIKE:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_GARGOYLE_STRIKE);
-                        events.RescheduleEvent(EVENT_GARGOYLE_STRIKE, 6000);
-                        return;
-                    case EVENT_STONEFORM:
-                        if (HealthBelowPct(10))
-                            DoCast(me, SPELL_STONEFORM);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_GARGOYLE_STRIKE:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_GARGOYLE_STRIKE);
+					events.RescheduleEvent(EVENT_GARGOYLE_STRIKE, 6000);
+					return;
+				case EVENT_STONEFORM:
+					if (HealthBelowPct(10))
+						DoCast(me, SPELL_STONEFORM);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_plagueborn_horror : public CreatureScript
-{
+class mob_plagueborn_horror: public CreatureScript {
 public:
-    mob_plagueborn_horror() : CreatureScript("mob_plagueborn_horror") { }
+	mob_plagueborn_horror() :
+			CreatureScript("mob_plagueborn_horror") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_plagueborn_horrorAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_plagueborn_horrorAI(pCreature);
+	}
 
-    struct mob_plagueborn_horrorAI: public ScriptedAI
-    {
-        mob_plagueborn_horrorAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_plagueborn_horrorAI: public ScriptedAI {
+		mob_plagueborn_horrorAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_BLIGHT_BOMB, 999999);
-            events.ScheduleEvent(EVENT_PUSTULANT_FLESH, 5000);
-            events.ScheduleEvent(EVENT_TOXIC_WASTE, 8000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_BLIGHT_BOMB, 999999);
+			events.ScheduleEvent(EVENT_PUSTULANT_FLESH, 5000);
+			events.ScheduleEvent(EVENT_TOXIC_WASTE, 8000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_BLIGHT_BOMB:
-                        if (HealthBelowPct(15))
-                            DoCast(me, SPELL_BLIGHT_BOMB);
-                        return;
-                    case EVENT_PUSTULANT_FLESH:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_PUSTULANT_FLESH);
-                        events.RescheduleEvent(EVENT_PUSTULANT_FLESH, 10000);
-                        return;
-                    case EVENT_TOXIC_WASTE:
-                        DoCast(me, SPELL_TOXIC_WASTE);
-                        events.RescheduleEvent(EVENT_TOXIC_WASTE, 8000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_BLIGHT_BOMB:
+					if (HealthBelowPct(15))
+						DoCast(me, SPELL_BLIGHT_BOMB);
+					return;
+				case EVENT_PUSTULANT_FLESH:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_PUSTULANT_FLESH);
+					events.RescheduleEvent(EVENT_PUSTULANT_FLESH, 10000);
+					return;
+				case EVENT_TOXIC_WASTE:
+					DoCast(me, SPELL_TOXIC_WASTE);
+					events.RescheduleEvent(EVENT_TOXIC_WASTE, 8000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_iceborn_protodrake : public CreatureScript
-{
+class mob_iceborn_protodrake: public CreatureScript {
 public:
-    mob_iceborn_protodrake() : CreatureScript("mob_iceborn_protodrake") { }
+	mob_iceborn_protodrake() :
+			CreatureScript("mob_iceborn_protodrake") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_iceborn_protodrakeAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_iceborn_protodrakeAI(pCreature);
+	}
 
-    struct mob_iceborn_protodrakeAI: public ScriptedAI
-    {
-        mob_iceborn_protodrakeAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_iceborn_protodrakeAI: public ScriptedAI {
+		mob_iceborn_protodrakeAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_FROST_BREATH, 5000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_FROST_BREATH, 5000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_FROST_BREATH:
-                        DoCast(me->getVictim(), SPELL_FROST_BREATH);
-                        events.RescheduleEvent(EVENT_FROST_BREATH, 10000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_FROST_BREATH:
+					DoCast(me->getVictim(), SPELL_FROST_BREATH);
+					events.RescheduleEvent(EVENT_FROST_BREATH, 10000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_hungering_ghoul : public CreatureScript
-{
+class mob_hungering_ghoul: public CreatureScript {
 public:
-    mob_hungering_ghoul() : CreatureScript("mob_hungering_ghoul") { }
+	mob_hungering_ghoul() :
+			CreatureScript("mob_hungering_ghoul") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_hungering_ghoulAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_hungering_ghoulAI(pCreature);
+	}
 
-    struct mob_hungering_ghoulAI: public ScriptedAI
-    {
-        mob_hungering_ghoulAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_hungering_ghoulAI: public ScriptedAI {
+		mob_hungering_ghoulAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_DEVOUR_FLESH, 4000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_DEVOUR_FLESH, 4000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_DEVOUR_FLESH:
-                        DoCast(me->getVictim(), SPELL_DEVOUR_FLESH);
-                        events.RescheduleEvent(EVENT_DEVOUR_FLESH, 8000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_DEVOUR_FLESH:
+					DoCast(me->getVictim(), SPELL_DEVOUR_FLESH);
+					events.RescheduleEvent(EVENT_DEVOUR_FLESH, 8000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_fallen_warrior : public CreatureScript
-{
+class mob_fallen_warrior: public CreatureScript {
 public:
-    mob_fallen_warrior() : CreatureScript("mob_fallen_warrior") { }
+	mob_fallen_warrior() :
+			CreatureScript("mob_fallen_warrior") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_fallen_warriorAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_fallen_warriorAI(pCreature);
+	}
 
-    struct mob_fallen_warriorAI: public ScriptedAI
-    {
-        mob_fallen_warriorAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_fallen_warriorAI: public ScriptedAI {
+		mob_fallen_warriorAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_ARCING_SLICE, 8000);
-            events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 20000);
-            events.ScheduleEvent(EVENT_SHIELD_BLOCK, 8000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_ARCING_SLICE, 8000);
+			events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 20000);
+			events.ScheduleEvent(EVENT_SHIELD_BLOCK, 8000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_ARCING_SLICE:
-                        DoCast(me->getVictim(), SPELL_ARCING_SLICE);
-                        events.RescheduleEvent(EVENT_ARCING_SLICE, 10000);
-                        return;
-                    case EVENT_DEMORALIZING_SHOUT:
-                        DoCast(me, SPELL_DEMORALIZING_SHOUT);
-                        events.RescheduleEvent(EVENT_DEMORALIZING_SHOUT, 20000);
-                        return;
-                    case EVENT_SHIELD_BLOCK:
-                        DoCast(me->getVictim(), SPELL_SHIELD_BLOCK);
-                        events.RescheduleEvent(EVENT_SHIELD_BLOCK, 8000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_ARCING_SLICE:
+					DoCast(me->getVictim(), SPELL_ARCING_SLICE);
+					events.RescheduleEvent(EVENT_ARCING_SLICE, 10000);
+					return;
+				case EVENT_DEMORALIZING_SHOUT:
+					DoCast(me, SPELL_DEMORALIZING_SHOUT);
+					events.RescheduleEvent(EVENT_DEMORALIZING_SHOUT, 20000);
+					return;
+				case EVENT_SHIELD_BLOCK:
+					DoCast(me->getVictim(), SPELL_SHIELD_BLOCK);
+					events.RescheduleEvent(EVENT_SHIELD_BLOCK, 8000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_deathwhisper_torturer : public CreatureScript
-{
+class mob_deathwhisper_torturer: public CreatureScript {
 public:
-    mob_deathwhisper_torturer() : CreatureScript("mob_deathwhisper_torturer") { }
+	mob_deathwhisper_torturer() :
+			CreatureScript("mob_deathwhisper_torturer") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_deathwhisper_torturerAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_deathwhisper_torturerAI(pCreature);
+	}
 
-    struct mob_deathwhisper_torturerAI: public ScriptedAI
-    {
-        mob_deathwhisper_torturerAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_deathwhisper_torturerAI: public ScriptedAI {
+		mob_deathwhisper_torturerAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_BLACK_BRAND, 10000);
-            events.ScheduleEvent(EVENT_CURSE_OF_AGONY, 6000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_BLACK_BRAND, 10000);
+			events.ScheduleEvent(EVENT_CURSE_OF_AGONY, 6000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_BLACK_BRAND:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_BLACK_BRAND);
-                        events.RescheduleEvent(EVENT_BLACK_BRAND, 10000);
-                        return;
-                    case EVENT_CURSE_OF_AGONY:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_CURSE_OF_AGONY);
-                        events.RescheduleEvent(EVENT_CURSE_OF_AGONY, 13000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_BLACK_BRAND:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_BLACK_BRAND);
+					events.RescheduleEvent(EVENT_BLACK_BRAND, 10000);
+					return;
+				case EVENT_CURSE_OF_AGONY:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_CURSE_OF_AGONY);
+					events.RescheduleEvent(EVENT_CURSE_OF_AGONY, 13000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_deathwhisper_shadowcaster : public CreatureScript
-{
+class mob_deathwhisper_shadowcaster: public CreatureScript {
 public:
-    mob_deathwhisper_shadowcaster() : CreatureScript("mob_deathwhisper_shadowcaster") { }
+	mob_deathwhisper_shadowcaster() :
+			CreatureScript("mob_deathwhisper_shadowcaster") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_deathwhisper_shadowcasterAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_deathwhisper_shadowcasterAI(pCreature);
+	}
 
-    struct mob_deathwhisper_shadowcasterAI: public ScriptedAI
-    {
-        mob_deathwhisper_shadowcasterAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_deathwhisper_shadowcasterAI: public ScriptedAI {
+		mob_deathwhisper_shadowcasterAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_SHADOW_BOLT, 3000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_SHADOW_BOLT, 3000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_SHADOW_BOLT:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_SHADOW_BOLT);
-                        events.RescheduleEvent(EVENT_SHADOW_BOLT, 5000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_SHADOW_BOLT:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_SHADOW_BOLT);
+					events.RescheduleEvent(EVENT_SHADOW_BOLT, 5000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_deathwhisper_necrolyte : public CreatureScript
-{
+class mob_deathwhisper_necrolyte: public CreatureScript {
 public:
-    mob_deathwhisper_necrolyte() : CreatureScript("mob_deathwhisper_necrolyte") { }
+	mob_deathwhisper_necrolyte() :
+			CreatureScript("mob_deathwhisper_necrolyte") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_deathwhisper_necrolyteAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_deathwhisper_necrolyteAI(pCreature);
+	}
 
-    struct mob_deathwhisper_necrolyteAI: public ScriptedAI
-    {
-        mob_deathwhisper_necrolyteAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_deathwhisper_necrolyteAI: public ScriptedAI {
+		mob_deathwhisper_necrolyteAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_CONVERSION_BEAM, 12000);
-            events.ScheduleEvent(EVENT_SHADOW_BOLT_2, 4000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_CONVERSION_BEAM, 12000);
+			events.ScheduleEvent(EVENT_SHADOW_BOLT_2, 4000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_CONVERSION_BEAM:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_CONVERSION_BEAM);
-                        events.RescheduleEvent(EVENT_CONVERSION_BEAM, 12000);
-                        return;
-                    case EVENT_SHADOW_BOLT_2:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_SHADOW_BOLT_2);
-                        events.RescheduleEvent(EVENT_SHADOW_BOLT_2, 5000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_CONVERSION_BEAM:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_CONVERSION_BEAM);
+					events.RescheduleEvent(EVENT_CONVERSION_BEAM, 12000);
+					return;
+				case EVENT_SHADOW_BOLT_2:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_SHADOW_BOLT_2);
+					events.RescheduleEvent(EVENT_SHADOW_BOLT_2, 5000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_wrathbone_sorcerer : public CreatureScript
-{
+class mob_wrathbone_sorcerer: public CreatureScript {
 public:
-    mob_wrathbone_sorcerer() : CreatureScript("mob_wrathbone_sorcerer") { }
+	mob_wrathbone_sorcerer() :
+			CreatureScript("mob_wrathbone_sorcerer") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_wrathbone_sorcererAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_wrathbone_sorcererAI(pCreature);
+	}
 
-    struct mob_wrathbone_sorcererAI: public ScriptedAI
-    {
-        mob_wrathbone_sorcererAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_wrathbone_sorcererAI: public ScriptedAI {
+		mob_wrathbone_sorcererAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            events.ScheduleEvent(EVENT_SHADOW_BOLT_3, 3000);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			events.ScheduleEvent(EVENT_SHADOW_BOLT_3, 3000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    case EVENT_SHADOW_BOLT_3:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_SHADOW_BOLT_3);
-                        events.RescheduleEvent(EVENT_SHADOW_BOLT_3, 5000);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_SHADOW_BOLT_3:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_SHADOW_BOLT_3);
+					events.RescheduleEvent(EVENT_SHADOW_BOLT_3, 5000);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-class mob_geist_ambusher : public CreatureScript
-{
+class mob_geist_ambusher: public CreatureScript {
 public:
-    mob_geist_ambusher() : CreatureScript("mob_geist_ambusher") { }
+	mob_geist_ambusher() :
+			CreatureScript("mob_geist_ambusher") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new mob_geist_ambusherAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_geist_ambusherAI(pCreature);
+	}
 
-    struct mob_geist_ambusherAI: public ScriptedAI
-    {
-        mob_geist_ambusherAI(Creature *c) : ScriptedAI(c)
-        {
-        }
+	struct mob_geist_ambusherAI: public ScriptedAI {
+		mob_geist_ambusherAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        EventMap events;
+		EventMap events;
 
-        void Reset()
-        {
-            events.Reset();
-        }
+		void Reset() {
+			events.Reset();
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            //Only here so when I figure out how to make it cast on an NPC i can do that.
-            events.ScheduleEvent(EVENT_LEAPING_FACE_MAUL, 99999);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			//Only here so when I figure out how to make it cast on an NPC i can do that.
+			events.ScheduleEvent(EVENT_LEAPING_FACE_MAUL, 99999);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STAT_CASTING))
-                return;
+			if (me->HasUnitState(UNIT_STAT_CASTING))
+				return;
 
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch(eventId)
-                {
-                    //Should only be used on NPCs
-                    case EVENT_LEAPING_FACE_MAUL:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_LEAPING_FACE_MAUL);
-                        events.CancelEvent(EVENT_LEAPING_FACE_MAUL);
-                        return;
-                }
-            }
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				//Should only be used on NPCs
+				case EVENT_LEAPING_FACE_MAUL:
+					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_LEAPING_FACE_MAUL);
+					events.CancelEvent(EVENT_LEAPING_FACE_MAUL);
+					return;
+				}
+			}
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_pit_of_saron()
-{
-    new mob_ymirjar_wrathbringer();
-    new mob_ymirjar_skycaller();
-    new mob_ymirjar_flamebearer();
-    new mob_ymirjar_deathbringer();
-    new mob_wrathbone_laborer();
-    new mob_wrathbone_coldwraith();
-    new mob_stonespine_gargoyle();
-    new mob_plagueborn_horror();
-    new mob_iceborn_protodrake();
-    new mob_hungering_ghoul();
-    new mob_fallen_warrior();
-    new mob_deathwhisper_torturer();
-    new mob_deathwhisper_shadowcaster();
-    new mob_deathwhisper_necrolyte();
-    new mob_wrathbone_sorcerer();
-    new mob_geist_ambusher();
+void AddSC_pit_of_saron() {
+	new mob_ymirjar_wrathbringer();
+	new mob_ymirjar_skycaller();
+	new mob_ymirjar_flamebearer();
+	new mob_ymirjar_deathbringer();
+	new mob_wrathbone_laborer();
+	new mob_wrathbone_coldwraith();
+	new mob_stonespine_gargoyle();
+	new mob_plagueborn_horror();
+	new mob_iceborn_protodrake();
+	new mob_hungering_ghoul();
+	new mob_fallen_warrior();
+	new mob_deathwhisper_torturer();
+	new mob_deathwhisper_shadowcaster();
+	new mob_deathwhisper_necrolyte();
+	new mob_wrathbone_sorcerer();
+	new mob_geist_ambusher();
 }

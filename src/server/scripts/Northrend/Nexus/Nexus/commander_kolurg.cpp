@@ -23,12 +23,12 @@
  */
 
 /* Script Data Start
-SDName: Boss Commander Kolurg
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:  Only Alliance Heroic
-SDCategory:
-Script Data End */
+ SDName: Boss Commander Kolurg
+ SDAuthor: LordVanMartin
+ SD%Complete:
+ SDComment:  Only Alliance Heroic
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 #include "nexus.h"
@@ -45,44 +45,47 @@ Script Data End */
 #define SAY_KILL                                           -1576025
 #define SAY_DEATH                                          -1576026
 
-class boss_commander_kolurg : public CreatureScript
-{
+class boss_commander_kolurg: public CreatureScript {
 public:
-    boss_commander_kolurg() : CreatureScript("boss_commander_kolurg") { }
+	boss_commander_kolurg() :
+			CreatureScript("boss_commander_kolurg") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_commander_kolurgAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_commander_kolurgAI(pCreature);
+	}
 
-    struct boss_commander_kolurgAI : public BossAI
-    {
-        boss_commander_kolurgAI(Creature *c) : BossAI(c, DATA_KOLURG) {
-        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-        me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);}
+	struct boss_commander_kolurgAI: public BossAI {
+		boss_commander_kolurgAI(Creature *c) :
+				BossAI(c, DATA_KOLURG) {
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        void Reset() {}
-        void EnterCombat(Unit* /*who*/) {}
+		void Reset() {
+		}
+		void EnterCombat(Unit* /*who*/) {
+		}
 
-		void JustDied(Unit* /*killer*/)
-		{
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
 		}
 
-        void AttackStart(Unit* /*who*/) {}
-        void MoveInLineOfSight(Unit* /*who*/) {}
-        void UpdateAI(const uint32 /*diff*/)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void AttackStart(Unit* /*who*/) {
+		}
+		void MoveInLineOfSight(Unit* /*who*/) {
+		}
+		void UpdateAI(const uint32 /*diff*/) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_commander_kolurg()
-{
-    new boss_commander_kolurg();
+void AddSC_boss_commander_kolurg() {
+	new boss_commander_kolurg();
 }

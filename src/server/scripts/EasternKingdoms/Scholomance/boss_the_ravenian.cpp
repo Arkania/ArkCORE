@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_the_ravenian
-SD%Complete: 100
-SDComment:
-SDCategory: Scholomance
-EndScriptData */
+ SDName: Boss_the_ravenian
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Scholomance
+ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "scholomance.h"
@@ -37,90 +37,86 @@ EndScriptData */
 #define SPELL_SUNDERINCLEAVE    25174
 #define SPELL_KNOCKAWAY         10101
 
-class boss_the_ravenian : public CreatureScript
-{
+class boss_the_ravenian: public CreatureScript {
 public:
-    boss_the_ravenian() : CreatureScript("boss_the_ravenian") { }
+	boss_the_ravenian() :
+			CreatureScript("boss_the_ravenian") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_theravenianAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_theravenianAI(pCreature);
+	}
 
-    struct boss_theravenianAI : public ScriptedAI
-    {
-        boss_theravenianAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_theravenianAI: public ScriptedAI {
+		boss_theravenianAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 Trample_Timer;
-        uint32 Cleave_Timer;
-        uint32 SunderingCleave_Timer;
-        uint32 KnockAway_Timer;
-        bool HasYelled;
+		uint32 Trample_Timer;
+		uint32 Cleave_Timer;
+		uint32 SunderingCleave_Timer;
+		uint32 KnockAway_Timer;
+		bool HasYelled;
 
-        void Reset()
-        {
-            Trample_Timer = 24000;
-            Cleave_Timer = 15000;
-            SunderingCleave_Timer = 40000;
-            KnockAway_Timer = 32000;
-            HasYelled = false;
-        }
+		void Reset() {
+			Trample_Timer = 24000;
+			Cleave_Timer = 15000;
+			SunderingCleave_Timer = 40000;
+			KnockAway_Timer = 32000;
+			HasYelled = false;
+		}
 
-        void JustDied(Unit * /*killer*/)
-        {
-            InstanceScript *pInstance = me->GetInstanceScript();
-            if (pInstance)
-            {
-                pInstance->SetData(DATA_THERAVENIAN_DEATH, 0);
+		void JustDied(Unit * /*killer*/) {
+			InstanceScript *pInstance = me->GetInstanceScript();
+			if (pInstance) {
+				pInstance->SetData(DATA_THERAVENIAN_DEATH, 0);
 
-                if (pInstance->GetData(TYPE_GANDLING) == IN_PROGRESS)
-                    me->SummonCreature(1853, 180.73f, -9.43856f, 75.507f, 1.61399f, TEMPSUMMON_DEAD_DESPAWN, 0);
-            }
-        }
+				if (pInstance->GetData(TYPE_GANDLING) == IN_PROGRESS)
+					me->SummonCreature(1853, 180.73f, -9.43856f, 75.507f,
+							1.61399f, TEMPSUMMON_DEAD_DESPAWN, 0);
+			}
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-        }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //Trample_Timer
-            if (Trample_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_TRAMPLE);
-                Trample_Timer = 10000;
-            } else Trample_Timer -= diff;
+			//Trample_Timer
+			if (Trample_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_TRAMPLE);
+				Trample_Timer = 10000;
+			} else
+				Trample_Timer -= diff;
 
-            //Cleave_Timer
-            if (Cleave_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_CLEAVE);
-                Cleave_Timer = 7000;
-            } else Cleave_Timer -= diff;
+			//Cleave_Timer
+			if (Cleave_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_CLEAVE);
+				Cleave_Timer = 7000;
+			} else
+				Cleave_Timer -= diff;
 
-            //SunderingCleave_Timer
-            if (SunderingCleave_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_SUNDERINCLEAVE);
-                SunderingCleave_Timer = 20000;
-            } else SunderingCleave_Timer -= diff;
+			//SunderingCleave_Timer
+			if (SunderingCleave_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_SUNDERINCLEAVE);
+				SunderingCleave_Timer = 20000;
+			} else
+				SunderingCleave_Timer -= diff;
 
-            //KnockAway_Timer
-            if (KnockAway_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_KNOCKAWAY);
-                KnockAway_Timer = 12000;
-            } else KnockAway_Timer -= diff;
+			//KnockAway_Timer
+			if (KnockAway_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_KNOCKAWAY);
+				KnockAway_Timer = 12000;
+			} else
+				KnockAway_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_theravenian()
-{
-    new boss_the_ravenian();
+void AddSC_boss_theravenian() {
+	new boss_the_ravenian();
 }

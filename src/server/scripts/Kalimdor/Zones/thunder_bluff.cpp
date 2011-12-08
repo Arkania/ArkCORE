@@ -17,17 +17,17 @@
  */
 
 /* ScriptData
-SDName: Thunder_Bluff
-SD%Complete: 100
-SDComment: Quest support: 925
-SDCategory: Thunder Bluff
-EndScriptData */
+ SDName: Thunder_Bluff
+ SD%Complete: 100
+ SDComment: Quest support: 925
+ SDCategory: Thunder Bluff
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
 /*#####
-# npc_cairne_bloodhoof
-######*/
+ # npc_cairne_bloodhoof
+ ######*/
 
 #define SPELL_BERSERKER_CHARGE  16636
 #define SPELL_CLEAVE            16044
@@ -37,104 +37,101 @@ EndScriptData */
 
 #define GOSSIP_HCB "I know this is rather silly but a young ward who is a bit shy would like your hoofprint."
 //TODO: verify abilities/timers
-class npc_cairne_bloodhoof : public CreatureScript
-{
+class npc_cairne_bloodhoof: public CreatureScript {
 public:
-    npc_cairne_bloodhoof() : CreatureScript("npc_cairne_bloodhoof") { }
+	npc_cairne_bloodhoof() :
+			CreatureScript("npc_cairne_bloodhoof") {
+	}
 
-    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-    {
-        pPlayer->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_SENDER_INFO)
-        {
-            pPlayer->CastSpell(pPlayer, 23123, false);
-            pPlayer->SEND_GOSSIP_MENU(7014, pCreature->GetGUID());
-        }
-        return true;
-    }
+	bool OnGossipSelect(Player* pPlayer, Creature* pCreature,
+			uint32 /*uiSender*/, uint32 uiAction) {
+		pPlayer->PlayerTalkClass->ClearMenus();
+		if (uiAction == GOSSIP_SENDER_INFO) {
+			pPlayer->CastSpell(pPlayer, 23123, false);
+			pPlayer->SEND_GOSSIP_MENU(7014, pCreature->GetGUID());
+		}
+		return true;
+	}
 
-    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
-    {
-        if (pCreature->isQuestGiver())
-            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	bool OnGossipHello(Player* pPlayer, Creature* pCreature) {
+		if (pCreature->isQuestGiver())
+			pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-        if (pPlayer->GetQuestStatus(925) == QUEST_STATUS_INCOMPLETE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HCB, GOSSIP_SENDER_MAIN, GOSSIP_SENDER_INFO);
+		if (pPlayer->GetQuestStatus(925) == QUEST_STATUS_INCOMPLETE)
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HCB, GOSSIP_SENDER_MAIN, GOSSIP_SENDER_INFO);
 
-        pPlayer->SEND_GOSSIP_MENU(7013, pCreature->GetGUID());
+		pPlayer->SEND_GOSSIP_MENU(7013, pCreature->GetGUID());
 
-        return true;
-    }
+		return true;
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new npc_cairne_bloodhoofAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new npc_cairne_bloodhoofAI(pCreature);
+	}
 
-    struct npc_cairne_bloodhoofAI : public ScriptedAI
-    {
-        npc_cairne_bloodhoofAI(Creature* c) : ScriptedAI(c) {}
+	struct npc_cairne_bloodhoofAI: public ScriptedAI {
+		npc_cairne_bloodhoofAI(Creature* c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 BerserkerCharge_Timer;
-        uint32 Cleave_Timer;
-        uint32 MortalStrike_Timer;
-        uint32 Thunderclap_Timer;
-        uint32 Uppercut_Timer;
+		uint32 BerserkerCharge_Timer;
+		uint32 Cleave_Timer;
+		uint32 MortalStrike_Timer;
+		uint32 Thunderclap_Timer;
+		uint32 Uppercut_Timer;
 
-        void Reset()
-        {
-            BerserkerCharge_Timer = 30000;
-            Cleave_Timer = 5000;
-            MortalStrike_Timer = 10000;
-            Thunderclap_Timer = 15000;
-            Uppercut_Timer = 10000;
-        }
+		void Reset() {
+			BerserkerCharge_Timer = 30000;
+			Cleave_Timer = 5000;
+			MortalStrike_Timer = 10000;
+			Thunderclap_Timer = 15000;
+			Uppercut_Timer = 10000;
+		}
 
-        void EnterCombat(Unit * /*who*/) {}
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            if (BerserkerCharge_Timer <= diff)
-            {
-                Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
-                if (pTarget)
-                    DoCast(pTarget, SPELL_BERSERKER_CHARGE);
-                BerserkerCharge_Timer = 25000;
-            } else BerserkerCharge_Timer -= diff;
+			if (BerserkerCharge_Timer <= diff) {
+				Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+				if (pTarget)
+					DoCast(pTarget, SPELL_BERSERKER_CHARGE);
+				BerserkerCharge_Timer = 25000;
+			} else
+				BerserkerCharge_Timer -= diff;
 
-            if (Uppercut_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_UPPERCUT);
-                Uppercut_Timer = 20000;
-            } else Uppercut_Timer -= diff;
+			if (Uppercut_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_UPPERCUT);
+				Uppercut_Timer = 20000;
+			} else
+				Uppercut_Timer -= diff;
 
-            if (Thunderclap_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_THUNDERCLAP);
-                Thunderclap_Timer = 15000;
-            } else Thunderclap_Timer -= diff;
+			if (Thunderclap_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_THUNDERCLAP);
+				Thunderclap_Timer = 15000;
+			} else
+				Thunderclap_Timer -= diff;
 
-            if (MortalStrike_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_MORTAL_STRIKE);
-                MortalStrike_Timer = 15000;
-            } else MortalStrike_Timer -= diff;
+			if (MortalStrike_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_MORTAL_STRIKE);
+				MortalStrike_Timer = 15000;
+			} else
+				MortalStrike_Timer -= diff;
 
-            if (Cleave_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_CLEAVE);
-                Cleave_Timer = 7000;
-            } else Cleave_Timer -= diff;
+			if (Cleave_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_CLEAVE);
+				Cleave_Timer = 7000;
+			} else
+				Cleave_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_thunder_bluff()
-{
-    new npc_cairne_bloodhoof();
+void AddSC_thunder_bluff() {
+	new npc_cairne_bloodhoof();
 }

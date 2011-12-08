@@ -23,58 +23,55 @@
  */
 
 /* TODO:
-ScriptData
-SDName:
-SD%Complete:
-SDComment:
-EndScriptData */
+ ScriptData
+ SDName:
+ SD%Complete:
+ SDComment:
+ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "deadmines.h"
 
-enum eSpels
-{
-    SPELL_ARCANE_POWER      = 88009,
-    SPELL_FIST_OF_FLAME     = 87859,
-    SPELL_FIST_OF_FROST     = 87861,
-    SPELL_FIRE_BLOSSOM      = 88129,
-    SPELL_FIRE_BLOSSOM_H    = 91286,
-    SPELL_FROST_BLOSSOM     = 88169,
-    SPELL_FROST_BLOSSOM_H   = 91287
+enum eSpels {
+	SPELL_ARCANE_POWER = 88009,
+	SPELL_FIST_OF_FLAME = 87859,
+	SPELL_FIST_OF_FROST = 87861,
+	SPELL_FIRE_BLOSSOM = 88129,
+	SPELL_FIRE_BLOSSOM_H = 91286,
+	SPELL_FROST_BLOSSOM = 88169,
+	SPELL_FROST_BLOSSOM_H = 91287
 };
 
-class boss_glubtok : public CreatureScript
-{
+class boss_glubtok: public CreatureScript {
 public:
-    boss_glubtok() : CreatureScript("boss_glubtok") { }
+	boss_glubtok() :
+			CreatureScript("boss_glubtok") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_glubtokAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_glubtokAI(pCreature);
+	}
 
-    struct boss_glubtokAI : public ScriptedAI
-    {
-        boss_glubtokAI(Creature* pCreature) : ScriptedAI(pCreature)
-        {
-            pInstance = pCreature->GetInstanceScript();
-        }
+	struct boss_glubtokAI: public ScriptedAI {
+		boss_glubtokAI(Creature* pCreature) :
+				ScriptedAI(pCreature) {
+			pInstance = pCreature->GetInstanceScript();
+		}
 
-        InstanceScript* pInstance;
+		InstanceScript* pInstance;
 
-        uint32 uiTrashTimer;
-        uint32 uiSlamTimer;
-        uint32 uiNimbleReflexesTimer;
+		uint32 uiTrashTimer;
+		uint32 uiSlamTimer;
+		uint32 uiNimbleReflexesTimer;
 
-        uint8 uiHealth;
+		uint8 uiHealth;
 
-        uint32 uiPhase;
-        uint32 uiTimer;
-        // TODO: MAKE THE CORRECT SCRIPT :)
-    };
+		uint32 uiPhase;
+		uint32 uiTimer;
+		// TODO: MAKE THE CORRECT SCRIPT :)
+	};
 };
 
-void AddSC_boss_glubtok()
-{
-    new boss_glubtok();
+void AddSC_boss_glubtok() {
+	new boss_glubtok();
 }

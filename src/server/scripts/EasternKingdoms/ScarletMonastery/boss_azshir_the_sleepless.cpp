@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Azshir_the_Sleepless
-SD%Complete: 80
-SDComment:
-SDCategory: Scarlet Monastery
-EndScriptData */
+ SDName: Boss_Azshir_the_Sleepless
+ SD%Complete: 80
+ SDComment:
+ SDCategory: Scarlet Monastery
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -35,73 +35,69 @@ EndScriptData */
 #define SPELL_TERRIFY                   7399
 #define SPELL_SOULSIPHON                7290
 
-class boss_azshir_the_sleepless : public CreatureScript
-{
+class boss_azshir_the_sleepless: public CreatureScript {
 public:
-    boss_azshir_the_sleepless() : CreatureScript("boss_azshir_the_sleepless") { }
+	boss_azshir_the_sleepless() :
+			CreatureScript("boss_azshir_the_sleepless") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_azshir_the_sleeplessAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_azshir_the_sleeplessAI(pCreature);
+	}
 
-    struct boss_azshir_the_sleeplessAI : public ScriptedAI
-    {
-        boss_azshir_the_sleeplessAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_azshir_the_sleeplessAI: public ScriptedAI {
+		boss_azshir_the_sleeplessAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 SoulSiphon_Timer;
-        uint32 CallOftheGrave_Timer;
-        uint32 Terrify_Timer;
+		uint32 SoulSiphon_Timer;
+		uint32 CallOftheGrave_Timer;
+		uint32 Terrify_Timer;
 
-        void Reset()
-        {
-            SoulSiphon_Timer = 1;
-            CallOftheGrave_Timer = 30000;
-            Terrify_Timer = 20000;
-        }
+		void Reset() {
+			SoulSiphon_Timer = 1;
+			CallOftheGrave_Timer = 30000;
+			Terrify_Timer = 20000;
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-        }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //If we are <50% hp cast Soul Siphon rank 1
-            if (!HealthAbovePct(50) && !me->IsNonMeleeSpellCasted(false))
-            {
-                //SoulSiphon_Timer
-                if (SoulSiphon_Timer <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_SOULSIPHON);
-                    return;
+			//If we are <50% hp cast Soul Siphon rank 1
+			if (!HealthAbovePct(50) && !me->IsNonMeleeSpellCasted(false)) {
+				//SoulSiphon_Timer
+				if (SoulSiphon_Timer <= diff) {
+					DoCast(me->getVictim(), SPELL_SOULSIPHON);
+					return;
 
-                    //SoulSiphon_Timer = 20000;
-                } else SoulSiphon_Timer -= diff;
-            }
+					//SoulSiphon_Timer = 20000;
+				} else
+					SoulSiphon_Timer -= diff;
+			}
 
-            //CallOfTheGrave_Timer
-            if (CallOftheGrave_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_CALLOFTHEGRAVE);
-                CallOftheGrave_Timer = 30000;
-            } else CallOftheGrave_Timer -= diff;
+			//CallOfTheGrave_Timer
+			if (CallOftheGrave_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_CALLOFTHEGRAVE);
+				CallOftheGrave_Timer = 30000;
+			} else
+				CallOftheGrave_Timer -= diff;
 
-            //Terrify_Timer
-            if (Terrify_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_TERRIFY);
-                Terrify_Timer = 20000;
-            } else Terrify_Timer -= diff;
+			//Terrify_Timer
+			if (Terrify_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_TERRIFY);
+				Terrify_Timer = 20000;
+			} else
+				Terrify_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_azshir_the_sleepless()
-{
-    new boss_azshir_the_sleepless();
+void AddSC_boss_azshir_the_sleepless() {
+	new boss_azshir_the_sleepless();
 }

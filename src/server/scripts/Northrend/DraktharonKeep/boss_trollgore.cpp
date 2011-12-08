@@ -29,172 +29,169 @@
 #include "ScriptPCH.h"
 #include "drak_tharon_keep.h"
 
-enum Spells
-{
-    SPELL_INFECTED_WOUND                          = 49637,
-    SPELL_CRUSH                                   = 49639,
-    SPELL_CORPSE_EXPLODE                          = 49555,
-    SPELL_CONSUME                                 = 49380,
-    SPELL_CONSUME_AURA                            = 49381,
-    //Heroic spells
-    H_SPELL_CORPSE_EXPLODE                        = 59807,
-    H_SPELL_CONSUME                               = 59803,
-    H_SPELL_CONSUME_AURA                          = 59805,
+enum Spells {
+	SPELL_INFECTED_WOUND = 49637,
+	SPELL_CRUSH = 49639,
+	SPELL_CORPSE_EXPLODE = 49555,
+	SPELL_CONSUME = 49380,
+	SPELL_CONSUME_AURA = 49381,
+	//Heroic spells
+	H_SPELL_CORPSE_EXPLODE = 59807,
+	H_SPELL_CONSUME = 59803,
+	H_SPELL_CONSUME_AURA = 59805,
 };
-enum Yells
-{
-    SAY_AGGRO                                     = -1600006,
-    SAY_KILL                                      = -1600007,
-    SAY_CONSUME                                   = -1600008,
-    SAY_EXPLODE                                   = -1600009,
-    SAY_DEATH                                     = -1600010
+enum Yells {
+	SAY_AGGRO = -1600006,
+	SAY_KILL = -1600007,
+	SAY_CONSUME = -1600008,
+	SAY_EXPLODE = -1600009,
+	SAY_DEATH = -1600010
 };
-enum Achievements
-{
-    ACHIEV_CONSUMPTION_JUNCTION                   = 2151
+enum Achievements {
+	ACHIEV_CONSUMPTION_JUNCTION = 2151
 };
-enum Creatures
-{
-    NPC_DRAKKARI_INVADER_1                        = 27753,
-    NPC_DRAKKARI_INVADER_2                        = 27709
+enum Creatures {
+	NPC_DRAKKARI_INVADER_1 = 27753, NPC_DRAKKARI_INVADER_2 = 27709
 };
 
 Position AddSpawnPoint = { -260.493011f, -622.968018f, 26.605301f, 3.036870f };
 
-class boss_trollgore : public CreatureScript
-{
+class boss_trollgore: public CreatureScript {
 public:
-    boss_trollgore() : CreatureScript("boss_trollgore") { }
+	boss_trollgore() :
+			CreatureScript("boss_trollgore") {
+	}
 
-    struct boss_trollgoreAI : public BossAI
-    {
-        boss_trollgoreAI(Creature *c) : BossAI(c, DATA_TROLLGORE_EVENT)
-        {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-        }
+	struct boss_trollgoreAI: public BossAI {
+		boss_trollgoreAI(Creature *c) :
+				BossAI(c, DATA_TROLLGORE_EVENT) {
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        uint32 uiConsumeTimer;
-        uint32 uiAuraCountTimer;
-        uint32 uiCrushTimer;
-        uint32 uiInfectedWoundTimer;
-        uint32 uiExplodeCorpseTimer;
-        uint32 uiSpawnTimer;
+		uint32 uiConsumeTimer;
+		uint32 uiAuraCountTimer;
+		uint32 uiCrushTimer;
+		uint32 uiInfectedWoundTimer;
+		uint32 uiExplodeCorpseTimer;
+		uint32 uiSpawnTimer;
 
-        bool bAchiev;
+		bool bAchiev;
 
-        void Reset()
-        {
-            uiConsumeTimer = 15*IN_MILLISECONDS;
-            uiAuraCountTimer = 15500;
-            uiCrushTimer = urand(1*IN_MILLISECONDS, 5*IN_MILLISECONDS);
-            uiInfectedWoundTimer = urand(60*IN_MILLISECONDS, 10*IN_MILLISECONDS);
-            uiExplodeCorpseTimer = 3*IN_MILLISECONDS;
-            uiSpawnTimer = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
+		void Reset() {
+			uiConsumeTimer = 15 * IN_MILLISECONDS;
+			uiAuraCountTimer = 15500;
+			uiCrushTimer = urand(1 * IN_MILLISECONDS, 5 * IN_MILLISECONDS);
+			uiInfectedWoundTimer = urand(60 * IN_MILLISECONDS,
+					10 * IN_MILLISECONDS);
+			uiExplodeCorpseTimer = 3 * IN_MILLISECONDS;
+			uiSpawnTimer = urand(30 * IN_MILLISECONDS, 40 * IN_MILLISECONDS);
 
-            bAchiev = IsHeroic();
+			bAchiev = IsHeroic();
 
-            summons.DespawnAll();
+			summons.DespawnAll();
 
-            me->RemoveAura(DUNGEON_MODE(SPELL_CONSUME_AURA, H_SPELL_CONSUME_AURA));
+			me->RemoveAura(
+					DUNGEON_MODE(SPELL_CONSUME_AURA, H_SPELL_CONSUME_AURA));
 
-            if (instance)
-                instance->SetData(DATA_TROLLGORE_EVENT, NOT_STARTED);
-        }
+			if (instance)
+				instance->SetData(DATA_TROLLGORE_EVENT, NOT_STARTED);
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
 
-            if (instance)
-                instance->SetData(DATA_TROLLGORE_EVENT, IN_PROGRESS);
-        }
+			if (instance)
+				instance->SetData(DATA_TROLLGORE_EVENT, IN_PROGRESS);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (uiSpawnTimer <= diff)
-            {
-                uint32 spawnNumber = urand(2, DUNGEON_MODE(3, 5));
-                for (uint8 i = 0; i < spawnNumber; ++i)
-                    DoSummon(RAND(NPC_DRAKKARI_INVADER_1, NPC_DRAKKARI_INVADER_2), AddSpawnPoint, 0, TEMPSUMMON_DEAD_DESPAWN);
-                uiSpawnTimer = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
-            } else uiSpawnTimer -= diff;
+			if (uiSpawnTimer <= diff) {
+				uint32 spawnNumber = urand(2, DUNGEON_MODE(3, 5));
+				for (uint8 i = 0; i < spawnNumber; ++i)
+					DoSummon(
+							RAND(NPC_DRAKKARI_INVADER_1,
+									NPC_DRAKKARI_INVADER_2), AddSpawnPoint, 0,
+							TEMPSUMMON_DEAD_DESPAWN);
+				uiSpawnTimer = urand(30 * IN_MILLISECONDS,
+						40 * IN_MILLISECONDS);
+			} else
+				uiSpawnTimer -= diff;
 
-            if (uiConsumeTimer <= diff)
-            {
-                DoScriptText(SAY_CONSUME, me);
-                DoCast(SPELL_CONSUME);
-                uiConsumeTimer = 15*IN_MILLISECONDS;
-            } else uiConsumeTimer -= diff;
+			if (uiConsumeTimer <= diff) {
+				DoScriptText(SAY_CONSUME, me);
+				DoCast(SPELL_CONSUME);
+				uiConsumeTimer = 15 * IN_MILLISECONDS;
+			} else
+				uiConsumeTimer -= diff;
 
-            if (bAchiev)
-            {
-                Aura *pConsumeAura = me->GetAura(DUNGEON_MODE(SPELL_CONSUME_AURA, H_SPELL_CONSUME_AURA));
-                if (pConsumeAura && pConsumeAura->GetStackAmount() > 9)
-                    bAchiev = false;
-            }
+			if (bAchiev) {
+				Aura *pConsumeAura = me->GetAura(
+						DUNGEON_MODE(SPELL_CONSUME_AURA, H_SPELL_CONSUME_AURA));
+				if (pConsumeAura && pConsumeAura->GetStackAmount() > 9)
+					bAchiev = false;
+			}
 
-            if (uiCrushTimer <= diff)
-            {
-                DoCastVictim(SPELL_CRUSH);
-                uiCrushTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
-            } else uiCrushTimer -= diff;
+			if (uiCrushTimer <= diff) {
+				DoCastVictim(SPELL_CRUSH);
+				uiCrushTimer = urand(10 * IN_MILLISECONDS,
+						15 * IN_MILLISECONDS);
+			} else
+				uiCrushTimer -= diff;
 
-            if (uiInfectedWoundTimer <= diff)
-            {
-                DoCastVictim(SPELL_INFECTED_WOUND);
-                uiInfectedWoundTimer = urand(25*IN_MILLISECONDS, 35*IN_MILLISECONDS);
-            } else uiInfectedWoundTimer -= diff;
+			if (uiInfectedWoundTimer <= diff) {
+				DoCastVictim(SPELL_INFECTED_WOUND);
+				uiInfectedWoundTimer = urand(25 * IN_MILLISECONDS,
+						35 * IN_MILLISECONDS);
+			} else
+				uiInfectedWoundTimer -= diff;
 
-            if (uiExplodeCorpseTimer <= diff)
-            {
-                DoCast(SPELL_CORPSE_EXPLODE);
-                DoScriptText(SAY_EXPLODE, me);
-                uiExplodeCorpseTimer = urand(15*IN_MILLISECONDS, 19*IN_MILLISECONDS);
-            } else uiExplodeCorpseTimer -= diff;
+			if (uiExplodeCorpseTimer <= diff) {
+				DoCast(SPELL_CORPSE_EXPLODE);
+				DoScriptText(SAY_EXPLODE, me);
+				uiExplodeCorpseTimer = urand(15 * IN_MILLISECONDS,
+						19 * IN_MILLISECONDS);
+			} else
+				uiExplodeCorpseTimer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-            {
-                if (bAchiev)
-                    instance->DoCompleteAchievement(ACHIEV_CONSUMPTION_JUNCTION);
-                instance->SetData(DATA_TROLLGORE_EVENT, DONE);
-            }
-        }
+			if (instance) {
+				if (bAchiev)
+					instance->DoCompleteAchievement(
+							ACHIEV_CONSUMPTION_JUNCTION);
+				instance->SetData(DATA_TROLLGORE_EVENT, DONE);
+			}
+		}
 
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
-            DoScriptText(SAY_KILL, me);
-        }
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
+			DoScriptText(SAY_KILL, me);
+		}
 
-        void JustSummoned(Creature* summon)
-        {
-            summons.push_back(summon->GetGUID());
-            if (summon->AI())
-                summon->AI()->AttackStart(me);
-        }
-    };
+		void JustSummoned(Creature* summon) {
+			summons.push_back(summon->GetGUID());
+			if (summon->AI())
+				summon->AI()->AttackStart(me);
+		}
+	};
 
-    CreatureAI *GetAI(Creature *creature) const
-    {
-        return new boss_trollgoreAI(creature);
-    }
+	CreatureAI *GetAI(Creature *creature) const {
+		return new boss_trollgoreAI(creature);
+	}
 };
 
-void AddSC_boss_trollgore()
-{
-    new boss_trollgore;
+void AddSC_boss_trollgore() {
+	new boss_trollgore;
 }

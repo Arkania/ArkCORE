@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Ironaya
-SD%Complete: 100
-SDComment:
-SDCategory: Uldaman
-EndScriptData */
+ SDName: Boss_Ironaya
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Uldaman
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -37,85 +37,77 @@ EndScriptData */
 #define SPELL_KNOCKAWAY             10101
 #define SPELL_WSTOMP                11876
 
-class boss_ironaya : public CreatureScript
-{
-    public:
+class boss_ironaya: public CreatureScript {
+public:
 
-        boss_ironaya()
-            : CreatureScript("boss_ironaya")
-        {
-        }
+	boss_ironaya() :
+			CreatureScript("boss_ironaya") {
+	}
 
-        struct boss_ironayaAI : public ScriptedAI
-        {
-            boss_ironayaAI(Creature* pCreature) : ScriptedAI(pCreature) {}
+	struct boss_ironayaAI: public ScriptedAI {
+		boss_ironayaAI(Creature* pCreature) :
+				ScriptedAI(pCreature) {
+		}
 
-            uint32 uiArcingTimer;
-            bool bHasCastedWstomp;
-            bool bHasCastedKnockaway;
+		uint32 uiArcingTimer;
+		bool bHasCastedWstomp;
+		bool bHasCastedKnockaway;
 
-            void Reset()
-            {
-                uiArcingTimer = 3000;
-                bHasCastedKnockaway = false;
-                bHasCastedWstomp = false;
-            }
+		void Reset() {
+			uiArcingTimer = 3000;
+			bHasCastedKnockaway = false;
+			bHasCastedWstomp = false;
+		}
 
-            void EnterCombat(Unit * /*who*/)
-            {
-                DoScriptText(SAY_AGGRO, me);
-            }
+		void EnterCombat(Unit * /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
+		}
 
-            void UpdateAI(const uint32 uiDiff)
-            {
-                //Return since we have no target
-                if (!UpdateVictim())
-                    return;
+		void UpdateAI(const uint32 uiDiff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-                //If we are <50% hp do knockaway ONCE
-                if (!bHasCastedKnockaway && HealthBelowPct(50))
-                {
-                    DoCast(me->getVictim(), SPELL_KNOCKAWAY, true);
+			//If we are <50% hp do knockaway ONCE
+			if (!bHasCastedKnockaway && HealthBelowPct(50)) {
+				DoCast(me->getVictim(), SPELL_KNOCKAWAY, true);
 
-                    // current aggro target is knocked away pick new target
-                    Unit* pTarget = SelectUnit(SELECT_TARGET_TOPAGGRO, 0);
+				// current aggro target is knocked away pick new target
+				Unit* pTarget = SelectUnit(SELECT_TARGET_TOPAGGRO, 0);
 
-                    if (!pTarget || pTarget == me->getVictim())
-                        pTarget = SelectUnit(SELECT_TARGET_TOPAGGRO, 1);
+				if (!pTarget || pTarget == me->getVictim())
+					pTarget = SelectUnit(SELECT_TARGET_TOPAGGRO, 1);
 
-                    if (pTarget)
-                        me->TauntApply(pTarget);
+				if (pTarget)
+					me->TauntApply(pTarget);
 
-                    //Shouldn't cast this agian
-                    bHasCastedKnockaway = true;
-                }
+				//Shouldn't cast this agian
+				bHasCastedKnockaway = true;
+			}
 
-                //uiArcingTimer
-                if (uiArcingTimer <= uiDiff)
-                {
-                    DoCast(me, SPELL_ARCINGSMASH);
-                    uiArcingTimer = 13000;
-                } else uiArcingTimer -= uiDiff;
+			//uiArcingTimer
+			if (uiArcingTimer <= uiDiff) {
+				DoCast(me, SPELL_ARCINGSMASH);
+				uiArcingTimer = 13000;
+			} else
+				uiArcingTimer -= uiDiff;
 
-                if (!bHasCastedWstomp && HealthBelowPct(25))
-                {
-                    DoCast(me, SPELL_WSTOMP);
-                    bHasCastedWstomp = true;
-                }
+			if (!bHasCastedWstomp && HealthBelowPct(25)) {
+				DoCast(me, SPELL_WSTOMP);
+				bHasCastedWstomp = true;
+			}
 
-                DoMeleeAttackIfReady();
-            }
-        };
+			DoMeleeAttackIfReady();
+		}
+	};
 
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new boss_ironayaAI(creature);
-        }
+	CreatureAI* GetAI(Creature* creature) const {
+		return new boss_ironayaAI(creature);
+	}
 };
 
 //This is the actual function called only once durring InitScripts()
 //It must define all handled functions that are to be run in this script
-void AddSC_boss_ironaya()
-{
-    new boss_ironaya();
+void AddSC_boss_ironaya() {
+	new boss_ironaya();
 }

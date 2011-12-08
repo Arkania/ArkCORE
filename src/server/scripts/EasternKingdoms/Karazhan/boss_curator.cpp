@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Curator
-SD%Complete: 100
-SDComment:
-SDCategory: Karazhan
-EndScriptData */
+ SDName: Boss_Curator
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Karazhan
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -42,164 +42,154 @@ EndScriptData */
 
 //Flare spell info
 #define SPELL_ASTRAL_FLARE_PASSIVE      30234               //Visual effect + Flare damage
-
 //Curator spell info
 #define SPELL_HATEFUL_BOLT              30383
 #define SPELL_EVOCATION                 30254
 #define SPELL_ENRAGE                    30403               //Arcane Infusion: Transforms Curator and adds damage.
 #define SPELL_BERSERK                   26662
 
-class boss_curator : public CreatureScript
-{
+class boss_curator: public CreatureScript {
 public:
-    boss_curator() : CreatureScript("boss_curator") { }
+	boss_curator() :
+			CreatureScript("boss_curator") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_curatorAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_curatorAI(pCreature);
+	}
 
-    struct boss_curatorAI : public ScriptedAI
-    {
-        boss_curatorAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_curatorAI: public ScriptedAI {
+		boss_curatorAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 AddTimer;
-        uint32 HatefulBoltTimer;
-        uint32 BerserkTimer;
+		uint32 AddTimer;
+		uint32 HatefulBoltTimer;
+		uint32 BerserkTimer;
 
-        bool Enraged;
-        bool Evocating;
+		bool Enraged;
+		bool Evocating;
 
-        void Reset()
-        {
-            AddTimer = 10000;
-            HatefulBoltTimer = 15000;                           //This time may be wrong
-            BerserkTimer = 720000;                              //12 minutes
-            Enraged = false;
-            Evocating = false;
+		void Reset() {
+			AddTimer = 10000;
+			HatefulBoltTimer = 15000; //This time may be wrong
+			BerserkTimer = 720000; //12 minutes
+			Enraged = false;
+			Evocating = false;
 
-            me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ARCANE, true);
-        }
+			me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ARCANE,
+					true);
+		}
 
-        void KilledUnit(Unit * /*victim*/)
-        {
-            DoScriptText(RAND(SAY_KILL1, SAY_KILL2), me);
-        }
+		void KilledUnit(Unit * /*victim*/) {
+			DoScriptText(RAND(SAY_KILL1, SAY_KILL2), me);
+		}
 
-        void JustDied(Unit * /*victim*/)
-        {
-            DoScriptText(SAY_DEATH, me);
-        }
+		void JustDied(Unit * /*victim*/) {
+			DoScriptText(SAY_DEATH, me);
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
-        }
+		void EnterCombat(Unit * /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //always decrease BerserkTimer
-            if (BerserkTimer <= diff)
-            {
-                //if evocate, then break evocate
-                if (Evocating)
-                {
-                    if (me->HasAura(SPELL_EVOCATION))
-                        me->RemoveAurasDueToSpell(SPELL_EVOCATION);
+			//always decrease BerserkTimer
+			if (BerserkTimer <= diff) {
+				//if evocate, then break evocate
+				if (Evocating) {
+					if (me->HasAura(SPELL_EVOCATION))
+						me->RemoveAurasDueToSpell(SPELL_EVOCATION);
 
-                    Evocating = false;
-                }
+					Evocating = false;
+				}
 
-                //may not be correct SAY (generic hard enrage)
-                DoScriptText(SAY_ENRAGE, me);
+				//may not be correct SAY (generic hard enrage)
+				DoScriptText(SAY_ENRAGE, me);
 
-                me->InterruptNonMeleeSpells(true);
-                DoCast(me, SPELL_BERSERK);
+				me->InterruptNonMeleeSpells(true);
+				DoCast(me, SPELL_BERSERK);
 
-                //don't know if he's supposed to do summon/evocate after hard enrage (probably not)
-                Enraged = true;
-            } else BerserkTimer -= diff;
+				//don't know if he's supposed to do summon/evocate after hard enrage (probably not)
+				Enraged = true;
+			} else
+				BerserkTimer -= diff;
 
-            if (Evocating)
-            {
-                //not supposed to do anything while evocate
-                if (me->HasAura(SPELL_EVOCATION))
-                    return;
-                else
-                    Evocating = false;
-            }
+			if (Evocating) {
+				//not supposed to do anything while evocate
+				if (me->HasAura(SPELL_EVOCATION))
+					return;
+				else
+					Evocating = false;
+			}
 
-            if (!Enraged)
-            {
-                if (AddTimer <= diff)
-                {
-                    //Summon Astral Flare
-                    Creature* AstralFlare = DoSpawnCreature(17096, float(rand()%37), float(rand()%37), 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                    Unit *pTarget = NULL;
-                    pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+			if (!Enraged) {
+				if (AddTimer <= diff) {
+					//Summon Astral Flare
+					Creature* AstralFlare = DoSpawnCreature(17096,
+							float(rand() % 37), float(rand() % 37), 0, 0,
+							TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+					Unit *pTarget = NULL;
+					pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
 
-                    if (AstralFlare && pTarget)
-                    {
-                        AstralFlare->CastSpell(AstralFlare, SPELL_ASTRAL_FLARE_PASSIVE, false);
-                        AstralFlare->AI()->AttackStart(pTarget);
-                    }
+					if (AstralFlare && pTarget) {
+						AstralFlare->CastSpell(AstralFlare,
+								SPELL_ASTRAL_FLARE_PASSIVE, false);
+						AstralFlare->AI()->AttackStart(pTarget);
+					}
 
-                    //Reduce Mana by 10% of max health
-                    if (int32 mana = me->GetMaxPower(POWER_MANA))
-                    {
-                        mana /= 10;
-                        me->ModifyPower(POWER_MANA, -mana);
+					//Reduce Mana by 10% of max health
+					if (int32 mana = me->GetMaxPower(POWER_MANA)) {
+						mana /= 10;
+						me->ModifyPower(POWER_MANA, -mana);
 
-                        //if this get's us below 10%, then we evocate (the 10th should be summoned now)
-                        if (me->GetPower(POWER_MANA)*100 / me->GetMaxPower(POWER_MANA) < 10)
-                        {
-                            DoScriptText(SAY_EVOCATE, me);
-                            me->InterruptNonMeleeSpells(false);
-                            DoCast(me, SPELL_EVOCATION);
-                            Evocating = true;
-                            //no AddTimer cooldown, this will make first flare appear instantly after evocate end, like expected
-                            return;
-                        }
-                        else
-                        {
-                            if (urand(0, 1) == 0)
-                            {
-                                DoScriptText(RAND(SAY_SUMMON1, SAY_SUMMON2), me);
-                            }
-                        }
-                    }
+						//if this get's us below 10%, then we evocate (the 10th should be summoned now)
+						if (me->GetPower(POWER_MANA) * 100
+								/ me->GetMaxPower(POWER_MANA) < 10) {
+							DoScriptText(SAY_EVOCATE, me);
+							me->InterruptNonMeleeSpells(false);
+							DoCast(me, SPELL_EVOCATION);
+							Evocating = true;
+							//no AddTimer cooldown, this will make first flare appear instantly after evocate end, like expected
+							return;
+						} else {
+							if (urand(0, 1) == 0) {
+								DoScriptText(RAND(SAY_SUMMON1, SAY_SUMMON2),
+										me);
+							}
+						}
+					}
 
-                    AddTimer = 10000;
-                } else AddTimer -= diff;
+					AddTimer = 10000;
+				} else
+					AddTimer -= diff;
 
-                if (!HealthAbovePct(15))
-                {
-                    Enraged = true;
-                    DoCast(me, SPELL_ENRAGE);
-                    DoScriptText(SAY_ENRAGE, me);
-                }
-            }
+				if (!HealthAbovePct(15)) {
+					Enraged = true;
+					DoCast(me, SPELL_ENRAGE);
+					DoScriptText(SAY_ENRAGE, me);
+				}
+			}
 
-            if (HatefulBoltTimer <= diff)
-            {
-                if (Enraged)
-                    HatefulBoltTimer = 7000;
-                else
-                    HatefulBoltTimer = 15000;
+			if (HatefulBoltTimer <= diff) {
+				if (Enraged)
+					HatefulBoltTimer = 7000;
+				else
+					HatefulBoltTimer = 15000;
 
-                if (Unit *pTarget = SelectUnit(SELECT_TARGET_TOPAGGRO, 1))
-                    DoCast(pTarget, SPELL_HATEFUL_BOLT);
-            } else HatefulBoltTimer -= diff;
+				if (Unit *pTarget = SelectUnit(SELECT_TARGET_TOPAGGRO, 1))
+					DoCast(pTarget, SPELL_HATEFUL_BOLT);
+			} else
+				HatefulBoltTimer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_curator()
-{
-    new boss_curator();
+void AddSC_boss_curator() {
+	new boss_curator();
 }

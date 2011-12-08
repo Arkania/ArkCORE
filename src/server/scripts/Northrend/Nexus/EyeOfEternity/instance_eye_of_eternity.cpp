@@ -25,24 +25,26 @@
 #include "ScriptPCH.h"
 #include "eye_of_eternity.h"
 
-class instance_eye_of_eternity : public InstanceMapScript
-{
+class instance_eye_of_eternity: public InstanceMapScript {
 public:
-    instance_eye_of_eternity() : InstanceMapScript("instance_eye_of_eternity", 616) { }
+	instance_eye_of_eternity() :
+			InstanceMapScript("instance_eye_of_eternity", 616) {
+	}
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
-    {
-        return new instance_eye_of_eternity_InstanceMapScript(pMap);
-    }
+	InstanceScript* GetInstanceScript(InstanceMap* pMap) const {
+		return new instance_eye_of_eternity_InstanceMapScript(pMap);
+	}
 
-    struct instance_eye_of_eternity_InstanceMapScript : public InstanceScript
-    {
-        instance_eye_of_eternity_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {Initialize();};
-    };
+	struct instance_eye_of_eternity_InstanceMapScript: public InstanceScript {
+		instance_eye_of_eternity_InstanceMapScript(Map* pMap) :
+				InstanceScript(pMap) {
+			Initialize();
+		}
+		;
+	};
 };
 
-void AddSC_instance_eye_of_eternity()
-{
-    // doesn't exist in the database?
-    //new instance_eye_of_eternity();
+void AddSC_instance_eye_of_eternity() {
+	// doesn't exist in the database?
+	//new instance_eye_of_eternity();
 }

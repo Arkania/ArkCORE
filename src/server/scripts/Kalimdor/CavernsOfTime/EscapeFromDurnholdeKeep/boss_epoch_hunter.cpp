@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Epoch_Hunter
-SD%Complete: 60
-SDComment: Missing spawns pre-event, missing speech to be coordinated with rest of escort event.
-SDCategory: Caverns of Time, Old Hillsbrad Foothills
-EndScriptData */
+ SDName: Boss_Epoch_Hunter
+ SD%Complete: 60
+ SDComment: Missing spawns pre-event, missing speech to be coordinated with rest of escort event.
+ SDCategory: Caverns of Time, Old Hillsbrad Foothills
+ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "old_hillsbrad.h"
@@ -48,100 +48,94 @@ EndScriptData */
 #define SPELL_MAGIC_DISRUPTION_AURA 33834
 #define SPELL_WING_BUFFET           31475
 
-class boss_epoch_hunter : public CreatureScript
-{
+class boss_epoch_hunter: public CreatureScript {
 public:
-    boss_epoch_hunter() : CreatureScript("boss_epoch_hunter") { }
+	boss_epoch_hunter() :
+			CreatureScript("boss_epoch_hunter") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_epoch_hunterAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_epoch_hunterAI(pCreature);
+	}
 
-    struct boss_epoch_hunterAI : public ScriptedAI
-    {
-        boss_epoch_hunterAI(Creature *c) : ScriptedAI(c)
-        {
-            pInstance = c->GetInstanceScript();
-        }
+	struct boss_epoch_hunterAI: public ScriptedAI {
+		boss_epoch_hunterAI(Creature *c) :
+				ScriptedAI(c) {
+			pInstance = c->GetInstanceScript();
+		}
 
-        InstanceScript *pInstance;
+		InstanceScript *pInstance;
 
-        uint32 SandBreath_Timer;
-        uint32 ImpendingDeath_Timer;
-        uint32 WingBuffet_Timer;
-        uint32 Mda_Timer;
+		uint32 SandBreath_Timer;
+		uint32 ImpendingDeath_Timer;
+		uint32 WingBuffet_Timer;
+		uint32 Mda_Timer;
 
-        void Reset()
-        {
-            SandBreath_Timer = 8000 + rand()%8000;
-            ImpendingDeath_Timer = 25000 + rand()%5000;
-            WingBuffet_Timer = 35000;
-            Mda_Timer = 40000;
-        }
+		void Reset() {
+			SandBreath_Timer = 8000 + rand() % 8000;
+			ImpendingDeath_Timer = 25000 + rand() % 5000;
+			WingBuffet_Timer = 35000;
+			Mda_Timer = 40000;
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-            DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2), me);
-        }
+		void EnterCombat(Unit * /*who*/) {
+			DoScriptText(RAND(SAY_AGGRO1, SAY_AGGRO2), me);
+		}
 
-        void KilledUnit(Unit * /*victim*/)
-        {
-            DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
-        }
+		void KilledUnit(Unit * /*victim*/) {
+			DoScriptText(RAND(SAY_SLAY1, SAY_SLAY2), me);
+		}
 
-        void JustDied(Unit * /*victim*/)
-        {
-            DoScriptText(SAY_DEATH, me);
+		void JustDied(Unit * /*victim*/) {
+			DoScriptText(SAY_DEATH, me);
 
-            if (pInstance && pInstance->GetData(TYPE_THRALL_EVENT) == IN_PROGRESS)
-                pInstance->SetData(TYPE_THRALL_PART4, DONE);
-        }
+			if (pInstance
+					&& pInstance->GetData(TYPE_THRALL_EVENT) == IN_PROGRESS)
+				pInstance->SetData(TYPE_THRALL_PART4, DONE);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            //Sand Breath
-            if (SandBreath_Timer <= diff)
-            {
-                if (me->IsNonMeleeSpellCasted(false))
-                    me->InterruptNonMeleeSpells(false);
+			//Sand Breath
+			if (SandBreath_Timer <= diff) {
+				if (me->IsNonMeleeSpellCasted(false))
+					me->InterruptNonMeleeSpells(false);
 
-                DoCast(me->getVictim(), SPELL_SAND_BREATH);
+				DoCast(me->getVictim(), SPELL_SAND_BREATH);
 
-                DoScriptText(RAND(SAY_BREATH1, SAY_BREATH2), me);
+				DoScriptText(RAND(SAY_BREATH1, SAY_BREATH2), me);
 
-                SandBreath_Timer = 10000 + rand()%10000;
-            } else SandBreath_Timer -= diff;
+				SandBreath_Timer = 10000 + rand() % 10000;
+			} else
+				SandBreath_Timer -= diff;
 
-            if (ImpendingDeath_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_IMPENDING_DEATH);
-                ImpendingDeath_Timer = 25000+rand()%5000;
-            } else ImpendingDeath_Timer -= diff;
+			if (ImpendingDeath_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_IMPENDING_DEATH);
+				ImpendingDeath_Timer = 25000 + rand() % 5000;
+			} else
+				ImpendingDeath_Timer -= diff;
 
-            if (WingBuffet_Timer <= diff)
-            {
-                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pTarget, SPELL_WING_BUFFET);
-                WingBuffet_Timer = 25000+rand()%10000;
-            } else WingBuffet_Timer -= diff;
+			if (WingBuffet_Timer <= diff) {
+				if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+					DoCast(pTarget, SPELL_WING_BUFFET);
+				WingBuffet_Timer = 25000 + rand() % 10000;
+			} else
+				WingBuffet_Timer -= diff;
 
-            if (Mda_Timer <= diff)
-            {
-                DoCast(me, SPELL_MAGIC_DISRUPTION_AURA);
-                Mda_Timer = 15000;
-            } else Mda_Timer -= diff;
+			if (Mda_Timer <= diff) {
+				DoCast(me, SPELL_MAGIC_DISRUPTION_AURA);
+				Mda_Timer = 15000;
+			} else
+				Mda_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_epoch_hunter()
-{
-    new boss_epoch_hunter();
+void AddSC_boss_epoch_hunter() {
+	new boss_epoch_hunter();
 }

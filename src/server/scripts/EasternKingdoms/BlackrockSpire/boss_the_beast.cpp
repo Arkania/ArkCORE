@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_The_Best
-SD%Complete: 100
-SDComment:
-SDCategory: Blackrock Spire
-EndScriptData */
+ SDName: Boss_The_Best
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Blackrock Spire
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -35,69 +35,66 @@ EndScriptData */
 #define SPELL_IMMOLATE              20294
 #define SPELL_TERRIFYINGROAR        14100
 
-class boss_the_beast : public CreatureScript
-{
+class boss_the_beast: public CreatureScript {
 public:
-    boss_the_beast() : CreatureScript("boss_the_beast") { }
+	boss_the_beast() :
+			CreatureScript("boss_the_beast") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_thebeastAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_thebeastAI(pCreature);
+	}
 
-    struct boss_thebeastAI : public ScriptedAI
-    {
-        boss_thebeastAI(Creature *c) : ScriptedAI(c) {}
+	struct boss_thebeastAI: public ScriptedAI {
+		boss_thebeastAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 Flamebreak_Timer;
-        uint32 Immolate_Timer;
-        uint32 TerrifyingRoar_Timer;
+		uint32 Flamebreak_Timer;
+		uint32 Immolate_Timer;
+		uint32 TerrifyingRoar_Timer;
 
-        void Reset()
-        {
-            Flamebreak_Timer = 12000;
-            Immolate_Timer = 3000;
-            TerrifyingRoar_Timer = 23000;
-        }
+		void Reset() {
+			Flamebreak_Timer = 12000;
+			Immolate_Timer = 3000;
+			TerrifyingRoar_Timer = 23000;
+		}
 
-        void EnterCombat(Unit * /*who*/)
-        {
-        }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            //Flamebreak_Timer
-            if (Flamebreak_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_FLAMEBREAK);
-                Flamebreak_Timer = 10000;
-            } else Flamebreak_Timer -= diff;
+			//Flamebreak_Timer
+			if (Flamebreak_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_FLAMEBREAK);
+				Flamebreak_Timer = 10000;
+			} else
+				Flamebreak_Timer -= diff;
 
-            //Immolate_Timer
-            if (Immolate_Timer <= diff)
-            {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_IMMOLATE);
-                Immolate_Timer = 8000;
-            } else Immolate_Timer -= diff;
+			//Immolate_Timer
+			if (Immolate_Timer <= diff) {
+				if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					DoCast(pTarget, SPELL_IMMOLATE);
+				Immolate_Timer = 8000;
+			} else
+				Immolate_Timer -= diff;
 
-            //TerrifyingRoar_Timer
-            if (TerrifyingRoar_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_TERRIFYINGROAR);
-                TerrifyingRoar_Timer = 20000;
-            } else TerrifyingRoar_Timer -= diff;
+			//TerrifyingRoar_Timer
+			if (TerrifyingRoar_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_TERRIFYINGROAR);
+				TerrifyingRoar_Timer = 20000;
+			} else
+				TerrifyingRoar_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_thebeast()
-{
-    new boss_the_beast();
+void AddSC_boss_thebeast() {
+	new boss_the_beast();
 }

@@ -23,138 +23,131 @@
  */
 
 /* Script Data Start
-SDName: Boss epoch
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro, consecutive attacks to a random target durin time wrap, adjust timers
-SDCategory:
-Script Data End */
+ SDName: Boss epoch
+ SDAuthor: Tartalo
+ SD%Complete: 80
+ SDComment: TODO: Intro, consecutive attacks to a random target durin time wrap, adjust timers
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
 
-enum Spells
-{
-    SPELL_CURSE_OF_EXERTION                     = 52772,
-    SPELL_TIME_WARP                             = 52766, //Time slows down, reducing attack, casting and movement speed by 70% for 6 sec.
-    SPELL_TIME_STOP                             = 58848, //Stops time in a 50 yard sphere for 2 sec.
-    SPELL_WOUNDING_STRIKE                       = 52771, //Used only on the tank
-    H_SPELL_WOUNDING_STRIKE                     = 58830
+enum Spells {
+	SPELL_CURSE_OF_EXERTION = 52772, SPELL_TIME_WARP = 52766, //Time slows down, reducing attack, casting and movement speed by 70% for 6 sec.
+	SPELL_TIME_STOP = 58848, //Stops time in a 50 yard sphere for 2 sec.
+	SPELL_WOUNDING_STRIKE = 52771, //Used only on the tank
+	H_SPELL_WOUNDING_STRIKE = 58830
 };
 
-enum Yells
-{
-    SAY_INTRO                                   = -1595000, //"Prince Arthas Menethil, on this day, a powerful darkness has taken hold of your soul. The death you are destined to visit upon others will this day be your own."
-    SAY_AGGRO                                   = -1595001, //"We'll see about that, young prince."
-    SAY_TIME_WARP_1                             = -1595002, //"Tick tock, tick tock..."
-    SAY_TIME_WARP_2                             = -1595003, //"Not quick enough!"
-    SAY_TIME_WARP_3                             = -1595004, //"Let's get this over with. "
-    SAY_SLAY_1                                  = -1595005, //"There is no future for you."
-    SAY_SLAY_2                                  = -1595006, //"This is the hour of our greatest triumph!"
-    SAY_SLAY_3                                  = -1595007, //"You were destined to fail. "
-    SAY_DEATH                                   = -1595008 //"*gurgles*"
+enum Yells {
+	SAY_INTRO = -1595000, //"Prince Arthas Menethil, on this day, a powerful darkness has taken hold of your soul. The death you are destined to visit upon others will this day be your own."
+	SAY_AGGRO = -1595001, //"We'll see about that, young prince."
+	SAY_TIME_WARP_1 = -1595002, //"Tick tock, tick tock..."
+	SAY_TIME_WARP_2 = -1595003, //"Not quick enough!"
+	SAY_TIME_WARP_3 = -1595004, //"Let's get this over with. "
+	SAY_SLAY_1 = -1595005, //"There is no future for you."
+	SAY_SLAY_2 = -1595006, //"This is the hour of our greatest triumph!"
+	SAY_SLAY_3 = -1595007, //"You were destined to fail. "
+	SAY_DEATH = -1595008
+//"*gurgles*"
 };
 
-class boss_epoch : public CreatureScript
-{
+class boss_epoch: public CreatureScript {
 public:
-    boss_epoch() : CreatureScript("boss_epoch") { }
+	boss_epoch() :
+			CreatureScript("boss_epoch") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_epochAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_epochAI(pCreature);
+	}
 
-    struct boss_epochAI : public BossAI
-    {
-        boss_epochAI(Creature *c) : BossAI(c, DATA_EPOCH_EVENT)
-        {
-        }
+	struct boss_epochAI: public BossAI {
+		boss_epochAI(Creature *c) :
+				BossAI(c, DATA_EPOCH_EVENT) {
+		}
 
-        uint8 uiStep;
+		uint8 uiStep;
 
-        uint32 uiStepTimer;
-        uint32 uiWoundingStrikeTimer;
-        uint32 uiTimeWarpTimer;
-        uint32 uiTimeStopTimer;
-        uint32 uiCurseOfExertionTimer;
+		uint32 uiStepTimer;
+		uint32 uiWoundingStrikeTimer;
+		uint32 uiTimeWarpTimer;
+		uint32 uiTimeStopTimer;
+		uint32 uiCurseOfExertionTimer;
 
-        void Reset()
-        {
-            uiStep = 1;
-            uiStepTimer = 26000;
-            uiCurseOfExertionTimer = 9300;
-            uiTimeWarpTimer = 25300;
-            uiTimeStopTimer = 21300;
-            uiWoundingStrikeTimer = 5300;
+		void Reset() {
+			uiStep = 1;
+			uiStepTimer = 26000;
+			uiCurseOfExertionTimer = 9300;
+			uiTimeWarpTimer = 25300;
+			uiTimeStopTimer = 21300;
+			uiWoundingStrikeTimer = 5300;
 
-            if (instance)
-                instance->SetData(DATA_EPOCH_EVENT, NOT_STARTED);
-        }
+			if (instance)
+				instance->SetData(DATA_EPOCH_EVENT, NOT_STARTED);
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
 
-            if (instance)
-                instance->SetData(DATA_EPOCH_EVENT, IN_PROGRESS);
-        }
+			if (instance)
+				instance->SetData(DATA_EPOCH_EVENT, IN_PROGRESS);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (uiCurseOfExertionTimer < diff)
-            {
-                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                    DoCast(pTarget, SPELL_CURSE_OF_EXERTION);
-                uiCurseOfExertionTimer = 9300;
-            } else uiCurseOfExertionTimer -= diff;
+			if (uiCurseOfExertionTimer < diff) {
+				if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					DoCast(pTarget, SPELL_CURSE_OF_EXERTION);
+				uiCurseOfExertionTimer = 9300;
+			} else
+				uiCurseOfExertionTimer -= diff;
 
-            if (uiWoundingStrikeTimer < diff)
-            {
-                DoCastVictim(SPELL_WOUNDING_STRIKE);
-                uiWoundingStrikeTimer = 5300;
-            } else uiWoundingStrikeTimer -= diff;
+			if (uiWoundingStrikeTimer < diff) {
+				DoCastVictim(SPELL_WOUNDING_STRIKE);
+				uiWoundingStrikeTimer = 5300;
+			} else
+				uiWoundingStrikeTimer -= diff;
 
-            if (uiTimeStopTimer < diff)
-            {
-                DoCastAOE(SPELL_TIME_STOP);
-                uiTimeStopTimer = 21300;
-            } else uiTimeStopTimer -= diff;
+			if (uiTimeStopTimer < diff) {
+				DoCastAOE(SPELL_TIME_STOP);
+				uiTimeStopTimer = 21300;
+			} else
+				uiTimeStopTimer -= diff;
 
-            if (uiTimeWarpTimer < diff)
-            {
-                DoScriptText(RAND(SAY_TIME_WARP_1, SAY_TIME_WARP_2, SAY_TIME_WARP_3), me);
-                DoCastAOE(SPELL_TIME_WARP);
-                uiTimeWarpTimer = 25300;
-            } else uiTimeWarpTimer -= diff;
+			if (uiTimeWarpTimer < diff) {
+				DoScriptText(
+						RAND(SAY_TIME_WARP_1, SAY_TIME_WARP_2, SAY_TIME_WARP_3),
+						me);
+				DoCastAOE(SPELL_TIME_WARP);
+				uiTimeWarpTimer = 25300;
+			} else
+				uiTimeWarpTimer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-                instance->SetData(DATA_EPOCH_EVENT, DONE);
-        }
+			if (instance)
+				instance->SetData(DATA_EPOCH_EVENT, DONE);
+		}
 
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
 
-            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
-        }
-    };
+			DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
+		}
+	};
 };
 
-void AddSC_boss_epoch()
-{
-    new boss_epoch();
+void AddSC_boss_epoch() {
+	new boss_epoch();
 }

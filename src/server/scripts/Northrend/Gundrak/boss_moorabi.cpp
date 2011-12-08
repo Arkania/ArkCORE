@@ -25,158 +25,148 @@
 #include "ScriptPCH.h"
 #include "gundrak.h"
 
-enum eSpells
-{
-    SPELL_DETERMINED_STAB                         = 55104,
-    SPELL_GROUND_TREMOR                           = 55142,
-    SPELL_NUMBING_SHOUT                           = 55106,
-    SPELL_DETERMINED_GORE                         = 55102,
-    H_SPELL_DETERMINED_GORE                       = 59444,
-    SPELL_QUAKE                                   = 55101,
-    SPELL_NUMBING_ROAR                            = 55100,
-    SPELL_MOJO_FRENZY                             = 55163,
-    SPELL_TRANSFORMATION                          = 55098, //Periodic, The caster transforms into a powerful mammoth, increasing Physical damage done by 25% and granting immunity to Stun effects.
+enum eSpells {
+	SPELL_DETERMINED_STAB = 55104,
+	SPELL_GROUND_TREMOR = 55142,
+	SPELL_NUMBING_SHOUT = 55106,
+	SPELL_DETERMINED_GORE = 55102,
+	H_SPELL_DETERMINED_GORE = 59444,
+	SPELL_QUAKE = 55101,
+	SPELL_NUMBING_ROAR = 55100,
+	SPELL_MOJO_FRENZY = 55163,
+	SPELL_TRANSFORMATION = 55098,
+//Periodic, The caster transforms into a powerful mammoth, increasing Physical damage done by 25% and granting immunity to Stun effects.
 };
 
-enum eArchivements
-{
-    ACHIEV_LESS_RABI                              = 2040
+enum eArchivements {
+	ACHIEV_LESS_RABI = 2040
 };
 
-enum eSays
-{
-    SAY_AGGRO                                     = -1604010,
-    //SAY_SLAY_1                                  = -1604011, // not in db
-    SAY_SLAY_2                                    = -1604012,
-    SAY_SLAY_3                                    = -1604013,
-    SAY_DEATH                                     = -1604014,
-    SAY_TRANSFORM                                 = -1604015,
-    SAY_QUAKE                                     = -1604016,
-    EMOTE_TRANSFORM                               = -1604017
+enum eSays {
+	SAY_AGGRO = -1604010,
+	//SAY_SLAY_1                                  = -1604011, // not in db
+	SAY_SLAY_2 = -1604012,
+	SAY_SLAY_3 = -1604013,
+	SAY_DEATH = -1604014,
+	SAY_TRANSFORM = -1604015,
+	SAY_QUAKE = -1604016,
+	EMOTE_TRANSFORM = -1604017
 };
 
-class boss_moorabi : public CreatureScript
-{
+class boss_moorabi: public CreatureScript {
 public:
-    boss_moorabi() : CreatureScript("boss_moorabi") { }
+	boss_moorabi() :
+			CreatureScript("boss_moorabi") {
+	}
 
-    CreatureAI* GetAI(Creature *pCreature) const
-    {
-        return new boss_moorabiAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature *pCreature) const {
+		return new boss_moorabiAI(pCreature);
+	}
 
-    struct boss_moorabiAI : public BossAI
-    {
-        boss_moorabiAI(Creature* pCreature) : BossAI(pCreature, DATA_MOORABI_EVENT)
-        {
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-        }
+	struct boss_moorabiAI: public BossAI {
+		boss_moorabiAI(Creature* pCreature) :
+				BossAI(pCreature, DATA_MOORABI_EVENT) {
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        bool bPhase;
+		bool bPhase;
 
-        uint32 uiNumblingShoutTimer;
-        uint32 uiGroundTremorTimer;
-        uint32 uiDeterminedStabTimer;
-        uint32 uiTransformationTImer;
+		uint32 uiNumblingShoutTimer;
+		uint32 uiGroundTremorTimer;
+		uint32 uiDeterminedStabTimer;
+		uint32 uiTransformationTImer;
 
-        void Reset()
-        {
-            uiGroundTremorTimer = 18*IN_MILLISECONDS;
-            uiNumblingShoutTimer =  10*IN_MILLISECONDS;
-            uiDeterminedStabTimer = 20*IN_MILLISECONDS;
-            uiTransformationTImer = 12*IN_MILLISECONDS;
-            bPhase = false;
+		void Reset() {
+			uiGroundTremorTimer = 18 * IN_MILLISECONDS;
+			uiNumblingShoutTimer = 10 * IN_MILLISECONDS;
+			uiDeterminedStabTimer = 20 * IN_MILLISECONDS;
+			uiTransformationTImer = 12 * IN_MILLISECONDS;
+			bPhase = false;
 
-            if (instance)
-                instance->SetData(DATA_MOORABI_EVENT, NOT_STARTED);
-        }
+			if (instance)
+				instance->SetData(DATA_MOORABI_EVENT, NOT_STARTED);
+		}
 
-        void EnterCombat(Unit* /*pWho*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
-            DoCast(me, SPELL_MOJO_FRENZY, true);
+		void EnterCombat(Unit* /*pWho*/) {
+			DoScriptText(SAY_AGGRO, me);
+			DoCast(me, SPELL_MOJO_FRENZY, true);
 
-            if (instance)
-                instance->SetData(DATA_MOORABI_EVENT, IN_PROGRESS);
-        }
+			if (instance)
+				instance->SetData(DATA_MOORABI_EVENT, IN_PROGRESS);
+		}
 
-        void UpdateAI(const uint32 uiDiff)
-        {
-            //Return since we have no target
-             if (!UpdateVictim())
-                 return;
+		void UpdateAI(const uint32 uiDiff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (!bPhase && me->HasAura(SPELL_TRANSFORMATION))
-            {
-                bPhase = true;
-                me->RemoveAura(SPELL_MOJO_FRENZY);
-            }
+			if (!bPhase && me->HasAura(SPELL_TRANSFORMATION)) {
+				bPhase = true;
+				me->RemoveAura(SPELL_MOJO_FRENZY);
+			}
 
-            if (uiGroundTremorTimer <= uiDiff)
-            {
-                DoScriptText(SAY_QUAKE, me);
-                if (bPhase)
-                    DoCast(me->getVictim(), SPELL_QUAKE, true);
-                else
-                    DoCast(me->getVictim(), SPELL_GROUND_TREMOR, true);
-                uiGroundTremorTimer = 10*IN_MILLISECONDS;
-            } else uiGroundTremorTimer -= uiDiff;
+			if (uiGroundTremorTimer <= uiDiff) {
+				DoScriptText(SAY_QUAKE, me);
+				if (bPhase)
+					DoCast(me->getVictim(), SPELL_QUAKE, true);
+				else
+					DoCast(me->getVictim(), SPELL_GROUND_TREMOR, true);
+				uiGroundTremorTimer = 10 * IN_MILLISECONDS;
+			} else
+				uiGroundTremorTimer -= uiDiff;
 
-            if (uiNumblingShoutTimer <= uiDiff)
-            {
-                if (bPhase)
-                    DoCast(me->getVictim(), SPELL_NUMBING_ROAR, true);
-                else
-                    DoCast(me->getVictim(), SPELL_NUMBING_SHOUT, true);
-                uiNumblingShoutTimer = 10*IN_MILLISECONDS;
-            } else uiNumblingShoutTimer -=uiDiff;
+			if (uiNumblingShoutTimer <= uiDiff) {
+				if (bPhase)
+					DoCast(me->getVictim(), SPELL_NUMBING_ROAR, true);
+				else
+					DoCast(me->getVictim(), SPELL_NUMBING_SHOUT, true);
+				uiNumblingShoutTimer = 10 * IN_MILLISECONDS;
+			} else
+				uiNumblingShoutTimer -= uiDiff;
 
-            if (uiDeterminedStabTimer <= uiDiff)
-            {
-                if (bPhase)
-                    DoCast(me->getVictim(), SPELL_DETERMINED_GORE);
-                else
-                    DoCast(me->getVictim(), SPELL_DETERMINED_STAB, true);
-                uiDeterminedStabTimer = 8*IN_MILLISECONDS;
-            } else uiDeterminedStabTimer -=uiDiff;
+			if (uiDeterminedStabTimer <= uiDiff) {
+				if (bPhase)
+					DoCast(me->getVictim(), SPELL_DETERMINED_GORE);
+				else
+					DoCast(me->getVictim(), SPELL_DETERMINED_STAB, true);
+				uiDeterminedStabTimer = 8 * IN_MILLISECONDS;
+			} else
+				uiDeterminedStabTimer -= uiDiff;
 
-            if (!bPhase && uiTransformationTImer <= uiDiff)
-            {
-                DoScriptText(EMOTE_TRANSFORM, me);
-                DoScriptText(SAY_TRANSFORM, me);
-                DoCast(me, SPELL_TRANSFORMATION, false);
-                uiTransformationTImer = 10*IN_MILLISECONDS;
-            } else uiTransformationTImer -= uiDiff;
+			if (!bPhase && uiTransformationTImer <= uiDiff) {
+				DoScriptText(EMOTE_TRANSFORM, me);
+				DoScriptText(SAY_TRANSFORM, me);
+				DoCast(me, SPELL_TRANSFORMATION, false);
+				uiTransformationTImer = 10 * IN_MILLISECONDS;
+			} else
+				uiTransformationTImer -= uiDiff;
 
-            DoMeleeAttackIfReady();
-         }
+			DoMeleeAttackIfReady();
+		}
 
-         void JustDied(Unit* /*pKiller*/)
-         {
+		void JustDied(Unit* /*pKiller*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-            {
-                instance->SetData(DATA_MOORABI_EVENT, DONE);
+			if (instance) {
+				instance->SetData(DATA_MOORABI_EVENT, DONE);
 
-                if (IsHeroic() && !bPhase)
-                    instance->DoCompleteAchievement(ACHIEV_LESS_RABI);
-            }
-        }
+				if (IsHeroic() && !bPhase)
+					instance->DoCompleteAchievement(ACHIEV_LESS_RABI);
+			}
+		}
 
-        void KilledUnit(Unit* pVictim)
-        {
-            if (pVictim == me)
-                return;
+		void KilledUnit(Unit* pVictim) {
+			if (pVictim == me)
+				return;
 
-            DoScriptText(RAND(SAY_SLAY_2, SAY_SLAY_3), me);
-        }
-    };
+			DoScriptText(RAND(SAY_SLAY_2, SAY_SLAY_3), me);
+		}
+	};
 };
 
-void AddSC_boss_moorabi()
-{
-    new boss_moorabi();
+void AddSC_boss_moorabi() {
+	new boss_moorabi();
 }

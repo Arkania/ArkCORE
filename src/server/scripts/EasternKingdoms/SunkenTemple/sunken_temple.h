@@ -36,6 +36,5 @@
 #define HAZZAS_DEATH 9
 #define ERANIKUS_DEATH 10
 #define ATALALARION_DEATH 11 //optional
-
 #define EVENT_STATE 1
 #endif

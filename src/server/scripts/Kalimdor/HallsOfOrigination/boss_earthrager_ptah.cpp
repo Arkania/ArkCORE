@@ -23,105 +23,91 @@
 #include"SpellScript.h"
 #include"SpellAuraEffects.h"
 
-enum ScriptTexts
-{
-    SAY_AGGRO          = 0,
-    SAY_KILL_1         = 1,
-    SAY_KILL_2         = 2,
-    SAY_DEATH          = 3,
+enum ScriptTexts {
+	SAY_AGGRO = 0, SAY_KILL_1 = 1, SAY_KILL_2 = 2, SAY_DEATH = 3,
 };
 
-enum Spells
-{
-    SPELL_FLAME_BOLT   = 77370,
-    SPELL_RAGING_SMASH = 83650,
+enum Spells {
+	SPELL_FLAME_BOLT = 77370, SPELL_RAGING_SMASH = 83650,
 };
 
-enum Events
-{
-    EVENT_FLAME_BOLT   = 1,
-    EVENT_RAGING_SMASH = 2,
+enum Events {
+	EVENT_FLAME_BOLT = 1, EVENT_RAGING_SMASH = 2,
 };
 
-class boss_earthrager_ptah : public CreatureScript
-{
-    public:
-        boss_earthrager_ptah() : CreatureScript("boss_earthrager_ptah") { }
+class boss_earthrager_ptah: public CreatureScript {
+public:
+	boss_earthrager_ptah() :
+			CreatureScript("boss_earthrager_ptah") {
+	}
 
-        CreatureAI* GetAI(Creature* pCreature) const
-        {
-            return new boss_earthrager_ptahAI(pCreature);
-        }
-        struct boss_earthrager_ptahAI : public ScriptedAI
-        {
-            boss_earthrager_ptahAI(Creature* pCreature) : ScriptedAI(pCreature)
-            {
-                pInstance = pCreature->GetInstanceScript();
-            }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_earthrager_ptahAI(pCreature);
+	}
+	struct boss_earthrager_ptahAI: public ScriptedAI {
+		boss_earthrager_ptahAI(Creature* pCreature) :
+				ScriptedAI(pCreature) {
+			pInstance = pCreature->GetInstanceScript();
+		}
 
-            InstanceScript *pInstance;
-            EventMap events;
-            bool check_in;
+		InstanceScript *pInstance;
+		EventMap events;
+		bool check_in;
 
-            void Reset()
-            {
-                events.Reset();
+		void Reset() {
+			events.Reset();
 
-                if (pInstance && (pInstance->GetData(DATA_EARTHRAGER_PTAH_EVENT) != DONE && !check_in))
-                   pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, NOT_STARTED);
-                check_in = false;
-            }
+			if (pInstance
+					&& (pInstance->GetData(DATA_EARTHRAGER_PTAH_EVENT) != DONE
+							&& !check_in))
+				pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, NOT_STARTED);
+			check_in = false;
+		}
 
-            void KilledUnit(Unit* /*Killed*/)
-            {
-                DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
-            }
+		void KilledUnit(Unit* /*Killed*/) {
+			DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
+		}
 
-            void JustDied(Unit* /*Kill*/)
-            {
-                DoScriptText(SAY_DEATH, me);
-                if (pInstance)
-                    pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, DONE);
-            }
+		void JustDied(Unit* /*Kill*/) {
+			DoScriptText(SAY_DEATH, me);
+			if (pInstance)
+				pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, DONE);
+		}
 
-            void EnterCombat(Unit* /*Ent*/)
-            {
-                DoScriptText(SAY_AGGRO, me);
-				if (pInstance)
-                    pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, IN_PROGRESS);
+		void EnterCombat(Unit* /*Ent*/) {
+			DoScriptText(SAY_AGGRO, me);
+			if (pInstance)
+				pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, IN_PROGRESS);
 
-                DoZoneInCombat();
+			DoZoneInCombat();
+		}
+
+		void UpdateAI(const uint32 uiDiff) {
+			if (!UpdateVictim())
+				return;
+			events.Update(uiDiff);
+
+			while (uint32 eventId = events.ExecuteEvent()) {
+				switch (eventId) {
+				case EVENT_FLAME_BOLT:
+					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
+						DoCast(target, SPELL_FLAME_BOLT);
+					events.ScheduleEvent(EVENT_FLAME_BOLT, 7500);
+					break;
+				case EVENT_RAGING_SMASH:
+					DoCast(me->getVictim(), SPELL_RAGING_SMASH);
+					events.ScheduleEvent(EVENT_RAGING_SMASH,
+							urand(4000, 10000));
+					break;
+				default:
+					break;
+				}
 			}
-
-            void UpdateAI(const uint32 uiDiff)
-            {
-                if (!UpdateVictim())
-                   return;
-                events.Update(uiDiff);
-
-                while(uint32 eventId = events.ExecuteEvent())
-                {
-                    switch(eventId)
-                    {
-                        case EVENT_FLAME_BOLT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
-                                DoCast(target, SPELL_FLAME_BOLT);
-                                events.ScheduleEvent(EVENT_FLAME_BOLT, 7500);
-                            break;
-                        case EVENT_RAGING_SMASH:
-                            DoCast(me->getVictim(), SPELL_RAGING_SMASH);
-                            events.ScheduleEvent(EVENT_RAGING_SMASH, urand(4000, 10000));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                DoMeleeAttackIfReady();
-            }
-        };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_earthrager_ptah()
-{
-    new boss_earthrager_ptah();
+void AddSC_boss_earthrager_ptah() {
+	new boss_earthrager_ptah();
 }

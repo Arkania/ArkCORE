@@ -23,12 +23,12 @@
  */
 
 /* Script Data Start
-SDName: Boss malygos
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:
-SDCategory:
-Script Data End */
+ SDName: Boss malygos
+ SDAuthor: LordVanMartin
+ SD%Complete:
+ SDComment:
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 
@@ -82,13 +82,13 @@ Script Data End */
 //--> Phase2 at 50% HP,
 
 /*Malygos himself is not targetable during this phase, it will end when the adds he spawns are all killed. However, he does continue to play a part in the encounter.
-During this phase he drops anti-magic zones onto the ground the raid MUST stand inside of, it reduces magical damage taken by 50%. They shrink over time, so it's important that your raid moves to each new one he drops.
-Throughout the phase, he will deep breath doing ~4k damage per second, unless you are standing inside of the anti-magic zone.
-The way the fight works during this phase is there are NPCs riding around on disks in the room. There are two types of mobs, Lords and Scions.
-The Lords will move down onto the group, and need to be tanked (They will one-shot a non-tank). After they die, they drop a disk that a raid member can mount onto, which allows them to fly, to attack the Scions that do not come down to the ground.
-It is recommended to let melee take the first disks, then ranged. As those mobs die, they also drop disks, which allows the rest of your dps to get onto them.
-The Scions will continually cast Arcane Blast on random targets on the floor, which is mitigated by the anti-magic zones. While mounted on a disk, you will not take damage.
-After all of the NPCs riding on the disks die, the players on the disks need to dismount as Phase 3 is about to begin.*/
+ During this phase he drops anti-magic zones onto the ground the raid MUST stand inside of, it reduces magical damage taken by 50%. They shrink over time, so it's important that your raid moves to each new one he drops.
+ Throughout the phase, he will deep breath doing ~4k damage per second, unless you are standing inside of the anti-magic zone.
+ The way the fight works during this phase is there are NPCs riding around on disks in the room. There are two types of mobs, Lords and Scions.
+ The Lords will move down onto the group, and need to be tanked (They will one-shot a non-tank). After they die, they drop a disk that a raid member can mount onto, which allows them to fly, to attack the Scions that do not come down to the ground.
+ It is recommended to let melee take the first disks, then ranged. As those mobs die, they also drop disks, which allows the rest of your dps to get onto them.
+ The Scions will continually cast Arcane Blast on random targets on the floor, which is mitigated by the anti-magic zones. While mounted on a disk, you will not take damage.
+ After all of the NPCs riding on the disks die, the players on the disks need to dismount as Phase 3 is about to begin.*/
 
 //not in db
 #define SAY_PHASE2_AGGRO                           -1616018
@@ -104,96 +104,97 @@ After all of the NPCs riding on the disks die, the players on the disks need to 
 #define SAY_PHASE3_SLAY_3                          -1616027
 #define SAY_PHASE3_BIG_ATTACK                      -1616028
 
-enum
-{
-    ACHIEV_TIMED_START_EVENT                      = 20387,
+enum {
+	ACHIEV_TIMED_START_EVENT = 20387,
 };
 
-class boss_malygos : public CreatureScript
-{
+class boss_malygos: public CreatureScript {
 public:
-    boss_malygos() : CreatureScript("boss_malygos") { }
+	boss_malygos() :
+			CreatureScript("boss_malygos") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_malygosAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_malygosAI(pCreature);
+	}
 
-    struct boss_malygosAI : public ScriptedAI
-    {
-        boss_malygosAI(Creature *c) : ScriptedAI(c)
-        {
-            instance = me->GetInstanceScript();
-            me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-        }
+	struct boss_malygosAI: public ScriptedAI {
+		boss_malygosAI(Creature *c) :
+				ScriptedAI(c) {
+			instance = me->GetInstanceScript();
+			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
+					true);
+			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+		}
 
-        InstanceScript *instance;
+		InstanceScript *instance;
 
-        uint32 phase;
-        uint32 enrage;
+		uint32 phase;
+		uint32 enrage;
 
-        void Reset()
-        {
-            phase = 1;
-            enrage = 615000;    //Source Deadly Boss Mod
+		void Reset() {
+			phase = 1;
+			enrage = 615000; //Source Deadly Boss Mod
 
-            if (instance)
-                instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
-        }
+			if (instance)
+				instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT,
+						ACHIEV_TIMED_START_EVENT);
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            if (phase == 1)
-            {
-                DoScriptText(SAY_PHASE1_AGGRO, me);
-                if (instance)
-                    instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
-            }
+		void EnterCombat(Unit* /*who*/) {
+			if (phase == 1) {
+				DoScriptText(SAY_PHASE1_AGGRO, me);
+				if (instance)
+					instance->DoStartTimedAchievement(
+							ACHIEVEMENT_TIMED_TYPE_EVENT,
+							ACHIEV_TIMED_START_EVENT);
+			}
 
-            if (phase == 2)
-                DoScriptText(SAY_PHASE1_AGGRO, me);
-            if (phase == 3)
-                DoScriptText(SAY_PHASE1_AGGRO, me);
-        }
+			if (phase == 2)
+				DoScriptText(SAY_PHASE1_AGGRO, me);
+			if (phase == 3)
+				DoScriptText(SAY_PHASE1_AGGRO, me);
+		}
 
-        void UpdateAI(const uint32 /*diff*/)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 /*diff*/) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (phase == 1 && HealthBelowPct(50)) {
-                phase = 2;
-                //spawn adds
-                //set malygos unatackable untill all adds spawned dead
-                //start phase3
-            }
+			if (phase == 1 && HealthBelowPct(50)) {
+				phase = 2;
+				//spawn adds
+				//set malygos unatackable untill all adds spawned dead
+				//start phase3
+			}
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
-            DoScriptText(SAY_DEATH, me);
-        }
+		void JustDied(Unit* /*killer*/) {
+			DoScriptText(SAY_DEATH, me);
+		}
 
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
 
-            if (phase == 1)
-                DoScriptText(RAND(SAY_PHASE1_SLAY_1, SAY_PHASE1_SLAY_2, SAY_PHASE1_SLAY_3), me);
-            if (phase == 2)
-                DoScriptText(RAND(SAY_PHASE2_SLAY_1, SAY_PHASE2_SLAY_2, SAY_PHASE2_SLAY_3), me);
-            if (phase == 3)
-                DoScriptText(RAND(SAY_PHASE3_SLAY_1, SAY_PHASE3_SLAY_2, SAY_PHASE3_SLAY_3), me);
-        }
-    };
+			if (phase == 1)
+				DoScriptText(
+						RAND(SAY_PHASE1_SLAY_1, SAY_PHASE1_SLAY_2,
+								SAY_PHASE1_SLAY_3), me);
+			if (phase == 2)
+				DoScriptText(
+						RAND(SAY_PHASE2_SLAY_1, SAY_PHASE2_SLAY_2,
+								SAY_PHASE2_SLAY_3), me);
+			if (phase == 3)
+				DoScriptText(
+						RAND(SAY_PHASE3_SLAY_1, SAY_PHASE3_SLAY_2,
+								SAY_PHASE3_SLAY_3), me);
+		}
+	};
 };
 
-void AddSC_boss_malygos()
-{
-    new boss_malygos();
+void AddSC_boss_malygos() {
+	new boss_malygos();
 }

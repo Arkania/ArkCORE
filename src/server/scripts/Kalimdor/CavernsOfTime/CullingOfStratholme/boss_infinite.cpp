@@ -25,68 +25,59 @@
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
 
-enum Spells
-{
-    SPELL_CORRUPTING_BLIGHT                     = 60588,
-    SPELL_VOID_STRIKE                           = 60590
+enum Spells {
+	SPELL_CORRUPTING_BLIGHT = 60588, SPELL_VOID_STRIKE = 60590
 };
 
-enum Yells
-{
-    SAY_AGGRO                                   = -1595045,
-    SAY_FAIL                                    = -1595046,
-    SAY_DEATH                                   = -1595047
+enum Yells {
+	SAY_AGGRO = -1595045, SAY_FAIL = -1595046, SAY_DEATH = -1595047
 };
 
-class boss_infinite_corruptor : public CreatureScript
-{
+class boss_infinite_corruptor: public CreatureScript {
 public:
-    boss_infinite_corruptor() : CreatureScript("boss_infinite_corruptor") { }
+	boss_infinite_corruptor() :
+			CreatureScript("boss_infinite_corruptor") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_infinite_corruptorAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_infinite_corruptorAI(pCreature);
+	}
 
-    struct boss_infinite_corruptorAI : public BossAI
-    {
-        boss_infinite_corruptorAI(Creature *c) : BossAI(c, DATA_INFINITE_EVENT)
-        {
-        }
+	struct boss_infinite_corruptorAI: public BossAI {
+		boss_infinite_corruptorAI(Creature *c) :
+				BossAI(c, DATA_INFINITE_EVENT) {
+		}
 
-        void Reset()
-        {
-            if (instance)
-                instance->SetData(DATA_INFINITE_EVENT, NOT_STARTED);
-        }
+		void Reset() {
+			if (instance)
+				instance->SetData(DATA_INFINITE_EVENT, NOT_STARTED);
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            if (instance)
-                instance->SetData(DATA_INFINITE_EVENT, IN_PROGRESS);
-        }
+		void EnterCombat(Unit* /*who*/) {
+			if (instance)
+				instance->SetData(DATA_INFINITE_EVENT, IN_PROGRESS);
+		}
 
-        void AttackStart(Unit* /*who*/) {}
-        void MoveInLineOfSight(Unit* /*who*/) {}
-        void UpdateAI(const uint32 /*diff*/)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void AttackStart(Unit* /*who*/) {
+		}
+		void MoveInLineOfSight(Unit* /*who*/) {
+		}
+		void UpdateAI(const uint32 /*diff*/) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            if (instance)
-                instance->SetData(DATA_INFINITE_EVENT, DONE);
-        }
-    };
+			if (instance)
+				instance->SetData(DATA_INFINITE_EVENT, DONE);
+		}
+	};
 };
 
-void AddSC_boss_infinite_corruptor()
-{
-    new boss_infinite_corruptor();
+void AddSC_boss_infinite_corruptor() {
+	new boss_infinite_corruptor();
 }

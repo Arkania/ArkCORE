@@ -23,18 +23,18 @@
  */
 
 /* ScriptData
-SDName: Alterac_Mountains
-SD%Complete: 0
-SDComment: Placeholder
-SDCategory: Alterac Mountains
-EndScriptData */
+ SDName: Alterac_Mountains
+ SD%Complete: 0
+ SDComment: Placeholder
+ SDCategory: Alterac Mountains
+ EndScriptData */
 
 /* ContentData
-EndContentData */
+ EndContentData */
 
 #include "ScriptPCH.h"
 
 /*void AddSC_alterac_mountains()
-{
-    Script *newscript;
-}*/
+ {
+ Script *newscript;
+ }*/

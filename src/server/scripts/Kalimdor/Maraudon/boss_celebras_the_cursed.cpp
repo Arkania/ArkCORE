@@ -23,11 +23,11 @@
  */
 
 /* ScriptData
-SDName: Boss_Celebras_the_Cursed
-SD%Complete: 100
-SDComment:
-SDCategory: Maraudon
-EndScriptData */
+ SDName: Boss_Celebras_the_Cursed
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Maraudon
+ EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -35,74 +35,73 @@ EndScriptData */
 #define SPELL_ENTANGLINGROOTS       12747
 #define SPELL_CORRUPT_FORCES        21968
 
-class celebras_the_cursed : public CreatureScript
-{
+class celebras_the_cursed: public CreatureScript {
 public:
-    celebras_the_cursed() : CreatureScript("celebras_the_cursed") { }
+	celebras_the_cursed() :
+			CreatureScript("celebras_the_cursed") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new celebras_the_cursedAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new celebras_the_cursedAI(pCreature);
+	}
 
-    struct celebras_the_cursedAI : public ScriptedAI
-    {
-        celebras_the_cursedAI(Creature *c) : ScriptedAI(c) {}
+	struct celebras_the_cursedAI: public ScriptedAI {
+		celebras_the_cursedAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 Wrath_Timer;
-        uint32 EntanglingRoots_Timer;
-        uint32 CorruptForces_Timer;
+		uint32 Wrath_Timer;
+		uint32 EntanglingRoots_Timer;
+		uint32 CorruptForces_Timer;
 
-        void Reset()
-        {
-            Wrath_Timer = 8000;
-            EntanglingRoots_Timer = 2000;
-            CorruptForces_Timer = 30000;
-        }
+		void Reset() {
+			Wrath_Timer = 8000;
+			EntanglingRoots_Timer = 2000;
+			CorruptForces_Timer = 30000;
+		}
 
-        void EnterCombat(Unit * /*who*/) { }
+		void EnterCombat(Unit * /*who*/) {
+		}
 
-        void JustDied(Unit* /*Killer*/)
-        {
-            me->SummonCreature(13716, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 600000);
-        }
+		void JustDied(Unit* /*Killer*/) {
+			me->SummonCreature(13716, me->GetPositionX(), me->GetPositionY(),
+					me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 600000);
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //Wrath
-            if (Wrath_Timer <= diff)
-            {
-                Unit *pTarget = NULL;
-                pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
-                if (pTarget)
-                    DoCast(pTarget, SPELL_WRATH);
-                Wrath_Timer = 8000;
-            } else Wrath_Timer -= diff;
+			//Wrath
+			if (Wrath_Timer <= diff) {
+				Unit *pTarget = NULL;
+				pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+				if (pTarget)
+					DoCast(pTarget, SPELL_WRATH);
+				Wrath_Timer = 8000;
+			} else
+				Wrath_Timer -= diff;
 
-            //EntanglingRoots
-            if (EntanglingRoots_Timer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_ENTANGLINGROOTS);
-                EntanglingRoots_Timer = 20000;
-            } else EntanglingRoots_Timer -= diff;
+			//EntanglingRoots
+			if (EntanglingRoots_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_ENTANGLINGROOTS);
+				EntanglingRoots_Timer = 20000;
+			} else
+				EntanglingRoots_Timer -= diff;
 
-            //CorruptForces
-            if (CorruptForces_Timer <= diff)
-            {
-                me->InterruptNonMeleeSpells(false);
-                DoCast(me, SPELL_CORRUPT_FORCES);
-                CorruptForces_Timer = 20000;
-            } else CorruptForces_Timer -= diff;
+			//CorruptForces
+			if (CorruptForces_Timer <= diff) {
+				me->InterruptNonMeleeSpells(false);
+				DoCast(me, SPELL_CORRUPT_FORCES);
+				CorruptForces_Timer = 20000;
+			} else
+				CorruptForces_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
-void AddSC_boss_celebras_the_cursed()
-{
-    new celebras_the_cursed();
+void AddSC_boss_celebras_the_cursed() {
+	new celebras_the_cursed();
 }

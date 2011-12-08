@@ -23,164 +23,153 @@
  */
 
 /* Script Data Start
-SDName: Boss maiden_of_grief
-SDAuthor: LordVanMartin
-SD%Complete:
-SDComment:
-SDCategory:
-Script Data End */
+ SDName: Boss maiden_of_grief
+ SDAuthor: LordVanMartin
+ SD%Complete:
+ SDComment:
+ SDCategory:
+ Script Data End */
 
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
 
-enum Spells
-{
-    SPELL_PARTING_SORROW                          = 59723,
-    SPELL_STORM_OF_GRIEF_N                        = 50752,
-    SPELL_STORM_OF_GRIEF_H                        = 59772,
-    SPELL_SHOCK_OF_SORROW_N                       = 50760,
-    SPELL_SHOCK_OF_SORROW_H                       = 59726,
-    SPELL_PILLAR_OF_WOE_N                         = 50761,
-    SPELL_PILLAR_OF_WOE_H                         = 59727
+enum Spells {
+	SPELL_PARTING_SORROW = 59723,
+	SPELL_STORM_OF_GRIEF_N = 50752,
+	SPELL_STORM_OF_GRIEF_H = 59772,
+	SPELL_SHOCK_OF_SORROW_N = 50760,
+	SPELL_SHOCK_OF_SORROW_H = 59726,
+	SPELL_PILLAR_OF_WOE_N = 50761,
+	SPELL_PILLAR_OF_WOE_H = 59727
 };
 
-enum Yells
-{
-    SAY_AGGRO                                     = -1599000,
-    SAY_SLAY_1                                    = -1599001,
-    SAY_SLAY_2                                    = -1599002,
-    SAY_SLAY_3                                    = -1599003,
-    SAY_SLAY_4                                    = -1599004,
-    SAY_DEATH                                     = -1599005,
-    SAY_STUN                                      = -1599006
+enum Yells {
+	SAY_AGGRO = -1599000,
+	SAY_SLAY_1 = -1599001,
+	SAY_SLAY_2 = -1599002,
+	SAY_SLAY_3 = -1599003,
+	SAY_SLAY_4 = -1599004,
+	SAY_DEATH = -1599005,
+	SAY_STUN = -1599006
 };
 
-enum Achievements
-{
-    ACHIEV_GOOD_GRIEF_START_EVENT                 = 20383,
+enum Achievements {
+	ACHIEV_GOOD_GRIEF_START_EVENT = 20383,
 };
 
-class boss_maiden_of_grief : public CreatureScript
-{
+class boss_maiden_of_grief: public CreatureScript {
 public:
-    boss_maiden_of_grief() : CreatureScript("boss_maiden_of_grief") { }
+	boss_maiden_of_grief() :
+			CreatureScript("boss_maiden_of_grief") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const
-    {
-        return new boss_maiden_of_griefAI (pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_maiden_of_griefAI(pCreature);
+	}
 
-    struct boss_maiden_of_griefAI : public BossAI
-    {
-        boss_maiden_of_griefAI(Creature *c) : BossAI(c, DATA_MAIDEN_OF_GRIEF_EVENT)
-        {
-        }
+	struct boss_maiden_of_griefAI: public BossAI {
+		boss_maiden_of_griefAI(Creature *c) :
+				BossAI(c, DATA_MAIDEN_OF_GRIEF_EVENT) {
+		}
 
-        uint32 PartingSorrowTimer;
-        uint32 StormOfGriefTimer;
-        uint32 ShockOfSorrowTimer;
-        uint32 PillarOfWoeTimer;
+		uint32 PartingSorrowTimer;
+		uint32 StormOfGriefTimer;
+		uint32 ShockOfSorrowTimer;
+		uint32 PillarOfWoeTimer;
 
-        void Reset()
-        {
-            PartingSorrowTimer = 25000 + rand()%5000;
-            StormOfGriefTimer = 10000;
-            ShockOfSorrowTimer = 20000+rand()%5000;
-            PillarOfWoeTimer = 5000 + rand()%10000;
+		void Reset() {
+			PartingSorrowTimer = 25000 + rand() % 5000;
+			StormOfGriefTimer = 10000;
+			ShockOfSorrowTimer = 20000 + rand() % 5000;
+			PillarOfWoeTimer = 5000 + rand() % 10000;
 
-            if (instance)
-            {
-                instance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, NOT_STARTED);
-                instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_GOOD_GRIEF_START_EVENT);
-            }
-        }
+			if (instance) {
+				instance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, NOT_STARTED);
+				instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT,
+						ACHIEV_GOOD_GRIEF_START_EVENT);
+			}
+		}
 
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoScriptText(SAY_AGGRO, me);
+		void EnterCombat(Unit* /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
 
-            if (instance)
-            {
-                if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_MAIDEN_DOOR)))
-                    if (pDoor->GetGoState() == GO_STATE_READY)
-                    {
-                        EnterEvadeMode();
-                        return;
-                    }
+			if (instance) {
+				if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_MAIDEN_DOOR)))
+					if (pDoor->GetGoState() == GO_STATE_READY) {
+						EnterEvadeMode();
+						return;
+					}
 
-                instance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, IN_PROGRESS);
-                instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_GOOD_GRIEF_START_EVENT);
-            }
-        }
+				instance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, IN_PROGRESS);
+				instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT,
+						ACHIEV_GOOD_GRIEF_START_EVENT);
+			}
+		}
 
-        void UpdateAI(const uint32 diff)
-        {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            if (IsHeroic())
-            {
-                if (PartingSorrowTimer <= diff)
-                {
-                    Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+			if (IsHeroic()) {
+				if (PartingSorrowTimer <= diff) {
+					Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
 
-                    if (pTarget)
-                        DoCast(pTarget, SPELL_PARTING_SORROW);
+					if (pTarget)
+						DoCast(pTarget, SPELL_PARTING_SORROW);
 
-                    PartingSorrowTimer = 30000 + rand()%10000;
-                } else PartingSorrowTimer -= diff;
-            }
+					PartingSorrowTimer = 30000 + rand() % 10000;
+				} else
+					PartingSorrowTimer -= diff;
+			}
 
-            if (StormOfGriefTimer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_STORM_OF_GRIEF_N, true);
-                StormOfGriefTimer = 15000 + rand()%5000;
-            } else StormOfGriefTimer -= diff;
+			if (StormOfGriefTimer <= diff) {
+				DoCast(me->getVictim(), SPELL_STORM_OF_GRIEF_N, true);
+				StormOfGriefTimer = 15000 + rand() % 5000;
+			} else
+				StormOfGriefTimer -= diff;
 
-            if (ShockOfSorrowTimer <= diff)
-            {
-                DoResetThreat();
-                DoScriptText(SAY_STUN, me);
-                DoCast(me, SPELL_SHOCK_OF_SORROW_N);
-                ShockOfSorrowTimer = 20000 + rand()%10000;
-            } else ShockOfSorrowTimer -= diff;
+			if (ShockOfSorrowTimer <= diff) {
+				DoResetThreat();
+				DoScriptText(SAY_STUN, me);
+				DoCast(me, SPELL_SHOCK_OF_SORROW_N);
+				ShockOfSorrowTimer = 20000 + rand() % 10000;
+			} else
+				ShockOfSorrowTimer -= diff;
 
-            if (PillarOfWoeTimer <= diff)
-            {
-                Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 1);
+			if (PillarOfWoeTimer <= diff) {
+				Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 1);
 
-                if (pTarget)
-                    DoCast(pTarget, SPELL_PILLAR_OF_WOE_N);
-                else
-                    DoCast(me->getVictim(), SPELL_PILLAR_OF_WOE_N);
+				if (pTarget)
+					DoCast(pTarget, SPELL_PILLAR_OF_WOE_N);
+				else
+					DoCast(me->getVictim(), SPELL_PILLAR_OF_WOE_N);
 
-                PillarOfWoeTimer = 5000 + rand()%20000;
-            } else PillarOfWoeTimer -= diff;
+				PillarOfWoeTimer = 5000 + rand() % 20000;
+			} else
+				PillarOfWoeTimer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
+			DoMeleeAttackIfReady();
+		}
 
-        void JustDied(Unit* /*killer*/)
-        {
+		void JustDied(Unit* /*killer*/) {
 			_JustDied();
-            DoScriptText(SAY_DEATH, me);
+			DoScriptText(SAY_DEATH, me);
 
-            if (instance)
-                instance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, DONE);
-        }
+			if (instance)
+				instance->SetData(DATA_MAIDEN_OF_GRIEF_EVENT, DONE);
+		}
 
-        void KilledUnit(Unit * victim)
-        {
-            if (victim == me)
-                return;
+		void KilledUnit(Unit * victim) {
+			if (victim == me)
+				return;
 
-            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3, SAY_SLAY_4), me);
-        }
-    };
+			DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3, SAY_SLAY_4),
+					me);
+		}
+	};
 };
 
-void AddSC_boss_maiden_of_grief()
-{
-    new boss_maiden_of_grief();
+void AddSC_boss_maiden_of_grief() {
+	new boss_maiden_of_grief();
 }
