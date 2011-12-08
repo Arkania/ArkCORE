@@ -430,10 +430,9 @@ void WheatyExceptionReport::GenerateExceptionReport(
 	GetLocalTime(&systime);
 
 	// Start out with a banner
-	_tprintf(_T("Revision: %s\r\n"), _FULLVERSION);
-	_tprintf(_T("Date %u:%u:%u. Time %u:%u \r\n"), systime.wDay, systime.wMonth,
-			systime.wYear, systime.wHour, systime.wMinute);
-	PEXCEPTION_RECORD pExceptionRecord = pExceptionInfo->ExceptionRecord;
+    _tprintf(_T("Revision: %s\r\n"), _CLIENT_BUILD_REVISION, _FULLVERSION);
+    _tprintf(_T("Date %u:%u:%u. Time %u:%u \r\n"), systime.wDay, systime.wMonth, systime.wYear, systime.wHour, systime.wMinute);
+    PEXCEPTION_RECORD pExceptionRecord = pExceptionInfo->ExceptionRecord;
 
 	PrintSystemInfo();
 	// First print information about the type of fault
