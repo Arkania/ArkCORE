@@ -1102,7 +1102,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target) {
 		// can't use default call because of threading, do stuff as fast as possible
 		for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i) {
 			if (farMask & (1 << i))
-				HandleEffects(unit, NULL, NULL, i);
+				HandleEffects(unit, NULL, NULL, i, SPELL_EFFECT_HANDLE_HIT_TARGET);
 		}
 		return;
 	}
@@ -1537,7 +1537,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask,
 	for (uint32 effectNumber = 0; effectNumber < MAX_SPELL_EFFECTS;
 			++effectNumber) {
 		if (effectMask & (1 << effectNumber))
-			HandleEffects(unit, NULL, NULL, effectNumber);
+			HandleEffects(unit, NULL, NULL, effectNumber, SPELL_EFFECT_HANDLE_HIT_TARGET);
 	}
 
 	return SPELL_MISS_NONE;
@@ -1625,7 +1625,7 @@ void Spell::DoAllEffectOnTarget(GOTargetInfo *target) {
 	for (uint32 effectNumber = 0; effectNumber < MAX_SPELL_EFFECTS;
 			++effectNumber)
 		if (effectMask & (1 << effectNumber))
-			HandleEffects(NULL, NULL, go, effectNumber);
+			HandleEffects(NULL, NULL, go, effectNumber, SPELL_EFFECT_HANDLE_HIT_TARGET);
 
 	CallScriptOnHitHandlers();
 
@@ -1652,7 +1652,7 @@ void Spell::DoAllEffectOnTarget(ItemTargetInfo *target) {
 	for (uint32 effectNumber = 0; effectNumber < MAX_SPELL_EFFECTS;
 			++effectNumber)
 		if (effectMask & (1 << effectNumber))
-			HandleEffects(NULL, target->item, NULL, effectNumber);
+			HandleEffects(NULL, target->item, NULL, effectNumber, SPELL_EFFECT_HANDLE_HIT_TARGET);
 
 	CallScriptOnHitHandlers();
 
@@ -3519,7 +3519,7 @@ void Spell::cast(bool skipCheck) {
 		case SPELL_EFFECT_JUMP_DEST:
 		case SPELL_EFFECT_LEAP_BACK:
 		case SPELL_EFFECT_ACTIVATE_RUNE:
-			HandleEffects(NULL, NULL, NULL, i);
+			HandleEffects(NULL, NULL, NULL, i, SPELL_EFFECT_HANDLE_LAUNCH);
 			m_effectMask |= (1 << i);
 			break;
 		}
@@ -3687,7 +3687,7 @@ void Spell::_handle_immediate_phase() {
 		// apply Send Event effect to ground in case empty target lists
 		if (m_spellInfo->Effect[j] == SPELL_EFFECT_SEND_EVENT
 				&& !HaveTargetsForEffect(j)) {
-			HandleEffects(NULL, NULL, NULL, j);
+			HandleEffects(NULL, NULL, NULL, j, SPELL_EFFECT_HANDLE_HIT);
 			continue;
 		}
 	}
@@ -3712,11 +3712,11 @@ void Spell::_handle_immediate_phase() {
 		if (EffectTargetType[m_spellInfo->Effect[j]] == SPELL_REQUIRE_DEST) {
 			if (!m_targets.HasDst()) // FIXME: this will ignore dest set in effect
 				m_targets.setDst(*m_caster);
-			HandleEffects(m_originalCaster, NULL, NULL, j);
+			HandleEffects(m_originalCaster, NULL, NULL, j, SPELL_EFFECT_HANDLE_HIT);
 			m_effectMask |= (1 << j);
 		} else if (EffectTargetType[m_spellInfo->Effect[j]]
 				== SPELL_REQUIRE_NONE) {
-			HandleEffects(m_originalCaster, NULL, NULL, j);
+			HandleEffects(m_originalCaster, NULL, NULL, j, SPELL_EFFECT_HANDLE_HIT);
 			m_effectMask |= (1 << j);
 		}
 	}
@@ -4939,12 +4939,13 @@ void Spell::HandleHolyPower(Player* caster) {
 	}
 }
 
-void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget,
-		GameObject *pGOTarget, uint32 i) {
+void Spell::HandleEffects(Unit* pUnitTarget, Item* pItemTarget, GameObject* pGOTarget, uint32 i, SpellEffectHandleMode mode)
+{
 	//effect has been handled, skip it
 	if (m_effectMask & (1 << i))
 		return;
 
+	effectHandleMode = mode;
 	unitTarget = pUnitTarget;
 	itemTarget = pItemTarget;
 	gameObjTarget = pGOTarget;
@@ -4957,7 +4958,7 @@ void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget,
 	//we do not need DamageMultiplier here.
 	damage = CalculateDamage(i, NULL);
 
-	bool preventDefault = CallScriptEffectHandlers((SpellEffIndex) i);
+	bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i, mode);
 
 	if (!preventDefault && eff < TOTAL_SPELL_EFFECTS) {
 		(this->*SpellEffects[eff])((SpellEffIndex) i);
@@ -7741,7 +7742,7 @@ SpellCastResult Spell::CallScriptCheckCastHandlers() {
 	return retVal;
 }
 
-bool Spell::CallScriptEffectHandlers(SpellEffIndex effIndex) {
+bool Spell::CallScriptEffectHandlers(SpellEffIndex effIndex, SpellEffectHandleMode mode) {
 	// execute script effect handler hooks and check if effects was prevented
 	bool preventDefault = false;
 	for (std::list<SpellScript *>::iterator scritr = m_loadedScripts.begin();

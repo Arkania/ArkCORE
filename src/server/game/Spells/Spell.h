@@ -300,6 +300,14 @@ enum SpellState {
 	SPELL_STATE_DELAYED = 5
 };
 
+enum SpellEffectHandleMode
+{
+    SPELL_EFFECT_HANDLE_LAUNCH,
+    SPELL_EFFECT_HANDLE_LAUNCH_TARGET,
+    SPELL_EFFECT_HANDLE_HIT,
+    SPELL_EFFECT_HANDLE_HIT_TARGET,
+};
+
 enum ReplenishType {
 	REPLENISH_UNDEFINED = 0,
 	REPLENISH_HEALTH = 20,
@@ -551,8 +559,7 @@ public:
 	void SendResurrectRequest(Player* target);
 	void SendPlaySpellVisual(uint32 SpellID);
 
-	void HandleEffects(Unit *pUnitTarget, Item *pItemTarget,
-			GameObject *pGOTarget, uint32 i);
+	void HandleEffects(Unit* pUnitTarget, Item* pItemTarget, GameObject* pGOTarget, uint32 i, SpellEffectHandleMode mode);
 	void HandleThreatSpells(uint32 spellId);
 
 	const SpellEntry * const m_spellInfo;
@@ -694,6 +701,7 @@ protected:
 	Item* itemTarget;
 	GameObject* gameObjTarget;
 	int32 damage;
+	SpellEffectHandleMode effectHandleMode;
 	// used in effects handlers
 	Aura * m_spellAura;
 	// pointer to magneting aura if spell is redirected
@@ -796,7 +804,7 @@ protected:
 	void LoadScripts();
 	SpellCastResult CallScriptCheckCastHandlers();
 	void PrepareScriptHitHandlers();
-	bool CallScriptEffectHandlers(SpellEffIndex effIndex);
+	bool CallScriptEffectHandlers(SpellEffIndex effIndex, SpellEffectHandleMode mode);
 	void CallScriptBeforeHitHandlers();
 	void CallScriptOnHitHandlers();
 	void CallScriptAfterHitHandlers();
