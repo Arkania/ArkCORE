@@ -131,16 +131,15 @@ int Master::Run()
     sLog->outString("<Ctrl-C> to stop.\n");
 
     sLog->outString(" ");
-	sLog->outString("    Arkania Community (c) 2011 <http://arkania.net/> ");
-	sLog->outString(" ");
-    sLog->outString("     #                   #####  ####### ######  ####### "); 
-    sLog->outString("    # #   #####  #    # #     # #     # #     # #       "); 
-    sLog->outString("   #   #  #    # #   #  #       #     # #     # #       "); 
-    sLog->outString("  #     # #    # ####   #       #     # ######  #####   "); 
-    sLog->outString("  ####### #####  #  #   #       #     # #   #   #       "); 
-    sLog->outString("  #     # #   #  #   #  #     # #     # #    #  #       "); 
-    sLog->outString("  #     # #    # #    #  #####  ####### #     # ####### ");
-    sLog->outString("  			A World of Warcraft: Cataclysm Core Emulator ");
+    sLog->outString("       _/_/              _/          _/_/_/    _/_/    _/_/_/    _/_/_/_/  "); 
+    sLog->outString("    _/    _/  _/  _/_/  _/  _/    _/        _/    _/  _/    _/  _/         "); 
+    sLog->outString("   _/_/_/_/  _/_/      _/_/      _/        _/    _/  _/_/_/    _/_/_/      "); 
+    sLog->outString("  _/    _/  _/        _/  _/    _/        _/    _/  _/    _/  _/           "); 
+    sLog->outString(" _/    _/  _/        _/    _/    _/_/_/    _/_/    _/    _/  _/_/_/_/  	");
+    sLog->outString(" ");
+    sLog->outString("				A World of Warcraft: Cataclysm Core Emulator ");
+	sLog->outString("						Arkania Community (c) 2011 ");
+	sLog->outString("    					  <http://arkania.net/>");
     sLog->outString(" ");
 
 #ifdef USE_SFMT_FOR_RNG
