@@ -221,9 +221,13 @@ class SpellScript : public _SpellScript
         HookList<CheckCastHandler> OnCheckCast;
         #define SpellCheckCastFn(F) CheckCastHandlerFunction(&F)
 
-        // example: OnEffect += SpellEffectFn(class::function, EffectIndexSpecifier, EffectNameSpecifier);
+        // example: OnEffect**** += SpellEffectFn(class::function, EffectIndexSpecifier, EffectNameSpecifier);
         // where function is void function(SpellEffIndex effIndex)
         HookList<EffectHandler> OnEffect;
+        HookList<EffectHandler> OnEffectLaunch;
+        HookList<EffectHandler> OnEffectLaunchTarget;
+        HookList<EffectHandler> OnEffectHit;
+        HookList<EffectHandler> OnEffectHitTarget;
         #define SpellEffectFn(F, I, N) EffectHandlerFunction(&F, I, N)
 
         // example: BeforeHit += SpellHitFn(class::function);
