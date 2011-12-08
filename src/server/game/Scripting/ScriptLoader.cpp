@@ -606,7 +606,11 @@ void AddSC_instance_lost_city_of_the_tolvir();
 void AddSC_boss_lockmaw();
 void AddSC_boss_high_prophet_barim();
 void AddSC_instance_the_vortex_pinnacle();	//The Vortex Pinnacle
-void AddSC_instance_grim_batol();			//Grim Batol
+void AddSC_boss_general_umbriss();           //Grimbatol
+void AddSC_boss_forgemaster_throngus();
+void AddSC_boss_drahga_shadowburner();
+void AddSC_boss_erudax();
+void AddSC_instance_grim_batol();
 void AddSC_instance_throne_of_the_tides();	//Throne of the Tides
 void AddSC_instance_blackrock_caverns();	//Blackrock Caverns
 void AddSC_boss_chogall(); 					//BastionOfTwilight
@@ -1257,7 +1261,11 @@ void AddNorthrendScripts() {
 	AddSC_boss_lockmaw();
 	AddSC_boss_high_prophet_barim();
 	AddSC_instance_the_vortex_pinnacle();//The Vortex Pinnacle
-	AddSC_instance_grim_batol();//Grim Batol
+    AddSC_boss_general_umbriss();           //Grimbatol
+    AddSC_boss_forgemaster_throngus();
+    AddSC_boss_drahga_shadowburner();
+    AddSC_boss_erudax();
+    AddSC_instance_grim_batol();
 	AddSC_instance_throne_of_the_tides();//Throne of the Tides
 	AddSC_instance_blackrock_caverns();//Blackrock Caverns
 

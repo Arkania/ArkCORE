@@ -214,7 +214,11 @@ set(scripts_STAT_SRCS
   EasternKingdoms/BastionOfTwilight/boss_sinestra.cpp
   EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h  
   EasternKingdoms/GrimBatol/grim_batol.h
-  EasternKingdoms/GrimBatol/instance_grim_batol.cpp
+  EasternKingdoms/GrimBatol/boss_drahga_shadowburner.cpp
+  EasternKingdoms/GrimBatol/boss_erudax.cpp
+  EasternKingdoms/GrimBatol/boss_forgemaster_throngus.cpp
+  EasternKingdoms/GrimBatol/boss_general_umbriss.cpp
+  EasternKingdoms/GrimBatol/instance_grim_batol.cpp  
   EasternKingdoms/ThroneOfTheTides/throne_of_the_tides.h
   EasternKingdoms/ThroneOfTheTides/instance_throne_of_the_tides.cpp
   EasternKingdoms/BlackwingDescent/instance_blackwing_descent.cpp
