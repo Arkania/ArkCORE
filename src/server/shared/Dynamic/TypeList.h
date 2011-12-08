@@ -24,18 +24,17 @@
 #define ARKCORE_TYPELIST_H
 
 /*
-  @struct TypeList
-  TypeList is the most simple but yet the most powerfull class of all.  It holds
-  at compile time the different type of objects in a linked list.
+ @struct TypeList
+ TypeList is the most simple but yet the most powerfull class of all.  It holds
+ at compile time the different type of objects in a linked list.
  */
 
 class TypeNull;
 
 template<typename HEAD, typename TAIL>
-struct TypeList
-{
-    typedef HEAD Head;
-    typedef TAIL Tail;
+struct TypeList {
+	typedef HEAD Head;
+	typedef TAIL Tail;
 };
 
 // enough for now.. can be expand at any point in time as needed
