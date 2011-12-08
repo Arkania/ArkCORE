@@ -1,25 +1,22 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2011 MaNGOS <http://www.getmangos.org/>
  *
- * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2011 TrinityCore <http://www.trinitycore.org/>
  *
- * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
+ * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *
- * Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/>
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* Script Data Start
@@ -38,14 +35,19 @@ Script Data End */
 
 enum Spells
 {
-    SPELL_TRESPASSER_A = 54028,
-    SPELL_TRESPASSER_H = 54029
+    SPELL_TRESPASSER_A      = 54028,
+    SPELL_TRESPASSER_H      = 54029,
+    SPELL_DETECTION         = 18950,
+    SPELL_DISGUISE_A_F 		= 70973,
+    SPELL_DISGUISE_A_M 		= 70974,
+    SPELL_DISGUISE_H_F 		= 70971,
+    SPELL_DISGUISE_H_M 		= 70972
 };
 
 enum NPCs // All outdoor guards are within 35.0f of these NPCs
 {
-    NPC_APPLEBOUGH_A = 29547,
-    NPC_SWEETBERRY_H = 29715,
+    NPC_APPLEBOUGH_A       = 29547,
+    NPC_SWEETBERRY_H       = 29715,
 };
 
 class npc_mageguard_dalaran : public CreatureScript
@@ -62,7 +64,10 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void Reset(){}
+        void Reset()
+        {
+            me->CastSpell(me, SPELL_DETECTION, true);
+        }
 
         void EnterCombat(Unit* /*who*/){}
 
@@ -84,7 +89,7 @@ public:
             switch (me->GetEntry())
             {
                 case 29254:
-                    if (player->GetTeam() == HORDE)              // Horde unit found in Alliance area
+                    if (player->GetTeam() == HORDE && !(player->HasAura(SPELL_DISGUISE_H_M) || player->HasAura(SPELL_DISGUISE_H_F)))      // Horde unit found in Alliance area
                     {
                         if (GetClosestCreatureWithEntry(me, NPC_APPLEBOUGH_A, 32.0f))
                         {
@@ -96,7 +101,7 @@ public:
                     }
                     break;
                 case 29255:
-                    if (player->GetTeam() == ALLIANCE)           // Alliance unit found in Horde area
+                    if (player->GetTeam() == ALLIANCE && !(player->HasAura(SPELL_DISGUISE_A_M) || player->HasAura(SPELL_DISGUISE_A_F)))  // Alliance unit found in Horde area
                     {
                         if (GetClosestCreatureWithEntry(me, NPC_SWEETBERRY_H, 32.0f))
                         {
@@ -115,7 +120,7 @@ public:
         void UpdateAI(const uint32 /*diff*/){}
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_mageguard_dalaranAI(creature);
     }
@@ -165,8 +170,118 @@ public:
     }
 };
 
+/*######
+## npc_archmage_vargoth
+######*/
+
+enum eArchmageVargoth
+{
+    ZONE_DALARAN                                = 4395,
+    ITEM_ACANE_MAGIC_MASTERY                    = 43824,
+    SPELL_CREATE_FAMILAR                        = 61457,
+    SPELL_FAMILAR_PET                           = 61472,
+    ITEM_FAMILAR_PET                            = 44738
+};
+
+#define GOSSIP_TEXT_FAMILIAR_WELCOME "I have a book that might interest you. Would you like to take a look?"
+#define GOSSIP_TEXT_FAMILIAR_THANKS  "Thank you! I will be sure to notify you if I find anything else."
+
+class npc_archmage_vargoth : public CreatureScript
+{
+    public:
+        npc_archmage_vargoth() : CreatureScript("npc_archmage_vargoth") { }
+
+        bool OnGossipHello(Player* player, Creature* creature)
+        {
+            if (creature->isQuestGiver() && creature->GetZoneId() != ZONE_DALARAN)
+                player->PrepareQuestMenu(creature->GetGUID());
+
+            if (player->HasItemCount(ITEM_ACANE_MAGIC_MASTERY, 1, false))
+            {
+                if (!player->HasSpell(SPELL_FAMILAR_PET) && !player->HasItemCount(ITEM_FAMILAR_PET, 1, true))
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FAMILIAR_WELCOME, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            }
+
+            player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+
+            return true;
+        }
+
+        bool OnGossipSelect (Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+        {
+            switch (action)
+            {
+                case GOSSIP_ACTION_INFO_DEF + 1:
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_FAMILIAR_THANKS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+                    player->SEND_GOSSIP_MENU(40006, creature->GetGUID());
+                    break;
+                case GOSSIP_ACTION_INFO_DEF + 2:
+                    creature->CastSpell(player, SPELL_CREATE_FAMILAR, false);
+                    player->CLOSE_GOSSIP_MENU();
+                    break;
+            }
+
+            return true;
+        }
+};
+
+/*######
+## npc_rhonin
+######*/
+
+enum npcRhonin
+{
+    ACHIEVEMENT_HIGHER_LEARNING             = 1956,
+    ITEM_THE_SCHOOLS_OF_ARCANE_MAGIC        = 43824,
+    SPELL_THE_SCHOOLS_OF_ARCANE_MAGIC       = 59983,
+    //QUEST_ALL_IS_WELL_THAT_ENDS_WELL        = 13631,
+    //QUEST_HEROIC_ALL_IS_WELL_THAT_ENDS_WELL = 13819
+};
+
+#define GOSSIP_TEXT_RESTORE_ITEM       "[PH] Please give me a new <The Schools of Arcane Magic - Mastery>"
+
+class npc_rhonin : public CreatureScript
+{
+    public:
+        npc_rhonin() : CreatureScript("npc_rhonin") { }
+
+        bool OnGossipHello(Player* player, Creature* creature)
+        {
+            if (creature->isQuestGiver())
+                player->PrepareQuestMenu(creature->GetGUID());
+
+            if (player->HasAchieved(ACHIEVEMENT_HIGHER_LEARNING) && !player->HasItemCount(ITEM_THE_SCHOOLS_OF_ARCANE_MAGIC, 1, true))
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_RESTORE_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+            player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+            return true;
+        }
+
+        bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action)
+        {
+            player->PlayerTalkClass->ClearMenus();
+
+            if (action == GOSSIP_ACTION_INFO_DEF + 1)
+            {
+                player->CastSpell(player, SPELL_THE_SCHOOLS_OF_ARCANE_MAGIC, false);
+                player->CLOSE_GOSSIP_MENU();
+            }
+
+            return true;
+        }
+
+        // FIXME: add Quest 13631, 13819 Event
+
+        //bool OnQuestComplete(Player* /*player*/, Creature* /*creature*/, Quest const* /*quest*/)
+        //{
+        //    return true;
+        //}
+};
+
 void AddSC_dalaran()
 {
-    new npc_mageguard_dalaran;
-    new npc_hira_snowdawn;
+    new npc_mageguard_dalaran();
+    new npc_hira_snowdawn();
+    new npc_archmage_vargoth();
+    new npc_rhonin();
 }
