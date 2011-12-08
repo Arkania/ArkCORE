@@ -131,13 +131,16 @@ int Master::Run()
     sLog->outString("<Ctrl-C> to stop.\n");
 
     sLog->outString(" ");
-    sLog->outString("   ______  __  __  __  __  ______ __  ______  ______ ");
-    sLog->outString("  /\\  ___\\/\\ \\/ / /\\ \\_\\ \\/\\  ___/\\ \\/\\  == \\/\\  ___\\ ");
-    sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
-    sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
-    sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
-    sLog->outString("  ArkCORE 2011(c) Open-sourced Game Emulation ");
-    sLog->outString("           <http://www.arkania.net/> ");
+	sLog->outString("    Arkania Community (c) 2011 <http://arkania.net/> ");
+	sLog->outString(" ");
+    sLog->outString("     #                   #####  ####### ######  ####### "); 
+    sLog->outString("    # #   #####  #    # #     # #     # #     # #       "); 
+    sLog->outString("   #   #  #    # #   #  #       #     # #     # #       "); 
+    sLog->outString("  #     # #    # ####   #       #     # ######  #####   "); 
+    sLog->outString("  ####### #####  #  #   #       #     # #   #   #       "); 
+    sLog->outString("  #     # #   #  #   #  #     # #     # #    #  #       "); 
+    sLog->outString("  #     # #    # #    #  #####  ####### #     # ####### ");
+    sLog->outString("  			A World of Warcraft: Cataclysm Core Emulator ");
     sLog->outString(" ");
 
 #ifdef USE_SFMT_FOR_RNG

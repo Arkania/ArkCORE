@@ -2200,7 +2200,7 @@ void ObjectMgr::LoadItemPrototypes()
             }
         }
         else
-            sLog->outErrorDb("Item (Entry: %u) does not exist in item.db2! (not correct id?).", i);
+            sLog->outErrorDb("Item (Entry: %u) does not exist in item.db2! (this client do not support this item entry).", i);
 
         if (proto->Class >= MAX_ITEM_CLASS)
         {

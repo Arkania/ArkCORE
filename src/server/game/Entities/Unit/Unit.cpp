@@ -9087,16 +9087,6 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage, AuraEffect* trig
                 return false;
             break;
         }
-
-		// Incite:
-        // gives your Heroic Strike criticals a 100% chance to cause the next Heroic Strike to also be a critical strike.
-        // These guaranteed criticals cannot re-trigger the Incite effect.
-        case 86627:
-        {
-            if (HasAura(86627))
-                return false;
-            break;
-        }
     }
 
     if (cooldown && GetTypeId() == TYPEID_PLAYER && ToPlayer()->HasSpellCooldown(trigger_spell_id))
