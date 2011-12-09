@@ -162,17 +162,16 @@ extern int main(int argc, char **argv) {
 		}
 		sLog->Initialize();
 
-		sLog->outString("%s (realm-daemon)", _FULLVERSION);
+		sLog->outString("%s (realm-daemon)", _CLIENT_BUILD_REVISION);
 		sLog->outString(" ");
+		sLog->outString(" 								A World of Warcraft: Cataclysm Core Emulator");
 		sLog->outString("       _/_/              _/          _/_/_/    _/_/    _/_/_/    _/_/_/_/  ");
 		sLog->outString("    _/    _/  _/  _/_/  _/  _/    _/        _/    _/  _/    _/  _/         ");
 		sLog->outString("   _/_/_/_/  _/_/      _/_/      _/        _/    _/  _/_/_/    _/_/_/      ");
 		sLog->outString("  _/    _/  _/        _/  _/    _/        _/    _/  _/    _/  _/           ");
 		sLog->outString(" _/    _/  _/        _/    _/    _/_/_/    _/_/    _/    _/  _/_/_/_/  	");
-		sLog->outString(" ");
-		sLog->outString("				A World of Warcraft: Cataclysm Core Emulator ");
-		sLog->outString("						Arkania Community (c) 2011 ");
-		sLog->outString("    					  <http://arkania.net/>");
+		sLog->outString(" Arkania Community (c) 2011");
+		sLog->outString("      <http://arkania.net/>");
 		sLog->outString(" ");
 		sLog->outString("<Ctrl-C> to stop.\n");
 

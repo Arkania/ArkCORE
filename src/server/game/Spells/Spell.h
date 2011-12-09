@@ -289,6 +289,7 @@ struct SpellValue {
 	int32 EffectBasePoints[3];
 	uint32 MaxAffectedTargets;
 	float RadiusMod;
+	uint8     AuraStackAmount;
 };
 
 enum SpellState {

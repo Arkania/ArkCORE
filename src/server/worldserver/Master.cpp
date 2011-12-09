@@ -122,21 +122,18 @@ int Master::Run() {
 	BigNumber seed1;
 	seed1.SetRand(16 * 8);
 
-	sLog->outString("%s (worldserver-daemon)", _FULLVERSION);
-	sLog
-			->outString("<Ctrl-C> to stop.\n");
-
+	sLog->outString("%s (worldserver-daemon)", _CLIENT_BUILD_REVISION);
 			sLog->outString(" ");
+			sLog->outString(" 								A World of Warcraft: Cataclysm Core Emulator");
 			sLog->outString("       _/_/              _/          _/_/_/    _/_/    _/_/_/    _/_/_/_/  ");
 			sLog->outString("    _/    _/  _/  _/_/  _/  _/    _/        _/    _/  _/    _/  _/         ");
 			sLog->outString("   _/_/_/_/  _/_/      _/_/      _/        _/    _/  _/_/_/    _/_/_/      ");
 			sLog->outString("  _/    _/  _/        _/  _/    _/        _/    _/  _/    _/  _/           ");
 			sLog->outString(" _/    _/  _/        _/    _/    _/_/_/    _/_/    _/    _/  _/_/_/_/  	");
+			sLog->outString(" Arkania Community (c) 2011");
+			sLog->outString("      <http://arkania.net/>");
 			sLog->outString(" ");
-			sLog->outString("				A World of Warcraft: Cataclysm Core Emulator ");
-			sLog->outString("						Arkania Community (c) 2011 ");
-			sLog->outString("    					  <http://arkania.net/>");
-			sLog->outString(" ");
+			sLog->outString("<Ctrl-C> to stop.\n");
 
 #ifdef USE_SFMT_FOR_RNG
 			sLog->outString("\n");

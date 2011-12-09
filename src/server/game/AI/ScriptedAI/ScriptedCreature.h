@@ -232,6 +232,10 @@ struct ScriptedAI: public CreatureAI {
 		return m_difficulty;
 	}
 
+	Difficulty GetDifficulty() {
+		return m_difficulty;
+	}
+
 	// return true for 25 man or 25 man heroic mode
 	bool Is25ManRaid() {
 		return m_difficulty & 1;
