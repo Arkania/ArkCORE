@@ -164,7 +164,7 @@ extern int main(int argc, char **argv) {
 
 		sLog->outString("%s (realm-daemon)", _CLIENT_BUILD_REVISION);
 		sLog->outString(" ");
-		sLog->outString(" 								A World of Warcraft: Cataclysm Core Emulator");
+		sLog->outString(" 							A World of Warcraft: Cataclysm Core Emulator	");
 		sLog->outString("       _/_/              _/          _/_/_/    _/_/    _/_/_/    _/_/_/_/  ");
 		sLog->outString("    _/    _/  _/  _/_/  _/  _/    _/        _/    _/  _/    _/  _/         ");
 		sLog->outString("   _/_/_/_/  _/_/      _/_/      _/        _/    _/  _/_/_/    _/_/_/      ");

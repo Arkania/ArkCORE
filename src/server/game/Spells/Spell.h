@@ -301,6 +301,7 @@ enum SpellState {
 	SPELL_STATE_DELAYED = 5
 };
 
+// TODO
 enum SpellEffectHandleMode
 {
     SPELL_EFFECT_HANDLE_LAUNCH,
@@ -560,7 +561,7 @@ public:
 	void SendResurrectRequest(Player* target);
 	void SendPlaySpellVisual(uint32 SpellID);
 
-	void HandleEffects(Unit* pUnitTarget, Item* pItemTarget, GameObject* pGOTarget, uint32 i, SpellEffectHandleMode mode);
+	void HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOTarget, uint32 i);
 	void HandleThreatSpells(uint32 spellId);
 
 	const SpellEntry * const m_spellInfo;
@@ -805,7 +806,7 @@ protected:
 	void LoadScripts();
 	SpellCastResult CallScriptCheckCastHandlers();
 	void PrepareScriptHitHandlers();
-	bool CallScriptEffectHandlers(SpellEffIndex effIndex, SpellEffectHandleMode mode);
+	bool CallScriptEffectHandlers(SpellEffIndex effIndex);
 	void CallScriptBeforeHitHandlers();
 	void CallScriptOnHitHandlers();
 	void CallScriptAfterHitHandlers();
