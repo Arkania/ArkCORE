@@ -124,7 +124,7 @@ int Master::Run() {
 
 	sLog->outString("%s (worldserver-daemon)", _CLIENT_BUILD_REVISION);
 			sLog->outString(" ");
-			sLog->outString(" 							A World of Warcraft: Cataclysm Core Emulator	");
+			sLog->outString(" A World of Warcraft: Cataclysm Core Emulator	");
 			sLog->outString("       _/_/              _/          _/_/_/    _/_/    _/_/_/    _/_/_/_/  ");
 			sLog->outString("    _/    _/  _/  _/_/  _/  _/    _/        _/    _/  _/    _/  _/         ");
 			sLog->outString("   _/_/_/_/  _/_/      _/_/      _/        _/    _/  _/_/_/    _/_/_/      ");

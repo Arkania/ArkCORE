@@ -6973,22 +6973,29 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 
 		break;
 	}
-	case SPELLFAMILY_MAGE: {
-		switch (GetId()) {
-		case 79683: // Arcane Missiles!
-		{
-			if (apply)
-				caster->CastSpell(caster, 79808, true, NULL, NULL,
-						GetCasterGUID()); // Arcane Missiles Aurastate
-			break;
-		}
-		case 5143: {
-			caster->RemoveAurasDueToSpell(79808);
-			break;
-		}
-		}
-		break;
-	}
+	case SPELLFAMILY_MAGE:{
+            if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                break;
+            switch (GetId())
+            {
+                //Arcane Missiles.
+                case 79683:
+				if (target->getLevel() >= 20 && target->getLevel() < 40) {
+                {
+                    if (apply)
+                        caster->CastSpell(caster, 79808, true, NULL, NULL, GetCasterGUID());
+                    break;
+                }
+                case 5143:
+                {
+                    caster->RemoveAurasDueToSpell(79808);
+                    break;
+                }
+                break;
+            }
+		}	
+            break;
+    }
 	case SPELLFAMILY_PRIEST:
 		break;
 	case SPELLFAMILY_DRUID: {
