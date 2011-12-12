@@ -6729,7 +6729,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 	}
 	case SPELLFAMILY_PALADIN: {
 		// Seal of Righteousness - melee proc dummy (addition ${$MWS*(0.011*$AP+0.022*$SPH)} damage)
-		if (dummySpell->SpellFamilyFlags[1] & 0x20000000) {
+		if (dummySpell->Id == 20154) {
 			if (effIndex != 0)
 				return false;
 			triggered_spell_id = 25742;
