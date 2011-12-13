@@ -1422,6 +1422,28 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                     // Iron Dwarf Snapshot Credit
                     m_caster->CastSpell(m_caster, 48047, true, m_CastItem, NULL, unitTarget->GetGUID());
                     return;
+                }
+                case 48386: // Ymiron Summon Fountain
+                {
+                    m_caster->CastSpell(m_caster, 48385, true);
+                    return;
+                }
+                case 48593: // Summon Avenging Spirit
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        m_caster->CastSpell(m_caster, 48592, true);
+                    }
+                    return;
+                }
+                case 48790: // Neltharion's Flame
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // Neltharion's Flame Fire Bunny: Periodic Fire Aura
+                    unitTarget->CastSpell(unitTarget, 48786, false);
+                    return;
                 }				
                 case 49357: // Brewfest Mount Transformation
                     if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
