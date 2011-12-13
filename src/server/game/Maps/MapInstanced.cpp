@@ -123,7 +123,8 @@ Map* MapInstanced::CreateInstance(const uint32 mapId, Player * player) {
 			return NULL;
 		map = _FindMap(NewInstanceId);
 		if (!map)
-			map = CreateBattleground(NewInstanceId, player->GetBattleground());
+            if (Battleground* NewBattleground = player->GetBattleground())
+			    map = CreateBattleground(NewInstanceId, NewBattleground);
 	} else {
 		InstancePlayerBind *pBind = player->GetBoundInstance(GetId(),
 				player->GetDifficulty(IsRaid()));
