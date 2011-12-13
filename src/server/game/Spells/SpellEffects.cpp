@@ -410,7 +410,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex) {
                         float distance = m_caster->GetDistance2d(unitTarget);
                         damage *= exp(-distance/15.0f);
                         break;
-                    }						
+                    }
                         // Ancient Fury
                     case 86704: {
                         Aura* ancientpower = m_caster->GetAura(86700);
@@ -1034,7 +1034,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex) {
                     if (unitTarget->GetTypeId() != TYPEID_UNIT || !(unitTarget->IsImmunedToSpellEffect(sSpellStore.LookupEntry(44572), 0)))
                         return;
                 break;
-            }			
+            }
         }
 
         if (m_originalCaster && damage > 0 && apply_direct_bonus) damage =
@@ -1337,7 +1337,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                     if (m_caster->ToPlayer())
                         m_caster->ToPlayer()->SendAttackSwingCancelAttack();
                     return;
-                }				
+                }
                     // Demon Broiled Surprise
                 case 43723: {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
@@ -1491,7 +1491,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                     // Neltharion's Flame Fire Bunny: Periodic Fire Aura
                     unitTarget->CastSpell(unitTarget, 48786, false);
                     return;
-                }				
+                }
                 case 49357: // Brewfest Mount Transformation
                     if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
                     if (!m_caster->HasAuraType(SPELL_AURA_MOUNTED)) return;
@@ -2171,12 +2171,14 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                             SPELLFAMILY_SHAMAN, 0x200000, 0, 0)) m_damage +=
                             m_damage * damage / 100;
                 }
-                // Searing Flames
+                // Improved Lava Lash
+                if (AuraEffect const* ill = m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 4780, 1))
+				// Searing Flames
                 if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))
                 {
                     AddPctN(m_damage, sf->GetBase()->GetStackAmount() * ill->GetAmount());
                     unitTarget->RemoveAura(77661);
-                }				
+                }
                 return;
             }
             break;
@@ -3434,6 +3436,13 @@ void Spell::EffectEnergize(SpellEffIndex effIndex) {
         case 48542: // Revitalize
             damage = damage * unitTarget->GetMaxPower(power) / 100;
             break;
+        case 67490:                                         // Runic Mana Injector (mana gain increased by 25% for engineers - 3.2.0 patch change)
+        {
+            if (Player* player = m_caster->ToPlayer())
+                if (player->HasSkill(SKILL_ENGINEERING))
+                    AddPctN(damage, 25);
+            break;
+        }
         default:
             break;
     }
@@ -3823,9 +3832,9 @@ void Spell::EffectSummonType(SpellEffIndex effIndex) {
      if (m_caster->GetTypeId() == TYPEID_PLAYER && m_CastItem)
      {
      ItemPrototype const *proto = m_CastItem->GetProto();
-     if (proto && proto->RequiredSkill == SKILL_ENGINERING)
+     if (proto && proto->RequiredSkill == SKILL_ENGINEERING)
      {
-     uint16 skill202 = m_caster->ToPlayer()->GetSkillValue(SKILL_ENGINERING);
+     uint16 skill202 = m_caster->ToPlayer()->GetSkillValue(SKILL_ENGINEERING);
      if (skill202)
      level = skill202/5;
      }
@@ -7812,7 +7821,7 @@ void Spell::SummonGuardian(uint32 i, uint32 entry,
 
     // level of pet summoned using engineering item based at engineering skill level
     if (m_CastItem && caster->GetTypeId() == TYPEID_PLAYER) if (ItemPrototype const *proto = m_CastItem->GetProto()) if (proto->RequiredSkill
-            == SKILL_ENGINERING) if (uint16 skill202 = caster->ToPlayer()->GetSkillValue(SKILL_ENGINERING)) level =
+            == SKILL_ENGINEERING) if (uint16 skill202 = caster->ToPlayer()->GetSkillValue(SKILL_ENGINEERING)) level =
             skill202 / 5;
 
     //float radius = GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(m_spellInfo->EffectRadiusIndex[i]));
