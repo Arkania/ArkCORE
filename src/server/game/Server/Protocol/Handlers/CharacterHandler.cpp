@@ -1730,6 +1730,8 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data) {
 			newname.c_str(), race, used_loginFlag, lowGuid);
 	trans->PAppend("DELETE FROM character_declinedname WHERE guid ='%u'",
 			lowGuid);
+			
+	trans->PAppend("DELETE FROM `character_aura` WHERE `spell`=20584 AND `guid`='%u'", lowGuid);
 
 	BattlegroundTeamId team = BG_TEAM_ALLIANCE;
 
