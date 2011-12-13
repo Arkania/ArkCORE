@@ -404,6 +404,13 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data) {
 				plMover->RepopAtGraveyard();
 			}
 		}
+        else if (movementInfo.pos.GetPositionZ() < -50.0f)
+        {
+            if (plMover->InBattleground())
+                if (Battleground* bg = plMover->GetBattleground())
+                    if (bg->isArena())
+                        bg->HandlePlayerUnderMap(_player);
+        }		
 	}
 }
 
