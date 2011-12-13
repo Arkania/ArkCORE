@@ -2109,7 +2109,7 @@ void Unit::AttackerStateUpdate(Unit *pVictim, WeaponAttackType attType,
 	if (!pVictim->isAlive())
 		return;
 
-    if ((attType == BASE_ATTACK || attType == OFF_ATTACK) && !IsWithinLOSInMap(victim) && !isPet())
+    if ((attType == BASE_ATTACK || attType == OFF_ATTACK) && !IsWithinLOSInMap(pVictim) && !isPet())
         return;
 
 	CombatStart(pVictim);
@@ -6863,6 +6863,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 		}
 			// Judgement of Light
 		case 20185: {
+		    if (!pVictim) // Crash Fix in Unit::HandleDummyAuraProc.
+            return false;
 			// 2% of base mana
 			basepoints0 = int32(pVictim->CountPctFromMaxHealth(2));
 			pVictim->CastCustomSpell(pVictim, 20267, &basepoints0, 0, 0, true,
