@@ -453,6 +453,10 @@ void GameObject::Update(uint32 diff) {
 					// some traps do not have spell but should be triggered
 					if (goInfo->trap.spellId)
 						CastSpell(ok, goInfo->trap.spellId);
+						
+                    // Traps should put caster in combat and activate PvP mode.
+                    if (owner && owner->isAlive())
+                        owner->CombatStart(ok);						
 
 					m_cooldownTime = time(NULL) + 4; // 4 seconds
 
