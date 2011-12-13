@@ -1387,7 +1387,16 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                     unitTarget->CastSpell(unitTarget, 46648, true, NULL, NULL, m_caster->GetGUID());
                     unitTarget->CastSpell(unitTarget, 44811, true);
                     return;
-                }				
+                }
+                case 45989: // Summon Void Sentinel Summoner Visual
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // summon void sentinel
+                    unitTarget->CastSpell(unitTarget, 45988, true);
+                    return;
+                }
                 case 44875: // Complete Raptor Capture
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT) return;
