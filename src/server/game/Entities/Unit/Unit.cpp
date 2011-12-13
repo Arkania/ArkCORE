@@ -2109,9 +2109,8 @@ void Unit::AttackerStateUpdate(Unit *pVictim, WeaponAttackType attType,
 	if (!pVictim->isAlive())
 		return;
 
-	if ((attType == BASE_ATTACK || attType == OFF_ATTACK)
-			&& !this->IsWithinLOSInMap(pVictim))
-		return;
+    if ((attType == BASE_ATTACK || attType == OFF_ATTACK) && !IsWithinLOSInMap(victim) && !isPet())
+        return;
 
 	CombatStart(pVictim);
 	RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MELEE_ATTACK);
