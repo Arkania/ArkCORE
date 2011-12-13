@@ -1411,6 +1411,18 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
 
                     return;
                 }
+                case 48046: // Use Camera
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // No despawn expected, nor any change in dynamic flags/other flags.
+                    // Need internal way to track if credit has been given for this object.
+
+                    // Iron Dwarf Snapshot Credit
+                    m_caster->CastSpell(m_caster, 48047, true, m_CastItem, NULL, unitTarget->GetGUID());
+                    return;
+                }				
                 case 49357: // Brewfest Mount Transformation
                     if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
                     if (!m_caster->HasAuraType(SPELL_AURA_MOUNTED)) return;
