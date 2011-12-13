@@ -1373,6 +1373,21 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
 
                     return;
                 }
+                case 44869:                          // Spectral Blast
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    // If target has spectral exhaustion or spectral realm aura return
+                    if (unitTarget->HasAura(44867) || unitTarget->HasAura(46021))
+                        return;
+
+                    // Cast the spectral realm effect spell, visual spell and spectral blast rift summoning
+                    unitTarget->CastSpell(unitTarget, 44866, true, NULL, NULL, m_caster->GetGUID());
+                    unitTarget->CastSpell(unitTarget, 46648, true, NULL, NULL, m_caster->GetGUID());
+                    unitTarget->CastSpell(unitTarget, 44811, true);
+                    return;
+                }				
                 case 44875: // Complete Raptor Capture
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT) return;
