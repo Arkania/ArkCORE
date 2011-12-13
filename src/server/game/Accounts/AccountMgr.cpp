@@ -88,7 +88,7 @@ AccountOpResult AccountMgr::DeleteAccount(uint32 accountId) {
 
 	trans->PAppend("DELETE FROM account WHERE id = '%d'", accountId);
 	trans->PAppend("DELETE FROM account_access WHERE id = '%d'", accountId);
-	trans->PAppend("DELETE FROM realmcharacters WHERE accountId = '%d'",
+	trans->PAppend("DELETE FROM realmcharacters WHERE acctid = '%d'",
 			accountId);
 
 	LoginDatabase.CommitTransaction(trans);
