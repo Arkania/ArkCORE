@@ -2171,6 +2171,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                             SPELLFAMILY_SHAMAN, 0x200000, 0, 0)) m_damage +=
                             m_damage * damage / 100;
                 }
+                // Searing Flames
+                if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))
+                {
+                    AddPctN(m_damage, sf->GetBase()->GetStackAmount() * ill->GetAmount());
+                    unitTarget->RemoveAura(77661);
+                }				
                 return;
             }
             break;
