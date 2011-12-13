@@ -1379,7 +1379,38 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                     // Plague Effect Self
                     unitTarget->CastSpell(unitTarget, 47178, true);
                     return;
-                }				
+                }
+                case 47381: // Reagent Check (Frozen Mojo)
+                case 47386: // Reagent Check (Zim'Bo's Mojo)
+                case 47389: // Reagent Check (Desperate Mojo)
+                case 47408: // Reagent Check (Sacred Mojo)
+                case 50441: // Reagent Check (Survival Mojo)
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    switch(m_spellInfo->Id)
+                    {
+                        case 47381:
+                            // Envision Drakuru
+                            m_caster->CastSpell(m_caster, 47118, true);
+                            break;
+                        case 47386:
+                            m_caster->CastSpell(m_caster, 47150, true);
+                            break;
+                        case 47389:
+                            m_caster->CastSpell(m_caster, 47317, true);
+                            break;
+                        case 47408:
+                            m_caster->CastSpell(m_caster, 47406, true);
+                            break;
+                        case 50441:
+                            m_caster->CastSpell(m_caster, 50440, true);
+                            break;
+                    }
+
+                    return;
+                }
                 case 49357: // Brewfest Mount Transformation
                     if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
                     if (!m_caster->HasAuraType(SPELL_AURA_MOUNTED)) return;
