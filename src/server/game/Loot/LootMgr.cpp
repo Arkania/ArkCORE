@@ -730,6 +730,10 @@ LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player,
 		}
 	}
 
+    // Player Bind to instance on loot
+    if (player->HasPendingBind())
+        player->BindToInstance();	
+	
 	if (is_looted)
 		return NULL;
 
