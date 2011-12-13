@@ -584,6 +584,9 @@ public:
 	virtual void OnDestroyed(Player* /*player*/, GameObject* /*go*/,
 			uint32 /*eventId*/) {
 	}
+	
+    // Called when the game object is damaged (destructible buildings only).
+    virtual void OnDamaged(GameObject* /*go*/, Player* /*player*/) { }	
 };
 
 class AreaTriggerScript: public ScriptObject {
@@ -1132,7 +1135,8 @@ public:
 			uint32 opt);
 	uint32 GetDialogStatus(Player* player, GameObject* go);
 	void OnGameObjectDestroyed(Player* player, GameObject* go, uint32 eventId);
-	void OnGameObjectUpdate(GameObject* go, uint32 diff);
+	void OnGameObjectDamaged(GameObject* go, Player* player);
+	void OnGameObjectUpdate(GameObject* go, uint32 diff);	
 
 public:
 	/* AreaTriggerScript */

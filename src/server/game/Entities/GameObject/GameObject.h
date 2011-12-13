@@ -537,6 +537,10 @@ union GameObjectValue {
 	struct {
 		uint32 health;
 	} building;
+	struct {
+        uint32 Health;
+        uint32 MaxHealth;		
+	} Building;	
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
@@ -823,6 +827,18 @@ public:
 	bool IsInRange(float x, float y, float z, float radius) const;
 	void TakenDamage(uint32 damage, Unit* who = NULL);
 	void Rebuild();
+	
+        void ModifyHealth(int32 change, Unit* attackerOrHealer = NULL, uint32 spellId = 0);
+        // sets GameObject type 33 destruction flags and optionally default health for that state
+        void SetDestructibleState(GameObjectDestructibleState state, Player* eventInvoker = NULL, bool setHealth = false);
+        GameObjectDestructibleState GetDestructibleState() const
+        {
+            if (HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED))
+                return GO_DESTRUCTIBLE_DESTROYED;
+            if (HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED))
+                return GO_DESTRUCTIBLE_DAMAGED;
+            return GO_DESTRUCTIBLE_INTACT;
+        }	
 
 	void EventInform(uint32 eventId);
 

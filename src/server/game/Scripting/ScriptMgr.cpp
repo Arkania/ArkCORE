@@ -887,6 +887,14 @@ void ScriptMgr::OnGameObjectDestroyed(Player* player, GameObject* go,
 	tmpscript->OnDestroyed(player, go, eventId);
 }
 
+void ScriptMgr::OnGameObjectDamaged(GameObject* go, Player* player)
+{
+    ASSERT(go);
+
+    GET_SCRIPT(GameObjectScript, go->GetScriptId(), tmpscript);
+    tmpscript->OnDamaged(go, player);
+}
+
 void ScriptMgr::OnGameObjectUpdate(GameObject* go, uint32 diff) {
 	ASSERT(go);
 
