@@ -739,6 +739,21 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage,
 						ACHIEVEMENT_CRITERIA_TYPE_SPECIAL_PVP_KILL, 1, 0,
 						pVictim);
 		}
+        if (this->ToPlayer() && this->isAlive()) // Trinkets Heirloom
+            if (this->ToPlayer()->isHonorOrXPTarget(pVictim))
+            {
+                AuraEffectList const& heirloom = GetAuraEffectsByType(SPELL_AURA_DUMMY);
+                for (AuraEffectList::const_iterator j = heirloom.begin(); j != heirloom.end(); ++j)
+                {
+                    if ((*j)->GetId() == 59915 && this->getPowerType() == POWER_MANA)
+                        this->CastSpell(this,59914,true);
+                    if ((*j)->GetId() == 59906)
+                    {
+                        int32 bonushealth = this->GetMaxHealth() * this->GetAura(59906)->GetEffect(0)->GetAmount() / 100;
+                        this->CastCustomSpell(this,59913,&bonushealth,0,0,true);
+                    }
+                }
+            }
 
 		Kill(pVictim, durabilityLoss);
 	} else {
