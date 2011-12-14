@@ -482,3 +482,48 @@ VehicleSeatEntry const* Vehicle::GetSeatForPassenger(Unit* passenger) {
 
 	return NULL;
 }
+
+
+SeatMap::iterator Vehicle::GetSeatIteratorForPassenger(Unit* passenger)
+{
+    SeatMap::iterator itr;
+    for (itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
+        if (itr->second.Passenger == passenger->GetGUID())
+            return itr;
+
+    return m_Seats.end();
+}
+
+uint8 Vehicle::GetAvailableSeatCount() const
+{
+    uint8 ret = 0;
+    SeatMap::const_iterator itr;
+    for (itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
+        if (!itr->second.Passenger && (itr->second.seatInfo->CanEnterOrExit() || itr->second.seatInfo->IsUsableByAura()))
+            ++ret;
+
+    return ret;
+}
+
+void Vehicle::Relocate(Position pos)
+{
+    sLog->outDebug(LOG_FILTER_VEHICLES, "Vehicle::Relocate %u", me->GetEntry());
+
+    std::set<Unit*> vehiclePlayers;
+    for (int8 i = 0; i < 8; i++)
+        vehiclePlayers.insert(GetPassenger(i));
+
+    // passengers should be removed or they will have movement stuck
+    RemoveAllPassengers();
+
+    for (std::set<Unit*>::const_iterator itr = vehiclePlayers.begin(); itr != vehiclePlayers.end(); ++itr)
+    {
+        if (Unit* player = (*itr))
+        {
+            // relocate/setposition doesn't work for player
+            player->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation());
+        }
+    }
+
+    me->UpdatePosition(pos, true);
+}

@@ -26,6 +26,7 @@
 #include "ObjectDefines.h"
 
 struct VehicleEntry;
+struct Position;
 struct VehicleSeatEntry;
 class Unit;
 
@@ -75,8 +76,10 @@ enum VehicleSeatFlagsB {
 // Lua_UnitHasVehiclePlayerFrameUI - actually checked for flagsb &~ 0x80000000
 };
 
-enum VehicleSpells {
-	VEHICLE_SPELL_PARACHUTE = 45472
+enum VehicleSpells
+{
+    VEHICLE_SPELL_RIDE_HARDCODED                 = 46598,
+    VEHICLE_SPELL_PARACHUTE                      = 45472
 };
 
 struct VehicleSeat {
@@ -85,6 +88,7 @@ struct VehicleSeat {
 	}
 	VehicleSeatEntry const *seatInfo;
 	Unit* passenger;
+	uint64 Passenger;
 };
 
 struct VehicleAccessory {
@@ -130,6 +134,7 @@ public:
 	bool HasEmptySeat(int8 seatId) const;
 	Unit *GetPassenger(int8 seatId) const;
 	int8 GetNextEmptySeat(int8 seatId, bool next, bool byAura = false) const;
+	uint8 GetAvailableSeatCount() const;
 
 	bool AddPassenger(Unit *passenger, int8 seatId = -1, bool byAura = false);
 	void EjectPassenger(Unit* passenger, Unit* controller);
@@ -140,6 +145,7 @@ public:
 	bool IsVehicleInUse() {
 		return m_Seats.begin() != m_Seats.end();
 	}
+	void Relocate(Position pos);
 
 	SeatMap m_Seats;
 
@@ -153,6 +159,9 @@ protected:
 	uint32 m_usableSeatNum; // Number of seats that match VehicleSeatEntry::UsableByPlayer, used for proper display flags
 	uint32 m_bonusHP;
 
+	SeatMap::iterator GetSeatIteratorForPassenger(Unit* passenger);
+	void InitMovementInfoForBase();
 	void InstallAccessory(uint32 entry, int8 seatId, bool minion = true);
+	
 };
 #endif
