@@ -855,8 +855,7 @@ void Aura::SetNeedClientUpdateForTargets() const {
 }
 
 // trigger effects on real aura apply/remove
-void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
-		bool apply) {
+void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, bool apply, bool onReapply) {
 	Unit * target = aurApp->GetTarget();
 	AuraRemoveMode removeMode = aurApp->GetRemoveMode();
 	// spell_area table
@@ -878,6 +877,61 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
 			}
 		}
 	}
+
+	// handle spell_linked_spell table
+    if (!onReapply)
+    {
+        // apply linked auras
+        if (apply)
+        {
+            if (std::vector<int32> const* spellTriggered = sSpellMgr->GetSpellLinked(GetId() + SPELL_LINK_AURA))
+            {
+                for (std::vector<int32>::const_iterator itr = spellTriggered->begin(); itr != spellTriggered->end(); ++itr)
+                {
+                    if (*itr < 0)
+                        target->ApplySpellImmune(GetId(), IMMUNITY_ID, -(*itr), true);
+                    else if (caster)
+                        caster->AddAura(*itr, target);
+                }
+            }
+        }
+        else
+        {
+            // remove linked auras
+            if (std::vector<int32> const* spellTriggered = sSpellMgr->GetSpellLinked(-(int32)GetId()))
+            {
+                for (std::vector<int32>::const_iterator itr = spellTriggered->begin(); itr != spellTriggered->end(); ++itr)
+                {
+                    if (*itr < 0)
+                        target->RemoveAurasDueToSpell(-(*itr));
+                    else if (removeMode != AURA_REMOVE_BY_DEATH)
+                        target->CastSpell(target, *itr, true, NULL, NULL, GetCasterGUID());
+                }
+            }
+            if (std::vector<int32> const* spellTriggered = sSpellMgr->GetSpellLinked(GetId() + SPELL_LINK_AURA))
+            {
+                for (std::vector<int32>::const_iterator itr = spellTriggered->begin(); itr != spellTriggered->end(); ++itr)
+                {
+                    if (*itr < 0)
+                        target->ApplySpellImmune(GetId(), IMMUNITY_ID, -(*itr), false);
+                    else
+                        target->RemoveAura(*itr, GetCasterGUID(), 0, removeMode);
+                }
+            }
+        }
+    }
+    else if (apply)
+    {
+        // modify stack amount of linked auras
+        if (std::vector<int32> const* spellTriggered = sSpellMgr->GetSpellLinked(GetId() + SPELL_LINK_AURA))
+        {
+            for (std::vector<int32>::const_iterator itr = spellTriggered->begin(); itr != spellTriggered->end(); ++itr)
+                if (*itr > 0)
+                    if (Aura* triggeredAura = target->GetAura(*itr, GetCasterGUID()))
+                        triggeredAura->ModStackAmount(GetStackAmount() - triggeredAura->GetStackAmount());
+        }
+    }
+	
 	// mods at aura apply
 	if (apply) {
 		// Apply linked auras (On first aura apply)
@@ -993,17 +1047,28 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
 			}
 			break;
 		case SPELLFAMILY_WARLOCK:
-			switch (GetId()) {
-			case 48020: // Demonic Circle
-				if (target->GetTypeId() == TYPEID_PLAYER)
-					if (GameObject* obj = target->GetGameObject(48018)) {
-						target->NearTeleportTo(obj->GetPositionX(),
-								obj->GetPositionY(), obj->GetPositionZ(),
-								obj->GetOrientation());
-						target->RemoveMovementImpairingAuras();
-					}
-				break;
-			}
+                switch (GetId())
+                {
+                    case 6358: // Seduction
+                        if (!caster)
+                            break;
+                        if (Unit *owner = caster->GetOwner())
+                            if (owner->HasAura(56250)) // Glyph of Succubus
+                            {
+                                target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, target->GetAura(32409)); // SW:D shall not be removed.
+                                target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
+                                target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH);
+                            }
+                        break;
+                    case 48020: // Demonic Circle
+                        if (target->GetTypeId() == TYPEID_PLAYER)
+                            if (GameObject* obj = target->GetGameObject(48018))
+                            {
+                                target->NearTeleportTo(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), obj->GetOrientation());
+                                target->RemoveMovementImpairingAuras();
+                            }
+                        break;
+                }
 			break;
 		case SPELLFAMILY_PRIEST:
 			if (!caster)
@@ -1311,16 +1376,24 @@ void Aura::HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
 						caster->CastSpell(target, spellId, true);
 				}
 			}
-			switch (GetId()) {
-			case 48018: // Demonic Circle
-				// Do not remove GO when aura is removed by stack
-				// to prevent remove GO added by new spell
-				// old one is already removed
-				if (removeMode != AURA_REMOVE_BY_STACK)
-					target->RemoveGameObject(GetId(), true);
-				target->RemoveAura(62388);
-				break;
-			}
+                switch (GetId())
+                {
+                    case 6358: // Seduction
+                        // Interrupt cast if aura removed from target
+                        // maybe should be used SpellChannelInterruptFlags instead
+                        caster->InterruptNonMeleeSpells(false, 6358, false);
+                        break;
+                   case 48018: // Demonic Circle
+                        // Do not remove GO when aura is removed by stack
+                        // to prevent remove GO added by new spell
+                        // old one is already removed
+                        if (!onReapply)
+                            target->RemoveGameObject(GetId(), true);
+                        target->RemoveAura(62388);
+                    break;
+                    default:
+                        break;
+                }
 			break;
 		case SPELLFAMILY_PRIEST:
 			if (!caster)

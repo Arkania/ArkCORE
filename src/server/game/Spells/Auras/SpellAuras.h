@@ -284,8 +284,7 @@ public:
 	}
 
 	void SetNeedClientUpdateForTargets() const;
-	void HandleAuraSpecificMods(AuraApplication const * aurApp, Unit * caster,
-			bool apply);
+	void HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, bool apply, bool onReapply);
 	bool CanBeAppliedOn(Unit *target);
 	bool CheckAreaTarget(Unit *target);
 

@@ -832,6 +832,8 @@ protected:
 
 	uint32 m_spellState;
 	uint32 m_timer;
+	
+	TriggerCastFlags _triggeredCastFlags;
 
 	bool m_IsTriggeredSpell;
 
