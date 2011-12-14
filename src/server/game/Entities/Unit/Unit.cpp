@@ -3486,7 +3486,7 @@ void Unit::_ApplyAura(AuraApplication * aurApp, uint8 effMask) {
 	if (aurApp->GetRemoveMode())
 		return;
 
-	aura->HandleAuraSpecificMods(aurApp, caster, true);
+	aura->HandleAuraSpecificMods(aurApp, caster, true, false);
 
 	// apply effects of the aura
 	for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i) {
@@ -3567,7 +3567,7 @@ void Unit::_UnapplyAura(AuraApplicationMap::iterator &i,
 	if (!auraStateFound)
 		ModifyAuraState(auraState, false);
 
-	aura->HandleAuraSpecificMods(aurApp, caster, false);
+	aura->HandleAuraSpecificMods(aurApp, caster, false, false);
 
 	// only way correctly remove all auras from list
 	//if (removedAuras != m_removedAurasCount) new aura may be added
@@ -17658,6 +17658,41 @@ bool Unit::SetPosition(float x, float y, float z, float orientation,
 
 	return (relocated || turn);
 }
+
+bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool teleport)
+{
+    // prevent crash when a bad coord is sent by the client
+    if (!Trinity::IsValidMapCoord(x, y, z, orientation))
+    {
+        sLog->outDebug(LOG_FILTER_UNITS, "Unit::UpdatePosition(%f, %f, %f) .. bad coordinates!", x, y, z);
+        return false;
+    }
+
+    bool turn = (GetOrientation() != orientation);
+    bool relocated = (teleport || GetPositionX() != x || GetPositionY() != y || GetPositionZ() != z);
+
+    if (turn)
+        RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TURNING);
+
+    if (relocated)
+    {
+        RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MOVE);
+
+        // move and update visible state if need
+        if (GetTypeId() == TYPEID_PLAYER)
+            GetMap()->PlayerRelocation(ToPlayer(), x, y, z, orientation);
+        else
+            GetMap()->CreatureRelocation(ToCreature(), x, y, z, orientation);
+    }
+    else if (turn)
+        SetOrientation(orientation);
+
+    if ((relocated || turn) && IsVehicle())
+        GetVehicleKit()->RelocatePassengers(x, y, z, orientation);
+
+    return (relocated || turn);
+}
+
 
 void Unit::SendThreatListUpdate() {
 	if (uint32 count = getThreatManager().getThreatList().size()) {
