@@ -294,6 +294,12 @@ public:
 	template<class T, class CONTAINER> void Visit(const Cell& cell,
 			TypeContainerVisitor<T, CONTAINER> &visitor);
 
+	
+    bool IsGridLoaded(float x, float y) const
+    {
+        return IsGridLoaded(Trinity::ComputeGridCoord(x, y));
+    }
+		
 	bool IsRemovalGrid(float x, float y) const {
 		GridPair p = Trinity::ComputeGridPair(x, y);
 		return !getNGrid(p.x_coord, p.y_coord)
@@ -566,6 +572,7 @@ private:
 	CreatureMoveList i_creaturesToMove;
 
 	bool loaded(const GridPair &) const;
+	bool IsGridLoaded(const GridCoord &) const;
 	void EnsureGridCreated(const GridPair &);
 	bool EnsureGridLoaded(Cell const&);
 	void EnsureGridLoadedAtEnter(Cell const&, Player* player = NULL);

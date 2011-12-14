@@ -475,6 +475,11 @@ bool Map::loaded(const GridPair &p) const {
 			&& isGridObjectDataLoaded(p.x_coord, p.y_coord));
 }
 
+bool Map::IsGridLoaded(const GridCoord &p) const
+{
+    return (getNGrid(p.x_coord, p.y_coord) && isGridObjectDataLoaded(p.x_coord, p.y_coord));
+}
+
 void Map::VisitNearbyCellsOf(
 		WorldObject* obj,
 		TypeContainerVisitor<Trinity::ObjectUpdater, GridTypeMapContainer> &gridVisitor
