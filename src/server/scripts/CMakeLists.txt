@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2010 Trinity <http://www.trinitycore.org/>
+# Copyright (C) 2008-2011 ArkCORE <http://www.arkania.net/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -8,44 +8,52 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-# Enable precompiled headers when using the GCC compiler.
-if( USE_SCRIPTPCH )
-  include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-  )
-endif()
+file(GLOB_RECURSE scripts_easternkingdoms EasternKingdoms/*.cpp EasternKingdoms/*.h)
+file(GLOB_RECURSE scripts_kalimdor Kalimdor/*.cpp Kalimdor/*.h)
+file(GLOB_RECURSE scripts_northrend Northrend/*.cpp Northrend/*.h)
+file(GLOB_RECURSE scripts_outland Outland/*.cpp Outland/*.h)
+file(GLOB_RECURSE scripts_world World/*.cpp World/*.h)
+file(GLOB_RECURSE scripts_spells Spells/*.cpp Spells/*.h)
+file(GLOB_RECURSE scripts_outdoorpvp OutdoorPvP/*.cpp OutdoorPvP/*.h)
+file(GLOB_RECURSE scripts_commands Commands/*.cpp Commands/*.h)
+file(GLOB_RECURSE scripts_custom Custom/*.cpp Custom/*.h)
+file(GLOB_RECURSE scripts_examples Examples/*.cpp Examples/*.h)
 
-if( USE_SCRIPTPCH AND MSVC )
+source_group(EasternKingdoms FILES ${scripts_easternkingdoms})
+source_group(Kalimdor FILES ${scripts_kalimdor})
+source_group(Northrend FILES ${scripts_northrend})
+source_group(Outland FILES ${scripts_outland})
+source_group(World FILES ${scripts_world})
+source_group(Spells FILES ${scripts_spells})
+source_group(OutdoorPvP FILES ${scripts_outdoorpvp})
+source_group(Commands FILES ${scripts_commands})
+source_group(Custom FILES ${scripts_custom})
+source_group(Examples FILES ${scripts_examples})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
   set(scripts_STAT_SRCS
     PrecompiledHeaders/ScriptPCH.cpp
-    PrecompiledHeaders/ScriptPCH.h
-  )
-endif()
+  PrecompiledHeaders/ScriptPCH.h)
 
 message(STATUS "SCRIPT PREPARATIONS")
-include(Spells/CMakeLists.txt)
-
-include(Examples/CMakeLists.txt)
-
-include(Commands/CMakeLists.txt)
 
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
+  ${scripts_easternkingdoms}
+  ${scripts_kalimdor}
+  ${scripts_northrend}
+  ${scripts_outland}
+  ${scripts_world}
+  ${scripts_spells}
+  ${scripts_outdoorpvp}
+  ${scripts_commands}
+  ${scripts_custom}
+  ${scripts_examples}
   ../game/AI/ScriptedAI/ScriptedEscortAI.cpp
   ../game/AI/ScriptedAI/ScriptedCreature.cpp
   ../game/AI/ScriptedAI/ScriptedFollowerAI.cpp
   ../game/AI/ScriptedAI/ScriptedSimpleAI.cpp
 )
-
-if(SCRIPTS)
-  include(Custom/CMakeLists.txt)
-  include(World/CMakeLists.txt)
-  include(OutdoorPvP/CMakeLists.txt)
-  include(EasternKingdoms/CMakeLists.txt)
-  include(Kalimdor/CMakeLists.txt)
-  include(Outland/CMakeLists.txt)
-  include(Northrend/CMakeLists.txt)
-endif()
 
 message(STATUS "SCRIPT PREPARATION COMPLETE")
 message("")
@@ -124,6 +132,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/game/Movement/Waypoints
   ${CMAKE_SOURCE_DIR}/src/server/game/Opcodes
   ${CMAKE_SOURCE_DIR}/src/server/game/OutdoorPvP
+  ${CMAKE_SOURCE_DIR}/src/server/scripts/OutdoorPvP  
   ${CMAKE_SOURCE_DIR}/src/server/game/Pools
   ${CMAKE_SOURCE_DIR}/src/server/game/PrecompiledHeaders
   ${CMAKE_SOURCE_DIR}/src/server/game/Quests
@@ -151,10 +160,8 @@ add_library(scripts STATIC ${scripts_STAT_SRCS})
 add_dependencies(scripts revision.h)
 
 # Generate precompiled header
-if( USE_SCRIPTPCH )
   if(CMAKE_COMPILER_IS_GNUCXX)
     add_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/ScriptPCH.h)
   elseif(MSVC)
     add_native_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/ScriptPCH)
   endif()
-endif()
