@@ -2276,10 +2276,10 @@ void AuraEffect::PeriodicDummyTick(Unit *target, Unit *caster) const {
 		case 48018:
 			if (GameObject *obj = target->GetGameObject(GetSpellProto()->Id)) {
 				if (target->IsWithinDist(obj, GetSpellMaxRange(48020, true))) {
-					if (!target->HasAura(62388))
-						target->CastSpell(target, 62388, true);
+					if (!target->HasAura(48018))
+						target->CastSpell(target, 48018, true);
 				} else
-					target->RemoveAura(62388);
+					target->RemoveAura(48018);
 			}
 			break;
 		}

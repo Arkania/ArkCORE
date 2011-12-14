@@ -1389,7 +1389,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         // old one is already removed
                         if (!onReapply)
                             target->RemoveGameObject(GetId(), true);
-                        target->RemoveAura(62388);
+                        target->RemoveAura(48018);
                     break;
                     default:
                         break;

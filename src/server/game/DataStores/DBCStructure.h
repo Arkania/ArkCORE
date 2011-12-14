@@ -558,14 +558,16 @@ struct AreaPOIEntry
     uint32 icon[11];        //1-11
     float x;                //12
     float y;                //13
-    uint32 mapId;           //14
-    //uint32 val1;          //15
-    uint32 zoneId;          //16
-    //DBCString name;       //17
-    //DBCString name2;      //18
-    uint32 worldState;      //19
-    //float unk1;           //20
-    //uint32 unk2;          //21
+    float z;                //14
+    uint32 mapId;           //15
+    //uint32 val1;          //16
+    uint32 zoneId;          //17
+    //char* name[16];       //18-33
+    //uint32 name_flag;     //34
+    //char* name2[16];      //35-50
+    //uint32 name_flag2;    //51
+    uint32 worldState;      //52
+    //uint32 val2;          //53
 };
 
 struct AreaTriggerEntry
