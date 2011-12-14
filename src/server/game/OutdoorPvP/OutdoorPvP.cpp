@@ -584,12 +584,13 @@ void OutdoorPvP::TeamApplyBuff(TeamId team, uint32 spellId, uint32 spellId2) {
 			spellId2 ? -(int32) spellId2 : -(int32) spellId);
 }
 
-void OutdoorPvP::OnGameObjectCreate(GameObject *go, bool add) {
-	if (go->GetGoType() != GAMEOBJECT_TYPE_CAPTURE_POINT)
-		return;
+void OutdoorPvP::OnGameObjectCreate(GameObject* go)
+{
+    if (go->GetGoType() != GAMEOBJECT_TYPE_CAPTURE_POINT)
+        return;
 
-	if (OPvPCapturePoint *cp = GetCapturePoint(go->GetDBTableGUIDLow()))
-		cp->m_capturePoint = add ? go : NULL;
+    if (OPvPCapturePoint *cp = GetCapturePoint(go->GetDBTableGUIDLow()))
+        cp->m_capturePoint = go;
 }
 
 void OutdoorPvP::OnGameObjectRemove(GameObject *go) {

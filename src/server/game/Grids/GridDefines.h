@@ -130,6 +130,7 @@ struct CoordPair {
 
 typedef CoordPair<MAX_NUMBER_OF_GRIDS> GridPair;
 typedef CoordPair<TOTAL_NUMBER_OF_CELLS_PER_MAP> CellPair;
+typedef CoordPair<MAX_NUMBER_OF_GRIDS> GridCoord;
 
 namespace Trinity {
 template<class RET_TYPE, int CENTER_VAL>
@@ -141,7 +142,13 @@ inline RET_TYPE Compute(float x, float y, float center_offset, float size) {
 	int x_val = int(x_offset + CENTER_VAL + 0.5);
 	int y_val = int(y_offset + CENTER_VAL + 0.5);
 	return RET_TYPE(x_val, y_val);
+
 }
+
+    inline GridCoord ComputeGridCoord(float x, float y)
+    {
+        return Compute<GridCoord, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET, SIZE_OF_GRIDS);
+    }
 
 inline GridPair ComputeGridPair(float x, float y) {
 	return Compute<GridPair, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET,
