@@ -35,6 +35,9 @@
 #include "MapManager.h"
 #include "BattlegroundIC.h"
 
+#include "OutdoorPvPMgr.h"
+#include "OutdoorPvPWG.h"
+
 bool IsAreaEffectTarget[TOTAL_SPELL_TARGETS];
 SpellEffectTargetTypes EffectTargetType[TOTAL_SPELL_EFFECTS];
 SpellSelectTargetTypes SpellTargetType[TOTAL_SPELL_TARGETS];
@@ -3279,6 +3282,26 @@ bool SpellArea::IsFitToRequirements(Player const* player, uint32 newZone,
 			return false;
 		break;
 	}
+        case 58730: // No fly Zone - Wintergrasp
+        {
+             if (!player)
+                 return false;
+
+             if (sWorld->getBoolConfig(CONFIG_OUTDOORPVP_WINTERGRASP_ENABLED))
+             {
+                 OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
+                 if ((pvpWG->isWarTime()==false) || player->isDead() || player->HasAura(45472) || player->HasAura(44795) || player->GetPositionZ() > 619.2f || player->isInFlight() || (!player->HasAuraType(SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED) && !player->HasAuraType(SPELL_AURA_FLY)))
+                    return false;
+             }
+             break;
+        }
+        case 58045: // Essence of Wintergrasp - Wintergrasp
+        case 57940: // Essence of Wintergrasp - Northrend
+        {
+             if (!player || player->GetTeamId() != sWorld->getWorldState(WORLDSTATE_WINTERGRASP_CONTROLING_FACTION))
+             return false;
+            break;
+        }	
 	case 68719: // Oil Refinery - Isle of Conquest.
 	case 68720: // Quarry - Isle of Conquest.
 	{
@@ -4498,6 +4521,10 @@ void SpellMgr::LoadSpellCustomAttr() {
 			spellInfo->Effect[1] = 0;
 			count++;
 			break;
+        case 51678: //WintergraspSiegeEngine Ram set damage radius to 5 yards 
+            spellInfo->EffectRadiusIndex[0] = 52;
+            spellInfo->EffectRadiusIndex[1] = 52;
+                break;						
 		case 87959: // Drink
 			spellInfo->Category = 59;
 			spellInfo->EffectApplyAuraName[1] = SPELL_AURA_MOD_POWER_REGEN;

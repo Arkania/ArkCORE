@@ -169,6 +169,7 @@ set(scripts_STAT_SRCS
   Northrend/Zones/howling_fjord.cpp
   Northrend/Zones/dalaran.cpp
   Northrend/Zones/argent_tournament.cpp
+  Northrend/Zones/wintergrasp.cpp
   Northrend/DraktharonKeep/boss_trollgore.cpp
   Northrend/DraktharonKeep/instance_drak_tharon_keep.cpp
   Northrend/DraktharonKeep/boss_novos.cpp

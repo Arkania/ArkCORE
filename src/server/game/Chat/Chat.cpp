@@ -447,6 +447,17 @@ ChatCommand * ChatHandler::getCommandTable()
         { NULL,             0,                  false, NULL,                                                "", NULL }
     };
 
+	static ChatCommand wintergraspCommandTable[] =
+    {
+        { "status",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspStatusCommand>,       "", NULL },
+        { "enable",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspEnableCommand>,       "", NULL },
+        { "start",          SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspStartCommand>,        "", NULL },
+        { "stop",           SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspStopCommand>,         "", NULL },
+        { "switch",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspSwitchTeamCommand>,   "", NULL },
+        { "timer",          SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspTimerCommand>,        "", NULL },
+        { NULL,             0,                  false, NULL,                                               "", NULL }
+    };
+	
     static ChatCommand commandTable[] =
     {
         { "gm",             SEC_MODERATOR,      true,  NULL,                                           "", gmCommandTable       },
@@ -543,7 +554,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "unpossess",      SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleUnPossessCommand>,           "", NULL },
         { "bindsight",      SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleBindSightCommand>,           "", NULL },
         { "unbindsight",    SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleUnbindSightCommand>,         "", NULL },
-        { "playall",        SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandlePlayAllCommand>,             "", NULL },
+        { "wg",             SEC_ADMINISTRATOR,  false, NULL,                                    "", wintergraspCommandTable },
+		{ "playall",        SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandlePlayAllCommand>,             "", NULL },
         { NULL,             0,                  false, NULL,                                           "", NULL }
     };
 
@@ -1860,26 +1872,19 @@ char const *fmtstring(char const *format, ...)
     static int        index = 0;
     char    *buf;
     int len;
-
     va_start(argptr, format);
-    vsnprintf(temp_buffer, MAX_FMT_STRING, format, argptr);
+    vsnprintf(temp_buffer,MAX_FMT_STRING, format, argptr);
     va_end(argptr);
-
     len = strlen(temp_buffer);
-
     if (len >= MAX_FMT_STRING)
         return "ERROR";
-
     if (len + index >= MAX_FMT_STRING-1)
     {
         index = 0;
     }
-
     buf = &string[index];
     memcpy(buf, temp_buffer, len+1);
-
     index += len + 1;
-
     return buf;
 }
 

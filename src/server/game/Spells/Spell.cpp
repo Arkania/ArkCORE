@@ -60,6 +60,9 @@
 #include "DB2Structure.h"
 #include "DB2Stores.h"
 
+#include "OutdoorPvPWG.h"
+#include "OutdoorPvPMgr.h"
+
 #define SPELL_CHANNEL_UPDATE_INTERVAL (1 * IN_MILLISECONDS)
 
 extern pEffect SpellEffects[TOTAL_SPELL_EFFECTS];
@@ -5714,14 +5717,20 @@ SpellCastResult Spell::CheckCast(bool strict) {
             case SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED: {
                 // not allow cast fly spells if not have req. skills  (all spells is self target)
                 // allow always ghost flight spells
-                if (m_originalCaster
-                        && m_originalCaster->GetTypeId() == TYPEID_PLAYER
-                        && m_originalCaster->isAlive()) {
-                    if (AreaTableEntry const* pArea = GetAreaEntryByAreaID(m_originalCaster->GetAreaId())) if (pArea->flags
-                            & AREA_FLAG_NO_FLY_ZONE) return
-                            m_IsTriggeredSpell ?
-                                    SPELL_FAILED_DONT_REPORT :
-                                    SPELL_FAILED_NOT_HERE;
+                if (m_originalCaster && m_originalCaster->GetTypeId() == TYPEID_PLAYER && m_originalCaster->isAlive())
+                {
+                    if (AreaTableEntry const* pArea = GetAreaEntryByAreaID(m_originalCaster->GetAreaId()))
+                    {
+                        if (pArea->flags & AREA_FLAG_NO_FLY_ZONE)
+                            return (_triggeredCastFlags & TRIGGERED_DONT_REPORT_CAST_ERROR) ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_NOT_HERE;
+                        // Wintergrasp Antifly check
+                        if (sWorld->getBoolConfig(CONFIG_OUTDOORPVP_WINTERGRASP_ENABLED))
+                        {
+	                      OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
+                          if (m_originalCaster->GetZoneId() == 4197 && pvpWG && pvpWG != 0  && pvpWG->isWarTime())
+                              return (_triggeredCastFlags & TRIGGERED_DONT_REPORT_CAST_ERROR) ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_NOT_HERE;
+                        }
+                    }
                 }
                 break;
             }
