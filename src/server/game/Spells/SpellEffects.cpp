@@ -2162,20 +2162,20 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                 return;
             }
             // Lava Lash
-            if (m_spellInfo->SpellFamilyFlags[2]
-                    & SPELLFAMILYFLAG2_SHAMAN_LAVA_LASH) {
-                if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
+            if (m_spellInfo->SpellFamilyFlags[2] & SPELLFAMILYFLAG2_SHAMAN_LAVA_LASH)
+            {
+                if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                    return;
 
-                if (m_caster->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0,
-                        EQUIPMENT_SLOT_OFFHAND)) {
-                    // Damage is increased by 25% if your off-hand weapon is enchanted with Flametongue.
-                    if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY,
-                            SPELLFAMILY_SHAMAN, 0x200000, 0, 0)) m_damage +=
-                            m_damage * damage / 100;
+                if (m_caster->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+                {
+                    // Damage is increased by 25% if your off-hand weapon is enchanted with Flame tongue.
+                    if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0))
+                        AddPctN(m_damage, damage);
                 }
                 // Improved Lava Lash
                 if (AuraEffect const* ill = m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 4780, 1))
-				// Searing Flames
+                // Searing Flames
                 if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))
                 {
                     AddPctN(m_damage, sf->GetBase()->GetStackAmount() * ill->GetAmount());
