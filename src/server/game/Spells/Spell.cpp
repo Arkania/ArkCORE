@@ -2820,18 +2820,17 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur) {
                     break;
                 case SPELLFAMILY_PALADIN:
                     // Holy Wrath
-                    if (m_spellInfo->Id == 2812) {
-                        for (std::list<Unit*>::iterator itr = unitList.begin();
-                                itr != unitList.end();) {
-                            if ((*itr)->GetTypeId() == TYPEID_PLAYER
-                                    || (*itr)->GetCreatureType()
-                                            == CREATURE_TYPE_DEMON
-                                    || (*itr)->GetCreatureType()
-                                            == CREATURE_TYPE_UNDEAD) itr++;
-                            else
-                                itr = unitList.erase(itr);
-                        }
-                    }
+    			// Spell desactivada por bug
+//                    if (m_spellInfo->Id == 2812)
+//                    {
+//                        for (std::list<Unit*>::iterator itr = unitList.begin() ; itr != unitList.end();)
+//                        {
+//                            if ((*itr)->GetTypeId() == TYPEID_PLAYER || (*itr)->GetCreatureType() == CREATURE_TYPE_DEMON || (*itr)->GetCreatureType() == CREATURE_TYPE_UNDEAD)
+//                               itr++;
+//                            else
+//                                itr = unitList.erase(itr);
+//                        }
+//                    }
                     break;
                 default:
                     break;
@@ -2874,6 +2873,34 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur) {
                 Trinity::RandomResizeList(unitList, maxTargets);
             } else {
                 switch (m_spellInfo->Id) {
+    				case 2812:	// Paladin Holy Wrath
+						if (m_spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AURA &&
+							m_spellInfo->EffectApplyAuraName[i] == SPELL_AURA_MOD_STUN)
+						{
+							bool isElemsAndDragonkings = m_caster->HasAura(56420);		// Glyph of Holy Wrath
+							for (std::list<Unit*>::iterator itr = unitList.begin(); itr != unitList.end();)
+							{
+								Unit* target = (*itr);
+								if (!target)
+								{
+									itr++;
+									continue;
+								}
+
+								uint32 typeCreature = target->GetCreatureType();
+								if ( (CREATURE_TYPE_DEMON==typeCreature || CREATURE_TYPE_UNDEAD==typeCreature) ||
+									(isElemsAndDragonkings && (CREATURE_TYPE_DRAGONKIN==typeCreature || CREATURE_TYPE_ELEMENTAL==typeCreature))
+								   )
+								{
+									itr++;
+								}
+								else
+								{
+									itr = unitList.erase(itr);
+								}
+							}
+						}
+						break;
                     case 27285: // Seed of Corruption proc spell
                         unitList.remove(m_targets.getUnitTarget());
                         break;
