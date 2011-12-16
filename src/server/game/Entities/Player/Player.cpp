@@ -78,6 +78,7 @@
 #include "CharacterDatabaseCleaner.h"
 #include "InstanceScript.h"
 #include <cmath>
+#include "OutdoorPvPWG.h"
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
@@ -9044,6 +9045,13 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid) {
 	data << uint32(3901)
 			<< uint32(sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID));
 
+    // May be send timer to start Wintergrasp
+    if(sWorld->GetWintergrapsState()==4354)
+        data << uint32(0x1102) << sWorld->GetWintergrapsTimer();
+    else
+        data << uint32(0xEC5) << sWorld->GetWintergrapsTimer();
+    // ---
+			
 	if (mapid == 530) // Outland
 			{
 		data << uint32(0x9bf) << uint32(0x0); // 7

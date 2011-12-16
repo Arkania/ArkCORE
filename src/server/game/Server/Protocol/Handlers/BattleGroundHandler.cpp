@@ -621,7 +621,9 @@ void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data) {
 		return;
 
 	if (bg)
+	{
 		sBattlegroundMgr->SendAreaSpiritHealerQueryOpcode(_player, bg, guid);
+	}
 	else
     {  // Wintergrasp Hack till 3.3.5 and it's implemented as BG
         if (GetPlayer()->GetZoneId() == 4197)
@@ -630,7 +632,7 @@ void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data) {
             if (pvpWG && pvpWG->isWarTime())
                 pvpWG->SendAreaSpiritHealerQueryOpcode(_player, guid);
         }
-    }		
+    }
 }
 
 void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket & recv_data) {

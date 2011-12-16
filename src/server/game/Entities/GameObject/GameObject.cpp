@@ -458,10 +458,10 @@ void GameObject::Update(uint32 diff) {
                     if (owner && owner->isAlive())
                         owner->CombatStart(ok);
 						
-                    // wg allow to use scripts
+					// allow to use scripts
                     if (ok->GetTypeId() == TYPEID_PLAYER)
-                      if (sScriptMgr->OnGossipHello(ok->ToPlayer(), this))
-                        return;						
+                        if (sScriptMgr->OnGossipHello(ok->ToPlayer(), this))
+                        return;				
 
 					m_cooldownTime = time(NULL) + 4; // 4 seconds
 

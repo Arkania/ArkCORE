@@ -1872,21 +1872,29 @@ char const *fmtstring(char const *format, ...)
     static int        index = 0;
     char    *buf;
     int len;
+
     va_start(argptr, format);
     vsnprintf(temp_buffer,MAX_FMT_STRING, format, argptr);
     va_end(argptr);
+
     len = strlen(temp_buffer);
+
     if (len >= MAX_FMT_STRING)
         return "ERROR";
+
     if (len + index >= MAX_FMT_STRING-1)
     {
         index = 0;
     }
+
     buf = &string[index];
     memcpy(buf, temp_buffer, len+1);
+
     index += len + 1;
+
     return buf;
 }
+
 
 GameObject* ChatHandler::GetNearbyGameObject()
 {

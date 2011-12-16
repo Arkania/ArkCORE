@@ -5294,20 +5294,22 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex) {
             switch (m_spellInfo->Id) {
                 //Teleport to Lake Wintergrasp
                 case 58622:
-                {
-                  if (OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197))
-                     if (unitTarget->getLevel() > 74)
-                     {
-                       if ((pvpWG->getDefenderTeam()==TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == ALLIANCE))
-                          unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_FORTRESS, true);
-                       else if ((pvpWG->getDefenderTeam()==TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == HORDE))
-                          unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_HORDE_CAMP, true);
-                       else if ((pvpWG->getDefenderTeam()!=TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == HORDE))
-                          unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_FORTRESS, true);
-                       else if ((pvpWG->getDefenderTeam()!=TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == ALLIANCE))
-                          unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_ALLIENCE_CAMP, true);
-                     }
-				}			
+                   {
+                  if(OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197))
+                        if(pvpWG->isWarTime() || pvpWG->m_timer<300000)
+                        {
+                        if ((pvpWG->getDefenderTeam()==TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == ALLIANCE))
+                        unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_FORTRESS, true);
+                        else if ((pvpWG->getDefenderTeam()==TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == HORDE))
+                        unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_HORDE_CAMP, true);
+                    
+                        if ((pvpWG->getDefenderTeam()!=TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == HORDE))
+                        unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_FORTRESS, true);
+                        else if ((pvpWG->getDefenderTeam()!=TEAM_ALLIANCE) && (unitTarget->ToPlayer()->GetTeam() == ALLIANCE))
+                        unitTarget->CastSpell(unitTarget, SPELL_TELEPORT_ALLIENCE_CAMP, true);
+                        }
+                return;
+                   }
                 // Glyph of Backstab
                 case 63975: {
                     if (AuraEffect const * aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x00100000, 0, 0, m_caster->GetGUID())) {
@@ -7966,8 +7968,23 @@ void Spell::EffectActivateSpec(SpellEffIndex /*effIndex*/) {
 void Spell::EffectPlayerNotification(SpellEffIndex /*effIndex*/) {
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER) return;
 
+	OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
+	
     switch (m_spellInfo->Id) {
         case 58730: // Restricted Flight Area
+           {
+             if (sWorld->getBoolConfig(CONFIG_OUTDOORPVP_WINTERGRASP_ENABLED))
+              {
+              if (pvpWG->isWarTime()==true)
+               {
+                unitTarget->ToPlayer()->GetSession()->SendNotification(LANG_ZONE_NOFLYZONE);
+                unitTarget->PlayDirectSound(9417); // Fel Reaver sound
+                unitTarget->MonsterTextEmote("The air is too thin in Wintergrasp for normal flight. You will be ejected in 9 sec.",unitTarget->GetGUID(),true);
+               break;
+               } else unitTarget->RemoveAura(58730);
+              }
+            break;
+            }
         case 58600: // Restricted Flight Area
             unitTarget->ToPlayer()->GetSession()->SendNotification(
                     LANG_ZONE_NOFLYZONE);
