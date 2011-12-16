@@ -1068,10 +1068,7 @@ bool Guardian::UpdateStats(Stats stat) {
 				SPELLFAMILY_DEATHKNIGHT, 3010, 0);
 		if (aurEff) {
 			SpellEntry const* sProto = aurEff->GetSpellProto(); // Then get the SpellProto and add the dummy effect value
-			mod +=
-					mod
-							* (SpellMgr::CalculateSpellEffectAmount(sProto, 1)
-									/ 100.0f); // Ravenous Dead edits the original scale
+			mod += mod * (SpellMgr::CalculateSpellEffectAmount(sProto, 1) / 100.0f); // Ravenous Dead edits the original scale
 		}
 		// Glyph of the Ghoul
 		aurEff = owner->GetAuraEffect(58686, 0);

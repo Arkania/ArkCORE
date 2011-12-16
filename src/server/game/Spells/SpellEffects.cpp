@@ -2031,11 +2031,16 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
         }
         case SPELLFAMILY_PALADIN: {
             // Divine Storm
-            if (m_spellInfo->SpellFamilyFlags[1]
-                    & SPELLFAMILYFLAG1_PALADIN_DIVINESTORM && effIndex == 1) {
+            case 54171: {
                 int32 dmg = m_damage * damage / 100;
-                if (!unitTarget) unitTarget = m_caster;
+				if (!unitTarget) unitTarget = m_caster;	
                 m_caster->CastCustomSpell(unitTarget, 54171, &dmg, 0, 0, true);
+                return;
+            }
+            case 54172: {
+                int32 dmg = m_damage * damage / 100;
+				if (!unitTarget) unitTarget = m_caster;	
+                m_caster->CastCustomSpell(unitTarget, 54172, &dmg, 0, 0, true);
                 return;
             }
 
