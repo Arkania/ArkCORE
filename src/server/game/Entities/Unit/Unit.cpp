@@ -9292,6 +9292,13 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 			return false;
 		break;
 	}
+	// Demonic Circle: Summon
+	case 48018: {
+		if (HasAura(48018))
+		target->RemoveAura(48018);
+			return false;
+		break;
+	}
 	}
 
 	if (cooldown && GetTypeId() == TYPEID_PLAYER
