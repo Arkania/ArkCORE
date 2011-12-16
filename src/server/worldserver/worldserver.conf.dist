@@ -2179,7 +2179,6 @@ DungeonFinder.Enable = 1
 AccountInstancesPerHour = 5
 IgnoringMapsVersion = 0
 
-
 ###################################################################################################
 #   OutdoorPvP.Wintergrasp.Enabled
 #       Determines whether the Wintergrasp battle is enabled or not.
