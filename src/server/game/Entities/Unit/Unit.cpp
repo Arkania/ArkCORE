@@ -12682,9 +12682,19 @@ void Unit::ClearInCombat() {
 	RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_IN_COMBAT);
 }
 
-//TODO: remove this function
-bool Unit::isTargetableForAttack() const {
-	return isAttackableByAOE() && !HasUnitState(UNIT_STAT_DIED);
+bool Unit::isTargetableForAttack(bool checkFakeDeath) const
+{
+    if (!isAlive())
+        return false;
+
+    if (HasFlag(UNIT_FIELD_FLAGS,
+        UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE))
+        return false;
+
+    if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->isGameMaster())
+        return false;
+
+    return !HasUnitState(UNIT_STAT_UNATTACKABLE) && (!checkFakeDeath || !HasUnitState(UNIT_STAT_DIED));
 }
 
 bool Unit::IsValidAttackTarget(Unit const* target) const
