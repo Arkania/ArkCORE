@@ -571,7 +571,9 @@ enum UnitFlags {
 
 // Value masks for UNIT_FIELD_FLAGS_2
 enum UnitFlags2 {
-	UNIT_FLAG2_FEIGN_DEATH = 0x00000001, UNIT_FLAG2_UNK1 = 0x00000002, // Hide unit model (show only player equip)
+	UNIT_FLAG2_FEIGN_DEATH = 0x00000001, 
+	UNIT_FLAG2_UNK1 = 0x00000002, // Hide unit model (show only player equip)
+	UNIT_FLAG2_IGNORE_REPUTATION    = 0x00000004,
 	UNIT_FLAG2_COMPREHEND_LANG = 0x00000008,
 	UNIT_FLAG2_MIRROR_IMAGE = 0x00000010,
 	UNIT_FLAG2_FORCE_MOVE = 0x00000040,
@@ -1418,6 +1420,8 @@ public:
 		SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, faction);
 	}
 	FactionTemplateEntry const* getFactionTemplateEntry() const;
+    ReputationRank GetReactionTo(Unit const* target) const;
+    ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, Unit const* target);
 	bool IsHostileTo(Unit const* unit) const;
 	bool IsHostileToPlayers() const;
 	bool IsFriendlyTo(Unit const* unit) const;
@@ -1846,6 +1850,7 @@ public:
 		return (Unit*) this;
 	}
 	Player* GetCharmerOrOwnerPlayerOrPlayerItself() const;
+	Player* GetAffectingPlayer() const;
 
 	void SetMinion(Minion *minion, bool apply, PetSlot slot);
 	void GetAllMinionsByEntry(std::list<Unit*>& Minions, uint32 entry);
