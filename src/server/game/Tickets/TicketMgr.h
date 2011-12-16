@@ -3,7 +3,9 @@
  *
  * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2010-2011 ProjectSkyfire <http://www.projectskyfire.org/>
+ * 
+ * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
