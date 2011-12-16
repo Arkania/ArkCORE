@@ -6987,7 +6987,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
             {
                 //Arcane Missiles.
                 case 79683:
-				if (target->getLevel() >= 20 && target->getLevel() < 40) {
                 {
                     if (apply)
                         caster->CastSpell(caster, 79808, true, NULL, NULL, GetCasterGUID());
@@ -7000,7 +6999,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
                 }
                 break;
             }
-		}	
             break;
     }
 	case SPELLFAMILY_PRIEST:
