@@ -9004,6 +9004,17 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 		this->ToPlayer()->RemoveSpellCategoryCooldown(1248, true);
 	}
 
+    // Death's Advance
+    if (auraSpellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && auraSpellInfo->SpellIconID == 3315)
+    {
+        Player* player = ToPlayer();
+        if (!player || player->getClass() != CLASS_DEATH_KNIGHT)
+            return false;
+
+        if (!player->IsBaseRuneSlotsOnCooldown(RUNE_UNHOLY))
+            return false;
+    }
+
 	// Custom basepoints/target for exist spell
 	// dummy basepoints or other customs
 	switch (trigger_spell_id) {
