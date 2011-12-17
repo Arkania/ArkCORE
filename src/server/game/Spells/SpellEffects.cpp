@@ -1868,8 +1868,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                 //Juggernaut crit bonus & Cooldown
                 if (m_caster->HasAura(64976)) {
                     m_caster->CastSpell(m_caster, 65156, true);
-                    m_caster->ToPlayer()->AddSpellCooldown(20252, 0,
-                            time(NULL) + 30);
+					m_caster->CastSpell(m_caster, 96216, false);
+                    m_caster->ToPlayer()->AddSpellCooldown(20252, 0, time(NULL) + 30);
                 }
                 return;
             }
