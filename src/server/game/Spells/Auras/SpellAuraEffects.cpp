@@ -7378,7 +7378,7 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const * aurApp,
 
 	Unit * target = aurApp->GetTarget();
 
-	if (target->GetTypeId() != TYPEID_PLAYER || !target->IsInWorld())
+	if (!target->IsInWorld())
 		return;
 
 	uint32 vehicleId = GetMiscValue();
@@ -7388,6 +7388,9 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const * aurApp,
 			return;
 	} else if (target->GetVehicleKit())
 		target->RemoveVehicleKit();
+		
+    if (target->GetTypeId() != TYPEID_PLAYER)
+        return;		
 
 	WorldPacket data(SMSG_PLAYER_VEHICLE_DATA,
 			target->GetPackGUID().size() + 4);
