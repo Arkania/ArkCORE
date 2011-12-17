@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/> 
+ * Copyright (C) 2010-2011 ProjectSkyfire <http://www.projectskyfire.org/>
+ * 
+ * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -93,8 +95,8 @@ public:
 			CreatureScript("npc_prince_liam_greymane_phase1") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_prince_liam_greymane_phase1AI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_prince_liam_greymane_phase1AI(creature);
 	}
 
 	struct npc_prince_liam_greymane_phase1AI: public ScriptedAI {
@@ -155,8 +157,8 @@ public:
 			CreatureScript("npc_panicked_citizen") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_panicked_citizenAI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_panicked_citizenAI(creature);
 	}
 
 	struct npc_panicked_citizenAI: public ScriptedAI {
@@ -201,7 +203,6 @@ public:
 				if (guid_panicked_nextsay == me->GetGUIDLow()) {
 					//Timed say
 					if (tSay_panicked <= diff) {
-
 						//Say random
 						DoScriptText(
 								RAND(SAY_PANICKED_CITIZEN_1,
@@ -218,7 +219,6 @@ public:
 			}
 		}
 	};
-
 };
 
 /*######
@@ -240,8 +240,8 @@ public:
 			CreatureScript("npc_panicked_citizen_2") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_panicked_citizen_2AI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_panicked_citizen_2AI(creature);
 	}
 
 	struct npc_panicked_citizen_2AI: public ScriptedAI {
@@ -320,7 +320,6 @@ public:
 				onceRun = true;
 			} else
 				running = false;
-
 		}
 
 		void UpdateAI(const uint32 diff) {
@@ -348,8 +347,8 @@ public:
 			CreatureScript("npc_lieutenant_walden") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_lieutenant_waldenAI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_lieutenant_waldenAI(creature);
 	}
 
 	struct npc_lieutenant_waldenAI: public ScriptedAI {
@@ -357,13 +356,12 @@ public:
 				ScriptedAI(c) {
 		}
 
-		void sQuestReward(Player *pPlayer, const Quest *pQuest, uint32 data) {
+		void sQuestReward(Player *player, const Quest *pQuest, uint32 data) {
 			if (pQuest->GetQuestId() == QUEST_LOCKDOWN
-					&& pPlayer->GetPhaseMask() == 1)
-				pPlayer->SetAuraStack(SPELL_PHASE_2, pPlayer, 1); //phaseshift
+					&& player->GetPhaseMask() == 1)
+				player->SetAuraStack(SPELL_PHASE_2, player, 1); //phaseshift
 		}
 	};
-
 };
 
 /*######
@@ -375,8 +373,8 @@ public:
 			CreatureScript("npc_gilneas_city_guard_phase1") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_gilneas_city_guard_phase1AI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_gilneas_city_guard_phase1AI(creature);
 	}
 
 	struct npc_gilneas_city_guard_phase1AI: public ScriptedAI {
@@ -411,7 +409,6 @@ public:
 			}
 		}
 	};
-
 };
 
 /*######
@@ -424,8 +421,8 @@ public:
 			CreatureScript("npc_gilneas_city_guard_phase2") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_gilneas_city_guard_phase2AI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_gilneas_city_guard_phase2AI(creature);
 	}
 
 	struct npc_gilneas_city_guard_phase2AI: public ScriptedAI {
@@ -504,11 +501,9 @@ public:
 					tAnimate = DELAY_ANIMATE;
 				} else
 					tAnimate -= diff;
-
 			}
 		}
 	};
-
 };
 
 /*######
@@ -521,8 +516,8 @@ public:
 			CreatureScript("npc_prince_liam_greymane_phase2") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_prince_liam_greymane_phase2AI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_prince_liam_greymane_phase2AI(creature);
 	}
 
 	struct npc_prince_liam_greymane_phase2AI: public ScriptedAI {
@@ -543,10 +538,10 @@ public:
 			tYell = DELAY_YELL_PRINCE_LIAM_GREYMANE;
 		}
 
-		void sGossipHello(Player *pPlayer) {
-			if ((pPlayer->GetQuestStatus(14094) == QUEST_STATUS_REWARDED)
-					&& (pPlayer->GetPhaseMask() == 2))
-				pPlayer->SetAuraStack(SPELL_PHASE_4, pPlayer, 1); //phaseshift
+		void sGossipHello(Player *player) {
+			if ((player->GetQuestStatus(14094) == QUEST_STATUS_REWARDED)
+					&& (player->GetPhaseMask() == 2))
+				player->SetAuraStack(SPELL_PHASE_4, player, 1); //phaseshift
 		}
 
 		void DamageTaken(Unit * pWho, uint32 &uiDamage) {
@@ -627,7 +622,6 @@ public:
 						tAnimate = DELAY_ANIMATE;
 					} else
 						tAnimate -= diff;
-
 				}
 
 				//Stop yell timer on combat
@@ -635,7 +629,6 @@ public:
 			}
 		}
 	};
-
 };
 
 /*######
@@ -653,8 +646,8 @@ public:
 			CreatureScript("npc_rampaging_worgen") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_rampaging_worgenAI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_rampaging_worgenAI(creature);
 	}
 
 	struct npc_rampaging_worgenAI: public ScriptedAI {
@@ -736,10 +729,8 @@ public:
 				} else
 					tAnimate -= diff;
 			}
-
 		}
 	};
-
 };
 
 class npc_rampaging_worgen2: public CreatureScript {
@@ -748,8 +739,8 @@ public:
 			CreatureScript("npc_rampaging_worgen2") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_rampaging_worgen2AI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_rampaging_worgen2AI(creature);
 	}
 
 	struct npc_rampaging_worgen2AI: public ScriptedAI {
@@ -793,7 +784,6 @@ public:
 			DoMeleeAttackIfReady();
 		}
 	};
-
 };
 
 /*######
@@ -817,13 +807,13 @@ public:
 	Player* aPlayer;
 	GameObject* pGO;
 
-	bool OnGossipHello(Player *pPlayer, GameObject *pGO) {
-		if (pPlayer->GetQuestStatus(QUEST_EVAC_MERC_SQUA)
+	bool OnGossipHello(Player *player, GameObject *pGO) {
+		if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA)
 				== QUEST_STATUS_INCOMPLETE) {
-			aPlayer = pPlayer;
+			aPlayer = player;
 			opened = 1;
 			tQuestCredit = 2500;
-			pGO->Use(pPlayer);
+			pGO->Use(player);
 			spawnKind = urand(1, 3); //1,2=citizen, 3=citizen&worgen (66%,33%)
 			angle = pGO->GetOrientation();
 			x = pGO->GetPositionX() - cos(angle) * 2;
@@ -908,8 +898,8 @@ public:
 			CreatureScript("npc_frightened_citizen") {
 	}
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_frightened_citizenAI(pCreature);
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_frightened_citizenAI(creature);
 	}
 
 	struct npc_frightened_citizenAI: public ScriptedAI {
@@ -936,7 +926,7 @@ public:
 				paths.pointsCount[0] = result[0]->GetRowCount();
 			else {
 				sLog->outError("waypoint_data for frightened citizen missing");
-				return paths;
+				return paths; ///- this needs correctly fixed! -truncation from double to float (warnings, that can be fixed)
 			}
 			if (result[1])
 				paths.pointsCount[1] = result[1]->GetRowCount();
@@ -1052,6 +1042,335 @@ public:
 	};
 };
 
+// Quest: (14154) By the Skin of His Teeth
+class npc_lord_darius_crowley: public CreatureScript {
+public:
+	npc_lord_darius_crowley() :
+			CreatureScript("npc_lord_darius_crowley") {
+	}
+
+	bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest) {
+		if (quest->GetQuestId() == 14154) {
+			CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->in_progress =
+					true;
+			CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->phase =
+					1;
+			CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->m_player =
+					player;
+			creature->CastSpell(player, 66914, true);
+		}
+		return true;
+	}
+
+	CreatureAI* GetAI(Creature* creature) const {
+		return new npc_lord_darius_crowleyAI(creature);
+	}
+
+	struct npc_lord_darius_crowleyAI: public ScriptedAI {
+		npc_lord_darius_crowleyAI(Creature* c) :
+				ScriptedAI(c), Summons(me) {
+		}
+
+		uint8 phase;
+		uint32 phaseTime;
+		bool in_progress;
+		SummonList Summons;
+		Player* m_player;
+
+		void Reset() {
+			phase = 1;
+			phaseTime = 15000;
+			Summons.DespawnAll();
+			in_progress = false;
+			m_player = NULL;
+			me->CastSpell(me, 67503, true);
+		}
+
+		void EnterCombat(Unit* who) {
+			me->CastSpell(who, 61044, true);
+		}
+
+		void JustSummoned(Creature *summoned) {
+			summoned->AI()->AttackStart(m_player);
+			Summons.Summon(summoned);
+		}
+
+		void SummonedCreatureDespawn(Creature* summoned) {
+			Summons.Despawn(summoned);
+		}
+
+		void JustDied(Unit* /*killer*/) {
+			if (m_player) {
+				m_player->RemoveAurasDueToSpell(59073);
+				m_player->FailQuest(66914);
+			}
+		}
+
+		void UpdateAI(const uint32 diff) {
+			if (in_progress) {
+				if (phaseTime <= diff) {
+					switch (phase) {
+					case 1:
+						for (int i = 0; i < 8; i++)
+							me->SummonCreature(35456, me->GetPositionX() + 10,
+									me->GetPositionY() + 10, me->GetPositionZ(),
+									0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+
+					case 2:
+						me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+
+					case 3:
+						for (int i = 0; i < 10; i++)
+							me->SummonCreature(35456, me->GetPositionX() + 10,
+									me->GetPositionY() + 10, me->GetPositionZ(),
+									0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+
+					case 4:
+						me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+
+					case 5:
+						for (int i = 0; i < 7; i++)
+							me->SummonCreature(35456, me->GetPositionX() + 10,
+									me->GetPositionY() + 10, me->GetPositionZ(),
+									0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+
+					case 6:
+						for (int i = 0; i < 7; i++)
+							me->SummonCreature(35456, me->GetPositionX() + 10,
+									me->GetPositionY() + 10, me->GetPositionZ(),
+									0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+
+					case 7:
+						me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f,
+								0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+						break;
+					}
+
+					phase++;
+					phaseTime = 15000;
+					if (phase > 7) {
+						phase = 1;
+						in_progress = false;
+					}
+				} else
+					phaseTime -= diff;
+			}
+
+			DoMeleeAttackIfReady();
+		}
+	};
+};
+
+class npc_josiah_avery: public CreatureScript {
+public:
+	npc_josiah_avery() :
+			CreatureScript("npc_josiah_avery") {
+	}
+
+	bool OnQuestComplete(Player* player, Creature* creature,
+			const Quest *_Quest) {
+		if (_Quest->GetQuestId() == 14159) {
+			if (Creature *lorna = creature->FindNearestCreature(35378, 30))
+				lorna->CastSpell(player, 67357, true);
+
+			player->RemoveAurasDueToSpell(59073);
+			player->CastSpell(player, 72870, true);
+
+			DoScriptText(-1777004, player);
+		}
+		return true;
+	}
+};
+
+// Quest:(14293) Save Krennan Aranas
+class npc_king_genn_greymane: public CreatureScript {
+public:
+	npc_king_genn_greymane() :
+			CreatureScript("npc_king_genn_greymane") {
+	}
+
+	bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest) {
+		if (quest->GetQuestId() == 14293) {
+			//player->CastSpell(player, 68232, true);
+			//player->CastSpell(player, 43671, true);
+			player->KilledMonsterCredit(35753, 0);
+		}
+		return true;
+	}
+};
+
+/*class spell_rescue_krennan : public SpellScriptLoader
+ {
+ public:
+ spell_rescue_krennan() : SpellScriptLoader("spell_rescue_krennan") { }
+
+ class spell_rescue_krennan_SpellScript : public SpellScript
+ {
+ PrepareSpellScript(spell_rescue_krennan_SpellScript)*/
+
+//bool Validate(SpellEntry const * /*spellEntry*/)
+//{
+//    return true;
+//}
+//void HandleDummy(SpellEffIndex /*effIndex*/)
+/*{
+ if (Unit * caster = GetCaster())
+ {
+ if (Creature *krennan = caster->FindNearestCreature(35905, 30))
+ krennan->DisappearAndDie();
+ else
+ return;
+
+ if (Creature *krennan = caster->FindNearestCreature(35907, 30))
+ caster->GetVehicle()->AddPassenger(krennan, 1, false);
+
+ if (caster->GetTypeId() != TYPEID_PLAYER)
+ return;
+
+ caster->ToPlayer()->KilledMonsterCredit(35753, 0);
+ }
+ }
+
+ void Register()
+ {
+ OnEffect += SpellEffectFn(spell_rescue_krennan_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_SUMMON);
+ }
+ };
+
+ SpellScript* GetSpellScript() const
+ {
+ return new spell_rescue_krennan_SpellScript();
+ }
+ };*/
+
+class npc_lord_darius_crowley_c2: public CreatureScript {
+public:
+	npc_lord_darius_crowley_c2() :
+			CreatureScript("npc_lord_darius_crowley_c2") {
+	}
+
+	bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest) {
+		for (int i = 0; i < 30; i++)
+			player->KilledMonsterCredit(35582, 0);
+
+		player->TeleportTo(654, -1533.76f, 1582.44f, 26.54f, 4.05f);
+		return true;
+	}
+};
+
+class npc_lord_darius_crowley_c3: public CreatureScript {
+public:
+	npc_lord_darius_crowley_c3() :
+			CreatureScript("npc_lord_darius_crowley_c3") {
+	}
+
+	bool OnQuestComplete(Player* player, Creature* creature,
+			Quest const* quest) {
+		if (quest->GetQuestId() == 14222) {
+			player->SendMovieStart(21);
+			player->CastSpell(player, 93477, true);
+			player->RemoveAurasDueToSpell(72870);
+			player->CastSpell(player, 76642, true);
+			player->CastSpell(player, 68630, true);
+			player->CastSpell(player, 72788, true);
+			player->setInWorgenForm();
+
+			player->CastSpell(player, 69123, true);
+			player->CastSpell(player, 68632, true);
+			player->CastSpell(player, 68634, true);
+
+			WorldLocation loc;
+			loc.m_mapId = 654;
+			loc.m_positionX = -1818.4f;
+			loc.m_positionY = 2294.25f;
+			loc.m_positionZ = 42.2135f;
+			loc.m_orientation = 3.14f;
+
+			player->SetHomebind(loc, 4786);
+		}
+		return true;
+	}
+};
+
+class npc_king_genn_greymane_c2: public CreatureScript {
+public:
+	npc_king_genn_greymane_c2() :
+			CreatureScript("npc_king_genn_greymane_c2") {
+	}
+
+	bool OnQuestComplete(Player* player, Creature* creature,
+			Quest const* quest) {
+		player->RemoveAurasDueToSpell(68630);
+		player->RemoveAurasDueToSpell(76642);
+		player->CastSpell(player, 68481, true);
+		return true;
+	}
+};
+
+/*class spell_keg_placed : public SpellScriptLoader
+ {
+ public:
+ spell_keg_placed() : SpellScriptLoader("spell_keg_placed") { }
+
+ class spell_keg_placed_AuraScript : public AuraScript
+ {
+ PrepareAuraScript(spell_keg_placed_AuraScript);
+
+ uint32 tick, tickcount;*/
+
+// void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+/*{
+ tick = urand(1, 4);
+ tickcount = 0;
+ }
+
+ void HandlePeriodic(AuraEffect const * aurEff)
+ {
+ PreventDefaultAction();
+ if (Unit* caster = GetCaster())
+ {
+ if (tickcount > tick)
+ {
+ if (caster->GetTypeId() != TYPEID_PLAYER)
+ return;
+
+ caster->ToPlayer()->KilledMonsterCredit(36233, 0);
+ if (Unit * target = GetTarget())
+ target->Kill(target);
+ }
+ tickcount++;
+ }
+ }
+
+ void Register()
+ {
+ OnEffectApply += AuraEffectApplyFn(spell_keg_placed_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+ OnEffectPeriodic += AuraEffectPeriodicFn(spell_keg_placed_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_DUMMY);
+ }
+ };
+
+ AuraScript* GetAuraScript() const
+ {
+ return new spell_keg_placed_AuraScript();
+ }
+ };*/
+
 void AddSC_gilneas() {
 	new npc_gilneas_city_guard_phase1();
 	new npc_gilneas_city_guard_phase2();
@@ -1064,4 +1383,12 @@ void AddSC_gilneas() {
 	new npc_panicked_citizen();
 	new npc_panicked_citizen_2();
 	new npc_lieutenant_walden();
+	new npc_lord_darius_crowley();
+	new npc_josiah_avery();
+	new npc_king_genn_greymane();
+	//new spell_rescue_krennan();
+	new npc_lord_darius_crowley_c2();
+	new npc_lord_darius_crowley_c3();
+	new npc_king_genn_greymane_c2();
+	//new spell_keg_placed();
 }
