@@ -896,26 +896,31 @@ private:
 	float i_range;
 };
 
-class AnyUnfriendlyNoTotemUnitInObjectRangeCheck {
-public:
-	AnyUnfriendlyNoTotemUnitInObjectRangeCheck(WorldObject const* obj,
-			Unit const* funit, float range) :
-			i_obj(obj), i_funit(funit), i_range(range) {
-	}
-	bool operator()(Unit* u) {
-		if (!u->isAlive())
-			return false;
+    class AnyUnfriendlyNoTotemUnitInObjectRangeCheck
+    {
+        public:
+            AnyUnfriendlyNoTotemUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range) : i_obj(obj), i_funit(funit), i_range(range) {}
+            bool operator()(Unit* u)
+            {
+                if (!u->isAlive())
+                    return false;
 
-		if (u->GetTypeId() == TYPEID_UNIT && ((Creature*) u)->isTotem())
-			return false;
+                if (u->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET)
+                    return false;
 
-		return i_obj->IsWithinDistInMap(u, i_range) && !i_funit->IsFriendlyTo(u);
-	}
-private:
-	WorldObject const* i_obj;
-	Unit const* i_funit;
-	float i_range;
-};
+                if (u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->isTotem())
+                    return false;
+
+                if(!u->isTargetableForAttack(false))
+                    return false;
+
+                return i_obj->IsWithinDistInMap(u, i_range) && !i_funit->IsFriendlyTo(u);
+            }
+        private:
+            WorldObject const* i_obj;
+            Unit const* i_funit;
+            float i_range;
+    };
 
 class AnyUnfriendlyVisibleUnitInObjectRangeCheck {
 public:
