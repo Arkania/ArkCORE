@@ -5978,7 +5978,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 	}
 		// Blessing of Ancient Kings (Val'anyr, Hammer of Ancient Kings)
 	case 64411: {
-        if(!victim)
+        if(!pVictim)
             return false;	
 		basepoints0 = int32(CalculatePctN(damage, 15));
 		if (AuraEffect* aurEff = pVictim->GetAuraEffect(64413, 0, GetGUID())) {
@@ -6680,7 +6680,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 
 			// Explosive Shot
 			if (procSpell->SpellFamilyFlags[2] & 0x200) {
-                if(!victim)
+                if(!pVictim)
                     return false;			
 				if (AuraEffect const* pEff = pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_DUMMY, SPELLFAMILY_HUNTER, 0x0, 0x80000000, 0x0, GetGUID()))
 					basepoints0 = CalculatePowerCost(pEff->GetSpellProto(),

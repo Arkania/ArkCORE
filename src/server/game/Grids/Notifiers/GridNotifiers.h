@@ -1126,13 +1126,13 @@ public:
 		if (!me->IsWithinDistInMap(u, m_range))
 			return false;
 
-		if (m_force) {
-			if (!me->canAttack(u))
-				return false;
-		} else {
-			if (!me->canStartAttack(u, false))
-				return false;
-		}
+		if (m_force)
+        {
+          if (!me->canAttack(u))
+            return false;
+        }
+        else if (!me->canStartAttack(u, false))
+            return false;		
 
 		m_range = me->GetDistance(u); // use found unit range as new range limit for next check
 		return true;
