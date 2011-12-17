@@ -272,10 +272,269 @@ public:
 	}
 };
 
+class spell_mage_blast_wave : public SpellScriptLoader
+{
+    public:
+        spell_mage_blast_wave() : SpellScriptLoader("spell_mage_blast_wave") { }
+
+        class spell_mage_blast_wave_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_mage_blast_wave_SpellScript)
+            bool Validate(SpellEntry const* /*spellEntry*/)
+            {
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+                    return false;
+                return true;
+            }
+
+            void HandleKnockBack(SpellEffIndex effIndex)
+            {
+                if (GetCaster()->HasAura(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+                    PreventHitDefaultEffect(effIndex);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_mage_blast_wave_SpellScript::HandleKnockBack, EFFECT_2, SPELL_EFFECT_KNOCK_BACK);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_mage_blast_wave_SpellScript();
+        }
+};
+
+class spell_mage_summon_water_elemental : public SpellScriptLoader
+{
+    public:
+        spell_mage_summon_water_elemental() : SpellScriptLoader("spell_mage_summon_water_elemental") { }
+
+        class spell_mage_summon_water_elemental_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript)
+            bool Validate(SpellEntry const* /*spellEntry*/)
+            {
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
+                    return false;
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY))
+                    return false;
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT))
+                    return false;
+                return true;
+            }
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                Unit* caster = GetCaster();
+                // Glyph of Eternal Water
+                if (caster->HasAura(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
+                    caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT, true);
+                else
+                    caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY, true);
+            }
+
+            void Register()
+            {
+                // add dummy effect spell handler to Summon Water Elemental
+                OnEffectHit += SpellEffectFn(spell_mage_summon_water_elemental_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_mage_summon_water_elemental_SpellScript();
+        }
+};
+
+// npc_flame_orb
+enum eFlameOrb
+{
+    SPELL_FLAME_ORB_DAMAGE          = 86719,
+    FLAME_ORB_DISTANCE              = 120
+};
+
+class npc_flame_orb : public CreatureScript
+{
+public:
+    npc_flame_orb() : CreatureScript("npc_flame_orb") {}
+
+    struct npc_flame_orbAI : public ScriptedAI
+    {
+        npc_flame_orbAI(Creature *creature) : ScriptedAI(creature)
+        {
+            x = me->GetPositionX();
+            y = me->GetPositionY();
+            z = me->GetOwner()->GetPositionZ()+2;
+            o = me->GetOrientation();
+            me->NearTeleportTo(x, y, z, o, true);
+            angle = me->GetOwner()->GetAngle(me);
+            newx = me->GetPositionX() + FLAME_ORB_DISTANCE/2 * cos(angle);
+            newy = me->GetPositionY() + FLAME_ORB_DISTANCE/2 * sin(angle);
+            CombatCheck = false;
+        }
+
+        float x,y,z,o,newx,newy,angle;
+        bool CombatCheck;
+        uint32 DespawnTimer;
+        uint32 DespawnCheckTimer;
+        uint32 DamageTimer;
+
+        void EnterCombat(Unit* /*target*/)
+        {
+            me->GetMotionMaster()->MoveCharge(newx, newy, z, 1.14286f);  // Normal speed
+            DespawnTimer = 15 * IN_MILLISECONDS;
+            CombatCheck = true;
+        }
+
+        void Reset()
+        {
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NON_ATTACKABLE);
+            me->AddUnitMovementFlag(MOVEMENTFLAG_FLYING);
+            me->SetReactState(REACT_PASSIVE);
+            if (CombatCheck == true)
+                DespawnTimer = 15 * IN_MILLISECONDS;
+            else
+                DespawnTimer = 4 * IN_MILLISECONDS;
+            DamageTimer = 1 * IN_MILLISECONDS;
+            me->GetMotionMaster()->MovePoint(0, newx, newy, z);
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!me->isInCombat() && CombatCheck == false)
+            {
+                me->SetSpeed(MOVE_RUN, 2, true);
+                me->SetSpeed(MOVE_FLIGHT, 2, true);
+            }
+
+            if (DespawnTimer <= diff)
+            {
+                me->SetVisible(false);
+                me->DisappearAndDie();
+            }
+            else
+                DespawnTimer -= diff;
+
+            if (DamageTimer <= diff)
+            {
+                if (Unit* target = me->SelectNearestTarget(20))
+                    DoCast(target, SPELL_FLAME_ORB_DAMAGE);
+
+                DamageTimer = 1 * IN_MILLISECONDS;
+            }
+            else
+                DamageTimer -= diff;
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_flame_orbAI(creature);
+    }
+};
+
+class npc_ring_of_frost : public CreatureScript
+{
+public:
+    npc_ring_of_frost() : CreatureScript("npc_ring_of_frost") { }
+
+    struct npc_ring_of_frostAI : public ScriptedAI
+    {
+        npc_ring_of_frostAI(Creature *creature) : ScriptedAI(creature) {}
+        bool Isready;
+        uint32 timer;
+
+        void Reset()
+        {
+            timer = 3000; // 3sec
+            Isready = false;
+        }
+
+        void InitializeAI()
+        {
+            ScriptedAI::InitializeAI();
+            Unit* owner = me->GetOwner();
+            if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            me->SetReactState(REACT_PASSIVE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+            // Remove other ring spawned by the player
+            std::list<Creature*> templist;
+            float x, y, z;
+            me->GetPosition(x, y, z);
+            {
+                CellCoord pair(Trinity::ComputeCellCoord(x, y));
+                Cell cell(pair);
+                cell.SetNoCreate();
+
+                Trinity::AllFriendlyCreaturesInGrid check(me);
+                Trinity::CreatureListSearcher<Trinity::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
+
+                TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+
+                cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
+
+                if (!templist.empty())
+                    for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
+                        if((*itr)->GetEntry() == me->GetEntry() && ((*itr)->GetOwner() == me->GetOwner() && *itr != me))
+                            (*itr)->DisappearAndDie();
+                templist.clear();
+            }
+        }
+
+        void EnterEvadeMode() { return; }
+
+        void CheckIfMoveInRing(Unit* who)
+        {
+            if (who->isAlive() && me->IsInRange(who, 2.0f, 4.7f) && !who->HasAura(82691)/*<= target already frozen*/ && !Isready)
+                me->CastSpell(who, 82691, true);
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (timer <= diff)
+            {
+                if (!Isready)
+                {
+                    Isready = true;
+                    timer = 9000; // 9sec
+                }
+                else
+                    me->DisappearAndDie();
+            }
+            else
+                timer -= diff;
+
+            // Find all the enemies
+            std::list<Unit*> targets;
+            Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 5.0f);
+            Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
+            me->VisitNearbyObject(5.0f, searcher);
+            for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
+                CheckIfMoveInRing(*iter);
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_ring_of_frostAI(creature);
+    }
+};
+
 void AddSC_mage_spell_scripts() {
 	new spell_mage_cold_snap;
 	new spell_mage_frost_warding_trigger();
 	new spell_mage_incanters_absorbtion_absorb();
 	new spell_mage_incanters_absorbtion_manashield();
-	new spell_mage_polymorph_cast_visual;
+	new spell_mage_polymorph_cast_visual; //d
+	new spell_mage_blast_wave;
+    new spell_mage_summon_water_elemental;
+    new npc_flame_orb;
+    new npc_ring_of_frost;
 }
+
+
