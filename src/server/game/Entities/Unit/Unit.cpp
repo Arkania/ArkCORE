@@ -9059,7 +9059,6 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 		}
 		break;
 		// Die by the Sword
-		// Die by the Sword
 	case 85386:
 	case 86624:
 		if (HealthBelowPct(19) || (!HealthBelowPctDamaged(20, damage)))

@@ -176,7 +176,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data) {
 	}
 
 	//sLog->outDebug("CHAT: packet received. type %u, lang %u", type, lang);
-
+	Player* sender = GetPlayer();
+	
 	// prevent talking at unknown language (cheating)
 	LanguageDesc const* langDesc = GetLanguageDescByID(lang);
 	if (!langDesc) {
@@ -324,13 +325,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data) {
 	case CHAT_MSG_SAY:
 	case CHAT_MSG_EMOTE:
 	case CHAT_MSG_YELL: {
-		if (_player->getLevel()
+        if (GetSecurity() == SEC_PLAYER)
+        {
+            if (sender->getLevel()
 				< sWorld->getIntConfig(CONFIG_CHAT_SAY_LEVEL_REQ)) {
 			SendNotification(GetArkCoreString(LANG_SAY_REQ),
 					sWorld->getIntConfig(CONFIG_CHAT_SAY_LEVEL_REQ));
 			return;
+			}
 		}
-
 		if (type == CHAT_MSG_SAY)
 			GetPlayer()->Say(msg, lang);
 		else if (type == CHAT_MSG_EMOTE)
@@ -513,12 +516,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data) {
 	}
 		break;
 	case CHAT_MSG_CHANNEL: {
-		if (_player->getLevel()
-				< sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ)) {
-			SendNotification(GetArkCoreString(LANG_CHANNEL_REQ),
-					sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ));
-			return;
-		}
+            if (GetSecurity() == SEC_PLAYER)
+            {
+                if (sender->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ))
+                {
+                    SendNotification(GetArkCoreString(LANG_CHANNEL_REQ), sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ));
+                    return;
+                }
+            }
 
 		if (ChannelMgr* cMgr = channelMgr(_player->GetTeam())) {
 			if (Channel *chn = cMgr->GetChannel(channel, _player)) {

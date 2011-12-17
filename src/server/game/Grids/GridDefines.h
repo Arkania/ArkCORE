@@ -131,6 +131,7 @@ struct CoordPair {
 typedef CoordPair<MAX_NUMBER_OF_GRIDS> GridPair;
 typedef CoordPair<TOTAL_NUMBER_OF_CELLS_PER_MAP> CellPair;
 typedef CoordPair<MAX_NUMBER_OF_GRIDS> GridCoord;
+typedef CoordPair<TOTAL_NUMBER_OF_CELLS_PER_MAP> CellCoord;
 
 namespace Trinity {
 template<class RET_TYPE, int CENTER_VAL>
@@ -145,19 +146,20 @@ inline RET_TYPE Compute(float x, float y, float center_offset, float size) {
 
 }
 
-    inline GridCoord ComputeGridCoord(float x, float y)
-    {
-        return Compute<GridCoord, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET, SIZE_OF_GRIDS);
-    }
+inline GridCoord ComputeGridCoord(float x, float y) {
+    return Compute<GridCoord, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET, SIZE_OF_GRIDS);
+}
+
+inline CellCoord ComputeCellCoord(float x, float y) {
+    return Compute<CellCoord, CENTER_GRID_CELL_ID>(x, y, CENTER_GRID_CELL_OFFSET, SIZE_OF_GRID_CELL);
+}
 
 inline GridPair ComputeGridPair(float x, float y) {
-	return Compute<GridPair, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET,
-			SIZE_OF_GRIDS);
+	return Compute<GridPair, CENTER_GRID_ID>(x, y, CENTER_GRID_OFFSET, SIZE_OF_GRIDS);
 }
 
 inline CellPair ComputeCellPair(float x, float y) {
-	return Compute<CellPair, CENTER_GRID_CELL_ID>(x, y, CENTER_GRID_CELL_OFFSET,
-			SIZE_OF_GRID_CELL);
+	return Compute<CellPair, CENTER_GRID_CELL_ID>(x, y, CENTER_GRID_CELL_OFFSET, SIZE_OF_GRID_CELL);
 }
 
 inline CellPair ComputeCellPair(float x, float y, float &x_off, float &y_off) {
