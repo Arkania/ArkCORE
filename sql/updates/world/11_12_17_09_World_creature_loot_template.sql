@@ -1,4 +1,4 @@
--- Ur'Goz	-41654
+-- Ur'Goz -41654
 DELETE FROM `creature_loot_template` WHERE (`entry`=41654);
 INSERT INTO `creature_loot_template` VALUES
 (41654, 53010, 44, 2, 1, 1, 1),
