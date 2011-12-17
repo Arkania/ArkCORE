@@ -516,14 +516,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data) {
 	}
 		break;
 	case CHAT_MSG_CHANNEL: {
-            if (GetSecurity() == SEC_PLAYER)
-            {
-                if (sender->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ))
-                {
-                    SendNotification(GetArkCoreString(LANG_CHANNEL_REQ), sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ));
-                    return;
-                }
-            }
+            //if (GetSecurity() == SEC_PLAYER)
+            //{
+            //    if (sender->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ))
+            //    {
+            //        SendNotification(GetArkCoreString(LANG_CHANNEL_REQ), sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ));
+            //        return;
+           //     }
+           // }
 
 		if (ChannelMgr* cMgr = channelMgr(_player->GetTeam())) {
 			if (Channel *chn = cMgr->GetChannel(channel, _player)) {
