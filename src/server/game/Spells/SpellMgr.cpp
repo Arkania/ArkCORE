@@ -4523,6 +4523,12 @@ void SpellMgr::LoadSpellCustomAttr() {
 			spellInfo->Effect[1] = 0;
 			count++;
 			break;
+            case 68282: // Charge (ToC mount)
+                spellInfo->Attributes |= SPELL_EFFECT_SCHOOL_DAMAGE;
+                spellInfo->Attributes |= SPELL_EFFECT_CHARGE;
+                spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->EffectBasePoints[0] = 20 * 1000;
+            break;			
         case 51678: //WintergraspSiegeEngine Ram set damage radius to 5 yards 
             spellInfo->EffectRadiusIndex[0] = 52;
             spellInfo->EffectRadiusIndex[1] = 52;
