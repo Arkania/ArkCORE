@@ -4233,6 +4233,13 @@ void SpellMgr::LoadSpellCustomAttr() {
 			spellInfo->Stances = 1 << (FORM_TREE - 1);
 			count++;
 			break;
+            case 51466: // Elemental Oath (Rank 1)
+            case 51470: // Elemental Oath (Rank 2)
+                spellInfo->Effect[EFFECT_1] = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->EffectApplyAuraName[EFFECT_1] = SPELL_AURA_ADD_FLAT_MODIFIER;
+                spellInfo->EffectMiscValue[EFFECT_1] = SPELLMOD_EFFECT2;
+                spellInfo->EffectSpellClassMask[EFFECT_1] = flag96(0x00000000, 0x00004000, 0x00000000);
+                break;			
 		case 47569: // Improved Shadowform (Rank 1)
 			// with this spell atrribute aura can be stacked several times
 			spellInfo->Attributes &= ~SPELL_ATTR0_NOT_SHAPESHIFT;
