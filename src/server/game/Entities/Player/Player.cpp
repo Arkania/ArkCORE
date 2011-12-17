@@ -634,6 +634,7 @@ Player::Player(WorldSession *session) :
 	sWorld->IncreasePlayerCount();
 
 	m_ChampioningFaction = 0;
+	m_ChampioningFactionDungeonLevel = 0;
 
 	for (uint8 i = 0; i < MAX_POWERS; ++i)
 		m_powerFraction[i] = 0;
