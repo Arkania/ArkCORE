@@ -2295,11 +2295,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                 else
                     // or guardian
                     spell_id = 46585;
-
-               // if (m_targets.HasDst())
-               //     targets.setDst(*m_targets.GetDst());
-               // else
-               //     targets.setDst(*m_caster);
 			   
                 if (m_targets.HasDst())
 					targets.setDst(m_targets.m_dstPos);
