@@ -148,7 +148,7 @@ public:
 /*######
  ## npc_panicked_citizen
  ######*/
-
+/*
 uint32 guid_panicked_nextsay = 0; //GUID of the Panicked Citizen that will say random text, this is to prevent more than 1 npc speaking
 uint32 tSay_panicked = DELAY_SAY_PANICKED_CITIZEN; //Time left to say
 class npc_panicked_citizen: public CreatureScript {
@@ -220,6 +220,7 @@ public:
 		}
 	};
 };
+ */
 
 /*######
  ## npc_panicked_citizen_2
@@ -1380,7 +1381,7 @@ void AddSC_gilneas() {
 	new npc_rampaging_worgen2();
 	new go_merchant_square_door();
 	new npc_frightened_citizen();
-	new npc_panicked_citizen();
+	//new npc_panicked_citizen();
 	new npc_panicked_citizen_2();
 	new npc_lieutenant_walden();
 	new npc_lord_darius_crowley();
