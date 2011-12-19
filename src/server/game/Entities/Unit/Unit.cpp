@@ -5908,8 +5908,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 		}
 			// Glyph of Polymorph
 		case 56375: {
-			target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0,
-					target->GetAura(32409)); // SW:D shall not be removed.
+            if(!target)
+                return false;		
+			target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, target->GetAura(32409)); // SW:D shall not be removed.
 			target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
 			target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH);
 			return true;
@@ -5977,6 +5978,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 	}
 		// Blessing of Ancient Kings (Val'anyr, Hammer of Ancient Kings)
 	case 64411: {
+        if(!pVictim)
+            return false;	
 		basepoints0 = int32(CalculatePctN(damage, 15));
 		if (AuraEffect* aurEff = pVictim->GetAuraEffect(64413, 0, GetGUID())) {
 			// The shield can grow to a maximum size of 20, 000 damage absorbtion
@@ -6248,6 +6251,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 		}
 		// Divine Aegis
 		if (dummySpell->SpellIconID == 2820) {
+            if(!target)
+                return false;		
 			// Multiple effects stack, so let's try to find this aura.
 			int32 bonus = 0;
 			if (AuraEffect *aurEff = target->GetAuraEffect(47753, 0))
@@ -6419,6 +6424,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 		}
 			// Glyph of Shred
 		case 54815: {
+                    if(!target)
+                        return false;		
 			// try to find spell Rip on the target
 			if (AuraEffect const *AurEff = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DRUID, 0x00800000, 0x0, 0x0, GetGUID())) {
 				// Rip's max duration, note: spells which modifies Rip's duration also counted like Glyph of Rip
@@ -6673,6 +6680,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 
 			// Explosive Shot
 			if (procSpell->SpellFamilyFlags[2] & 0x200) {
+                if(!pVictim)
+                    return false;			
 				if (AuraEffect const* pEff = pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_DUMMY, SPELLFAMILY_HUNTER, 0x0, 0x80000000, 0x0, GetGUID()))
 					basepoints0 = CalculatePowerCost(pEff->GetSpellProto(),
 							this,
@@ -7349,6 +7358,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 		}
 			// Item - Shaman T10 Elemental 4P Bonus
 		case 70817: {
+            if (!target)
+                return false;		
 			// try to find spell Flame Shock on the target
 
 			if (AuraEffect const* aurEff = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_SHAMAN, 0x10000000, 0x0, 0x0, GetGUID())) {
@@ -8945,8 +8956,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 	case 63156:
 	case 63158:
 		// Can proc only if target has hp below 35%
-		if (!pVictim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, procSpell,
-				this))
+		if (!pVictim || !pVictim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, procSpell, this))
 			return false;
 		break;
 		// Deathbringer Saurfang - Rune of Blood
@@ -15086,6 +15096,8 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit * pTarget, uint32 procFlag,
 					break;
 				}
 				case SPELL_AURA_PROC_TRIGGER_DAMAGE: {
+                    if (!pTarget)
+                        return;				
 					sLog->outDebug(
 							LOG_FILTER_SPELLS_AURAS,
 							"ProcDamageAndSpell: doing %u damage from spell id %u (triggered by %s aura of spell %u)",

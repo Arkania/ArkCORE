@@ -778,10 +778,18 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 						/ 10000;
 		}
 		// Innervate
-		else if (m_spellProto->Id == 29166)
-			amount = int32(
-					GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA) * amount
-							/ (GetTotalTicks() * 100.0f));
+            else if (m_spellProto->Id == 29166)
+            {
+                int32 bonusMana = amount;
+                if(GetBase()->GetCaster() == GetBase()->GetUnitOwner())
+                {
+                    if(GetBase()->GetCaster()->HasAura(33597))  // Dreamstate rank1
+                        bonusMana += 15;
+                    if(GetBase()->GetCaster()->HasAura(33599))  // Dreamstate rank2
+                        bonusMana += 30;
+                }
+                ApplyPctF(bonusMana, float(GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA)) / GetTotalTicks());
+            }
 		// Owlkin Frenzy
 		else if (m_spellProto->Id == 48391)
 			amount = GetBase()->GetUnitOwner()->GetCreatePowers(POWER_MANA)
@@ -2412,9 +2420,12 @@ void AuraEffect::PeriodicDummyTick(Unit *target, Unit *caster) const {
 		switch (GetId()) {
 		case 49016: // Hysteria
 			if (target && caster && caster->IsInRaidWith(target)) {
+            if (target->GetTypeId() != TYPEID_PLAYER)
+                return;
+            if(((Player*)target)->getClass() != CLASS_DEATH_KNIGHT)
+                return;					
 				uint32 damage = uint32(target->CountPctFromMaxHealth(1));
-				target->DealDamage(target, damage, NULL, NODAMAGE,
-						SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+				target->DealDamage(target, damage, NULL, NODAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
 			}
 			break;
 		}
@@ -4678,6 +4689,10 @@ void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const *aurApp,
 		return;
 
 	Unit *target = aurApp->GetTarget();
+	
+    // Spirit walk removes imparing effects
+    if (apply && GetSpellProto()->Id == 58875) // Spirit Walk
+        target->CastSpell(target, 58876, true);	
 
 	target->UpdateSpeed(MOVE_RUN, true);
 

@@ -2031,16 +2031,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
         }
         case SPELLFAMILY_PALADIN: {
             // Divine Storm
-            case 54171: {
-                int32 dmg = m_damage * damage / 100;
-				if (!unitTarget) unitTarget = m_caster;	
+            if (m_spellInfo->SpellFamilyFlags[1] & SPELLFAMILYFLAG1_PALADIN_DIVINESTORM && effIndex == 1)
+            {
+                int32 dmg = CalculatePctN(m_damage, damage);
+                if (!unitTarget)
+                    unitTarget = m_caster;
                 m_caster->CastCustomSpell(unitTarget, 54171, &dmg, 0, 0, true);
-                return;
-            }
-            case 54172: {
-                int32 dmg = m_damage * damage / 100;
-				if (!unitTarget) unitTarget = m_caster;	
-                m_caster->CastCustomSpell(unitTarget, 54172, &dmg, 0, 0, true);
                 return;
             }
 
@@ -2057,21 +2053,20 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                 }
                 case 19740: // Blessing of Might
                 {
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER) {
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
                         std::list<Unit*> PartyMembers;
                         m_caster->GetPartyMembers(PartyMembers);
                         bool Continue = false;
                         uint32 player = 0;
-                        for (std::list<Unit*>::iterator itr =
-                                PartyMembers.begin(); itr != PartyMembers.end();
-                                ++itr) // If caster is in party with a player
-                                {
+                        for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
+                        {
                             ++player;
-                            if (Continue == false && player > 1) Continue =
-                                    true;
+                            if (Continue == false && player > 1)
+                                Continue = true;
                         }
-                        if (Continue == true) m_caster->CastSpell(unitTarget,
-                                79102, true); // Blessing of Might (Raid)
+                        if (Continue == true)
+                            m_caster->CastSpell(unitTarget, 79102, true); // Blessing of Might (Raid)
                         else
                             m_caster->CastSpell(unitTarget, 79101, true); // Blessing of Might (Caster)
                     }
@@ -2079,21 +2074,20 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                 }
                 case 20217: // Blessing of Kings
                 {
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER) {
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
                         std::list<Unit*> PartyMembers;
                         m_caster->GetPartyMembers(PartyMembers);
                         bool Continue = false;
                         uint32 player = 0;
-                        for (std::list<Unit*>::iterator itr =
-                                PartyMembers.begin(); itr != PartyMembers.end();
-                                ++itr) // If caster is in party with a player
-                                {
+                        for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
+                        {
                             ++player;
-                            if (Continue == false && player > 1) Continue =
-                                    true;
+                            if (Continue == false && player > 1)
+                                Continue = true;
                         }
-                        if (Continue == true) m_caster->CastSpell(unitTarget,
-                                79063, true); // Blessing of Kings (Raid)
+                        if (Continue == true)
+                            m_caster->CastSpell(unitTarget, 79063, true); // Blessing of Kings (Raid)
                         else
                             m_caster->CastSpell(unitTarget, 79062, true); // Blessing of Kings (Caster)
                     }
@@ -2174,7 +2168,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
 
                 if (m_caster->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
                 {
-                    // Damage is increased by 25% if your off-hand weapon is enchanted with Flame tongue.
+                    // Damage is increased by 25% if your off-hand weapon is enchanted with Flametongue.
                     if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0))
                         AddPctN(m_damage, damage);
                 }
@@ -2282,34 +2276,30 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                             pos.GetPositionY(), pos.GetPositionZ(), damage,
                             true);
                     return;
-                case 46584: // Raise Dead
-                    if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
+            case 46584: // Raise Dead
+                if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                    return;
 
-                    // Do we have talent Master of Ghouls?
-                    if (m_caster->HasAura(52143))
+                if(effIndex != 0)
+                    return;
+                // Do we have talent Master of Ghouls?
+                if (m_caster->HasAura(52143))
                     // summon as pet
-                    bp = 52150;
-                    else
-                        // or guardian
-                        bp = 46585;
-
-                    if (m_targets.HasDst()) targets.setDst(m_targets.m_dstPos);
-                    else {
-                        targets.setDst(*m_caster);
-                        // Corpse not found - take reagents (only not triggered cast can take them)
-                        triggered = false;
-                    }
-                    // Remove cooldown - summon spellls have category
-                    m_caster->ToPlayer()->RemoveSpellCooldown(m_spellInfo->Id,
-                            true);
-                    spell_id = 48289;
-                    break;
-                    // Raise dead - take reagents and trigger summon spells
-                case 48289:
-                    if (m_targets.HasDst()) targets.setDst(m_targets.m_dstPos);
-
-                    spell_id = CalculateDamage(0, NULL);
-                    break;
+                    spell_id = 52150;
+                else
+                    // or guardian
+                    spell_id = 46585;
+			   
+                if (m_targets.HasDst())
+					targets.setDst(m_targets.m_dstPos);
+                else 
+				{
+                    targets.setDst(*m_caster);			   
+				}
+                // Remove cooldown - summon spellls have category
+                m_caster->ToPlayer()->RemoveSpellCooldown(52150, true);
+                m_caster->ToPlayer()->RemoveSpellCooldown(46585, true);
+                break;
             }
             break;
     }
@@ -3046,6 +3036,13 @@ void Spell::SpellDamageHeal(SpellEffIndex effIndex) {
             }
 
             addhealth += damageAmount;
+        }
+        // Runic Healing Injector (heal increased by 25% for engineers - 3.2.0 patch change)
+        else if (m_spellInfo->Id == 67489)
+        {
+            if (Player* player = m_caster->ToPlayer())
+                if (player->HasSkill(SKILL_ENGINEERING))
+                    AddPctN(addhealth, 25);
         }
         // Swiftmend - consumes Regrowth or Rejuvenation
         else if (m_spellInfo->TargetAuraState == AURA_STATE_SWIFTMEND
