@@ -1,4 +1,4 @@
--- DB/ITEMS: Fix some matiral, display etc for item template
+-- DB/ITEMS: Fix some matiral, display etc for item template this fix all items erros.
 -- Fix some material on item template
 -- Fix some disenchant errors
 UPDATE `item_template` SET `material`='3', `displayid`='81262' WHERE `entry`='67130'; -- Dorian's Lost Necklace
