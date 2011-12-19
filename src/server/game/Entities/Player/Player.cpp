@@ -634,6 +634,7 @@ Player::Player(WorldSession *session) :
 	sWorld->IncreasePlayerCount();
 
 	m_ChampioningFaction = 0;
+	m_ChampioningFactionDungeonLevel = 0;
 
 	for (uint8 i = 0; i < MAX_POWERS; ++i)
 		m_powerFraction[i] = 0;
@@ -2269,11 +2270,12 @@ void Player::RegenerateAll() {
 		}
 
 		Regenerate(POWER_RAGE);
-		if (getClass() == CLASS_DEATH_KNIGHT)
-			Regenerate(POWER_RUNIC_POWER);
-
-		if (getClass() == CLASS_HUNTER)
-			Regenerate(POWER_FOCUS);
+        if (getClass() == CLASS_PALADIN)
+            Regenerate(POWER_HOLY_POWER);
+        if (getClass() == CLASS_DEATH_KNIGHT)
+            Regenerate(POWER_RUNIC_POWER);
+        if (getClass() == CLASS_HUNTER)
+            Regenerate(POWER_FOCUS);
 
 		m_regenTimerCount -= 2000;
 	}
@@ -5183,6 +5185,8 @@ void Player::DurabilityLoss(Item* item, double percent) {
 
 	if (!pMaxDurability)
 		return;
+		
+    percent /= GetTotalAuraMultiplier(SPELL_AURA_MOD_DURABILITY_LOSS);		
 
 	uint32 pDurabilityLoss = uint32(pMaxDurability * percent);
 
@@ -7336,6 +7340,22 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea) {
 		sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
 		sOutdoorPvPMgr->HandlePlayerEnterZone(this, newZone);
 		SendInitWorldStates(newZone, newArea); // only if really enters to new zone, not just area change, works strange...
+		
+        // zone changed, check mount
+        bool allowMount = false;
+        if (InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetMapId()))
+            allowMount = mInstance->allowMount;
+        else if (MapEntry const* mEntry = sMapStore.LookupEntry(GetMapId()))
+            allowMount = !mEntry->IsDungeon() || mEntry->IsBattlegroundOrArena();
+
+        if (!allowMount)
+        {
+            RemoveAurasByType(SPELL_AURA_MOUNTED);
+
+            if (IsInDisallowedMountForm())
+                RemoveAurasByType(SPELL_AURA_MOD_SHAPESHIFT);
+        }
+		
 	}
 
 	m_zoneUpdateId = newZone;

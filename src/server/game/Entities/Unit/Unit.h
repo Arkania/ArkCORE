@@ -1391,6 +1391,7 @@ public:
 	void SetMaxPower(Powers power, uint32 val);
 	// returns the change in power
 	int32 ModifyPower(Powers power, int32 val);
+	int32 ModifyPowerPct(Powers power, float pct, bool apply = true);
 
 	uint32 GetAttackTime(WeaponAttackType att) const {
 		float f_BaseAttackTime = GetFloatValue(UNIT_FIELD_BASEATTACKTIME + att)
@@ -2372,26 +2373,15 @@ public:
 	Unit* SelectMagnetTarget(Unit *victim, SpellEntry const *spellInfo = NULL);
 	int32 SpellBaseDamageBonus(SpellSchoolMask schoolMask);
 	int32 SpellBaseHealingBonus(SpellSchoolMask schoolMask);
-	int32 SpellBaseDamageBonusForVictim(SpellSchoolMask schoolMask,
-			Unit *pVictim);
-	int32 SpellBaseHealingBonusForVictim(SpellSchoolMask schoolMask,
-			Unit *pVictim);
-	uint32 SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto,
-			uint32 effIndex, uint32 damage, DamageEffectType damagetype,
-			uint32 stack = 1);
-	uint32 SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto,
-			uint32 effIndex, uint32 healamount, DamageEffectType damagetype,
-			uint32 stack = 1);
-	bool isSpellBlocked(Unit *pVictim, SpellEntry const *spellProto,
-			WeaponAttackType attackType = BASE_ATTACK);
+	int32 SpellBaseDamageBonusForVictim(SpellSchoolMask schoolMask, Unit *pVictim);
+	int32 SpellBaseHealingBonusForVictim(SpellSchoolMask schoolMask, Unit *pVictim);
+	uint32 SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint32 effIndex, uint32 damage, DamageEffectType damagetype, uint32 stack = 1);
+	uint32 SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto, uint32 effIndex, uint32 healamount, DamageEffectType damagetype, uint32 stack = 1);
+	bool isSpellBlocked(Unit *pVictim, SpellEntry const *spellProto, WeaponAttackType attackType = BASE_ATTACK);
 	bool isBlockCritical();
-	bool isSpellCrit(Unit *pVictim, SpellEntry const *spellProto,
-			SpellSchoolMask schoolMask, WeaponAttackType attackType =
-					BASE_ATTACK) const;
-	uint32 SpellCriticalDamageBonus(SpellEntry const *spellProto, uint32 damage,
-			Unit *pVictim);
-	uint32 SpellCriticalHealingBonus(SpellEntry const *spellProto,
-			uint32 damage, Unit *pVictim);
+	bool isSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolMask schoolMask, WeaponAttackType attackType = BASE_ATTACK) const;
+	uint32 SpellCriticalDamageBonus(SpellEntry const *spellProto, uint32 damage, Unit *pVictim);
+	uint32 SpellCriticalHealingBonus(SpellEntry const *spellProto, uint32 damage, Unit *pVictim);
 
 	void SetLastManaUse(uint32 spellCastTime) {
 		m_lastManaUse = spellCastTime;

@@ -272,10 +272,87 @@ public:
 	}
 };
 
+class spell_mage_blast_wave : public SpellScriptLoader
+{
+    public:
+        spell_mage_blast_wave() : SpellScriptLoader("spell_mage_blast_wave") { }
+
+        class spell_mage_blast_wave_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_mage_blast_wave_SpellScript)
+            bool Validate(SpellEntry const* /*spellEntry*/)
+            {
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+                    return false;
+                return true;
+            }
+
+            void HandleKnockBack(SpellEffIndex effIndex)
+            {
+                if (GetCaster()->HasAura(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+                    PreventHitDefaultEffect(effIndex);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_mage_blast_wave_SpellScript::HandleKnockBack, EFFECT_2, SPELL_EFFECT_KNOCK_BACK);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_mage_blast_wave_SpellScript();
+        }
+};
+
+class spell_mage_summon_water_elemental : public SpellScriptLoader
+{
+    public:
+        spell_mage_summon_water_elemental() : SpellScriptLoader("spell_mage_summon_water_elemental") { }
+
+        class spell_mage_summon_water_elemental_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript)
+            bool Validate(SpellEntry const* /*spellEntry*/)
+            {
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
+                    return false;
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY))
+                    return false;
+                if (!sSpellStore.LookupEntry(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT))
+                    return false;
+                return true;
+            }
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                Unit* caster = GetCaster();
+                // Glyph of Eternal Water
+                if (caster->HasAura(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
+                    caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT, true);
+                else
+                    caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY, true);
+            }
+
+            void Register()
+            {
+                // add dummy effect spell handler to Summon Water Elemental
+                OnEffectHit += SpellEffectFn(spell_mage_summon_water_elemental_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_mage_summon_water_elemental_SpellScript();
+        }
+};
+
 void AddSC_mage_spell_scripts() {
 	new spell_mage_cold_snap;
 	new spell_mage_frost_warding_trigger();
 	new spell_mage_incanters_absorbtion_absorb();
 	new spell_mage_incanters_absorbtion_manashield();
-	new spell_mage_polymorph_cast_visual;
+	new spell_mage_polymorph_cast_visual; //d
+	new spell_mage_blast_wave;
+    new spell_mage_summon_water_elemental;
 }

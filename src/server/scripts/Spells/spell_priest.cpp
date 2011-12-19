@@ -153,6 +153,32 @@ public:
 	}
 };
 
+class spell_pri_mind_sear : public SpellScriptLoader
+{
+    public:
+        spell_pri_mind_sear() : SpellScriptLoader("spell_pri_mind_sear") { }
+
+        class spell_pri_mind_sear_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pri_mind_sear_SpellScript);
+
+            void FilterTargets(std::list<Unit*>& unitList)
+            {
+                unitList.remove_if (Trinity::ObjectGUIDCheck(GetCaster()->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)));
+            }
+
+            void Register()
+            {
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_pri_mind_sear_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ENEMY_DST);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pri_mind_sear_SpellScript();
+        }
+};
+
 class spell_pri_penance: public SpellScriptLoader {
 public:
 	spell_pri_penance() :
@@ -294,6 +320,129 @@ public:
 	}
 };
 
+// Shadow Word: Death
+// Spell Id: 32379
+class spell_pri_shadow_word_death : public SpellScriptLoader
+{
+    public:
+        spell_pri_shadow_word_death() : SpellScriptLoader("spell_pri_shadow_word_death") { }
+
+        class spell_pri_shadow_word_death_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pri_shadow_word_death_SpellScript);
+
+            void DamageCaster(SpellEffIndex effIndex)
+            {
+                if(Unit* caster = GetCaster())
+                {
+                    int32 back_damage = caster->SpellDamageBonus(GetHitUnit(), GetSpellInfo(), effIndex, uint32(GetHitDamage()), SPELL_DIRECT_DAMAGE);
+                    if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 1))
+                        back_damage -= back_damage * (-aurEff->GetAmount() / 100);
+
+                    if (back_damage < int32(GetHitUnit()->GetHealth()))
+                    {
+                        caster->CastCustomSpell(caster, 32409, &back_damage, NULL, NULL, true);
+                        if(GetHitUnit()->HealthBelowPct(25))
+                        {
+                            SetHitDamage(int32(GetHitDamage() * 3)); // Deals 3 times more damage to targets below 25% health
+
+                            if (caster->HasAura(55682) && !GetHitUnit()->HasAura(95652)) // Glyph of Shadow Word: Death
+                            {
+                                caster->AddAura(95652, GetHitUnit()); // Glyph of Shadow Word: Death - Marker
+                                if(caster->GetTypeId() == TYPEID_PLAYER)
+                                    caster->ToPlayer()->RemoveSpellCooldown(32379, true); // Shadow Word: Death
+                            }
+                        }
+                    }
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pri_shadow_word_death_SpellScript::DamageCaster, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pri_shadow_word_death_SpellScript;
+        }
+};
+
+// Mind Blast
+// Spell Id: 8092
+class spell_pri_mind_blast : public SpellScriptLoader
+{
+    public:
+        spell_pri_mind_blast() : SpellScriptLoader("spell_pri_mind_blast") { }
+
+        class spell_pri_mind_blast_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pri_mind_blast_SpellScript);
+
+            void HandleDamage(SpellEffIndex /*effIndex*/)
+            {
+                if(Unit* caster = GetCaster())
+                {
+                    if (AuraEffect * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 1)) // If we have Improved Mind Blast
+                        if (caster->GetShapeshiftForm() == FORM_SHADOW)
+                            if (roll_chance_i(aurEff->GetAmount()))
+                                caster->CastSpell(GetHitUnit(), 48301, true); // Cast Mind Trauma
+
+                    // Remove Mind Melt
+                    caster->RemoveAurasDueToSpell(87160);
+                    caster->RemoveAurasDueToSpell(81292);
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pri_mind_blast_SpellScript::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pri_mind_blast_SpellScript;
+        }
+};
+
+// Power Word: Fortitude
+// Spell Id: 21562
+class spell_pri_power_word_fortitude : public SpellScriptLoader
+{
+    public:
+        spell_pri_power_word_fortitude() : SpellScriptLoader("spell_pri_power_word_fortitude") { }
+
+        class spell_pri_power_word_fortitude_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pri_power_word_fortitude_SpellScript);
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                if(Unit* caster = GetCaster())
+                {
+                    std::list<Unit*> PartyMembers;
+                    caster->GetPartyMembers(PartyMembers);
+                    if(PartyMembers.size() > 1)
+                        caster->CastSpell(GetHitUnit(), 79105, true); // Power Word : Fortitude (Raid)
+                    else
+                        caster->CastSpell(GetHitUnit(), 79104, true); // Power Word : Fortitude (Caster)
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pri_power_word_fortitude_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pri_power_word_fortitude_SpellScript;
+        }
+};
+
 void AddSC_priest_spell_scripts() {
 	new spell_pri_guardian_spirit();
 	new spell_pri_mana_burn;
@@ -301,4 +450,8 @@ void AddSC_priest_spell_scripts() {
 	new spell_pri_penance;
 	new spell_pri_reflective_shield_trigger();
 	new spell_priest_flash_heal;
+	new spell_pri_mind_sear();
+	new spell_pri_shadow_word_death();
+	new spell_pri_mind_blast();
+	new spell_pri_power_word_fortitude();
 }

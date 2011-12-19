@@ -778,10 +778,18 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 						/ 10000;
 		}
 		// Innervate
-		else if (m_spellProto->Id == 29166)
-			amount = int32(
-					GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA) * amount
-							/ (GetTotalTicks() * 100.0f));
+            else if (m_spellProto->Id == 29166)
+            {
+                int32 bonusMana = amount;
+                if(GetBase()->GetCaster() == GetBase()->GetUnitOwner())
+                {
+                    if(GetBase()->GetCaster()->HasAura(33597))  // Dreamstate rank1
+                        bonusMana += 15;
+                    if(GetBase()->GetCaster()->HasAura(33599))  // Dreamstate rank2
+                        bonusMana += 30;
+                }
+                ApplyPctF(bonusMana, float(GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA)) / GetTotalTicks());
+            }
 		// Owlkin Frenzy
 		else if (m_spellProto->Id == 48391)
 			amount = GetBase()->GetUnitOwner()->GetCreatePowers(POWER_MANA)
@@ -896,8 +904,7 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 					continue;
 				if (cap->map != ((uint32) -1) && cap->map != map)
 					continue;
-				if (cap->reqSkillLevel > plrskill
-						|| cap->reqSkillLevel <= maxSkill)
+				if (cap->reqSkillLevel && (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill))
 					continue;
 				if (cap->reqSpell && !plr->HasSpell(cap->reqSpell))
 					continue;
@@ -1090,7 +1097,7 @@ void AuraEffect::CalculateSpellMod() {
 		default:
 			break;
 		}
-		break;
+		break;		
 	case SPELL_AURA_ADD_FLAT_MODIFIER:
 	case SPELL_AURA_ADD_PCT_MODIFIER:
 		if (!m_spellmod) {
@@ -2413,9 +2420,12 @@ void AuraEffect::PeriodicDummyTick(Unit *target, Unit *caster) const {
 		switch (GetId()) {
 		case 49016: // Hysteria
 			if (target && caster && caster->IsInRaidWith(target)) {
+            if (target->GetTypeId() != TYPEID_PLAYER)
+                return;
+            if(((Player*)target)->getClass() != CLASS_DEATH_KNIGHT)
+                return;					
 				uint32 damage = uint32(target->CountPctFromMaxHealth(1));
-				target->DealDamage(target, damage, NULL, NODAMAGE,
-						SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+				target->DealDamage(target, damage, NULL, NODAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
 			}
 			break;
 		}
@@ -4679,6 +4689,10 @@ void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const *aurApp,
 		return;
 
 	Unit *target = aurApp->GetTarget();
+	
+    // Spirit walk removes imparing effects
+    if (apply && GetSpellProto()->Id == 58875) // Spirit Walk
+        target->CastSpell(target, 58876, true);	
 
 	target->UpdateSpeed(MOVE_RUN, true);
 
@@ -5557,7 +5571,18 @@ void AuraEffect::HandleAuraModIncreaseEnergyPercent(
 
 	UnitMods unitMod = UnitMods(UNIT_MOD_POWER_START + powerType);
 
-	target->HandleStatModifier(unitMod, TOTAL_PCT, float(GetAmount()), apply);
+    float amount = float(GetAmount());
+	
+    if (apply)
+    {
+        target->HandleStatModifier(unitMod, TOTAL_PCT, amount, apply);
+        target->ModifyPowerPct(powerType, amount, apply);
+    }
+    else
+    {
+        target->ModifyPowerPct(powerType, amount, apply);
+        target->HandleStatModifier(unitMod, TOTAL_PCT, amount, apply);
+    }
 }
 
 void AuraEffect::HandleAuraModIncreaseHealthPercent(
@@ -6808,105 +6833,67 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 			target->ApplySpellImmune(GetId(), IMMUNITY_ID, 90355, apply); // Ancient Hysteria
 			break;
 		}
-		case 57819: // Argent Champion
-		case 57820: // Ebon Champion
-		case 57821: // Champion of the Kirin Tor
-		case 57822: // Wyrmrest Champion
-		case 93339: // Champion of the Earthen Ring
-		case 94158: // Champion of the Dragonmaw Clan
-		case 93337: // Champion of Ramkahen
-		case 93341: // Champion of the Guardians of Hyjal
-		case 93368: // Champion of the Wildhammer Clan
-		case 93347: // Champion of Therazane
-		case 93830: // Bilgewater Champion
-		case 93827: // Darkspear Champion
-		case 93806: // Darnassus Champion
-		case 93811: // Exodar Champion
-		case 93816: // Gilneas Champion
-		case 93821: // Gnomeregan Champion
-		case 93805: // Ironforge Champion
-		case 93825: // Orgrimmar Champion
-		case 93795: // Stormwind Champion
-		case 94463: // Thunder Bluff Champion
-		case 94462: // Undercity Champion
-		case 93828: // Silvermoon Champion
+                case 57819: // Argent Champion
+                case 57820: // Ebon Champion
+                case 57821: // Champion of the Kirin Tor
+                case 57822: // Wyrmrest Champion
+                case 93337: // Champion of Ramkahen
+                case 93339: // Champion of the Earthen Ring
+                case 93341: // Champion of the Guardians of Hyjal
+                case 93347: // Champion of Therazane
+                case 93368: // Champion of the Wildhammer Clan
+                case 94158: // Champion of the Dragonmaw Clan
+                case 93795: // Stormwind Champion
+                case 93805: // Ironforge Champion
+                case 93806: // Darnassus Champion
+                case 93811: // Exodar Champion
+                case 93816: // Gilneas Champion
+                case 93821: // Gnomeregan Champion
+                case 93825: // Orgrimmar Champion
+                case 93827: // Darkspear Champion
+                case 93828: // Silvermoon Champion
+                case 93830: // Bilgewater Champion
+                case 94462: // Undercity Champion
+                case 94463: // Thunder Bluff Champion
 		{
 			if (!caster || caster->GetTypeId() != TYPEID_PLAYER)
 				break;
 
 			uint32 FactionID = 0;
+			uint32 DungeonLevel = 0;
 
 			if (apply) {
-				switch (m_spellProto->Id) {
-				case 57819:
-					FactionID = 1106;
-					break; // Argent Crusade
-				case 57820:
-					FactionID = 1098;
-					break; // Knights of the Ebon Blade
-				case 57821:
-					FactionID = 1090;
-					break; // Kirin Tor
-				case 57822:
-					FactionID = 1091;
-					break; // The Wyrmrest Accord
-				case 93339:
-					FactionID = 1135;
-					break; // The Earthen Ring
-				case 94158:
-					FactionID = 1172;
-					break; // Dragonmaw Clan
-				case 93337:
-					FactionID = 1173;
-					break; // Ramkahen
-				case 93341:
-					FactionID = 1158;
-					break; // Guardians of Hyjal
-				case 93368:
-					FactionID = 1174;
-					break; // Wildhammer Clan
-				case 93347:
-					FactionID = 1171;
-					break; // Therazane
-				case 93830:
-					FactionID = 1133;
-					break; // Bilgewater Cartel
-				case 93827:
-					FactionID = 530;
-					break; // Darkspear Trolls
-				case 93806:
-					FactionID = 69;
-					break; // Darnassus
-				case 93811:
-					FactionID = 930;
-					break; // Exodar
-				case 93816:
-					FactionID = 1134;
-					break; // Gilneas
-				case 93821:
-					FactionID = 54;
-					break; // Gnomeregan
-				case 93805:
-					FactionID = 47;
-					break; // Ironforge
-				case 93825:
-					FactionID = 76;
-					break; // Orgrimmar
-				case 93795:
-					FactionID = 72;
-					break; // Stormwind
-				case 94463:
-					FactionID = 81;
-					break; // Thunder Bluff
-				case 94462:
-					FactionID = 68;
-					break; // Undercity
-				case 93828:
-					FactionID = 911;
-					break; // Silvermoon
-				}
+				switch (m_spellProto->Id) 
+                        {
+                            // Wrath of the Lich King factions
+                            case 57819: FactionID = 1106; DungeonLevel = 80; break; // Argent Crusade
+                            case 57820: FactionID = 1098; DungeonLevel = 80; break; // Knights of the Ebon Blade
+                            case 57821: FactionID = 1090; DungeonLevel = 80; break; // Kirin Tor
+                            case 57822: FactionID = 1091; DungeonLevel = 80; break; // The Wyrmrest Accord
+                            // Cataclysm factions
+                            case 93337: FactionID = 1173; DungeonLevel = 85; break; // Ramkahen
+                            case 93339: FactionID = 1135; DungeonLevel = 85; break; // The Earthen Ring
+                            case 93341: FactionID = 1158; DungeonLevel = 85; break; // Guardians of Hyjal
+                            case 93347: FactionID = 1171; DungeonLevel = 85; break; // Therazane
+                            case 93368: FactionID = 1174; DungeonLevel = 85; break; // Wildhammer Clan
+                            case 94158: FactionID = 1172; DungeonLevel = 85; break; // Dragonmaw Clan
+                            // Alliance factions
+                            case 93795: FactionID = 72;   DungeonLevel = 0;  break; // Stormwind
+                            case 93805: FactionID = 47;   DungeonLevel = 0;  break; // Ironforge
+                            case 93806: FactionID = 69;   DungeonLevel = 0;  break; // Darnassus
+                            case 93811: FactionID = 930;  DungeonLevel = 0;  break; // Exodar
+                            case 93816: FactionID = 1134; DungeonLevel = 0;  break; // Gilneas
+                            case 93821: FactionID = 54;   DungeonLevel = 0;  break; // Gnomeregan
+                            // Horde factions
+                            case 93825: FactionID = 76;   DungeonLevel = 0;  break; // Orgrimmar
+                            case 93827: FactionID = 530;  DungeonLevel = 0;  break; // Darkspear Trolls
+                            case 93828: FactionID = 911;  DungeonLevel = 0;  break; // Silvermoon
+                            case 93830: FactionID = 1133; DungeonLevel = 0;  break; // Bilgewater Cartel
+                            case 94462: FactionID = 68;   DungeonLevel = 0;  break; // Undercity
+                            case 94463: FactionID = 81;   DungeonLevel = 0;  break; // Thunder Bluff
+                        }
 			}
-			caster->ToPlayer()->SetChampioningFaction(FactionID);
+			caster->ToPlayer()->SetChampioningFaction(FactionID, DungeonLevel);
 			break;
 		}
 			// LK Intro VO (1)
@@ -7416,7 +7403,7 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const * aurApp,
 
 	Unit * target = aurApp->GetTarget();
 
-	if (target->GetTypeId() != TYPEID_PLAYER || !target->IsInWorld())
+	if (!target->IsInWorld())
 		return;
 
 	uint32 vehicleId = GetMiscValue();
@@ -7426,6 +7413,9 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const * aurApp,
 			return;
 	} else if (target->GetVehicleKit())
 		target->RemoveVehicleKit();
+		
+    if (target->GetTypeId() != TYPEID_PLAYER)
+        return;		
 
 	WorldPacket data(SMSG_PLAYER_VEHICLE_DATA,
 			target->GetPackGUID().size() + 4);

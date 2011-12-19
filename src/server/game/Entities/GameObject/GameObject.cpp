@@ -75,18 +75,24 @@ GameObject::GameObject() :
 	ResetLootMode(); // restore default loot mode
 }
 
-GameObject::~GameObject() {
-	delete m_goValue;
-	//if (m_uint32Values)                                      // field array can be not exist if GameOBject not loaded
-	//    CleanupsBeforeDelete();
+GameObject::~GameObject()
+{
+    delete m_goValue;
+    delete m_AI;
+    //if (m_uint32Values)                                      // field array can be not exist if GameOBject not loaded
+    //    CleanupsBeforeDelete();
 }
 
-bool GameObject::AIM_Initialize() {
-	m_AI = FactorySelector::SelectGameObjectAI(this);
-	if (!m_AI)
-		return false;
-	m_AI->InitializeAI();
-	return true;
+bool GameObject::AIM_Initialize()
+{
+    if (m_AI)
+        delete m_AI;
+
+    m_AI = FactorySelector::SelectGameObjectAI(this);
+    if (!m_AI)
+        return false;
+    m_AI->InitializeAI();
+    return true;
 }
 
 std::string GameObject::GetAIName() const {
@@ -536,19 +542,21 @@ void GameObject::Update(uint32 diff) {
 				m_usetimes = 0;
 			}
 
-			SetGoState(GO_STATE_READY);
+                SetGoState(GO_STATE_READY);
 
-			//any return here in case battleground traps
+                //any return here in case battleground traps
+                if (GetGOInfo()->flags & GO_FLAG_NODESPAWN)
+                    return;
 		}
-
-		if (GetOwnerGUID()) {
-			if (Unit* owner = GetOwner()) {
-				owner->RemoveGameObject(this, false);
-				SetRespawnTime(0);
-				Delete();
-			}
-			return;
-		}
+	
+            //! If this is summoned by a spell with ie. SPELL_EFFECT_SUMMON_OBJECT_WILD, with or without owner, we check respawn criteria based on spell
+            //! The GetOwnerGUID() check is mostly for compatibility with hacky scripts - 99% of the time summoning should be done trough spells.
+            if (GetSpellId() || GetOwnerGUID())
+            {
+                SetRespawnTime(0);
+                Delete();
+                return;
+            }
 
 		//burning flags in some battlegrounds, if you find better condition, just add it
 		if (GetGOInfo()->IsDespawnAtAction() || GetGoAnimProgress() > 0) {

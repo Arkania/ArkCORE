@@ -896,26 +896,31 @@ private:
 	float i_range;
 };
 
-class AnyUnfriendlyNoTotemUnitInObjectRangeCheck {
-public:
-	AnyUnfriendlyNoTotemUnitInObjectRangeCheck(WorldObject const* obj,
-			Unit const* funit, float range) :
-			i_obj(obj), i_funit(funit), i_range(range) {
-	}
-	bool operator()(Unit* u) {
-		if (!u->isAlive())
-			return false;
+    class AnyUnfriendlyNoTotemUnitInObjectRangeCheck
+    {
+        public:
+            AnyUnfriendlyNoTotemUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range) : i_obj(obj), i_funit(funit), i_range(range) {}
+            bool operator()(Unit* u)
+            {
+                if (!u->isAlive())
+                    return false;
 
-		if (u->GetTypeId() == TYPEID_UNIT && ((Creature*) u)->isTotem())
-			return false;
+                if (u->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET)
+                    return false;
 
-		return i_obj->IsWithinDistInMap(u, i_range) && !i_funit->IsFriendlyTo(u);
-	}
-private:
-	WorldObject const* i_obj;
-	Unit const* i_funit;
-	float i_range;
-};
+                if (u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->isTotem())
+                    return false;
+
+                if(!u->isTargetableForAttack(false))
+                    return false;
+
+                return i_obj->IsWithinDistInMap(u, i_range) && !i_funit->IsFriendlyTo(u);
+            }
+        private:
+            WorldObject const* i_obj;
+            Unit const* i_funit;
+            float i_range;
+    };
 
 class AnyUnfriendlyVisibleUnitInObjectRangeCheck {
 public:
@@ -1121,13 +1126,13 @@ public:
 		if (!me->IsWithinDistInMap(u, m_range))
 			return false;
 
-		if (m_force) {
-			if (!me->canAttack(u))
-				return false;
-		} else {
-			if (!me->canStartAttack(u, false))
-				return false;
-		}
+		if (m_force)
+        {
+          if (!me->canAttack(u))
+            return false;
+        }
+        else if (!me->canStartAttack(u, false))
+            return false;		
 
 		m_range = me->GetDistance(u); // use found unit range as new range limit for next check
 		return true;
@@ -1375,6 +1380,48 @@ private:
 	const WorldObject* m_pObject;
 	float m_fRange;
 };
+
+    class ObjectTypeIdCheck
+    {
+        public:
+            ObjectTypeIdCheck(TypeID typeId, bool equals) : _typeId(typeId), _equals(equals) {}
+            bool operator()(WorldObject* object)
+            {
+                return (object->GetTypeId() == _typeId) == _equals;
+            }
+
+        private:
+            TypeID _typeId;
+            bool _equals;
+    };
+
+    class ObjectGUIDCheck
+    {
+        public:
+            ObjectGUIDCheck(uint64 GUID) : _GUID(GUID) {}
+            bool operator()(WorldObject* object)
+            {
+                return object->GetGUID() == _GUID;
+            }
+
+        private:
+            uint64 _GUID;
+    };
+
+    class UnitAuraCheck
+    {
+        public:
+            UnitAuraCheck(bool present, uint32 spellId, uint64 casterGUID = 0) : _present(present), _spellId(spellId), _casterGUID(casterGUID) {}
+            bool operator()(Unit* unit)
+            {
+                return unit->HasAura(_spellId, _casterGUID) == _present;
+            }
+
+        private:
+            bool _present;
+            uint32 _spellId;
+            uint64 _casterGUID;
+    };
 
 // Player checks and do
 
