@@ -15097,6 +15097,8 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit * pTarget, uint32 procFlag,
 					break;
 				}
 				case SPELL_AURA_PROC_TRIGGER_DAMAGE: {
+                    if (!target)
+                        return;				
 					sLog->outDebug(
 							LOG_FILTER_SPELLS_AURAS,
 							"ProcDamageAndSpell: doing %u damage from spell id %u (triggered by %s aura of spell %u)",
