@@ -2420,9 +2420,12 @@ void AuraEffect::PeriodicDummyTick(Unit *target, Unit *caster) const {
 		switch (GetId()) {
 		case 49016: // Hysteria
 			if (target && caster && caster->IsInRaidWith(target)) {
+            if (target->GetTypeId() != TYPEID_PLAYER)
+                return;
+            if(((Player*)target)->getClass() != CLASS_DEATH_KNIGHT)
+                return;					
 				uint32 damage = uint32(target->CountPctFromMaxHealth(1));
-				target->DealDamage(target, damage, NULL, NODAMAGE,
-						SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+				target->DealDamage(target, damage, NULL, NODAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
 			}
 			break;
 		}
