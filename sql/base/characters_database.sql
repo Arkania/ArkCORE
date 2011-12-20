@@ -2280,6 +2280,11 @@ LOCK TABLES `worldstates` WRITE;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+INSERT INTO `worldstates` VALUES ('31001', '0', 'WG war status');
+INSERT INTO `worldstates` VALUES ('31002', '0', 'WG clock');
+INSERT INTO `worldstates` VALUES ('31003', '0', 'WG Fortress Defender');
+INSERT INTO `worldstates` VALUES ('31004', '0', 'WG TEMP Battle Control Faction');
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
