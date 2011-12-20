@@ -476,10 +476,11 @@ void AddSC_pit_of_saron();
 void AddSC_boss_garfrost();
 void AddSC_boss_ick();
 void AddSC_boss_tyrannus();
-void AddSC_instance_halls_of_reflection();// Halls of Reflection
+void AddSC_instance_halls_of_reflection();   // Halls of Reflection
 void AddSC_halls_of_reflection();
 void AddSC_boss_falric();
 void AddSC_boss_marwyn();
+void AddSC_boss_lich_king_hr();
 void AddSC_boss_lord_marrowgar();// Icecrown Citadel
 void AddSC_boss_lady_deathwhisper();
 void AddSC_boss_deathbringer_saurfang();
@@ -1223,10 +1224,11 @@ void AddNorthrendScripts() {
 	AddSC_boss_garfrost();
 	AddSC_boss_ick();
 	AddSC_boss_tyrannus();
-	AddSC_instance_halls_of_reflection();// Halls of Reflection
-	AddSC_halls_of_reflection();
-	AddSC_boss_falric();
-	AddSC_boss_marwyn();
+    AddSC_instance_halls_of_reflection();   // Halls of Reflection
+    AddSC_halls_of_reflection();
+    AddSC_boss_falric();
+    AddSC_boss_marwyn();
+    AddSC_boss_lich_king_hr();
 	AddSC_boss_lord_marrowgar();// Icecrown Citadel
 	AddSC_boss_lady_deathwhisper();
 	AddSC_boss_deathbringer_saurfang();
