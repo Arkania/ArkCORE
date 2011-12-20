@@ -1,4 +1,4 @@
-UPDATE `creature_template` SET `mechanic_immune_mask` = 1048576 WHERE `entry` IN (39985, 39986, 39708, 39987, 39988, 39994, 40021, 40019, 40017, 40023 39709, 39980, 39981, 39982, 39978, 39979, 39983, 48143, 40251, 40252, 40808, 40311, 48139, 48140);
+UPDATE `creature_template` SET `mechanic_immune_mask` = 1048576 WHERE `entry` IN (39985, 39986, 39708, 39987, 39988, 39994, 40021, 40019, 40017, 40023, 39709, 39980, 39981, 39982, 39978, 39979, 39983, 48143, 40251, 40252, 40808, 40311, 48139, 48140);
 UPDATE creature SET spawntimesecs=86400 WHERE map in (644, 645, 755, 670, 725, 657, 33, 36);
 
 UPDATE `arkcore_string` SET `content_default` = '%d (Entry: %d) - |cffffffff|Hgameobject:%d|h[%s X:%f Y:%f Z:%f MapId:%d]|h|r' WHERE `entry` = '517';
