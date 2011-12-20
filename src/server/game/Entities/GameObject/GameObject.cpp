@@ -848,6 +848,18 @@ bool GameObject::isAlwaysVisibleFor(WorldObject const* seer) const {
 	return false;
 }
 
+bool GameObject::IsInvisibleDueToDespawn() const
+{
+    if (WorldObject::IsInvisibleDueToDespawn())
+        return true;
+
+    // Despawned
+    if (!isSpawned())
+        return true;
+
+    return false;
+}
+
 bool GameObject::isVisibleForInState(WorldObject const* seer) const {
 	if (!WorldObject::isVisibleForInState(seer))
 		return false;
