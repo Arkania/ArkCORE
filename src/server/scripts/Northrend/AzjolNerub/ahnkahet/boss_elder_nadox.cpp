@@ -310,8 +310,8 @@ class spell_elder_nadox_guardian_aura : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_elder_nadox_guardian_aura_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ALLY);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_elder_nadox_guardian_aura_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_SRC_AREA_ALLY);
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_elder_nadox_guardian_aura_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ALLY_SRC);
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_elder_nadox_guardian_aura_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_AREA_ALLY_SRC);
             }
         };
 

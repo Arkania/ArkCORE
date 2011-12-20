@@ -92,9 +92,9 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
             //below may need another adjustment
-            SpellInfo* spell = (SpellInfo*)sSpellMgr->GetSpellInfo(DUNGEON_MODE(SPELL_FLAME_SPHERE_PERIODIC, H_SPELL_FLAME_SPHERE_PERIODIC));
+            SpellEntry* spell = (SpellEntry*)sSpellStore.LookupEntry(DUNGEON_MODE(SPELL_FLAME_SPHERE_PERIODIC, H_SPELL_FLAME_SPHERE_PERIODIC));
             if (spell)
-                spell->Effects[0].Amplitude = 500;
+                spell->EffectAmplitude[0] = 500;
         }
 
         uint32 uiBloodthirstTimer;
@@ -408,7 +408,7 @@ public:
         if (pPrinceTaldaram && pPrinceTaldaram->isAlive())
         {
             // maybe these are hacks :(
-            pGO->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
+            pGO->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
             pGO->SetGoState(GO_STATE_ACTIVE);
 
             switch (pGO->GetEntry())
