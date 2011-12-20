@@ -1424,7 +1424,8 @@ public:
 	void SetSpellDifficultyId(uint32 spellId, uint32 id) {
 		mSpellDifficultySearcherMap[spellId] = id;
 	}
-
+	
+	uint32 GetSpellIdForDifficulty(uint32 spellId, Unit const* caster) const;
 	const SpellsRequiringSpellMap GetSpellsRequiringSpell() {
 		return this->mSpellsReqSpell;
 	}

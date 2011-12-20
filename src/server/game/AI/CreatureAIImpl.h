@@ -551,6 +551,34 @@ public:
 				++itr;
 		}
 	}
+	
+        // Cancel events belonging to specified group
+        void CancelEventGroup(uint32 groupId)
+        {
+            uint32 groupMask = (1 << (groupId + 16));
+
+            for (iterator itr = begin(); itr != end();)
+            {
+                if (itr->second & groupMask)
+                {
+                    erase(itr);
+                    itr = begin();
+                }
+                else
+                    ++itr;
+            }
+        }
+
+        // Returns time of next event to execute
+        // To get how much time remains substract _time
+        uint32 GetNextEventTime(uint32 eventId) const
+        {
+            for (const_iterator itr = begin(); itr != end(); ++itr)
+                if (eventId == (itr->second & 0x0000FFFF))
+                    return itr->first;
+
+            return 0;
+        }	
 
 	void CancelEventsByGCD(uint32 gcd) {
 		gcd = (1 << (gcd + 16));
