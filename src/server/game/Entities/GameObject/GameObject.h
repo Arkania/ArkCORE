@@ -810,6 +810,7 @@ public:
 
 	void TriggeringLinkedGameObject(uint32 trapEntry, Unit* target);
 
+	bool IsInvisibleDueToDespawn() const;
 	bool isAlwaysVisibleFor(WorldObject const* seer) const;
 	bool isVisibleForInState(WorldObject const* seer) const;
 

@@ -946,7 +946,7 @@ public:
 
 	bool canDetectInvisibilityOf(WorldObject const* obj) const;
 	bool canDetectStealthOf(WorldObject const* obj) const;
-
+	virtual bool IsInvisibleDueToDespawn() const { return false; }
 	virtual bool isAlwaysDetectableFor(WorldObject const* /*seer*/) const {
 		return false;
 	}
