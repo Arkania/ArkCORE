@@ -1247,9 +1247,7 @@ public:
 		void HandleSummon(SpellEffIndex effIndex) {
 			PreventHitDefaultEffect(effIndex);
 			uint32 entry = uint32(GetSpellInfo()->EffectMiscValue[effIndex]);
-			SummonPropertiesEntry const* properties =
-					sSummonPropertiesStore.LookupEntry(
-							uint32(GetSpellInfo()->EffectMiscValueB[effIndex]));
+			SummonPropertiesEntry const* properties = sSummonPropertiesStore.LookupEntry(uint32(GetSpellInfo()->EffectMiscValueB[effIndex]));
 			Unit* caster = GetOriginalCaster();
 			if (!caster)
 				return;

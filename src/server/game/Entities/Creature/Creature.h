@@ -885,6 +885,7 @@ protected:
 	uint32 guid_transport;
 
 	bool isVisibleForInState(WorldObject const* seer) const;
+	bool IsInvisibleDueToDespawn() const;
 	bool canSeeAlways(WorldObject const* obj) const;
 private:
 	//WaypointMovementGenerator vars

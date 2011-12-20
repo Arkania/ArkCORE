@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2010 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,26 +15,26 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEF_ZULGURUB_H
-#define DEF_ZULGURUB_H
+#ifndef DEF_OBSIDIAN_SANCTUM_H
+#define DEF_OBSIDIAN_SANCTUM_H
 
-enum eTypes {
-	MAX_ENCOUNTERS = 8,
+enum eTypes
+{
+    TYPE_SARTHARION_EVENT       = 1,
+    TYPE_TENEBRON_PREKILLED     = 2,
+    TYPE_SHADRON_PREKILLED      = 3,
+    TYPE_VESPERON_PREKILLED     = 4,
 
-	TYPE_ARLOKK = 1,
-	TYPE_JEKLIK = 2,
-	TYPE_VENOXIS = 3,
-	TYPE_MARLI = 4,
-	TYPE_OHGAN = 5,
-	TYPE_THEKAL = 6,
-	TYPE_ZATH = 7,
-	TYPE_LORKHAN = 8,
+    DATA_SARTHARION             = 10,
+    DATA_TENEBRON               = 11,
+    DATA_SHADRON                = 12,
+    DATA_VESPERON               = 13,
 
-	DATA_JINDO = 10,
-	DATA_LORKHAN = 11,
-	DATA_THEKAL = 12,
-	DATA_ZATH = 13
+    NPC_SARTHARION              = 28860,
+    NPC_TENEBRON                = 30452,
+    NPC_SHADRON                 = 30451,
+    NPC_VESPERON                = 30449,
+    GO_TWILIGHT_PORTAL          = 193988
 };
 
 #endif
-

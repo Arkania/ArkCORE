@@ -1,201 +1,341 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
- *
- * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
- *
- * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
- *
  * Copyright (C) 2010-2011 ProjectSkyfire <http://www.projectskyfire.org/>
  * 
  * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ScriptPCH.h"
 #include "pit_of_saron.h"
 
-enum Yells {
-	SAY_AGGRO = -1658001,
-	SAY_SLAY_1 = -1658002,
-	SAY_SLAY_2 = -1658003,
-	SAY_DEATH = -1658004,
-	SAY_PHASE2 = -1658005,
-	SAY_PHASE3 = -1658006,
+enum Yells
+{
+    SAY_AGGRO                                   = -1658001,
+    SAY_SLAY_1                                  = -1658002,
+    SAY_SLAY_2                                  = -1658003,
+    SAY_DEATH                                   = -1658004,
+    SAY_PHASE2                                  = -1658005,
+    SAY_PHASE3                                  = -1658006,
 
-	SAY_TYRANNUS_DEATH = -1659007,
+    SAY_TYRANNUS_DEATH                          = -1659007,
 };
 
-enum eEvents {
-	EVENT_NONE,
-	EVENT_PERMAFROST,
-	EVENT_THROW_SARONITE,
-	EVENT_CHILLINGWAVE,
-	EVENT_DEEPFREEZE,
+enum Spells
+{
+    SPELL_PERMAFROST                            = 70326,
+    SPELL_THROW_SARONITE                        = 68788,
+    SPELL_THUNDERING_STOMP                      = 68771,
+    SPELL_CHILLING_WAVE                         = 68778,
+    SPELL_DEEP_FREEZE                           = 70381,
+    SPELL_FORGE_MACE                            = 68785,
+    SPELL_FORGE_BLADE                           = 68774,
 };
 
-enum Spells {
-	SPELL_PERMAFROST = 70326, SPELL_PERMAFROST_TRIGGER = 68786, // triggered by PERMAFROST. Used to check aura
-	SPELL_THROW_SARONITE = 68788,
-	SPELL_THUNDERING_STOMP = 68771,
-	SPELL_CHILLING_WAVE = 68778,
-	H_SPELL_CHILLING_WAVE = 70333,
-	SPELL_DEEP_FREEZE = 70381,
-	H_SPELL_DEEP_FREEZE = 72930,
-	SPELL_FORGE_MACE = 68785,
-	H_SPELL_FORGE_MACE = 70335,
-	SPELL_FORGE_BLADE = 68774,
-	H_SPELL_FORGE_BLADE = 70334,
+#define SPELL_PERMAFROST_HELPER RAID_MODE<uint32>(68786, 70336)
+#define SPELL_FORGE_BLADE_HELPER RAID_MODE<uint32>(68774, 70334)
+
+enum Events
+{
+    EVENT_THROW_SARONITE    = 1,
+    EVENT_CHILLING_WAVE     = 2,
+    EVENT_DEEP_FREEZE       = 3,
+    EVENT_JUMP              = 4,
+    EVENT_FORGING           = 5,
+    EVENT_RESUME_ATTACK     = 6,
 };
 
-enum eEnums {
-	EQUIP_ID_SWORD = 49345,
-	EQUIP_ID_MACE = 49344,
-	ACHIEV_DOESNT_GO_TO_ELEVEN = 4524,
+enum Phases
+{
+    PHASE_ONE           = 1,
+    PHASE_TWO           = 2,
+    PHASE_THREE         = 3,
+
+    PHASE_ONE_MASK      = 1 << PHASE_ONE,
+    PHASE_TWO_MASK      = 1 << PHASE_TWO,
+    PHASE_THREE_MASK    = 1 << PHASE_THREE,
 };
 
-class boss_garfrost: public CreatureScript {
+enum MiscData
+{
+    EQUIP_ID_SWORD                              = 49345,
+    EQUIP_ID_MACE                               = 49344,
+    ACHIEV_DOESNT_GO_TO_ELEVEN                  = 4524,
+    POINT_FORGE                 = 0,
+};
+
+Position const northForgePos = {722.5643f, -234.1615f, 527.182f, 2.16421f};
+Position const southForgePos = {639.257f, -210.1198f, 529.015f, 0.523599f};
+
+class boss_garfrost : public CreatureScript
+{
 public:
-	boss_garfrost() :
-			CreatureScript("boss_garfrost") {
-	}
+    boss_garfrost() : CreatureScript("boss_garfrost") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_garfrostAI(pCreature);
-	}
+        struct boss_garfrostAI : public BossAI
+        {
+            boss_garfrostAI(Creature* creature) : BossAI(creature, DATA_GARFROST)
+            {
+            }
 
-	struct boss_garfrostAI: public BossAI {
-		boss_garfrostAI(Creature *c) :
-				BossAI(c, DATA_GARFROST_EVENT) {
-			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
-					true);
-			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-		}
+            void InitializeAI()
+            {
+                if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(PoSScriptName))
+                    me->IsAIEnabled = false;
+                else if (!me->isDead())
+                    Reset();
+            }
 
-		bool phase2;
-		bool phase3;
-		bool bAchievement;
+        void Reset()
+        {
+            events.Reset();
+                events.SetPhase(PHASE_ONE);
+                SetEquipmentSlots(true);
+                _permafrostStack = 0;
 
-		void Reset() {
-			events.Reset();
+                instance->SetBossState(DATA_GARFROST, NOT_STARTED);
+        }
 
-			phase2 = false;
-			phase3 = false;
-			bAchievement = true;
+        void EnterCombat(Unit* /*who*/)
+        {
+            DoScriptText(SAY_AGGRO, me);
+            DoCast(me, SPELL_PERMAFROST);
+                events.ScheduleEvent(EVENT_THROW_SARONITE, 7000);
 
-			if (instance)
-				instance->SetData(DATA_GARFROST_EVENT, NOT_STARTED);
-		}
+                instance->SetBossState(DATA_GARFROST, IN_PROGRESS);
+        }
 
-		void EnterCombat(Unit* /*who*/) {
-			DoScriptText(SAY_AGGRO, me);
-			DoCast(me, SPELL_PERMAFROST);
+        void KilledUnit(Unit * victim)
+        {
+                if (victim->GetTypeId() == TYPEID_PLAYER)
+            DoScriptText(RAND(SAY_SLAY_1,SAY_SLAY_2), me);
+        }
 
-			if (instance)
-				instance->SetData(DATA_GARFROST_EVENT, IN_PROGRESS);
+        void JustDied(Unit* /*killer*/)
+        {
+            DoScriptText(SAY_DEATH, me);
+                if (Creature* tyrannus = me->GetCreature(*me, instance->GetData64(DATA_TYRANNUS)))
+                    DoScriptText(SAY_TYRANNUS_DEATH, tyrannus);
 
-			events.ScheduleEvent(EVENT_THROW_SARONITE, 45000);
-		}
+                instance->SetBossState(DATA_GARFROST, DONE);
+            }
 
-		void DamageTaken(Unit* /*pDoneBy*/, uint32& /*uiDamage*/) {
-			if (HealthBelowPct(66) && !phase2) {
-				phase2 = true;
-				DoCast(me, SPELL_THUNDERING_STOMP);
-				// TODO: should go to a forge
-				DoCast(me, SPELL_FORGE_BLADE);
-				// TODO: should equip when spell completes
-				SetEquipmentSlots(false, EQUIP_ID_SWORD, -1, -1);
-				me->SetByteValue(UNIT_FIELD_BYTES_2, 0, SHEATH_STATE_MELEE);
-				events.ScheduleEvent(EVENT_CHILLINGWAVE, 10000);
-			}
+            void DamageTaken(Unit* /*attacker*/, uint32& /*uiDamage*/)
+            {
+                if (events.GetPhaseMask() & PHASE_ONE_MASK && !HealthAbovePct(66))
+                {
+                    events.SetPhase(PHASE_TWO);
+                    events.DelayEvents(8000);
+                    DoCast(me, SPELL_THUNDERING_STOMP);
+                    events.ScheduleEvent(EVENT_JUMP, 1500);
+                    return;
+                }
 
-			if (HealthBelowPct(33) && !phase3) {
-				phase3 = true;
-				DoCast(me, SPELL_THUNDERING_STOMP);
-				// TODO: should go to a forge
-				DoCast(me, SPELL_FORGE_MACE);
-				// TODO: should equip when spell completes
-				SetEquipmentSlots(false, EQUIP_ID_MACE, -1, -1);
-				me->SetByteValue(UNIT_FIELD_BYTES_2, 0, SHEATH_STATE_MELEE);
-				events.CancelEvent(EVENT_CHILLINGWAVE); // cast only in phase 2.
-				events.ScheduleEvent(EVENT_DEEPFREEZE, 10000);
-			}
-		}
+                if (events.GetPhaseMask() & PHASE_TWO_MASK && !HealthAbovePct(33))
+                {
+                    events.SetPhase(PHASE_THREE);
+                    events.DelayEvents(8000);
+                    DoCast(me, SPELL_THUNDERING_STOMP);
+                    events.ScheduleEvent(EVENT_JUMP, 1500);
+                    return;
+                }
+            }
 
-		void KilledUnit(Unit * victim) {
-			if (victim == me)
-				return;
+            void MovementInform(uint32 type, uint32 id)
+            {
+                if (type != POINT_MOTION_TYPE || id != POINT_FORGE)
+                    return;
 
-			DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
-		}
+                if (events.GetPhaseMask() & PHASE_TWO_MASK)
+                    DoCast(me, SPELL_FORGE_BLADE);
+                if (events.GetPhaseMask() & PHASE_THREE_MASK)
+                {
+                    me->RemoveAurasDueToSpell(SPELL_FORGE_BLADE_HELPER);
+                    DoCast(me, SPELL_FORGE_MACE);
+                }
+                events.ScheduleEvent(EVENT_RESUME_ATTACK, 5000);
+            }
 
-		void JustDied(Unit* /*killer*/) {
-			_JustDied();
-			DoScriptText(SAY_DEATH, me);
-			if (instance) {
-				if (Creature *pTyrannus = me->GetCreature(*me, instance->GetData64(DATA_TYRANNUS)))
-					DoScriptText(SAY_TYRANNUS_DEATH, pTyrannus);
+            void SpellHitTarget(Unit* target, const SpellEntry* spell)
+            {
+                if (spell->Id == SPELL_PERMAFROST_HELPER)
+                {
+                    if (Aura* aura = target->GetAura(SPELL_PERMAFROST_HELPER))
+                        _permafrostStack = std::max<uint32>(_permafrostStack, aura->GetStackAmount());
+                }
+                else if (spell->Id == SPELL_FORGE_BLADE)
+                    SetEquipmentSlots(false, EQUIP_ID_SWORD);
+                else if (spell->Id == SPELL_FORGE_MACE)
+                    SetEquipmentSlots(false, EQUIP_ID_MACE);
+            }
 
-				instance->SetData(DATA_GARFROST_EVENT, DONE);
-				if (IsHeroic() && bAchievement)
-					instance->DoCompleteAchievement(ACHIEV_DOESNT_GO_TO_ELEVEN);
-			}
-		}
+            uint32 GetData(uint32 /*type*/)
+            {
+                return _permafrostStack;
+        }
 
-		void SpellHitTarget(Unit* pTarget, const SpellEntry *spell) {
-			if (spell->Id == SPELL_PERMAFROST_TRIGGER && bAchievement) {
-				if (Aura *pAura = pTarget->GetAura(SPELL_PERMAFROST_TRIGGER))
-					if (pAura->GetStackAmount() > 10)
-						bAchievement = false;
-			}
-		}
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
 
-		void UpdateAI(const uint32 diff) {
-			//Return since we have no target
-			if (!UpdateVictim())
-				return;
+            events.Update(diff);
 
-			events.Update(diff);
+            if (me->HasUnitState(UNIT_STAT_CASTING))
+                return;
 
-			if (me->HasUnitState(UNIT_STAT_CASTING))
-				return;
+            while (uint32 eventId = events.ExecuteEvent())
+            {
+                switch(eventId)
+                {
+                    case EVENT_THROW_SARONITE:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                DoCast(target, SPELL_THROW_SARONITE);
+                            events.ScheduleEvent(EVENT_THROW_SARONITE, urand(12500, 20000));
+                            break;
+                        case EVENT_CHILLING_WAVE:
+                            DoCast(me, SPELL_CHILLING_WAVE);
+                            events.ScheduleEvent(EVENT_CHILLING_WAVE, 40000, 0, PHASE_TWO);
+                            break;
+                        case EVENT_DEEP_FREEZE:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                DoCast(target, SPELL_DEEP_FREEZE);
+                            events.ScheduleEvent(EVENT_DEEP_FREEZE, 35000, 0, PHASE_THREE);
+                            break;
+                        case EVENT_JUMP:
+                            me->AttackStop();
+                            if (events.GetPhaseMask() & PHASE_TWO_MASK)
+                                me->GetMotionMaster()->MoveJump(northForgePos.GetPositionX(), northForgePos.GetPositionY(), northForgePos.GetPositionZ(), 25.0f, 15.0f);
+                            else if (events.GetPhaseMask() & PHASE_THREE_MASK)
+                                me->GetMotionMaster()->MoveJump(southForgePos.GetPositionX(), southForgePos.GetPositionY(), southForgePos.GetPositionZ(), 25.0f, 15.0f);
+                            break;
+                        case EVENT_RESUME_ATTACK:
+                            if (events.GetPhaseMask() & PHASE_TWO_MASK)
+                                events.ScheduleEvent(EVENT_CHILLING_WAVE, 5000, 0, PHASE_TWO);
+                            else if (events.GetPhaseMask() & PHASE_THREE_MASK)
+                                events.ScheduleEvent(EVENT_DEEP_FREEZE, 10000, 0, PHASE_THREE);
+                            AttackStart(me->getVictim());
+                            break;
+                        default:
+                            break;
+                }
+            }
 
-			while (uint32 eventId = events.ExecuteEvent()) {
-				switch (eventId) {
-				case EVENT_THROW_SARONITE:
-					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-						DoCast(pTarget, SPELL_THROW_SARONITE);
-					events.RescheduleEvent(EVENT_THROW_SARONITE, 35000);
-					return;
-				case EVENT_DEEPFREEZE:
-					if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-						DoCast(pTarget, SPELL_DEEP_FREEZE);
-					events.RescheduleEvent(EVENT_DEEPFREEZE, 35000);
-					return;
-				case EVENT_CHILLINGWAVE:
-					DoCastAOE(SPELL_CHILLING_WAVE);
-					events.RescheduleEvent(EVENT_CHILLINGWAVE, 40000);
-					return;
-				}
-			}
+            DoMeleeAttackIfReady();
+        }
 
-			DoMeleeAttackIfReady();
-		}
-	};
+        private:
+            uint32 _permafrostStack;
+    };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new boss_garfrostAI(creature);
+        }
 };
 
-void AddSC_boss_garfrost() {
-	new boss_garfrost();
+class spell_garfrost_permafrost : public SpellScriptLoader
+{
+    public:
+        spell_garfrost_permafrost() : SpellScriptLoader("spell_garfrost_permafrost") { }
+
+        class spell_garfrost_permafrost_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_garfrost_permafrost_SpellScript);
+
+            bool Load()
+            {
+                prevented = false;
+                return true;
+            }
+
+            void PreventHitByLoS()
+            {
+                if (Unit* target = GetHitUnit())
+                {
+                    Unit* caster = GetCaster();
+                    //Temporary Line of Sight Check
+                    std::list<GameObject*> blockList;
+                    caster->GetGameObjectListWithEntryInGrid(blockList, GO_SARONITE_ROCK, 100.0f);
+                    if (!blockList.empty())
+                    {
+                        for (std::list<GameObject*>::const_iterator itr = blockList.begin(); itr != blockList.end(); ++itr)
+                        {
+                            if (!(*itr)->IsInvisibleDueToDespawn())
+                            {
+                                if ((*itr)->IsInBetween(caster, target, 4.0f))
+                                {
+                                    prevented = true;
+                                    target->ApplySpellImmune(GetSpellInfo()->Id, IMMUNITY_ID, GetSpellInfo()->Id, true);
+                                    PreventHitDefaultEffect(EFFECT_0);
+                                    PreventHitDefaultEffect(EFFECT_1);
+                                    PreventHitDefaultEffect(EFFECT_2);
+                                    PreventHitDamage();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            void RestoreImmunity()
+            {
+                if (Unit* target = GetHitUnit())
+                {
+                    target->ApplySpellImmune(GetSpellInfo()->Id, IMMUNITY_ID, GetSpellInfo()->Id, false);
+                    if (prevented)
+                        PreventHitAura();
+                }
+            }
+
+            void Register()
+            {
+                BeforeHit += SpellHitFn(spell_garfrost_permafrost_SpellScript::PreventHitByLoS);
+                AfterHit += SpellHitFn(spell_garfrost_permafrost_SpellScript::RestoreImmunity);
+            }
+
+            bool prevented;
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_garfrost_permafrost_SpellScript();
+        }
+};
+
+class achievement_doesnt_go_to_eleven : public AchievementCriteriaScript
+{
+    public:
+        achievement_doesnt_go_to_eleven() : AchievementCriteriaScript("achievement_doesnt_go_to_eleven") { }
+
+        bool OnCheck(Player* /*source*/, Unit* target)
+        {
+            if (target)
+                if (Creature* garfrost = target->ToCreature())
+                    if (garfrost->AI()->GetData(ACHIEV_DOESNT_GO_TO_ELEVEN) <= 10)
+                        return true;
+
+            return false;
+        }
+};
+
+void AddSC_boss_garfrost()
+{
+    new boss_garfrost();
+    new spell_garfrost_permafrost();
+    new achievement_doesnt_go_to_eleven();
 }
