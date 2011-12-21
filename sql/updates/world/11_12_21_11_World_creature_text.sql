@@ -10,4 +10,4 @@ UPDATE `creature_text` SET `type`='5' WHERE `type`='15'; -- Whisper
 -- CREATURETEXT: Remove sound for unknow entrys
 UPDATE `creature_text` SET `sound`='0' WHERE `Entry` IN (23863);
 -- SCRIPTEXTS: change type 12 to 6
-UPDATE `script_texts` SET `type`='6' WHERE `entry` IN (-1610001)
+UPDATE `script_texts` SET `type`='6' WHERE `entry` IN (-1610001);
