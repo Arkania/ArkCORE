@@ -32,6 +32,8 @@
 
 #define SCRIPT_CAST_TYPE dynamic_cast
 
+#define MAX_AGGRO_PULSE_TIMER            5000
+
 #define CAST_PLR(a)     (SCRIPT_CAST_TYPE<Player*>(a))
 #define CAST_CRE(a)     (SCRIPT_CAST_TYPE<Creature*>(a))
 #define CAST_SUM(a)     (SCRIPT_CAST_TYPE<TempSummon*>(a))
@@ -311,6 +313,7 @@ struct BossAI: public ScriptedAI {
 	virtual ~BossAI() {
 	}
 
+	uint32 inFightAggroCheck_Timer;
 	const uint32 bossId;
 	EventMap events;
 	SummonList summons;
@@ -342,6 +345,7 @@ protected:
 	void _JustReachedHome() {
 		me->setActive(false);
 	}
+	void _DoAggroPulse(const uint32 diff);
 
 	bool CheckInRoom() {
 		if (CheckBoundary(me))
