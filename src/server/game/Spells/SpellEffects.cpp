@@ -2170,15 +2170,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex) {
                 {
                     // Damage is increased by 25% if your off-hand weapon is enchanted with Flametongue.
                     if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0))
-                        AddPctN(m_damage, damage);
-                }
-                // Improved Lava Lash
-                if (AuraEffect const* ill = m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 4780, 1))
-                // Searing Flames
-                if (AuraEffect const* sf = unitTarget->GetAuraEffect(77661, 0, m_caster->GetOwner()->GetGUID()))
-                {
-                    AddPctN(m_damage, sf->GetBase()->GetStackAmount() * ill->GetAmount());
-                    unitTarget->RemoveAura(77661);
+                        m_damage += m_damage * damage / 100;
                 }
                 return;
             }

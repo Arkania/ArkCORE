@@ -1,5 +1,9 @@
 /*
- * Copyright (C) 2008-2010 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+ *
+ * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+ *
+ * Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,46 +20,51 @@
  */
 
 /* ScriptData
- SDName: Sunwell_Plateau
- SD%Complete: 0
- SDComment: Placeholder, Epilogue after Kil'jaeden, Captain Selana Gossips
- EndScriptData */
+SDName: Sunwell_Plateau
+SD%Complete: 0
+SDComment: Placeholder, Epilogue after Kil'jaeden, Captain Selana Gossips
+EndScriptData */
 
 /* ContentData
- npc_prophet_velen
- npc_captain_selana
- EndContentData */
+npc_prophet_velen
+npc_captain_selana
+EndContentData */
 
 #include "ScriptPCH.h"
 #include "sunwell_plateau.h"
 
 /*######
- ## npc_prophet_velen
- ######*/
+## npc_prophet_velen
+######*/
 
-enum ProphetSpeeches {
-	PROPHET_SAY1 = -1580099,
-	PROPHET_SAY2 = -1580100,
-	PROPHET_SAY3 = -1580101,
-	PROPHET_SAY4 = -1580102,
-	PROPHET_SAY5 = -1580103,
-	PROPHET_SAY6 = -1580104,
-	PROPHET_SAY7 = -1580105,
-	PROPHET_SAY8 = -1580106
+enum ProphetSpeeches
+{
+    PROPHET_SAY1 = -1580099,
+    PROPHET_SAY2 = -1580100,
+    PROPHET_SAY3 = -1580101,
+    PROPHET_SAY4 = -1580102,
+    PROPHET_SAY5 = -1580103,
+    PROPHET_SAY6 = -1580104,
+    PROPHET_SAY7 = -1580105,
+    PROPHET_SAY8 = -1580106
 };
 
-enum LiadrinnSpeeches {
-	LIADRIN_SAY1 = -1580107, LIADRIN_SAY2 = -1580108, LIADRIN_SAY3 = -1580109
+enum LiadrinnSpeeches
+{
+    LIADRIN_SAY1 = -1580107,
+    LIADRIN_SAY2 = -1580108,
+    LIADRIN_SAY3 = -1580109
 };
 
 /*######
- ## npc_captain_selana
- ######*/
+## npc_captain_selana
+######*/
 
 #define CS_GOSSIP1 "Give me a situation report, Captain."
 #define CS_GOSSIP2 "What went wrong?"
 #define CS_GOSSIP3 "Why did they stop?"
 #define CS_GOSSIP4 "Your insight is appreciated."
 
-void AddSC_sunwell_plateau() {
+void AddSC_sunwell_plateau()
+{
 }
