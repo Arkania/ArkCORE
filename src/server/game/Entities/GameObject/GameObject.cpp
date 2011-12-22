@@ -542,21 +542,19 @@ void GameObject::Update(uint32 diff) {
 				m_usetimes = 0;
 			}
 
-                SetGoState(GO_STATE_READY);
+			SetGoState(GO_STATE_READY);
 
-                //any return here in case battleground traps
-                if (GetGOInfo()->flags & GO_FLAG_NODESPAWN)
-                    return;
+			//any return here in case battleground traps
 		}
-	
-            //! If this is summoned by a spell with ie. SPELL_EFFECT_SUMMON_OBJECT_WILD, with or without owner, we check respawn criteria based on spell
-            //! The GetOwnerGUID() check is mostly for compatibility with hacky scripts - 99% of the time summoning should be done trough spells.
-            if (GetSpellId() || GetOwnerGUID())
-            {
-                SetRespawnTime(0);
-                Delete();
-                return;
-            }
+
+		if (GetOwnerGUID()) {
+			if (Unit* owner = GetOwner()) {
+				owner->RemoveGameObject(this, false);
+				SetRespawnTime(0);
+				Delete();
+			}
+			return;
+		}
 
 		//burning flags in some battlegrounds, if you find better condition, just add it
 		if (GetGOInfo()->IsDespawnAtAction() || GetGoAnimProgress() > 0) {
