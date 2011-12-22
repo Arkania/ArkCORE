@@ -143,7 +143,7 @@ void Vehicle::Uninstall() {
 			if (passenger->HasUnitTypeMask(UNIT_MASK_ACCESSORY))
 				passenger->ToTempSummon()->UnSummon();
 
-	this->RemoveAllPassengers();
+	RemoveAllPassengers();
 
 	if (GetBase()->GetTypeId() == TYPEID_UNIT)
 		sScriptMgr->OnUninstall(this);
@@ -156,7 +156,7 @@ void Vehicle::Die() {
 			if (passenger->HasUnitTypeMask(UNIT_MASK_ACCESSORY))
 				passenger->setDeathState(JUST_DIED);
 
-	this->RemoveAllPassengers();
+	RemoveAllPassengers();
 
 	if (GetBase()->GetTypeId() == TYPEID_UNIT)
 		sScriptMgr->OnDie(this);
@@ -195,11 +195,9 @@ void Vehicle::RemoveAllPassengers() {
 				itr->second.passenger = NULL;
 			}
 
-			// creature passengers mounted on player mounts should be despawned at dismount
-			if (GetBase()->IsOnVehicle(passenger)
-					&& GetBase()->GetTypeId() == TYPEID_PLAYER
-					&& passenger->ToCreature())
-				passenger->ToCreature()->ForcedDespawn();
+            // creature passengers mounted on player mounts should be despawned at dismount
+            if (GetBase()->GetTypeId() == TYPEID_PLAYER && passenger->ToCreature())
+                passenger->ToCreature()->ForcedDespawn();
 		}
 }
 
@@ -425,24 +423,22 @@ void Vehicle::RemovePassenger(Unit *unit) {
 		sScriptMgr->OnRemovePassenger(this, unit);
 }
 
-void Vehicle::RelocatePassengers(float x, float y, float z, float ang) {
+void Vehicle::RelocatePassengers(float x, float y, float z, float ang) 
+{
 	Map *map = me->GetMap();
 	ASSERT(map != NULL);
 
-	// not sure that absolute position calculation is correct, it must depend on vehicle orientation and pitch angle
-	for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end();
-			++itr)
-		if (Unit *passenger = itr->second.passenger) {
-			if (!passenger)
-				return;
-			if (this->GetBase()->IsOnVehicle(passenger)) {
-				float px = x + passenger->m_movementInfo.t_pos.m_positionX;
-				float py = y + passenger->m_movementInfo.t_pos.m_positionY;
-				float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
-				float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
-				passenger->SetPosition(px, py, pz, po);
-			}
-		}
+    // not sure that absolute position calculation is correct, it must depend on vehicle orientation and pitch angle
+    for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
+        if (Unit *passenger = itr->second.passenger)
+        {
+            float px = x + passenger->m_movementInfo.t_pos.m_positionX;
+            float py = y + passenger->m_movementInfo.t_pos.m_positionY;
+            float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
+            float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
+
+            passenger->SetPosition(px, py, pz, po);
+        }
 }
 
 void Vehicle::Dismiss() {

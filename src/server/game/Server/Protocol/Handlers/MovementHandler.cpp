@@ -748,7 +748,7 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data) {
 			ASSERT(GetPlayer() == vehicle->GetBase());
 			unit->ExitVehicle();
 			unit->ToCreature()->DespawnOrUnsummon(1000);
-			ASSERT(!vehicle->GetBase()->IsOnVehicle(unit));
+			ASSERT(!unit->IsOnVehicle(vehicle->GetBase()));
 		} else
 			sLog->outError(
 					"Player %u attempted to eject creature GUID %u from non-ejectable seat.",
