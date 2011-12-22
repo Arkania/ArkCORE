@@ -8095,10 +8095,7 @@ bool Unit::HandleAuraProc(Unit * pVictim, uint32 damage, Aura * triggeredByAura,
 			// order to add the missing spell 32733 wich i suppose,
 			// is the cooldown marker used by blizz to share the cd
 			// of Pursuit of justice and Blessed life proc.
-			if (!HasAura(31828) && !HasAura(31829)
-					&& ((GetAllSpellMechanicMask(procSpell)
-							& ((1 << MECHANIC_ROOT) | (1 << MECHANIC_STUN)
-									| (1 << MECHANIC_FEAR))))) {
+			if (!HasAura(31828) && !HasAura(31829) && ((GetAllSpellMechanicMask(procSpell) && ((1 << MECHANIC_ROOT) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR))))) {
 				CastSpell(pVictim, 89024, true);
 				return true;
 			}
