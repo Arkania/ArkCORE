@@ -2,4 +2,4 @@
 -- SPELL SCRIPT: Remove new format for spell script don't support on SkyFire
 DELETE FROM `spell_scripts` WHERE `id` IN (43709,51662);
 -- EVENTSCRIPTS: Deleting some event scripts for +4.1 items
-DELETE FROM `event_scripts` WHERE `id` IN (2609);0');
+DELETE FROM `event_scripts` WHERE `id` IN (2609);
