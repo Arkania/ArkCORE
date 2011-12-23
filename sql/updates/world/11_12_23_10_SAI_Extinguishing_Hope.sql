@@ -15,7 +15,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (@ENTRY,@SOURCETYPE,8,10,61,1,100,0,0,0,0,0,33,50047,0,0,0,0,0,1,1,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Update Phase 2 - Give Kill Credit"),
 (@ENTRY,@SOURCETYPE,9,14,61,0,100,0,0,0,0,0,64,1,0,0,0,0,0,7,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Spell Hit - Store Target"),
 (@ENTRY,@SOURCETYPE,10,0,61,1,100,0,0,0,0,0,23,1,0,0,0,0,0,1,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Update Phase 2 - Set Phase 3"),
-(@ENTRY,@SOURCETYPE,11,12,61,2,100,1,0,0,0,0,23,0,0,0,0,0,0,1,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Update Phase 3 - Move To Dummy"),
+(@ENTRY,@SOURCETYPE,11,12,61,2,100,1,0,0,0,0,23,1,0,0,0,0,0,1,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Update Phase 3 - Move To Dummy"),
 (@ENTRY,@SOURCETYPE,12,0,61,2,100,0,0,0,0,0,23,1,0,0,0,0,0,1,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Update Phase 3 - Set Phase 4"),
 (@ENTRY,@SOURCETYPE,13,0,1,4,100,0,16000,17000,16000,17000,41,0,0,0,0,0,0,1,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Update Phase 4 - Despawn"),
 (@ENTRY,@SOURCETYPE,14,15,61,0,100,0,0,0,0,0,11,93097,2,0,0,0,0,1,0,0,0,0.0,0.0,0.0,0.0,"Injured Stormwind Infantry - On Spell Hit - Cast Renewed Life on self"),
