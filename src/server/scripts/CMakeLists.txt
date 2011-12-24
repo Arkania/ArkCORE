@@ -11,6 +11,7 @@
 file(GLOB_RECURSE scripts_easternkingdoms EasternKingdoms/*.cpp EasternKingdoms/*.h)
 file(GLOB_RECURSE scripts_kalimdor Kalimdor/*.cpp Kalimdor/*.h)
 file(GLOB_RECURSE scripts_northrend Northrend/*.cpp Northrend/*.h)
+file(GLOB_RECURSE scripts_maelstrom Maelstrom/*.cpp Maelstrom/*.h)
 file(GLOB_RECURSE scripts_outland Outland/*.cpp Outland/*.h)
 file(GLOB_RECURSE scripts_world World/*.cpp World/*.h)
 file(GLOB_RECURSE scripts_spells Spells/*.cpp Spells/*.h)
@@ -22,6 +23,7 @@ file(GLOB_RECURSE scripts_examples Examples/*.cpp Examples/*.h)
 source_group(EasternKingdoms FILES ${scripts_easternkingdoms})
 source_group(Kalimdor FILES ${scripts_kalimdor})
 source_group(Northrend FILES ${scripts_northrend})
+source_group(Maelstrom FILES ${scripts_maelstrom})
 source_group(Outland FILES ${scripts_outland})
 source_group(World FILES ${scripts_world})
 source_group(Spells FILES ${scripts_spells})
@@ -42,6 +44,7 @@ set(scripts_STAT_SRCS
   ${scripts_easternkingdoms}
   ${scripts_kalimdor}
   ${scripts_northrend}
+  ${scripts_maelstrom}
   ${scripts_outland}
   ${scripts_world}
   ${scripts_spells}

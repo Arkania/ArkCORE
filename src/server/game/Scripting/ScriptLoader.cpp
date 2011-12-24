@@ -597,6 +597,11 @@ void AddSC_zangarmarsh();
 
 // Cataclysm Scripts
 
+// Maelstrom
+void AddSC_deepholm();
+void AddSC_kezan();
+//void AddSC_tol_barad();
+
 void AddSC_the_stonecore();					 //TheStonecore
 void AddSC_instance_the_stonecore();
 void AddSC_instance_halls_of_origination();  //Halls of Origination
@@ -659,6 +664,7 @@ void AddScripts() {
 	AddKalimdorScripts();
 	AddOutlandScripts();
 	AddNorthrendScripts();
+    AddMaelstromScripts();	
 	AddBattlegroundScripts();
 	AddOutdoorPvPScripts();
 	AddCustomScripts();
@@ -1301,6 +1307,15 @@ void AddOutdoorPvPScripts() {
 	AddSC_outdoorpvp_zm();
 	AddSC_outdoorpvp_gh();
 	AddSC_outdoorpvp_wg();
+#endif
+}
+
+void AddMaelstromScripts()
+{
+#ifdef SCRIPTS
+    AddSC_deepholm();
+    AddSC_kezan();
+    //AddSC_tol_barad();
 #endif
 }
 
