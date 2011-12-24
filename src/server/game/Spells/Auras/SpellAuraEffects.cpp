@@ -6378,7 +6378,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 				if (!pet)
 					break;
 
-				pet->CastSpell(target, 83381, true, NULL, this);
+                                pet->CastSpell(target, 83381, true, NULL, this);
 				break;
 			}
 			case 37096: // Blood Elf Illusion
@@ -7087,6 +7087,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 				target->AddPetAura(petSpell);
 			else
 				target->RemovePetAura(petSpell);
+
 		}
 	}
 }
@@ -7104,8 +7105,7 @@ void AuraEffect::HandleChannelDeathItem(AuraApplication const *aurApp,
 
 		Player *plCaster = caster->ToPlayer();
 		Unit *target = aurApp->GetTarget();
-
-		if (target->getDeathState() != JUST_DIED)
+                if (target->getDeathState() != JUST_DIED)
 			return;
 
 		// Item amount
