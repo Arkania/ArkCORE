@@ -1713,66 +1713,66 @@ bool ChatHandler::HandleModifyMountCommand(const char* args)
 
 //Edit Player money
 bool ChatHandler::HandleModifyMoneyCommand(const char* args)
-{
-    if (!*args)
-        return false;
-
-    Player *chr = getSelectedPlayer();
-    if (chr == NULL)
     {
-        SendSysMessage(LANG_NO_CHAR_SELECTED);
-        SetSentErrorMessage(true);
-        return false;
-    }
+        if (!*args)
+            return false;
 
-    // check online security
-    if (HasLowerSecurity(chr, 0))
-        return false;
-
-    int64 addmoney = atoi((char*)args);
-
-    uint64 moneyuser = chr->GetMoney();
-
-    if (addmoney < 0)
-    {
-        int64 newmoney = int64(moneyuser) + addmoney;
-
-        sLog->outDetail(GetArkCoreString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
-        if (newmoney <= 0)
+        Player* target = getSelectedPlayer();
+        if (!target)
         {
-            PSendSysMessage(LANG_YOU_TAKE_ALL_MONEY, GetNameLink(chr).c_str());
-            if (needReportToTarget(chr))
-                ChatHandler(chr).PSendSysMessage(LANG_YOURS_ALL_MONEY_GONE, GetNameLink().c_str());
+            SendSysMessage(LANG_NO_CHAR_SELECTED);
+            SetSentErrorMessage(true);
+            return false;
+        }
 
-            chr->SetMoney(0);
+        // check online security
+        if (HasLowerSecurity(target, 0))
+            return false;
+
+        int32 addmoney = atoi((char*)args);
+
+        uint32 moneyuser = target->GetMoney();
+
+        if (addmoney < 0)
+        {
+            int32 newmoney = int32(moneyuser) + addmoney;
+
+            sLog->outDetail(GetArkCoreString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
+            if (newmoney <= 0)
+            {
+                PSendSysMessage(LANG_YOU_TAKE_ALL_MONEY, GetNameLink(target).c_str());
+                if (needReportToTarget(target))
+                    (ChatHandler(target)).PSendSysMessage(LANG_YOURS_ALL_MONEY_GONE, GetNameLink().c_str());
+
+                target->SetMoney(0);
+            }
+            else
+            {
+                if (newmoney > MAX_MONEY_AMOUNT)
+                    newmoney = MAX_MONEY_AMOUNT;
+
+                PSendSysMessage(LANG_YOU_TAKE_MONEY, abs(addmoney), GetNameLink(target).c_str());
+                if (needReportToTarget(target))
+                    (ChatHandler(target)).PSendSysMessage(LANG_YOURS_MONEY_TAKEN, GetNameLink().c_str(), abs(addmoney));
+                target->SetMoney(newmoney);
+            }
         }
         else
         {
-            if (newmoney > MAX_MONEY_AMOUNT)
-                newmoney = MAX_MONEY_AMOUNT;
+            PSendSysMessage(LANG_YOU_GIVE_MONEY, addmoney, GetNameLink(target).c_str());
+            if (needReportToTarget(target))
+                (ChatHandler(target)).PSendSysMessage(LANG_YOURS_MONEY_GIVEN, GetNameLink().c_str(), addmoney);
 
-            PSendSysMessage(LANG_YOU_TAKE_MONEY, addmoney, GetNameLink(chr).c_str());
-            if (needReportToTarget(chr))
-                ChatHandler(chr).PSendSysMessage(LANG_YOURS_MONEY_TAKEN, GetNameLink().c_str(), addmoney);
-            chr->SetMoney(newmoney);
+            if (addmoney >=MAX_MONEY_AMOUNT)
+                target->SetMoney(MAX_MONEY_AMOUNT);
+            else
+                target->ModifyMoney(addmoney);
         }
+
+        sLog->outDetail(GetArkCoreString(LANG_NEW_MONEY), moneyuser, addmoney, target->GetMoney());
+
+        return true;
     }
-    else
-    {
-        PSendSysMessage(LANG_YOU_GIVE_MONEY, addmoney, GetNameLink(chr).c_str());
-        if (needReportToTarget(chr))
-            ChatHandler(chr).PSendSysMessage(LANG_YOURS_MONEY_GIVEN, GetNameLink().c_str(), addmoney);
-
-        if (addmoney >=MAX_MONEY_AMOUNT)
-            chr->SetMoney(MAX_MONEY_AMOUNT);
-        else
-            chr->ModifyMoney(addmoney);
-    }
-
-    sLog->outDetail(GetArkCoreString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
-
-    return true;
-}
 
 //Edit Unit field
 bool ChatHandler::HandleModifyBitCommand(const char* args)
