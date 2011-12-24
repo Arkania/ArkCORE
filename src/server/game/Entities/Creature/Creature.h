@@ -818,6 +818,7 @@ public:
 	}
 	uint32 m_PlayerDamageReq;
 
+    uint32 GetOriginalEntry() const { return m_originalEntry; }	
 	void SetOriginalEntry(uint32 entry) {
 		m_originalEntry = entry;
 	}

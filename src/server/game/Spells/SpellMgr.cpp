@@ -2574,6 +2574,59 @@ bool SpellMgr::IsSpellValid(SpellEntry const *spellInfo, Player *pl, bool msg) {
 	return true;
 }
 
+uint32 SpellMgr::GetSpellDifficultyId(uint32 spellId) const
+{
+    SpellDifficultySearcherMap::const_iterator i = mSpellDifficultySearcherMap.find(spellId);
+    return i == mSpellDifficultySearcherMap.end() ? 0 : (*i).second;
+}
+
+void SpellMgr::SetSpellDifficultyId(uint32 spellId, uint32 id)
+{
+    mSpellDifficultySearcherMap[spellId] = id;
+}
+
+uint32 SpellMgr::GetSpellIdForDifficulty(uint32 spellId, Unit const* caster) const
+{
+   // if (!GetSpellInfo(spellId))
+     //   return spellId;
+
+    if (!caster || !caster->GetMap() || !caster->GetMap()->IsDungeon())
+        return spellId;
+
+    uint32 mode = uint32(caster->GetMap()->GetSpawnMode());
+    if (mode >= MAX_DIFFICULTY)
+    {
+        sLog->outError("SpellMgr::GetSpellIdForDifficulty: Incorrect Difficulty for spell %u.", spellId);
+        return spellId; //return source spell
+    }
+
+    uint32 difficultyId = GetSpellDifficultyId(spellId);
+    if (!difficultyId)
+        return spellId; //return source spell, it has only REGULAR_DIFFICULTY
+
+    SpellDifficultyEntry const* difficultyEntry = sSpellDifficultyStore.LookupEntry(difficultyId);
+    if (!difficultyEntry)
+    {
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellMgr::GetSpellIdForDifficulty: SpellDifficultyEntry not found for spell %u. This should never happen.", spellId);
+        return spellId; //return source spell
+    }
+
+    if (difficultyEntry->SpellID[mode] <= 0 && mode > DUNGEON_DIFFICULTY_HEROIC)
+    {
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellMgr::GetSpellIdForDifficulty: spell %u mode %u spell is NULL, using mode %u", spellId, mode, mode - 2);
+        mode -= 2;
+    }
+
+    if (difficultyEntry->SpellID[mode] <= 0)
+    {
+        sLog->outErrorDb("SpellMgr::GetSpellIdForDifficulty: spell %u mode %u spell is 0. Check spelldifficulty_dbc!", spellId, mode);
+        return spellId;
+    }
+
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellMgr::GetSpellIdForDifficulty: spellid for spell %u in mode %u is %d", spellId, mode, difficultyEntry->SpellID[mode]);
+    return uint32(difficultyEntry->SpellID[mode]);
+}
+
 void SpellMgr::LoadSpellAreas() {
 	uint32 oldMSTime = getMSTime();
 

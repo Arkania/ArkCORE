@@ -445,6 +445,43 @@ void Unit::SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ,
 		SendMessageToSet(&data, true);
 }
 
+void Unit::SendMonsterMove(MonsterMoveData const& moveData, Player* player)
+{
+    WorldPacket data(SMSG_MONSTER_MOVE, GetPackGUID().size() + 1 + 12 + 4 + 1 + 4 + 8 + 4 + 4 + 12);
+    data.append(GetPackGUID());
+
+    data << uint8(0);                                           // new in 3.1
+    data << GetPositionX() << GetPositionY() << GetPositionZ();
+    data << getMSTime();
+
+    data << uint8(0);
+    data << moveData.SplineFlag;
+
+    if (moveData.SplineFlag & SPLINEFLAG_ANIMATIONTIER)
+    {
+        data << uint8(moveData.AnimationState);
+        data << uint32(0);
+    }
+
+    data << moveData.Time;
+
+    if (moveData.SplineFlag & SPLINEFLAG_TRAJECTORY)
+    {
+        data << moveData.SpeedZ;
+        data << uint32(0);                                      // walk time after jump
+    }
+
+    data << uint32(1);                                          // waypoint count
+    data << moveData.DestLocation.GetPositionX();
+    data << moveData.DestLocation.GetPositionY();
+    data << moveData.DestLocation.GetPositionZ();
+
+    if (player)
+        player->GetSession()->SendPacket(&data);
+    else
+        SendMessageToSet(&data, true);
+}
+
 void Unit::SendMonsterMoveTransport(Unit *vehicleOwner) {
 	// TODO: Turn into BuildMonsterMoveTransport packet and allow certain variables (for npc movement aboard vehicles)
 	WorldPacket data(SMSG_MONSTER_MOVE_TRANSPORT,
@@ -18084,6 +18121,24 @@ void Unit::OutDebugInfo() const {
 
 	if (GetVehicle())
 		sLog->outString("On vehicle %u.", GetVehicleBase()->GetEntry());
+}
+
+void Unit::SendClearTarget()
+{
+    WorldPacket data(SMSG_BREAK_TARGET, GetPackGUID().size());
+    data.append(GetPackGUID());
+    SendMessageToSet(&data, false);
+}
+
+uint32 Unit::GetResistance(SpellSchoolMask mask) const
+{
+    int32 resist = -1;
+    for (int i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; ++i)
+        if (mask & (1 << i) && (resist < 0 || resist > int32(GetResistance(SpellSchools(i)))))
+            resist = int32(GetResistance(SpellSchools(i)));
+
+    // resist value will never be negative here
+    return uint32(resist);
 }
 
 uint32 Unit::GetRemainingDotDamage(uint64 caster, uint32 spellId,

@@ -309,6 +309,58 @@ void MotionMaster::MoveKnockbackFrom(float srcX, float srcY, float speedXY,
 	MoveJump(x, y, z, speedXY/speedZ, speedZ);
 }
 
+void MotionMaster::MoveLand(uint32 id, Position const& pos, float speed)
+{
+    if (i_owner->GetTypeId() != TYPEID_UNIT)
+        return;
+
+    uint32 moveFlag = SPLINEFLAG_FLYING | SPLINEFLAG_ANIMATIONTIER;
+    uint32 moveTime = uint32(i_owner->GetExactDist(&pos) / speed) * IN_MILLISECONDS;
+
+    // CHARGING state makes the unit use m_TempSpeed and JUMPING prevents sending movement packet in PointMovementGenerator
+    i_owner->AddUnitState(UNIT_STAT_CHARGING | UNIT_STAT_JUMPING);
+    i_owner->m_TempSpeed = speed;
+
+    float x, y, z;
+    pos.GetPosition(x, y, z);
+    sLog->outStaticDebug("Creature (Entry: %u) landing point (ID: %u X: %f Y: %f Z: %f)", i_owner->GetEntry(), id, x, y, z);
+    Mutate(new PointMovementGenerator<Creature>(id, x, y, z), MOTION_SLOT_ACTIVE);
+
+    MonsterMoveData data;
+    data.DestLocation.Relocate(pos);
+    data.SplineFlag = moveFlag;
+    data.Time = moveTime;
+    data.AnimationState = ANIMATION_ON_GROUND;
+
+    i_owner->SendMonsterMove(data);
+}
+
+void MotionMaster::MoveTakeoff(uint32 id, Position const& pos, float speed)
+{
+    if (i_owner->GetTypeId() != TYPEID_UNIT)
+        return;
+
+    uint32 moveFlag = SPLINEFLAG_FLYING | SPLINEFLAG_ANIMATIONTIER;
+    uint32 moveTime = uint32(i_owner->GetExactDist(&pos) / speed) * IN_MILLISECONDS;
+
+    // CHARGING state makes the unit use m_TempSpeed and JUMPING prevents sending movement packet in PointMovementGenerator
+    i_owner->AddUnitState(UNIT_STAT_CHARGING | UNIT_STAT_JUMPING);
+    i_owner->m_TempSpeed = speed;
+
+    float x, y, z;
+    pos.GetPosition(x, y, z);
+    sLog->outStaticDebug("Creature (Entry: %u) landing point (ID: %u X: %f Y: %f Z: %f)", i_owner->GetEntry(), id, x, y, z);
+    Mutate(new PointMovementGenerator<Creature>(id, x, y, z), MOTION_SLOT_ACTIVE);
+
+    MonsterMoveData data;
+    data.DestLocation.Relocate(pos);
+    data.SplineFlag = moveFlag;
+    data.Time = moveTime;
+    data.AnimationState = ANIMATION_FLYING;
+
+    i_owner->SendMonsterMove(data);
+}
+
 void MotionMaster::MoveJumpTo(float angle, float speedXY, float speedZ) {
 	//this function may make players fall below map
 	if (i_owner->GetTypeId() == TYPEID_PLAYER)
