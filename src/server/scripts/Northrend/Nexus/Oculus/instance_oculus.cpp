@@ -1,5 +1,9 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+ *
+ * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+ *
+ * Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,228 +25,263 @@
 #define MAX_ENCOUNTER 4
 
 /* The Occulus encounters:
- 0 - Drakos the Interrogator
- 1 - Varos Cloudstrider
- 2 - Mage-Lord Urom
- 3 - Ley-Guardian Eregos */
+0 - Drakos the Interrogator
+1 - Varos Cloudstrider
+2 - Mage-Lord Urom
+3 - Ley-Guardian Eregos */
 
-class instance_oculus: public InstanceMapScript {
+class instance_oculus : public InstanceMapScript
+{
 public:
-	instance_oculus() :
-			InstanceMapScript("instance_oculus", 578) {
-	}
+    instance_oculus() : InstanceMapScript("instance_oculus", 578) { }
 
-	InstanceScript* GetInstanceScript(InstanceMap* pMap) const {
-		return new instance_oculus_InstanceMapScript(pMap);
-	}
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
+    {
+        return new instance_oculus_InstanceMapScript(map);
+    }
 
-	struct instance_oculus_InstanceMapScript: public InstanceScript {
-		instance_oculus_InstanceMapScript(Map* pMap) :
-				InstanceScript(pMap) {
-			Initialize();
-		}
-		;
+    struct instance_oculus_InstanceMapScript : public InstanceScript
+    {
+        instance_oculus_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-		void Initialize() {
-			drakosGUID = 0;
-			varosGUID = 0;
-			uromGUID = 0;
-			eregosGUIDs = 0;
+        void Initialize()
+        {
+            SetBossNumber(MAX_ENCOUNTER);
 
-			platformUrom = 0;
+            drakosGUID = 0;
+            varosGUID = 0;
+            uromGUID = 0;
+            eregosGUID = 0;
 
-			azureDragonsList.clear();
-			gameObjectList.clear();
-		}
+            platformUrom = 0;
+            centrifugueConstructCounter = 0;
 
-		void ProcessEvent(Unit* /*unit*/, uint32 eventId) {
-			if (eventId != EVENT_CALL_DRAGON)
-				return;
+            eregosCacheGUID = 0;
 
-			if (azureDragonsList.empty())
-				return;
+            azureDragonsList.clear();
+            gameObjectList.clear();
+        }
 
-			Creature* nearestDragon = NULL;
-			Creature* varos = instance->GetCreature(varosGUID);
+        void OnCreatureDeath(Creature* creature)
+        {
+            if (creature->GetEntry() != NPC_CENTRIFUGE_CONSTRUCT)
+                return;
 
-			for (std::list<uint64>::const_iterator itr =
-					azureDragonsList.begin(); itr != azureDragonsList.end();
-					++itr) {
-				if (Creature* dragon = instance->GetCreature(*itr)) {
-					if (!dragon->isAlive() && dragon->isInCombat())
-						continue;
+             DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, --centrifugueConstructCounter);
 
-					if (!nearestDragon)
-						nearestDragon = dragon;
-					else if (varos) {
-						if (nearestDragon->GetExactDist(varos)
-								> dragon->GetExactDist(varos))
-							nearestDragon = dragon;
-					}
-				}
-			}
+             if (!centrifugueConstructCounter)
+                if (Creature* varos = instance->GetCreature(varosGUID))
+                    varos->RemoveAllAuras();
+        }
 
-			if (nearestDragon)
-				nearestDragon->AI()->DoAction(ACTION_CALL_DRAGON_EVENT);
-		}
+        void OnPlayerEnter(Player* player)
+        {
+            if (GetBossState(DATA_DRAKOS_EVENT) == DONE && GetBossState(DATA_VAROS_EVENT) != DONE)
+            {
+                player->SendUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW, 1);
+                player->SendUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, centrifugueConstructCounter);
+            }
+            else
+            {
+                player->SendUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW, 0);
+                player->SendUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, 0);
+            }
+        }
 
-		void OnCreatureCreate(Creature* creature) {
-			switch (creature->GetEntry()) {
-			case NPC_DRAKOS:
-				drakosGUID = creature->GetGUID();
-				break;
-			case NPC_VAROS:
-				varosGUID = creature->GetGUID();
-				break;
-			case NPC_UROM:
-				uromGUID = creature->GetGUID();
-				break;
-			case NPC_EREGOS:
-				eregosGUIDs = creature->GetGUID();
-				break;
-			case NPC_AZURE_RING_GUARDIAN:
-				azureDragonsList.push_back(creature->GetGUID());
-				break;
-			}
-		}
+        void ProcessEvent(WorldObject* /*unit*/, uint32 eventId)
+        {
+            if (eventId != EVENT_CALL_DRAGON)
+                return;
 
-		void OnGameObjectCreate(GameObject* go) {
-			if (go->GetEntry() == GO_DRAGON_CAGE_DOOR) {
-				if (GetData(DATA_DRAKOS_EVENT) == DONE)
-					go->SetGoState(GO_STATE_ACTIVE);
-				else
-					go->SetGoState(GO_STATE_READY);
+            Creature* varos = instance->GetCreature(varosGUID);
 
-				gameObjectList.push_back(go->GetGUID());
-			}
-		}
+            if (!varos)
+                return;
 
-		void SetData(uint32 type, uint32 data) {
-			switch (type) {
-			case DATA_DRAKOS_EVENT:
-				encounter[0] = data;
-				if (data == DONE)
-					OpenCageDoors();
-				break;
-			case DATA_VAROS_EVENT:
-				encounter[1] = data;
-				break;
-			case DATA_UROM_EVENT:
-				encounter[2] = data;
-				break;
-			case DATA_EREGOS_EVENT:
-				encounter[3] = data;
-				break;
-			case DATA_UROM_PLATAFORM:
-				platformUrom = data;
-				break;
-			}
+            if (Creature* drake = varos->SummonCreature(NPC_AZURE_RING_GUARDIAN, varos->GetPositionX(), varos->GetPositionY(), varos->GetPositionZ() + 40))
+                drake->AI()->DoAction(ACTION_CALL_DRAGON_EVENT);
+        }
 
-			if (data == DONE)
-				SaveToDB();
-		}
+        void OnCreatureCreate(Creature* creature)
+        {
+            switch (creature->GetEntry())
+            {
+                case NPC_DRAKOS:
+                    drakosGUID = creature->GetGUID();
+                    break;
+                case NPC_VAROS:
+                    varosGUID = creature->GetGUID();
+                    break;
+                case NPC_UROM:
+                    uromGUID = creature->GetGUID();
+                    break;
+                case NPC_EREGOS:
+                    eregosGUID = creature->GetGUID();
+                    break;
+                case NPC_CENTRIFUGE_CONSTRUCT:
+                    if (creature->isAlive())
+                        DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, ++centrifugueConstructCounter);
+                    break;
+            }
+        }
 
-		uint32 GetData(uint32 type) {
-			switch (type) {
-			case DATA_DRAKOS_EVENT:
-				return encounter[0];
-			case DATA_VAROS_EVENT:
-				return encounter[1];
-			case DATA_UROM_EVENT:
-				return encounter[2];
-			case DATA_EREGOS_EVENT:
-				return encounter[3];
-			case DATA_UROM_PLATAFORM:
-				return platformUrom;
-			}
+        void OnGameObjectCreate(GameObject* go)
+        {
+            switch (go->GetEntry())
+            {
+                case GO_DRAGON_CAGE_DOOR:
+                    if (GetBossState(DATA_DRAKOS_EVENT) == DONE)
+                        go->SetGoState(GO_STATE_ACTIVE);
+                    else
+                        go->SetGoState(GO_STATE_READY);
+                    gameObjectList.push_back(go->GetGUID());
+                    break;
+                case GO_EREGOS_CACHE_N:
+                case GO_EREGOS_CACHE_H:
+                    eregosCacheGUID = go->GetGUID();
+                    break;
+                default:
+                    break;
+            }
+        }
 
-			return 0;
-		}
+        bool SetBossState(uint32 type, EncounterState state)
+        {
+            if (!InstanceScript::SetBossState(type, state))
+                return false;
 
-		uint64 GetData64(uint32 identifier) {
-			switch (identifier) {
-			case DATA_DRAKOS:
-				return drakosGUID;
-			case DATA_VAROS:
-				return varosGUID;
-			case DATA_UROM:
-				return uromGUID;
-			case DATA_EREGOS:
-				return eregosGUIDs;
-			}
+            switch (type)
+            {
+                case DATA_DRAKOS_EVENT:
+                    if (state == DONE)
+                    {
+                        DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW, 1);
+                        DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, centrifugueConstructCounter);
+                        OpenCageDoors();
+                    }
+                    break;
+                case DATA_VAROS_EVENT:
+                    if (state == DONE)
+                        DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW, 0);
+                    break;
+                case DATA_EREGOS_EVENT:
+                    if (state == DONE)
+                        DoRespawnGameObject(eregosCacheGUID, 7*DAY);
+                    break;
+            }
 
-			return 0;
-		}
+            return true;
+        }
 
-		void OpenCageDoors() {
-			if (gameObjectList.empty())
-				return;
+        void SetData(uint32 type, uint32 data)
+        {
+            switch (type)
+            {
+                case DATA_UROM_PLATFORM:
+                    platformUrom = data;
+                    break;
+            }
+        }
 
-			for (std::list<uint64>::const_iterator itr = gameObjectList.begin();
-					itr != gameObjectList.end(); ++itr) {
-				if (GameObject* go = instance->GetGameObject(*itr))
-					go->SetGoState(GO_STATE_ACTIVE);
-			}
-		}
+        uint32 GetData(uint32 type)
+        {
+            switch (type)
+            {
+                case DATA_UROM_PLATFORM:          return platformUrom;
+                // used by condition system
+                case DATA_UROM_EVENT:             return GetBossState(DATA_UROM_EVENT);
+            }
 
-		std::string GetSaveData() {
-			OUT_SAVE_INST_DATA;
+            return 0;
+        }
 
-			std::ostringstream saveStream;
-			saveStream << "T O " << encounter[0] << " " << encounter[1] << " "
-					<< encounter[2] << " " << encounter[3];
+        uint64 GetData64(uint32 identifier)
+        {
+            switch (identifier)
+            {
+                case DATA_DRAKOS:                 return drakosGUID;
+                case DATA_VAROS:                  return varosGUID;
+                case DATA_UROM:                   return uromGUID;
+                case DATA_EREGOS:                 return eregosGUID;
+            }
 
-			str_data = saveStream.str();
+            return 0;
+        }
 
-			OUT_SAVE_INST_DATA_COMPLETE;
-			return str_data;
-		}
+        void OpenCageDoors()
+        {
+            if (gameObjectList.empty())
+                return;
 
-		void Load(const char* in) {
-			if (!in) {
-				OUT_LOAD_INST_DATA_FAIL;
-				return;
-			}
+            for (std::list<uint64>::const_iterator itr = gameObjectList.begin(); itr != gameObjectList.end(); ++itr)
+            {
+                if (GameObject* go = instance->GetGameObject(*itr))
+                    go->SetGoState(GO_STATE_ACTIVE);
+            }
+        }
 
-			OUT_LOAD_INST_DATA(in);
+        std::string GetSaveData()
+        {
+            OUT_SAVE_INST_DATA;
 
-			char dataHead1, dataHead2;
-			uint16 data0, data1, data2, data3;
+            std::ostringstream saveStream;
+            saveStream << "T O " << GetBossSaveData();
 
-			std::istringstream loadStream(in);
-			loadStream >> dataHead1 >> dataHead2 >> data0 >> data1 >> data2
-					>> data3;
+            str_data = saveStream.str();
 
-			if (dataHead1 == 'T' && dataHead2 == 'O') {
-				encounter[0] = data0;
-				encounter[1] = data1;
-				encounter[2] = data2;
-				encounter[3] = data3;
+            OUT_SAVE_INST_DATA_COMPLETE;
+            return str_data;
+        }
 
-				for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-					if (encounter[i] == IN_PROGRESS)
-						encounter[i] = NOT_STARTED;
-			} else
-				OUT_LOAD_INST_DATA_FAIL;
+        void Load(const char* in)
+        {
+            if (!in)
+            {
+                OUT_LOAD_INST_DATA_FAIL;
+                return;
+            }
 
-			OUT_LOAD_INST_DATA_COMPLETE;
-		}
-	private:
-		uint64 drakosGUID;
-		uint64 varosGUID;
-		uint64 uromGUID;
-		uint64 eregosGUIDs;
+            OUT_LOAD_INST_DATA(in);
 
-		uint8 platformUrom;
+            char dataHead1, dataHead2;
 
-		uint16 encounter[MAX_ENCOUNTER];
-		std::string str_data;
+            std::istringstream loadStream(in);
+            loadStream >> dataHead1 >> dataHead2;
 
-		std::list<uint64> gameObjectList;
-		std::list<uint64> azureDragonsList;
-	};
+            if (dataHead1 == 'T' && dataHead2 == 'O')
+            {
+                for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+                {
+                    uint32 tmpState;
+                    loadStream >> tmpState;
+                    if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
+                        tmpState = NOT_STARTED;
+                    SetBossState(i, EncounterState(tmpState));
+                }
+            } else OUT_LOAD_INST_DATA_FAIL;
+
+            OUT_LOAD_INST_DATA_COMPLETE;
+        }
+
+        private:
+            uint64 drakosGUID;
+            uint64 varosGUID;
+            uint64 uromGUID;
+            uint64 eregosGUID;
+
+            uint8 platformUrom;
+            uint8 centrifugueConstructCounter;
+
+            uint64 eregosCacheGUID;
+
+            std::string str_data;
+
+            std::list<uint64> gameObjectList;
+            std::list<uint64> azureDragonsList;
+    };
 };
 
-void AddSC_instance_oculus() {
-	new instance_oculus();
+void AddSC_instance_oculus()
+{
+    new instance_oculus();
 }

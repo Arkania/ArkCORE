@@ -3,154 +3,180 @@
  *
  * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
+ * Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/>
  *
- * Copyright (C) 2010-2011 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
- * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ScriptPCH.h"
 #include "violet_hold.h"
 
-enum Spells {
-	SPELL_CAUTERIZING_FLAMES = 59466, //Only in heroic
-	SPELL_FIREBOLT = 54235,
-	H_SPELL_FIREBOLT = 59468,
-	SPELL_FLAME_BREATH = 54282,
-	H_SPELL_FLAME_BREATH = 59469,
-	SPELL_LAVA_BURN = 54249,
-	H_SPELL_LAVA_BURN = 59594
+enum Spells
+{
+  SPELL_CAUTERIZING_FLAMES                      = 59466, //Only in heroic
+  SPELL_FIREBOLT                                = 54235,
+  H_SPELL_FIREBOLT                              = 59468,
+  SPELL_FLAME_BREATH                            = 54282,
+  H_SPELL_FLAME_BREATH                          = 59469,
+  SPELL_LAVA_BURN                               = 54249,
+  H_SPELL_LAVA_BURN                             = 59594
 };
 
-class boss_lavanthor: public CreatureScript {
+class boss_lavanthor : public CreatureScript
+{
 public:
-	boss_lavanthor() :
-			CreatureScript("boss_lavanthor") {
-	}
+    boss_lavanthor() : CreatureScript("boss_lavanthor") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_lavanthorAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new boss_lavanthorAI (creature);
+    }
 
-	struct boss_lavanthorAI: public BossAI {
-		boss_lavanthorAI(Creature *c) :
-				BossAI(c, BOSS_LAVANTHOR) {
-			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
-					true);
-			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-		}
+    struct boss_lavanthorAI : public ScriptedAI
+    {
+        boss_lavanthorAI(Creature* c) : ScriptedAI(c)
+        {
+            instance = c->GetInstanceScript();
+        }
 
-		uint32 uiFireboltTimer;
-		uint32 uiFlameBreathTimer;
-		uint32 uiLavaBurnTimer;
-		uint32 uiCauterizingFlamesTimer;
+        uint32 uiFireboltTimer;
+        uint32 uiFlameBreathTimer;
+        uint32 uiLavaBurnTimer;
+        uint32 uiCauterizingFlamesTimer;
 
-		void Reset() {
-			uiFireboltTimer = 1000;
-			uiFlameBreathTimer = 5000;
-			uiLavaBurnTimer = 10000;
-			uiCauterizingFlamesTimer = 3000;
-			if (instance) {
-				if (instance->GetData(DATA_WAVE_COUNT) == 6)
-					instance->SetData(DATA_1ST_BOSS_EVENT, NOT_STARTED);
-				else if (instance->GetData(DATA_WAVE_COUNT) == 12)
-					instance->SetData(DATA_2ND_BOSS_EVENT, NOT_STARTED);
-			}
-		}
+        InstanceScript* instance;
 
-		void EnterCombat(Unit* /*who*/) {
-			if (instance) {
-				if (GameObject *pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_LAVANTHOR_CELL)))
-					if (pDoor->GetGoState() == GO_STATE_READY) {
-						EnterEvadeMode();
-						return;
-					}
-				if (instance->GetData(DATA_WAVE_COUNT) == 6)
-					instance->SetData(DATA_1ST_BOSS_EVENT, IN_PROGRESS);
-				else if (instance->GetData(DATA_WAVE_COUNT) == 12)
-					instance->SetData(DATA_2ND_BOSS_EVENT, IN_PROGRESS);
-			}
-		}
+        void Reset()
+        {
+            uiFireboltTimer = 1000;
+            uiFlameBreathTimer = 5000;
+            uiLavaBurnTimer = 10000;
+            uiCauterizingFlamesTimer = 3000;
+            if (instance)
+            {
+                if (instance->GetData(DATA_WAVE_COUNT) == 6)
+                    instance->SetData(DATA_1ST_BOSS_EVENT, NOT_STARTED);
+                else if (instance->GetData(DATA_WAVE_COUNT) == 12)
+                    instance->SetData(DATA_2ND_BOSS_EVENT, NOT_STARTED);
+            }
+        }
 
-		void AttackStart(Unit* pWho) {
-			if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE)
-					|| me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
-				return;
+        void EnterCombat(Unit* /*who*/)
+        {
+            if (instance)
+            {
+            if (GameObject* pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_LAVANTHOR_CELL)))
+                    if (pDoor->GetGoState() == GO_STATE_READY)
+                    {
+                        EnterEvadeMode();
+                        return;
+                    }
+                if (instance->GetData(DATA_WAVE_COUNT) == 6)
+                    instance->SetData(DATA_1ST_BOSS_EVENT, IN_PROGRESS);
+                else if (instance->GetData(DATA_WAVE_COUNT) == 12)
+                    instance->SetData(DATA_2ND_BOSS_EVENT, IN_PROGRESS);
+            }
+        }
 
-			if (me->Attack(pWho, true)) {
-				me->AddThreat(pWho, 0.0f);
-				me->SetInCombatWith(pWho);
-				pWho->SetInCombatWith(me);
-				DoStartMovement(pWho);
-			}
-		}
+        void AttackStart(Unit* who)
+        {
+            if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+                return;
 
-		void MoveInLineOfSight(Unit* /*who*/) {
-		}
+            if (me->Attack(who, true))
+            {
+                me->AddThreat(who, 0.0f);
+                me->SetInCombatWith(who);
+                who->SetInCombatWith(me);
+                DoStartMovement(who);
+            }
+        }
 
-		void UpdateAI(const uint32 diff) {
-			//Return since we have no target
-			if (!UpdateVictim())
-				return;
+        void MoveInLineOfSight(Unit* /*who*/) {}
 
-			if (uiFireboltTimer <= diff) {
-				DoCast(me->getVictim(), SPELL_FIREBOLT);
-				uiFireboltTimer = urand(5000, 13000);
-			} else
-				uiFireboltTimer -= diff;
+        void UpdateAI(const uint32 diff)
+        {
+            //Return since we have no target
+            if (!UpdateVictim())
+                return;
 
-			if (uiFlameBreathTimer <= diff) {
-				DoCast(me->getVictim(), SPELL_FLAME_BREATH);
-				uiFlameBreathTimer = urand(10000, 15000);
-			} else
-				uiFlameBreathTimer -= diff;
+            if (uiFlameBreathTimer <= diff)
+            {
+                if(!me->IsNonMeleeSpellCasted(false))
+            {
+                DoCast(me->getVictim(), SPELL_FLAME_BREATH);
+                uiFlameBreathTimer = urand(10000,15000);
+                }
+            } else uiFlameBreathTimer -= diff;
 
-			if (uiLavaBurnTimer <= diff) {
-				DoCast(me->getVictim(), SPELL_LAVA_BURN);
-				uiLavaBurnTimer = urand(15000, 23000);
-			}
+            if (uiLavaBurnTimer <= diff)
+            {
+                if(!me->IsNonMeleeSpellCasted(false))
+                {
+                    DoCast(me->getVictim(), DUNGEON_MODE(SPELL_LAVA_BURN, H_SPELL_LAVA_BURN));
+                    uiLavaBurnTimer = urand(10000,20000);
+                }
+            }
 
-			if (IsHeroic()) {
-				if (uiCauterizingFlamesTimer <= diff) {
-					DoCast(me->getVictim(), SPELL_CAUTERIZING_FLAMES);
-					uiCauterizingFlamesTimer = urand(10000, 16000);
-				} else
-					uiCauterizingFlamesTimer -= diff;
-			}
+            if (IsHeroic())
+            {
+                if (uiCauterizingFlamesTimer <= diff)
+                {
+                    DoCast(me->getVictim(), SPELL_CAUTERIZING_FLAMES);
+                    uiCauterizingFlamesTimer = urand(10000, 16000);
+                } else uiCauterizingFlamesTimer -= diff;
+            }
 
-			DoMeleeAttackIfReady();
-		}
+            if (uiFireboltTimer <= diff)
+            {
+                if(!me->IsNonMeleeSpellCasted(false))
+                {
+                    DoCast(me->getVictim(), DUNGEON_MODE(SPELL_FIREBOLT, H_SPELL_FIREBOLT));
+                    uiFireboltTimer = urand(5000,13000);
+                }
+            } else uiFireboltTimer -= diff;
 
-		void JustDied(Unit* /*killer*/) {
-			_JustDied();
-			if (instance) {
-				if (instance->GetData(DATA_WAVE_COUNT) == 6) {
-					instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
-					instance->SetData(DATA_WAVE_COUNT, 7);
-				} else if (instance->GetData(DATA_WAVE_COUNT) == 12) {
-					instance->SetData(DATA_2ND_BOSS_EVENT, DONE);
-					instance->SetData(DATA_WAVE_COUNT, 13);
-				}
-			}
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+
+        void JustDied(Unit* /*killer*/)
+        {
+            if (instance)
+            {
+                if (instance->GetData(DATA_WAVE_COUNT) == 6)
+                {
+                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                        me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+
+                    instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
+                    instance->SetData(DATA_WAVE_COUNT, 7);
+                }
+                else if (instance->GetData(DATA_WAVE_COUNT) == 12)
+                {
+                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                        me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+
+                    instance->SetData(DATA_2ND_BOSS_EVENT, DONE);
+                    instance->SetData(DATA_WAVE_COUNT, 13);
+                }
+            }
+        }
+    };
+
 };
 
-void AddSC_boss_lavanthor() {
-	new boss_lavanthor();
+void AddSC_boss_lavanthor()
+{
+    new boss_lavanthor();
 }
