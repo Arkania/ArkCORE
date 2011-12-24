@@ -40,13 +40,10 @@ GossipMenu::~GossipMenu() {
 	ClearMenu();
 }
 
-void GossipMenu::AddMenuItem(uint8 Icon, const std::string& Message,
-		uint32 dtSender, uint32 dtAction, const std::string& BoxMessage,
-		uint32 BoxMoney, bool Coded) {
+void GossipMenu::AddMenuItem(uint8 Icon, const std::string& Message, uint32 dtSender, uint32 dtAction, const std::string& BoxMessage, uint32 BoxMoney, bool Coded) {
 	ASSERT(m_gItems.size() <= GOSSIP_MAX_MENU_ITEMS);
 
 	GossipMenuItem gItem;
-
 	gItem.m_gIcon = Icon;
 	gItem.m_gMessage = Message;
 	gItem.m_gCoded = Coded;
@@ -54,14 +51,11 @@ void GossipMenu::AddMenuItem(uint8 Icon, const std::string& Message,
 	gItem.m_gOptionId = dtAction;
 	gItem.m_gBoxMessage = BoxMessage;
 	gItem.m_gBoxMoney = BoxMoney;
-
 	m_gItems.push_back(gItem);
 }
 
-void GossipMenu::AddGossipMenuItemData(uint32 action_menu, uint32 action_poi,
-		uint32 action_script) {
+void GossipMenu::AddGossipMenuItemData(uint32 action_menu, uint32 action_poi, uint32 action_script) {
 	GossipMenuItemData pItemData;
-
 	pItemData.m_gAction_menu = action_menu;
 	pItemData.m_gAction_poi = action_poi;
 	pItemData.m_gAction_script = action_script;
@@ -69,8 +63,7 @@ void GossipMenu::AddGossipMenuItemData(uint32 action_menu, uint32 action_poi,
 	m_gItemsData.push_back(pItemData);
 }
 
-void GossipMenu::AddMenuItem(uint8 Icon, const std::string& Message,
-		bool Coded) {
+void GossipMenu::AddMenuItem(uint8 Icon, const std::string& Message, bool Coded) {
 	AddMenuItem(Icon, Message, 0, 0, "", 0, Coded);
 }
 
@@ -78,8 +71,7 @@ void GossipMenu::AddMenuItem(uint8 Icon, char const* Message, bool Coded) {
 	AddMenuItem(Icon, std::string(Message ? Message : ""), Coded);
 }
 
-void GossipMenu::AddMenuItem(uint8 Icon, char const* Message, uint32 dtSender,
-		uint32 dtAction, char const* BoxMessage, uint32 BoxMoney, bool Coded) {
+void GossipMenu::AddMenuItem(uint8 Icon, char const* Message, uint32 dtSender, uint32 dtAction, char const* BoxMessage, uint32 BoxMoney, bool Coded) {
 	AddMenuItem(Icon, std::string(Message ? Message : ""), dtSender, dtAction,
 			std::string(BoxMessage ? BoxMessage : ""), BoxMoney, Coded);
 }
