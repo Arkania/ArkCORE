@@ -1,0 +1,2 @@
+/usr/bin/ar cr libworldserver_pch_dephelp.a  CMakeFiles/worldserver_pch_dephelp.dir/worldserver_pch_dephelp.cxx.o
+/usr/bin/ranlib libworldserver_pch_dephelp.a

@@ -1061,13 +1061,20 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                             }
                         break;
                     case 48020: // Demonic Circle
-                        if (target->GetTypeId() == TYPEID_PLAYER)
-                            if (GameObject* obj = target->GetGameObject(48018))
-                            {
-                                target->NearTeleportTo(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), obj->GetOrientation());
-                                target->RemoveMovementImpairingAuras();
-                            }
-                        break;
+            if (GetSpellProto()->SpellIconID == 3221)
+        {
+            if (target->GetTypeId() != TYPEID_PLAYER)
+        return;
+            if (apply)
+        {
+            GameObject* obj = target->GetGameObject(48018);
+            if (obj)
+            ((Player*)target)->TeleportTo(obj->GetMapId(),obj->GetPositionX(),obj->GetPositionY(),obj->GetPositionZ(),obj->GetOrientation());
+        }
+        }
+        }
+            break;
+
                 }
 			break;
 		case SPELLFAMILY_PRIEST:

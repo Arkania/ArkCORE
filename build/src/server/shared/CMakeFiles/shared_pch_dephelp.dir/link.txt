@@ -1,0 +1,2 @@
+/usr/bin/ar cr libshared_pch_dephelp.a  CMakeFiles/shared_pch_dephelp.dir/shared_pch_dephelp.cxx.o
+/usr/bin/ranlib libshared_pch_dephelp.a

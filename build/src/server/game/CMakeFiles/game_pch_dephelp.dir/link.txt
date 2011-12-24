@@ -1,0 +1,2 @@
+/usr/bin/ar cr libgame_pch_dephelp.a  CMakeFiles/game_pch_dephelp.dir/game_pch_dephelp.cxx.o
+/usr/bin/ranlib libgame_pch_dephelp.a

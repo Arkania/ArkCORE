@@ -1,0 +1,2 @@
+/usr/bin/ar cr libscripts_pch_dephelp.a  CMakeFiles/scripts_pch_dephelp.dir/scripts_pch_dephelp.cxx.o
+/usr/bin/ranlib libscripts_pch_dephelp.a

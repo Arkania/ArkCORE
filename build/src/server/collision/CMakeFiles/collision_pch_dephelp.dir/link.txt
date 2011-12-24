@@ -1,0 +1,2 @@
+/usr/bin/ar cr libcollision_pch_dephelp.a  CMakeFiles/collision_pch_dephelp.dir/collision_pch_dephelp.cxx.o
+/usr/bin/ranlib libcollision_pch_dephelp.a
