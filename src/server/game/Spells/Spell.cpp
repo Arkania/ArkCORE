@@ -155,6 +155,13 @@ void SpellCastTargets::setDst(Position &pos) {
     m_targetMask |= TARGET_FLAG_DEST_LOCATION;
 }
 
+void SpellCastTargets::SetDst(Position const& pos)
+{
+    m_dstPos.Relocate(pos);
+    m_dstTransGUID = 0;
+    m_targetMask |= TARGET_FLAG_DEST_LOCATION;
+}
+
 void SpellCastTargets::setDst(WorldObject &wObj) {
     uint64 guid = wObj.GetTransGUID();
     m_dstTransGUID = guid;

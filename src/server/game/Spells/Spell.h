@@ -193,6 +193,7 @@ public:
 	void modSrc(Position &pos);
 	void setDst(float x, float y, float z, float orientation, uint32 mapId = MAPID_INVALID);
 	void setDst(Position &pos);
+	void SetDst(Position const& pos);
 	void setDst(WorldObject &wObj);
 	void setDst(SpellCastTargets &spellTargets);
 	void modDst(Position &pos);
