@@ -190,16 +190,13 @@ void AuraApplication::ClientUpdate(bool remove) {
 	Aura const * aura = GetBase();
 	data << uint32(aura->GetId());
 	uint32 flags = m_flags;
-	if (aura->GetMaxDuration() > 0
-			&& !(aura->GetSpellProto()->AttributesEx5
-					& SPELL_ATTR5_HIDE_DURATION))
+	if (aura->GetMaxDuration() > 0 && !(aura->GetSpellProto()->AttributesEx5 & SPELL_ATTR5_HIDE_DURATION))
 		flags |= AFLAG_DURATION;
-	data << uint8(flags);
-	data << uint8(aura->GetCasterLevel());
-	data
-			<< uint8(
-					aura->GetStackAmount() > 1 ? aura->GetStackAmount() :
-					(aura->GetCharges()) ? aura->GetCharges() : 1);
+    if (!aura->IsPassive())
+        flags |= AFLAG_ANY_EFFECT_AMOUNT_SENT;		
+		data << uint8(flags);
+		data << uint8(aura->GetCasterLevel());
+		data << uint8(aura->GetStackAmount() > 1 ? aura->GetStackAmount() :	(aura->GetCharges()) ? aura->GetCharges() : 1);
 
 	if (!(flags & AFLAG_CASTER))
 		data.appendPackGUID(aura->GetCasterGUID());
@@ -209,10 +206,15 @@ void AuraApplication::ClientUpdate(bool remove) {
 		data << uint32(aura->GetDuration());
 	}
 
-	if (flags & AFLAG_UNK2)
-		sLog->outError(
-				"Unhandled flag in AuraApplication::ClientUpdate. Will result in the aura being handled incorrectly on client side.");
-
+    if (flags & AFLAG_ANY_EFFECT_AMOUNT_SENT)
+    {
+        for (uint8 i=0; i<MAX_SPELL_EFFECTS; ++i)
+        {
+            if (flags & 1<<i)
+                data << uint32(aura->GetEffect(i)->GetAmount());
+        }
+    }
+	
 	m_target->SendMessageToSet(&data, true);
 }
 
