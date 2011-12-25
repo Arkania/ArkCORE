@@ -346,6 +346,26 @@ struct GameObjectListSearcher {
 	}
 };
 
+    template<class Functor>
+    struct GameObjectWorker
+    {
+        GameObjectWorker(WorldObject const* searcher, Functor& func)
+            : _func(func), _phaseMask(searcher->GetPhaseMask()) {}
+
+        void Visit(GameObjectMapType& m)
+        {
+            for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
+                if (itr->getSource()->InSamePhase(_phaseMask))
+                    _func(itr->getSource());
+        }
+
+        template<class NOT_INTERESTED> void Visit(GridRefManager<NOT_INTERESTED> &) {}
+
+    private:
+        Functor& _func;
+        uint32 _phaseMask;
+    };
+
 // Unit searchers
 
 // First accepted by Check Unit if any
@@ -527,6 +547,22 @@ struct PlayerListSearcher {
 			GridRefManager<NOT_INTERESTED> &) {
 	}
 };
+
+    template<class Check>
+    struct PlayerLastSearcher
+    {
+        uint32 i_phaseMask;
+        Player* &i_object;
+        Check& i_check;
+
+        PlayerLastSearcher(WorldObject const* searcher, Player*& result, Check& check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check)
+        {
+        }
+
+        void Visit(PlayerMapType& m);
+
+        template<class NOT_INTERESTED> void Visit(GridRefManager<NOT_INTERESTED> &) {}
+    };
 
 template<class Do>
 struct PlayerWorker {
@@ -1262,6 +1298,31 @@ private:
 	float _range;
 	bool _reqAlive;
 };
+
+    class NearestPlayerInObjectRangeCheck
+    {
+        public:
+            NearestPlayerInObjectRangeCheck(WorldObject const* obj, float range) : i_obj(obj), i_range(range)
+            {
+            }
+
+            bool operator()(Player* u)
+            {
+                if (u->isAlive() && i_obj->IsWithinDistInMap(u, i_range))
+                {
+                    i_range = i_obj->GetDistance(u);
+                    return true;
+                }
+
+                return false;
+            }
+        private:
+            WorldObject const* i_obj;
+            float i_range;
+
+            NearestPlayerInObjectRangeCheck(NearestPlayerInObjectRangeCheck const&);
+    };
+
 
 class AllFriendlyCreaturesInGrid {
 public:

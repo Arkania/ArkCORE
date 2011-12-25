@@ -163,38 +163,6 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0,
 				talker->GetName(), talker->GetGUIDLow(), mTextGUID);
 		break;
 	}
-	case SMART_ACTION_SIMPLE_TALK: {
-		ObjectList* targets = GetTargets(e, unit);
-		if (targets) {
-			for (ObjectList::const_iterator itr = targets->begin();
-					itr != targets->end(); ++itr) {
-				if (IsCreature((*itr)))
-					sCreatureTextMgr->SendChat(
-							(*itr)->ToCreature(),
-							uint8(e.action.talk.textGroupID),
-							IsPlayer(GetLastInvoker()) ?
-									GetLastInvoker()->GetGUID() : NULL);
-				else if (IsPlayer((*itr))) {
-					Unit* templastInvoker = GetLastInvoker();
-					sCreatureTextMgr->SendChat(
-							me,
-							uint8(e.action.talk.textGroupID),
-							IsPlayer(templastInvoker) ?
-									templastInvoker->GetGUID() : NULL,
-							CHAT_TYPE_END, LANG_ADDON, TEXT_RANGE_NORMAL, NULL,
-							TEAM_OTHER, false, (*itr)->ToPlayer());
-				}
-				sLog->outDebug(
-						LOG_FILTER_TSCR,
-						"SmartScript::ProcessAction:: SMART_ACTION_SIMPLE_TALK: talker: %s (GuidLow: %u), textGroupId: %u",
-						(*itr)->GetName(), (*itr)->GetGUIDLow(),
-						uint8(e.action.talk.textGroupID));
-			}
-
-			delete targets;
-		}
-		break;
-	}
 	case SMART_ACTION_PLAY_EMOTE: {
 		ObjectList* targets = GetTargets(e, unit);
 		if (targets) {
@@ -212,28 +180,26 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0,
 			delete targets;
 		}
 		break;
-	}
-	case SMART_ACTION_SOUND: {
-		ObjectList* targets = GetTargets(e, unit);
-		if (targets) {
-			for (ObjectList::const_iterator itr = targets->begin();
-					itr != targets->end(); ++itr) {
-				if (IsCreature((*itr))) {
-					sCreatureTextMgr->SendSound((*itr)->ToCreature(),
-							e.action.sound.sound, CHAT_TYPE_SAY, 0,
-							TextRange(e.action.sound.range), Team(NULL), false);
-					sLog->outDebug(
-							LOG_FILTER_TSCR,
-							"SmartScript::ProcessAction:: SMART_ACTION_SOUND: source: %s (GuidLow: %u), sound: %u, range: %u",
-							(*itr)->GetName(), (*itr)->GetGUIDLow(),
-							e.action.sound.sound, e.action.sound.range);
-				}
-			}
-
-			delete targets;
 		}
-		break;
-	}
+        case SMART_ACTION_SOUND:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (targets)
+            {
+                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                {
+                    if (IsUnit(*itr))
+                    {
+                        (*itr)->SendPlaySound(e.action.sound.sound, e.action.sound.range > 0 ? true : false);
+                        sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartScript::ProcessAction:: SMART_ACTION_SOUND: target: %s (GuidLow: %u), sound: %u, onlyself: %u",
+                            (*itr)->GetName(), (*itr)->GetGUIDLow(), e.action.sound.sound, e.action.sound.range);
+                    }
+                }
+
+                delete targets;
+            }
+            break;
+        }
 	case SMART_ACTION_SET_FACTION: {
 		ObjectList* targets = GetTargets(e, unit);
 		if (targets) {

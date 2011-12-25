@@ -279,6 +279,7 @@ public:
 	Unit * GetCaster();
 	Unit * GetOriginalCaster();
 	SpellEntry const * GetSpellInfo();
+	SpellValue const* GetSpellValue();
 
 	// methods useable after spell targets are set
 	// accessors to the "focus" targets of the spell
