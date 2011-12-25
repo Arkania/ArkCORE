@@ -312,6 +312,11 @@ Unit * SpellScript::GetTargetUnit() {
 	return m_spell->m_targets.getUnitTarget();
 }
 
+void SpellScript::SetTargetDest(WorldLocation& loc)
+{
+    m_spell->m_targets.SetDst(loc);
+}
+
 GameObject * SpellScript::GetTargetGObj() {
 	return m_spell->m_targets.getGOTarget();
 }

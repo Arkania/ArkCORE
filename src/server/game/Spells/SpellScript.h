@@ -286,6 +286,8 @@ public:
 	// returns: WorldLocation which was selected as a spell destination or NULL
 	WorldLocation * GetTargetDest();
 
+	void SetTargetDest(WorldLocation& loc);
+	
 	// returns: Unit which was selected as a spell target or NULL
 	Unit * GetTargetUnit();
 
