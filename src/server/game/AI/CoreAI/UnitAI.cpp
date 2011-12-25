@@ -276,3 +276,14 @@ void SimpleCharmedAI::UpdateAI(const uint32 /*diff*/) {
 	if (!target || !charmer->canAttack(target))
 		AttackStart(charmer->SelectNearestTargetInAttackDistance());
 }
+
+bool NonTankTargetSelector::operator()(Unit const* target) const
+{
+    if (!target)
+        return false;
+
+    if (_playerOnly && target->GetTypeId() != TYPEID_PLAYER)
+        return false;
+
+    return target != _source->getVictim();
+}
