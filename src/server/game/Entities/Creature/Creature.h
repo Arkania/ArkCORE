@@ -666,6 +666,8 @@ public:
 
 	Unit* SelectNearestTarget(float dist = 0) const;
 	Unit* SelectNearestTargetInAttackDistance(float dist = 0) const;
+	Player* SelectNearestPlayer(float distance = 0) const;
+	
 
 	void DoFleeToGetAssistance();
 	void CallForHelp(float fRadius);

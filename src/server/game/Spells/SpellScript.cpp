@@ -511,6 +511,11 @@ void SpellScript::SetCustomCastResultMessage(SpellCustomErrors result) {
 	m_spell->m_customError = result;
 }
 
+SpellValue const* SpellScript::GetSpellValue()
+{
+    return m_spell->m_spellValue;
+}
+
 bool AuraScript::_Validate(SpellEntry const * entry) {
 	for (std::list<EffectApplyHandler>::iterator itr = OnEffectApply.begin();
 			itr != OnEffectApply.end(); ++itr)

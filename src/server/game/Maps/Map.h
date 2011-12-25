@@ -430,6 +430,7 @@ public:
 				i_spawnMode >= RAID_DIFFICULTY_10MAN_HEROIC :
 				i_spawnMode >= DUNGEON_DIFFICULTY_HEROIC;
 	}
+	bool Is25ManRaid() const { return IsRaid() && i_spawnMode & RAID_DIFFICULTY_MASK_25MAN; }   // since 25man difficulties are 1 and 3, we can check them like that
 	bool IsBattleground() const {
 		return i_mapEntry && i_mapEntry->IsBattleground();
 	}
