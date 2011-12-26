@@ -6122,47 +6122,31 @@ bool Player::UpdateSkillPro(uint16 SkillId, int32 Chance, uint32 step) {
 	return false;
 }
 
-void Player::UpdateWeaponSkill(WeaponAttackType attType) {
-	// no skill gain in pvp
-	Unit *pVictim = getVictim();
-	if (pVictim && pVictim->GetTypeId() == TYPEID_PLAYER)
-		return;
+void Player::UpdateWeaponSkill(WeaponAttackType attType) 
+{
+    // no skill gain in pvp
+    Unit* victim = getVictim();
+    if (victim && victim->GetTypeId() == TYPEID_PLAYER)
+        return;
 
-	if (IsInFeralForm())
-		return; // always maximized SKILL_FERAL_COMBAT in fact
+    if (IsInFeralForm())
+        return;                                             // always maximized SKILL_FERAL_COMBAT in fact
 
-	if (GetShapeshiftForm() == FORM_TREE)
-		return; // use weapon but not skill up
+    if (GetShapeshiftForm() == FORM_TREE)
+        return;                                             // use weapon but not skill up
 
-	if (pVictim && pVictim->GetTypeId() == TYPEID_UNIT
-			&& (pVictim->ToCreature()->GetCreatureInfo()->flags_extra
-					& CREATURE_FLAG_EXTRA_NO_SKILLGAIN))
-		return;
+    if (victim && victim->GetTypeId() == TYPEID_UNIT && (victim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_SKILLGAIN))
+        return;
 
-	uint32 weapon_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_WEAPON);
+    uint32 weapon_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_WEAPON);
 
-	switch (attType) {
-	case BASE_ATTACK: {
-		Item *tmpitem = GetWeaponForAttack(attType, true);
+    Item* tmpitem = GetWeaponForAttack(attType, true);
+    if (!tmpitem && attType == BASE_ATTACK)
+        UpdateSkill(SKILL_UNARMED, weapon_skill_gain);
+    else if (tmpitem && tmpitem->GetProto()->SubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+        UpdateSkill(tmpitem->GetSkill(), weapon_skill_gain);
 
-		if (!tmpitem)
-			UpdateSkill(SKILL_UNARMED, weapon_skill_gain);
-		else if (tmpitem->GetProto()->SubClass
-				!= ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-			UpdateSkill(tmpitem->GetSkill(), weapon_skill_gain);
-		break;
-	}
-	case OFF_ATTACK:
-	case RANGED_ATTACK: {
-		Item *tmpitem = GetWeaponForAttack(attType, true);
-		if (tmpitem)
-			UpdateSkill(tmpitem->GetSkill(), weapon_skill_gain);
-		break;
-	}
-	default:
-		break;
-	}
-	UpdateAllCritPercentages();
+    UpdateAllCritPercentages();
 }
 
 void Player::UpdateCombatSkills(Unit *pVictim, WeaponAttackType attType,
