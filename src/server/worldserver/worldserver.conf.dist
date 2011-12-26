@@ -645,17 +645,21 @@ ChatLogTimestamp = 0
 #
 #    Expansion
 #        Allow server use content from expansion
-#        Default: 2 - check expansion 2 maps existence, and if client support
-#                      expansion 2 and account have expansion 2 setting then
-#                      allow visit expansion 2 maps, allow create new class
+#        Default: 3 - check expansion 3 map existence. If client supports
+#                      expansion 3 and account has expansion 3 settings then
+#                      allow visit expansion 3 maps and allow create new race
+#                      characters and new class/race combinations)
+#                 2 - check expansion 2 maps existence. If client supports
+#                      expansion 2 and account has expansion 2 settings then
+#                      allow visit expansion 2 maps and allow create new class
 #                      character)
-#                 1 - check expansion 1 maps existence, and if client support
-#                      expansion 1 and account have expansion 1 setting then
-#                      allow visit expansion 1 maps, allow create new races
-#                      character)
+#                 1 - check expansion 1 maps existence. If client supports
+#                      expansion 1 and account has expansion 1 settings then
+#                      allow visit expansion 1 maps and allow create new race
+#                      characters)
 #                 0 - don't check expansion maps existence, don't allow visit
-#                      maps, don't allow create new race or new class
-#                      characters, ignore account expansion setting)
+#                      maps, don't allow create new races or new class
+#                      characters, ignore account expansion settings)
 #
 #    DBC.Locale
 #        DBC Language Settings
