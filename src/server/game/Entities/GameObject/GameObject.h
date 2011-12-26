@@ -881,6 +881,7 @@ protected:
 
 	uint16 m_LootMode; // bitmask, default LOOT_MODE_DEFAULT, determines what loot will be lootable
 private:
+	void RemoveFromOwner();
 	void SwitchDoorOrButton(bool activate, bool alternative = false);
 	GameObjectAI* m_AI;
 };
