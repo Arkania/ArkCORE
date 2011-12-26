@@ -7356,8 +7356,7 @@ void Spell::EffectTransmitted(SpellEffIndex effIndex) {
     }
 
     Map *cMap = m_caster->GetMap();
-    if (goinfo->type == GAMEOBJECT_TYPE_FISHINGNODE
-            || goinfo->type == GAMEOBJECT_TYPE_FISHINGHOLE) {
+    if (goinfo->type == GAMEOBJECT_TYPE_FISHINGNODE || goinfo->type == GAMEOBJECT_TYPE_FISHINGHOLE) {
         LiquidData liqData;
         if (!cMap->IsInWater(fx, fy, fz + 1.f/* -0.5f */, &liqData)) // Hack to prevent fishing bobber from failing to land on fishing hole
                 { // but this is not proper, we really need to ignore not materialized objects
@@ -7388,8 +7387,7 @@ void Spell::EffectTransmitted(SpellEffIndex effIndex) {
 
     switch (goinfo->type) {
         case GAMEOBJECT_TYPE_FISHINGNODE: {
-            m_caster->SetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT,
-                    pGameObj->GetGUID());
+            m_caster->SetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT, pGameObj->GetGUID());
             m_caster->AddGameObject(pGameObj); // will removed at spell cancel
 
             // end time of range when possible catch fish (FISHING_BOBBER_READY_TIME..GetDuration(m_spellInfo))

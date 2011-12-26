@@ -118,14 +118,34 @@ void GameObject::CleanupsBeforeDelete(bool /*finalCleanup*/) {
 				else if (IS_PET_GUID(owner_guid))
 					ownerType = "pet";
 
-				sLog->outError(
-						"Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
-						GetGUIDLow(), GetGOInfo()->id, m_spellId,
-						GetGOInfo()->GetLinkedGameObjectEntry(),
-						GUID_LOPART(owner_guid), ownerType);
+				sLog->outError("Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.", GetGUIDLow(), GetGOInfo()->id, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), GUID_LOPART(owner_guid), ownerType);
 			}
 		}
 	}
+}
+
+void GameObject::RemoveFromOwner()
+{
+    uint64 ownerGUID = GetOwnerGUID();
+    if (!ownerGUID)
+        return;
+
+    if (Unit* owner = ObjectAccessor::GetUnit(*this, ownerGUID))
+    {
+        owner->RemoveGameObject(this, false);
+        ASSERT(!GetOwnerGUID());
+        return;
+    }
+
+    const char * ownerType = "creature";
+    if (IS_PLAYER_GUID(ownerGUID))
+        ownerType = "player";
+    else if (IS_PET_GUID(ownerGUID))
+        ownerType = "pet";
+
+    sLog->outCrash("Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
+        GetGUIDLow(), GetGOInfo()->id, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), GUID_LOPART(ownerGUID), ownerType);
+    SetOwnerGUID(0);
 }
 
 void GameObject::AddToWorld() {
@@ -292,29 +312,32 @@ void GameObject::Update(uint32 diff) {
 			m_lootState = GO_READY;
 			break;
 		}
-		case GAMEOBJECT_TYPE_FISHINGNODE: {
-			// fishing code (bobber ready)
-			if (time(NULL) > m_respawnTime - FISHING_BOBBER_READY_TIME) {
-				// splash bobber (bobber ready now)
-				Unit* caster = GetOwner();
-				if (caster && caster->GetTypeId() == TYPEID_PLAYER) {
-					SetGoState(GO_STATE_ACTIVE);
-					SetUInt32Value(GAMEOBJECT_FLAGS, GO_FLAG_NODESPAWN);
+		case GAMEOBJECT_TYPE_FISHINGNODE:
+                {
+                    // fishing code (bobber ready)
+                    if (time(NULL) > m_respawnTime - FISHING_BOBBER_READY_TIME)
+                    {
+                        // splash bobber (bobber ready now)
+                        Unit* caster = GetOwner();
+                        if (caster && caster->GetTypeId() == TYPEID_PLAYER)
+                        {
+                            SetGoState(GO_STATE_ACTIVE);
+                            SetUInt32Value(GAMEOBJECT_FLAGS, GO_FLAG_NODESPAWN);
 
-					UpdateData udata;
-					udata.m_map = uint16(GetMapId());
-					WorldPacket packet;
-					BuildValuesUpdateBlockForPlayer(&udata, caster->ToPlayer());
-					udata.BuildPacket(&packet);
-					caster->ToPlayer()->GetSession()->SendPacket(&packet);
+                            UpdateData udata;
+                            udata.m_map = uint16(GetMapId());
+                            WorldPacket packet;
+                            BuildValuesUpdateBlockForPlayer(&udata, caster->ToPlayer());
+                            udata.BuildPacket(&packet);
+                            caster->ToPlayer()->GetSession()->SendPacket(&packet);
 
-					SendCustomAnim(GetGoAnimProgress());
-				}
+                            SendCustomAnim(GetGoAnimProgress());
+                        }
 
-				m_lootState = GO_READY; // can be successfully open with some chance
-			}
-			return;
-		}
+                        m_lootState = GO_READY;                 // can be successfully open with some chance
+                    }
+                    return;
+                }		
 		default:
 			m_lootState = GO_READY; // for other GOis same switched without delay to GO_READY
 			break;
@@ -353,18 +376,19 @@ void GameObject::Update(uint32 diff) {
 
 				switch (GetGoType()) {
 				case GAMEOBJECT_TYPE_FISHINGNODE: //  can't fish now
-				{
-					Unit* caster = GetOwner();
-					if (caster && caster->GetTypeId() == TYPEID_PLAYER) {
-						caster->FinishSpell(CURRENT_CHANNELED_SPELL);
+                        {
+                            Unit* caster = GetOwner();
+                            if (caster && caster->GetTypeId() == TYPEID_PLAYER)
+                            {
+                                caster->FinishSpell(CURRENT_CHANNELED_SPELL);
 
-						WorldPacket data(SMSG_FISH_ESCAPED, 0);
-						caster->ToPlayer()->GetSession()->SendPacket(&data);
-					}
-					// can be delete
-					m_lootState = GO_JUST_DEACTIVATED;
-					return;
-				}
+                                WorldPacket data(SMSG_FISH_ESCAPED, 0);
+                                caster->ToPlayer()->GetSession()->SendPacket(&data);
+                            }
+                            // can be delete
+                            m_lootState = GO_JUST_DEACTIVATED;
+                            return;
+                        }
 				case GAMEOBJECT_TYPE_DOOR:
 				case GAMEOBJECT_TYPE_BUTTON:
 					//we need to open doors if they are closed (add there another condition if this code breaks some usage, but it need to be here for battlegrounds)
@@ -1267,82 +1291,83 @@ void GameObject::Use(Unit* user) {
 	}
 		//fishing bobber
 	case GAMEOBJECT_TYPE_FISHINGNODE: //17
-	{
-		if (user->GetTypeId() != TYPEID_PLAYER)
-			return;
+        {
+            Player* player = user->ToPlayer();
+            if (!player)
+                return;
 
-		Player* player = (Player*) user;
+            if (player->GetGUID() != GetOwnerGUID())
+                return;
 
-		if (player->GetGUID() != GetOwnerGUID())
-			return;
+            switch (getLootState())
+            {
+                case GO_READY:                              // ready for loot
+                {
+                    uint32 zone, subzone;
+                    GetZoneAndAreaId(zone, subzone);
 
-		switch (getLootState()) {
-		case GO_READY: // ready for loot
-		{
-			uint32 zone, subzone;
-			GetZoneAndAreaId(zone, subzone);
+                    int32 zone_skill = sObjectMgr->GetFishingBaseSkillLevel(subzone);
+                    if (!zone_skill)
+                        zone_skill = sObjectMgr->GetFishingBaseSkillLevel(zone);
 
-			int32 zone_skill = sObjectMgr->GetFishingBaseSkillLevel(subzone);
-			if (!zone_skill)
-				zone_skill = sObjectMgr->GetFishingBaseSkillLevel(zone);
+                    //provide error, no fishable zone or area should be 0
+                    if (!zone_skill)
+                        sLog->outErrorDb("Fishable areaId %u are not properly defined in `skill_fishing_base_level`.", subzone);
 
-			//provide error, no fishable zone or area should be 0
-			if (!zone_skill)
-				sLog->outErrorDb(
-						"Fishable areaId %u are not properly defined in `skill_fishing_base_level`.",
-						subzone);
+                    int32 skill = player->GetSkillValue(SKILL_FISHING);
 
-			int32 skill = player->GetSkillValue(SKILL_FISHING);
+                    int32 chance;
+                    if (skill < zone_skill)
+                    {
+                        chance = int32(pow((double)skill/zone_skill, 2) * 100);
+                        if (chance < 1)
+                            chance = 1;
+                    }
+                    else
+                        chance = 100;
 
-			int32 chance;
-			if (skill < zone_skill) {
-				chance = int32(pow((double) skill / zone_skill, 2) * 100);
-				if (chance < 1)
-					chance = 1;
-			} else
-				chance = 100;
+                    int32 roll = irand(1, 100);
 
-			int32 roll = irand(1, 100);
+                    sLog->outStaticDebug("Fishing check (skill: %i zone min skill: %i chance %i roll: %i", skill, zone_skill, chance, roll);
 
-			sLog->outStaticDebug(
-					"Fishing check (skill: %i zone min skill: %i chance %i roll: %i",
-					skill, zone_skill, chance, roll);
+                    // but you will likely cause junk in areas that require a high fishing skill (not yet implemented)
+                    if (chance >= roll)
+                    {
+                        player->UpdateFishingSkill();
+                        //TODO: I do not understand this hack. Need some explanation.
+                        RemoveFromOwner();
+                        player->RemoveGameObject(this, false);
+                        SetOwnerGUID(player->GetGUID());
 
-			// but you will likely cause junk in areas that require a high fishing skill (not yet implemented)
-			if (chance >= roll) {
-				player->UpdateFishingSkill();
+                        //TODO: find reasonable value for fishing hole search
+                        GameObject* ok = LookupFishingHoleAround(20.0f + CONTACT_DISTANCE);
+                        if (ok)
+                        {
+                            ok->Use(player);
+                            SetLootState(GO_JUST_DEACTIVATED);
+                        }
+                        else
+                            player->SendLoot(GetGUID(), LOOT_FISHING);
+                    }
+                    // TODO: else: junk
 
-				// prevent removing GO at spell cancel
-				player->RemoveGameObject(this, false);
-				SetOwnerGUID(player->GetGUID());
+                    break;
+                }
+                case GO_JUST_DEACTIVATED:                   // nothing to do, will be deleted at next update
+                    break;
+                default:
+                {
+                    SetLootState(GO_JUST_DEACTIVATED);
 
-				//TODO: find reasonable value for fishing hole search
-				GameObject* ok = LookupFishingHoleAround(
-						20.0f + CONTACT_DISTANCE);
-				if (ok) {
-					ok->Use(player);
-					SetLootState(GO_JUST_DEACTIVATED);
-				} else
-					player->SendLoot(GetGUID(), LOOT_FISHING);
-			}
-			// TODO: else: junk
+                    WorldPacket data(SMSG_FISH_NOT_HOOKED, 0);
+                    player->GetSession()->SendPacket(&data);
+                    break;
+                }
+            }
 
-			break;
-		}
-		case GO_JUST_DEACTIVATED: // nothing to do, will be deleted at next update
-			break;
-		default: {
-			SetLootState(GO_JUST_DEACTIVATED);
-
-			WorldPacket data(SMSG_FISH_NOT_HOOKED, 0);
-			player->GetSession()->SendPacket(&data);
-			break;
-		}
-		}
-
-		player->FinishSpell(CURRENT_CHANNELED_SPELL);
-		return;
-	}
+            player->FinishSpell(CURRENT_CHANNELED_SPELL);
+            return;
+        }
 
 	case GAMEOBJECT_TYPE_SUMMONING_RITUAL: //18
 	{
