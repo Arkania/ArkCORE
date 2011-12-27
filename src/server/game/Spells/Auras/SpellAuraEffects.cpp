@@ -573,7 +573,7 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 			}
 			break;
 		case SPELLFAMILY_PRIEST:
-			// Power Word: Shield 
+            // Power Word: Shield 
             // (SpellFamilyFlags[2] & 0x1 seems not work. Dbc flags: 0x00000000 00000000 00000001)
 			if (GetId() == 17) 
             {
@@ -582,7 +582,7 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 
                 DoneActualBenefit += caster->SpellBaseHealingBonus(GetSpellSchoolMask(m_spellProto)) * bonus;
                 DoneActualBenefit *= caster->CalculateLevelPenalty(GetSpellProto());
-				amount += (int32) DoneActualBenefit;
+                amount += (int32) DoneActualBenefit;
 
                 // Improved PW: Shield
                 if (AuraEffect const* pAurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 566, 1))
@@ -598,14 +598,14 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
                 amount = int32(DoneActualBenefit);
 
                 // Mastery: Shield Discipline
-				if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY)) 
+                if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY)) 
                 {
-					if (caster->ToPlayer()->getClass() == CLASS_PRIEST) 
+                    if (caster->ToPlayer()->getClass() == CLASS_PRIEST) 
                     {
-						if (caster->ToPlayer()->GetTalentBranchSpec(caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_DISCIPLINE) 
+                        if (caster->ToPlayer()->GetTalentBranchSpec(caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_DISCIPLINE) 
                         {
-							int32 bp = int32(amount * (0.2f + (0.025f * caster->ToPlayer()->GetMasteryPoints())));
-							amount += bp;
+                            int32 bp = int32(amount * (0.2f + (0.025f * caster->ToPlayer()->GetMasteryPoints())));
+                            amount += bp;
 						}
 					}
 				}
