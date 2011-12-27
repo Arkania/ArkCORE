@@ -711,22 +711,6 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex) {
                         break;
                 }
 
-                if (m_spellInfo->Id == 589 || m_spellInfo->Id == 15407) //Shadow Word: Pain | mind flay
-                        {
-                    if (m_caster->HasSpell(95740)) // Shadow Orbs
-                            {
-                        int chance = 10;
-
-                        if (m_caster->HasAura(33191)) // Harnessed Shadows rank1
-                        chance += 4;
-                        else if (m_caster->HasAura(78228)) // Harnessed Shadows rank2
-                        chance += 8;
-
-                        if (roll_chance_i(chance)) m_caster->CastSpell(m_caster,
-                                77487, true);
-                    }
-                }
-
                 if (m_caster->HasAura(81659)) // Evangelism Rank 1
                         {
                     if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914
@@ -2849,7 +2833,7 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex) {
     switch (m_spellInfo->SpellFamilyName) {
         case SPELLFAMILY_ROGUE: {
             if (m_spellInfo->SpellFamilyFlags[0] == 0x8) //Gouge
-                    {
+            {
                 m_caster->CastSpell(unitTarget, 1776, true);
                 return;
             }
@@ -2880,7 +2864,7 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex) {
             return;
         case 85673: // Word of Glory
             if (!m_caster->HasAura(93466)) return;
-    }
+    } 
 
     ASSERT(unitTarget == m_spellAura->GetOwner());
     m_spellAura->_ApplyEffectForTargets(effIndex);
