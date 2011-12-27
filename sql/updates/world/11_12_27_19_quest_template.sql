@@ -1,4 +1,5 @@
--- QUEST: Depth of the Depths Missign quest on DB (http://www.wowhead.com/quest=26869)
+-- QUEST: Depth of the Depths Missign quest on DB (http://www.wowhead.com/quest=26869) (read noteSpyder)
+-- Please check it on convert or somewhere this quest was add last week and removed again in r2.4 but this quest need to be on DB
 DELETE FROM `creature_questrelation` WHERE `quest` = 26869;
 DELETE FROM `gameobject_questrelation` WHERE `quest` = 26869;
 UPDATE `item_template` SET `StartQuest`=0 WHERE `StartQuest` = 26869;
