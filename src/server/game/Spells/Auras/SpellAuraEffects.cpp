@@ -572,58 +572,46 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 						GetSpellSchoolMask(m_spellProto)) * 0.8068f;
 			}
 			break;
-		case SPELLFAMILY_PRIEST:
-			// Power Word: Shield
-			if (GetSpellProto()->SpellFamilyFlags[0] & 0x1
-					&& GetSpellProto()->SpellFamilyFlags[2] & 0x400) {
+        case SPELLFAMILY_PRIEST:
+            // Power Word: Shield 
+            // (SpellFamilyFlags[2] & 0x1 seems not work. Dbc flags: 0x00000000 00000000 00000001)
+            if (GetId() == 17) 
+            {
 				//+80.68% from sp bonus
 				float bonus = 0.8068f;
 
-				// Borrowed Time
-				if (AuraEffect const* pAurEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_PRIEST, 2899, 1))
-					bonus += (float) pAurEff->GetAmount() / 100.0f;
+                DoneActualBenefit += caster->SpellBaseHealingBonus(GetSpellSchoolMask(m_spellProto)) * bonus;
+                DoneActualBenefit *= caster->CalculateLevelPenalty(GetSpellProto());
+                amount += (int32) DoneActualBenefit;
 
-				DoneActualBenefit += caster->SpellBaseHealingBonus(
-						GetSpellSchoolMask(m_spellProto)) * bonus;
-				// Improved PW: Shield: its weird having a SPELLMOD_ALL_EFFECTS here but its blizzards doing :)
-				// Improved PW: Shield is only applied at the spell healing bonus because it was already applied to the base value in CalculateSpellDamage
-				DoneActualBenefit = float(
-						caster->ApplyEffectModifiers(GetSpellProto(),
-								m_effIndex, (int32) DoneActualBenefit));
-				DoneActualBenefit *= caster->CalculateLevelPenalty(
-						GetSpellProto());
+                // Improved PW: Shield
+                if (AuraEffect const* pAurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 566, 1))
+                    AddPctN(amount, pAurEff->GetAmount());
 
-				amount += (int32) DoneActualBenefit;
+                // Spiritual Healing
+                if (AuraEffect const* pAurEff = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 3131, 0))
+                    AddPctN(amount, pAurEff->GetAmount());
 
-				// Twin Disciplines
-				if (AuraEffect const* pAurEff = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 0x400000, 0, 0, caster->GetGUID()))
-					amount *= int32((100.0f + pAurEff->GetAmount()) / 100.0f);
+                // Twin Disciplines
+                DoneActualBenefit = float(amount);
+                DoneActualBenefit *= caster->GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
+                amount = int32(DoneActualBenefit);
 
-				// Focused Power
-				// Reuse variable, not sure if this code below can be moved before Twin Disciplines
-				DoneActualBenefit = float(amount);
-				DoneActualBenefit *= caster->GetTotalAuraMultiplier(
-						SPELL_AURA_MOD_HEALING_DONE_PERCENT);
-				amount = int32(DoneActualBenefit);
-
-				if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY)) {
-					if (caster->ToPlayer()->getClass() == CLASS_PRIEST) {
-						if (caster->ToPlayer()->GetTalentBranchSpec(
-								caster->ToPlayer()->GetActiveSpec())
-								== BS_PRIEST_DISCIPLINE) {
-							int32 bp =
-									int32(
-											amount
-													* (0.2f
-															+ (0.025f
-																	* caster->ToPlayer()->GetMasteryPoints())));
-							amount += bp;
-						}
-					}
-				}
-				return amount;
-			}
-			break;
+                // Mastery: Shield Discipline
+                if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY)) 
+                {
+                    if (caster->ToPlayer()->getClass() == CLASS_PRIEST) 
+                    {
+                        if (caster->ToPlayer()->GetTalentBranchSpec(caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_DISCIPLINE) 
+                        {
+                            int32 bp = int32(amount * (0.2f + (0.025f * caster->ToPlayer()->GetMasteryPoints())));
+                            amount += bp;
+                        }
+                    }
+                }
+                return amount;
+            }
+            break;
 		case SPELLFAMILY_PALADIN:
 			// Sacred Shield
 			if (m_spellProto->SpellFamilyFlags[1] & 0x80000) {
@@ -1445,51 +1433,69 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
 			break;
 		}
 
-		// Dark Evangelism
-		if (target->HasAura(15407)) // Mind Flay
-				{
-			if (caster->HasAura(81659)) // Rank 1
-				caster->CastSpell(caster, 87117, true);
-			else if (caster->HasAura(81662)) // Rank 2
-				caster->CastSpell(caster, 87118, true);
-		}
-
 		// some auras remove at specific health level or more
-		if (GetAuraType() == SPELL_AURA_PERIODIC_DAMAGE) {
-			switch (GetId()) {
-			case 43093:
-			case 31956:
-			case 38801: // Grievous Wound
-			case 35321:
-			case 38363:
-			case 39215: // Gushing Wound
-				if (target->IsFullHealth()) {
-					target->RemoveAurasDueToSpell(GetId());
-					return;
-				}
-				break;
-			case 38772: // Grievous Wound
-			{
-				uint32 percent =
-						GetEffIndex() < 2
-								&& GetSpellProto()->Effect[GetEffIndex()]
-										== SPELL_EFFECT_DUMMY ?
-								caster->CalculateSpellDamage(target,
-										GetSpellProto(), GetEffIndex() + 1) :
-								100;
-				if (!target->HealthBelowPct(percent)) {
-					target->RemoveAurasDueToSpell(GetId());
-					return;
-				}
-				break;
-			}
-			case 603: // Bane of Doom
-			{
-				// There is a chance to summon an Ebon Imp when Bane of Doom does damage
-				if (roll_chance_i(20))
-					caster->CastSpell(caster, 18662, true);
-			}
-			}
+        if (GetAuraType() == SPELL_AURA_PERIODIC_DAMAGE)
+        {
+            switch (GetId())
+            {
+                case 43093:
+                case 31956:
+                case 38801: // Grievous Wound
+                case 35321:
+                case 38363:
+                case 39215: // Gushing Wound
+                    if (target->IsFullHealth()) 
+                    {
+                        target->RemoveAurasDueToSpell(GetId());
+                        return;
+                    }
+                    break;
+                case 38772: // Grievous Wound
+                {
+                    uint32 percent = GetEffIndex() < 2 && GetSpellProto()->Effect[GetEffIndex()] == SPELL_EFFECT_DUMMY ? caster->CalculateSpellDamage(target, GetSpellProto(), GetEffIndex() + 1) :	100;
+                    if (!target->HealthBelowPct(percent)) {
+                        target->RemoveAurasDueToSpell(GetId());
+                        return;
+                    }
+                    break;
+                }
+                case 603: // Bane of Doom
+                {
+                    // There is a chance to summon an Ebon Imp when Bane of Doom does damage
+                    if (roll_chance_i(20))
+                        caster->CastSpell(caster, 18662, true);
+                    break;
+                }
+                case 15407: // Mind Fly
+                {
+                    // Dark Evangelism proc
+			        if (caster->HasAura(81659)) 
+                    {
+				        caster->CastSpell(caster, 87117, true);
+                    }
+			        else if (caster->HasAura(81662))
+                    {
+				        caster->CastSpell(caster, 87118, true);
+                    }
+                // No break
+                }
+                case 589:  // Shadow Word Pain
+                {
+                    // Shadow Orb Proc
+                    if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 4941, 0))
+                    {
+                        int32 chance = 10;
+                        
+                        // Harnessed Shadows
+                        if (AuraEffect* hAurEff = caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_PRIEST, 554, 0))
+                            chance += hAurEff->GetAmount();
+
+                        if (roll_chance_i(chance))
+                            caster->AddAura(77487, caster);
+                    }
+                    break;
+                }
+            }
 		}
 
 		uint32 absorb = 0;
