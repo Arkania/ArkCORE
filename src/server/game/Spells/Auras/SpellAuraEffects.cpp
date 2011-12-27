@@ -572,10 +572,10 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 						GetSpellSchoolMask(m_spellProto)) * 0.8068f;
 			}
 			break;
-		case SPELLFAMILY_PRIEST:
+        case SPELLFAMILY_PRIEST:
             // Power Word: Shield 
             // (SpellFamilyFlags[2] & 0x1 seems not work. Dbc flags: 0x00000000 00000000 00000001)
-			if (GetId() == 17) 
+            if (GetId() == 17) 
             {
 				//+80.68% from sp bonus
 				float bonus = 0.8068f;
@@ -606,12 +606,12 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
                         {
                             int32 bp = int32(amount * (0.2f + (0.025f * caster->ToPlayer()->GetMasteryPoints())));
                             amount += bp;
-						}
-					}
-				}
-				return amount;
-			}
-			break;
+                        }
+                    }
+                }
+                return amount;
+            }
+            break;
 		case SPELLFAMILY_PALADIN:
 			// Sacred Shield
 			if (m_spellProto->SpellFamilyFlags[1] & 0x80000) {
