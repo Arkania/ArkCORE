@@ -303,26 +303,27 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data) {
 }
 
 //called when mail is read
-void WorldSession::HandleMailMarkAsRead(WorldPacket & recv_data) {
-	uint64 mailbox;
-	uint32 mailId;
+void WorldSession::HandleMailMarkAsRead(WorldPacket & recv_data)
+{
+    uint64 mailbox;
+    uint32 mailId;
 
-	recv_data >> mailbox;
-	recv_data >> mailId;
+    recv_data >> mailbox;
+    recv_data >> mailId;
 
-	if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox,
-			GAMEOBJECT_TYPE_MAILBOX))
-		return;
+    if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
+        return;
 
-	Player *pl = _player;
-	Mail *m = pl->GetMail(mailId);
-	if (m) {
-		if (pl->unReadMails)
-			--pl->unReadMails;
-		m->checked = m->checked | MAIL_CHECK_MASK_READ;
-		pl->m_mailsUpdated = true;
-		m->state = MAIL_STATE_CHANGED;
-	}
+    Player* player = _player;
+    Mail* m = player->GetMail(mailId);
+    if (m)
+    {
+        if (player->unReadMails)
+            --player->unReadMails;
+        m->checked = m->checked | MAIL_CHECK_MASK_READ;
+        player->m_mailsUpdated = true;
+        m->state = MAIL_STATE_CHANGED;
+    }
 }
 
 //called when client deletes mail
@@ -502,37 +503,40 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data) {
 		pl->SendMailResult(mailId, MAIL_ITEM_TAKEN, MAIL_ERR_EQUIP_ERROR, msg);
 }
 
-void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data) {
-	uint64 mailbox;
-	uint32 mailId;
-	recv_data >> mailbox;
-	recv_data >> mailId;
-	recv_data.read_skip<uint64>(); //4.0.6a
+void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data)
+{
+    uint64 mailbox;
+    uint32 mailId;
+    recv_data >> mailbox;
+    recv_data >> mailId;
+    recv_data.read_skip<uint64>();                          //4.0.6a
 
-	if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox,
-			GAMEOBJECT_TYPE_MAILBOX))
-		return;
+    if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
+        return;
 
-	Player *pl = _player;
+    Player* player = _player;
 
-	Mail* m = pl->GetMail(mailId);
-	if (!m || m->state == MAIL_STATE_DELETED || m->deliver_time > time(NULL)) {
-		pl->SendMailResult(mailId, MAIL_MONEY_TAKEN, MAIL_ERR_INTERNAL_ERROR);
-		return;
-	}
+    Mail* m = player->GetMail(mailId);
+    if (!m || m->state == MAIL_STATE_DELETED || m->deliver_time > time(NULL))
+    {
+        player->SendMailResult(mailId, MAIL_MONEY_TAKEN, MAIL_ERR_INTERNAL_ERROR);
+        return;
+    }
 
-	pl->SendMailResult(mailId, MAIL_MONEY_TAKEN, MAIL_OK);
+    player->SendMailResult(mailId, MAIL_MONEY_TAKEN, MAIL_OK);
 
-	pl->ModifyMoney(m->money);
-	m->money = 0;
+    player->ModifyMoney(m->money);
+    m->money = 0;
+	CharacterDatabase.PExecute("UPDATE mail SET money = '0' WHERE id='%u'", mailId);
+	m->checked = m->checked | MAIL_CHECK_MASK_READ;
+    player->m_mailsUpdated = true;
 	m->state = MAIL_STATE_CHANGED;
-	pl->m_mailsUpdated = true;
 
-	// save money and mail to prevent cheating
-	SQLTransaction trans = CharacterDatabase.BeginTransaction();
-	pl->SaveGoldToDB(trans);
-	pl->_SaveMail(trans);
-	CharacterDatabase.CommitTransaction(trans);
+    // save money and mail to prevent cheating
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    player->SaveGoldToDB(trans);
+    player->_SaveMail(trans);
+    CharacterDatabase.CommitTransaction(trans);
 }
 
 //called when player lists his received mails
