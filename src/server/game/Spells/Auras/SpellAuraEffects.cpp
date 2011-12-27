@@ -3768,8 +3768,11 @@ void AuraEffect::HandleAuraTransform(AuraApplication const *aurApp, uint8 mode,
 							&& GetSpellProto()->SpellIconID == 82
 							&& GetSpellProto()->SpellVisual[0] == 12978)
 						if (Unit *caster = GetCaster())
-							if (caster->HasAura(52648)) // Glyph of the Penguin
+							if (caster->HasAura(52648))			// Glyph of the Penguin
 								model_id = 26452;
+							else if (caster->HasAura(57927))	// Glyph of the Monkey 
+								model_id = 21362; 
+
 
 					target->SetDisplayId(model_id);
 
