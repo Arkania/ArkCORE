@@ -573,50 +573,38 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 			}
 			break;
 		case SPELLFAMILY_PRIEST:
-			// Power Word: Shield
-			if (GetSpellProto()->SpellFamilyFlags[0] & 0x1
-					&& GetSpellProto()->SpellFamilyFlags[2] & 0x400) {
+			// Power Word: Shield 
+            // (SpellFamilyFlags[2] & 0x1 seems not work. Dbc flags: 0x00000000 00000000 00000001)
+			if (GetId() == 17) 
+            {
 				//+80.68% from sp bonus
 				float bonus = 0.8068f;
 
-				// Borrowed Time
-				if (AuraEffect const* pAurEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_PRIEST, 2899, 1))
-					bonus += (float) pAurEff->GetAmount() / 100.0f;
-
-				DoneActualBenefit += caster->SpellBaseHealingBonus(
-						GetSpellSchoolMask(m_spellProto)) * bonus;
-				// Improved PW: Shield: its weird having a SPELLMOD_ALL_EFFECTS here but its blizzards doing :)
-				// Improved PW: Shield is only applied at the spell healing bonus because it was already applied to the base value in CalculateSpellDamage
-				DoneActualBenefit = float(
-						caster->ApplyEffectModifiers(GetSpellProto(),
-								m_effIndex, (int32) DoneActualBenefit));
-				DoneActualBenefit *= caster->CalculateLevelPenalty(
-						GetSpellProto());
-
+                DoneActualBenefit += caster->SpellBaseHealingBonus(GetSpellSchoolMask(m_spellProto)) * bonus;
+                DoneActualBenefit *= caster->CalculateLevelPenalty(GetSpellProto());
 				amount += (int32) DoneActualBenefit;
 
-				// Twin Disciplines
-				if (AuraEffect const* pAurEff = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 0x400000, 0, 0, caster->GetGUID()))
-					amount *= int32((100.0f + pAurEff->GetAmount()) / 100.0f);
+                // Improved PW: Shield
+                if (AuraEffect const* pAurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 566, 1))
+                    AddPctN(amount, pAurEff->GetAmount());
 
-				// Focused Power
-				// Reuse variable, not sure if this code below can be moved before Twin Disciplines
-				DoneActualBenefit = float(amount);
-				DoneActualBenefit *= caster->GetTotalAuraMultiplier(
-						SPELL_AURA_MOD_HEALING_DONE_PERCENT);
-				amount = int32(DoneActualBenefit);
+                // Spiritual Healing
+                if (AuraEffect const* pAurEff = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 3131, 0))
+                    AddPctN(amount, pAurEff->GetAmount());
 
-				if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY)) {
-					if (caster->ToPlayer()->getClass() == CLASS_PRIEST) {
-						if (caster->ToPlayer()->GetTalentBranchSpec(
-								caster->ToPlayer()->GetActiveSpec())
-								== BS_PRIEST_DISCIPLINE) {
-							int32 bp =
-									int32(
-											amount
-													* (0.2f
-															+ (0.025f
-																	* caster->ToPlayer()->GetMasteryPoints())));
+                // Twin Disciplines
+                DoneActualBenefit = float(amount);
+                DoneActualBenefit *= caster->GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
+                amount = int32(DoneActualBenefit);
+
+                // Mastery: Shield Discipline
+				if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY)) 
+                {
+					if (caster->ToPlayer()->getClass() == CLASS_PRIEST) 
+                    {
+						if (caster->ToPlayer()->GetTalentBranchSpec(caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_DISCIPLINE) 
+                        {
+							int32 bp = int32(amount * (0.2f + (0.025f * caster->ToPlayer()->GetMasteryPoints())));
 							amount += bp;
 						}
 					}
