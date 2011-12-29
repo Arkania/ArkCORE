@@ -193,6 +193,8 @@ public:
 			bool apply) const;
 	void HandleModTrapLauncher(AuraApplication const * aurApp, uint8 mode,
 			bool apply) const;
+	void HandleAuraSaleForGuild(AuraApplication const * aurApp, uint8 mode,
+			bool apply) const;
 	void HandleModCamouflage(AuraApplication const * aurApp, uint8 mode,
 			bool apply) const;
 	void HandleModStealth(AuraApplication const * aurApp, uint8 mode,
