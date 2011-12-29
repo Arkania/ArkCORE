@@ -2854,6 +2854,24 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex) {
                 return;
             }
         }
+		case SPELLFAMILY_PRIEST: {
+			// Chakra
+			// Solves the problem that a player has more than one chakra buff active at the same time
+			if(m_spellInfo->Id == 14751 /*Chakra*/) {
+
+				if(m_caster->HasAura(81208 /*Chakra: Serenity*/))
+					m_caster->RemoveAura(81208);
+				else if(m_caster->HasAura(81206 /*Chakra: Sanctuary*/))
+					m_caster->RemoveAura(81206);
+				else if(m_caster->HasAura(81209 /*Chakra: Chastise*/))
+					m_caster->RemoveAura(81209);
+			}
+			// Chakra: Sanctuary is now applied on caster if he casts Prayer of Mending and has Aura Chakra
+            if (m_caster->HasAura(14751 /*Chakra*/) && m_spellInfo->Id == 41635 /*Prayer of Mending */)
+				m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
+
+			return;
+        }
     }
 
     switch (m_spellAura->GetId()) {
@@ -2979,33 +2997,27 @@ void Spell::EffectPowerBurn(SpellEffIndex effIndex) {
 void Spell::EffectHeal(SpellEffIndex /*effIndex*/) {
     // Chakra Talent
     if (m_caster->HasAura(14751)) {
-        switch (m_spellInfo->Id) {
-            // Heal
-            case 2050:
+        switch (m_spellInfo->Id) {         
+            case 2050:	 // Greater Heal
+            case 2060:	 // Flash Heal
+            case 2061:	 // Chakra: Serenity
+            case 32546:	 // Binding Heal
                 m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
                 break;
-                // Greater Heal
-            case 2060:
-                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
-                break;
-                // Flash Heal
-            case 2061:
-                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
-                break;
-                // Binding Heal
-            case 32546:
-                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
-                break;
-                // Prayer of Healing
-            case 596:
-                m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
-                break;
-                // Prayer of Mending    TODO : should be fixed cause this is not a spellEffect but an AuraEffect    by Magma
-            case 41635:
+            // Trigger for Prayer of Mending is in EffectApplyAura
+			case 596:	 // Prayer of Healing
                 m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
                 break;
         }
     }
+
+	// Priest: Handles the refresh of renew if the caster casts a direct Heal and has Chakra: Serenity
+	if (m_caster->HasAura(81208) /*Chakra: Serenity*/)
+	{
+		if(unitTarget->HasAura(139 /*(Renew)*/) && (m_spellInfo->Id == 2050 /*(Heal)*/ || m_spellInfo->Id == 2060 /*(Greater Heal)*/ || 
+			m_spellInfo->Id == 2061 /*(Flash Heal)*/ || m_spellInfo->Id == 32546 /*(Binding Heal)*/))
+		unitTarget->GetAura(139)->RefreshDuration(); // Refresh Renew on Target		
+	}	
 }
 
 void Spell::SpellDamageHeal(SpellEffIndex effIndex) {
