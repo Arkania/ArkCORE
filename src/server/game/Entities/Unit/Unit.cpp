@@ -11002,11 +11002,14 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto,
 	case SPELLFAMILY_MAGE:
 		// Ice Lance
 		if (spellProto->SpellIconID == 186) {
-			if (pVictim->HasAuraState(AURA_STATE_FROZEN, spellProto, this)) {
+			if (pVictim->HasAuraState(AURA_STATE_FROZEN, spellProto, this)) 
+			{
 				// Glyph of Ice Lance
-				if (owner->HasAura(56377)
-						&& pVictim->getLevel() > owner->getLevel())
+				if (owner->HasAura(56377) && pVictim->getLevel() > owner->getLevel())
 					DoneTotalMod *= 1.05f;
+					
+				// Damages doubled against frozen targets. 
+				DoneTotalMod *= 2.0f; 
 			}
 		}
 
