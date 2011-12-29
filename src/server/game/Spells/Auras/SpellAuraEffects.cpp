@@ -393,7 +393,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] = { &AuraEffect::HandleNULL, /
 		&AuraEffect::HandleNULL, //334
 		&AuraEffect::HandleNULL, //335
 		&AuraEffect::HandleNULL, //336
-		&AuraEffect::HandleNULL, //337
+		&AuraEffect::HandleAuraSaleForGuild,//337
 		&AuraEffect::HandleNULL, //338
 		&AuraEffect::HandleNULL, //339
 		&AuraEffect::HandleNULL, //340
@@ -3189,6 +3189,10 @@ void AuraEffect::HandleModStealthDetect(AuraApplication const * aurApp,
 
 //TODO: Finish this aura
 void AuraEffect::HandleModTrapLauncher(AuraApplication const *aurApp,
+		uint8 mode, bool apply) const {
+}
+//TODO: Thats way? (for guild bonus spell)
+void AuraEffect::HandleAuraSaleForGuild(AuraApplication const *aurApp,
 		uint8 mode, bool apply) const {
 }
 
