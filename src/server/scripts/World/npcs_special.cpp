@@ -2968,6 +2968,37 @@ public:
 	}
 };
 
+class npc_lightwell : public CreatureScript
+{
+public:
+    npc_lightwell() : CreatureScript("npc_lightwell") { }
+
+    struct npc_lightwellAI : public PassiveAI
+    {
+        npc_lightwellAI(Creature* c) : PassiveAI(c) {}
+
+        void Reset()
+        {
+            DoCast(me, 59907, false); // Spell for Lightwell Charges
+        }
+
+        void EnterEvadeMode()
+        {
+            if (!me->isAlive())
+                return;
+
+            me->DeleteThreatList();
+            me->CombatStop(true);
+            me->ResetPlayerDamageReq();
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_lightwellAI(creature);
+    }
+};
+
 // Uncomment this once guardians are able to cast spells
 // on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts. 
 /*
@@ -3078,5 +3109,6 @@ void AddSC_npcs_special() {
 	new npc_ring_of_frost;
 	new npc_flame_orb;
 	new npc_power_word_barrier;
+	new npc_lightwell;
 	//new npc_guardian_of_ancient_kings;
 }
