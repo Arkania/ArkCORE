@@ -6922,7 +6922,7 @@ void Player::RewardReputation(Unit *pVictim, float rate) {
 	uint32 zone = GetZoneId();
 	uint32 team = GetTeam();
 	float favored_rep_mult = 0;
-
+        float favored_rep_guild = 0;
 	if ((HasAura(32096) || HasAura(32098))
 			&& (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713
 					|| zone == 3714))
@@ -6935,7 +6935,12 @@ void Player::RewardReputation(Unit *pVictim, float rate) {
 	if (favored_rep_mult > 0)
 		favored_rep_mult *= 2; // Multiplied by 2 because the reputation is divided by 2 for some reason (See "donerep1 / 2" and "donerep2 / 2") -- if you know why this is done, please update/explain :)
 	// Favored reputation increase END
-
+        if (HasAura(78634))
+                favored_rep_guild = 0.05f;
+        else if (HasAura(78635))
+                favored_rep_guild = 0.1f;
+        if (favored_rep_guild > 0)
+                favored_rep_guild *= 2;
 	bool recruitAFriend = GetsRecruitAFriendBonus(false);
 
 	if (Rep->repfaction1 && (!Rep->team_dependent || team == ALLIANCE)) {
@@ -6943,7 +6948,7 @@ void Player::RewardReputation(Unit *pVictim, float rate) {
 				Rep->repvalue1,
 				ChampioningFaction ? ChampioningFaction : Rep->repfaction1,
 				false);
-		donerep1 = int32(donerep1 * (rate + favored_rep_mult));
+                donerep1 = int32(donerep1 * (rate + favored_rep_mult + favored_rep_guild));
 
 		if (recruitAFriend)
 			donerep1 =
