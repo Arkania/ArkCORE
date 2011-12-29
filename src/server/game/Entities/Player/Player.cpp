@@ -2758,65 +2758,73 @@ void Player::SendLogXPGain(uint32 GivenXP, Unit* victim, uint32 BonusXP,
 }
 
 void Player::GiveXP(uint32 xp, Unit *victim, float group_rate) {
-	if (xp < 1)
-		return;
+        if (xp < 1)
+                return;
 
-	if (!isAlive())
-		return;
+        if (!isAlive())
+                return;
 
-	if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_NO_XP_GAIN))
-		return;
+        if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_NO_XP_GAIN))
+                return;
 
-	if (victim && victim->GetTypeId() == TYPEID_UNIT
-			&& !victim->ToCreature()->hasLootRecipient())
-		return;
+        if (victim && victim->GetTypeId() == TYPEID_UNIT
+                        && !victim->ToCreature()->hasLootRecipient())
+                return;
 
-	uint8 level = getLevel();
+        uint8 level = getLevel();
 
-	sScriptMgr->OnGivePlayerXP(this, xp, victim);
+        sScriptMgr->OnGivePlayerXP(this, xp, victim);
 
-	// Favored experience increase START
-	uint32 zone = GetZoneId();
-	float favored_exp_mult = 0;
-	if ((HasAura(32096) || HasAura(32098))
-			&& (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713
-					|| zone == 3714))
-		favored_exp_mult = 0.05f; // Thrallmar's Favor and Honor Hold's Favor
-	xp = uint32(xp * (1 + favored_exp_mult));
-	// Favored experience increase END
+        // Favored experience increase START
+        uint32 zone = GetZoneId();
+        float favored_exp_mult = 0;
+        //Brainstorm. Use a hackway. Need imlement into AuraSaleForguild. //wlasser
+        float favored_exp_guild_low =0;
+        float favored_exp_guild_high =0;
+        if (HasAura(78631))
+            favored_exp_guild_low = 0.05f;
+        if (HasAura(78632))
+            favored_exp_guild_high = 0.1f;
+        if ((HasAura(32096) || HasAura(32098))
+                        && (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713
+                                        || zone == 3714))
+                favored_exp_mult = 0.05f; // Thrallmar's Favor and Honor Hold's Favor
+        xp = uint32(xp * (1 + favored_exp_mult + favored_exp_guild_low + favored_exp_guild_high));
+        // Favored experience increase END
 
-	// XP to money conversion processed in Player::RewardQuest
-	if (level >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
-		return;
+        // XP to money conversion processed in Player::RewardQuest
+        if (level >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+                return;
 
-	uint32 bonus_xp = 0;
-	bool recruitAFriend = GetsRecruitAFriendBonus(true);
+        uint32 bonus_xp = 0;
+        bool recruitAFriend = GetsRecruitAFriendBonus(true);
 
-	// RaF does NOT stack with rested experience
-	if (recruitAFriend)
-		bonus_xp = 2 * xp; // xp + bonus_xp must add up to 3 * xp for RaF; calculation for quests done client-side
-	else
-		bonus_xp = victim ? GetXPRestBonus(xp) : 0; // XP resting bonus
+        // RaF does NOT stack with rested experience
+        if (recruitAFriend)
+                bonus_xp = 2 * xp; // xp + bonus_xp must add up to 3 * xp for RaF; calculation for quests done client-side
+        else
+                bonus_xp = victim ? GetXPRestBonus(xp) : 0; // XP resting bonus
 
-	SendLogXPGain(xp, victim, bonus_xp, recruitAFriend, group_rate);
+        SendLogXPGain(xp, victim, bonus_xp, recruitAFriend, group_rate);
 
-	uint32 curXP = GetUInt32Value(PLAYER_XP);
-	uint32 nextLvlXP = GetUInt32Value(PLAYER_NEXT_LEVEL_XP);
-	uint32 newXP = curXP + xp + bonus_xp;
+        uint32 curXP = GetUInt32Value(PLAYER_XP);
+        uint32 nextLvlXP = GetUInt32Value(PLAYER_NEXT_LEVEL_XP);
+        uint32 newXP = curXP + xp + bonus_xp;
 
-	while (newXP >= nextLvlXP
-			&& level < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL)) {
-		newXP -= nextLvlXP;
+        while (newXP >= nextLvlXP
+                        && level < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL)) {
+                newXP -= nextLvlXP;
 
-		if (level < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
-			GiveLevel(level + 1);
+                if (level < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+                        GiveLevel(level + 1);
 
-		level = getLevel();
-		nextLvlXP = GetUInt32Value(PLAYER_NEXT_LEVEL_XP);
-	}
+                level = getLevel();
+                nextLvlXP = GetUInt32Value(PLAYER_NEXT_LEVEL_XP);
+        }
 
-	SetUInt32Value(PLAYER_XP, newXP);
+        SetUInt32Value(PLAYER_XP, newXP);
 }
+
 
 // Update player to next level
 // Current player experience not update (must be update by caller)
@@ -6914,7 +6922,7 @@ void Player::RewardReputation(Unit *pVictim, float rate) {
 	uint32 zone = GetZoneId();
 	uint32 team = GetTeam();
 	float favored_rep_mult = 0;
-
+        float favored_rep_guild = 0;
 	if ((HasAura(32096) || HasAura(32098))
 			&& (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713
 					|| zone == 3714))
@@ -6927,7 +6935,12 @@ void Player::RewardReputation(Unit *pVictim, float rate) {
 	if (favored_rep_mult > 0)
 		favored_rep_mult *= 2; // Multiplied by 2 because the reputation is divided by 2 for some reason (See "donerep1 / 2" and "donerep2 / 2") -- if you know why this is done, please update/explain :)
 	// Favored reputation increase END
-
+        if (HasAura(78634))
+                favored_rep_guild = 0.05f;
+        else if (HasAura(78635))
+                favored_rep_guild = 0.1f;
+        if (favored_rep_guild > 0)
+                favored_rep_guild *= 2;
 	bool recruitAFriend = GetsRecruitAFriendBonus(false);
 
 	if (Rep->repfaction1 && (!Rep->team_dependent || team == ALLIANCE)) {
@@ -6935,7 +6948,7 @@ void Player::RewardReputation(Unit *pVictim, float rate) {
 				Rep->repvalue1,
 				ChampioningFaction ? ChampioningFaction : Rep->repfaction1,
 				false);
-		donerep1 = int32(donerep1 * (rate + favored_rep_mult));
+                donerep1 = int32(donerep1 * (rate + favored_rep_mult + favored_rep_guild));
 
 		if (recruitAFriend)
 			donerep1 =
