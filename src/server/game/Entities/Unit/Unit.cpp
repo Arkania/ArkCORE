@@ -8127,7 +8127,7 @@ bool Unit::HandleAuraProc(Unit * pVictim, uint32 damage, Aura * triggeredByAura,
 		// Pursuit of Justice
 		//case 26022:
 		//case 26023: {
-			*handled = true;
+		//	*handled = true;
 			// Hack, we need the new spell dbcs implemented in
 			// order to add the missing spell 32733 wich i suppose,
 			// is the cooldown marker used by blizz to share the cd
