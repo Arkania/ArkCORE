@@ -3192,18 +3192,6 @@ void AuraEffect::HandleModTrapLauncher(AuraApplication const *aurApp,
     if (!(mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK))
             return;
     Unit *target = aurApp->GetTarget();
-    if (apply)
-    {
-      target->GetCharmInfo()->AddSpellToActionBar(60192);
-       target->GetCharmInfo()->AddSpellToActionBar(82939);
-        target->GetCharmInfo()->AddSpellToActionBar(82941);
-    }
-    else //not correct way?
-    {
-       target->GetCharmInfo()->RemoveSpellFromActionBar(60192);
-       target->GetCharmInfo()->RemoveSpellFromActionBar(82939);
-       target->GetCharmInfo()->RemoveSpellFromActionBar(82941);
-    }
 }
 //TODO: Thats way? (for guild bonus spell)
 void AuraEffect::HandleAuraSaleForGuild(AuraApplication const *aurApp,
