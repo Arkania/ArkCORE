@@ -1,255 +1,262 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
- *
- * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
- *
- * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
- *
- * Copyright (C) 2010-2011 ProjectSkyfire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * 
  * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* Script Data Start
- SDName: Boss mal_ganis
- SDAuthor: Tartalo
- SD%Complete: 80
- SDComment: TODO: Intro & outro
- SDCategory:
- Script Data End */
+SDName: Boss mal_ganis
+SDAuthor: Tartalo
+SD%Complete: 80
+SDComment: TODO: Intro & outro
+SDCategory:
+Script Data End */
 
 #include "ScriptPCH.h"
 #include "culling_of_stratholme.h"
 
-enum Spells {
-	SPELL_CARRION_SWARM = 52720, //A cresting wave of chaotic magic splashes over enemies in front of the caster, dealing 3230 to 3570 Shadow damage and 380 to 420 Shadow damage every 3 sec. for 15 sec.
-	H_SPELL_CARRION_SWARM = 58852,
-	SPELL_MIND_BLAST = 52722, //Inflicts 4163 to 4837 Shadow damage to an enemy.
-	H_SPELL_MIND_BLAST = 58850,
-	SPELL_SLEEP = 52721, //Puts an enemy to sleep for up to 10 sec. Any damage caused will awaken the target.
-	H_SPELL_SLEEP = 58849,
-	SPELL_VAMPIRIC_TOUCH = 52723
-//Heals the caster for half the damage dealt by a melee attack.
+enum Spells
+{
+    SPELL_CARRION_SWARM                         = 52720, //A cresting wave of chaotic magic splashes over enemies in front of the caster, dealing 3230 to 3570 Shadow damage and 380 to 420 Shadow damage every 3 sec. for 15 sec.
+    H_SPELL_CARRION_SWARM                       = 58852,
+    SPELL_MIND_BLAST                            = 52722, //Inflicts 4163 to 4837 Shadow damage to an enemy.
+    H_SPELL_MIND_BLAST                          = 58850,
+    SPELL_SLEEP                                 = 52721, //Puts an enemy to sleep for up to 10 sec. Any damage caused will awaken the target.
+    H_SPELL_SLEEP                               = 58849,
+    SPELL_VAMPIRIC_TOUCH                        = 52723 //Heals the caster for half the damage dealt by a melee attack.
 };
 
-enum Yells {
-	SAY_INTRO_1 = -1595009,
-	SAY_INTRO_2 = -1595010,
-	SAY_AGGRO = -1595011,
-	SAY_KILL_1 = -1595012,
-	SAY_KILL_2 = -1595013,
-	SAY_KILL_3 = -1595014,
-	SAY_SLAY_1 = -1595015,
-	SAY_SLAY_2 = -1595016,
-	SAY_SLAY_3 = -1595017,
-	SAY_SLAY_4 = -1595018,
-	SAY_SLEEP_1 = -1595019,
-	SAY_SLEEP_2 = -1595020,
-	SAY_30HEALTH = -1595021,
-	SAY_15HEALTH = -1595022,
-	SAY_ESCAPE_SPEECH_1 = -1595023,
-	SAY_ESCAPE_SPEECH_2 = -1595024,
-	SAY_OUTRO = -1595025,
+enum Yells
+{
+    SAY_INTRO_1                                 = -1595009,
+    SAY_INTRO_2                                 = -1595010,
+    SAY_AGGRO                                   = -1595011,
+    SAY_KILL_1                                  = -1595012,
+    SAY_KILL_2                                  = -1595013,
+    SAY_KILL_3                                  = -1595014,
+    SAY_SLAY_1                                  = -1595015,
+    SAY_SLAY_2                                  = -1595016,
+    SAY_SLAY_3                                  = -1595017,
+    SAY_SLAY_4                                  = -1595018,
+    SAY_SLEEP_1                                 = -1595019,
+    SAY_SLEEP_2                                 = -1595020,
+    SAY_30HEALTH                                = -1595021,
+    SAY_15HEALTH                                = -1595022,
+    SAY_ESCAPE_SPEECH_1                         = -1595023,
+    SAY_ESCAPE_SPEECH_2                         = -1595024,
+    SAY_OUTRO                                   = -1595025,
 };
 
-enum CombatPhases {
-	COMBAT, OUTRO
+enum CombatPhases
+{
+    COMBAT,
+    OUTRO
 };
 
-class boss_mal_ganis: public CreatureScript {
+class boss_mal_ganis : public CreatureScript
+{
 public:
-	boss_mal_ganis() :
-			CreatureScript("boss_mal_ganis") {
-	}
+    boss_mal_ganis() : CreatureScript("boss_mal_ganis") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_mal_ganisAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new boss_mal_ganisAI (creature);
+    }
 
-	struct boss_mal_ganisAI: public BossAI {
-		boss_mal_ganisAI(Creature *c) :
-				BossAI(c, DATA_MAL_GANIS) {
-		}
+    struct boss_mal_ganisAI : public ScriptedAI
+    {
+        boss_mal_ganisAI(Creature* c) : ScriptedAI(c)
+        {
+            instance = c->GetInstanceScript();
+        }
 
-		uint32 uiCarrionSwarmTimer;
-		uint32 uiMindBlastTimer;
-		uint32 uiVampiricTouchTimer;
-		uint32 uiSleepTimer;
+        uint32 uiCarrionSwarmTimer;
+        uint32 uiMindBlastTimer;
+        uint32 uiVampiricTouchTimer;
+        uint32 uiSleepTimer;
 
-		uint8 uiOutroStep;
-		uint32 uiOutroTimer;
+        uint8 uiOutroStep;
+        uint32 uiOutroTimer;
 
-		bool bYelled;
-		bool bYelled2;
+        bool bYelled;
+        bool bYelled2;
 
-		CombatPhases Phase;
+        CombatPhases Phase;
 
-		void Reset() {
-			bYelled = false;
-			bYelled2 = false;
-			Phase = COMBAT;
-			uiCarrionSwarmTimer = 6000;
-			uiMindBlastTimer = 11000;
-			uiVampiricTouchTimer = urand(10000, 15000);
-			uiSleepTimer = urand(15000, 20000);
-			uiOutroTimer = 1000;
+        InstanceScript* instance;
 
-			if (instance)
-				instance->SetData(DATA_MAL_GANIS_EVENT, NOT_STARTED);
-		}
+        void Reset()
+        {
+             bYelled = false;
+             bYelled2 = false;
+             Phase = COMBAT;
+             uiCarrionSwarmTimer = 6000;
+             uiMindBlastTimer = 11000;
+             uiVampiricTouchTimer = urand(10000, 15000);
+             uiSleepTimer = urand(15000, 20000);
+             uiOutroTimer = 1000;
 
-		void EnterCombat(Unit* /*who*/) {
-			DoScriptText(SAY_AGGRO, me);
-			if (instance)
-				instance->SetData(DATA_MAL_GANIS_EVENT, IN_PROGRESS);
-		}
+             if (instance)
+                 instance->SetData(DATA_MAL_GANIS_EVENT, NOT_STARTED);
+        }
 
-		void DamageTaken(Unit *done_by, uint32 &damage) {
-			if (damage >= me->GetHealth() && done_by != me)
-				damage = me->GetHealth() - 1;
-		}
+        void EnterCombat(Unit* /*who*/)
+        {
+            DoScriptText(SAY_AGGRO, me);
+            if (instance)
+                instance->SetData(DATA_MAL_GANIS_EVENT, IN_PROGRESS);
+        }
 
-		void UpdateAI(const uint32 diff) {
-			switch (Phase) {
-			case COMBAT:
-				//Return since we have no target
-				if (!UpdateVictim())
-					return;
+        void DamageTaken(Unit* done_by, uint32 &damage)
+        {
+            if (damage >= me->GetHealth() && done_by != me)
+                damage = me->GetHealth()-1;
+        }
 
-				if (!bYelled && HealthBelowPct(30)) {
-					DoScriptText(SAY_30HEALTH, me);
-					bYelled = true;
-				}
+        void UpdateAI(const uint32 diff)
+        {
+            switch (Phase)
+            {
+                case COMBAT:
+                    //Return since we have no target
+                    if (!UpdateVictim())
+                        return;
 
-				if (!bYelled2 && HealthBelowPct(15)) {
-					DoScriptText(SAY_15HEALTH, me);
-					bYelled2 = true;
-				}
+                    if (!bYelled && HealthBelowPct(30))
+                    {
+                        DoScriptText(SAY_30HEALTH, me);
+                        bYelled = true;
+                    }
 
-				if (HealthBelowPct(1)) {
-					//Handle Escape Event: Don't forget to add Player::RewardPlayerAndGroupAtEvent
-					me->SetFlag(
-							UNIT_FIELD_FLAGS,
-							UNIT_FLAG_NON_ATTACKABLE
-									| UNIT_FLAG_NOT_SELECTABLE);
-					uiOutroStep = 1;
-					Phase = OUTRO;
-					return;
-				}
+                    if (!bYelled2 && HealthBelowPct(15))
+                    {
+                        DoScriptText(SAY_15HEALTH, me);
+                        bYelled2 = true;
+                    }
 
-				if (Creature* pArthas = me->GetCreature(*me, instance ? instance->GetData64(DATA_ARTHAS) : 0))
-					if (pArthas->isDead()) {
-						EnterEvadeMode();
-						me->DisappearAndDie();
-						if (instance)
-							instance->SetData(DATA_MAL_GANIS_EVENT, FAIL);
-					}
+                    if (HealthBelowPct(1))
+                    {
+                        //Handle Escape Event: Don't forget to add Player::RewardPlayerAndGroupAtEvent
+                        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
+                        uiOutroStep = 1;
+                        Phase = OUTRO;
+                        return;
+                    }
 
-				if (uiCarrionSwarmTimer < diff) {
-					DoCastVictim(SPELL_CARRION_SWARM);
-					uiCarrionSwarmTimer = 7000;
-				} else
-					uiCarrionSwarmTimer -= diff;
+                    if (Creature* pArthas = me->GetCreature(*me, instance ? instance->GetData64(DATA_ARTHAS) : 0))
+                        if (pArthas->isDead())
+                        {
+                            EnterEvadeMode();
+                            me->DisappearAndDie();
+                            if (instance)
+                                instance->SetData(DATA_MAL_GANIS_EVENT, FAIL);
+                        }
 
-				if (uiMindBlastTimer < diff) {
-					if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-						DoCast(pTarget, SPELL_MIND_BLAST);
-					uiMindBlastTimer = 6000;
-				} else
-					uiMindBlastTimer -= diff;
+                    if (uiCarrionSwarmTimer < diff)
+                    {
+                        DoCastVictim(SPELL_CARRION_SWARM);
+                        uiCarrionSwarmTimer = 7000;
+                    } else uiCarrionSwarmTimer -= diff;
 
-				if (uiVampiricTouchTimer < diff) {
-					DoCast(me, SPELL_VAMPIRIC_TOUCH);
-					uiVampiricTouchTimer = 32000;
-				} else
-					uiVampiricTouchTimer -= diff;
+                    if (uiMindBlastTimer < diff)
+                    {
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(target, SPELL_MIND_BLAST);
+                        uiMindBlastTimer = 6000;
+                    } else uiMindBlastTimer -= diff;
 
-				if (uiSleepTimer < diff) {
-					DoScriptText(RAND(SAY_SLEEP_1, SAY_SLEEP_2), me);
-					if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-						DoCast(pTarget, SPELL_SLEEP);
-					uiSleepTimer = urand(15000, 20000);
-				} else
-					uiSleepTimer -= diff;
+                    if (uiVampiricTouchTimer < diff)
+                    {
+                        DoCast(me, SPELL_VAMPIRIC_TOUCH);
+                        uiVampiricTouchTimer = 32000;
+                    } else uiVampiricTouchTimer -= diff;
 
-				DoMeleeAttackIfReady();
-				break;
-			case OUTRO:
-				if (uiOutroTimer < diff) {
-					switch (uiOutroStep) {
-					case 1:
-						DoScriptText(SAY_ESCAPE_SPEECH_1, me);
-						me->GetMotionMaster()->MoveTargetedHome();
-						++uiOutroStep;
-						uiOutroTimer = 8000;
-						break;
-					case 2:
-						me->SetUInt64Value(
-								UNIT_FIELD_TARGET,
-								instance ?
-										instance->GetData64(DATA_ARTHAS) : 0);
-						me->HandleEmoteCommand(29);
-						DoScriptText(SAY_ESCAPE_SPEECH_2, me);
-						++uiOutroStep;
-						uiOutroTimer = 9000;
-						break;
-					case 3:
-						DoScriptText(SAY_OUTRO, me);
-						++uiOutroStep;
-						uiOutroTimer = 16000;
-						break;
-					case 4:
-						me->HandleEmoteCommand(33);
-						++uiOutroStep;
-						uiOutroTimer = 500;
-						break;
-					case 5:
-						me->SetVisible(false);
-						me->Kill(me);
-						break;
-					}
-				} else
-					uiOutroTimer -= diff;
-				break;
-			}
-		}
+                    if (uiSleepTimer < diff)
+                    {
+                        DoScriptText(RAND(SAY_SLEEP_1, SAY_SLEEP_2), me);
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            DoCast(target, SPELL_SLEEP);
+                        uiSleepTimer = urand(15000, 20000);
+                    } else uiSleepTimer -= diff;
 
-		void JustDied(Unit* /*killer*/) {
-			_JustDied();
-			if (instance) {
-				instance->SetData(DATA_MAL_GANIS_EVENT, DONE);
+                    DoMeleeAttackIfReady();
+                    break;
+                case OUTRO:
+                    if (uiOutroTimer < diff)
+                    {
+                        switch (uiOutroStep)
+                        {
+                            case 1:
+                                DoScriptText(SAY_ESCAPE_SPEECH_1, me);
+                                me->GetMotionMaster()->MoveTargetedHome();
+                                ++uiOutroStep;
+                                uiOutroTimer = 8000;
+                                break;
+                            case 2:
+                                me->SetTarget(instance ? instance->GetData64(DATA_ARTHAS) : 0);
+                                me->HandleEmoteCommand(29);
+                                DoScriptText(SAY_ESCAPE_SPEECH_2, me);
+                                ++uiOutroStep;
+                                uiOutroTimer = 9000;
+                                break;
+                            case 3:
+                                DoScriptText(SAY_OUTRO, me);
+                                ++uiOutroStep;
+                                uiOutroTimer = 16000;
+                                break;
+                            case 4:
+                                me->HandleEmoteCommand(33);
+                                ++uiOutroStep;
+                                uiOutroTimer = 500;
+                                break;
+                            case 5:
+                                me->SetVisible(false);
+                                me->Kill(me);
+                                break;
 
-				// give achievement credit to players. criteria use spell 58630 which doesn't exist.
-				if (instance)
-					instance->DoUpdateAchievementCriteria(
-							ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, 58630);
-			}
-		}
+                        }
+                    } else uiOutroTimer -= diff;
+                    break;
+            }
+        }
 
-		void KilledUnit(Unit * victim) {
-			if (victim == me)
-				return;
+        void JustDied(Unit* /*killer*/)
+        {
+            if (instance)
+            {
+                instance->SetData(DATA_MAL_GANIS_EVENT, DONE);
 
-			DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3, SAY_SLAY_4),
-					me);
-		}
-	};
+                // give achievement credit to players. criteria use spell 58630 which doesn't exist.
+                if (instance)
+                    instance->DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, 58630);
+            }
+        }
+
+        void KilledUnit(Unit* victim)
+        {
+            if (victim == me)
+                return;
+
+            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3, SAY_SLAY_4), me);
+        }
+    };
+
 };
 
-void AddSC_boss_mal_ganis() {
-	new boss_mal_ganis();
+void AddSC_boss_mal_ganis()
+{
+    new boss_mal_ganis();
 }
