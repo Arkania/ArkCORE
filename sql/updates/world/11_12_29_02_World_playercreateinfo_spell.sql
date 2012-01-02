@@ -1,4 +1,4 @@
-DELETE FROM `playercreateinfo_spell WHERE `spell`=20589;
+DELETE FROM `playercreateinfo_spell` WHERE `spell`=20589;
 Insert INTO `playercreateinfo_spell` (`race`, `class`, `Spell`, `Note`) VALUES
 (7, 6, 20589, 'Escape Artist'),
 (7, 9, 20589, 'Escape Artist'),
