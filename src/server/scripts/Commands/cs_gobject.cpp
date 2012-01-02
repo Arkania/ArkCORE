@@ -184,6 +184,8 @@ public:
 
 		handler->PSendSysMessage(LANG_GAMEOBJECT_ADD, id, gInfo->name,
 				db_lowGUID, x, y, z);
+	
+		sLog->outSQLDev("INSERT INTO gameobject ('%u', '%u', 1, '%u', '%u', '%u', '%u', '%u', 0, 0, 0, 1, 1, 60, 100, '%u');", db_lowGUID, gInfo->id, map, chr->GetPhaseMaskForSpawn(), x, y, z, GO_STATE_READY);
 		return true;
 	}
 
@@ -386,7 +388,7 @@ public:
 		obj->DeleteFromDB();
 
 		handler->PSendSysMessage(LANG_COMMAND_DELOBJMESSAGE, obj->GetGUIDLow());
-
+		sLog->outSQLDev("DELETE FROM gameobject WHERE guid = %u;", obj->GetGUIDLow());
 		return true;
 	}
 

@@ -387,6 +387,7 @@ public:
 		unit->AddObjectToRemoveList();
 
 		handler->SendSysMessage(LANG_COMMAND_DELCREATMESSAGE);
+		sLog->outSQLDev("DELETE FROM creature WHERE guid = %u;", unit->GetGUIDLow());
 
 		return true;
 	}
