@@ -5075,16 +5075,16 @@ SpellCastResult Spell::CheckCast(bool strict) {
                 return SPELL_FAILED_TARGET_AURASTATE;
             }
         }
-        if (m_caster->GetTypeId() == TYPEID_PLAYER)
-        {
-            //// Hand of Protection / Lay on Hands / Divine Shield
-           if (m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN &&
-                (633==m_spellInfo->Id || 642==m_spellInfo->Id || 1022==m_spellInfo->Id))
+      if (m_caster->GetTypeId() == TYPEID_PLAYER)
             {
-                if (target->HasAura(25771))                        // Forbearance
-                    return SPELL_FAILED_TARGET_AURASTATE;
-            }
+        //// Hand of Protection / Lay on Hands / Divine Shield
+        if (m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN &&
+          (633==m_spellInfo->Id || 642==m_spellInfo->Id || 1022==m_spellInfo->Id))
+        {
+          if (target->HasAura(25771))            // Forbearance
+            return SPELL_FAILED_TARGET_AURASTATE;
         }
+            }
         // check pet presents
         for (int j = 0; j < MAX_SPELL_EFFECTS; ++j) {
             if (m_spellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_PET) {
