@@ -123,10 +123,10 @@ class boss_general_umbriss : public CreatureScript
                 DoScriptText(SAY_AGGRO, me);
             }
 
-            void JustDied(Unit* /*killer*/)
-            {
-                DoScriptText(SAY_DEATH, me);
-            }
+//            void JustDied(Unit* /*killer*/)
+//            {
+//                DoScriptText(SAY_DEATH, me);
+//            }
 
             void JustSummoned(Creature *pSummoned)
             {
@@ -144,7 +144,7 @@ class boss_general_umbriss : public CreatureScript
 
             void EnterPhaseGround()
             {
-                events.ScheduleEvent(EVENT_SECOUSS, 10000);
+                events.ScheduleEvent(EVENT_SECOUSS, 30000);
                 events.ScheduleEvent(EVENT_ECLAIR, 25000);
                 events.ScheduleEvent(EVENT_PLAIE, 20000);
                 events.ScheduleEvent(EVENT_SUMMON, 60000);
