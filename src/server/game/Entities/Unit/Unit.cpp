@@ -8125,19 +8125,19 @@ bool Unit::HandleAuraProc(Unit * pVictim, uint32 damage, Aura * triggeredByAura,
 	case SPELLFAMILY_GENERIC:
 		switch (dummySpell->Id) {
 		// Pursuit of Justice
-		case 26022:
-		case 26023: {
-			*handled = true;
+		//case 26022:
+		//case 26023: {
+		//	*handled = true;
 			// Hack, we need the new spell dbcs implemented in
 			// order to add the missing spell 32733 wich i suppose,
 			// is the cooldown marker used by blizz to share the cd
 			// of Pursuit of justice and Blessed life proc.
-			if (!HasAura(31828) && !HasAura(31829) && (GetAllSpellMechanicMask(procSpell) && ((1 << MECHANIC_ROOT) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR)))) {
-				CastSpell(pVictim, 89024, true);
-				return true;
-			}
-			break;
-		}
+			//if (!HasAura(31828) && !HasAura(31829) && (GetAllSpellMechanicMask(procSpell) && ((1 << MECHANIC_ROOT) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR)))) {
+			//	CastSpell(pVictim, 89024, true);
+			//	return true;
+			//}
+			//break;
+		//}
 			// Bone Shield cooldown
 		case 49222: {
 			*handled = true;
@@ -11002,11 +11002,14 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto,
 	case SPELLFAMILY_MAGE:
 		// Ice Lance
 		if (spellProto->SpellIconID == 186) {
-			if (pVictim->HasAuraState(AURA_STATE_FROZEN, spellProto, this)) {
+			if (pVictim->HasAuraState(AURA_STATE_FROZEN, spellProto, this)) 
+			{
 				// Glyph of Ice Lance
-				if (owner->HasAura(56377)
-						&& pVictim->getLevel() > owner->getLevel())
+				if (owner->HasAura(56377) && pVictim->getLevel() > owner->getLevel())
 					DoneTotalMod *= 1.05f;
+					
+				// Damages doubled against frozen targets. 
+				DoneTotalMod *= 2.0f; 
 			}
 		}
 

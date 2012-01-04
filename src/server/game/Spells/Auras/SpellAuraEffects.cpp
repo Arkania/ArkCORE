@@ -393,7 +393,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] = { &AuraEffect::HandleNULL, /
 		&AuraEffect::HandleNULL, //334
 		&AuraEffect::HandleNULL, //335
 		&AuraEffect::HandleNULL, //336
-		&AuraEffect::HandleNULL, //337
+		&AuraEffect::HandleAuraSaleForGuild,//337
 		&AuraEffect::HandleNULL, //338
 		&AuraEffect::HandleNULL, //339
 		&AuraEffect::HandleNULL, //340
@@ -3186,9 +3186,15 @@ void AuraEffect::HandleModStealthDetect(AuraApplication const * aurApp,
 
 	target->UpdateObjectVisibility();
 }
-
-//TODO: Finish this aura
+//trap launcher aura. Need cast or add spell on AB. need more ways for continues
 void AuraEffect::HandleModTrapLauncher(AuraApplication const *aurApp,
+      uint8 mode, bool apply) const {
+    if (!(mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK))
+            return;
+    Unit *target = aurApp->GetTarget();
+}
+//TODO: Thats way? (for guild bonus spell)
+void AuraEffect::HandleAuraSaleForGuild(AuraApplication const *aurApp,
 		uint8 mode, bool apply) const {
 }
 
