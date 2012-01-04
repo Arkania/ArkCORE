@@ -1255,139 +1255,129 @@ void Guild::OnPlayerStatusChange(Player* plr, uint32 flag, bool state) {
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
 // HANDLE CLIENT COMMANDS
-void Guild::HandleRoster(WorldSession *session /*= NULL*/) {
-	// Guess size
-	WorldPacket data(
-			SMSG_GUILD_ROSTER,
-			(4 + m_motd.length() + 1 + m_info.length() + 1 + 2 + 4 + 2
-					+ _GetRanksSize() * 100));
-	data << m_motd;
-	data << uint32(m_members.size());
+void Guild::HandleRoster(WorldSession* session /*= NULL*/)
+{
+    // Guess size
+    WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 4 + _GetRanksSize() * (4 + 4 + GUILD_BANK_MAX_TABS * (4 + 4)) + m_members.size() * 50));
+    data << m_motd;
+    data << uint32(m_members.size());
 
-	// Packed uint8 - each bit resembles some flag.
-	// Currently unknown and not needed.
-	uint32 totalBytesToSend = uint32(uint32(m_members.size()) / uint32(8)) + 1;
-	for (uint32 i = 0; i < totalBytesToSend; ++i)
-		data << uint8(0);
+    // Packed uint8 - each bit resembles some flag.
+    uint32 totalBytesToSend = uint32(uint32(m_members.size()) / uint32(8)) + 1;
+    for(uint32 i = 0; i < totalBytesToSend; ++i)
+        data << uint8(0); //unk
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << itr->second->GetPublicNote();
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint64(0); // unk uint64
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << itr->second->GetPublicNote();
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint64(0); // unk uint64
 
-	data << m_info;
+    data << m_info;
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint8(itr->second->GetFlags()); // GUILD_MEMBER_FLAGS enum
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint8(itr->second->GetFlags()); // GUILD_MEMBER_FLAGS enum
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr) {
-		// Zone ID: Use cached value as zone id does get updated
-		data << uint32(itr->second->GetZoneId());
-	}
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint32(itr->second->GetZoneId()); // Zone ID: Use cached value as zone id does get updated
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr) {
-		// Achievement Points (temporarily disabled)
-		//data << uint32(itr->second->GetAchievementPoints());
-		data << uint32(0);
-	}
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint32(itr->second->GetAchievementPoints()); // Achievement Points
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << itr->second->GetOfficerNote();
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << itr->second->GetOfficerNote();
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint64(0); // unk
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        //data << uint64(itr->second->GetGUID()); // unk uint64
+        data << uint64(0);
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint8(0); // unk
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint8(0); // unk
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint64(itr->second->GetGUID()); // guid
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint64(itr->second->GetGUID()); // guid
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint8(itr->second->GetClass()); // class id
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint8(itr->second->GetClass()); // class id
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << itr->second->GetName(); // plr name
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << itr->second->GetName(); // player name
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint32(0); // unk
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint32(0); // unk
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint32(itr->second->GetRankId()); // rank id
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint32(itr->second->GetRankId()); // rank id
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint32(0); // unk2
+    int i = 0;
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+    {
+        if(++i == 1)
+            data << uint32(0x0220);
+        else data << uint32(0); // unk
+    }
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint8(itr->second->GetLevel()); // level (cached on level-up)
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint8(itr->second->GetLevel()); // level (cached on level-up)
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr) {
-		// two primary professions (todo)
-		for (int i = 0; i < 2; ++i) {
-			data << uint32(0); // profession title
-			data << uint32(0); // profession level?
-			data << uint32(0); // skillid
-		}
-	}
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+    {
+        // two primary professions (todo)
+        for(int i = 0; i < 2; ++i)
+        {
+            data << uint32(0); // profession title
+            data << uint32(0); // profession level?
+            data << uint32(0); // skillid
+        }
+    }
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr)
-		data << uint32(0); // unk
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint32(0); // unk
 
-	for (Members::const_iterator itr = m_members.begin();
-			itr != m_members.end(); ++itr) {
-		if (itr->second->IsOnline())
-			data << float(0);
-		else
-			data
-					<< float(
-							float(::time(NULL) - itr->second->GetLogoutTime())
-									/ DAY);
-	}
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+    {
+        if(itr->second->IsOnline())
+            data << float(0); // unk
+        else data << float(float(::time(NULL) - itr->second->GetLogoutTime()) / DAY);
+    }
 
-	if (session)
-		session->SendPacket(&data);
-	else
-		BroadcastPacket(&data);
+    if (session)
+        session->SendPacket(&data);
+    else
+        BroadcastPacket(&data);
 
-	SendGuildRankInfo(session);
+    SendGuildRankInfo(session);
 
-	// This is to make client refresh the list
-	SendUpdateRoster(session);
+   // This is to make client refresh the list
+   SendUpdateRoster(session);
 
-	sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent (SMSG_GUILD_ROSTER)");
+   sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_ROSTER)");
 }
 
-void Guild::SendGuildRankInfo(WorldSession* session) {
-	WorldPacket data7(SMSG_GUILD_RANK);
-	data7 << uint32(_GetRanksSize());
-	for (uint32 i = 0; i < _GetRanksSize(); i++) {
-		data7 << uint32(i) << uint32(i); // double i for now, TODO change
-		//data7 << uint32(m_ranks[i].GetId());
-		m_ranks[i].WritePacket(data7);
-	}
-	if (session)
-		session->SendPacket(&data7);
-	else
-		BroadcastPacket(&data7);
+void Guild::SendGuildRankInfo(WorldSession* session)
+{
+    WorldPacket data7(SMSG_GUILD_RANK);
+    data7 << uint32(_GetRanksSize());
+    for(uint32 i = 0; i < _GetRanksSize(); i++)
+    {
+        //data7 << uint32(m_ranks[i].GetId());
+        data7 << uint32(i);
+        data7 << uint32(i);
+        data7 << m_ranks[i].GetName();
+        data7 << uint32(m_ranks[i].GetRights());
+
+        for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
+            data7 << uint32(0xFFFFFFFF);
+        for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
+            data7 << uint32(0xFFFFFFFF);
+
+        data7 << uint32(0xFFFFFFFF); // GuildBankRightsAndSlots
+    }
+
+    if (session)
+        session->SendPacket(&data7);
+    else
+        BroadcastPacket(&data7);
 }
 
 void Guild::HandleQuery(WorldSession *session) {
