@@ -392,6 +392,253 @@ void TradeData::SetAccepted(bool state, bool crosssend /*= false*/) {
 	}
 }
 
+
+// == KillRewarder ====================================================
+// KillRewarder incapsulates logic of rewarding player upon kill with:
+// * XP;
+// * honor;
+// * reputation;
+// * kill credit (for quest objectives).
+// Rewarding is initiated in two cases: when player kills unit in Unit::Kill()
+// and on battlegrounds in Battleground::RewardXPAtKill().
+//
+// Rewarding algorithm is:
+// 1. Initialize internal variables to default values.
+// 2. In case when player is in group, initialize variables necessary for group calculations:
+// 2.1. _count - number of alive group members within reward distance;
+// 2.2. _sumLevel - sum of levels of alive group members within reward distance;
+// 2.3. _maxLevel - maximum level of alive group member within reward distance;
+// 2.4. _maxNotGrayMember - maximum level of alive group member within reward distance,
+//      for whom victim is not gray;
+// 2.5. _isFullXP - flag identifying that for all group members victim is not gray,
+//      so 100% XP will be rewarded (50% otherwise).
+// 3. Reward killer (and group, if necessary).
+// 3.1. If killer is in group, reward group.
+// 3.1.1. Initialize initial XP amount based on maximum level of group member,
+//        for whom victim is not gray.
+// 3.1.2. Alter group rate if group is in raid (not for battlegrounds).
+// 3.1.3. Reward each group member (even dead) within reward distance (see 4. for more details).
+// 3.2. Reward single killer (not group case).
+// 3.2.1. Initialize initial XP amount based on killer's level.
+// 3.2.2. Reward killer (see 4. for more details).
+// 4. Reward player.
+// 4.1. Give honor (player must be alive and not on BG).
+// 4.2. Give XP.
+// 4.2.1. If player is in group, adjust XP:
+//        * set to 0 if player's level is more than maximum level of not gray member;
+//        * cut XP in half if _isFullXP is false.
+// 4.2.2. Apply auras modifying rewarded XP.
+// 4.2.3. Give XP to player.
+// 4.2.4. If player has pet, reward pet with XP (100% for single player, 50% for group case).
+// 4.3. Give reputation (player must not be on BG).
+// 4.4. Give kill credit (player must not be in group, or he must be alive or without corpse).
+// 5. Credit instance encounter.
+KillRewarder::KillRewarder(Player* killer, Unit* victim, bool isBattleGround) :
+    // 1. Initialize internal variables to default values.
+    _killer(killer), _victim(victim), _isBattleGround(isBattleGround),
+    _isPvP(false), _group(killer->GetGroup()), _groupRate(1.0f),
+    _maxLevel(0), _maxNotGrayMember(NULL), _count(0), _sumLevel(0), _isFullXP(false), _xp(0)
+{
+    // mark the credit as pvp if victim is player
+    if (victim->GetTypeId() == TYPEID_PLAYER)
+        _isPvP = true;
+    // or if its owned by player and its not a vehicle
+    else if (IS_PLAYER_GUID(victim->GetCharmerOrOwnerGUID()))
+        _isPvP = !victim->IsVehicle();
+
+    _InitGroupData();
+}
+
+inline void KillRewarder::_InitGroupData()
+{
+    if (_group)
+    {
+        // 2. In case when player is in group, initialize variables necessary for group calculations:
+        for (GroupReference* itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
+            if (Player* member = itr->getSource())
+                if (member->isAlive() && member->IsAtGroupRewardDistance(_victim))
+                {
+                    const uint8 lvl = member->getLevel();
+                    // 2.1. _count - number of alive group members within reward distance;
+                    ++_count;
+                    // 2.2. _sumLevel - sum of levels of alive group members within reward distance;
+                    _sumLevel += lvl;
+                    // 2.3. _maxLevel - maximum level of alive group member within reward distance;
+                    if (_maxLevel < lvl)
+                        _maxLevel = lvl;
+                    // 2.4. _maxNotGrayMember - maximum level of alive group member within reward distance,
+                    //      for whom victim is not gray;
+                    uint32 grayLevel = Trinity::XP::GetGrayLevel(lvl);
+                    if (_victim->getLevel() > grayLevel && (!_maxNotGrayMember || _maxNotGrayMember->getLevel() < lvl))
+                        _maxNotGrayMember = member;
+                }
+        // 2.5. _isFullXP - flag identifying that for all group members victim is not gray,
+        //      so 100% XP will be rewarded (50% otherwise).
+        _isFullXP = _maxNotGrayMember && (_maxLevel == _maxNotGrayMember->getLevel());
+    }
+    else
+        _count = 1;
+}
+
+inline void KillRewarder::_InitXP(Player* player)
+{
+    // Get initial value of XP for kill.
+    // XP is given:
+    // * on battlegrounds;
+    // * otherwise, not in PvP;
+    // * not if killer is on vehicle.
+    if (_isBattleGround || (!_isPvP && !_killer->GetVehicle()))
+        _xp = Trinity::XP::Gain(player, _victim);
+}
+
+inline void KillRewarder::_RewardHonor(Player* player)
+{
+    // Rewarded player must be alive.
+    if (player->isAlive())
+        player->RewardHonor(_victim, _count, -1, true);
+}
+
+inline void KillRewarder::_RewardXP(Player* player, float rate)
+{
+    uint32 xp(_xp);
+    if (_group)
+    {
+        // 4.2.1. If player is in group, adjust XP:
+        //        * set to 0 if player's level is more than maximum level of not gray member;
+        //        * cut XP in half if _isFullXP is false.
+        if (_maxNotGrayMember && player->isAlive() &&
+            _maxNotGrayMember->getLevel() >= player->getLevel())
+            xp = _isFullXP ?
+                uint32(xp * rate) :             // Reward FULL XP if all group members are not gray.
+                uint32(xp * rate / 2) + 1;      // Reward only HALF of XP if some of group members are gray.
+        else
+            xp = 0;
+    }
+    if (xp)
+    {
+        // 4.2.2. Apply auras modifying rewarded XP (SPELL_AURA_MOD_XP_PCT).
+        Unit::AuraEffectList const& auras = player->GetAuraEffectsByType(SPELL_AURA_MOD_XP_PCT);
+        for (Unit::AuraEffectList::const_iterator i = auras.begin(); i != auras.end(); ++i)
+            AddPctN(xp, (*i)->GetAmount());
+
+        // 4.2.3. Give XP to player.
+        player->GiveXP(xp, _victim, _groupRate);
+        if (Pet* pet = player->GetPet())
+            // 4.2.4. If player has pet, reward pet with XP (100% for single player, 50% for group case).
+            pet->GivePetXP(_group ? xp / 2 : xp);
+    }
+}
+
+inline void KillRewarder::_RewardOnKill(Player* player, float rate)
+{
+    // 4.3. Give reputation and currency (player must not be on BG).
+    // Even dead players and corpses are rewarded.
+    player->RewardOnKill(_victim, rate);
+}
+
+inline void KillRewarder::_RewardKillCredit(Player* player)
+{
+    // 4.4. Give kill credit (player must not be in group, or he must be alive or without corpse).
+    if (!_group || player->isAlive() || !player->GetCorpse())
+        if (_victim->GetTypeId() == TYPEID_UNIT)
+            player->KilledMonster(_victim->ToCreature()->GetCreatureInfo(), _victim->GetGUID());
+}
+
+void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
+{
+    // 4. Reward player.
+    if (!_isBattleGround)
+    {
+        // 4.1. Give honor (player must be alive and not on BG).
+        _RewardHonor(player);
+        // 4.1.1 Send player killcredit for quests with PlayerSlain
+        if (_victim->GetTypeId() == TYPEID_PLAYER)
+            player->KilledPlayerCredit();
+    }
+    // Give XP only in PvE or in battlegrounds.
+    // Give reputation and kill credit only in PvE.
+    if (!_isPvP || _isBattleGround)
+    {
+        const float rate = _group ?
+            _groupRate * float(player->getLevel()) / _sumLevel : // Group rate depends on summary level.
+            1.0f;                                                // Personal rate is 100%.
+        if (_xp)
+            // 4.2. Give XP.
+            _RewardXP(player, rate);
+        if (!_isBattleGround)
+        {
+            // If killer is in dungeon then all members receive full reputation at kill.
+            _RewardOnKill(player, isDungeon ? 1.0f : rate);
+            _RewardKillCredit(player);
+
+            // Reward Guild reputation
+            if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup(player->GetGuildId()))
+            {
+                uint32 guildRep = uint32(_xp / 450);
+                if (guildRep < 1)
+                    guildRep = 1;
+                player->GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
+            }
+        }
+    }
+}
+
+void KillRewarder::_RewardGroup()
+{
+    if (_maxLevel)
+    {
+        if (_maxNotGrayMember)
+            // 3.1.1. Initialize initial XP amount based on maximum level of group member,
+            //        for whom victim is not gray.
+            _InitXP(_maxNotGrayMember);
+        // To avoid unnecessary calculations and calls,
+        // proceed only if XP is not ZERO or player is not on battleground
+        // (battleground rewards only XP, that's why).
+        if (!_isBattleGround || _xp)
+        {
+            const bool isDungeon = !_isPvP && sMapStore.LookupEntry(_killer->GetMapId())->IsDungeon();
+            if (!_isBattleGround)
+            {
+                // 3.1.2. Alter group rate if group is in raid (not for battlegrounds).
+                const bool isRaid = !_isPvP && sMapStore.LookupEntry(_killer->GetMapId())->IsRaid() && _group->isRaidGroup();
+                _groupRate = Trinity::XP::xp_in_group_rate(_count, isRaid);
+            }
+
+            // 3.1.3. Reward each group member (even dead or corpse) within reward distance.
+            for (GroupReference* itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
+                if (Player* member = itr->getSource())
+                    if (member->IsAtGroupRewardDistance(_victim))
+                        _RewardPlayer(member, isDungeon);
+        }
+    }
+}
+
+void KillRewarder::Reward()
+{
+    // 3. Reward killer (and group, if necessary).
+    if (_group)
+        // 3.1. If killer is in group, reward group.
+        _RewardGroup();
+    else
+    {
+        // 3.2. Reward single killer (not group case).
+        // 3.2.1. Initialize initial XP amount based on killer's level.
+        _InitXP(_killer);
+        // To avoid unnecessary calculations and calls,
+        // proceed only if XP is not ZERO or player is not on battleground
+        // (battleground rewards only XP, that's why).
+        if (!_isBattleGround || _xp)
+            // 3.2.2. Reward killer.
+            _RewardPlayer(_killer, false);
+    }
+
+    // 5. Credit instance encounter.
+    if (Creature* victim = _victim->ToCreature())
+        if (victim->IsDungeonBoss())
+            if (InstanceScript* instance = _victim->GetInstanceScript())
+                instance->UpdateEncounterState(ENCOUNTER_CREDIT_KILL_CREATURE, _victim->GetEntry(), _victim);
+}
+
 // == Player ====================================================
 
 UpdateMask Player::updateVisualBits;
@@ -6884,112 +7131,113 @@ int32 Player::CalculateReputationGain(uint32 creatureOrQuestLevel, int32 rep,
 }
 
 //Calculates how many reputation points player gains in victim's enemy factions
-void Player::RewardReputation(Unit *pVictim, float rate) {
-	if (!pVictim || pVictim->GetTypeId() == TYPEID_PLAYER)
-		return;
+void Player::RewardOnKill(Unit *victim, float rate)
+{
+    if (!victim || victim->GetTypeId() == TYPEID_PLAYER)
+        return;
 
-	if (pVictim->ToCreature()->IsReputationGainDisabled())
-		return;
+    if (victim->ToCreature()->IsReputationGainDisabled())
+        return;
 
-	ReputationOnKillEntry const* Rep = sObjectMgr->GetReputationOnKilEntry(
-			pVictim->ToCreature()->GetCreatureInfo()->Entry);
+    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(victim->ToCreature()->GetCreatureInfo()->Entry);
 
-	if (!Rep)
-		return;
+    if (!Rew)
+        return;
 
-	uint32 ChampioningFaction = 0;
+    uint32 ChampioningFaction = 0;
 
-	if (GetChampioningFaction()) {
-		// support for: Championing - http://www.wowwiki.com/Championing
+    if (GetChampioningFaction())
+    {
+        // support for: Championing - http://www.wowwiki.com/Championing
 
-		Map const *pMap = GetMap();
-		if (pMap && pMap->IsDungeon()) {
-			InstanceTemplate const *pInstance = sObjectMgr->GetInstanceTemplate(
-					pMap->GetId());
-			if (pInstance) {
-				AccessRequirement const *pAccessRequirement =
-						sObjectMgr->GetAccessRequirement(pMap->GetId(),
-								((InstanceMap*) pMap)->GetDifficulty());
-				if (pAccessRequirement) {
-					if (!pMap->IsRaid() && pAccessRequirement->levelMin == 80)
-						ChampioningFaction = GetChampioningFaction();
-				}
-			}
-		}
-	}
+        // Note:
 
-	// Favored reputation increase START
-	uint32 zone = GetZoneId();
-	uint32 team = GetTeam();
-	float favored_rep_mult = 0;
-        float favored_rep_guild = 0;
-	if ((HasAura(32096) || HasAura(32098))
-			&& (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713
-					|| zone == 3714))
-		favored_rep_mult = 0.25; // Thrallmar's Favor and Honor Hold's Favor
-	else if (HasAura(30754)
-			&& (Rep->repfaction1 == 609 || Rep->repfaction2 == 609)
-			&& !ChampioningFaction)
-		favored_rep_mult = 0.25; // Cenarion Favor
+        // "All reputation gains while in dungeons will be applied to your standing with them."
+        //   Alliance and Horde factions championing is allowed in all dungeons
 
-	if (favored_rep_mult > 0)
-		favored_rep_mult *= 2; // Multiplied by 2 because the reputation is divided by 2 for some reason (See "donerep1 / 2" and "donerep2 / 2") -- if you know why this is done, please update/explain :)
-	// Favored reputation increase END
-        if (HasAura(78634))
-                favored_rep_guild = 0.05f;
-        else if (HasAura(78635))
-                favored_rep_guild = 0.1f;
-        if (favored_rep_guild > 0)
-                favored_rep_guild *= 2;
-	bool recruitAFriend = GetsRecruitAFriendBonus(false);
+        // "All reputation gains while in level 80 dungeons will be applied to your standing with them."
+        //   Wrath of the Lich King factions championing is allowed in WLK heroic dungeons (level 80) and Cataclysm dungeons (level 80 - 84)
 
-	if (Rep->repfaction1 && (!Rep->team_dependent || team == ALLIANCE)) {
-		int32 donerep1 = CalculateReputationGain(pVictim->getLevel(),
-				Rep->repvalue1,
-				ChampioningFaction ? ChampioningFaction : Rep->repfaction1,
-				false);
-                donerep1 = int32(donerep1 * (rate + favored_rep_mult + favored_rep_guild));
+        // "All reputation gains while in level 85 Cataclysm dungeons will be applied to your standing with them."
+        //   Cataclysm factions championing is allowed in Cataclysm heroic dungeons only (level 85)
 
-		if (recruitAFriend)
-			donerep1 =
-					int32(
-							donerep1
-									* (1
-											+ sWorld->getRate(
-													RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
+        Map const *map = GetMap();
+        if (map && map->IsDungeon())
+        {
+            uint32 dungeonLevel = GetChampioningFactionDungeonLevel();
+            if (dungeonLevel)
+            {
+                InstanceTemplate const *instance = sObjectMgr->GetInstanceTemplate(map->GetId());
+                if (instance)
+                {
+                    AccessRequirement const *pAccessRequirement = sObjectMgr->GetAccessRequirement(map->GetId(), ((InstanceMap*)map)->GetDifficulty());
+                    if (pAccessRequirement)
+                    {
+                        if (!map->IsRaid() && pAccessRequirement->levelMin >= dungeonLevel)
+                            ChampioningFaction = GetChampioningFaction();
+                    }
+                }
+            }
+            else
+                ChampioningFaction = GetChampioningFaction();
+        }
+    }
 
-		FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(
-				ChampioningFaction ? ChampioningFaction : Rep->repfaction1);
-		uint32 current_reputation_rank1 = GetReputationMgr().GetRank(
-				factionEntry1);
-		if (factionEntry1
-				&& current_reputation_rank1 <= Rep->reputation_max_cap1)
-			GetReputationMgr().ModifyReputation(factionEntry1, donerep1);
-	}
+    // Favored reputation increase START
+    uint32 zone = GetZoneId();
+    uint32 team = GetTeam();
+    float favored_rep_mult = 0;
 
-	if (Rep->repfaction2 && (!Rep->team_dependent || team == HORDE)) {
-		int32 donerep2 = CalculateReputationGain(pVictim->getLevel(),
-				Rep->repvalue2,
-				ChampioningFaction ? ChampioningFaction : Rep->repfaction2,
-				false);
-		donerep2 = int32(donerep2 * (rate + favored_rep_mult));
+    if ((HasAura(32096) || HasAura(32098)) && (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713 || zone == 3714)) favored_rep_mult = 0.25; // Thrallmar's Favor and Honor Hold's Favor
+    else if (HasAura(30754) && (Rew->repfaction1 == 609 || Rew->repfaction2 == 609) && !ChampioningFaction)                   favored_rep_mult = 0.25; // Cenarion Favor
 
-		if (recruitAFriend)
-			donerep2 =
-					int32(
-							donerep2
-									* (1
-											+ sWorld->getRate(
-													RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
+    if (favored_rep_mult > 0) favored_rep_mult *= 2; // Multiplied by 2 because the reputation is divided by 2 for some reason (See "donerep1 / 2" and "donerep2 / 2") -- if you know why this is done, please update/explain :)
+    // Favored reputation increase END
 
-		FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(
-				ChampioningFaction ? ChampioningFaction : Rep->repfaction2);
-		uint32 current_reputation_rank2 = GetReputationMgr().GetRank(
-				factionEntry2);
-		if (factionEntry2
-				&& current_reputation_rank2 <= Rep->reputation_max_cap2)
-			GetReputationMgr().ModifyReputation(factionEntry2, donerep2);
-	}
+    bool recruitAFriend = GetsRecruitAFriendBonus(false);
+
+    if (Rew->repfaction1 && (!Rew->team_dependent || team == ALLIANCE))
+    {
+        int32 donerep1 = CalculateReputationGain(victim->getLevel(), Rew->repvalue1, ChampioningFaction ? ChampioningFaction : Rew->repfaction1, false);
+        donerep1 = int32(donerep1*(rate + favored_rep_mult));
+
+        if (recruitAFriend)
+            donerep1 = int32(donerep1 * (1 + sWorld->getRate(RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
+
+        FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rew->repfaction1);
+        uint32 current_reputation_rank1 = GetReputationMgr().GetRank(factionEntry1);
+        if (factionEntry1 && current_reputation_rank1 <= Rew->reputation_max_cap1)
+            GetReputationMgr().ModifyReputation(factionEntry1, donerep1);
+    }
+
+    if (Rew->repfaction2 && (!Rew->team_dependent || team == HORDE))
+    {
+        int32 donerep2 = CalculateReputationGain(victim->getLevel(), Rew->repvalue2, ChampioningFaction ? ChampioningFaction : Rew->repfaction2, false);
+        donerep2 = int32(donerep2*(rate + favored_rep_mult));
+
+        if (recruitAFriend)
+            donerep2 = int32(donerep2 * (1 + sWorld->getRate(RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
+
+        FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rew->repfaction2);
+        uint32 current_reputation_rank2 = GetReputationMgr().GetRank(factionEntry2);
+        if (factionEntry2 && current_reputation_rank2 <= Rew->reputation_max_cap2)
+            GetReputationMgr().ModifyReputation(factionEntry2, donerep2);
+    }
+
+    if (Rew->currencyid1 && Rew->currencycount1)
+    {
+        ModifyCurrency(Rew->currencyid1, Rew->currencycount1);
+    }
+
+    if (Rew->currencyid2 && Rew->currencycount2)
+    {
+        ModifyCurrency(Rew->currencyid2, Rew->currencycount2);
+    }
+
+    if (Rew->currencyid3 && Rew->currencycount3)
+    {
+        ModifyCurrency(Rew->currencyid3, Rew->currencycount3);
+    }
 }
 
 //Calculate how many reputation points player gain with the quest
@@ -16045,6 +16293,47 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid) {
 	}
 }
 
+void Player::KilledPlayerCredit()
+{
+    uint16 addkillcount = 1;
+
+    for (uint8 i = 0; i < MAX_QUEST_LOG_SIZE; ++i)
+    {
+        uint32 questid = GetQuestSlotQuestId(i);
+        if (!questid)
+            continue;
+
+        Quest const* qInfo = sObjectMgr->GetQuestTemplate(questid);
+        if (!qInfo)
+            continue;
+        // just if !ingroup || !noraidgroup || raidgroup
+        QuestStatusData& q_status = m_QuestStatus[questid];
+        if (q_status.m_status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
+        {
+            if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_PLAYER_KILL))
+            {
+                uint32 reqkill = qInfo->GetPlayersSlain();
+                uint16 curkill = q_status.m_playercount;
+
+                if (curkill < reqkill)
+                {
+                    q_status.m_playercount = curkill + addkillcount;
+
+                    m_QuestStatusSave[questid] = true;
+
+                    SendQuestUpdateAddPlayer(qInfo, curkill, addkillcount);
+                }
+
+                if (CanCompleteQuest(questid))
+                    CompleteQuest(questid);
+
+                break;
+            }
+        }
+    }
+}
+
+
 void Player::CastedCreatureOrGO(uint32 entry, uint64 guid, uint32 spell_id) {
 	bool isCreature = IS_CRE_OR_VEH_GUID(guid);
 
@@ -16447,6 +16736,22 @@ void Player::SendQuestUpdateAddCreatureOrGo(Quest const* pQuest, uint64 guid,
 	if (log_slot < MAX_QUEST_LOG_SIZE)
 		SetQuestSlotCounter(log_slot, creatureOrGO_idx,
 				GetQuestSlotCounter(log_slot, creatureOrGO_idx) + add_count);
+}
+
+void Player::SendQuestUpdateAddPlayer(Quest const* quest, uint16 old_count, uint16 add_count)
+{
+    ASSERT(old_count + add_count < 65536 && "player count store in 16 bits");
+
+    WorldPacket data(SMSG_QUESTUPDATE_ADD_PVP_KILL, (3*4));
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTUPDATE_ADD_PVP_KILL");
+    data << uint32(quest->GetQuestId());
+    data << uint32(old_count + add_count);
+    data << uint32(quest->GetPlayersSlain());
+    GetSession()->SendPacket(&data);
+
+    uint16 log_slot = FindQuestSlot(quest->GetQuestId());
+    if (log_slot < MAX_QUEST_LOG_SIZE)
+        SetQuestSlotCounter(log_slot, QUEST_PVP_KILL_SLOT, GetQuestSlotCounter(log_slot, QUEST_PVP_KILL_SLOT) + add_count);
 }
 
 /*********************************************************/
@@ -22833,168 +23138,36 @@ bool Player::GetsRecruitAFriendBonus(bool forXP) {
 	return recruitAFriend;
 }
 
-bool Player::RewardPlayerAndGroupAtKill(Unit* pVictim) {
-	bool PvP = pVictim->isCharmedOwnedByPlayerOrPlayer();
-
-	// prepare data for near group iteration (PvP and !PvP cases)
-	uint32 xp = 0;
-	bool honored_kill = false;
-
-	if (Group *pGroup = GetGroup()) {
-		uint32 count = 0;
-		uint32 sum_level = 0;
-		Player* member_with_max_level = NULL;
-		Player* not_gray_member_with_max_level = NULL;
-
-		pGroup->GetDataForXPAtKill(pVictim, count, sum_level,
-				member_with_max_level, not_gray_member_with_max_level);
-
-		if (member_with_max_level) {
-			// PvP kills doesn't yield experience
-			// also no XP gained if there is no member below gray level
-			xp = (PvP || !not_gray_member_with_max_level || GetVehicle()) ?
-					0 :
-					Trinity::XP::Gain(not_gray_member_with_max_level, pVictim);
-
-			/// skip in check PvP case (for speed, not used)
-			bool is_raid =
-					PvP ? false : sMapStore.LookupEntry(GetMapId())->IsRaid()
-									&& pGroup->isRaidGroup();
-			bool is_dungeon =
-					PvP ? false : sMapStore.LookupEntry(GetMapId())->IsDungeon();
-			float group_rate = Trinity::XP::xp_in_group_rate(count, is_raid);
-
-			for (GroupReference *itr = pGroup->GetFirstMember(); itr != NULL;
-					itr = itr->next()) {
-				Player* pGroupGuy = itr->getSource();
-				if (!pGroupGuy)
-					continue;
-
-				if (!pGroupGuy->IsAtGroupRewardDistance(pVictim))
-					continue; // member (alive or dead) or his corpse at req. distance
-
-				// honor can be in PvP and !PvP (racial leader) cases (for alive)
-				if (pGroupGuy->isAlive()
-						&& pGroupGuy->RewardHonor(pVictim, count, -1, true)
-						&& pGroupGuy == this)
-					honored_kill = true;
-
-				// xp and reputation only in !PvP case
-				if (!PvP) {
-					float rate = group_rate * float(pGroupGuy->getLevel())
-							/ sum_level;
-
-					// if is in dungeon then all receive full reputation at kill
-					// rewarded any alive/dead/near_corpse group member
-					pGroupGuy->RewardReputation(pVictim,
-							is_dungeon ? 1.0f : rate);
-
-					// XP updated only for alive group member
-					if (pGroupGuy->isAlive() && not_gray_member_with_max_level
-							&& pGroupGuy->getLevel()
-									<= not_gray_member_with_max_level->getLevel()) {
-						uint32 itr_xp =
-								(member_with_max_level
-										== not_gray_member_with_max_level) ?
-										uint32(xp * rate) :
-										uint32((xp * rate / 2) + 1);
-
-						// handle SPELL_AURA_MOD_XP_PCT auras
-						Unit::AuraEffectList const& ModXPPctAuras =
-								GetAuraEffectsByType(SPELL_AURA_MOD_XP_PCT);
-						for (Unit::AuraEffectList::const_iterator i =
-								ModXPPctAuras.begin(); i != ModXPPctAuras.end();
-								++i)
-							itr_xp =
-									uint32(
-											itr_xp
-													* (1.0f
-															+ (*i)->GetAmount()
-																	/ 100.0f));
-
-						pGroupGuy->GiveXP(itr_xp, pVictim, group_rate);
-						if (Pet* pet = pGroupGuy->GetPet())
-							pet->GivePetXP(itr_xp / 2);
-					}
-
-					// quest objectives updated only for alive group member or dead but with not released body
-					if (pGroupGuy->isAlive() || !pGroupGuy->GetCorpse()) {
-						// normal creature (not pet/etc) can be only in !PvP case
-						if (pVictim->GetTypeId() == TYPEID_UNIT)
-							pGroupGuy->KilledMonster(
-									pVictim->ToCreature()->GetCreatureInfo(),
-									pVictim->GetGUID());
-					}
-				}
-			}
-		}
-	} else // if (!pGroup)
-	{
-		xp = (PvP || GetVehicle()) ? 0 : Trinity::XP::Gain(this, pVictim);
-
-		// honor can be in PvP and !PvP (racial leader) cases
-		if (RewardHonor(pVictim, 1, -1, true))
-			honored_kill = true;
-
-		// xp and reputation only in !PvP case
-		if (!PvP) {
-			RewardReputation(pVictim, 1);
-
-			// handle SPELL_AURA_MOD_XP_PCT auras
-			Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(
-					SPELL_AURA_MOD_XP_PCT);
-			for (Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin();
-					i != ModXPPctAuras.end(); ++i)
-				xp = uint32(xp * (1.0f + (*i)->GetAmount() / 100.0f));
-
-			GiveXP(xp, pVictim);
-
-			if (Pet* pet = GetPet())
-				pet->GivePetXP(xp);
-
-			// normal creature (not pet/etc) can be only in !PvP case
-			if (pVictim->GetTypeId() == TYPEID_UNIT)
-				KilledMonster(pVictim->ToCreature()->GetCreatureInfo(),
-						pVictim->GetGUID());
-		}
-	}
-
-	// Credit encounter in instance
-	if (Creature* victim = pVictim->ToCreature())
-		if (victim->IsDungeonBoss())
-			if (InstanceScript* instance = pVictim->GetInstanceScript())
-				instance->UpdateEncounterState(ENCOUNTER_CREDIT_KILL_CREATURE,
-						pVictim->GetEntry(), pVictim);
-
-	return xp || honored_kill;
+void Player::RewardPlayerAndGroupAtKill(Unit* victim, bool isBattleGround)
+{
+    KillRewarder(this, victim, isBattleGround).Reward();
 }
 
-void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id,
-		WorldObject* pRewardSource) {
-	if (!pRewardSource)
-		return;
-	uint64 creature_guid =
-			(pRewardSource->GetTypeId() == TYPEID_UNIT) ?
-					pRewardSource->GetGUID() : uint64(0);
+void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource)
+{
+    if (!pRewardSource)
+        return;
+    uint64 creature_guid = (pRewardSource->GetTypeId() == TYPEID_UNIT) ? pRewardSource->GetGUID() : uint64(0);
 
-	// prepare data for near group iteration
-	if (Group *pGroup = GetGroup()) {
-		for (GroupReference *itr = pGroup->GetFirstMember(); itr != NULL; itr =
-				itr->next()) {
-			Player* pGroupGuy = itr->getSource();
-			if (!pGroupGuy)
-				continue;
+    // prepare data for near group iteration
+    if (Group *group = GetGroup())
+    {
+        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        {
+            Player* player = itr->getSource();
+            if (!player)
+                continue;
 
-			if (!pGroupGuy->IsAtGroupRewardDistance(pRewardSource))
-				continue; // member (alive or dead) or his corpse at req. distance
+            if (!player->IsAtGroupRewardDistance(pRewardSource))
+                continue;                               // member (alive or dead) or his corpse at req. distance
 
-			// quest objectives updated only for alive group member or dead but with not released body
-			if (pGroupGuy->isAlive() || !pGroupGuy->GetCorpse())
-				pGroupGuy->KilledMonsterCredit(creature_id, creature_guid);
-		}
-	} else
-		// if (!pGroup)
-		KilledMonsterCredit(creature_id, creature_guid);
+            // quest objectives updated only for alive group member or dead but with not released body
+            if (player->isAlive()|| !player->GetCorpse())
+                player->KilledMonsterCredit(creature_id, creature_guid);
+        }
+    }
+    else                                                    // if (!group)
+        KilledMonsterCredit(creature_id, creature_guid);
 }
 
 bool Player::IsAtGroupRewardDistance(WorldObject const* pRewardSource) const {

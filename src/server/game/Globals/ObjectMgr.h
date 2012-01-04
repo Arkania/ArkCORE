@@ -436,16 +436,23 @@ struct RepRewardRate {
 	float spell_rate;
 };
 
-struct ReputationOnKillEntry {
-	uint32 repfaction1;
-	uint32 repfaction2;
-	bool is_teamaward1;
-	uint32 reputation_max_cap1;
-	int32 repvalue1;
-	bool is_teamaward2;
-	uint32 reputation_max_cap2;
-	int32 repvalue2;
-	bool team_dependent;
+struct RewardOnKillEntry
+{
+    uint32 repfaction1;
+    uint32 repfaction2;
+    bool is_teamaward1;
+    uint32 reputation_max_cap1;
+    int32 repvalue1;
+    bool is_teamaward2;
+    uint32 reputation_max_cap2;
+    int32 repvalue2;
+    bool team_dependent;
+    uint32 currencyid1;
+    uint32 currencyid2;
+    uint32 currencyid3;
+    int32 currencycount1;
+    int32 currencycount2;
+    int32 currencycount3;
 };
 
 struct RepSpilloverTemplate {
@@ -622,7 +629,7 @@ public:
 	typedef UNORDERED_MAP<uint32, AccessRequirement> AccessRequirementMap;
 
 	typedef UNORDERED_MAP<uint32, RepRewardRate > RepRewardRateMap;
-	typedef UNORDERED_MAP<uint32, ReputationOnKillEntry> RepOnKillMap;
+	typedef UNORDERED_MAP<uint32, RewardOnKillEntry> RewOnKillMap;
 	typedef UNORDERED_MAP<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
 
 	typedef UNORDERED_MAP<uint32, PointOfInterest> PointOfInterestMap;
@@ -806,13 +813,13 @@ public:
 		return NULL;
 	}
 
-	ReputationOnKillEntry const* GetReputationOnKilEntry(uint32 id) const
-	{
-		RepOnKillMap::const_iterator itr = mRepOnKill.find(id);
-		if (itr != mRepOnKill.end())
-		return &itr->second;
-		return NULL;
-	}
+        RewardOnKillEntry const* GetRewardOnKillEntry(uint32 id) const
+        {
+            RewOnKillMap::const_iterator itr = mRewOnKill.find(id);
+            if (itr != mRewOnKill.end())
+                return &itr->second;
+            return NULL;
+        }
 
 	RepSpilloverTemplate const* GetRepSpilloverTemplate(uint32 factionId) const
 	{
@@ -978,7 +985,7 @@ public:
 	void LoadFishingBaseSkillLevel();
 
 	void LoadReputationRewardRate();
-	void LoadReputationOnKill();
+	void LoadRewardOnKill();
 	void LoadReputationSpilloverTemplate();
 
 	void LoadPointsOfInterest();
@@ -1329,7 +1336,7 @@ protected:
 	DungeonEncounterMap mDungeonEncounters;
 
 	RepRewardRateMap m_RepRewardRateMap;
-	RepOnKillMap mRepOnKill;
+	RewOnKillMap        mRewOnKill;
 	RepSpilloverTemplateMap m_RepSpilloverTemplateMap;
 
 	GossipMenusMap m_mGossipMenusMap;

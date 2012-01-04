@@ -44,6 +44,7 @@ class ObjectMgr;
 #define QUEST_DEPLINK_COUNT 10
 #define QUEST_REPUTATIONS_COUNT 5
 #define QUEST_EMOTE_COUNT 4
+#define QUEST_PVP_KILL_SLOT 0
 #define QUEST_CURRENCY_COUNT 4
 
 enum QuestFailedReasons {
@@ -121,29 +122,44 @@ enum __QuestGiverStatus {
 };
 
 enum QuestFlags {
-	// Flags used at server and sent to client
-	QUEST_FLAGS_NONE = 0x00000000,
-	QUEST_FLAGS_STAY_ALIVE = 0x00000001, // Not used currently
-	QUEST_FLAGS_PARTY_ACCEPT = 0x00000002, // Not used currently. If player in party, all players that can accept this quest will receive confirmation box to accept quest CMSG_QUEST_CONFIRM_ACCEPT/SMSG_QUEST_CONFIRM_ACCEPT
-	QUEST_FLAGS_EXPLORATION = 0x00000004, // Not used currently
-	QUEST_FLAGS_SHARABLE = 0x00000008, // Can be shared: Player::CanShareQuest()
-	//QUEST_FLAGS_NONE2        = 0x00000010,                // Not used currently
-	QUEST_FLAGS_EPIC = 0x00000020, // Not used currently: Unsure of content
-	QUEST_FLAGS_RAID = 0x00000040, // Not used currently
-	QUEST_FLAGS_TBC = 0x00000080, // Not used currently: Available if TBC expansion enabled only
-	QUEST_FLAGS_DELIVER_MORE = 0x00000100, // Not used currently: _DELIVER_MORE Quest needs more than normal _q-item_ drops from mobs
-	QUEST_FLAGS_HIDDEN_REWARDS = 0x00000200, // Items and money rewarded only sent in SMSG_QUESTGIVER_OFFER_REWARD (not in SMSG_QUESTGIVER_QUEST_DETAILS or in client quest log(SMSG_QUEST_QUERY_RESPONSE))
-	QUEST_FLAGS_AUTO_REWARDED = 0x00000400, // These quests are automatically rewarded on quest complete and they will never appear in quest log client side.
-	QUEST_FLAGS_TBC_RACES = 0x00000800, // Not used currently: Blood elf/Draenei starting zone quests
-	QUEST_FLAGS_DAILY = 0x00001000, // Used to know quest is Daily one
-	QUEST_FLAGS_REPEATABLE = 0x00002000, // Used on repeatable quests (3.0.0+)
-	QUEST_FLAGS_UNAVAILABLE = 0x00004000, // Used on quests that are not generically available
-	QUEST_FLAGS_WEEKLY = 0x00008000,
-	QUEST_FLAGS_AUTOCOMPLETE = 0x00010000, // auto complete
-	QUEST_FLAGS_SPECIAL_ITEM = 0x00020000, // has something to do with ReqItemId and SrcItemId
-	QUEST_FLAGS_OBJ_TEXT = 0x00040000, // use Objective text as Complete text
-	QUEST_FLAGS_AUTO_ACCEPT = 0x00080000,
-// The client recognizes this flag as auto-accept.
+    // Flags used at server and sent to client
+    QUEST_FLAGS_NONE           = 0x00000000,
+    QUEST_FLAGS_STAY_ALIVE     = 0x00000001,                // Not used currently
+    QUEST_FLAGS_PARTY_ACCEPT   = 0x00000002,                // Not used currently. If player in party, all players that can accept this quest will receive confirmation box to accept quest CMSG_QUEST_CONFIRM_ACCEPT/SMSG_QUEST_CONFIRM_ACCEPT
+    QUEST_FLAGS_EXPLORATION    = 0x00000004,                // Not used currently
+    QUEST_FLAGS_SHARABLE       = 0x00000008,                // Can be shared: Player::CanShareQuest()
+    //QUEST_FLAGS_NONE2        = 0x00000010,                // Not used currently
+    QUEST_FLAGS_EPIC           = 0x00000020,                // Not used currently: Unsure of content
+    QUEST_FLAGS_RAID           = 0x00000040,                // Not used currently
+    QUEST_FLAGS_TBC            = 0x00000080,                // Not used currently: Available if TBC expansion enabled only
+    QUEST_FLAGS_DELIVER_MORE   = 0x00000100,                // Not used currently: _DELIVER_MORE Quest needs more than normal _q-item_ drops from mobs
+    QUEST_FLAGS_HIDDEN_REWARDS = 0x00000200,                // Items and money rewarded only sent in SMSG_QUESTGIVER_OFFER_REWARD (not in SMSG_QUESTGIVER_QUEST_DETAILS or in client quest log(SMSG_QUEST_QUERY_RESPONSE))
+    QUEST_FLAGS_AUTO_REWARDED  = 0x00000400,                // These quests are automatically rewarded on quest complete and they will never appear in quest log client side.
+    QUEST_FLAGS_TBC_RACES      = 0x00000800,                // Not used currently: Blood elf/Draenei starting zone quests
+    QUEST_FLAGS_DAILY          = 0x00001000,                // Used to know quest is Daily one
+    QUEST_FLAGS_REPEATABLE     = 0x00002000,                // Used on repeatable quests (3.0.0+)
+    QUEST_FLAGS_UNAVAILABLE    = 0x00004000,                // Used on quests that are not generically available
+    QUEST_FLAGS_WEEKLY         = 0x00008000,
+    QUEST_FLAGS_AUTOCOMPLETE   = 0x00010000,                // auto complete
+    QUEST_FLAGS_SPECIAL_ITEM   = 0x00020000,                // has something to do with ReqItemId and SrcItemId
+    QUEST_FLAGS_OBJ_TEXT       = 0x00040000,                // use Objective text as Complete text
+    QUEST_FLAGS_AUTO_ACCEPT    = 0x00080000,                // The client recognizes this flag as auto-accept. However, NONE of the current quests (3.3.5a) have this flag. Maybe blizz used to use it, or will use it in the future.
+
+    // Trinity flags for set SpecialFlags in DB if required but used only at server
+    QUEST_TRINITY_FLAGS_REPEATABLE           = 0x00100000,   // Set by 1 in SpecialFlags from DB
+    QUEST_TRINITY_FLAGS_EXPLORATION_OR_EVENT = 0x00200000,   // Set by 2 in SpecialFlags from DB (if reequired area explore, spell SPELL_EFFECT_QUEST_COMPLETE casting, table `*_script` command SCRIPT_COMMAND_QUEST_EXPLORED use, set from script)
+    QUEST_TRINITY_FLAGS_AUTO_ACCEPT          = 0x00400000,  // Set by 4 in SpecialFlags in DB if the quest is to be auto-accepted.
+    QUEST_TRINITY_FLAGS_DF_QUEST             = 0x00800000,  // Set by 8 in SpecialFlags in DB if the quest is used by Dungeon Finder.
+
+    QUEST_TRINITY_FLAGS_DB_ALLOWED = 0xFFFFF | QUEST_TRINITY_FLAGS_REPEATABLE | QUEST_TRINITY_FLAGS_EXPLORATION_OR_EVENT | QUEST_TRINITY_FLAGS_AUTO_ACCEPT | QUEST_TRINITY_FLAGS_DF_QUEST,
+
+    // Trinity flags for internal use only
+    QUEST_TRINITY_FLAGS_DELIVER              = 0x04000000,   // Internal flag computed only
+    QUEST_TRINITY_FLAGS_SPEAKTO              = 0x08000000,   // Internal flag computed only
+    QUEST_TRINITY_FLAGS_KILL_OR_CAST         = 0x10000000,   // Internal flag computed only
+    QUEST_TRINITY_FLAGS_TIMED                = 0x20000000,   // Internal flag computed only
+    QUEST_TRINITY_FLAGS_PLAYER_KILL          = 0x40000000,   // Internal flag computed only
+
 };
 
 enum QuestSpecialFlags {
@@ -571,8 +587,8 @@ protected:
 };
 
 struct QuestStatusData {
-	QuestStatusData() :
-			m_status(QUEST_STATUS_NONE), m_explored(false), m_timer(0) {
+	QuestStatusData() :	m_status(QUEST_STATUS_NONE), m_explored(false), m_timer(0) 
+	{
 		memset(m_itemcount, 0, QUEST_ITEM_OBJECTIVES_COUNT * sizeof(uint16));
 		memset(m_creatureOrGOcount, 0, QUEST_OBJECTIVES_COUNT * sizeof(uint16));
 	}
@@ -582,5 +598,6 @@ struct QuestStatusData {
 	uint32 m_timer;
 	uint16 m_itemcount[QUEST_ITEM_OBJECTIVES_COUNT];
 	uint16 m_creatureOrGOcount[QUEST_OBJECTIVES_COUNT];
+	uint16 m_playercount;
 };
 #endif
