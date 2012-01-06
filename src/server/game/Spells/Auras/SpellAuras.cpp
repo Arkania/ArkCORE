@@ -1074,66 +1074,63 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         break;
                 }
 			break;
-		case SPELLFAMILY_PRIEST:
-			if (!caster)
-				break;
-			// Devouring Plague
-			if (GetSpellProto()->SpellFamilyFlags[0] & 0x02000000
-					&& GetEffect(0)) {
-				// Improved Devouring Plague
-				if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3790, 1)) {
-					int32 basepoints0 = aurEff->GetAmount()
-							* GetEffect(0)->GetTotalTicks()
-							* caster->SpellDamageBonus(target, GetSpellProto(),
-									0, GetEffect(0)->GetAmount(), DOT) / 100;
-					caster->CastCustomSpell(target, 63675, &basepoints0, NULL,
-							NULL, true, NULL, GetEffect(0));
-				}
-			}
-			// Mind fly
-			else if (GetId() == 15407) {
-				// Pain and Suffering: Rank 1
-				if (Aura* pain = caster->GetAura(47580)) {
-					if (Aura* swp = target->GetAura(589)) {
-						if (roll_chance_i(30))
-							swp->RefreshDuration();
-					}
-				}
-				// Pain and Suffering: Rank 2
-				if (Aura* pain = caster->GetAura(47581)) {
-					if (Aura* swp = target->GetAura(589)) {
-						if (roll_chance_i(60))
-							swp->RefreshDuration();
-					}
-				}
-			}
-			// Renew
-			else if (GetSpellProto()->SpellFamilyFlags[0] & 0x00000040
-					&& GetEffect(0)) {
-				// Empowered Renew
-				if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3021, 1)) {
-					int32 basepoints0 = aurEff->GetAmount()
-							* GetEffect(0)->GetTotalTicks()
-							* caster->SpellHealingBonus(target, GetSpellProto(),
-									0, GetEffect(0)->GetAmount(), HEAL) / 100;
-					caster->CastCustomSpell(target, 63544, &basepoints0, NULL,
-							NULL, true, NULL, GetEffect(0));
-				}
-			}
-			// Power Word: Shield
-			else if (m_spellProto->SpellFamilyFlags[0] & 0x1
-					&& m_spellProto->SpellFamilyFlags[2] & 0x400
-					&& GetEffect(0)) {
-				// Glyph of Power Word: Shield
-				if (AuraEffect* glyph = caster->GetAuraEffect(55672, 0)) {
-					// instantly heal m_amount% of the absorb-value
-					int32 heal = glyph->GetAmount() * GetEffect(0)->GetAmount()
-							/ 100;
-					caster->CastCustomSpell(GetUnitOwner(), 56160, &heal, NULL,
-							NULL, true, 0, GetEffect(0));
-				}
-			}
-			break;
+        case SPELLFAMILY_PRIEST:
+            if (!caster)
+            break;
+            // Devouring Plague
+			if (GetId() == 2944) 
+            {
+                // Improved Devouring Plague
+				if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3790, 0)) 
+                {
+					int32 basepoints0 = aurEff->GetAmount() * GetEffect(0)->GetTotalTicks()	* caster->SpellDamageBonus(target, GetSpellProto(),	0, GetEffect(0)->GetAmount(), DOT) / 100;
+					caster->CastCustomSpell(target, 63675, &basepoints0, NULL, NULL, true, NULL, GetEffect(0));
+                }
+            }
+            // Mind fly
+			if (GetId() == 15407) 
+            {
+                // Pain and Suffering: Rank 1
+    	        if (Aura* pain = caster->GetAura(47580)) 
+                {
+                    if (Aura* swp = target->GetAura(589)) 
+                    {
+				        if (roll_chance_i(30))
+					        swp->RefreshDuration();
+                    }
+                }
+                // Pain and Suffering: Rank 2
+                if (Aura* pain = caster->GetAura(47581))
+                {
+                    if (Aura* swp = target->GetAura(589))
+                    {
+                        if (roll_chance_i(60))
+                            swp->RefreshDuration();
+                    }
+                }
+            }
+            // Renew
+            if (GetId() == 139) 
+            {
+                // Empowered Renew
+                if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3021, 0)) 
+                {
+                    int32 basepoints0 = aurEff->GetAmount()	* GetEffect(0)->GetTotalTicks()	* caster->SpellHealingBonus(target, GetSpellProto(), 0, GetEffect(0)->GetAmount(), HEAL) / 100;
+                    caster->CastCustomSpell(target, 63544, &basepoints0, NULL, NULL, true, NULL, GetEffect(0));
+                }
+            }
+            // Power Word: Shield
+            if (GetId() == 17) 
+            {
+                // Glyph of Power Word: Shield
+                if (AuraEffect* glyph = caster->GetAuraEffect(55672, 0))
+                {
+                    // instantly heal m_amount% of the absorb-value
+                    int32 heal = glyph->GetAmount() * GetEffect(0)->GetAmount()	/ 100;
+                    caster->CastCustomSpell(GetUnitOwner(), 56160, &heal, NULL,	NULL, true, 0, GetEffect(0));
+                }
+            }
+            break;
 		case SPELLFAMILY_ROGUE:
 			// Sprint (skip non player casted spells by category)
 			if (GetSpellProto()->SpellFamilyFlags[0] & 0x40
