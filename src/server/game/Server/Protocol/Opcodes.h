@@ -1244,7 +1244,7 @@ enum Opcodes
     SMSG_UNKNOWN_1240                                = 0x0B8E0, // 4.0.6a 13623
     CMSG_CHAR_FACTION_CHANGE                         = 0x0BBCC, // 4.0.6a 13623
     SMSG_CHAR_FACTION_CHANGE                         = 0x023AC, // 4.0.6a 13623
-    SMSG_BATTLEFIELD_MGR_ENTRY_INVITE                = 0x10226, //
+    SMSG_BATTLEFIELD_MGR_ENTRY_INVITE                = 0x0455E, // 4.0.6a 13623
     CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE       = 0x00005, // 4.0.6a 13623
     SMSG_BATTLEFIELD_MGR_ENTERED                     = 0x00004, // 4.0.6a 13623
     SMSG_BATTLEFIELD_MGR_QUEUE_INVITE                = 0x10069, // 4.0.6a 13623
@@ -1255,6 +1255,9 @@ enum Opcodes
     SMSG_BATTLEFIELD_MGR_EJECTED                     = 0x0011A, // 4.0.6a 13623
     CMSG_BATTLEFIELD_MGR_EXIT_REQUEST                = 0x08580, // 4.0.6a 13623
     SMSG_BATTLEFIELD_MGR_STATE_CHANGE                = 0x0352D, // 4.0.6a 13623
+    CMSG_WARGAME_ACCEPT                              = 0x00108, // 4.0.6a 13623
+    CMSG_WARGAME_REQUEST                             = 0x00501, // 4.0.6a 13623
+    SMSG_WARGAME_REQUEST_RESPONSE                    = 0x0094E, // 4.0.6a 13623
     MSG_SET_RAID_DIFFICULTY                          = 0x0B5E8, // 4.0.6a 13623
     SMSG_TOGGLE_XP_GAIN                              = 0x07980, // 4.0.6a 13623
     SMSG_GMRESPONSE_DB_ERROR                         = 0x0E0A0, // 4.0.6a 13623
@@ -1309,6 +1312,26 @@ enum Opcodes
     SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
     CMSG_REFORGE                                     = 0x00313, // 4.0.6a 13623
     SMSG_SHOW_REFORGE                                = 0x00C5C, // 4.0.6a 13623
+	SMSG_GUILD_CRITERIA_DATA                         = 0x0400E, // 4.0.6a 13623
+	SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
+	CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
+	CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
+	CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
+	CMSG_CLEAR_RAID_MARKER                           = 0x02218, // 4.0.6a 13623
+	SMSG_SEND_GUILD_ACHIEVEMENT_MEMBERS              = 0x0414E, // 4.0.6a 13623
+	CMSG_GET_GUILD_ACHIEVEMENT_MEMBERS               = 0x02509, // 4.0.6a 13623
+	SMSG_SEND_ERROR_MESSAGE                          = 0x0480C, // 4.0.6a 13623 this has its own enum u8+u32+u32 special
+	SMSG_TALENT_ERROR                                = 0x068A4, // 4.0.6a 13623
+	SMSG_SERVER_MESSAGE_BOX                          = 0x0080C, // Server msgbox-like 4.0.6a 13623
+	SMSG_REQUEST_WAR_GAME_RESPONSE                   = 0x00C1C, // 4.0.6a 13623
+	SMSG_UNKNOWN_GOLD                                = 0x0004E, // 4.0.6a 13623 gives gold to the player
+	CMSG_SET_FOCUSED_ACHIEVEMENT                     = 0x03109, // 4.0.6a 13623
+    CMSG_COMPLETED_ARTIFACTS                         = 0x00A13, // 4.0.6a 13623
+    SMSG_COMPLETED_ARTIFACTS                         = 0x0044E, // 4.0.6a 13623 structure: uint32 (count) loop: uint32(id), uint32(date), uint32(number of times completed) :endloop
+    SMSG_ARTIFACT_COMPLETED                          = 0x0491C, // 4.0.6a 13623	
+	SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
+	SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
+	SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B7  // last unknown opcode + 1.
 };
 
