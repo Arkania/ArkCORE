@@ -178,7 +178,6 @@ void MailDraft::SendReturnToSender(uint32 sender_acc, uint32 sender_guid,
 	SendMailTo(trans, MailReceiver(receiver, receiver_guid),
 			MailSender(MAIL_NORMAL, sender_guid), MAIL_CHECK_MASK_RETURNED,
 			deliver_delay);
-	CharacterDatabase.CommitTransaction(trans);
 }
 
 void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver,
