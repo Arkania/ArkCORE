@@ -701,127 +701,93 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex) {
                 }
                 break;
             }
-            case SPELLFAMILY_PRIEST: {
-                switch (m_spellInfo->Id) {
-                    case 73413: // inner will
+            case SPELLFAMILY_PRIEST: 
+            {
+                switch (m_spellInfo->Id) 
+                {
+                    // Inner will
+                    case 73413: 
                         m_caster->RemoveAurasDueToSpell(588);
                         break;
-                    case 588: // inner fire
+                    // Inner fire
+                    case 588: 
                         m_caster->RemoveAurasDueToSpell(73413);
                         break;
-                }
-
-                if (m_spellInfo->Id == 589 || m_spellInfo->Id == 15407) //Shadow Word: Pain | mind flay
+                    //Shadow Word: Pain || mind flay
+                    case 589:
+                    case 15407:
+                    {
+                        if (m_caster->HasSpell(95740)) // Shadow Orbs
                         {
-                    if (m_caster->HasSpell(95740)) // Shadow Orbs
-                            {
-                        int chance = 10;
+                            int chance = 10;
+                            if (m_caster->HasAura(33191)) 
+                                chance += 4;
+                            else if (m_caster->HasAura(78228))
+                                chance += 8;
 
-                        if (m_caster->HasAura(33191)) // Harnessed Shadows rank1
-                        chance += 4;
-                        else if (m_caster->HasAura(78228)) // Harnessed Shadows rank2
-                        chance += 8;
-
-                        if (roll_chance_i(chance)) m_caster->CastSpell(m_caster,
-                                77487, true);
-                    }
-                }
-
-                if (m_caster->HasAura(81659)) // Evangelism Rank 1
-                        {
-                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914
-                            || m_spellInfo->Id == 15407) // Smite | Holy Fire | mind flay
-                    m_caster->CastSpell(m_caster, 81660, true);
-                }
-
-                if (m_caster->HasAura(81662)) // Evangelism Rank 2
-                        {
-                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914
-                            || m_spellInfo->Id == 15407) // Smite | Holy Fire | mind flay
-                    m_caster->CastSpell(m_caster, 81661, true);
-                }
-                //Dark Evangelism  not implemented yet
-                if (m_caster->HasAura(81659)) // Evangelism rank 1
-                        {
-                    if (m_spellInfo->Id == 15407) //  Mind Flay
-                    m_caster->CastSpell(m_caster, 87117, true); // Dark Evangelism
-                } else if (m_caster->HasAura(81662)) // Evangelism rank 2
-                        {
-                    if (m_spellInfo->Id == 15407) //  Mind Flay
-                    m_caster->CastSpell(m_caster, 87118, true); // Dark Evangelism
-                }
-                break;
-
-                // Chakra
-                if (m_caster->HasAura(14751)) {
-                    switch (m_spellInfo->Id) {
-                        // Smite
-                        case 585:
-                            m_caster->CastSpell(m_caster, 81209, true); // Chakra: Chastise
-                            break;
-                            // Mind Spike
-                        case 73510:
-                            m_caster->CastSpell(m_caster, 81209, true); // Chakra: Chastise
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                // Shadow Word: Death - deals damage equal to damage done to caster
-                if ((m_spellInfo->SpellFamilyFlags[1] & 0x2)) {
-                    int32 back_damage = m_caster->SpellDamageBonus(unitTarget,
-                            m_spellInfo, effIndex, (uint32) damage,
-                            SPELL_DIRECT_DAMAGE);
-                    // Pain and Suffering reduces damage
-                    if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 0)) back_damage -=
-                            aurEff->GetAmount() * back_damage / 100;
-
-                    if (back_damage < int32(unitTarget->GetHealth())) m_caster->CastCustomSpell(
-                            m_caster, 32409, &back_damage, 0, 0, true);
-                }
-                // Mind Blast - applies Mind Trauma if:
-                else if (m_spellInfo->Id == 8092) {
-                    // We are in Shadow Form
-                    if (m_caster->GetShapeshiftForm() == FORM_SHADOW)
-                    // We have Improved Mind Blast
-                    if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 0))
-                    // Chance has been successfully rolled
-                    if (roll_chance_i(aurEff->GetAmount())) m_caster->CastSpell(
-                            unitTarget, 48301, true);
-
-                    //Mind Melt Aura remove
-                    m_caster->RemoveAurasDueToSpell(87160);
-                    m_caster->RemoveAurasDueToSpell(81292);
-                }
-                // Mind Blast - Paralysis
-                else if (m_spellInfo->Id == 8092) {
-                    // Paralysis (Rank 1)
-                    if (m_caster->HasAura(87192)) m_caster->CastSpell(
-                            unitTarget, 87193, true);
-                    // Paralysis (Rank 2)
-                    else if (m_caster->HasAura(87195)) m_caster->CastSpell(
-                            unitTarget, 87194, true);
-                }
-                // Improved Mind Blast (Mind Blast in shadow form bonus)
-                else if (m_caster->GetShapeshiftForm() == FORM_SHADOW
-                        && (m_spellInfo->SpellFamilyFlags[0] & 0x00002000)) {
-                    Unit::AuraEffectList const& ImprMindBlast =
-                            m_caster->GetAuraEffectsByType(
-                                    SPELL_AURA_ADD_FLAT_MODIFIER);
-                    for (Unit::AuraEffectList::const_iterator i =
-                            ImprMindBlast.begin(); i != ImprMindBlast.end();
-                            ++i) {
-                        if ((*i)->GetSpellProto()->SpellFamilyName
-                                == SPELLFAMILY_PRIEST
-                                && ((*i)->GetSpellProto()->SpellIconID == 95)) {
-                            int chance = SpellMgr::CalculateSpellEffectAmount(
-                                    (*i)->GetSpellProto(), 1, m_caster);
                             if (roll_chance_i(chance))
-                            // Mind Trauma
-                            m_caster->CastSpell(unitTarget, 48301, true, 0);
-                            break;
+                                m_caster->CastSpell(m_caster, 77487, true);
                         }
+                        break;
                     }
+                    // Mind Blast
+                    case 8092:
+                        // Improved Mind Blast
+                        if (m_caster->GetShapeshiftForm() == FORM_SHADOW)
+                        {                
+                            Unit::AuraEffectList const& ImprMindBlast = m_caster->GetAuraEffectsByType(SPELL_AURA_ADD_FLAT_MODIFIER);
+                            for (Unit::AuraEffectList::const_iterator i = ImprMindBlast.begin(); i != ImprMindBlast.end(); ++i) 
+                            {
+                                if ((*i)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_PRIEST && ((*i)->GetSpellProto()->SpellIconID == 95)) 
+                                {
+                                    int chance = SpellMgr::CalculateSpellEffectAmount((*i)->GetSpellProto(), 1, m_caster);
+                                    // Mind Trauma
+                                    if (roll_chance_i(chance))
+                                        m_caster->CastSpell(unitTarget, 48301, true, 0);
+                                }
+                            }
+                        }
+                        //Mind Melt Aura remove
+                        m_caster->RemoveAurasDueToSpell(87160);
+                        m_caster->RemoveAurasDueToSpell(81292);
+                        break;
+                    // Smite, Mind Spike
+                    case 585:
+                    case 73510:
+                        // Chakra: Chastise
+                        if (m_caster->HasAura(14751)) 
+                            m_caster->CastSpell(m_caster, 81209, true); 
+                        break;
+                    default:
+                        break;
+                }
+                
+                // Evangelism Rank 1
+                if (m_caster->HasAura(81659)) 
+                {
+                    // Smite | Holy Fire
+                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
+                        m_caster->CastSpell(m_caster, 81660, true);
+                }
+
+                // Evangelism Rank 2
+                if (m_caster->HasAura(81662)) 
+                {
+                    // Smite | Holy Fire
+                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914) 
+                        m_caster->CastSpell(m_caster, 81661, true);
+                }
+
+                // Shadow Word: Death - deals damage equal to damage done to caster
+                if (m_spellInfo->SpellFamilyFlags[1] & 0x2) 
+                {
+                    int32 back_damage = m_caster->SpellDamageBonus(unitTarget, m_spellInfo, effIndex, (uint32) damage, SPELL_DIRECT_DAMAGE);
+                    // Pain and Suffering reduces damage
+                    if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 0)) 
+                        back_damage -= aurEff->GetAmount() * back_damage / 100;
+
+                    if (back_damage < int32(unitTarget->GetHealth())) 
+                        m_caster->CastCustomSpell(m_caster, 32409, &back_damage, 0, 0, true);
                 }
                 break;
             }
