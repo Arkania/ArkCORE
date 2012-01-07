@@ -977,13 +977,8 @@ public:
 
 	virtual void SetMap(Map * map);
 	virtual void ResetMap();
-	Map * GetMap() const {
-		ASSERT(m_currMap);
-		return m_currMap;
-	}
-	Map * FindMap() const {
-		return m_currMap;
-	}
+    Map* GetMap() const { ASSERT(m_currMap); return m_currMap; }
+    Map* FindMap() const { return m_currMap; }
 	//used to check all object's GetMap() calls when object is not in world!
 
 	//this function should be removed in nearest time...
