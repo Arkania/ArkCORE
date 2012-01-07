@@ -137,6 +137,22 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber,
 	result = CharacterDatabase.PQuery( "SELECT id, entry, owner, modelid, level, exp, Reactstate, slot, name, renamed, curhealth, curmana, curhappiness, abdata, savetime, resettalents_cost, resettalents_time, CreatedBySpell, PetType "
 							"FROM character_pet WHERE owner = '%u' AND ((slot >= '%u' AND slot <= '%u') OR slot > '%u')", ownerid, PET_SLOT_HUNTER_FIRST, PET_SLOT_HUNTER_LAST, PET_SLOT_STABLE_LAST);
 
+    if (m_owner->getClass() == CLASS_MAGE) // Mage pet (only frost)
+    {
+       QueryResult result2;
+       result2 = CharacterDatabase.PQuery("SELECT disabled FROM character_spell WHERE guid = '%u' AND spell = 31687",
+       ownerid);
+       if (result2)
+       {
+          Field *fields2 = result2->Fetch();
+          if (fields2[0].GetUInt32()== 1)
+          {
+             m_loading = false;
+             return false;
+          }
+       }
+    }
+	
 	if (!result)
 	{
 		m_loading = false;
