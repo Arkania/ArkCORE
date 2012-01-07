@@ -6564,6 +6564,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 					triggered_spell_id = 37378;
 					break;
 				}
+                // Fel Armor
+                case 28176:
+                {
+                    basepoints0 = int32(damage * triggerAmount / 100);
+                    triggered_spell_id = 96379;
+                    break;
+		        }
 			}
 			break;
 		}
