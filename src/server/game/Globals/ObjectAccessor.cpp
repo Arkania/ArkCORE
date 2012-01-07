@@ -188,34 +188,43 @@ Corpse* ObjectAccessor::GetCorpseForPlayerGUID(uint64 guid) {
 	return iter->second;
 }
 
-void ObjectAccessor::RemoveCorpse(Corpse* corpse) {
-	ASSERT(corpse && corpse->GetType() != CORPSE_BONES);
+void ObjectAccessor::RemoveCorpse(Corpse* corpse)
+{
+    ASSERT(corpse && corpse->GetType() != CORPSE_BONES);
 
-	if (corpse->FindMap())
-		corpse->FindMap()->Remove(corpse, false);
-	else
-		corpse->RemoveFromWorld();
+    //TODO: more works need to be done for corpse and other world object
+    if (Map* map = corpse->FindMap())
+    {
+        corpse->DestroyForNearbyPlayers();
+        if (corpse->IsInGrid())
+            map->Remove(corpse, false);
+        else
+        {
+            corpse->RemoveFromWorld();
+            corpse->ResetMap();
+        }
+    }
+    else
+        corpse->RemoveFromWorld();
 
-	// Critical section
-	{
+    // Critical section
+    {
+        //TRINITY_WRITE_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
 		ACE_GUARD(LockType, g, i_corpseGuard);
 
-		Player2CorpsesMapType::iterator iter = i_player2corpse.find(
-				corpse->GetOwnerGUID());
-		if (iter == i_player2corpse.end()) // TODO: Fix this
-			return;
+        Player2CorpsesMapType::iterator iter = i_player2corpse.find(corpse->GetOwnerGUID());
+        if (iter == i_player2corpse.end()) // TODO: Fix this
+            return;
 
-		// build mapid*cellid -> guid_set map
-		CellPair cell_pair = Trinity::ComputeCellPair(corpse->GetPositionX(),
-				corpse->GetPositionY());
-		uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP)
-				+ cell_pair.x_coord;
-
-		sObjectMgr->DeleteCorpseCellData(corpse->GetMapId(), cell_id,
-				GUID_LOPART(corpse->GetOwnerGUID()));
-
-		i_player2corpse.erase(iter);
-	}
+		CellPair cell_pair = Trinity::ComputeCellPair(corpse->GetPositionX(), corpse->GetPositionY());
+		uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
+        // build mapid*cellid -> guid_set map
+        CellCoord cellCoord = Trinity::ComputeCellCoord(corpse->GetPositionX(), corpse->GetPositionY());
+        // sObjectMgr->DeleteCorpseCellData(corpse->GetMapId(), cellCoord.GetId(), GUID_LOPART(corpse->GetOwnerGUID()));
+		sObjectMgr->DeleteCorpseCellData(corpse->GetMapId(), cell_id, GUID_LOPART(corpse->GetOwnerGUID()));
+		
+        i_player2corpse.erase(iter);
+    }
 }
 
 void ObjectAccessor::AddCorpse(Corpse* corpse) {
