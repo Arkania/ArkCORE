@@ -172,51 +172,54 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			sScriptMgr->OnPlayerChat(_player, type, LANG_UNIVERSAL, msg);
 
-			_player->ToggleDND();
-			if (_player->isDND() && _player->isAFK()) _player->ToggleAFK();
-		}
-		return;
-	}
-
-	recv_data >> lang;
-
-	if (type >= MAX_CHAT_MSG_TYPE)
-	{
-		sLog->outError("CHAT: Wrong message type received: %u", type);
-		return;
-	}
-
-	//sLog->outDebug("CHAT: packet received. type %u, lang %u", type, lang);
-	Player* sender = GetPlayer();
-
-	// prevent talking at unknown language (cheating)
-	LanguageDesc const* langDesc = GetLanguageDescByID(lang);
-	if (!langDesc)
-	{
-		SendNotification(LANG_UNKNOWN_LANGUAGE);
-		return;
-	}
-	if (langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
-	{
-		// also check SPELL_AURA_COMPREHEND_LANGUAGE (client offers option to speak in that language)
-		Unit::AuraEffectList const& langAuras = _player->GetAuraEffectsByType(
-				SPELL_AURA_COMPREHEND_LANGUAGE);
-		bool foundAura = false;
-		for (Unit::AuraEffectList::const_iterator i = langAuras.begin();
-				i != langAuras.end(); ++i)
-		{
-			if ((*i)->GetMiscValue() == int32(lang))
-			{
-				foundAura = true;
-				break;
-			}
-		}
-		if (!foundAura)
-		{
-			SendNotification(LANG_NOT_LEARNED_LANGUAGE);
-			return;
-		}
-	}
+_player->ToggleDND();
+            if (_player->isDND() && _player->isAFK())
+                _player->ToggleAFK();
+        }
+        return;
+    }
+ 
+    if (type >= MAX_CHAT_MSG_TYPE) {
+        sLog->outError("CHAT: Wrong message type received: %u", type);
+        return;
+    }
+ 
+    //sLog->outDebug("CHAT: packet received. type %u, lang %u", type, lang);
+    Player* sender = GetPlayer();
+ 
+    if (type != CHAT_MSG_EMOTE)
+    {
+ 
+        recv_data >> lang;
+ 
+        // prevent talking at unknown language (cheating)
+        LanguageDesc const* langDesc = GetLanguageDescByID(lang);
+    if (!langDesc)
+    {
+        SendNotification(LANG_UNKNOWN_LANGUAGE);
+        return;
+    }
+    if (langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
+    {
+ 
+// also check SPELL_AURA_COMPREHEND_LANGUAGE (client offers option to speak in that language)
+            Unit::AuraEffectList const& langAuras = _player->GetAuraEffectsByType(SPELL_AURA_COMPREHEND_LANGUAGE);
+            bool foundAura = false;
+            for (Unit::AuraEffectList::const_iterator i = langAuras.begin(); i != langAuras.end(); ++i)
+            {
+                if ((*i)->GetMiscValue() == int32(lang))
+                {
+                    foundAura = true;
+                    break;
+                }
+            }
+            if (!foundAura)
+            {
+                SendNotification(LANG_NOT_LEARNED_LANGUAGE);
+                return;
+            }
+        }
+    }
 
 	if (lang == LANG_ADDON)
 	{
