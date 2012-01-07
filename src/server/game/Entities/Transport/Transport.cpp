@@ -142,7 +142,7 @@ void MapManager::LoadTransports() {
 
 Transport* MapManager::LoadTransportInMap(Map* instance, uint32 goEntry, uint32 period)
 {
-    const GameObjectTemplate* goInfo = sObjectMgr->GetGameObjectTemplate(goEntry);
+    const GameObjectInfo* goInfo = sObjectMgr->GetGameObjectInfo(goEntry);
 
     if (!goInfo)
     {

@@ -349,7 +349,7 @@ void StartFlyShip(Transport* t)
 
     Map* map = t->GetMap();
     std::set<uint32> mapsUsed;
-    GameObjectTemplate const* goinfo = t->GetGOInfo();
+    GameObjectInfo const* goinfo = t->GetGOInfo();
 
     t->GenerateWaypoints(goinfo->moTransport.taxiPathId, mapsUsed);
 
