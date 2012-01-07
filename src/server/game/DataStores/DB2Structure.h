@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010-2011 Strawberry-Pr0jcts <http://www.strawberry-pr0jcts.com/>
+ * Copyright (C) 2010 - 2012 Strawberry-Pr0jcts <http://www.strawberry-pr0jcts.com/>
  *
- * Copyright (C) 2010-2011 ProjectSkyfire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
  * 
  * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *

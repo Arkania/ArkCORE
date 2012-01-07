@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2008 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it

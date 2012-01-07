@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * 
  * Copyright (C) 2011 ArkCORE <http://www.arkania.net/>
  *

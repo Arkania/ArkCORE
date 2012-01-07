@@ -1,8 +1,8 @@
-# Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+# Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
 #
-# Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+# Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
 #
-# Copyright (C) 2010-2011 ArkCORE <http://www.arkania.net/>
+# Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
