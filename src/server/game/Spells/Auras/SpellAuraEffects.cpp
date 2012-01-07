@@ -342,7 +342,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] = { &AuraEffect::HandleNULL, /
 		&AuraEffect::HandleNoImmediateEffect, //283 SPELL_AURA_MOD_HEALING_RECEIVED       implemented in Unit::SpellHealingBonus
 		&AuraEffect::HandleAuraLinked, //284 SPELL_AURA_LINKED
 		&AuraEffect::HandleAuraModAttackPowerOfArmor, //285 SPELL_AURA_MOD_ATTACK_POWER_OF_ARMOR  implemented in Player::UpdateAttackPowerAndDamage
-		&AuraEffect::HandleNoImmediateEffect, //286 SPELL_AURA_ABILITY_PERIODIC_CRIT implemented in AuraEffect::PeriodicTick
+		&AuraEffect::HandleNoImmediateEffect, //286 SPELL_AURA_ABILITY_PERIODIC_CRIT deprecated patch 4.0.1 all dots can crit
 		&AuraEffect::HandleNoImmediateEffect, //287 SPELL_AURA_DEFLECT_SPELLS             implemented in Unit::MagicSpellHitResult and Unit::MeleeSpellHitResult
 		&AuraEffect::HandleNoImmediateEffect, //288 SPELL_AURA_IGNORE_HIT_DIRECTION  implemented in Unit::MagicSpellHitResult and Unit::MeleeSpellHitResult Unit::RollMeleeOutcomeAgainst
 		&AuraEffect::HandleNULL, //289 unused (3.2.0)
@@ -1373,25 +1373,13 @@ void AuraEffect::UpdatePeriodic(Unit *caster) {
 	GetBase()->CallScriptEffectUpdatePeriodicHandlers(this);
 }
 
-bool AuraEffect::IsPeriodicTickCrit(Unit *target, Unit const *caster) const {
-	ASSERT(caster);
-	Unit::AuraEffectList const& mPeriodicCritAuras =
-			caster->GetAuraEffectsByType(SPELL_AURA_ABILITY_PERIODIC_CRIT);
-	for (Unit::AuraEffectList::const_iterator itr = mPeriodicCritAuras.begin();
-			itr != mPeriodicCritAuras.end(); ++itr) {
-		if ((*itr)->IsAffectedOnSpell(m_spellProto)
-				&& caster->isSpellCrit(target, m_spellProto,
-						GetSpellSchoolMask(m_spellProto)))
-			return true;
-	}
-	// Rupture - since 3.3.3 can crit
-	if (target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE,
-			0x100000, 0x0, 0x0, caster->GetGUID())) {
-		if (caster->isSpellCrit(target, m_spellProto,
-				GetSpellSchoolMask(m_spellProto)))
-			return true;
-	}
-	return false;
+bool AuraEffect::IsPeriodicTickCrit(Unit *target, Unit const *caster) const 
+{
+    ASSERT(caster);
+    if (caster->isSpellCrit(target, m_spellProto, GetSpellSchoolMask(m_spellProto)))
+        return true;
+    else
+        return false;
 }
 
 void AuraEffect::SendTickImmune(Unit *target, Unit *caster) const {
