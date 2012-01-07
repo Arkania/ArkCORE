@@ -6302,14 +6302,6 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 			triggered_spell_id = 47753;
 			break;
 		}
-		//Mind Melt
-		case 87160:
-		case 81292:
-		{
-			if (procSpell->Id != 73510)
-				return false;
-			break;
-		}
 		// Body and Soul
 		if (dummySpell->SpellIconID == 2218) {
 			// Proc only from Abolish desease on self cast
@@ -6422,6 +6414,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 		}
 			// Priest T10 Healer 2P Bonus
 		case 70770:
+        {
 			// Flash Heal
 			if (procSpell->SpellFamilyFlags[0] & 0x800) {
 				triggered_spell_id = 70772;
@@ -6435,6 +6428,25 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 										/ blessHealing->EffectAmplitude[0]));
 			}
 			break;
+        }
+        //Mind Melt
+		case 87160:
+		case 81292:
+		{
+			if (procSpell->Id != 73510)
+				return false;
+			break;
+		}
+        // Atonement
+        case 14523:
+        case 81749:
+        {
+            basepoints0 = int32(CalculatePctN(damage, triggerAmount));
+            triggered_spell_id = 81751;
+            target = this;
+            break;
+        }
+
 		}
 		break;
 	}
