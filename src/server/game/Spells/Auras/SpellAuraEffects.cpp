@@ -1435,55 +1435,67 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
 
 		// Dark Evangelism
 		if (target->HasAura(15407)) // Mind Flay
-				{
-			if (caster->HasAura(81659)) // Rank 1
-				caster->CastSpell(caster, 87117, true);
-			else if (caster->HasAura(81662)) // Rank 2
+        {
+            if (caster->HasAura(81659)) // Rank 1
+                caster->CastSpell(caster, 87117, true);
+            else if (caster->HasAura(81662)) // Rank 2
 				caster->CastSpell(caster, 87118, true);
 		}
 
 		// some auras remove at specific health level or more
-		if (GetAuraType() == SPELL_AURA_PERIODIC_DAMAGE) {
-			switch (GetId()) {
-			case 43093:
-			case 31956:
-			case 38801: // Grievous Wound
-			case 35321:
-			case 38363:
-			case 39215: // Gushing Wound
-				if (target->IsFullHealth()) {
-					target->RemoveAurasDueToSpell(GetId());
-					return;
-				}
-				break;
-			case 38772: // Grievous Wound
-			{
-				uint32 percent =
-						GetEffIndex() < 2
-								&& GetSpellProto()->Effect[GetEffIndex()]
-										== SPELL_EFFECT_DUMMY ?
-								caster->CalculateSpellDamage(target,
-										GetSpellProto(), GetEffIndex() + 1) :
-								100;
-				if (!target->HealthBelowPct(percent)) {
-					target->RemoveAurasDueToSpell(GetId());
-					return;
-				}
-				break;
-			}
-			case 603: // Bane of Doom
-			{
-				// There is a chance to summon an Ebon Imp when Bane of Doom does damage
-				if (roll_chance_i(20))
-					caster->CastSpell(caster, 18662, true);
-			}
+		if (GetAuraType() == SPELL_AURA_PERIODIC_DAMAGE) 
+        {
+			switch (GetId()) 
+            {
+			    case 43093:
+			    case 31956:
+			    case 38801: // Grievous Wound
+			    case 35321:
+			    case 38363:
+			    case 39215: // Gushing Wound
+				    if (target->IsFullHealth()) 
+                    {
+					    target->RemoveAurasDueToSpell(GetId());
+					    return;
+				    }
+				    break;
+			    case 38772: // Grievous Wound
+			    {
+				    uint32 percent = GetEffIndex() < 2 && GetSpellProto()->Effect[GetEffIndex()] == SPELL_EFFECT_DUMMY ? caster->CalculateSpellDamage(target, GetSpellProto(), GetEffIndex() + 1) : 100;
+				    if (!target->HealthBelowPct(percent)) 
+                    {
+					    target->RemoveAurasDueToSpell(GetId());
+					    return;
+				    }
+				    break;
+			    }
+			    case 603: // Bane of Doom
+			    {
+				    // There is a chance to summon an Ebon Imp when Bane of Doom does damage
+				    if (roll_chance_i(20))
+					    caster->CastSpell(caster, 18662, true);
+
+                    break;
+			    }
+                case 589: // Shadow Word: Pain
+                    if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 4879, 0))
+                    {
+                        int32 chance = aurEff->GetAmount();
+                        if (caster->isMoving())
+                            chance *= 5;
+                       
+                        if (roll_chance_i(chance))
+                        {
+                            caster->CastSpell(target, 87426, true);
+                        }
+                    }
+                    break;
 			}
 		}
 
 		uint32 absorb = 0;
 		uint32 resist = 0;
-		CleanDamage cleanDamage = CleanDamage(0, 0, BASE_ATTACK,
-				MELEE_HIT_NORMAL);
+		CleanDamage cleanDamage = CleanDamage(0, 0, BASE_ATTACK, MELEE_HIT_NORMAL);
 
 		// ignore non positive values (can be result apply spellmods to aura damage
 		uint32 damage = GetAmount() > 0 ? GetAmount() : 0;

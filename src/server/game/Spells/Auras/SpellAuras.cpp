@@ -1078,7 +1078,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             if (!caster)
             break;
             // Devouring Plague
-			if (GetId() == 2944) 
+            if (GetId() == 2944) 
             {
                 // Improved Devouring Plague
 				if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3790, 0)) 

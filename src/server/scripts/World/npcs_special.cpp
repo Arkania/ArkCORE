@@ -2999,6 +2999,79 @@ public:
     }
 };
 
+class npc_shadowy_apparition : public CreatureScript
+{
+public:
+    npc_shadowy_apparition() : CreatureScript("npc_shadowy_apparition") { }
+
+    struct npc_shadowy_apparitionAI : public ScriptedAI
+    {
+        npc_shadowy_apparitionAI(Creature* c) : ScriptedAI(c) 
+        {
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        uint64 targetGuid;
+
+        void InitializeAI()
+        {
+            Unit * owner = me->GetOwner();
+
+            if (!owner)
+				return;   
+
+            owner->CastSpell(me, 87213, true);
+
+            if (me->GetCharmInfo())
+            {
+                me->GetCharmInfo()->SetIsAtStay(true);
+                me->GetCharmInfo()->SetIsFollowing(false);
+                me->GetCharmInfo()->SetIsReturning(false);
+            }
+        }
+
+        void Reset()
+        {
+            me->CastSpell(me, 87427, true);
+        }
+
+        void MoveInLineOfSight(Unit* who)
+        {
+            if (who->IsHostileTo(me) && me->GetDistance(who) <= 2.0f)
+            {
+                me->CastCustomSpell(who, 87532, NULL, NULL, NULL, true, 0, 0, me->GetOwnerGUID());
+                me->CastSpell(me, 87529, true);
+                me->DisappearAndDie();
+            }
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+            {
+                Unit * owner = me->GetOwner();
+
+                if (!owner)
+			        return; 
+
+                if (Unit* target = owner->getAttackerForHelper())
+                {
+                    me->Attack(target, false);
+                    me->AddThreat(target, 100.0f);
+                    me->GetMotionMaster()->MoveChase(target, 0.0f, 0.0f);
+                    targetGuid = target->GetGUID();
+                }
+            }
+        }
+
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_shadowy_apparitionAI(creature);
+    }
+};
+
 // Uncomment this once guardians are able to cast spells
 // on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts. 
 /*
@@ -3110,5 +3183,6 @@ void AddSC_npcs_special() {
 	new npc_flame_orb;
 	new npc_power_word_barrier;
 	new npc_lightwell;
+    new npc_shadowy_apparition;
 	//new npc_guardian_of_ancient_kings;
 }
