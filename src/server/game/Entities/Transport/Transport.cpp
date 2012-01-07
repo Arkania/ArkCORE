@@ -152,7 +152,7 @@ Transport* MapManager::LoadTransportInMap(Map* instance, uint32 goEntry, uint32 
 
     if (goInfo->type != GAMEOBJECT_TYPE_MO_TRANSPORT)
     {
-        sLog->outErrorDb("Transport ID:%u, Name: %s, will not be loaded, gameobject_template type wrong", goEntry, goInfo->name.c_str());
+        sLog->outErrorDb("Transport ID:%u, Name: %s, will not be loaded, gameobject_template type wrong", goEntry);
         return NULL;
     }
 
