@@ -134,19 +134,22 @@ public:
 		float o = chr->GetOrientation();
 		Map *map = chr->GetMap();
 
-		if (chr->GetTransport()) {
-			uint32 tguid = chr->GetTransport()->AddNPCPassenger(0, id,
-					chr->GetTransOffsetX(), chr->GetTransOffsetY(),
-					chr->GetTransOffsetZ(), chr->GetTransOffsetO());
-			if (tguid > 0)
-				WorldDatabase.PQuery(
-						"INSERT INTO creature_transport (guid, npc_entry, transport_entry,  TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO) values (%u, %u, %f, %f, %f, %f, %u)",
-						tguid, id, chr->GetTransport()->GetEntry(),
-						chr->GetTransOffsetX(), chr->GetTransOffsetY(),
-						chr->GetTransOffsetZ(), chr->GetTransOffsetO());
-
-			return true;
-		}
+        if (chr->GetTransport())
+        {
+            if (!map->ToInstanceMap())
+            {
+                if(chr->GetTransport()->AddNPCPassenger(0, id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO()))
+                {
+                    WorldDatabase.PQuery("INSERT INTO creature_transport (guid, transport_entry, npc_entry, TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO, emote) values (%u, %u, %u, %f, %f, %f, %f, 0)", 0, chr->GetTransport()->GetEntry(),id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            chr->GetTransport()->AddNPCPassengerInInstance(0, id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
+            WorldDatabase.PQuery("INSERT INTO creature_transport (guid, transport_entry, npc_entry, TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO, emote) values (%u, %u, %u, %f, %f, %f, %f, 0)", 0, chr->GetTransport()->GetEntry(),id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
+        }
 
 		Creature* pCreature = new Creature;
 		if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, (uint32)teamval, x, y, z, o))

@@ -54,8 +54,8 @@ public:
 
 	typedef std::set<Creature*> CreatureSet;
 	CreatureSet m_NPCPassengerSet;
-	uint32 AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y,
-			float z, float o, uint32 anim = 0);
+    Creature* AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, float z, float o, uint32 anim=0);
+    Creature* AddNPCPassengerInInstance(uint32 entry, float x, float y, float z, float o, uint32 anim=0);
 	void UpdatePosition(MovementInfo *mi);
 	void UpdateNPCPositions();
 	void BuildStartMovePacket(Map const *targetMap);
