@@ -1483,8 +1483,17 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
                         int32 chance = aurEff->GetAmount();
                         if (caster->isMoving())
                             chance *= 5;
+
+                        std::list<Creature*> unitList;
+                        caster->GetCreatureListWithEntryInGrid(unitList, 46954, 100.0f);
+                        uint32 appCount = 0;
+                        for (std::list<Creature*>::const_iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
+                        {
+                            if ((*itr)->GetOwnerGUID() == caster->GetGUID())
+                                appCount++;
+                        }
                        
-                        if (roll_chance_i(chance))
+                        if (roll_chance_i(chance) && appCount < 4)
                         {
                             caster->CastSpell(target, 87426, true);
                         }

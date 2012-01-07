@@ -4596,6 +4596,10 @@ void SpellMgr::LoadSpellCustomAttr() {
 			spellInfo->EffectApplyAuraName[1] = SPELL_AURA_MOD_POWER_REGEN;
 			count++;
 			break;
+        case 87426: // Summon Shadowy Apparition
+            spellInfo->EffectBasePoints[0] = 1;
+            count++;
+            break;
 		default:
 			break;
 		}
