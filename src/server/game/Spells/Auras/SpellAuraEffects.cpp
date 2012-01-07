@@ -566,10 +566,10 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
 			break;
 		case SPELLFAMILY_WARLOCK:
 			// Shadow Ward
-			if (m_spellProto->SpellFamilyFlags[2] & 0x40) {
+			if (m_spellProto->Id == 6229) 
+            {
 				// +80.68% from sp bonus
-				DoneActualBenefit += caster->SpellBaseDamageBonus(
-						GetSpellSchoolMask(m_spellProto)) * 0.8068f;
+				DoneActualBenefit += caster->SpellBaseDamageBonus(GetSpellSchoolMask(m_spellProto)) * 0.8068f;
 			}
 			break;
         case SPELLFAMILY_PRIEST:
