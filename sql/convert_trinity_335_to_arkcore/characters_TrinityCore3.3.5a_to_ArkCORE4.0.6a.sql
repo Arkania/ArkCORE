@@ -2,14 +2,12 @@
 -- STATUS: 5%
 
 
--- account_data
+-- account_data [Structure DONE]
 ALTER TABLE `account_data` 
-	ADD COLUMN `account` int(10) unsigned   NOT NULL DEFAULT '0' first, 
-	CHANGE `type` `type` tinyint(3) unsigned   NOT NULL DEFAULT '0' after `account`, 
-	DROP COLUMN `accountId`, 
-	DROP KEY `PRIMARY`, add PRIMARY KEY(`account`,`type`);
+	CHANGE `accountId` `account` int(10) unsigned   NOT NULL DEFAULT '0' first, 
+	CHANGE `type` `type` tinyint(3) unsigned   NOT NULL DEFAULT '0' after `account`;
 
--- arena_team_stats
+-- arena_team_stats [Structure DONE]
 CREATE TABLE `arena_team_stats`(
 	`arenateamid` int(10) unsigned NOT NULL  DEFAULT '0' , 
 	`rating` int(10) unsigned NOT NULL  DEFAULT '0' , 
@@ -21,14 +19,11 @@ CREATE TABLE `arena_team_stats`(
 	PRIMARY KEY (`arenateamid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
-INSERT INTO `access_requirement` (id, item, item2, heroic_key, heroic_key2, quest_done, quest_failed_text, heroic_quest_done, map) SELECT id, required_item, required_item2, heroic_key, heroic_key2, required_quest_done, required_failed_text, required_quest_done_heroic, target_map FROM `areatrigger_teleport`;
-
-
--- character_arena_stats
+-- character_arena_stats [Structure DONE]
 ALTER TABLE `character_arena_stats` 
 	ADD COLUMN `personalRating` smallint(5)   NOT NULL after `matchMakerRating`;
 
--- character_branchspec
+-- character_branchspec [Structure DONE]
 CREATE TABLE `character_branchspec`(
 	`guid` int(11) unsigned NOT NULL  DEFAULT '0' , 
 	`spec` int(11) unsigned NOT NULL  DEFAULT '0' , 
@@ -36,8 +31,10 @@ CREATE TABLE `character_branchspec`(
 	PRIMARY KEY (`guid`,`spec`) 
 ) ENGINE=MyISAM DEFAULT CHARSET='latin1';
 
+-- players need to re-assign their talents again
+INSERT INTO `character_branchspec` (guid) SELECT guid FROM `characters`;
 
--- character_cp_weekcap
+-- character_cp_weekcap [Structure DONE]
 CREATE TABLE `character_cp_weekcap`(
 	`guid` int(10) unsigned NOT NULL  DEFAULT '0' , 
 	`source` tinyint(3) unsigned NOT NULL  DEFAULT '0' , 
@@ -47,7 +44,8 @@ CREATE TABLE `character_cp_weekcap`(
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
--- character_currency
+-- character_currency [Almost Structure DONE]
+-- Maybe we should convert curencies?
 CREATE TABLE `character_currency`(
 	`guid` int(11) unsigned NOT NULL  , 
 	`currency` smallint(5) unsigned NOT NULL  , 
@@ -57,48 +55,44 @@ CREATE TABLE `character_currency`(
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
--- character_glyphs
+-- character_glyphs [Almost Structure DONE]
+-- Need to be tested, cataclysm add 3 more glyphs
 ALTER TABLE `character_glyphs` 
 	ADD COLUMN `glyph7` smallint(5) unsigned   NULL DEFAULT '0' after `glyph6`, 
 	ADD COLUMN `glyph8` smallint(5) unsigned   NULL DEFAULT '0' after `glyph7`, 
 	ADD COLUMN `glyph9` int(11) unsigned   NULL DEFAULT '0' after `glyph8`;
 
--- character_homebind
+-- character_homebind [Structure DONE]
 ALTER TABLE `character_homebind` 
-	ADD COLUMN `map` smallint(5) unsigned   NOT NULL DEFAULT '0' COMMENT 'Map Identifier' after `guid`, 
-	ADD COLUMN `zone` smallint(5) unsigned   NOT NULL DEFAULT '0' COMMENT 'Zone Identifier' after `map`, 
-	ADD COLUMN `position_x` float   NOT NULL DEFAULT '0' after `zone`, 
-	ADD COLUMN `position_y` float   NOT NULL DEFAULT '0' after `position_x`, 
-	ADD COLUMN `position_z` float   NOT NULL DEFAULT '0' after `position_y`, 
-	DROP COLUMN `mapId`, 
-	DROP COLUMN `zoneId`, 
-	DROP COLUMN `posX`, 
-	DROP COLUMN `posY`, 
-	DROP COLUMN `posZ`;
+	CHANGE `mapId` `map` smallint(5) unsigned   NOT NULL DEFAULT '0' COMMENT 'Map Identifier' after `guid`, 
+	CHANGE `zoneId` `zone` smallint(5) unsigned   NOT NULL DEFAULT '0' COMMENT 'Zone Identifier' after `map`, 
+	CHANGE `posX` `position_x` float   NOT NULL DEFAULT '0' after `zone`, 
+	CHANGE `posY` `position_y` float   NOT NULL DEFAULT '0' after `position_x`, 
+	CHANGE `posZ` `position_z` float   NOT NULL DEFAULT '0' after `position_y`;
 
--- character_inventory
+-- character_inventory [Structure DONE]
 ALTER TABLE `character_inventory` 
 	DROP KEY `guid`;
 
--- character_pet
+-- character_pet [Structure DONE]
 ALTER TABLE `character_pet` 
 	ADD COLUMN `resettalents_cost` int(10) unsigned   NULL DEFAULT '0' after `savetime`, 
 	ADD COLUMN `resettalents_time` int(10) unsigned   NULL DEFAULT '0' after `resettalents_cost`, 
 	CHANGE `abdata` `abdata` text  COLLATE utf8_general_ci NULL after `resettalents_time`, 
 	DROP KEY `idx_slot`;
 
--- character_queststatus
+-- character_queststatus [Structure DONE]
 ALTER TABLE `character_queststatus` 
 	DROP COLUMN `playercount`;
 
--- character_stats
+-- character_stats [Structure DONE]
 ALTER TABLE `character_stats` 
 	ADD COLUMN `maxpower8` int(10) unsigned   NOT NULL DEFAULT '0' after `spellPower`, 
 	ADD COLUMN `maxpower9` int(10) unsigned   NOT NULL DEFAULT '0' after `maxpower8`, 
 	ADD COLUMN `maxpower10` int(10) unsigned   NOT NULL DEFAULT '0' after `maxpower9`, 
-	DROP COLUMN `resilience`;
+	DROP COLUMN `resilience`; -- maybe maxpower10, stats are auto populared every time play relog
 
--- character_tutorial
+-- character_tutorial [Structure DONE]
 CREATE TABLE `character_tutorial`(
 	`account` int(10) unsigned NOT NULL  auto_increment COMMENT 'Account Identifier' , 
 	`tut0` int(10) unsigned NOT NULL  DEFAULT '0' , 
@@ -113,7 +107,7 @@ CREATE TABLE `character_tutorial`(
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8' COMMENT='Player System';
 
 
--- characters
+-- characters [Structure DONE]
 ALTER TABLE `characters` 
 	CHANGE `map` `map` int(11) unsigned   NOT NULL DEFAULT '0' COMMENT 'Map Identifier' after `position_z`, 
 	ADD COLUMN `power8` int(10) unsigned   NOT NULL DEFAULT '0' after `power7`, 
@@ -134,7 +128,7 @@ ALTER TABLE `characters`
 	ADD COLUMN `petSlotUsed` bigint(32)   NULL after `currentPetSlot`, 
 	DROP COLUMN `grantableLevels`;
 
--- corpse
+-- corpse [Structure DONE]
 ALTER TABLE `corpse` 
 	CHANGE `flags` `flags` tinyint(3) unsigned   NOT NULL DEFAULT '0' after `bytes2`, 
 	CHANGE `dynFlags` `dynFlags` tinyint(3) unsigned   NOT NULL DEFAULT '0' after `flags`, 
@@ -149,35 +143,24 @@ ALTER TABLE `corpse`
 	ADD KEY `Idx_time`(`time`), 
 	ADD KEY `instance`(`instanceId`);
 
--- game_event_condition_save
+-- game_event_condition_save [Structure DONE]
 ALTER TABLE `game_event_condition_save` 
-	ADD COLUMN `event_id` smallint(5) unsigned   NOT NULL first, 
-	CHANGE `condition_id` `condition_id` int(10) unsigned   NOT NULL DEFAULT '0' after `event_id`, 
-	DROP COLUMN `eventEntry`, 
-	DROP KEY `PRIMARY`, add PRIMARY KEY(`event_id`,`condition_id`);
+	CHANGE `eventEntry` `event_id` smallint(5) unsigned   NOT NULL first, 
+	CHANGE `condition_id` `condition_id` int(10) unsigned   NOT NULL DEFAULT '0' after `event_id`;
 
--- game_event_save
+-- game_event_save [Structure DONE]
 ALTER TABLE `game_event_save` 
-	ADD COLUMN `event_id` mediumint(8) unsigned   NOT NULL first, 
+	CHANGE `eventEntry` `event_id` mediumint(8) unsigned   NOT NULL first, 
 	CHANGE `state` `state` tinyint(3) unsigned   NOT NULL DEFAULT '1' after `event_id`, 
-	CHANGE `next_start` `next_start` bigint(11) unsigned   NOT NULL DEFAULT '0' after `state`, 
-	DROP COLUMN `eventEntry`, 
-	DROP KEY `PRIMARY`, add PRIMARY KEY(`event_id`);
+	CHANGE `next_start` `next_start` bigint(11) unsigned   NOT NULL DEFAULT '0' after `state`;
 
--- gm_subsurveys
-ALTER TABLE `gm_subsurveys` 
-	DROP KEY `PRIMARY`, add PRIMARY KEY(`surveyid`,`subsurveyid`);
-
--- gm_surveys
+-- gm_surveys [Structure DONE]
 ALTER TABLE `gm_surveys` 
-	ADD COLUMN `player` int(10) unsigned   NOT NULL DEFAULT '0' after `surveyid`, 
+	CHANGE `surveyId` `surveyid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;
+	CHANGE `guid` `player` int(10) unsigned   NOT NULL DEFAULT '0' after `surveyid`, 
 	CHANGE `mainSurvey` `mainSurvey` int(10) unsigned   NOT NULL DEFAULT '0' after `player`, 
-	ADD COLUMN `overall_comment` longtext  COLLATE utf8_general_ci NOT NULL after `mainSurvey`, 
-	ADD COLUMN `timestamp` int(10) unsigned   NOT NULL DEFAULT '0' after `overall_comment`, 
-	DROP COLUMN `guid`, 
-	DROP COLUMN `overallComment`, 
-	DROP COLUMN `createTime`, 
-	DROP KEY `PRIMARY`, add PRIMARY KEY(`surveyid`);
+	CHANGE `overallComment` `overall_comment` longtext  COLLATE utf8_general_ci NOT NULL after `mainSurvey`, 
+	CHANGE `createTime` `timestamp` int(10) unsigned   NOT NULL DEFAULT '0' after `overall_comment`;
 
 -- gm_tickets
 ALTER TABLE `gm_tickets` 
