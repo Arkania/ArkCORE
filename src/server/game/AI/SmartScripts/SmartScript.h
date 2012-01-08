@@ -254,9 +254,7 @@ private:
 				(mEventPhase < (uint32) p ?
 						(uint32) p - mEventPhase : (uint32) p);
 	}
-	bool IsInPhase(uint32 p) const {
-		return mEventPhase & p;
-	}
+	bool IsInPhase(uint32 p) const { return (1 << (mEventPhase - 1)) & p; }
 	void SetPhase(uint32 p = 0) {
 		mEventPhase = p;
 	}
