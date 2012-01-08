@@ -19,10 +19,6 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**********
-* Script Coded by Naios
-* Script Complete 85% (or less)
-**********/
 
 /* ToDo:
 - Damage of Shadow Gale needs to be fixed
@@ -30,17 +26,21 @@
 - Shadow Gale debuff has to be displayed
 - Correct the Spell of the Twilight Hatchlings in SAI Script (Their damage is too high)
 - Implement a better GetRandomEgg() method
+- implement script text for summoning in the script
 */
 
 #include "ScriptPCH.h"
 #include "grim_batol.h"
 
-// ToDo move the Yells to the DB
-#define SAY_AGGRO "The darkest days are still ahead!"
-#define	SAY_DEATH "Ywaq maq oou; ywaq maq ssaggh. Yawq ma shg'fhn."
-#define SAY_SUMMON "Come, suffering... Enter, chaos!"
-#define SAY_SHADOW_GALE "F'lakh ghet! The shadow's hunger cannot be sated!"
-#define SAY_KILL "More flesh for the offering!"
+enum ScriptTexts
+{
+    SAY_AGGRO                           = -1810000,
+    SAY_DEATH                           = -1810001,
+    SAY_SUMMON                          = -1810002,
+    SAY_GALE                            = -1810003,
+    SAY_SLAY                            = -1810004,
+};
+
 
 enum Spells
 {
@@ -131,14 +131,10 @@ public:
 			me->SetReactState(REACT_AGGRESSIVE);
 			me->GetMotionMaster()->Clear();
 			me->GetMotionMaster()->MoveChase(me->getVictim());
-
 			events.ScheduleEvent(EVENT_ENFEEBLING_BLOW, 4000);
-
 			events.ScheduleEvent(EVENT_BINDING_SHADOWS, 9000);
-
 			events.ScheduleEvent(EVENT_SHADOW_GALE, 20000);
-
-			me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, NULL);
+			DoScriptText(SAY_AGGRO, me);
 
 			// The Position of the Portal Stalker is the Summon Position of the Adds
 			FacelessPortalStalker = me->SummonCreature(NPC_FACELESS_PORTAL_STALKER,-641.515f,-827.8f,235.5f,3.069f,TEMPSUMMON_MANUAL_DESPAWN);
@@ -193,6 +189,7 @@ public:
 					ShadowGaleTrigger = me->SummonCreature(NPC_SHADOW_GALE_STALKER,-739.665f/*+(urand(0,20)-10)*/,-827.024f/*+(urand(0,20)-10)*/,232.412f,3.1f,TEMPSUMMON_CORPSE_DESPAWN);
 					me->SetReactState(REACT_PASSIVE);
 					me->GetMotionMaster()->MovePoint(POINT_ERUDAX_IS_AT_STALKER,ShadowGaleTrigger->GetPositionX(),ShadowGaleTrigger->GetPositionY(),ShadowGaleTrigger->GetPositionZ());
+                    DoScriptText(SAY_GALE, me);
 					break;
 
 				case EVENT_REMOVE_TWILIGHT_PORTAL:
@@ -218,7 +215,7 @@ public:
 
 		void KilledUnit(Unit* victim)
 		{
-			me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, NULL);
+			DoScriptText(SAY_SLAY, me);
 		}
 
 		virtual void JustReachedHome()
@@ -226,14 +223,11 @@ public:
 			ResetMinions();
 		}
 
-
 		void JustDied(Unit* /*killer*/)
 		{	
 			ResetMinions();
-
 			RemoveShadowGaleDebuffFromPlayers();
-
-			me->MonsterYell(SAY_DEATH, LANG_UNIVERSAL, NULL);
+			DoScriptText(SAY_DEATH, me);
 		}
 
 		void JustSummoned(Creature* summon)
@@ -341,8 +335,8 @@ public:
 		void IsSummonedBy(Unit* summoner)
 		{
 			pTarget = GetRandomEgg();
-
 			DoZoneInCombat();
+            DoScriptText(SAY_SUMMON, summoner);
 
 			if(me->GetMap()->IsHeroic())
 				events.ScheduleEvent(EVENT_CAST_SHIELD_OF_NIGHTMARE_DELAY, 3000);
