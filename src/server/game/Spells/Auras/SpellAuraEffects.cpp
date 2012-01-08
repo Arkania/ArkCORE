@@ -6680,11 +6680,8 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 				if (GetId() == 29341) {
 					if (caster->GetTypeId() == TYPEID_PLAYER
 							&& caster->ToPlayer()->isHonorOrXPTarget(target)
-							&& !target->isAlive()) {
-						int32 amount = GetAmount();
-						for (int i = 0; i < amount; i++)
-							caster->CastSpell(target, 95810, true);
-					}
+							&& !target->isAlive())
+                            caster->CastSpell(target, 95810, true);
 				}
 				// Haunt
 				if (m_spellProto->SpellFamilyFlags[1] & 0x40000) {
