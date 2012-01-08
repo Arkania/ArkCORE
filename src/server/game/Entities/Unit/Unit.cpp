@@ -9173,71 +9173,45 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
                         target = this;
                         break;
                     }
-						// Lightning Capacitor
-					case 37657:
-					{
-						if (!pVictim || !pVictim->isAlive()) return false;
-						// stacking
-						CastSpell(this, 37658, true, NULL, triggeredByAura);
+                    case 37657: // Lightning Capacitor
+                    case 54841: // Thunder Capacitor
+                    case 67712: // Item - Coliseum 25 Normal Caster Trinket
+                    case 67758: // Item - Coliseum 25 Heroic Caster Trinket
+                    {
+                        if (!pVictim || !pVictim->isAlive() || GetTypeId() != TYPEID_PLAYER)
+                            return false;
 
-						Aura * dummy = GetAura(37658);
-						// release at 3 aura in stack (cont contain in basepoint of trigger aura)
-						if (!dummy || dummy->GetStackAmount() < triggerAmount) return false;
+                        uint32 stack_spell_id = 0;
+                        switch (auraSpellInfo->Id)
+                        {
+                            case 37657:
+                                stack_spell_id = 37658;
+                                trigger_spell_id = 37661;
+                                break;
+                            case 54841:
+                                stack_spell_id = 54842;
+                                trigger_spell_id = 54843;
+                                break;
+                            case 67712:
+                                stack_spell_id = 67713;
+                                trigger_spell_id = 67714;
+                                break;
+                            case 67758:
+                                stack_spell_id = 67759;
+                                trigger_spell_id = 67760;
+                                break;
+                        }
 
-						RemoveAurasDueToSpell(37658);
-						trigger_spell_id = 37661;
-						target = pVictim;
-						break;
-					}
-						// Thunder Capacitor
-					case 54841:
-					{
-						if (!pVictim || !pVictim->isAlive()) return false;
-						// stacking
-						CastSpell(this, 54842, true, NULL, triggeredByAura);
+                        CastSpell(this, stack_spell_id, true, NULL, triggeredByAura);
 
-						// counting
-						Aura * dummy = GetAura(54842);
-						// release at 3 aura in stack (cont contain in basepoint of trigger aura)
-						if (!dummy || dummy->GetStackAmount() < triggerAmount) return false;
+                        Aura* dummy = GetAura(stack_spell_id);
+                        if (!dummy || dummy->GetStackAmount() < triggerAmount)
+                            return false;
 
-						RemoveAurasDueToSpell(54842);
-						trigger_spell_id = 54843;
-						target = pVictim;
-						break;
-					}
-						//Item - Coliseum 25 Normal Caster Trinket
-					case 67712:
-					{
-						if (!pVictim || !pVictim->isAlive()) return false;
-						// stacking
-						CastSpell(this, 67713, true, NULL, triggeredByAura);
-
-						Aura * dummy = GetAura(67713);
-						// release at 3 aura in stack (cont contain in basepoint of trigger aura)
-						if (!dummy || dummy->GetStackAmount() < triggerAmount) return false;
-
-						RemoveAurasDueToSpell(67713);
-						trigger_spell_id = 67714;
-						target = pVictim;
-						break;
-					}
-						//Item - Coliseum 25 Heroic Caster Trinket
-					case 67758:
-					{
-						if (!pVictim || !pVictim->isAlive()) return false;
-						// stacking
-						CastSpell(this, 67759, true, NULL, triggeredByAura);
-
-						Aura * dummy = GetAura(67759);
-						// release at 3 aura in stack (cont contain in basepoint of trigger aura)
-						if (!dummy || dummy->GetStackAmount() < triggerAmount) return false;
-
-						RemoveAurasDueToSpell(67759);
-						trigger_spell_id = 67760;
-						target = pVictim;
-						break;
-					}
+                        RemoveAurasDueToSpell(stack_spell_id);
+                        target = pVictim;
+                        break;
+                    }
 					default:
 						// Illumination
 						if (auraSpellInfo->SpellIconID == 241)
