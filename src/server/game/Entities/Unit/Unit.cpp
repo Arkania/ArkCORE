@@ -1852,18 +1852,23 @@ void Unit::CalcAbsorbResist(Unit *pVictim, SpellSchoolMask schoolMask,
 	// Magic damage, check for resists
 	if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
 	{
-		float baseVictimResistance = float(
-				pVictim->GetResistance(GetFirstSchoolInMask(schoolMask)));
-		float ignoredResistance = float(
-				GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE,
-						schoolMask));
-		if (Player* player = ToPlayer()) ignoredResistance += float(
-				player->GetSpellPenetrationItemMod());
+		float baseVictimResistance = float(pVictim->GetResistance(GetFirstSchoolInMask(schoolMask)));
+		float ignoredResistance = float(GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, schoolMask));
 		float victimResistance = baseVictimResistance + ignoredResistance;
+		
+		if (Player* player = ToPlayer()) 
+			ignoredResistance += float(player->GetSpellPenetrationItemMod());		
 
-		static const uint32 BOSS_LEVEL = 83;
-		static const float BOSS_RESISTANCE_CONSTANT = 510.0;
-		uint32 level = getLevel();
+        if (Player* player = ToPlayer())
+            victimResistance -= float(player->GetSpellPenetrationItemMod());
+		
+        // Resistance can't be lower then 0.
+        if (victimResistance < 0.0f)
+            victimResistance = 0.0f;		
+
+		static const uint32 BOSS_LEVEL = 88;
+		static const float BOSS_RESISTANCE_CONSTANT = 510.0f;
+		uint32 level = pVictim->getLevel();
 		float resistanceConstant = 0.0f;
 
 		if (level == BOSS_LEVEL) resistanceConstant = BOSS_RESISTANCE_CONSTANT;

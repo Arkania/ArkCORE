@@ -3195,8 +3195,8 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
 	{
 		if (unitTarget->HasAura(139 /*(Renew)*/)
 				&& (m_spellInfo->Id == 2050 /*(Heal)*/|| m_spellInfo->Id == 2060 /*(Greater Heal)*/
-						|| m_spellInfo->Id == 2061 /*(Flash Heal)*/
-						|| m_spellInfo->Id == 32546 /*(Binding Heal)*/)) unitTarget->GetAura(
+				|| m_spellInfo->Id == 2061 /*(Flash Heal)*/
+				|| m_spellInfo->Id == 32546 /*(Binding Heal)*/)) unitTarget->GetAura(
 				139)->RefreshDuration(); // Refresh Renew on Target
 	}
 }
@@ -3330,13 +3330,15 @@ void Spell::SpellDamageHeal(SpellEffIndex effIndex)
 				&& m_spellInfo->SpellFamilyFlags [0] & 0x00080000) addhealth =
 				caster->SpellHealingBonus(unitTarget, m_spellInfo, effIndex,
 						int32(caster->CountPctFromMaxHealth(damage)), HEAL);
-        // Seal of Insight - heal for (0.15 * AP + 0.15 * holy spell power)
-        else if (m_spellInfo->Id == 20167)
-        {
-            if (!damage) // no heal when unleashing Seal of Insight
-                return;
-            addhealth = (caster->GetTotalAttackPowerValue(BASE_ATTACK) + caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY)) * damage / 100;
-        }						
+		// Seal of Insight - heal for (0.15 * AP + 0.15 * holy spell power)
+		else if (m_spellInfo->Id == 20167)
+		{
+			if (!damage) // no heal when unleashing Seal of Insight
+			return;
+			addhealth = (caster->GetTotalAttackPowerValue(BASE_ATTACK)
+					+ caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY))
+					* damage / 100;
+		}
 		else addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo,
 				effIndex, addhealth, HEAL);
 
