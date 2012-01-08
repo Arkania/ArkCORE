@@ -4480,6 +4480,7 @@ void Spell::EffectDistract(SpellEffIndex /*effIndex*/)
 				unitTarget->GetPositionY(), unitTarget->GetPositionZ(), angle,
 				false);
 		unitTarget->ToPlayer()->SendTeleportAckPacket();
+		unitTarget->ToPlayer()->SetStandState(0);
 	}
 	else
 	{
