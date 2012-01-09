@@ -64,6 +64,7 @@ public:
 	float GetRadius() const {
 		return GetFloatValue(DYNAMICOBJECT_RADIUS);
 	}
+	Aura* GetAura() { return m_aura; }
 
 	void Say(int32 textId, uint32 language, uint64 TargetGuid) {
 		MonsterSay(textId, language, TargetGuid);
