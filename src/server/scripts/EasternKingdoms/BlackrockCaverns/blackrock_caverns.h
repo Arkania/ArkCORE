@@ -1,21 +1,21 @@
 /*
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+* 
+* Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef DEF_BLACKROCK_CAVERNS_H
 #define DEF_BLACKROCK_CAVERNS_H
@@ -49,7 +49,6 @@ enum CreatureIds {
 	// Trash mobs
 
 	NPC_BUSTER = 40013,
-	NPC_CHAINS_OF_WOE = 40447,
 	NPC_CONFLAGRATION = 39994,
 	NPC_CRAZED_MAGE = 39982,
 	NPC_DEFILED_EARTH_RAGER = 40023,
@@ -64,10 +63,25 @@ enum CreatureIds {
 	NPC_TWILIGHT_ZEALOT = 39990,
 
 	// Various NPCs
-
 	NPC_RAZ_THE_CRAZED = 39670,
 	NPC_FINKLE_EINHORN = 49476,
 	NPC_TWILIGHT_PORTAL = 51340,
+
+	// Ascendant Lord  Obsidius
+	NPC_SHADOW_OF_OBSIDIUS = 40817,
+
+	// Karsh Steelbender
+	NPC_BOUND_FLAMES = 50417,
+	NPC_LAVA_SPOUT_TRIGGER = 49529,
+
+	// Corla, Herald of Twilight
+	NPC_TWILIGHT_ZEALOT_CORLA = 50284,
+	NPC_NETHER_ESSENCE_TRIGGER = 49526,
+
+	// Romogg Bonecrusher
+	NPC_ANGERED_EARTH = 50376,
+	NPC_CHAINS_OF_WOE = 40447,
+
 };
 
 enum GameObjectIds {
