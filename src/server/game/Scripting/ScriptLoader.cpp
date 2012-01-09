@@ -634,6 +634,10 @@ void AddSC_boss_erudax();
 void AddSC_instance_grim_batol();
 void AddSC_instance_throne_of_the_tides();	//Throne of the Tides
 void AddSC_instance_blackrock_caverns();	//Blackrock Caverns
+void AddSC_boss_romogg_bonecrusher();
+void AddSC_boss_corla_herald_of_twilight();
+void AddSC_boss_karsh_steelbender();
+void AddSC_boss_ascendant_lord_obsidius();
 void AddSC_boss_chogall(); 					//BastionOfTwilight
 void AddSC_boss_ascendant_council();
 void AddSC_boss_halfus_wyrmbreaker();
@@ -1244,7 +1248,7 @@ void AddNorthrendScripts() {
     AddSC_boss_lich_king_hr();
     AddSC_boss_lord_marrowgar();        // Icecrown Citadel
     AddSC_boss_lady_deathwhisper();
-    AddSC_boss_gunship_battle();
+	AddSC_boss_gunship_battle();
     AddSC_boss_deathbringer_saurfang();
     AddSC_boss_festergut();
     AddSC_boss_rotface();
@@ -1306,7 +1310,11 @@ void AddNorthrendScripts() {
     AddSC_boss_erudax();
     AddSC_instance_grim_batol();
 	AddSC_instance_throne_of_the_tides();//Throne of the Tides
-	AddSC_instance_blackrock_caverns();//Blackrock Caverns
+	AddSC_instance_blackrock_caverns(); //Blackrock Caverns
+	AddSC_boss_romogg_bonecrusher();
+	AddSC_boss_corla_herald_of_twilight();
+	AddSC_boss_karsh_steelbender();
+	AddSC_boss_ascendant_lord_obsidius();
 
 #endif
 }
