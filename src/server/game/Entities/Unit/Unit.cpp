@@ -6789,9 +6789,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
                             {
                                 uint32 newCooldownDelay = caster->GetSpellCooldownDelay(47540);
                                 if (newCooldownDelay <= 0.5)
-						            newCooldownDelay = 0;
-					            else
-						            newCooldownDelay -= 0.5;
+                                    newCooldownDelay = 0;
+                                else
+                                    newCooldownDelay -= 0.5;
 
                                 caster->AddSpellCooldown(47540, 0, uint32(time(NULL) + newCooldownDelay));
                                 WorldPacket data(SMSG_MODIFY_COOLDOWN, 4 + 8 + 4);
@@ -9636,9 +9636,9 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
                 {
                     uint32 newCooldownDelay = pVictim->GetAura(6788)->GetDuration();
                     if (newCooldownDelay <= (triggeredByAura->GetSpellProto()->GetSpellEffect(0)->EffectBasePoints)*1000)
-						newCooldownDelay = 0;
-					else
-						newCooldownDelay -= ((triggeredByAura->GetSpellProto()->GetSpellEffect(0)->EffectBasePoints)*1000);
+                        newCooldownDelay = 0;
+                    else
+                        newCooldownDelay -= ((triggeredByAura->GetSpellProto()->GetSpellEffect(0)->EffectBasePoints)*1000);
 
                     pVictim->GetAura(6788)->SetDuration(newCooldownDelay, true);
                 }
