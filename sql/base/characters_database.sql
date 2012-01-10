@@ -1281,7 +1281,7 @@ CREATE TABLE `characters` (
   `deleteInfos_Account` int(10) unsigned DEFAULT NULL,
   `deleteInfos_Name` varchar(12) DEFAULT NULL,
   `deleteDate` int(10) unsigned DEFAULT NULL,
-  `currentPetSlot` int(10) DEFAULT NULL,
+  `currentPetSlot` int(11) DEFAULT NULL,
   `petSlotUsed` int(32) DEFAULT NULL,
   PRIMARY KEY (`guid`),
   KEY `idx_account` (`account`),
