@@ -1428,6 +1428,8 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
                 caster->CastSpell(caster, 87117, true);
             else if (caster->HasAura(81662)) // Rank 2
 				caster->CastSpell(caster, 87118, true);
+
+            caster->AddAura(87154, caster);
 		}
 
 		// some auras remove at specific health level or more
