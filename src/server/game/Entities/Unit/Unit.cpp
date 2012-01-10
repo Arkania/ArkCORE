@@ -9628,6 +9628,22 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 	// dummy basepoints or other customs
 	switch (trigger_spell_id)
 	{
+        // Strength of Soul
+        case 89490:
+            if (procSpell->Id == 2050 || procSpell->Id == 2060 || procSpell->Id == 2061)
+            {
+                if (pVictim->HasAura(6788))
+                {
+                    uint32 newCooldownDelay = pVictim->GetAura(6788)->GetDuration();
+                    if (newCooldownDelay <= (triggeredByAura->GetSpellProto()->GetSpellEffect(0)->EffectBasePoints)*1000)
+						newCooldownDelay = 0;
+					else
+						newCooldownDelay -= ((triggeredByAura->GetSpellProto()->GetSpellEffect(0)->EffectBasePoints)*1000);
+
+                    pVictim->GetAura(6788)->SetDuration(newCooldownDelay, true);
+                }
+            }
+            break;
 		// Will of Necropolis
 		case 81162:
 			if (HealthBelowPct(29) || (!HealthBelowPctDamaged(30, damage))) return false;
