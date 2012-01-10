@@ -6778,7 +6778,6 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 					target = this;
 					break;
 				}
-
 			}
 			break;
 		}
@@ -7040,6 +7039,23 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 					triggered_spell_id = 32747;
 					break;
 				}
+                case 51698: // Honor Among Thieves
+                case 51700:
+                case 51701:
+                {
+                    if (Player* pTarget = triggeredByAura->GetCaster()->ToPlayer()) 
+                    {
+                        if (pTarget->HasSpellCooldown(51699))
+                            break;
+
+                        Unit* spellTarget = ObjectAccessor::GetUnit(*pTarget, pTarget->GetComboTarget());
+                        if (!spellTarget)
+                            spellTarget = pTarget->GetSelectedUnit();
+                        if (spellTarget && pTarget->canAttack(spellTarget))
+                            pTarget->CastSpell(spellTarget, 51699, true);
+                    }
+                    break;
+                }
 			}
 			// Cut to the Chase
 			if (dummySpell->SpellIconID == 2909)
@@ -9619,22 +9635,6 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 		case 52914:
 		case 52915:
 		case 52910:
-			// Honor Among Thieves
-		case 52916:
-		{
-			target = triggeredByAura->GetBase()->GetCaster();
-			if (!target) return false;
-
-			if (cooldown && target->GetTypeId() == TYPEID_PLAYER
-					&& target->ToPlayer()->HasSpellCooldown(trigger_spell_id)) return false;
-
-			target->CastSpell(target, trigger_spell_id, true, castItem,
-					triggeredByAura);
-
-			if (cooldown && target->GetTypeId() == TYPEID_PLAYER) target->ToPlayer()->AddSpellCooldown(
-					trigger_spell_id, 0, time(NULL) + cooldown);
-			return true;
-		}
 			// Cast positive spell on enemy target
 		case 7099: // Curse of Mending
 		case 39703: // Curse of Mending
