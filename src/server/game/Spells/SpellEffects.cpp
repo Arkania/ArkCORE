@@ -754,38 +754,43 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
 						}
 						break;
 					}
-						// Mind Blast
-					case 8092:
-						// Improved Mind Blast
-						if (m_caster->GetShapeshiftForm() == FORM_SHADOW)
-						{
-							Unit::AuraEffectList const& ImprMindBlast =
-									m_caster->GetAuraEffectsByType(
-											SPELL_AURA_ADD_FLAT_MODIFIER);
-							for (Unit::AuraEffectList::const_iterator i =
-									ImprMindBlast.begin();
-									i != ImprMindBlast.end(); ++i)
-							{
-								if ((*i)->GetSpellProto()->SpellFamilyName
-										== SPELLFAMILY_PRIEST
-										&& ((*i)->GetSpellProto()->SpellIconID
-												== 95))
-								{
-									int chance =
-											SpellMgr::CalculateSpellEffectAmount(
-													(*i)->GetSpellProto(), 1,
-													m_caster);
-									// Mind Trauma
-									if (roll_chance_i(chance)) m_caster->CastSpell(
-											unitTarget, 48301, true, 0);
-								}
-							}
-						}
-						//Mind Melt Aura remove
-						m_caster->RemoveAurasDueToSpell(87160);
-						m_caster->RemoveAurasDueToSpell(81292);
-						break;
-						// Smite, Mind Spike
+                    // Mind Blast
+                    case 8092:
+                        // Improved Mind Blast
+                        if (m_caster->GetShapeshiftForm() == FORM_SHADOW)
+                        {
+                            Unit::AuraEffectList const& ImprMindBlast = m_caster->GetAuraEffectsByType(SPELL_AURA_ADD_FLAT_MODIFIER);
+                            for (Unit::AuraEffectList::const_iterator i = ImprMindBlast.begin(); i != ImprMindBlast.end(); ++i)
+                            {
+                                if ((*i)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_PRIEST && ((*i)->GetSpellProto()->SpellIconID == 95))
+                                {
+                                    int chance = SpellMgr::CalculateSpellEffectAmount((*i)->GetSpellProto(), 1, m_caster);
+                                    // Mind Trauma
+                                    if (roll_chance_i(chance)) m_caster->CastSpell(unitTarget, 48301, true, 0);
+                                }
+                            }
+                        }
+
+                        // Shadow orbs
+                        if (m_caster->HasAura(77487))
+                        {
+                            uint8 stack = m_caster->GetAura(77487)->GetStackAmount();
+                            uint32 pct = stack * 10;
+
+                            // Mastery
+                            if (m_caster->HasAuraType(SPELL_AURA_MASTERY))
+                                if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_SHADOW)
+                                    pct += 1.5f * m_caster->ToPlayer()->GetMasteryPoints();
+
+                            AddPctN(damage, pct);
+                            m_caster->RemoveAurasDueToSpell(77487);
+                        }
+
+                        //Mind Melt Aura remove
+                        m_caster->RemoveAurasDueToSpell(87160);
+                        m_caster->RemoveAurasDueToSpell(81292);
+                        break;
+                    // Smite, Mind Spike
 					case 585:
 					case 73510:
 						// Chakra: Chastise
