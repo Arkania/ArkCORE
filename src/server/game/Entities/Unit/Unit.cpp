@@ -7945,6 +7945,18 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 					return false;
 				}
 					break;
+                // Lava Surge
+                case 77755:
+                case 77756:
+                    if (procSpell->Id != 8050)
+                        break;
+
+                    if (Player* caster = ToPlayer())
+                    {
+                        if (caster->HasSpellCooldown(51505))
+                            caster->RemoveSpellCooldown(51505, true);
+                    }
+                    break;
 			}
 			// Frozen Power
 			if (dummySpell->SpellIconID == 3780)
