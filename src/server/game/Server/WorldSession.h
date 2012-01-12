@@ -194,7 +194,7 @@ class WorldSession {
 	friend class CharacterHandler;
 public:
 	WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec,
-			uint8 expansion, time_t mute_time, LocaleConstant locale,
+			bool ispremium, uint8 expansion, time_t mute_time, LocaleConstant locale,
 			uint32 recruiter);
 	~WorldSession();
 
@@ -232,6 +232,9 @@ public:
 
 	AccountTypes GetSecurity() const {
 		return _security;
+	}
+	bool IsPremium() const { 
+	return _ispremium; 
 	}
 	uint32 GetAccountId() const {
 		return _accountId;
@@ -962,6 +965,7 @@ private:
 	AccountTypes _security;
 	uint32 _accountId;
 	uint8 m_expansion;
+	bool _ispremium;
 
 	time_t _logoutTime;
 	bool m_inQueue; // session wait in auth.queue
