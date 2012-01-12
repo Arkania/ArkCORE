@@ -375,6 +375,54 @@ public:
     };
 };
 
+// Stonefather's Banner for Quest Stonefathers Boon
+
+enum eBanner
+{
+	NPC_STONEHEART_DEFENDER = 43138,
+	SPELL_BUFF_OF_THE_STONEFATHER = 80668,
+	SPELL_BANNER_HITS_GROUND = 80669,
+};
+
+class npc_stonefathers_banner : public CreatureScript
+{
+public:
+    npc_stonefathers_banner() : CreatureScript("npc_stonefathers_banner") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_stonefathers_bannerAI (creature);
+    }
+
+    struct npc_stonefathers_bannerAI : public ScriptedAI
+    {
+        npc_stonefathers_bannerAI(Creature* creature) : ScriptedAI(creature) {}
+
+		void Reset()
+		{
+			me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE	| UNIT_FLAG_NOT_SELECTABLE);
+		}
+
+		void IsSummonedBy(Unit* summoner)
+		{
+			DoCastAOE(SPELL_BANNER_HITS_GROUND, true);
+
+			std::list<Creature*> creatures;
+			GetCreatureListWithEntryInGrid(creatures, me, NPC_STONEHEART_DEFENDER, 10.0f /*Range is official*/);
+
+			if (creatures.empty())
+				return;
+
+			for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
+				if(!(*iter)->HasAura(SPELL_BUFF_OF_THE_STONEFATHER))
+				{
+					(*iter)->CastSpell((*iter),SPELL_BUFF_OF_THE_STONEFATHER, true);
+					summoner->ToPlayer()->KilledMonsterCredit(NPC_STONEHEART_DEFENDER, 0);
+				}
+		}
+    };
+};
+
 void AddSC_deepholm()
 {
     new npc_lodestone();
@@ -382,4 +430,5 @@ void AddSC_deepholm()
 	new npc_flint_oremantle();
 	new npc_boden_the_imposing();
 	new npc_ricket_ticker();
+	new npc_stonefathers_banner();
 }
