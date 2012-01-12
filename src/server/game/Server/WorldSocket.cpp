@@ -739,6 +739,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket) {
 	uint32 clientSeed;
 	std::string accountName;
 	LocaleConstant locale;
+	bool isPremium = false;
 
 	SHA1Hash sha1;
 	BigNumber v, s, g, N, K;
@@ -908,7 +909,17 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket) {
 				"WorldSocket::HandleAuthSession: Sent Auth Response (Account banned).");
 		return -1;
 	}
-
+	
+    QueryResult premresult =
+        LoginDatabase.PQuery ("SELECT 1 "
+                                "FROM account_premium "
+                                "WHERE id = '%u' "
+                                "AND active = 1",
+                                id);
+    if (premresult) // if account premium
+    {
+        isPremium = true;
+    }
 	// Check locked state for server
 	AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
 	sLog->outDebug(LOG_FILTER_NETWORKIO, "Allowed Level: %u Player Level %u",
@@ -966,7 +977,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket) {
 	// NOTE ATM the socket is single-threaded, have this in mind ...
 	ACE_NEW_RETURN(
 			m_Session,
-			WorldSession (id, this, AccountTypes(security), expansion, mutetime, locale, recruiter),
+			WorldSession (id, this, AccountTypes(security), isPremium, expansion, mutetime, locale, recruiter),
 			-1);
 
 	m_Crypt.Init(&K);
