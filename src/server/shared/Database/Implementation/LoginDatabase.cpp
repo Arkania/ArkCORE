@@ -95,4 +95,7 @@ void LoginDatabaseConnection::DoPrepareStatements() {
 	PREPARE_STATEMENT(LOGIN_SET_ACCOUNT_NOT_BANNED,
 			"UPDATE account_banned SET active = 0 WHERE id = ? AND active != 0",
 			CONNECTION_ASYNC);
+    PREPARE_STATEMENT(LOGIN_SET_ACCOUNT_PREMIUM, 
+	        "UPDATE account_premium SET active = 0 WHERE unsetdate<=UNIX_TIMESTAMP() AND unsetdate<>setdate", 
+	        CONNECTION_ASYNC);
 }
