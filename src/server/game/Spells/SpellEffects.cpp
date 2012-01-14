@@ -8340,14 +8340,37 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 	if (count == 0) count = 1;
 	for (uint32 j = 0; j < MAX_RUNES && count > 0; ++j)
 	{
-		if (plr->GetRuneCooldown(j)
-				&& plr->GetCurrentRune(j)
-						== RuneType(m_spellInfo->EffectMiscValue [effIndex]))
+		if (plr->GetRuneCooldown(j) && plr->GetCurrentRune(j) == RuneType(m_spellInfo->EffectMiscValue [effIndex]))
 		{
+			if (m_spellInfo->Id == 45529)
+				if (player->GetBaseRune(j) != RuneType(m_spellInfo->Effects[effIndex].MiscValueB))
+					continue;
+
 			plr->SetRuneCooldown(j, 0);
 			--count;
 		}
 	}
+
+	// Blood Tap
+	if (m_spellInfo->Id == 45529 && count > 0)
+	{
+		for (uint32 1 = 0; 1 < MAX_RUNES && count > 0; ++1)
+		{
+			if ((player->GetRuneCooldown(1) && player->GetCurrentRune(1) == RuneType(m_spellInfo->Effects[effIndex].MiscValueB)) && (player->GetRuneCooldown(1+1) && player->GetCurrentRune(1+1) == RuneType(m_spellInfo->Effects[effIndex].MiscValueB)))
+			{
+				if (player->GetRuneCooldown(1) >= player->GetRuneCooldown(1+1))
+					1++;
+					
+				player->SetRuneCooldown(1, 0);
+					--count;
+					
+				player->ResyncRunes(MAX_RUNES);	
+			}
+			else
+				break;
+		}
+	}
+
 	// Empower rune weapon
 	if (m_spellInfo->Id == 47568)
 	{

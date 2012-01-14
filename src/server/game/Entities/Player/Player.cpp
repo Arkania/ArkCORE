@@ -23879,17 +23879,24 @@ void Player::RemoveRunesByAuraEffect(AuraEffect const * aura) {
 	}
 }
 
-void Player::RestoreBaseRune(uint8 index) {
+void Player::RestoreBaseRune(uint8 index) 
+{
 	AuraEffect const * aura = m_runes->runes[index].ConvertAura;
+	if (aura && !(aura->GetSpellInfo()->Attributes & SPELL_ATTR0_PASSIVE))
+		return;
+		
 	ConvertRune(index, GetBaseRune(index));
 	SetRuneConvertAura(index, NULL);
+	
 	// Don't drop passive talents providing rune convertion
 	if (!aura || aura->GetAuraType() != SPELL_AURA_CONVERT_RUNE)
 		return;
+		
 	for (uint8 i = 0; i < MAX_RUNES; ++i) {
 		if (aura == m_runes->runes[i].ConvertAura)
 			return;
 	}
+	
 	aura->GetBase()->Remove();
 }
 
