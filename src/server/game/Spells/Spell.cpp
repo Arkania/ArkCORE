@@ -3533,6 +3533,12 @@ void Spell::handle_immediate() {
             m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
             SendChannelStart(duration);
         }
+		else if (duration == -1)
+		{
+			m_spellState = SPELL_STATE_CASTING;
+			m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
+			SendChannelStart(duration);
+		}
     }
 
     PrepareTargetProcessing();
