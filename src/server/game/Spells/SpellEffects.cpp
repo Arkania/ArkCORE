@@ -8370,7 +8370,7 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 				break;
 		}
 	}
-
+ 
 	// Empower rune weapon
 	if (m_spellInfo->Id == 47568)
 	{
