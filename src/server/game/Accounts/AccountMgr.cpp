@@ -190,7 +190,8 @@ bool AccountMgr::CheckPassword(uint32 accountId, std::string password) {
 	normalizeString(username);
 	normalizeString(password);
 
-	return false;
+    QueryResult result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%d' AND sha_pass_hash='%s'", accountId, CalculateShaPassHash(username, password).c_str());
+    return (result) ? true : false;
 }
 
 uint32 AccountMgr::GetCharactersCount(uint32 accountId) {
