@@ -1227,20 +1227,19 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target) {
 
         // Do triggers for unit (reflect triggers passed on hit phase for correct drop charge)
         if (canEffectTrigger && missInfo != SPELL_MISS_REFLECT) {
-            caster->ProcDamageAndSpell(unitTarget, procAttacker, procVictim,
-                    procEx, damageInfo.damage, m_attackType, m_spellInfo,
-                    m_triggeredByAuraSpell);
-            if (caster->GetTypeId() == TYPEID_PLAYER
-                    && (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET)
-                            == 0
-                    && (m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE
-                            || m_spellInfo->DmgClass
-                                    == SPELL_DAMAGE_CLASS_RANGED)) caster->ToPlayer()->CastItemCombatSpell(
-                    unitTarget, m_attackType, procVictim, procEx);
+            caster->ProcDamageAndSpell(unitTarget, procAttacker, procVictim, procEx, damageInfo.damage, m_attackType, m_spellInfo, m_triggeredByAuraSpell);
+            if (caster->GetTypeId() == TYPEID_PLAYER && (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET) == 0 && (m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE || m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_RANGED))
+				caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
         caster->DealSpellDamage(&damageInfo, true);
 
+		// Cobra Strikes
+		if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && m_spellInfo->SpellFamilyFlags[1] & 0x10000000)
+			if (Unit * owner = caster->GetOwner())
+				if (Aura* pAura = owner->GetAura(53257))
+					pAura->DropCharge();
+		
         // Used in spell scripts
         m_final_damage = damageInfo.damage;
 
