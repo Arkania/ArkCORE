@@ -213,35 +213,31 @@ void Player::UpdateResistances(uint32 school)
 
 void Player::UpdateArmor()
 {
-	float value = 0.0f;
-	UnitMods unitMod = UNIT_MOD_ARMOR;
+    float value = 0.0f;
+    UnitMods unitMod = UNIT_MOD_ARMOR;
 
-	value = GetModifierValue(unitMod, BASE_VALUE); // base armor (from items)
-	value *= GetModifierValue(unitMod, BASE_PCT); // armor percent from items
-	value += GetStat(STAT_AGILITY) * 2.0f; // armor bonus from stats
-	value += GetModifierValue(unitMod, TOTAL_VALUE);
+    value  = GetModifierValue(unitMod, BASE_VALUE);         // base armor (from items)
+    value *= GetModifierValue(unitMod, BASE_PCT);           // armor percent from items
+    value += GetModifierValue(unitMod, TOTAL_VALUE);
 
-	//add dynamic flat mods
-	AuraEffectList const& mResbyIntellect = GetAuraEffectsByType(
-			SPELL_AURA_MOD_RESISTANCE_OF_STAT_PERCENT);
-	for (AuraEffectList::const_iterator i = mResbyIntellect.begin();
-			i != mResbyIntellect.end(); ++i)
-	{
-		if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL) value += int32(
-				GetStat(Stats((*i)->GetMiscValueB())) * (*i)->GetAmount()
-						/ 100.0f);
-	}
+    //add dynamic flat mods
+    AuraEffectList const& mResbyIntellect = GetAuraEffectsByType(SPELL_AURA_MOD_RESISTANCE_OF_STAT_PERCENT);
+    for (AuraEffectList::const_iterator i = mResbyIntellect.begin(); i != mResbyIntellect.end(); ++i)
+    {
+        if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL)
+            value += CalculatePctN(GetStat(Stats((*i)->GetMiscValueB())), (*i)->GetAmount());
+    }
 
-	value *= GetModifierValue(unitMod, TOTAL_PCT);
+    value *= GetModifierValue(unitMod, TOTAL_PCT);
 
-	SetArmor(int32(value));
+    SetArmor(int32(value));
 
-	Pet *pet = GetPet();
-	if (pet) pet->UpdateArmor();
+    Pet* pet = GetPet();
+    if (pet)
+        pet->UpdateArmor();
 
-	UpdateAttackPowerAndDamage(); // armor dependent auras update for SPELL_AURA_MOD_ATTACK_POWER_OF_ARMOR
+    UpdateAttackPowerAndDamage();                           // armor dependent auras update for SPELL_AURA_MOD_ATTACK_POWER_OF_ARMOR
 }
-
 void Player::UpdateSpellPower()
 {
 	uint32 spellPowerFromIntellect = GetStat(STAT_INTELLECT) - 10;
