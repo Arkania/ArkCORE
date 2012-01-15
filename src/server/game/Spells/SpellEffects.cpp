@@ -8343,7 +8343,7 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 		if (plr->GetRuneCooldown(j) && plr->GetCurrentRune(j) == RuneType(m_spellInfo->EffectMiscValue [effIndex]))
 		{
 			if (m_spellInfo->Id == 45529)
-				if (player->GetBaseRune(j) != RuneType(m_spellInfo->Effects[effIndex].MiscValueB))
+				if (plr->GetBaseRune(j) != RuneType(m_spellInfo->EffectMiscValue[effIndex]))
 					continue;
 
 			plr->SetRuneCooldown(j, 0);
@@ -8354,17 +8354,17 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 	// Blood Tap
 	if (m_spellInfo->Id == 45529 && count > 0)
 	{
-		for (uint32 1 = 0; 1 < MAX_RUNES && count > 0; ++1)
+		for (uint32 rune = 0; rune < MAX_RUNES && count > 0; ++rune)
 		{
-			if ((player->GetRuneCooldown(1) && player->GetCurrentRune(1) == RuneType(m_spellInfo->Effects[effIndex].MiscValueB)) && (player->GetRuneCooldown(1+1) && player->GetCurrentRune(1+1) == RuneType(m_spellInfo->Effects[effIndex].MiscValueB)))
+			if ((plr->GetRuneCooldown(rune) && plr->GetCurrentRune(rune) == RuneType(m_spellInfo->EffectMiscValue[effIndex])) && (plr->GetRuneCooldown(rune+1) && plr->GetCurrentRune(rune+1) == RuneType(m_spellInfo->EffectMiscValue[effIndex])))
 			{
-				if (player->GetRuneCooldown(1) >= player->GetRuneCooldown(1+1))
-					1++;
+				if (plr->GetRuneCooldown(rune) >= plr->GetRuneCooldown(rune+1))
+					rune++;
 					
-				player->SetRuneCooldown(1, 0);
+				plr->SetRuneCooldown(rune, 0);
 					--count;
 					
-				player->ResyncRunes(MAX_RUNES);	
+				plr->ResyncRunes(MAX_RUNES);	
 			}
 			else
 				break;
@@ -8379,10 +8379,7 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 
 		for (uint32 i = 0; i < MAX_RUNES; ++i)
 		{
-			if (plr->GetRuneCooldown(i)
-					&& (plr->GetCurrentRune(i) == RUNE_FROST
-							|| plr->GetCurrentRune(i) == RUNE_DEATH)) plr->SetRuneCooldown(
-					i, 0);
+			if (plr->GetRuneCooldown(i) && (plr->GetCurrentRune(i) == RUNE_FROST || plr->GetCurrentRune(i) == RUNE_DEATH)) plr->SetRuneCooldown(i, 0);
 		}
 	}
 }

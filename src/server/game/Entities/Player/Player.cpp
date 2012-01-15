@@ -23882,7 +23882,7 @@ void Player::RemoveRunesByAuraEffect(AuraEffect const * aura) {
 void Player::RestoreBaseRune(uint8 index) 
 {
 	AuraEffect const * aura = m_runes->runes[index].ConvertAura;
-	if (aura && !(aura->GetSpellInfo()->Attributes & SPELL_ATTR0_PASSIVE))
+	if (aura && !(aura->GetSpellProto()->Attributes & SPELL_ATTR0_PASSIVE))
 		return;
 		
 	ConvertRune(index, GetBaseRune(index));
