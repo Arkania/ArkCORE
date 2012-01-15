@@ -817,6 +817,7 @@ public:
 	void HandleWhoisOpcode(WorldPacket& recv_data);
 	void HandleResetInstancesOpcode(WorldPacket& recv_data);
 	void HandleHearthAndResurrect(WorldPacket& recv_data);
+	void HandleGuildPartyStateUpdate(WorldPacket& recv_data);
 	void HandleInstanceLockResponse(WorldPacket& recvPacket);
 
 	// Looking for Dungeon/Raid

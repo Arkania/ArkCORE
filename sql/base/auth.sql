@@ -1,15 +1,20 @@
+/*
+MySQL - 5.5.16 : Database - auth
+*********************************************************************
+*/
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
+
+/*!40101 SET SQL_MODE=''*/;
+
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*Table structure for table `account` */
+
 DROP TABLE IF EXISTS `account`;
+
 CREATE TABLE `account` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `username` varchar(32) NOT NULL DEFAULT '',
@@ -30,14 +35,12 @@ CREATE TABLE `account` (
   `recruiter` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
 
-LOCK TABLES `account` WRITE;
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'ADMINISTRATOR','A34B29541B87B7E4823683CE6C7BF6AE68BEAAAC',NULL,NULL,NULL,NULL,'2010-12-06 20:29:32','127.0.0.1',0,0,'0000-00-00 00:00:00',0,3,0,0,0),(2,'GAMEMASTER','7841E21831D7C6BC0B57FBE7151EB82BD65EA1F9',NULL,NULL,NULL,NULL,'2010-12-06 20:29:46','127.0.0.1',0,0,'0000-00-00 00:00:00',0,3,0,0,0),(3,'DEVELOPER','82FA3BF31780E4CAAAC18DB6BC2940EA7D37B2ED',NULL,NULL,NULL,NULL,'2010-12-06 20:29:58','127.0.0.1',0,0,'0000-00-00 00:00:00',0,3,0,0,0),(4,'MODERATOR','A7F5FBFF0B4EEC2D6B6E78E38E8312E64D700008',NULL,NULL,NULL,NULL,'2010-12-06 20:30:17','127.0.0.1',0,0,'0000-00-00 00:00:00',0,3,0,0,0),(5,'PLAYER','3CE8A96D17C5AE88A30681024E86279F1A38C041',NULL,NULL,NULL,NULL,'2010-12-06 20:30:23','127.0.0.1',0,0,'0000-00-00 00:00:00',0,3,0,0,0);
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `account_access` */
+
 DROP TABLE IF EXISTS `account_access`;
+
 CREATE TABLE `account_access` (
   `id` int(11) unsigned NOT NULL,
   `gmlevel` tinyint(3) unsigned NOT NULL,
@@ -45,12 +48,10 @@ CREATE TABLE `account_access` (
   PRIMARY KEY (`id`,`RealmID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-LOCK TABLES `account_access` WRITE;
-/*!40000 ALTER TABLE `account_access` DISABLE KEYS */;
-INSERT INTO `account_access` VALUES (1,4,-1),(2,3,-1),(3,2,-1),(4,1,-1);
-/*!40000 ALTER TABLE `account_access` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `account_banned` */
+
 DROP TABLE IF EXISTS `account_banned`;
+
 CREATE TABLE `account_banned` (
   `id` int(11) NOT NULL DEFAULT '0' COMMENT 'Account id',
   `bandate` bigint(40) NOT NULL DEFAULT '0',
@@ -61,11 +62,23 @@ CREATE TABLE `account_banned` (
   PRIMARY KEY (`id`,`bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Ban List';
 
-LOCK TABLES `account_banned` WRITE;
-/*!40000 ALTER TABLE `account_banned` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_banned` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `account_premium` */
+
+DROP TABLE IF EXISTS `account_premium`;
+
+CREATE TABLE `account_premium` (
+  `id` int(11) NOT NULL DEFAULT '0' COMMENT 'Account id',
+  `setdate` bigint(40) NOT NULL DEFAULT '0',
+  `unsetdate` bigint(40) NOT NULL DEFAULT '0',
+  `premium_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
+  `active` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`,`setdate`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Premium Accounts';
+
+/*Table structure for table `ip_banned` */
+
 DROP TABLE IF EXISTS `ip_banned`;
+
 CREATE TABLE `ip_banned` (
   `ip` varchar(32) NOT NULL DEFAULT '127.0.0.1',
   `bandate` bigint(40) NOT NULL,
@@ -75,11 +88,10 @@ CREATE TABLE `ip_banned` (
   PRIMARY KEY (`ip`,`bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Banned IPs';
 
-LOCK TABLES `ip_banned` WRITE;
-/*!40000 ALTER TABLE `ip_banned` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ip_banned` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `logs` */
+
 DROP TABLE IF EXISTS `logs`;
+
 CREATE TABLE `logs` (
   `time` int(14) NOT NULL,
   `realm` int(4) NOT NULL,
@@ -87,11 +99,10 @@ CREATE TABLE `logs` (
   `string` text
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-LOCK TABLES `logs` WRITE;
-/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `realmcharacters` */
+
 DROP TABLE IF EXISTS `realmcharacters`;
+
 CREATE TABLE `realmcharacters` (
   `realmid` int(11) unsigned NOT NULL DEFAULT '0',
   `acctid` bigint(20) unsigned NOT NULL,
@@ -100,11 +111,10 @@ CREATE TABLE `realmcharacters` (
   KEY `acctid` (`acctid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm Character Tracker';
 
-LOCK TABLES `realmcharacters` WRITE;
-/*!40000 ALTER TABLE `realmcharacters` DISABLE KEYS */;
-/*!40000 ALTER TABLE `realmcharacters` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `realmlist` */
+
 DROP TABLE IF EXISTS `realmlist`;
+
 CREATE TABLE `realmlist` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '',
@@ -121,12 +131,10 @@ CREATE TABLE `realmlist` (
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm System';
 
-LOCK TABLES `realmlist` WRITE;
-/*!40000 ALTER TABLE `realmlist` DISABLE KEYS */;
-INSERT INTO `realmlist` VALUES (1,'ArkCORE','127.0.0.1',8085,0,0,1,0,0,0,13623);
-/*!40000 ALTER TABLE `realmlist` ENABLE KEYS */;
-UNLOCK TABLES;
+/*Table structure for table `uptime` */
+
 DROP TABLE IF EXISTS `uptime`;
+
 CREATE TABLE `uptime` (
   `realmid` int(11) unsigned NOT NULL,
   `starttime` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -137,19 +145,7 @@ CREATE TABLE `uptime` (
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Uptime system';
 
-LOCK TABLES `uptime` WRITE;
-/*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
-/*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
-UNLOCK TABLES;
-DELIMITER ;;
-DELIMITER ;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
