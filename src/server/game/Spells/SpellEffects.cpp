@@ -5317,7 +5317,7 @@ void Spell::SpellDamageWeaponDmg(SpellEffIndex effIndex)
 					break;
 				}
 				case 3044: // Arcane Shot
-				case 63741: // Chimera Shot
+				case 53209: // Chimera Shot
 				{
 					// "An instant shot that causes % weapon damage plus (RAP * 0.0483)+289 as Arcane damage."
 					if (m_spellInfo->SpellFamilyFlags [0] & 0x800) shotMod =
