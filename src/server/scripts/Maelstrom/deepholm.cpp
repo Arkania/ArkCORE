@@ -225,9 +225,210 @@ public:
     };
 };
 
+// Boden the Imposing for Quest: 26315
+enum eBoden
+{
+	QUEST_IMPOSING_CONFRONTATION = 26315,
+	SPELL_EARTHEN_RING_PROCLAMATION = 79715,
+	SPELL_IMPOSING_CONFRONTATION_CREDIT = 79843,
+};
+
+class npc_boden_the_imposing : public CreatureScript
+{
+public:
+    npc_boden_the_imposing() : CreatureScript("npc_boden_the_imposing") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_boden_the_imposingAI (creature);
+    }
+
+    struct npc_boden_the_imposingAI : public ScriptedAI
+    {
+        npc_boden_the_imposingAI(Creature* creature) : ScriptedAI(creature), DialogNumber(0), SpeakPlayer(NULL) {}
+
+		uint16 DialogNumber;
+		uint64 uiProcessDialog;
+		Unit* SpeakPlayer;
+
+        void SpellHit(Unit* Caster,const SpellEntry* Spell)
+		{
+			if(Spell->Id != SPELL_EARTHEN_RING_PROCLAMATION/* || Caster->ToPlayer()->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE*/) // The Quest if clause didn't work^^ don#t know why
+				return;
+
+			Caster->ToPlayer()->Say("Boden the Imposing. I come on behalf of the Earthen Ring. We wish your kind no harm. We seek to repair the rift between our worlds. Why do you attack us?", LANG_UNIVERSAL);
+
+			DialogNumber = 1;
+			uiProcessDialog = 2000;
+
+			SpeakPlayer = Caster;
+		}
+
+        void UpdateAI(const uint32 diff)
+        {
+            if(DialogNumber == NULL)
+				return;
+
+			if (uiProcessDialog <= diff)
+			{
+				switch(DialogNumber)
+				{
+				
+				case 1:
+					me->MonsterYell("Hah! Did you mistake me for Diamant, $r? Or perhaps some other whimpering, complaint stone trogg who cares?",LANG_UNIVERSAL,0);
+					uiProcessDialog = 4000;
+					break;
+
+				case 2:
+					me->MonsterYell("If you seek peace, relinquish the World Pillar and leave Deepholm. This is our realm. Your only welcome here shall be found underneath my stone foot.",LANG_UNIVERSAL,0);
+					uiProcessDialog = 1200;
+					break;
+					
+				case 3:
+					if(SpeakPlayer)
+					me->CastSpell(SpeakPlayer,SPELL_IMPOSING_CONFRONTATION_CREDIT,true);
+					break;
+				}
+
+				if(DialogNumber != 3)
+				{
+					DialogNumber++;
+				}else
+					DialogNumber = 0;
+
+			} else uiProcessDialog -= diff;
+		}
+    };
+};
+
+// Ricket Ticker for Quest: Underground Ecomomy (27048)
+
+enum eRicketTicker
+{
+	SPELL_EXPLODE = 91981,
+
+	NPC_DEEP_CELESTITE_BUNNY = 49865,
+	NPC_DEEP_AMETHYST_BUNNY = 49866,
+	NPC_DEEP_GRANAT_BUNNY = 49867,
+	NPC_DEEP_ALABASTER_BUNNY = 49824,
+	
+	ITEM_DEEP_CELESTITE_CRYSTAL = 65507,
+	ITEM_DEEP_AMETHYST_CRYSTAL = 65508,
+	ITEM_DEEP_GRANAT_CRYSTAL = 65510,
+	ITEM_DEEP_ALABASTER_CRYSTAL = 65504,
+};
+
+class npc_ricket_ticker : public CreatureScript
+{
+public:
+    npc_ricket_ticker() : CreatureScript("npc_ricket_ticker") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_ricket_tickerAI (creature);
+    }
+
+    struct npc_ricket_tickerAI : public ScriptedAI
+    {
+        npc_ricket_tickerAI(Creature* creature) : ScriptedAI(creature), uiExplode(NULL) { }
+
+		uint32 uiExplode;	
+		Player* player;
+
+		void Reset()
+		{
+			uiExplode = 0;
+		}
+
+		void IsSummonedBy(Unit* summoner)
+		{
+			uiExplode = 3500;
+			player = summoner->ToPlayer();
+		}
+
+        void UpdateAI(const uint32 diff)
+        {
+			if (uiExplode == NULL)
+				return;
+
+			if (uiExplode <= diff)
+			{	
+				DoCastAOE(SPELL_EXPLODE,true);
+			
+				// Checks weather a Deep Crystal is in Range
+				if(me->FindNearestCreature(NPC_DEEP_CELESTITE_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_CELESTITE_CRYSTAL,1);
+
+				if(me->FindNearestCreature(NPC_DEEP_AMETHYST_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_AMETHYST_CRYSTAL,1);
+
+				if(me->FindNearestCreature(NPC_DEEP_GRANAT_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_GRANAT_CRYSTAL,1);
+
+				if(me->FindNearestCreature(NPC_DEEP_ALABASTER_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_ALABASTER_CRYSTAL,1);
+
+				me->DespawnOrUnsummon();
+
+        	} else uiExplode -= diff;
+		}
+    };
+};
+
+// Stonefather's Banner for Quest Stonefathers Boon
+
+enum eBanner
+{
+	NPC_STONEHEART_DEFENDER = 43138,
+	SPELL_BUFF_OF_THE_STONEFATHER = 80668,
+	SPELL_BANNER_HITS_GROUND = 80669,
+};
+
+class npc_stonefathers_banner : public CreatureScript
+{
+public:
+    npc_stonefathers_banner() : CreatureScript("npc_stonefathers_banner") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_stonefathers_bannerAI (creature);
+    }
+
+    struct npc_stonefathers_bannerAI : public ScriptedAI
+    {
+        npc_stonefathers_bannerAI(Creature* creature) : ScriptedAI(creature) {}
+
+		void Reset()
+		{
+			me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE	| UNIT_FLAG_NOT_SELECTABLE);
+		}
+
+		void IsSummonedBy(Unit* summoner)
+		{
+			DoCastAOE(SPELL_BANNER_HITS_GROUND, true);
+
+			std::list<Creature*> creatures;
+			GetCreatureListWithEntryInGrid(creatures, me, NPC_STONEHEART_DEFENDER, 10.0f /*Range is official*/);
+
+			if (creatures.empty())
+				return;
+
+			for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
+				if(!(*iter)->HasAura(SPELL_BUFF_OF_THE_STONEFATHER))
+				{
+					(*iter)->CastSpell((*iter),SPELL_BUFF_OF_THE_STONEFATHER, true);
+					summoner->ToPlayer()->KilledMonsterCredit(NPC_STONEHEART_DEFENDER, 0);
+				}
+		}
+    };
+};
+
 void AddSC_deepholm()
 {
     new npc_lodestone();
     new npc_slaincrewmember();
 	new npc_flint_oremantle();
+	new npc_boden_the_imposing();
+	new npc_ricket_ticker();
+	new npc_stonefathers_banner();
 }
