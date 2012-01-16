@@ -2342,8 +2342,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 				return;
 			}
 			// Death Coil
-			if (m_spellInfo->SpellFamilyFlags [0]
-					& SPELLFAMILYFLAG_DK_DEATH_COIL)
+			if (m_spellInfo->SpellFamilyFlags [0] & SPELLFAMILYFLAG_DK_DEATH_COIL)
 			{
 				if (m_caster->IsFriendlyTo(unitTarget))
 				{
@@ -2370,19 +2369,30 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 							damage + (damage * count * 12.5 / 100));
 					break;
 				}
-				case 49560: // Death Grip
-					Position pos;
-					GetSummonPosition(effIndex, pos);
-					if (Unit* unit = unitTarget->GetVehicleBase()) // what is this for?
-					unit->CastSpell(pos.GetPositionX(), pos.GetPositionY(),
-							pos.GetPositionZ(), damage, true);
-					else if (!unitTarget->HasAuraType(
-							SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
-					unitTarget->CastSpell(pos.GetPositionX(),
-							pos.GetPositionY(), pos.GetPositionZ(), damage,
-							true);
-					return;
+				// Death Grip 
+				case 49576:
+				{ 
+					if (!unitTarget) 
+						return; 
+ 
+					m_caster->CastSpell(unitTarget, 49560, true); 
+						return; 
+				} 
+				case 49560: 
+				{ 
+					if (!unitTarget) 
+						return;
+						
+					/*
+					if (!unitTarget->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence no work perfectly.
+						return;
+					*/
+					
+					unitTarget->CastSpell(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), damage, true); 
+						return;
+				}
 				case 46584: // Raise Dead
+				{
 					if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
 
 					if (effIndex != 0) return;
@@ -2403,6 +2413,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 					m_caster->ToPlayer()->RemoveSpellCooldown(52150, true);
 					m_caster->ToPlayer()->RemoveSpellCooldown(46585, true);
 					break;
+				}
 			}
 			break;
 	}
@@ -8340,14 +8351,37 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 	if (count == 0) count = 1;
 	for (uint32 j = 0; j < MAX_RUNES && count > 0; ++j)
 	{
-		if (plr->GetRuneCooldown(j)
-				&& plr->GetCurrentRune(j)
-						== RuneType(m_spellInfo->EffectMiscValue [effIndex]))
+		if (plr->GetRuneCooldown(j) && plr->GetCurrentRune(j) == RuneType(m_spellInfo->EffectMiscValue [effIndex]))
 		{
+			if (m_spellInfo->Id == 45529)
+				if (plr->GetBaseRune(j) != RuneType(m_spellInfo->EffectMiscValue[effIndex]))
+					continue;
+
 			plr->SetRuneCooldown(j, 0);
 			--count;
 		}
 	}
+
+	// Blood Tap
+	if (m_spellInfo->Id == 45529 && count > 0)
+	{
+		for (uint32 rune = 0; rune < MAX_RUNES && count > 0; ++rune)
+		{
+			if ((plr->GetRuneCooldown(rune) && plr->GetCurrentRune(rune) == RuneType(m_spellInfo->EffectMiscValue[effIndex])) && (plr->GetRuneCooldown(rune+1) && plr->GetCurrentRune(rune+1) == RuneType(m_spellInfo->EffectMiscValue[effIndex])))
+			{
+				if (plr->GetRuneCooldown(rune) >= plr->GetRuneCooldown(rune+1))
+					rune++;
+					
+				plr->SetRuneCooldown(rune, 0);
+					--count;
+					
+				plr->ResyncRunes(MAX_RUNES);	
+			}
+			else
+				break;
+		}
+	}
+ 
 	// Empower rune weapon
 	if (m_spellInfo->Id == 47568)
 	{
@@ -8356,10 +8390,7 @@ void Spell::EffectActivateRune(SpellEffIndex effIndex)
 
 		for (uint32 i = 0; i < MAX_RUNES; ++i)
 		{
-			if (plr->GetRuneCooldown(i)
-					&& (plr->GetCurrentRune(i) == RUNE_FROST
-							|| plr->GetCurrentRune(i) == RUNE_DEATH)) plr->SetRuneCooldown(
-					i, 0);
+			if (plr->GetRuneCooldown(i) && (plr->GetCurrentRune(i) == RUNE_FROST || plr->GetCurrentRune(i) == RUNE_DEATH)) plr->SetRuneCooldown(i, 0);
 		}
 	}
 }

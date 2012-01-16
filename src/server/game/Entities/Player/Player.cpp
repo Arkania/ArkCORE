@@ -1020,7 +1020,7 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race,
 	SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
 
 	SetUInt32Value(PLAYER_FIELD_KILLS, 0);
-	//SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 0);
+	SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 0);
 	//SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, 0);
 	//SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
 
@@ -7402,7 +7402,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor,
 			// count the number of playerkills in one day
 			ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
 			// and those in a lifetime
-			//ApplyModUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 1, true);
+			ApplyModUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 1, true);
 			UpdateAchievementCriteria(
 					ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL);
 			UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_CLASS,
@@ -17163,8 +17163,7 @@ bool Player::_LoadFromDB(uint32 guid, SQLQueryHolder * holder,
 			SetArenaTeamInfoField(arena_slot, ArenaTeamInfoType(j), 0);
 	}
 
-	SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS,
-			fields[45].GetUInt32());
+	SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[45].GetUInt32());
 	SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[46].GetUInt16());
 	SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[47].GetUInt16());
 
@@ -19056,8 +19055,7 @@ void Player::SaveToDB() {
 
 	ss << m_taxi.SaveTaxiDestinationsToString() << "', ";
 
-	ss << uint32(0) /*GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS)*/
-	<< ", ";
+	ss << GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ", ";
 
 	ss << GetUInt16Value(PLAYER_FIELD_KILLS, 0) << ", ";
 
@@ -23881,17 +23879,24 @@ void Player::RemoveRunesByAuraEffect(AuraEffect const * aura) {
 	}
 }
 
-void Player::RestoreBaseRune(uint8 index) {
+void Player::RestoreBaseRune(uint8 index) 
+{
 	AuraEffect const * aura = m_runes->runes[index].ConvertAura;
+	if (aura && !(aura->GetSpellProto()->Attributes & SPELL_ATTR0_PASSIVE))
+		return;
+		
 	ConvertRune(index, GetBaseRune(index));
 	SetRuneConvertAura(index, NULL);
+	
 	// Don't drop passive talents providing rune convertion
 	if (!aura || aura->GetAuraType() != SPELL_AURA_CONVERT_RUNE)
 		return;
+		
 	for (uint8 i = 0; i < MAX_RUNES; ++i) {
 		if (aura == m_runes->runes[i].ConvertAura)
 			return;
 	}
+	
 	aura->GetBase()->Remove();
 }
 
