@@ -6647,22 +6647,23 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 				break;
 			case SPELLFAMILY_MAGE:
 				// Living Bomb
-				if (m_spellProto->SpellFamilyFlags[1] & 0x20000) {
+				if (m_spellProto->SpellFamilyFlags[1] & 0x20000) 
+				{
 					AuraRemoveMode mode = aurApp->GetRemoveMode();
-					if (caster
-							&& (mode == AURA_REMOVE_BY_ENEMY_SPELL
-									|| mode == AURA_REMOVE_BY_EXPIRE))
+					if (caster && (mode == AURA_REMOVE_BY_ENEMY_SPELL || mode == AURA_REMOVE_BY_EXPIRE))
 						caster->CastSpell(target, GetAmount(), true);
 				}
 				break;
 			case SPELLFAMILY_ROGUE:
 				switch (GetId()) {
 				case 59628: // Tricks of the Trade
-					caster->SetReducedThreatPercent(0, 0);
+					target->SetReducedThreatPercent(0, 0);
 					break;
 				case 57934: // Tricks of the Trade
-					if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_DEFAULT)
-						caster->SetReducedThreatPercent(0, 0);
+					if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE || !caster->GetMisdirectionTarget())
+						target->SetReducedThreatPercent(0, 0);
+					else
+						target->SetReducedThreatPercent(0, caster->GetMisdirectionTarget()->GetGUID()); 
 					break;
 				}
 				break;
