@@ -1227,20 +1227,19 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target) {
 
         // Do triggers for unit (reflect triggers passed on hit phase for correct drop charge)
         if (canEffectTrigger && missInfo != SPELL_MISS_REFLECT) {
-            caster->ProcDamageAndSpell(unitTarget, procAttacker, procVictim,
-                    procEx, damageInfo.damage, m_attackType, m_spellInfo,
-                    m_triggeredByAuraSpell);
-            if (caster->GetTypeId() == TYPEID_PLAYER
-                    && (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET)
-                            == 0
-                    && (m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE
-                            || m_spellInfo->DmgClass
-                                    == SPELL_DAMAGE_CLASS_RANGED)) caster->ToPlayer()->CastItemCombatSpell(
-                    unitTarget, m_attackType, procVictim, procEx);
+            caster->ProcDamageAndSpell(unitTarget, procAttacker, procVictim, procEx, damageInfo.damage, m_attackType, m_spellInfo, m_triggeredByAuraSpell);
+            if (caster->GetTypeId() == TYPEID_PLAYER && (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET) == 0 && (m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE || m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_RANGED))
+				caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
         caster->DealSpellDamage(&damageInfo, true);
 
+		// Cobra Strikes
+		if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && m_spellInfo->SpellFamilyFlags[1] & 0x10000000)
+			if (Unit * owner = caster->GetOwner())
+				if (Aura* pAura = owner->GetAura(53257))
+					pAura->DropCharge();
+		
         // Used in spell scripts
         m_final_damage = damageInfo.damage;
 
@@ -3534,6 +3533,12 @@ void Spell::handle_immediate() {
             m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
             SendChannelStart(duration);
         }
+		else if (duration == -1)
+		{
+			m_spellState = SPELL_STATE_CASTING;
+			m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
+			SendChannelStart(duration);
+		}
     }
 
     PrepareTargetProcessing();
@@ -4002,18 +4007,18 @@ void Spell::SendCastResult(Player* caster, SpellEntry const* spellInfo,
                     << uint32(spellInfo->TotemCategory[1]);
             break;
         case SPELL_FAILED_EQUIPPED_ITEM_CLASS:
+		case SPELL_FAILED_EQUIPPED_ITEM_CLASS_MAINHAND:
+		case SPELL_FAILED_EQUIPPED_ITEM_CLASS_OFFHAND:
             data << uint32(spellInfo->EquippedItemClass);
             data << uint32(spellInfo->EquippedItemSubClassMask);
-            //data << uint32(spellInfo->EquippedItemInventoryTypeMask);
             break;
         case SPELL_FAILED_TOO_MANY_OF_ITEM: {
             uint32 item = 0;
             for (int8 x = 0; x < 3; x++)
-                if (spellInfo->EffectItemType[x]) item =
-                        spellInfo->EffectItemType[x];
-            ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(item);
-            if (pProto && pProto->ItemLimitCategory) data
-                    << uint32(pProto->ItemLimitCategory);
+                if (spellInfo->EffectItemType[x]) item = spellInfo->EffectItemType[x];
+					ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(item);
+				if (pProto && pProto->ItemLimitCategory) 
+					data << uint32(pProto->ItemLimitCategory);
             break;
         }
         default:
@@ -4048,7 +4053,7 @@ void Spell::SendSpellStart() {
     data << uint8(m_cast_count); // pending spell cast?
     data << uint32(m_spellInfo->Id); // spellId
     data << uint32(castFlags); // cast flags
-    data << uint32(m_timer); // delay?
+    data << int32(m_timer); // delay?
 
     m_targets.write(data);
 
@@ -6558,7 +6563,7 @@ void Spell::Delayed() // only called in DealDamage()
 
     delaytime = delaytime * (100 - delayReduce) / 100;
 
-    if (int32(m_timer) + delaytime > m_casttime) {
+    if (m_timer + delaytime > m_casttime) {
         delaytime = m_casttime - m_timer;
         m_timer = m_casttime;
     } else
@@ -6592,7 +6597,7 @@ void Spell::DelayedChannel() {
 
     delaytime = delaytime * (100 - delayReduce) / 100;
 
-    if (int32(m_timer) <= delaytime) {
+    if (m_timer <= delaytime) {
         delaytime = m_timer;
         m_timer = 0;
     } else

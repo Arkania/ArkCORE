@@ -7193,6 +7193,22 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 				target = this;
 				break;
 			}
+			
+			// Sic 'Em Rank 1
+            if (dummySpell->Id == 53340)
+            {
+                triggered_spell_id = 83359;
+                target = this;
+                break;
+            }
+            // Sic 'Em Rank 2
+            if (dummySpell->Id == 83356)
+            {
+                triggered_spell_id = 89388;
+                target = this;
+                break;
+            }
+			
 			// Improved Mend Pet
 			if (dummySpell->SpellIconID == 267)
 			{
@@ -9613,6 +9629,15 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 			if (!(procSpell->SpellFamilyFlags [0] & 0x20)) return false;
 			break;
 		}
+		
+		    // Glyph of Aimed Shoot
+        case 56824:
+        {
+            // Proc off Aimed Shot
+            if (!(procSpell->SpellFamilyFlags[0] & 0x00020000)) return false;
+            break;
+        }
+		
 			// Decimation
 		case 63156:
 		case 63158:
@@ -9908,12 +9933,11 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 							&& procSpell->SpellFamilyFlags [0] == 0x80002000)) return false;
 			break;
 		}
-			// Glyph of Death Grip
+		// Glyph of Death Grip
 		case 58628:
 		{
 			// remove cooldown of Death Grip
-			if (GetTypeId() == TYPEID_PLAYER) this->ToPlayer()->RemoveSpellCooldown(
-					49576, true);
+			if (GetTypeId() == TYPEID_PLAYER) this->ToPlayer()->RemoveSpellCooldown(49576, true);
 			return true;
 		}
 			// Savage Defense
