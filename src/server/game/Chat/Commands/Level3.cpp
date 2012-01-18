@@ -1258,11 +1258,32 @@ bool ChatHandler::HandleLookupSkillCommand(const char *args)
     // Search in SkillLine.dbc
     for (uint32 id = 0; id < sSkillLineStore.GetNumRows(); id++)
     {
-        SkillLineEntry const *skillInfo = sSkillLineStore.LookupEntry(id);
+        SkillLineEntry const* skillInfo = sSkillLineStore.LookupEntry(id);
         if (skillInfo)
         {
+            int loc = GetSessionDbcLocale();
             std::string name = skillInfo->name;
-            if (!name.empty())
+            if (name.empty())
+                continue;
+
+            if (!Utf8FitTo(name, wnamepart))
+            {
+                loc = 0;
+                for (; loc < TOTAL_LOCALES; ++loc)
+                {
+                    if (loc == GetSessionDbcLocale())
+                        continue;
+
+                    name = skillInfo->name[loc];
+                    if (name.empty())
+                        continue;
+
+                    if (Utf8FitTo(name, wnamepart))
+                        break;
+                }
+            }
+
+            if (loc < TOTAL_LOCALES)
             {
                 if (maxResults && count++ == maxResults)
                 {
@@ -1286,9 +1307,9 @@ bool ChatHandler::HandleLookupSkillCommand(const char *args)
 
                 // send skill in "id - [namedlink locale]" format
                 if (m_session)
-                    PSendSysMessage(LANG_SKILL_LIST_CHAT, id, id, name.c_str(), localeNames, knownStr, valStr);
+                    PSendSysMessage(LANG_SKILL_LIST_CHAT, id, id, name.c_str(), localeNames[loc], knownStr, valStr);
                 else
-                    PSendSysMessage(LANG_SKILL_LIST_CONSOLE, id, name.c_str(), localeNames, knownStr, valStr);
+                    PSendSysMessage(LANG_SKILL_LIST_CONSOLE, id, name.c_str(), localeNames[loc], knownStr, valStr);
 
                 if (!found)
                     found = true;
@@ -1704,7 +1725,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char *args)
         return false;
 
     // Can be NULL at console call
-    Player *target = getSelectedPlayer ();
+    Player* target = getSelectedPlayer ();
 
     std::string namepart = args;
     std::wstring wnamepart;
@@ -1721,13 +1742,34 @@ bool ChatHandler::HandleLookupFactionCommand(const char *args)
 
     for (uint32 id = 0; id < sFactionStore.GetNumRows(); ++id)
     {
-        FactionEntry const *factionEntry = sFactionStore.LookupEntry (id);
+        FactionEntry const* factionEntry = sFactionStore.LookupEntry (id);
         if (factionEntry)
         {
             FactionState const* repState = target ? target->GetReputationMgr().GetState(factionEntry) : NULL;
 
+            int loc = GetSessionDbcLocale();
             std::string name = factionEntry->name;
-            if (!name.empty())
+            if (name.empty())
+                continue;
+
+            if (!Utf8FitTo(name, wnamepart))
+            {
+                loc = 0;
+                for (; loc < TOTAL_LOCALES; ++loc)
+                {
+                    if (loc == GetSessionDbcLocale())
+                        continue;
+
+                    name = factionEntry->name[loc];
+                    if (name.empty())
+                        continue;
+
+                    if (Utf8FitTo(name, wnamepart))
+                        break;
+                }
+            }
+
+            if (loc < TOTAL_LOCALES)
             {
                 if (maxResults && count++ == maxResults)
                 {
@@ -1739,16 +1781,16 @@ bool ChatHandler::HandleLookupFactionCommand(const char *args)
                 // or              "id - [faction] [no reputation]" format
                 std::ostringstream ss;
                 if (m_session)
-                    ss << id << " - |cffffffff|Hfaction:" << id << "|h[" << name << " " << localeNames << "]|h|r";
+                    ss << id << " - |cffffffff|Hfaction:" << id << "|h[" << name << ' ' << localeNames[loc] << "]|h|r";
                 else
-                    ss << id << " - " << name << " " << localeNames;
+                    ss << id << " - " << name << ' ' << localeNames[loc];
 
                 if (repState)                               // and then target != NULL also
                 {
                     uint32 index = target->GetReputationMgr().GetReputationRankStrIndex(factionEntry);
                     std::string rankName = GetArkCoreString(index);
 
-                    ss << " " << rankName << "|h|r (" << target->GetReputationMgr().GetReputation(factionEntry) << ")";
+                    ss << ' ' << rankName << "|h|r (" << target->GetReputationMgr().GetReputation(factionEntry) << ')';
 
                     if (repState->Flags & FACTION_FLAG_VISIBLE)
                         ss << GetArkCoreString(LANG_FACTION_VISIBLE);
