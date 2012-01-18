@@ -2033,7 +2033,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
 	}
 }
 
-void AchievementMgr::SendAllAchievementData()`
+void AchievementMgr::SendAllAchievementData()
 {
 	uint32 criterias = m_criteriaProgress.size();
 	uint32 achievements = m_completedAchievements.size();
