@@ -1814,8 +1814,29 @@ bool ChatHandler::HandleLookupTitleCommand(const char* args)
         CharTitlesEntry const *titleInfo = sCharTitlesStore.LookupEntry(id);
         if (titleInfo)
         {
+            int loc = GetSessionDbcLocale();
             std::string name = titleInfo->name;
-            if (!name.empty())
+            if (name.empty())
+                continue;
+
+            if (!Utf8FitTo(name, wnamepart))
+            {
+                loc = 0;
+                for (; loc < TOTAL_LOCALES; ++loc)
+                {
+                    if (loc == GetSessionDbcLocale())
+                        continue;
+
+                    name = titleInfo->name[loc];
+                    if (name.empty())
+                        continue;
+
+                    if (Utf8FitTo(name, wnamepart))
+                        break;
+                }
+            }
+
+            if (loc < TOTAL_LOCALES)
             {
                 if (maxResults && counter == maxResults)
                 {
@@ -1834,9 +1855,9 @@ bool ChatHandler::HandleLookupTitleCommand(const char* args)
 
                 // send title in "id (idx:idx) - [namedlink locale]" format
                 if (m_session)
-                    PSendSysMessage(LANG_TITLE_LIST_CHAT, id, titleInfo->bit_index, id, titleNameStr, localeNames, knownStr, activeStr);
+                    PSendSysMessage(LANG_TITLE_LIST_CHAT, id, titleInfo->bit_index, id, titleNameStr, localeNames[loc], knownStr, activeStr);
                 else
-                    PSendSysMessage(LANG_TITLE_LIST_CONSOLE, id, titleInfo->bit_index, titleNameStr, localeNames, knownStr, activeStr);
+                    PSendSysMessage(LANG_TITLE_LIST_CONSOLE, id, titleInfo->bit_index, titleNameStr, localeNames[loc], knownStr, activeStr);
 
                 ++counter;
             }
