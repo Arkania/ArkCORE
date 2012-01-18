@@ -29,7 +29,8 @@
 
 #include "Common.h"
 
-enum AccountOpResult {
+enum AccountOpResult
+{
 	AOR_OK,
 	AOR_NAME_TOO_LONG,
 	AOR_PASS_TOO_LONG,
@@ -40,7 +41,9 @@ enum AccountOpResult {
 
 #define MAX_ACCOUNT_STR 16
 
-class AccountMgr {
+class AccountMgr
+{
+
 public:
 	AccountMgr();
 	~AccountMgr();
