@@ -776,7 +776,7 @@ int32 AuraEffect::CalculateAmount(Unit *caster) {
                     if(GetBase()->GetCaster()->HasAura(33599))  // Dreamstate rank2
                         bonusMana += 30;
                 }
-                ApplyPctF(bonusMana, float(GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA)) / GetTotalTicks());
+                amount = int32(GetBase()->GetUnitOwner()->GetCreatePowers(POWER_MANA) * amount * 3 / (GetTotalTicks() * 100.0f));
             }
 		// Owlkin Frenzy
 		else if (m_spellProto->Id == 48391)

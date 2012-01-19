@@ -83,9 +83,13 @@ Vehicle::Vehicle(Unit *unit, VehicleEntry const *vehInfo) :
 
 Vehicle::~Vehicle()
 {
-	for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end();
-			++itr)
-		ASSERT(!itr->second.passenger);
+    for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
+    {
+        if(itr->second.passenger)
+        {
+            itr->second.passenger->ExitVehicle();
+        }
+    }
 }
 
 void Vehicle::Install()
