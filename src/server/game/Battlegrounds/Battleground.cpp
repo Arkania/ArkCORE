@@ -761,7 +761,7 @@ void Battleground::EndBattleground(uint32 winner)
         Player* plr = _GetPlayer(itr, "EndBattleground");
         if (!plr)
             continue;
-zz
+
         // should remove spirit of redemption
         if (plr->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
             plr->RemoveAurasByType(SPELL_AURA_MOD_SHAPESHIFT);

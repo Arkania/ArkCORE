@@ -682,7 +682,7 @@ int32 ArenaTeam::WonAgainst(uint32 againstRating)
 
     // Modify the team stats accordingly
     FinishGame(mod);
-z
+
     // Update number of wins per season and week
     Stats.WeekWins += 1;
     Stats.SeasonWins += 1;
