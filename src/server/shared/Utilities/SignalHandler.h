@@ -25,17 +25,18 @@
 
 #include <ace/Event_Handler.h>
 
-namespace Trinity {
+namespace Trinity
+{
 /// Handle termination signals
-class SignalHandler: public ACE_Event_Handler {
-public:
-	int handle_signal(int SigNum, siginfo_t* = NULL, ucontext_t* = NULL) {
-		HandleSignal(SigNum);
-		return 0;
-	}
-	virtual void HandleSignal(int /*SigNum*/) {
-	}
-	;
+class SignalHandler : public ACE_Event_Handler
+{
+    public:
+        int handle_signal(int SigNum, siginfo_t* = NULL, ucontext_t* = NULL)
+        {
+            HandleSignal(SigNum);
+            return 0;
+        }
+        virtual void HandleSignal(int /*SigNum*/) {};
 };
 }
 
