@@ -32,9 +32,10 @@
 
 class WorldSession;
 
-struct AddonInfo {
-	AddonInfo(const std::string& name, uint8 enabled, uint32 crc, uint8 state,
-			bool crcOrPubKey) {
+struct AddonInfo
+{
+	AddonInfo(const std::string& name, uint8 enabled, uint32 crc, uint8 state, bool crcOrPubKey)
+	{
 		Name = name;
 		Enabled = enabled;
 		CRC = crc;
@@ -49,8 +50,10 @@ struct AddonInfo {
 	bool UsePublicKeyOrCRC;
 };
 
-struct SavedAddon {
-	SavedAddon(const std::string& name, uint32 crc) {
+struct SavedAddon
+{
+	SavedAddon(const std::string& name, uint32 crc)
+	{
 		Name = name;
 		CRC = crc;
 	}
@@ -67,23 +70,23 @@ typedef std::list<SavedAddon> SavedAddonsList;
 
 #define STANDARD_ADDON_CRC 0x4c1c776d
 
-class AddonMgr {
-	friend class ACE_Singleton<AddonMgr, ACE_Null_Mutex> ;
+class AddonMgr
+{
+	friend class ACE_Singleton<AddonMgr, ACE_Null_Mutex>;
+	
 	AddonMgr();
 	~AddonMgr();
 
-public:
-
-	void LoadFromDB();
-	void SaveAddon(AddonInfo const& addon);
+	public:
+		void LoadFromDB();
+		void SaveAddon(AddonInfo const& addon);
 
 	SavedAddon const* GetAddonInfo(const std::string& name) const;
 
-private:
-
+	private:
+	
 	SavedAddonsList m_knownAddons; // Known addons.
 };
 
 #define sAddonMgr ACE_Singleton<AddonMgr, ACE_Null_Mutex>::instance()
-
 #endif
