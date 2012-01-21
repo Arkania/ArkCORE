@@ -25,54 +25,60 @@
  */
 
 /* ScriptData
- SDName: Boss_Buru
- SD%Complete: 0
- SDComment: Place Holder
- SDCategory: Ruins of Ahn'Qiraj
- EndScriptData */
+SDName: Boss_Buru
+SD%Complete: 0
+SDComment: Place Holder
+SDCategory: Ruins of Ahn'Qiraj
+EndScriptData */
 
 #include "ScriptPCH.h"
 #include "ruins_of_ahnqiraj.h"
 
-enum Yells {
-	EMOTE_TARGET = -1509002
+enum Yells
+{
+    EMOTE_TARGET               = -1509002
 };
 
-class boss_buru: public CreatureScript {
+class boss_buru : public CreatureScript
+{
 public:
-	boss_buru() :
-			CreatureScript("boss_buru") {
-	}
+    boss_buru() : CreatureScript("boss_buru") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_buruAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_buruAI (pCreature);
+    }
 
-	struct boss_buruAI: public ScriptedAI {
-		boss_buruAI(Creature *c) :
-				ScriptedAI(c) {
-			pInstance = c->GetInstanceScript();
-		}
+    struct boss_buruAI : public ScriptedAI
+    {
+        boss_buruAI(Creature *c) : ScriptedAI(c)
+        {
+            pInstance = c->GetInstanceScript();
+        }
 
-		InstanceScript *pInstance;
+        InstanceScript *pInstance;
 
-		void Reset() {
-			if (pInstance)
-				pInstance->SetData(DATA_BURU_EVENT, NOT_STARTED);
-		}
+        void Reset()
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_BURU_EVENT, NOT_STARTED);
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-			if (pInstance)
-				pInstance->SetData(DATA_BURU_EVENT, IN_PROGRESS);
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_BURU_EVENT, IN_PROGRESS);
+        }
 
-		void JustDied(Unit * /*killer*/) {
-			if (pInstance)
-				pInstance->SetData(DATA_BURU_EVENT, DONE);
-		}
-	};
+        void JustDied(Unit * /*killer*/)
+        {
+            if (pInstance)
+                pInstance->SetData(DATA_BURU_EVENT, DONE);
+        }
+    };
 };
 
-void AddSC_boss_buru() {
-	new boss_buru();
+void AddSC_boss_buru()
+{
+    new boss_buru();
 }

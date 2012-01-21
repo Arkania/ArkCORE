@@ -27,81 +27,87 @@
 #include "ScriptPCH.h"
 #include "naxxramas.h"
 
-enum Spells {
-	SPELL_NECROTIC_AURA = 55593,
-	SPELL_SUMMON_SPORE = 29234,
-	SPELL_DEATHBLOOM = 29865,
-	H_SPELL_DEATHBLOOM = 55053,
-	SPELL_INEVITABLE_DOOM = 29204,
-	H_SPELL_INEVITABLE_DOOM = 55052
+enum Spells
+{
+    SPELL_NECROTIC_AURA                                    = 55593,
+    SPELL_SUMMON_SPORE                                     = 29234,
+    SPELL_DEATHBLOOM                                       = 29865,
+    H_SPELL_DEATHBLOOM                                     = 55053,
+    SPELL_INEVITABLE_DOOM                                  = 29204,
+    H_SPELL_INEVITABLE_DOOM                                = 55052
 };
 
-enum Events {
-	EVENT_NONE, EVENT_AURA, EVENT_BLOOM, EVENT_DOOM,
+enum Events
+{
+    EVENT_NONE,
+    EVENT_AURA,
+    EVENT_BLOOM,
+    EVENT_DOOM,
 };
 
-class boss_loatheb: public CreatureScript {
+class boss_loatheb : public CreatureScript
+{
 public:
-	boss_loatheb() :
-			CreatureScript("boss_loatheb") {
-	}
+    boss_loatheb() : CreatureScript("boss_loatheb") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_loathebAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_loathebAI (pCreature);
+    }
 
-	struct boss_loathebAI: public BossAI {
-		boss_loathebAI(Creature *c) :
-				BossAI(c, BOSS_LOATHEB) {
-			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
-					true);
-			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-		}
+    struct boss_loathebAI : public BossAI
+    {
+        boss_loathebAI(Creature *c) : BossAI(c, BOSS_LOATHEB) {
+        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
+        me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);}
 
-		void EnterCombat(Unit * /*who*/) {
-			_EnterCombat();
-			events.ScheduleEvent(EVENT_AURA, 10000);
-			events.ScheduleEvent(EVENT_BLOOM, 5000);
-			events.ScheduleEvent(EVENT_DOOM, 120000);
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+            _EnterCombat();
+            events.ScheduleEvent(EVENT_AURA, 10000);
+            events.ScheduleEvent(EVENT_BLOOM, 5000);
+            events.ScheduleEvent(EVENT_DOOM, 120000);
+        }
 
-		void JustDied(Unit* /*killer*/) {
+		void JustDied(Unit* /*killer*/)
+		{
 			_JustDied();
 		}
 
-		void UpdateAI(const uint32 diff) {
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
 
-			events.Update(diff);
+            events.Update(diff);
 
-			while (uint32 eventId = events.ExecuteEvent()) {
-				switch (eventId) {
-				case EVENT_AURA:
-					DoCastAOE(SPELL_NECROTIC_AURA);
-					events.ScheduleEvent(EVENT_AURA, 20000);
-					break;
-				case EVENT_BLOOM:
-					// TODO : Add missing text
-					DoCastAOE(SPELL_SUMMON_SPORE, true);
-					DoCastAOE(RAID_MODE(SPELL_DEATHBLOOM, H_SPELL_DEATHBLOOM));
-					events.ScheduleEvent(EVENT_BLOOM, 30000);
-					break;
-				case EVENT_DOOM:
-					DoCastAOE(
-							RAID_MODE(SPELL_INEVITABLE_DOOM,
-									H_SPELL_INEVITABLE_DOOM));
-					events.ScheduleEvent(EVENT_DOOM,
-							events.GetTimer() < 5 * 60000 ? 30000 : 15000);
-					break;
-				}
-			}
+            while (uint32 eventId = events.ExecuteEvent())
+            {
+                switch(eventId)
+                {
+                    case EVENT_AURA:
+                        DoCastAOE(SPELL_NECROTIC_AURA);
+                        events.ScheduleEvent(EVENT_AURA, 20000);
+                        break;
+                    case EVENT_BLOOM:
+                        // TODO : Add missing text
+                        DoCastAOE(SPELL_SUMMON_SPORE, true);
+                        DoCastAOE(RAID_MODE(SPELL_DEATHBLOOM, H_SPELL_DEATHBLOOM));
+                        events.ScheduleEvent(EVENT_BLOOM, 30000);
+                        break;
+                    case EVENT_DOOM:
+                        DoCastAOE(RAID_MODE(SPELL_INEVITABLE_DOOM, H_SPELL_INEVITABLE_DOOM));
+                        events.ScheduleEvent(EVENT_DOOM, events.GetTimer() < 5*60000 ? 30000 : 15000);
+                        break;
+                }
+            }
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_loatheb() {
-	new boss_loatheb();
+void AddSC_boss_loatheb()
+{
+    new boss_loatheb();
 }

@@ -28,127 +28,129 @@
 
 #include "ObjectMgr.h"
 
-WeatherMgr::~WeatherMgr() {
-	///- Empty the WeatherMap
-	for (WeatherMap::const_iterator itr = m_weathers.begin();
-			itr != m_weathers.end(); ++itr)
-		delete itr->second;
+WeatherMgr::~WeatherMgr()
+{
+    ///- Empty the WeatherMap
+    for (WeatherMap::const_iterator itr = m_weathers.begin(); itr != m_weathers.end(); ++itr)
+        delete itr->second;
 
-	m_weathers.clear();
+    m_weathers.clear();
 }
 
 /// Find a Weather object by the given zoneid
-Weather* WeatherMgr::FindWeather(uint32 id) const {
-	WeatherMap::const_iterator itr = m_weathers.find(id);
+Weather* WeatherMgr::FindWeather(uint32 id) const
+{
+    WeatherMap::const_iterator itr = m_weathers.find(id);
 
-	if (itr != m_weathers.end())
-		return itr->second;
-	else
-		return 0;
+    if (itr != m_weathers.end())
+        return itr->second;
+    else
+        return 0;
 }
 
 /// Remove a Weather object for the given zoneid
-void WeatherMgr::RemoveWeather(uint32 id) {
-	// not called at the moment. Kept for completeness
-	WeatherMap::iterator itr = m_weathers.find(id);
+void WeatherMgr::RemoveWeather(uint32 id)
+{
+    // not called at the moment. Kept for completeness
+    WeatherMap::iterator itr = m_weathers.find(id);
 
-	if (itr != m_weathers.end()) {
-		delete itr->second;
-		m_weathers.erase(itr);
-	}
+    if (itr != m_weathers.end())
+    {
+        delete itr->second;
+        m_weathers.erase(itr);
+    }
 }
 
 /// Add a Weather object to the list
-Weather* WeatherMgr::AddWeather(uint32 zone_id) {
-	WeatherData const* weatherChances = GetWeatherChances(zone_id);
+Weather* WeatherMgr::AddWeather(uint32 zone_id)
+{
+    WeatherData const* weatherChances = GetWeatherChances(zone_id);
 
-	// zone not have weather, ignore
-	if (!weatherChances)
-		return NULL;
+    // zone not have weather, ignore
+    if (!weatherChances)
+        return NULL;
 
-	Weather* w = new Weather(zone_id, weatherChances);
-	m_weathers[w->GetZone()] = w;
-	w->ReGenerate();
-	w->UpdateWeather();
-	return w;
+    Weather* w = new Weather(zone_id, weatherChances);
+    m_weathers[w->GetZone()] = w;
+    w->ReGenerate();
+    w->UpdateWeather();
+    return w;
 }
 
-void WeatherMgr::LoadWeatherData() {
-	uint32 oldMSTime = getMSTime();
+void WeatherMgr::LoadWeatherData()
+{
+    uint32 oldMSTime = getMSTime();
 
-	uint32 count = 0;
+    uint32 count = 0;
 
-	//                                                0     1                   2                   3                    4                   5                   6                    7                 8                 9                  10                  11                  12                                13
-	QueryResult result =
-			WorldDatabase.Query(
-					"SELECT zone, spring_rain_chance, spring_snow_chance, spring_storm_chance, summer_rain_chance, summer_snow_chance, summer_storm_chance, fall_rain_chance, fall_snow_chance, fall_storm_chance, winter_rain_chance, winter_snow_chance, winter_storm_chance, ScriptName FROM game_weather");
+    //                                                0     1                   2                   3                    4                   5                   6                    7                 8                 9                  10                  11                  12                                13
+    QueryResult result = WorldDatabase.Query("SELECT zone, spring_rain_chance, spring_snow_chance, spring_storm_chance, summer_rain_chance, summer_snow_chance, summer_storm_chance, fall_rain_chance, fall_snow_chance, fall_storm_chance, winter_rain_chance, winter_snow_chance, winter_storm_chance, ScriptName FROM game_weather");
 
-	if (!result) {
-		sLog->outErrorDb(
-				">> Loaded 0 weather definitions. DB table `game_weather` is empty.");
-		sLog->outString();
-		return;
-	}
+    if (!result)
+    {
+        sLog->outErrorDb(">> Loaded 0 weather definitions. DB table `game_weather` is empty.");
+        sLog->outString();
+        return;
+    }
 
-	do {
-		Field *fields = result->Fetch();
+    do
+    {
+        Field *fields = result->Fetch();
 
-		uint32 zone_id = fields[0].GetUInt32();
+        uint32 zone_id = fields[0].GetUInt32();
 
-		WeatherData& wzc = mWeatherZoneMap[zone_id];
+        WeatherData& wzc = mWeatherZoneMap[zone_id];
 
-		for (uint8 season = 0; season < WEATHER_SEASONS; ++season) {
-			wzc.data[season].rainChance = fields[season * (MAX_WEATHER_TYPE - 1)
-					+ 1].GetUInt32();
-			wzc.data[season].snowChance = fields[season * (MAX_WEATHER_TYPE - 1)
-					+ 2].GetUInt32();
-			wzc.data[season].stormChance = fields[season
-					* (MAX_WEATHER_TYPE - 1) + 3].GetUInt32();
+        for (uint8 season = 0; season < WEATHER_SEASONS; ++season)
+        {
+            wzc.data[season].rainChance  = fields[season * (MAX_WEATHER_TYPE-1) + 1].GetUInt32();
+            wzc.data[season].snowChance  = fields[season * (MAX_WEATHER_TYPE-1) + 2].GetUInt32();
+            wzc.data[season].stormChance = fields[season * (MAX_WEATHER_TYPE-1) + 3].GetUInt32();
 
-			if (wzc.data[season].rainChance > 100) {
-				wzc.data[season].rainChance = 25;
-				sLog->outErrorDb(
-						"Weather for zone %u season %u has wrong rain chance > 100%%",
-						zone_id, season);
-			}
+            if (wzc.data[season].rainChance > 100)
+            {
+                wzc.data[season].rainChance = 25;
+                sLog->outErrorDb("Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
+            }
 
-			if (wzc.data[season].snowChance > 100) {
-				wzc.data[season].snowChance = 25;
-				sLog->outErrorDb(
-						"Weather for zone %u season %u has wrong snow chance > 100%%",
-						zone_id, season);
-			}
+            if (wzc.data[season].snowChance > 100)
+            {
+                wzc.data[season].snowChance = 25;
+                sLog->outErrorDb("Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
+            }
 
-			if (wzc.data[season].stormChance > 100) {
-				wzc.data[season].stormChance = 25;
-				sLog->outErrorDb(
-						"Weather for zone %u season %u has wrong storm chance > 100%%",
-						zone_id, season);
-			}
-		}
+            if (wzc.data[season].stormChance > 100)
+            {
+                wzc.data[season].stormChance = 25;
+                sLog->outErrorDb("Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
+            }
+        }
 
-		wzc.ScriptId = sObjectMgr->GetScriptId(fields[13].GetCString());
+        wzc.ScriptId = sObjectMgr->GetScriptId(fields[13].GetCString());
 
-		++count;
-	} while (result->NextRow());
+        ++count;
+    }
+    while (result->NextRow());
 
-	sLog->outString(">> Loaded %u weather definitions in %u ms", count,
-			GetMSTimeDiffToNow(oldMSTime));
-	sLog->outString();
+    sLog->outString(">> Loaded %u weather definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
 }
 
-void WeatherMgr::Update(uint32 diff) {
-	///- Send an update signal to Weather objects
-	WeatherMap::iterator itr, next;
-	for (itr = m_weathers.begin(); itr != m_weathers.end(); itr = next) {
-		next = itr;
-		++next;
+void WeatherMgr::Update(uint32 diff)
+{
+    ///- Send an update signal to Weather objects
+    WeatherMap::iterator itr, next;
+    for (itr = m_weathers.begin(); itr != m_weathers.end(); itr = next)
+    {
+        next = itr;
+        ++next;
 
-		///- and remove Weather objects for zones with no player
-		//As interval > WorldTick
-		if (!itr->second->Update(diff)) {
-			delete itr->second;
-			m_weathers.erase(itr);
-		}
-	}
+        ///- and remove Weather objects for zones with no player
+                                                        //As interval > WorldTick
+        if (!itr->second->Update(diff))
+        {
+            delete itr->second;
+            m_weathers.erase(itr);
+        }
+    }
 }

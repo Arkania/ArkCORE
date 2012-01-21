@@ -25,11 +25,11 @@
  */
 
 /* ScriptData
- SDName: Boss_Viscidus
- SD%Complete: 0
- SDComment: place holder
- SDCategory: Temple of Ahn'Qiraj
- EndScriptData */
+SDName: Boss_Viscidus
+SD%Complete: 0
+SDComment: place holder
+SDCategory: Temple of Ahn'Qiraj
+EndScriptData */
 
 #include "ScriptPCH.h"
 

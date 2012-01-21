@@ -51,169 +51,176 @@
 
 #define MAX_SUMMON_POS 5
 
-const float SummonPos[MAX_SUMMON_POS][4] = { { 2728.12f, -3544.43f, 261.91f,
-		6.04f }, { 2729.05f, -3544.47f, 261.91f, 5.58f }, { 2728.24f, -3465.08f,
-		264.20f, 3.56f }, { 2704.11f, -3456.81f, 265.53f, 4.51f }, { 2663.56f,
-		-3464.43f, 262.66f, 5.20f }, };
-
-enum Events {
-	EVENT_NONE,
-	EVENT_BERSERK,
-	EVENT_CURSE,
-	EVENT_BLINK,
-	EVENT_WARRIOR,
-	EVENT_BALCONY,
-	EVENT_WAVE,
-	EVENT_GROUND,
+const float SummonPos[MAX_SUMMON_POS][4] =
+{
+    {2728.12f, -3544.43f, 261.91f, 6.04f},
+    {2729.05f, -3544.47f, 261.91f, 5.58f},
+    {2728.24f, -3465.08f, 264.20f, 3.56f},
+    {2704.11f, -3456.81f, 265.53f, 4.51f},
+    {2663.56f, -3464.43f, 262.66f, 5.20f},
 };
 
-class boss_noth: public CreatureScript {
+enum Events
+{
+    EVENT_NONE,
+    EVENT_BERSERK,
+    EVENT_CURSE,
+    EVENT_BLINK,
+    EVENT_WARRIOR,
+    EVENT_BALCONY,
+    EVENT_WAVE,
+    EVENT_GROUND,
+};
+
+class boss_noth : public CreatureScript
+{
 public:
-	boss_noth() :
-			CreatureScript("boss_noth") {
-	}
+    boss_noth() : CreatureScript("boss_noth") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_nothAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_nothAI (pCreature);
+    }
 
-	struct boss_nothAI: public BossAI {
-		boss_nothAI(Creature *c) :
-				BossAI(c, BOSS_NOTH) {
-			me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK,
-					true);
-			me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
-		}
+    struct boss_nothAI : public BossAI
+    {
+        boss_nothAI(Creature *c) : BossAI(c, BOSS_NOTH) {
+        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
+        me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);}
 
-		uint32 waveCount, balconyCount;
+        uint32 waveCount, balconyCount;
 
-		void Reset() {
-			me->SetReactState(REACT_AGGRESSIVE);
-			me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-			_Reset();
-		}
+        void Reset()
+        {
+            me->SetReactState(REACT_AGGRESSIVE);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            _Reset();
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-			_EnterCombat();
-			DoScriptText(SAY_AGGRO, me);
-			balconyCount = 0;
-			EnterPhaseGround();
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+            _EnterCombat();
+            DoScriptText(SAY_AGGRO, me);
+            balconyCount = 0;
+            EnterPhaseGround();
+        }
 
-		void EnterPhaseGround() {
-			me->SetReactState(REACT_AGGRESSIVE);
-			me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-			DoZoneInCombat();
-			if (me->getThreatManager().isThreatListEmpty())
-				EnterEvadeMode();
-			else {
-				events.ScheduleEvent(EVENT_BALCONY, 110000);
-				events.ScheduleEvent(EVENT_CURSE, 10000 + rand() % 15000);
-				events.ScheduleEvent(EVENT_WARRIOR, 30000);
-				if (getDifficulty() == RAID_DIFFICULTY_25MAN_NORMAL)
-					events.ScheduleEvent(EVENT_BLINK, 20000 + rand() % 20000);
-			}
-		}
+        void EnterPhaseGround()
+        {
+            me->SetReactState(REACT_AGGRESSIVE);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            DoZoneInCombat();
+            if (me->getThreatManager().isThreatListEmpty())
+                EnterEvadeMode();
+            else
+            {
+                events.ScheduleEvent(EVENT_BALCONY, 110000);
+                events.ScheduleEvent(EVENT_CURSE, 10000+rand()%15000);
+                events.ScheduleEvent(EVENT_WARRIOR, 30000);
+                if (getDifficulty() == RAID_DIFFICULTY_25MAN_NORMAL)
+                    events.ScheduleEvent(EVENT_BLINK, 20000 + rand()%20000);
+            }
+        }
 
-		void KilledUnit(Unit* /*victim*/) {
-			if (!(rand() % 5))
-				DoScriptText(SAY_SLAY, me);
-		}
+        void KilledUnit(Unit* /*victim*/)
+        {
+            if (!(rand()%5))
+                DoScriptText(SAY_SLAY, me);
+        }
 
-		void JustSummoned(Creature *summon) {
-			summons.Summon(summon);
-			summon->setActive(true);
-			summon->AI()->DoZoneInCombat();
-		}
+        void JustSummoned(Creature *summon)
+        {
+            summons.Summon(summon);
+            summon->setActive(true);
+            summon->AI()->DoZoneInCombat();
+        }
 
-		void JustDied(Unit* /*Killer*/) {
-			_JustDied();
-			DoScriptText(SAY_DEATH, me);
-		}
+        void JustDied(Unit* /*Killer*/)
+        {
+            _JustDied();
+            DoScriptText(SAY_DEATH, me);
+        }
 
-		void SummonUndead(uint32 entry, uint32 num) {
-			for (uint32 i = 0; i < num; ++i) {
-				uint32 pos = rand() % MAX_SUMMON_POS;
-				me->SummonCreature(entry, SummonPos[pos][0], SummonPos[pos][1],
-						SummonPos[pos][2], SummonPos[pos][3],
-						TEMPSUMMON_CORPSE_DESPAWN, 60000);
-			}
-		}
+        void SummonUndead(uint32 entry, uint32 num)
+        {
+            for (uint32 i = 0; i < num; ++i)
+            {
+                uint32 pos = rand()%MAX_SUMMON_POS;
+                me->SummonCreature(entry, SummonPos[pos][0], SummonPos[pos][1], SummonPos[pos][2],
+                    SummonPos[pos][3], TEMPSUMMON_CORPSE_DESPAWN, 60000);
+            }
+        }
 
-		void UpdateAI(const uint32 diff) {
-			if (!UpdateVictim() || !CheckInRoom())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim() || !CheckInRoom())
+                return;
 
-			events.Update(diff);
+            events.Update(diff);
 
-			while (uint32 eventId = events.ExecuteEvent()) {
-				switch (eventId) {
-				case EVENT_CURSE:
-					DoCastAOE(SPELL_CURSE_PLAGUEBRINGER);
-					events.ScheduleEvent(EVENT_CURSE, 50000 + rand() % 10000);
-					return;
-				case EVENT_WARRIOR:
-					DoScriptText(SAY_SUMMON, me);
-					SummonUndead(MOB_WARRIOR, RAID_MODE(2, 3));
-					events.ScheduleEvent(EVENT_WARRIOR, 30000);
-					return;
-				case EVENT_BLINK:
-					DoCastAOE(SPELL_CRIPPLE, true);
-					DoCastAOE(SPELL_BLINK);
-					DoResetThreat();
-					events.ScheduleEvent(EVENT_BLINK, 40000);
-					return;
-				case EVENT_BALCONY:
-					me->SetReactState(REACT_PASSIVE);
-					me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-					me->AttackStop();
-					me->RemoveAllAuras();
-					me->NearTeleportTo(TELE_X, TELE_Y, TELE_Z, TELE_O);
-					events.Reset();
-					events.ScheduleEvent(EVENT_WAVE, 2000 + rand() % 3000);
-					waveCount = 0;
-					return;
-				case EVENT_WAVE:
-					DoScriptText(SAY_SUMMON, me);
-					switch (balconyCount) {
-					case 0:
-						SummonUndead(MOB_CHAMPION, RAID_MODE(2, 4));
-						break;
-					case 1:
-						SummonUndead(MOB_CHAMPION, RAID_MODE(1, 2));
-						SummonUndead(MOB_GUARDIAN, RAID_MODE(1, 2));
-						break;
-					case 2:
-						SummonUndead(MOB_GUARDIAN, RAID_MODE(2, 4));
-						break;
-					default:
-						SummonUndead(MOB_CHAMPION, RAID_MODE(5, 10));
-						SummonUndead(MOB_GUARDIAN, RAID_MODE(5, 10));
-						break;
-					}
-					++waveCount;
-					events.ScheduleEvent(
-							waveCount < 2 ? EVENT_WAVE : EVENT_GROUND,
-							30000 + rand() % 15000);
-					return;
-				case EVENT_GROUND: {
-					++balconyCount;
-					float x, y, z, o;
-					me->GetHomePosition(x, y, z, o);
-					me->NearTeleportTo(x, y, z, o);
-					events.ScheduleEvent(EVENT_BALCONY, 110000);
-					EnterPhaseGround();
-					return;
-				}
-				}
-			}
+            while (uint32 eventId = events.ExecuteEvent())
+            {
+                switch(eventId)
+                {
+                    case EVENT_CURSE:
+                        DoCastAOE(SPELL_CURSE_PLAGUEBRINGER);
+                        events.ScheduleEvent(EVENT_CURSE, 50000 + rand()%10000);
+                        return;
+                    case EVENT_WARRIOR:
+                        DoScriptText(SAY_SUMMON, me);
+                        SummonUndead(MOB_WARRIOR, RAID_MODE(2, 3));
+                        events.ScheduleEvent(EVENT_WARRIOR, 30000);
+                        return;
+                    case EVENT_BLINK:
+                        DoCastAOE(SPELL_CRIPPLE, true);
+                        DoCastAOE(SPELL_BLINK);
+                        DoResetThreat();
+                        events.ScheduleEvent(EVENT_BLINK, 40000);
+                        return;
+                    case EVENT_BALCONY:
+                        me->SetReactState(REACT_PASSIVE);
+                        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                        me->AttackStop();
+                        me->RemoveAllAuras();
+                        me->NearTeleportTo(TELE_X, TELE_Y, TELE_Z, TELE_O);
+                        events.Reset();
+                        events.ScheduleEvent(EVENT_WAVE, 2000 + rand()%3000);
+                        waveCount = 0;
+                        return;
+                    case EVENT_WAVE:
+                        DoScriptText(SAY_SUMMON, me);
+                        switch(balconyCount)
+                        {
+                            case 0: SummonUndead(MOB_CHAMPION, RAID_MODE(2, 4)); break;
+                            case 1: SummonUndead(MOB_CHAMPION, RAID_MODE(1, 2));
+                                    SummonUndead(MOB_GUARDIAN, RAID_MODE(1, 2)); break;
+                            case 2: SummonUndead(MOB_GUARDIAN, RAID_MODE(2, 4)); break;
+                            default:SummonUndead(MOB_CHAMPION, RAID_MODE(5, 10));
+                                    SummonUndead(MOB_GUARDIAN, RAID_MODE(5, 10));break;
+                        }
+                        ++waveCount;
+                        events.ScheduleEvent(waveCount < 2 ? EVENT_WAVE : EVENT_GROUND, 30000 + rand()%15000);
+                        return;
+                    case EVENT_GROUND:
+                    {
+                        ++balconyCount;
+                        float x, y, z, o;
+                        me->GetHomePosition(x, y, z, o);
+                        me->NearTeleportTo(x, y, z, o);
+                        events.ScheduleEvent(EVENT_BALCONY, 110000);
+                        EnterPhaseGround();
+                        return;
+                    }
+                }
+            }
 
-			if (me->HasReactState(REACT_AGGRESSIVE))
-				DoMeleeAttackIfReady();
-		}
-	};
+            if (me->HasReactState(REACT_AGGRESSIVE))
+                DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_noth() {
-	new boss_noth();
+void AddSC_boss_noth()
+{
+    new boss_noth();
 }

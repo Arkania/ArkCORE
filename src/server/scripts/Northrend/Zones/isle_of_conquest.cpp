@@ -30,49 +30,52 @@
 // TO-DO: This should be done with SmartAI, but yet it does not correctly support vehicles's AIs.
 //        Even adding ReactState Passive we still have issues using SmartAI.
 
-class npc_four_car_garage: public CreatureScript {
-public:
-	npc_four_car_garage() :
-			CreatureScript("npc_four_car_garage") {
-	}
+class npc_four_car_garage : public CreatureScript
+{
+    public:
+        npc_four_car_garage() : CreatureScript("npc_four_car_garage") {}
 
-	struct npc_four_car_garageAI: public NullCreatureAI {
-		npc_four_car_garageAI(Creature* pCreature) :
-				NullCreatureAI(pCreature) {
-		}
+        struct npc_four_car_garageAI : public NullCreatureAI
+        {
+            npc_four_car_garageAI(Creature* pCreature) : NullCreatureAI(pCreature) { }
 
-		void PassengerBoarded(Unit* who, int8 seatId, bool apply) {
-			if (apply) {
-				uint32 spellId = 0;
+            void PassengerBoarded(Unit* who, int8 seatId, bool apply)
+            {
+                if (apply)
+                {
+                    uint32 spellId = 0;
 
-				switch (me->GetEntry()) {
-				case NPC_DEMOLISHER:
-					spellId = 68365;
-					break;
-					//case NPC_GLAIVE_THROWER:
-					//    spellId = 68363;
-					//    break;
-				case NPC_SIEGE_ENGINE_H:
-				case NPC_SIEGE_ENGINE_A:
-					spellId = 68364;
-					break;
-				case NPC_CATAPULT:
-					spellId = 68362;
-					break;
-				default:
-					return;
-				}
+                    switch(me->GetEntry())
+                    {
+                        case NPC_DEMOLISHER:
+                            spellId = 68365;
+                            break;
+                        //case NPC_GLAIVE_THROWER:
+                        //    spellId = 68363;
+                        //    break;
+                        case NPC_SIEGE_ENGINE_H:
+                        case NPC_SIEGE_ENGINE_A:
+                            spellId = 68364;
+                            break;
+                        case NPC_CATAPULT:
+                            spellId = 68362;
+                            break;
+                        default:
+                            return;
+                    }
 
-				me->CastSpell(who, spellId, true);
-			}
-		}
-	};
+                    me->CastSpell(who, spellId, true);
+                }
+            }
+        };
 
-	CreatureAI* GetAI(Creature* creature) const {
-		return new npc_four_car_garageAI(creature);
-	}
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_four_car_garageAI(creature);
+        }
 };
 
-void AddSC_isle_of_conquest() {
-	new npc_four_car_garage();
+void AddSC_isle_of_conquest()
+{
+    new npc_four_car_garage();
 }

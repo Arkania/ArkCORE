@@ -25,11 +25,11 @@
  */
 
 /* ScriptData
- SDName: Boss_Gehennas
- SD%Complete: 90
- SDComment: Adds MC NYI
- SDCategory: Molten Core
- EndScriptData */
+SDName: Boss_Gehennas
+SD%Complete: 90
+SDComment: Adds MC NYI
+SDCategory: Molten Core
+EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -37,68 +37,69 @@
 #define SPELL_RAINOFFIRE            19717
 #define SPELL_GEHENNASCURSE         19716
 
-class boss_gehennas: public CreatureScript {
+class boss_gehennas : public CreatureScript
+{
 public:
-	boss_gehennas() :
-			CreatureScript("boss_gehennas") {
-	}
+    boss_gehennas() : CreatureScript("boss_gehennas") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_gehennasAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_gehennasAI (pCreature);
+    }
 
-	struct boss_gehennasAI: public ScriptedAI {
-		boss_gehennasAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_gehennasAI : public ScriptedAI
+    {
+        boss_gehennasAI(Creature *c) : ScriptedAI(c) {}
 
-		uint32 ShadowBolt_Timer;
-		uint32 RainOfFire_Timer;
-		uint32 GehennasCurse_Timer;
+        uint32 ShadowBolt_Timer;
+        uint32 RainOfFire_Timer;
+        uint32 GehennasCurse_Timer;
 
-		void Reset() {
-			ShadowBolt_Timer = 6000;
-			RainOfFire_Timer = 10000;
-			GehennasCurse_Timer = 12000;
-		}
+        void Reset()
+        {
+            ShadowBolt_Timer = 6000;
+            RainOfFire_Timer = 10000;
+            GehennasCurse_Timer = 12000;
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-		}
+        void EnterCombat(Unit * /*who*/) {}
 
-		void UpdateAI(const uint32 diff) {
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
 
-			//ShadowBolt_Timer
-			if (ShadowBolt_Timer <= diff) {
-				if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 1))
-					DoCast(pTarget, SPELL_SHADOWBOLT);
+            //ShadowBolt_Timer
+            if (ShadowBolt_Timer <= diff)
+            {
+                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 1))
+                    DoCast(pTarget, SPELL_SHADOWBOLT);
 
-				ShadowBolt_Timer = 7000;
-			} else
-				ShadowBolt_Timer -= diff;
+                ShadowBolt_Timer = 7000;
+            } else ShadowBolt_Timer -= diff;
 
-			//RainOfFire_Timer
-			if (RainOfFire_Timer <= diff) {
-				if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-					DoCast(pTarget, SPELL_RAINOFFIRE);
+            //RainOfFire_Timer
+            if (RainOfFire_Timer <= diff)
+            {
+                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_RAINOFFIRE);
 
-				RainOfFire_Timer = urand(4000, 12000);
-			} else
-				RainOfFire_Timer -= diff;
+                RainOfFire_Timer = urand(4000, 12000);
+            } else RainOfFire_Timer -= diff;
 
-			//GehennasCurse_Timer
-			if (GehennasCurse_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_GEHENNASCURSE);
-				GehennasCurse_Timer = urand(22000, 30000);
-			} else
-				GehennasCurse_Timer -= diff;
+            //GehennasCurse_Timer
+            if (GehennasCurse_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_GEHENNASCURSE);
+                GehennasCurse_Timer = urand(22000, 30000);
+            } else GehennasCurse_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_gehennas() {
-	new boss_gehennas();
+void AddSC_boss_gehennas()
+{
+    new boss_gehennas();
 }

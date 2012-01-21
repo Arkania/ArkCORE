@@ -25,11 +25,11 @@
  */
 
 /* ScriptData
- SDName: Boss_Magistrate_Barthilas
- SD%Complete: 70
- SDComment:
- SDCategory: Stratholme
- EndScriptData */
+SDName: Boss_Magistrate_Barthilas
+SD%Complete: 70
+SDComment:
+SDCategory: Stratholme
+EndScriptData */
 
 #include "ScriptPCH.h"
 #include "stratholme.h"
@@ -42,94 +42,99 @@
 #define MODEL_NORMAL            10433
 #define MODEL_HUMAN             3637
 
-class boss_magistrate_barthilas: public CreatureScript {
+class boss_magistrate_barthilas : public CreatureScript
+{
 public:
-	boss_magistrate_barthilas() :
-			CreatureScript("boss_magistrate_barthilas") {
-	}
+    boss_magistrate_barthilas() : CreatureScript("boss_magistrate_barthilas") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_magistrate_barthilasAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_magistrate_barthilasAI (pCreature);
+    }
 
-	struct boss_magistrate_barthilasAI: public ScriptedAI {
-		boss_magistrate_barthilasAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_magistrate_barthilasAI : public ScriptedAI
+    {
+        boss_magistrate_barthilasAI(Creature *c) : ScriptedAI(c) {}
 
-		uint32 DrainingBlow_Timer;
-		uint32 CrowdPummel_Timer;
-		uint32 MightyBlow_Timer;
-		uint32 FuriousAnger_Timer;
-		uint32 AngerCount;
+        uint32 DrainingBlow_Timer;
+        uint32 CrowdPummel_Timer;
+        uint32 MightyBlow_Timer;
+        uint32 FuriousAnger_Timer;
+        uint32 AngerCount;
 
-		void Reset() {
-			DrainingBlow_Timer = 20000;
-			CrowdPummel_Timer = 15000;
-			MightyBlow_Timer = 10000;
-			FuriousAnger_Timer = 5000;
-			AngerCount = 0;
+        void Reset()
+        {
+            DrainingBlow_Timer = 20000;
+            CrowdPummel_Timer = 15000;
+            MightyBlow_Timer = 10000;
+            FuriousAnger_Timer = 5000;
+            AngerCount = 0;
 
-			if (me->isAlive())
-				me->SetDisplayId(MODEL_NORMAL);
-			else
-				me->SetDisplayId(MODEL_HUMAN);
-		}
+            if (me->isAlive())
+                me->SetDisplayId(MODEL_NORMAL);
+            else
+                me->SetDisplayId(MODEL_HUMAN);
+        }
 
-		void MoveInLineOfSight(Unit *who) {
-			//nothing to see here yet
+        void MoveInLineOfSight(Unit *who)
+        {
+            //nothing to see here yet
 
-			ScriptedAI::MoveInLineOfSight(who);
-		}
+            ScriptedAI::MoveInLineOfSight(who);
+        }
 
-		void JustDied(Unit* /*Killer*/) {
-			me->SetDisplayId(MODEL_HUMAN);
-		}
+        void JustDied(Unit* /*Killer*/)
+        {
+            me->SetDisplayId(MODEL_HUMAN);
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+        }
 
-		void UpdateAI(const uint32 diff) {
-			//Return since we have no target
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            //Return since we have no target
+            if (!UpdateVictim())
+                return;
 
-			if (FuriousAnger_Timer <= diff) {
-				FuriousAnger_Timer = 4000;
-				if (AngerCount > 25)
-					return;
+            if (FuriousAnger_Timer <= diff)
+            {
+                FuriousAnger_Timer = 4000;
+                if (AngerCount > 25)
+                    return;
 
-				++AngerCount;
-				DoCast(me, SPELL_FURIOUS_ANGER, false);
-			} else
-				FuriousAnger_Timer -= diff;
+                ++AngerCount;
+                DoCast(me, SPELL_FURIOUS_ANGER, false);
+            } else FuriousAnger_Timer -= diff;
 
-			//DrainingBlow
-			if (DrainingBlow_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_DRAININGBLOW);
-				DrainingBlow_Timer = 15000;
-			} else
-				DrainingBlow_Timer -= diff;
+            //DrainingBlow
+            if (DrainingBlow_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_DRAININGBLOW);
+                DrainingBlow_Timer = 15000;
+            } else DrainingBlow_Timer -= diff;
 
-			//CrowdPummel
-			if (CrowdPummel_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_CROWDPUMMEL);
-				CrowdPummel_Timer = 15000;
-			} else
-				CrowdPummel_Timer -= diff;
+            //CrowdPummel
+            if (CrowdPummel_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_CROWDPUMMEL);
+                CrowdPummel_Timer = 15000;
+            } else CrowdPummel_Timer -= diff;
 
-			//MightyBlow
-			if (MightyBlow_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_MIGHTYBLOW);
-				MightyBlow_Timer = 20000;
-			} else
-				MightyBlow_Timer -= diff;
+            //MightyBlow
+            if (MightyBlow_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_MIGHTYBLOW);
+                MightyBlow_Timer = 20000;
+            } else MightyBlow_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_magistrate_barthilas() {
-	new boss_magistrate_barthilas();
+void AddSC_boss_magistrate_barthilas()
+{
+    new boss_magistrate_barthilas();
 }

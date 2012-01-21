@@ -22,31 +22,35 @@
 #include "Creature.h"
 
 /*########
- # npc_deffiant_troll
- #########*/
+# npc_deffiant_troll
+#########*/
 
-enum NSCSDeffiantTroll {
-	DEFFIANT_KILL_CREDIT = 34830, SPELL_LIGHTNING_VISUAL = 56328
+enum NSCSDeffiantTroll
+{
+    DEFFIANT_KILL_CREDIT               = 34830,
+    SPELL_LIGHTNING_VISUAL             = 56328
 };
 
-class npc_deffiant_troll: public CreatureScript {
+class npc_deffiant_troll : public CreatureScript
+{
 public:
-	npc_deffiant_troll() :
-			CreatureScript("npc_deffiant_troll") {
-	}
+    npc_deffiant_troll() : CreatureScript("npc_deffiant_troll") { }
 
-	bool OnGossipHello(Player* pPlayer, Creature* pCreature) {
-		if (pPlayer->GetQuestStatus(14069) == QUEST_STATUS_INCOMPLETE) {
-			pCreature->CastSpell(pPlayer, 45870, true);
-			pPlayer->KilledMonsterCredit(DEFFIANT_KILL_CREDIT, 0);
-			pCreature->ForcedDespawn(1500);
-			return true;
-		}
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    {
+            if (pPlayer->GetQuestStatus(14069) == QUEST_STATUS_INCOMPLETE)
+            {
+                pCreature->CastSpell(pPlayer, 45870, true);
+                pPlayer->KilledMonsterCredit(DEFFIANT_KILL_CREDIT, 0);
+                pCreature->ForcedDespawn(1500);
+                return true;
+            }
 
-		return false;
-	}
+    return false;
+    }
 };
 
-void AddSC_npc_spell_click_spells() {
-	new npc_deffiant_troll;
+void AddSC_npc_spell_click_spells()
+{
+    new npc_deffiant_troll;
 }

@@ -25,11 +25,11 @@
  */
 
 /* ScriptData
- SDName: Boss_Overlord_Wyrmthalak
- SD%Complete: 100
- SDComment:
- SDCategory: Blackrock Spire
- EndScriptData */
+SDName: Boss_Overlord_Wyrmthalak
+SD%Complete: 100
+SDComment:
+SDCategory: Blackrock Spire
+EndScriptData */
 
 #include "ScriptPCH.h"
 
@@ -48,88 +48,91 @@
 #define ADD_2Z 88.195160f
 #define ADD_2O 4.613114f
 
-class boss_overlord_wyrmthalak: public CreatureScript {
+class boss_overlord_wyrmthalak : public CreatureScript
+{
 public:
-	boss_overlord_wyrmthalak() :
-			CreatureScript("boss_overlord_wyrmthalak") {
-	}
+    boss_overlord_wyrmthalak() : CreatureScript("boss_overlord_wyrmthalak") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_overlordwyrmthalakAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_overlordwyrmthalakAI (pCreature);
+    }
 
-	struct boss_overlordwyrmthalakAI: public ScriptedAI {
-		boss_overlordwyrmthalakAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_overlordwyrmthalakAI : public ScriptedAI
+    {
+        boss_overlordwyrmthalakAI(Creature *c) : ScriptedAI(c) {}
 
-		uint32 BlastWave_Timer;
-		uint32 Shout_Timer;
-		uint32 Cleave_Timer;
-		uint32 Knockaway_Timer;
-		bool Summoned;
+        uint32 BlastWave_Timer;
+        uint32 Shout_Timer;
+        uint32 Cleave_Timer;
+        uint32 Knockaway_Timer;
+        bool Summoned;
 
-		void Reset() {
-			BlastWave_Timer = 20000;
-			Shout_Timer = 2000;
-			Cleave_Timer = 6000;
-			Knockaway_Timer = 12000;
-			Summoned = false;
-		}
+        void Reset()
+        {
+            BlastWave_Timer = 20000;
+            Shout_Timer = 2000;
+            Cleave_Timer = 6000;
+            Knockaway_Timer = 12000;
+            Summoned = false;
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+        }
 
-		void UpdateAI(const uint32 diff) {
-			//Return since we have no target
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            //Return since we have no target
+            if (!UpdateVictim())
+                return;
 
-			//BlastWave_Timer
-			if (BlastWave_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_BLASTWAVE);
-				BlastWave_Timer = 20000;
-			} else
-				BlastWave_Timer -= diff;
+            //BlastWave_Timer
+            if (BlastWave_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_BLASTWAVE);
+                BlastWave_Timer = 20000;
+            } else BlastWave_Timer -= diff;
 
-			//Shout_Timer
-			if (Shout_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_SHOUT);
-				Shout_Timer = 10000;
-			} else
-				Shout_Timer -= diff;
+            //Shout_Timer
+            if (Shout_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_SHOUT);
+                Shout_Timer = 10000;
+            } else Shout_Timer -= diff;
 
-			//Cleave_Timer
-			if (Cleave_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_CLEAVE);
-				Cleave_Timer = 7000;
-			} else
-				Cleave_Timer -= diff;
+            //Cleave_Timer
+            if (Cleave_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_CLEAVE);
+                Cleave_Timer = 7000;
+            } else Cleave_Timer -= diff;
 
-			//Knockaway_Timer
-			if (Knockaway_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_KNOCKAWAY);
-				Knockaway_Timer = 14000;
-			} else
-				Knockaway_Timer -= diff;
+            //Knockaway_Timer
+            if (Knockaway_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_KNOCKAWAY);
+                Knockaway_Timer = 14000;
+            } else Knockaway_Timer -= diff;
 
-			//Summon two Beserks
-			if (!Summoned && HealthBelowPct(51)) {
-				Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100,
-						true);
+            //Summon two Beserks
+            if (!Summoned && HealthBelowPct(51))
+            {
+                Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
 
-				if (Creature *SummonedCreature = me->SummonCreature(9216, ADD_1X, ADD_1Y, ADD_1Z, ADD_1O, TEMPSUMMON_TIMED_DESPAWN, 300000))
-					SummonedCreature->AI()->AttackStart(pTarget);
-				if (Creature *SummonedCreature = me->SummonCreature(9268, ADD_2X, ADD_2Y, ADD_2Z, ADD_2O, TEMPSUMMON_TIMED_DESPAWN, 300000))
-					SummonedCreature->AI()->AttackStart(pTarget);
-				Summoned = true;
-			}
+                if (Creature *SummonedCreature = me->SummonCreature(9216, ADD_1X, ADD_1Y, ADD_1Z, ADD_1O, TEMPSUMMON_TIMED_DESPAWN, 300000))
+                    SummonedCreature->AI()->AttackStart(pTarget);
+                if (Creature *SummonedCreature = me->SummonCreature(9268, ADD_2X, ADD_2Y, ADD_2Z, ADD_2O, TEMPSUMMON_TIMED_DESPAWN, 300000))
+                    SummonedCreature->AI()->AttackStart(pTarget);
+                Summoned = true;
+            }
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_overlordwyrmthalak() {
-	new boss_overlord_wyrmthalak();
+void AddSC_boss_overlordwyrmthalak()
+{
+    new boss_overlord_wyrmthalak();
 }
