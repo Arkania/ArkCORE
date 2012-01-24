@@ -41,6 +41,93 @@ enum HunterSpells {
 	HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED = 53220
 };
 
+class spell_hun_kill_command: public SpellScriptLoader {
+public:
+	spell_hun_kill_command() : SpellScriptLoader("spell_hun_kill_command") {}
+
+	class spell_hun_kill_command_SpellScript: public SpellScript {
+		PrepareSpellScript(spell_hun_kill_command_SpellScript)
+
+		SpellCastResult CheckCast(){
+			Pet *pet = ((Player*)GetCaster())->GetPet();
+
+			if (!pet || pet->isDead())
+				return SPELL_FAILED_NO_PET;
+
+			if (!pet->IsWithinMeleeRange(pet->getVictim()))
+                return SPELL_FAILED_OUT_OF_RANGE;
+
+			return SPELL_CAST_OK;
+		}
+
+		void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
+			Unit* caster = GetCaster();
+            Pet *pet = ((Player*)GetCaster())->GetPet();
+
+			 sLog->outBasic("GetEffectValue: %u", GetEffectValue());
+			 pet->CastCustomSpell(pet->getVictim(), (uint32)GetEffectValue(), 0, NULL, NULL, true, NULL, NULL, pet->GetGUID());
+
+		}
+
+		void Register() 
+		{
+			OnCheckCast += SpellCheckCastFn(spell_hun_kill_command_SpellScript::CheckCast);
+			OnEffect += SpellEffectFn(spell_hun_kill_command_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
+		}
+	};
+
+	SpellScript* GetSpellScript() const {
+		return new spell_hun_kill_command_SpellScript();
+	}
+};
+
+class spell_hun_focus_fire: public SpellScriptLoader {
+public:
+	spell_hun_focus_fire() : SpellScriptLoader("spell_hun_focus_fire") {}
+
+	class spell_hun_focus_fire_SpellScript: public SpellScript {
+		PrepareSpellScript(spell_hun_focus_fire_SpellScript)
+
+		SpellCastResult CheckCast(){
+			Pet *pet = ((Player*)GetCaster())->GetPet();
+
+			if (!pet || pet->isDead())
+				return SPELL_FAILED_NO_PET;
+
+			if (!pet->GetAura(19615))
+				return SPELL_FAILED_NO_CHARGES_REMAIN;
+
+			return SPELL_CAST_OK;
+		}
+
+		void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
+			Unit* caster = GetCaster();
+            Pet *pet = ((Player*)GetCaster())->GetPet();
+
+				if (Aura* aur = pet->GetAura(19615))
+				{
+					uint8 aurCharges = aur->GetCharges();
+					caster->GetAura(82692)->SetCharges(aurCharges);
+					sLog->outBasic("Charges: %u", aurCharges);
+					pet->RemoveAurasDueToSpell(19615);
+		         }
+             int32 bp = GetEffectValue();
+			 caster->CastCustomSpell((Unit*)pet, 83468, &bp, NULL, NULL, true, NULL, NULL, caster->GetGUID());
+
+		}
+
+		void Register() 
+		{
+			OnCheckCast += SpellCheckCastFn(spell_hun_focus_fire_SpellScript::CheckCast);
+			OnEffect += SpellEffectFn(spell_hun_focus_fire_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_APPLY_AURA);
+		}
+	};
+
+	SpellScript* GetSpellScript() const {
+		return new spell_hun_focus_fire_SpellScript();
+	}
+};
+
 // 53412 Invigoration
 class spell_hun_invigoration: public SpellScriptLoader {
 public:
@@ -457,4 +544,6 @@ void AddSC_hunter_spell_scripts() {
 	new spell_hun_pet_heart_of_the_phoenix();
 	new spell_hun_pet_carrion_feeder();
 	new spell_hun_steady_shot();
+    new spell_hun_focus_fire();
+	new spell_hun_kill_command();
 }
