@@ -406,7 +406,7 @@ bool OutdoorPvPWG::SetupOutdoorPvP()
         if ((*itr)->icon[1] == 8)
         {
             // find or create grave yard
-            const WorldSafeLocsEntry *loc = sObjectMgr->GetClosestGraveYard((*itr)->x, (*itr)->y, (*itr)->z, (*itr)->mapId, 0);
+            const WorldSafeLocsEntry *loc = sObjectMgr->GetClosestGraveYard((*itr)->x, (*itr)->y, 1.0f, (*itr)->mapId, 0); // Fix Z, no longer in DBC
             if (!loc)
             {
                 ++itr;

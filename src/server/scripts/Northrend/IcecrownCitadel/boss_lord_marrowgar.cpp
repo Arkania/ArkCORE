@@ -555,6 +555,8 @@ class spell_marrowgar_bone_spike_graveyard : public SpellScriptLoader
             {
                 if (Unit* caster = GetCaster())
                     return caster->GetAI()->SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 0.0f, true, -SPELL_IMPALED) ? SPELL_CAST_OK : SPELL_FAILED_NO_VALID_TARGETS;
+
+                return SPELL_FAILED_NO_VALID_TARGETS;
             }
 
             void HandleSpikes(SpellEffIndex effIndex)
