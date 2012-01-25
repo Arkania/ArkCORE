@@ -49,7 +49,7 @@ public:
         PrepareSpellScript(spell_hun_kill_command_SpellScript)
 
         SpellCastResult CheckCast(){
-            Pet *pet = ((Player*)GetCaster())->GetPet();
+            Pet* pet = GetCaster()->ToPlayer()->GetPet();
 
             if (!pet || pet->isDead())
                 return SPELL_FAILED_NO_PET;
@@ -61,10 +61,7 @@ public:
         }
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
-            Unit* caster = GetCaster();
-            Pet *pet = ((Player*)GetCaster())->GetPet();
-
-             sLog->outBasic("GetEffectValue: %u", GetEffectValue());
+             Pet* pet = GetCaster()->ToPlayer()->GetPet();
              pet->CastCustomSpell(pet->getVictim(), (uint32)GetEffectValue(), 0, NULL, NULL, true, NULL, NULL, pet->GetGUID());
 
         }
@@ -89,7 +86,8 @@ public:
         PrepareSpellScript(spell_hun_focus_fire_SpellScript)
 
         SpellCastResult CheckCast(){
-            Pet *pet = ((Player*)GetCaster())->GetPet();
+            Unit* caster = GetCaster();
+            Pet* pet = caster->ToPlayer()->GetPet();
 
             if (!pet || pet->isDead())
                 return SPELL_FAILED_NO_PET;
@@ -102,18 +100,17 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
             Unit* caster = GetCaster();
-            Pet *pet = ((Player*)GetCaster())->GetPet();
+            Pet* pet = GetCaster()->ToPlayer()->GetPet();
 
-                if (Aura* aur = pet->GetAura(19615))
-                {
-                    uint8 aurCharges = aur->GetCharges();
-                    caster->GetAura(82692)->SetCharges(aurCharges);
-                    sLog->outBasic("Charges: %u", aurCharges);
-                    pet->RemoveAurasDueToSpell(19615);
-                 }
+            if (Aura* aur = pet->GetAura(19615))
+            {
+                //GetCharges não funciona.
+                uint8 aurCharges = aur->GetCharges();
+                caster->GetAura(82692)->SetCharges(aurCharges);
+                pet->RemoveAurasDueToSpell(19615);
+             }
              int32 bp = GetEffectValue();
-             caster->CastCustomSpell((Unit*)pet, 83468, &bp, NULL, NULL, true, NULL, NULL, caster->GetGUID());
-
+             caster->CastCustomSpell(pet, 83468, &bp, NULL, NULL, true, NULL, NULL, caster->GetGUID());
         }
 
         void Register() 

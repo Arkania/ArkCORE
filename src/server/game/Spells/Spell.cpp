@@ -5609,7 +5609,14 @@ SpellCastResult Spell::CheckCast(bool strict) {
                     if (m_caster->GetTypeId() == TYPEID_PLAYER) return SPELL_FAILED_ROOTED;
                     else
                         return SPELL_FAILED_DONT_REPORT;
-                }
+				}
+				// Posthaste (Hacky)
+				if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 5094, 1))
+				{
+                    SpellEntry const* spellproto = aurEff->GetSpellProto();
+					int32 bp0 = spellproto->EffectBasePoints[1];
+                    m_caster->CastCustomSpell(m_caster, 83559, &bp0, NULL, NULL, true, 0, 0, m_caster->GetGUID());
+				}
                 break;
             }
             case SPELL_EFFECT_TALENT_SPEC_SELECT:

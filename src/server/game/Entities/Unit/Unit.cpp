@@ -7151,10 +7151,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 			}
 			break;
 		}
-		//Crouching Tiger
 		case SPELLFAMILY_HUNTER:
 		{
-            
 			// Thrill of the Hunt
 			if (dummySpell->SpellIconID == 2236)
 			{
@@ -9293,6 +9291,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
                             || (auraSpellInfo->procFlags
                                     & PROC_FLAG_TAKEN_SPELL_MELEE_DMG_CLASS))) return false;
 
+                    //One With Nature
                     if (AuraEffect* aurEff = ToPlayer()->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 5080, 1))
                     {
                         SpellEntry const* spellproto = aurEff->GetSpellProto();
