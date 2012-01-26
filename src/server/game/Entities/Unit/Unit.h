@@ -2926,20 +2926,14 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path
 	data << GetPositionZ();
 	data << uint32(getMSTime());
 	data << uint8(0);
-	data
-			<< uint32(
-					((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING)
-							|| isInFlight()) ?
-							(SPLINEFLAG_FLYING | SPLINEFLAG_WALKING) :
-							SPLINEFLAG_WALKING);
-	data << uint32(traveltime);
-	data << uint32(pathSize);
+    uint32 splineflags = ((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING;
+    data << uint32(splineflags);
+    data << uint32(traveltime / pathSize);
+    data << uint32(1/*pathSize*/);
 
-	for (uint32 i = start; i < end; ++i) {
-		data << float(path[i].x);
-		data << float(path[i].y);
-		data << float(path[i].z);
-	}
+    data << float(path[end -1].x);	
+    data << float(path[end -1].y);	
+    data << float(path[end -1].z);
 
 	SendMessageToSet(&data, true);
 }
