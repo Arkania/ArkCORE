@@ -374,6 +374,9 @@ public:
 	int32 GetRewSpellCast() const {
 		return RewSpellCast;
 	}
+	int32 GetRewSpellHiddenCast() const {
+		return RewSpellHiddenCast;
+	}
 	uint32 GetRewMailTemplateId() const {
 		return RewMailTemplateId;
 	}
@@ -560,6 +563,7 @@ protected:
 	uint32 RewMoneyMaxLevel;
 	uint32 RewSpell;
 	int32 RewSpellCast;
+	int32 RewSpellHiddenCast;
 	uint32 RewMailTemplateId;
 	uint32 RewMailDelaySecs;
 	uint32 PointMapId;

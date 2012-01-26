@@ -15523,6 +15523,10 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
 	else if (pQuest->GetRewSpell() > 0)
 		CastSpell(this, pQuest->GetRewSpell(), true);
 
+	// Hidden Spell Casts. This can still be present with RewSpellCast
+	if (pQuest->GetRewSpellHiddenCast() > 0)
+		CastSpell(this, pQuest->GetRewSpellHiddenCast(), true);
+
 	if (pQuest->GetZoneOrSort() > 0)
 		GetAchievementMgr().UpdateAchievementCriteria(
 				ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUESTS_IN_ZONE,

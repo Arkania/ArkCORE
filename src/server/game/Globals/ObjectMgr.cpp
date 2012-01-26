@@ -4376,23 +4376,23 @@ void ObjectMgr::LoadQuests() {
 							"RewRepFaction1, RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValueId1, RewRepValueId2, RewRepValueId3, RewRepValueId4, RewRepValueId5, "
 							//   107           108           109           110           111
 							"RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4, RewRepValue5, "
-							//   112               113                 114            115               116       117           118                119               120         121     122     123
-							"RewHonorAddition, RewHonorMultiplier, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailDelaySecs, PointMapId, PointX, PointY, PointOpt, "
-							//   124            125            126            127            128                 129                 130                 131
+							//   112               113                 114            115               116       117              118                119               120              121      122     123      124
+							"RewHonorAddition, RewHonorMultiplier, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewSpellHiddenCast, RewMailTemplateId, RewMailDelaySecs, PointMapId, PointX, PointY, PointOpt, "
+							//   125            126            127            128                 129                 130                 131               132
 							"DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1, DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, "
-							//   132              133            134                135                136                137
+							//   133            134                135                136                137                138
 							"IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2, OfferRewardEmote3, OfferRewardEmote4, "
-							//   138                     139                     140                     141
+							//   139                     140                     141                     142
 							"OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3, OfferRewardEmoteDelay4, "
-							//   142             143             144         145                 146
+							//   143             144         145                 146                 147
 							"RewSkillLineId, RewSkillPoints, RewRepMask, QuestGiverPortrait, QuestTurnInPortrait, "
-							//   147             148                149             150                151             152                153             154
+							//   148                149             150                151             152                153             154             155
 							"RewCurrencyId1, RewCurrencyCount1, RewCurrencyId2, RewCurrencyCount2, RewCurrencyId3, RewCurrencyCount3, RewCurrencyId4, RewCurrencyCount4, "
-							//   155             156                157             158                159             160                161             162
+							//   156                157             158                159             160                161             162             163
 							"ReqCurrencyId1, ReqCurrencyCount1, ReqCurrencyId2, ReqCurrencyCount2, ReqCurrencyId3, ReqCurrencyCount3, ReqCurrencyId4, ReqCurrencyCount4, "
-							//   163                     164                    165                      166                     167              168             169
+							//   164                    165                      166                     167              168             169                    170
 							"QuestGiverPortraitText, QuestGiverPortraitUnk, QuestTurnInPortraitText, QuestTurnInPortraitUnk, QuestTargetMark, QuestStartType, SoundAccept, "
-							//  170           171            172          173
+							//  171            172           173          174
 							"SoundTurnIn, RequiredSpell, StartScript, CompleteScript"
 							" FROM quest_template");
 	if (!result) {
@@ -4943,6 +4943,35 @@ void ObjectMgr::LoadQuests() {
 						qinfo->GetQuestId(), qinfo->RewSpellCast,
 						qinfo->RewSpellCast);
 				qinfo->RewSpellCast = 0; // no spell will be casted on player
+			}
+		}
+
+		if (qinfo->RewSpellHiddenCast > 0) {
+			SpellEntry const* spellInfo = sSpellStore.LookupEntry(
+					qinfo->RewSpellHiddenCast);
+
+			if (!spellInfo) {
+				sLog->outErrorDb(
+						"Quest %u has `RewSpellHiddenCast` = %u but spell %u does not exist, quest will not have a spell reward.",
+						qinfo->GetQuestId(), qinfo->RewSpellHiddenCast,
+						qinfo->RewSpellHiddenCast);
+				qinfo->RewSpellHiddenCast = 0; // no spell will be casted on player
+			}
+
+			else if (!SpellMgr::IsSpellValid(spellInfo)) {
+				sLog->outErrorDb(
+						"Quest %u has `RewSpellHiddenCast` = %u but spell %u is broken, quest will not have a spell reward.",
+						qinfo->GetQuestId(), qinfo->RewSpellHiddenCast,
+						qinfo->RewSpellHiddenCast);
+				qinfo->RewSpellHiddenCast = 0; // no spell will be casted on player
+			}
+
+			else if (GetTalentSpellCost(qinfo->RewSpellHiddenCast)) {
+				sLog->outErrorDb(
+						"Quest %u has `RewSpell` = %u but spell %u is talent, quest will not have a spell reward.",
+						qinfo->GetQuestId(), qinfo->RewSpellHiddenCast,
+						qinfo->RewSpellHiddenCast);
+				qinfo->RewSpellHiddenCast = 0; // no spell will be casted on player
 			}
 		}
 
