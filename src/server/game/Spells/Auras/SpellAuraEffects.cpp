@@ -6919,18 +6919,18 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
 			}
 			break;
 
-		case 87840: //Rune wild
-			if (target->GetTypeId() == TYPEID_PLAYER
-					&& target->HasAura(87840)) {
-				if (target->getLevel() >= 20 && target->getLevel() < 40)
-					target->ToPlayer()->SetSpeed(MOVE_RUN, 1.6f, true);
-				else if (target->getLevel() >= 40)
-					target->ToPlayer()->SetSpeed(MOVE_RUN, 2.0f, true);
-			} else
-				target->ToPlayer()->SetSpeed(MOVE_RUN, 1.0f, true);
-			target->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM3);
-			target->GetAuraEffectsByType(SPELL_AURA_MOUNTED).front()->GetMiscValue();
-			break;
+        case 87840: //Rune wild
+            if (target->GetTypeId() == TYPEID_PLAYER
+                    && target->HasAura(87840)) {
+                if (target->HasSpell(33391)) // Journeyman Riding
+                    target->ToPlayer()->SetSpeed(MOVE_RUN, 2.0f, true);
+                else if (target->HasSpell(33388)) // Apprentice Riding
+                    target->ToPlayer()->SetSpeed(MOVE_RUN, 1.6f, true);
+            } else
+                target->ToPlayer()->SetSpeed(MOVE_RUN, 1.0f, true);
+            target->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM3);
+            target->GetAuraEffectsByType(SPELL_AURA_MOUNTED).front()->GetMiscValue();
+            break;
 
 		case 62061: // Festive Holiday Mount
 			if (target->HasAuraType(SPELL_AURA_MOUNTED)) {
