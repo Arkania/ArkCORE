@@ -25,113 +25,119 @@
  */
 
 /* ScriptData
- SDName: Boss_Noxxion
- SD%Complete: 100
- SDComment:
- SDCategory: Maraudon
- EndScriptData */
+SDName: Boss_Noxxion
+SD%Complete: 100
+SDComment:
+SDCategory: Maraudon
+EndScriptData */
 
 #include "ScriptPCH.h"
 
 #define SPELL_TOXICVOLLEY           21687
 #define SPELL_UPPERCUT              22916
 
-class boss_noxxion: public CreatureScript {
+class boss_noxxion : public CreatureScript
+{
 public:
-	boss_noxxion() :
-			CreatureScript("boss_noxxion") {
-	}
+    boss_noxxion() : CreatureScript("boss_noxxion") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_noxxionAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_noxxionAI (pCreature);
+    }
 
-	struct boss_noxxionAI: public ScriptedAI {
-		boss_noxxionAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_noxxionAI : public ScriptedAI
+    {
+        boss_noxxionAI(Creature *c) : ScriptedAI(c) {}
 
-		uint32 ToxicVolley_Timer;
-		uint32 Uppercut_Timer;
-		uint32 Adds_Timer;
-		uint32 Invisible_Timer;
-		bool Invisible;
+        uint32 ToxicVolley_Timer;
+        uint32 Uppercut_Timer;
+        uint32 Adds_Timer;
+        uint32 Invisible_Timer;
+        bool Invisible;
 
-		void Reset() {
-			ToxicVolley_Timer = 7000;
-			Uppercut_Timer = 16000;
-			Adds_Timer = 19000;
-			Invisible_Timer = 15000; //Too much too low?
-			Invisible = false;
-		}
+        void Reset()
+        {
+            ToxicVolley_Timer = 7000;
+            Uppercut_Timer = 16000;
+            Adds_Timer = 19000;
+            Invisible_Timer = 15000;                            //Too much too low?
+            Invisible = false;
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+        }
 
-		void SummonAdds(Unit* pVictim) {
-			if (Creature *Add = DoSpawnCreature(13456, float(irand(-7, 7)), float(irand(-7, 7)), 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 90000))
-				Add->AI()->AttackStart(pVictim);
-		}
+        void SummonAdds(Unit* pVictim)
+        {
+            if (Creature *Add = DoSpawnCreature(13456, float(irand(-7, 7)), float(irand(-7, 7)), 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 90000))
+                Add->AI()->AttackStart(pVictim);
+        }
 
-		void UpdateAI(const uint32 diff) {
-			if (Invisible && Invisible_Timer <= diff) {
-				//Become visible again
-				me->setFaction(14);
-				me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-				//Noxxion model
-				me->SetDisplayId(11172);
-				Invisible = false;
-				//me->m_canMove = true;
-			} else if (Invisible) {
-				Invisible_Timer -= diff;
-				//Do nothing while invisible
-				return;
-			}
+        void UpdateAI(const uint32 diff)
+        {
+            if (Invisible && Invisible_Timer <= diff)
+            {
+                //Become visible again
+                me->setFaction(14);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                //Noxxion model
+                me->SetDisplayId(11172);
+                Invisible = false;
+                //me->m_canMove = true;
+            } else if (Invisible)
+            {
+                Invisible_Timer -= diff;
+                //Do nothing while invisible
+                return;
+            }
 
-			//Return since we have no target
-			if (!UpdateVictim())
-				return;
+            //Return since we have no target
+            if (!UpdateVictim())
+                return;
 
-			//ToxicVolley_Timer
-			if (ToxicVolley_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_TOXICVOLLEY);
-				ToxicVolley_Timer = 9000;
-			} else
-				ToxicVolley_Timer -= diff;
+            //ToxicVolley_Timer
+            if (ToxicVolley_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_TOXICVOLLEY);
+                ToxicVolley_Timer = 9000;
+            } else ToxicVolley_Timer -= diff;
 
-			//Uppercut_Timer
-			if (Uppercut_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_UPPERCUT);
-				Uppercut_Timer = 12000;
-			} else
-				Uppercut_Timer -= diff;
+            //Uppercut_Timer
+            if (Uppercut_Timer <= diff)
+            {
+                DoCast(me->getVictim(), SPELL_UPPERCUT);
+                Uppercut_Timer = 12000;
+            } else Uppercut_Timer -= diff;
 
-			//Adds_Timer
-			if (!Invisible && Adds_Timer <= diff) {
-				//Interrupt any spell casting
-				//me->m_canMove = true;
-				me->InterruptNonMeleeSpells(false);
-				me->setFaction(35);
-				me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-				// Invisible Model
-				me->SetDisplayId(11686);
-				SummonAdds(me->getVictim());
-				SummonAdds(me->getVictim());
-				SummonAdds(me->getVictim());
-				SummonAdds(me->getVictim());
-				SummonAdds(me->getVictim());
-				Invisible = true;
-				Invisible_Timer = 15000;
+            //Adds_Timer
+            if (!Invisible && Adds_Timer <= diff)
+            {
+                //Interrupt any spell casting
+                //me->m_canMove = true;
+                me->InterruptNonMeleeSpells(false);
+                me->setFaction(35);
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                // Invisible Model
+                me->SetDisplayId(11686);
+                SummonAdds(me->getVictim());
+                SummonAdds(me->getVictim());
+                SummonAdds(me->getVictim());
+                SummonAdds(me->getVictim());
+                SummonAdds(me->getVictim());
+                Invisible = true;
+                Invisible_Timer = 15000;
 
-				Adds_Timer = 40000;
-			} else
-				Adds_Timer -= diff;
+                Adds_Timer = 40000;
+            } else Adds_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_noxxion() {
-	new boss_noxxion();
+void AddSC_boss_noxxion()
+{
+    new boss_noxxion();
 }

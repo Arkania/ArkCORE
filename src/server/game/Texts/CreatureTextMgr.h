@@ -27,7 +27,8 @@
 #include "Creature.h"
 #include "SharedDefines.h"
 
-struct CreatureTextEntry {
+struct CreatureTextEntry 
+{
 	uint32 entry;
 	uint8 group;
 	uint8 id;
@@ -40,36 +41,32 @@ struct CreatureTextEntry {
 	uint32 sound;
 };
 
-enum TextRange {
-	TEXT_RANGE_NORMAL = 0,
-	TEXT_RANGE_AREA = 1,
-	TEXT_RANGE_ZONE = 2,
-	TEXT_RANGE_MAP = 3,
-	TEXT_RANGE_WORLD = 4
+enum TextRange
+{
+    TEXT_RANGE_NORMAL   = 0,
+    TEXT_RANGE_AREA     = 1,
+    TEXT_RANGE_ZONE     = 2,
+    TEXT_RANGE_MAP      = 3,
+    TEXT_RANGE_WORLD    = 4
 };
 
-typedef std::vector<CreatureTextEntry> CreatureTextGroup; //texts in a group
-typedef UNORDERED_MAP<uint8, CreatureTextGroup> CreatureTextHolder; //groups for a creature by groupid
-typedef UNORDERED_MAP<uint32, CreatureTextHolder> CreatureTextMap; //all creatures by entry
+typedef std::vector<CreatureTextEntry> CreatureTextGroup;              //texts in a group
+typedef UNORDERED_MAP<uint8, CreatureTextGroup> CreatureTextHolder;    //groups for a creature by groupid
+typedef UNORDERED_MAP<uint32, CreatureTextHolder> CreatureTextMap;     //all creatures by entry
 
 //used for handling non-repeatable random texts
 typedef std::vector<uint8> CreatureTextRepeatIds;
 typedef UNORDERED_MAP<uint8, CreatureTextRepeatIds> CreatureTextRepeatGroup;
-typedef UNORDERED_MAP<uint64, CreatureTextRepeatGroup> CreatureTextRepeatMap; //guid based
+typedef UNORDERED_MAP<uint64, CreatureTextRepeatGroup> CreatureTextRepeatMap;//guid based
 
-class CreatureTextMgr {
-	friend class ACE_Singleton<CreatureTextMgr, ACE_Null_Mutex> ;
-	CreatureTextMgr() {
-	}
-	;
-public:
-	~CreatureTextMgr() {
-	}
-	;
-	void LoadCreatureTexts();
-	CreatureTextMap const& GetTextMap() const {
-		return mTextMap;
-	}
+class CreatureTextMgr
+{
+    friend class ACE_Singleton<CreatureTextMgr, ACE_Null_Mutex>;
+    CreatureTextMgr() {};
+    public:
+        ~CreatureTextMgr() {};
+        void LoadCreatureTexts();
+        CreatureTextMap  const& GetTextMap() const { return mTextMap; }
 
 	void SendSound(Creature* source, uint32 sound, ChatMsg msgtype, uint64 whisperGuid, TextRange range, Team team, bool gmOnly);
 	void SendEmote(Unit* source, uint32 emote);
@@ -84,8 +81,8 @@ private:
 	void BuildMonsterChat(WorldPacket* data, WorldObject* source, ChatMsg msgType, char const* text, Language language, uint64 whisperGuid) const;
 	void SendChatPacket(WorldPacket* data, WorldObject* source, ChatMsg msgType, uint64 whisperGuid, TextRange range, Team team, bool gmOnly) const;
 
-	CreatureTextMap mTextMap;
-	CreatureTextRepeatMap mTextRepeatMap;
+        CreatureTextMap mTextMap;
+        CreatureTextRepeatMap mTextRepeatMap;
 };
 
 #define sCreatureTextMgr ACE_Singleton<CreatureTextMgr, ACE_Null_Mutex>::instance()

@@ -25,60 +25,64 @@
  */
 
 /* ScriptData
- SDName: Boss_Houndmaster_Loksey
- SD%Complete: 100
- SDComment:
- SDCategory: Scarlet Monastery
- EndScriptData */
+SDName: Boss_Houndmaster_Loksey
+SD%Complete: 100
+SDComment:
+SDCategory: Scarlet Monastery
+EndScriptData */
 
 #include "ScriptPCH.h"
 
-enum eEnums {
-	SAY_AGGRO = -1189021,
-	SPELL_SUMMONSCARLETHOUND = 17164,
-	SPELL_BLOODLUST = 6742
+enum eEnums
+{
+    SAY_AGGRO                       = -1189021,
+    SPELL_SUMMONSCARLETHOUND        = 17164,
+    SPELL_BLOODLUST                 = 6742
 };
 
-class boss_houndmaster_loksey: public CreatureScript {
+class boss_houndmaster_loksey : public CreatureScript
+{
 public:
-	boss_houndmaster_loksey() :
-			CreatureScript("boss_houndmaster_loksey") {
-	}
+    boss_houndmaster_loksey() : CreatureScript("boss_houndmaster_loksey") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_houndmaster_lokseyAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_houndmaster_lokseyAI (pCreature);
+    }
 
-	struct boss_houndmaster_lokseyAI: public ScriptedAI {
-		boss_houndmaster_lokseyAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_houndmaster_lokseyAI : public ScriptedAI
+    {
+        boss_houndmaster_lokseyAI(Creature *c) : ScriptedAI(c) {}
 
-		uint32 BloodLust_Timer;
+        uint32 BloodLust_Timer;
 
-		void Reset() {
-			BloodLust_Timer = 20000;
-		}
+        void Reset()
+        {
+            BloodLust_Timer = 20000;
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-			DoScriptText(SAY_AGGRO, me);
-		}
+        void EnterCombat(Unit * /*who*/)
+        {
+            DoScriptText(SAY_AGGRO, me);
+        }
 
-		void UpdateAI(const uint32 diff) {
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
 
-			if (BloodLust_Timer <= diff) {
-				DoCast(me, SPELL_BLOODLUST);
-				BloodLust_Timer = 20000;
-			} else
-				BloodLust_Timer -= diff;
+            if (BloodLust_Timer <= diff)
+            {
+                DoCast(me, SPELL_BLOODLUST);
+                BloodLust_Timer = 20000;
+            } else BloodLust_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
-void AddSC_boss_houndmaster_loksey() {
-	new boss_houndmaster_loksey();
+void AddSC_boss_houndmaster_loksey()
+{
+    new boss_houndmaster_loksey();
 }

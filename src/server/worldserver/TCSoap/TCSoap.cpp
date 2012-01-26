@@ -48,7 +48,7 @@ void TCSoapRunnable::run()
         sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip>>24)&0xFF, (int)(soap.ip>>16)&0xFF, (int)(soap.ip>>8)&0xFF, (int)soap.ip&0xFF);
         struct soap* thread_soap = soap_copy(&soap);// make a safe copy
 
-        ACE_Message_Block* mb = new ACE_Message_Block(sizeof(struct soap*));
+        ACE_Message_Block *mb = new ACE_Message_Block(sizeof(struct soap*));
         ACE_OS::memcpy(mb->wr_ptr(), &thread_soap, sizeof(struct soap*));
         process_message(mb);
     }
@@ -56,7 +56,7 @@ void TCSoapRunnable::run()
     soap_done(&soap);
 }
 
-void TCSoapRunnable::process_message(ACE_Message_Block* mb)
+void TCSoapRunnable::process_message(ACE_Message_Block *mb)
 {
     ACE_TRACE (ACE_TEXT ("SOAPWorkingThread::process_message"));
 
@@ -91,6 +91,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
         return 401;
     }
 
+	
     if (!sAccountMgr->CheckPassword(accountId, soap->passwd))
     {
         sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: invalid password for account '%s'", soap->userid);
@@ -120,9 +121,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
 
     int acc = connection.pendingCommands.acquire();
     if (acc)
-    {
         sLog->outError("TCSoap: Error while acquiring lock, acc = %i, errno = %u", acc, errno);
-    }
 
     // alright, command finished
 

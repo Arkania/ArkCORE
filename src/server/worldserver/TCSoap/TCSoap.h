@@ -42,6 +42,7 @@ class TCSoapRunnable: public ACE_Based::Runnable
             m_host = host;
             m_port = port;
         }
+
     private:
         void process_message(ACE_Message_Block* mb);
 
