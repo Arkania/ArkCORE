@@ -21380,7 +21380,6 @@ bool Player::ReduceSpellCooldown(uint32 spell_id, uint32 seconds)
 		    GetSession()->SendPacket(&data);
 		    return true;
 		}
-
 		return false;
     }
 

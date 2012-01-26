@@ -7151,8 +7151,31 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 			}
 			break;
 		}
-		case SPELLFAMILY_HUNTER:
-		{
+        case SPELLFAMILY_HUNTER:
+        {
+            // Crouching Tiger, Hidden Chimera
+            if (dummySpell->SpellIconID == 4752)
+            {
+                if (!procSpell) return false;
+
+                if (procFlag & PROC_FLAG_TAKEN_MELEE_AUTO_ATTACK ||
+                    procFlag & PROC_FLAG_TAKEN_SPELL_MELEE_DMG_CLASS)
+                {
+                    uint32 seconds = dummySpell->EffectBasePoints [0];
+                    ToPlayer()->ReduceSpellCooldown(781, seconds);
+                    return true;
+                }
+
+                if (procFlag & PROC_FLAG_TAKEN_RANGED_AUTO_ATTACK || 
+                    procFlag & PROC_FLAG_TAKEN_SPELL_RANGED_DMG_CLASS || 
+                    procFlag & PROC_FLAG_TAKEN_SPELL_MAGIC_DMG_CLASS_NEG)
+                {
+                    uint32 seconds = dummySpell->EffectBasePoints [1];
+                    ToPlayer()->ReduceSpellCooldown(19263, seconds);
+                    return true;
+                }
+                return false;
+            }
 			// Thrill of the Hunt
 			if (dummySpell->SpellIconID == 2236)
 			{
@@ -9265,24 +9288,6 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 					}
 					break;
 				}
-                /*if (auraSpellInfo->Id == 82899)
-                {
-                sLog->outBasic("ProcFlags: %i", procFlags);
-
-                if (auraSpellInfo->procFlags & PROC_FLAG_TAKEN_MELEE_AUTO_ATTACK)
-                {
-                    uint32 seconds = auraSpellInfo->EffectBasePoints [0];
-                    ToPlayer()->ReduceSpellCooldown(781, seconds);
-                }
-
-                if (auraSpellInfo->procFlags & PROC_FLAG_TAKEN_RANGED_AUTO_ATTACK | PROC_FLAG_TAKEN_SPELL_MAGIC_DMG_CLASS_NEG)
-                {
-                    uint32 seconds = auraSpellInfo->EffectBasePoints [1];
-                    ToPlayer()->ReduceSpellCooldown(19263, seconds);
-                }
-                break;
-                }*/
-
                 if (auraSpellInfo->Id == 82661) // Aspect of the Fox: Focus bonus
                 {
                     uint32 basepoints;
