@@ -104,9 +104,8 @@ public:
 
             if (Aura* aur = pet->GetAura(19615))
             {
-                //GetCharges não funciona.
-                uint8 aurCharges = aur->GetCharges();
-                caster->GetAura(82692)->SetCharges(aurCharges);
+                uint8 aurCharges = aur->GetStackAmount();
+                caster->GetAura(82692)->SetStackAmount(aurCharges);
                 pet->RemoveAurasDueToSpell(19615);
              }
              int32 bp = GetEffectValue();
