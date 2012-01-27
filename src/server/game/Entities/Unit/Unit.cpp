@@ -8249,27 +8249,23 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 				return true;
 			}
 			// Static Shock
-			if (dummySpell->SpellIconID == 3059)
-			{
-				// Lightning Shield
-				if (AuraEffect const * aurEff = GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_SHAMAN, 0x400, 0, 0))
-				{
-					uint32 spell = sSpellMgr->GetSpellWithRank(26364,
-							sSpellMgr->GetSpellRank(aurEff->GetId()));
+            if (dummySpell->SpellIconID == 3059)
+            {
+                // Lightning Shield
+                if (AuraEffect const * aurEff = GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_SHAMAN, 0x400, 0, 0))
+                {
+                    uint32 spell = sSpellMgr->GetSpellWithRank(26364, sSpellMgr->GetSpellRank(aurEff->GetId()));
 
-					// custom cooldown processing case
-					if (GetTypeId() == TYPEID_PLAYER
-							&& ToPlayer()->HasSpellCooldown(spell)) ToPlayer()->RemoveSpellCooldown(
-							spell);
+                    // custom cooldown processing case
+                    if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->HasSpellCooldown(spell)) ToPlayer()->RemoveSpellCooldown(spell);
 
-					CastSpell(target, spell, true, castItem, triggeredByAura);
-					aurEff->GetBase()->DropCharge();
-					return true;
-				}
-				return false;
-			}
-			break;
-		}
+                    CastSpell(target, spell, true, castItem, triggeredByAura);
+                    return true;
+                }
+                return false;
+            }
+            break;
+        }
 		case SPELLFAMILY_DEATHKNIGHT:
 		{
 			// Blood-Caked Strike - Blood-Caked Blade
