@@ -1052,6 +1052,15 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
 					if (AuraEffect* auraEff = owner->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 2234, 1))
 						GetEffect(0)->SetAmount(auraEff->GetAmount());
 			}
+            // Improved Serpent Sting
+            if (GetId() == 1978) 
+            {
+                if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 536, 0)) 
+                {
+                    int32 basepoints0 = aurEff->GetAmount() * GetEffect(0)->GetTotalTicks()	* caster->SpellDamageBonus(target, GetSpellProto(),	0, GetEffect(0)->GetAmount(), DOT) / 100;
+                    caster->CastCustomSpell(target, 83077, &basepoints0, NULL, NULL, true, NULL, GetEffect(0));
+                }
+            }
 			break;
 		case SPELLFAMILY_WARLOCK:
                 switch (GetId())
