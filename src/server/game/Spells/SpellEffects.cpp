@@ -2260,23 +2260,28 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 						true, 0, 0, m_originalCasterGUID);
 				return;
 			}
-			// Lava Lash
-			if (m_spellInfo->SpellFamilyFlags [2]
-					& SPELLFAMILYFLAG2_SHAMAN_LAVA_LASH)
-			{
-				if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
+            // Lava Lash
+            if (m_spellInfo->SpellFamilyFlags [2] & SPELLFAMILYFLAG2_SHAMAN_LAVA_LASH)
+            {
+                if (m_caster->GetTypeId() != TYPEID_PLAYER) return;
 
-				if (m_caster->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0,
-						EQUIPMENT_SLOT_OFFHAND))
-				{
-					// Damage is increased by 25% if your off-hand weapon is enchanted with Flametongue.
-					if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY,
-							SPELLFAMILY_SHAMAN, 0x200000, 0, 0)) m_damage +=
-							m_damage * damage / 100;
-				}
-				return;
-			}
-			break;
+                if (m_caster->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+                {
+                    // Damage is increased by 40% if your off-hand weapon is enchanted with Flametongue.
+                    if (m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 0x200000, 0, 0)) 
+                        m_damage += m_damage * damage / 100;
+                }
+                
+                if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, 4780, EFFECT_1)) 
+                    if (Aura * aur = unitTarget->GetAura(77661))
+                    {
+                        int32 pct = int32(aurEff->GetAmount() * aur->GetStackAmount());
+                        m_damage += CalculatePctN(m_damage, pct);
+                        unitTarget->RemoveAura(aur);
+                    }
+                return;
+            }
+            break;
 		case SPELLFAMILY_DEATHKNIGHT:
 			// Hungering Cold
 			if (m_spellInfo->SpellFamilyFlags [1]
