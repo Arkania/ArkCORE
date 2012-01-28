@@ -18570,6 +18570,15 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
 				default: // RACE_TAUREN
 					return 20872;
 			}
+		case FORM_MOONKIN:
+			switch (getRace()) {
+			case RACE_TROLL:
+			case RACE_TAUREN:
+					return 15375;
+			case RACE_NIGHTELF:
+			case RACE_WORGEN:
+					return 15374;
+			}
 		case FORM_FLIGHT_EPIC:
 			switch (getRace())
 			{
