@@ -48,6 +48,46 @@ enum ShamanSpells {
 	SHAMAN_TOTEM_SPELL_TOTEMIC_WRATH = 77746,
 	SHAMAN_TOTEM_SPELL_TOTEMIC_WRATH_AURA = 77747,
 	SHAMAN_SPELL_UNLEASH_ELEMENTS = 73680,
+
+    SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN = 77505,
+};
+
+// 77478 - Earthquake
+class spell_sha_earthquake : public SpellScriptLoader
+{
+    public:
+        spell_sha_earthquake() : SpellScriptLoader("spell_sha_earthquake") { }
+
+        class spell_sha_earthquake_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_sha_earthquake_SpellScript);
+
+			bool Validate(SpellEntry const* /*spellInfo*/)
+            {
+                if (!sSpellStore.LookupEntry(SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN))
+                    return false;
+                return true;
+            }
+
+            void OnQuake()
+            {
+				int32 chance = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_1);
+			    Unit* target = GetHitUnit();
+				sLog->outBasic("Chance: %i", chance);
+				if (roll_chance_i(chance))
+				    GetCaster()->CastSpell(target, SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN, true);
+            }
+
+            void Register()
+            {
+                OnHit += SpellHitFn(spell_sha_earthquake_SpellScript::OnQuake);
+            }
+        };
+        
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_sha_earthquake_SpellScript();
+        }
 };
 
 // 51474 - Astral shift
@@ -450,4 +490,5 @@ void AddSC_shaman_spell_scripts() {
 	new spell_sha_totemic_wrath();
 	new spell_sha_fulmination();
 	new spell_sha_healing_rain();
+    new spell_sha_earthquake();
 }
