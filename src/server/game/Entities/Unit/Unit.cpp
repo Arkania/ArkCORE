@@ -7156,13 +7156,15 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
             // Crouching Tiger, Hidden Chimera
             if (dummySpell->SpellIconID == 4752)
             {
-                if (!procSpell) return false;
+                if (!(dummySpell->procFlags == 0x000202A8)) return false;
+                if (ToPlayer()->HasSpellCooldown(dummySpell->Id)) return false;
 
                 if (procFlag & PROC_FLAG_TAKEN_MELEE_AUTO_ATTACK ||
                     procFlag & PROC_FLAG_TAKEN_SPELL_MELEE_DMG_CLASS)
                 {
                     uint32 seconds = dummySpell->EffectBasePoints [0];
                     ToPlayer()->ReduceSpellCooldown(781, seconds);
+                    ToPlayer()->AddSpellCooldown(dummySpell->Id, 0, time(NULL) + 2);
                     return true;
                 }
 
@@ -7172,6 +7174,7 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
                 {
                     uint32 seconds = dummySpell->EffectBasePoints [1];
                     ToPlayer()->ReduceSpellCooldown(19263, seconds);
+                    ToPlayer()->AddSpellCooldown(dummySpell->Id, 0, time(NULL) + 2);
                     return true;
                 }
                 return false;
