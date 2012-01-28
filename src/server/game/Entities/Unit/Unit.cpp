@@ -9290,7 +9290,7 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
 				}
                 if (auraSpellInfo->Id == 82661) // Aspect of the Fox: Focus bonus
                 {
-                    uint32 basepoints;
+                    uint32 basepoints = 0;
                     if (!((auraSpellInfo->procFlags
                             & PROC_FLAG_TAKEN_MELEE_AUTO_ATTACK)
                             || (auraSpellInfo->procFlags
