@@ -913,6 +913,11 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
 					if (m_caster->HasAura(78785)) // Blessing of the Grove rank 2
 					damage = int32(damage * 0.06f);
 				}
+				else if (m_spellInfo->Id == 77758) // Thrash
+				{
+					int32 dmg = urand(932, 1150);
+					damage = ((m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.0982) + dmg);
+				}
 				break;
 			}
 			case SPELLFAMILY_ROGUE:
@@ -7733,6 +7738,12 @@ void Spell::EffectLeapBack(SpellEffIndex effIndex)
 	{
 		//1891: Disengage
 		m_caster->JumpTo(speedxy, speedz, m_spellInfo->SpellIconID != 1891);
+		// Posthaste
+		if (AuraEffect *dummy = m_caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_HUNTER, 5094, 1))
+		{
+	int32 basepoints0 = dummy->GetAmount();
+				m_caster->CastCustomSpell(m_caster, 83559, &basepoints0, NULL, NULL, true);
+		}
 	}
 }
 
