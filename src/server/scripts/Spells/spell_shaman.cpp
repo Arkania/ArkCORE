@@ -62,7 +62,7 @@ class spell_sha_earthquake : public SpellScriptLoader
         {
             PrepareSpellScript(spell_sha_earthquake_SpellScript);
 
-			bool Validate(SpellEntry const* /*spellInfo*/)
+            bool Validate(SpellEntry const* /*spellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN))
                     return false;
@@ -71,11 +71,11 @@ class spell_sha_earthquake : public SpellScriptLoader
 
             void OnQuake()
             {
-				int32 chance = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_1);
-			    Unit* target = GetHitUnit();
-				sLog->outBasic("Chance: %i", chance);
-				if (roll_chance_i(chance))
-				    GetCaster()->CastSpell(target, SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN, true);
+                int32 chance = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_1);
+                Unit* target = GetHitUnit();
+
+                if (roll_chance_i(chance))
+                    GetCaster()->CastSpell(target, SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN, true);
             }
 
             void Register()
