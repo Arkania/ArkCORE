@@ -8274,6 +8274,17 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 
 				return true;
 			}
+            // Telluric Currents
+            if (dummySpell->SpellIconID == 320)
+            {
+                if (!procSpell) return false;
+
+                int32 pct = SpellMgr::CalculateSpellEffectAmount(dummySpell, EFFECT_0);
+                int32 bp0 = damage * pct / 100;
+
+                CastCustomSpell(pVictim, 82987, &bp0, NULL, NULL, true, 0, 0, GetGUID());
+                return true;
+            }
             // Focused Insight
             if (dummySpell->SpellIconID == 4674)
             {
