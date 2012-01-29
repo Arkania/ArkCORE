@@ -8274,6 +8274,18 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 
 				return true;
 			}
+            // Focused Insight
+            if (dummySpell->SpellIconID == 4674)
+            {
+                if (!procSpell) return false;
+
+                int32 manacost = (procSpell->ManaCostPercentage * GetCreateMana() / 100);
+                int32 mana = -(manacost * SpellMgr::CalculateSpellEffectAmount(dummySpell, EFFECT_0)) / 100;
+                int32 effect = SpellMgr::CalculateSpellEffectAmount(dummySpell, EFFECT_1);
+
+                CastCustomSpell(pVictim, 77800, &mana, &effect, &effect, true, 0, 0, GetGUID());
+                return true;
+            }
 			// Static Shock
             if (dummySpell->SpellIconID == 3059)
             {
