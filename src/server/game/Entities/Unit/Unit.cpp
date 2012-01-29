@@ -8274,6 +8274,16 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 
 				return true;
 			}
+            // Tidal Waves
+            if (dummySpell->SpellIconID == 3057)
+            {
+                if (!procSpell) return false;
+
+                int32 bp0 = -(dummySpell->EffectBasePoints[0]);
+                int32 bp1 = dummySpell->EffectBasePoints[0];
+                CastCustomSpell(this, 53390, &bp0, &bp1, NULL, true, 0, 0, GetGUID());
+                return true;
+            }
             // Telluric Currents
             if (dummySpell->SpellIconID == 320)
             {
