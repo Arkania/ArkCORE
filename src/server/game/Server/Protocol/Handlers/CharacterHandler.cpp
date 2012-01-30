@@ -1108,7 +1108,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder) {
 	if (sWorld->IsShutdowning())
 		sWorld->ShutdownMsg(true, pCurrChar);
 
-	if (pCurrChar)
+	if (sWorld->getBoolConfig(CONFIG_ALL_TAXI_PATHS))
 		pCurrChar->SetTaxiCheater(true);
 
 	if (pCurrChar->isGameMaster())

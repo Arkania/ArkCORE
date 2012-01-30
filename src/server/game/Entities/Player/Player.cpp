@@ -20762,6 +20762,8 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes,
 	// clean not finished taxi path if any
 	m_taxi.ClearTaxiDestinations();
 
+    m_taxi.AddTaxiDestination(sourcenode);
+
 	// fill destinations path tail
 	uint32 sourcepath = 0;
 	uint32 totalcost = 0;
