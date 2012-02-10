@@ -6480,6 +6480,13 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
 						triggeredByAura->GetAmount() - damage);
 				return true;
 			}
+            // Improved Soul Fire
+            if (dummySpell->SpellIconID == 184)
+            {
+                basepoints0 = triggerAmount;
+                triggered_spell_id = 85383;
+                break;
+            }
 			// Fel Synergy
 			if (dummySpell->SpellIconID == 3222)
 			{
