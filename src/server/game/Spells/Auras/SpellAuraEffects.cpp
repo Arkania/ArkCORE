@@ -2779,7 +2779,7 @@ void AuraEffect::TriggerSpell(Unit *target, Unit *caster) const {
 			// Rapid Recuperation (triggered energize have basepoints == 0)
 		case 56654:
 		case 58882: {
-			if (int32 mana = target->GetMaxPower(POWER_MANA) / 100 * GetAmount())
+			if (int32 mana = target->GetMaxPower(POWER_FOCUS) / 100 * GetAmount())
 				target->CastCustomSpell(target, triggerSpellId, &mana, NULL,
 						NULL, true, NULL, this);
 			return;
