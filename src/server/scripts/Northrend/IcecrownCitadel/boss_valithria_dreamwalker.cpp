@@ -434,6 +434,10 @@ class boss_valithria_dreamwalker : public CreatureScript
                     summon->m_Events.AddEvent(new DelayedCastEvent(summon, SPELL_SUMMON_NIGHTMARE_PORTAL, me->GetGUID(), 6000), summon->m_Events.CalculateTime(15000));
                     summon->m_Events.AddEvent(new AuraRemoveEvent(summon, SPELL_NIGHTMARE_PORTAL_VISUAL_PRE), summon->m_Events.CalculateTime(15000));
                 }
+				else
+				{
+				    summon->Attack(me, true);
+				}
             }
 
             void SummonedCreatureDespawn(Creature* summon)
