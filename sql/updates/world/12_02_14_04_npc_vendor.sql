@@ -1,0 +1,144 @@
+-- Fix Vendor Engineering
+-- By Mikadmin for Arkania
+-- http://fr.wowhead.com/search?q=roue+dent%C3%A9
+
+SET @ENTRY := 5519;
+SET @ENTRY1 := 5175;
+SET @ENTRY2 := 4587;
+SET @ENTRY3 := 16657;
+SET @ENTRY4 := 49702;
+SET @ENTRY5 := 52655;
+SET @ENTRY6 := 52637;
+SET @ENTRY7 := 3413;
+SET @ENTRY8 := 45546;
+SET @ENTRY9 := 16782;
+SET @ENTRY10 := 50460;
+
+SET @ITEM := 59480;
+SET @ITEM1 := 59496;
+SET @ITEM2 := 59478;
+SET @ITEM3 := 59491;
+SET @ITEM4 := 68660;
+SET @ITEM5 := 59489;
+SET @ITEM6 := 59479;
+SET @ITEM7 := 59493;
+SET @ITEM8 := 59477;
+
+SET @COST := 3308;
+SET @COST1 := 3306;
+SET @COST2 := 3311;
+SET @COST3 := 3305;
+SET @COST4 := 491;
+SET @COST5 := 3310;
+SET @COST6 := 3307;
+
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM1);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM2);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM3);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM4);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM5);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM6);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM7);
+DELETE FROM `npc_vendor` WHERE (`item`=@ITEM8);
+
+INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES 
+(@ENTRY, 0, @ITEM, 0, 0, @COST),
+(@ENTRY, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY1, 0, @ITEM, 0, 0, @COST),
+(@ENTRY1, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY1, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY1, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY1, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY1, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY1, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY1, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY1, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY2, 0, @ITEM, 0, 0, @COST),
+(@ENTRY2, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY2, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY2, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY2, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY2, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY2, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY2, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY2, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY3, 0, @ITEM, 0, 0, @COST),
+(@ENTRY3, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY3, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY3, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY3, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY3, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY3, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY3, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY3, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY4, 0, @ITEM, 0, 0, @COST),
+(@ENTRY4, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY4, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY4, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY4, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY4, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY4, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY4, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY4, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY5, 0, @ITEM, 0, 0, @COST),
+(@ENTRY5, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY5, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY5, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY5, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY5, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY5, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY5, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY5, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY6, 0, @ITEM, 0, 0, @COST),
+(@ENTRY6, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY6, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY6, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY6, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY6, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY6, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY6, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY6, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY7, 0, @ITEM, 0, 0, @COST),
+(@ENTRY7, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY7, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY7, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY7, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY7, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY7, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY7, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY7, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY8, 0, @ITEM, 0, 0, @COST),
+(@ENTRY8, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY8, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY8, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY8, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY8, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY8, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY8, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY8, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY9, 0, @ITEM, 0, 0, @COST),
+(@ENTRY9, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY9, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY9, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY9, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY9, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY9, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY9, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY9, 0, @ITEM8, 0, 0, @COST2),
+(@ENTRY10, 0, @ITEM, 0, 0, @COST),
+(@ENTRY10, 0, @ITEM1, 0, 0, @COST1),
+(@ENTRY10, 0, @ITEM2, 0, 0, @COST2),
+(@ENTRY10, 0, @ITEM3, 0, 0, @COST3),
+(@ENTRY10, 0, @ITEM4, 0, 0, @COST4),
+(@ENTRY10, 0, @ITEM5, 0, 0, @COST5),
+(@ENTRY10, 0, @ITEM6, 0, 0, @COST2),
+(@ENTRY10, 0, @ITEM7, 0, 0, @COST6),
+(@ENTRY10, 0, @ITEM8, 0, 0, @COST2);
