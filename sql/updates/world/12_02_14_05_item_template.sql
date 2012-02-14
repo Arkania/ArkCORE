@@ -2,7 +2,7 @@
 -- By Mikadmin for Arkania
 -- fix characteristic 
 
-UPDATE `world`.`item_template` SET `stat_type1` = '7',
+UPDATE `item_template` SET `stat_type1` = '7',
 `stat_value1` = '286',
 `stat_type2` = '5',
 `stat_value2` = '190',
