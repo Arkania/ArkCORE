@@ -18,6 +18,10 @@ INSERT INTO `disenchant_loot_template` VALUES
 (@ENTRY3, @ITEM, 100, 1, 0, 1, 2);
 
 UPDATE `item_template` SET `DisenchantID` = '67129' WHERE `item_template`.`entry` =67129;
+UPDATE `item_template` SET `RequiredDisenchantSkill` = '475' WHERE `item_template`.`entry` =67129;
 UPDATE `item_template` SET `DisenchantID` = '65020' WHERE `item_template`.`entry` =65020;
+UPDATE `item_template` SET `RequiredDisenchantSkill` = '475' WHERE `item_template`.`entry` =65020;
 UPDATE `item_template` SET `DisenchantID` = '59121' WHERE `item_template`.`entry` =59121;
+UPDATE `item_template` SET `RequiredDisenchantSkill` = '475' WHERE `item_template`.`entry` =59121;
 UPDATE `item_template` SET `DisenchantID` = '59120' WHERE `item_template`.`entry` =59120;
+UPDATE `item_template` SET `RequiredDisenchantSkill` = '475' WHERE `item_template`.`entry` =59120;
