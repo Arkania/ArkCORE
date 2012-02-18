@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -129,7 +129,7 @@ enum MalygosEvents
     DATA_SUMMON_DEATHS, // phase 2
     DATA_PHASE
 };
- 
+
 #define TEN_MINUTES 600000
 
 enum MalygosSays
@@ -175,7 +175,7 @@ const Position HoverDiskWaypoints[MAX_HOVER_DISK_WAYPOINTS] =
    {779.5085f, 1316.412f, 281.9145f, 0.0f},
    {782.8365f, 1306.778f, 282.3035f, 0.0f},
 };
- 
+
 #define GROUND_Z 268
 
 // Source: Sniffs (x, y,z)
@@ -208,7 +208,7 @@ const Position MalygosPositions[MAX_MALYGOS_POS] =
     {754.544f, 1301.71f, 320.0f, 0.0f},
     {754.39f, 1301.27f, 292.91f, 0.0f},
 };
- 
+
 class boss_malygos : public CreatureScript
 {
 public:
@@ -226,7 +226,7 @@ public:
             // If we enter in combat when MovePoint generator is active, it overrwrites our homeposition
             _homePosition = creature->GetHomePosition();
         }
-   
+
         void Reset()
         {
             _Reset();
@@ -432,7 +432,7 @@ public:
         {
             if (type != POINT_MOTION_TYPE)
                 return;
- 
+
             switch (id)
             {
                 case MOVE_VORTEX:
@@ -710,7 +710,6 @@ class spell_malygos_vortex_visual : public SpellScriptLoader
                         malygos->RemoveAura(SPELL_VORTEX_1);
                     }
                 }
-
             }
 
             void Register()
@@ -786,7 +785,6 @@ public:
         InstanceScript* _instance;
    };
 };
-
 
 class npc_power_spark : public CreatureScript
 {
@@ -971,7 +969,6 @@ public:
     };
 };
 
-
 // The reason of this AI is to make the creature able to enter in combat otherwise the spell casting of SPELL_ARCANE_OVERLOAD fails.
 class npc_arcane_overload : public CreatureScript
 {
@@ -1001,7 +998,6 @@ public:
         {
             // we dont do melee damage!
         }
-
 };
 };
 

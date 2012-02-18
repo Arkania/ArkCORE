@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -219,7 +219,7 @@ public:
                     break;
                 }
             }
-            
+
             /*
             if (!me->hasUnitState(UNIT_STAT_CASTING))
             {
@@ -231,7 +231,6 @@ public:
                 if (cast>=90)
                     events.ScheduleEvent(EVENT_BLAST,0);
             } */
-
         }
         void JustDied(Unit* /*killer*/)
         {
@@ -299,7 +298,6 @@ public:
             return SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true);
         }
     };
-
 };
 
 enum CrystalHandlerSpells
@@ -363,7 +361,6 @@ public:
                     AttackStart(target);
         }
     };
-
 };
 
 class mob_novos_minion : public CreatureScript
@@ -397,7 +394,6 @@ public:
             }
         }
     };
-
 };
 
 class achievement_oh_novos : public AchievementCriteriaScript

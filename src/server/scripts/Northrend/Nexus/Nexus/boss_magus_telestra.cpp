@@ -113,7 +113,7 @@ public:
 
             for (uint8 n = 0; n < 3; ++n)
                 time[n] = 0;
-				
+
             splitPersonality = 0;
             bIsWaitingToAppear = false;
 
@@ -336,8 +336,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
-};	  
+};
 
 class achievement_split_personality : public AchievementCriteriaScript
 {
@@ -446,7 +445,7 @@ class spell_nexus_critter_targeting : public SpellScriptLoader
 void AddSC_boss_magus_telestra()
 {
     new boss_magus_telestra();
-    new achievement_split_personality();	
+    new achievement_split_personality();
     new boss_magus_telestra_arcane();
     new spell_nexus_critter_targeting();
 }

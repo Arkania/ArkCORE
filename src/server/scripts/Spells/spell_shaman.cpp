@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -128,7 +128,7 @@ class spell_sha_earthquake : public SpellScriptLoader
                 OnHit += SpellHitFn(spell_sha_earthquake_SpellScript::OnQuake);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_sha_earthquake_SpellScript();
@@ -517,11 +517,11 @@ class spell_sha_healing_rain : public SpellScriptLoader
                 //DoCheckAreaTarget += AuraCheckAreaTargetFn(spell_sha_healing_rain_AuraScript::Target);
                 OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_healing_rain_AuraScript::OnTick, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
             }
-            
+
             public:
                 std::list<Unit*> targetList;
         };
-        
+
         AuraScript* GetAuraScript() const
         {
             return new spell_sha_healing_rain_AuraScript();

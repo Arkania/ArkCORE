@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -261,13 +261,11 @@ public:
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
                     if (m_auiEncounter[i] == IN_PROGRESS)
                         m_auiEncounter[i] = NOT_STARTED;
-
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;
         }
     };
-
 };
 
 void AddSC_instance_halls_of_stone()

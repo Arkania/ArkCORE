@@ -422,7 +422,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_swarm_scarab : public CreatureScript
@@ -488,7 +487,7 @@ public:
 
             DoMeleeAttackIfReady();
         }
-    };							  
+    };
 };
 
 class mob_nerubian_burrower : public CreatureScript

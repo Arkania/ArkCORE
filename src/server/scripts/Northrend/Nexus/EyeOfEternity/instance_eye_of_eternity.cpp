@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -26,7 +26,7 @@ class instance_eye_of_eternity : public InstanceMapScript
 {
 public:
     instance_eye_of_eternity() : InstanceMapScript("instance_eye_of_eternity",616) {}
- 
+
     InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
         return new instance_eye_of_eternity_InstanceMapScript(map);
@@ -105,7 +105,7 @@ public:
 
             instance->Add(go);
         }
-    
+
         void OnGameObjectCreate(GameObject *go)
         {
             switch(go->GetEntry())
@@ -126,7 +126,7 @@ public:
                     break;
             }
         }
- 
+
         void OnCreatureCreate(Creature* creature)
         {
             switch (creature->GetEntry())
@@ -278,7 +278,6 @@ public:
                         tmpState = NOT_STARTED;
                     SetBossState(i, EncounterState(tmpState));
                 }
-
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;

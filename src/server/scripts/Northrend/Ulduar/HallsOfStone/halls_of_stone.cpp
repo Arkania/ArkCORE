@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -129,7 +129,6 @@ enum Achievements
     ACHIEV_BRANN_SPANKIN_NEW            = 2154
 };
 
-
 #define GOSSIP_ITEM_START               "Brann, it would be our honor!"
 #define GOSSIP_ITEM_PROGRESS            "Let's move Brann, enough of the history lessons!"
 
@@ -250,7 +249,7 @@ public:
                             summon->SetDisplayId(17200);
                             summon->setFaction(16);
                             uiDarkMatterGUID = summon->GetGUID();
-                            
+
                             bLoadingDarkMatter = true;
 
                             for (std::list<uint64>::const_iterator itr = MarnakGUIDList.begin(); itr != MarnakGUIDList.end(); ++itr)
@@ -276,7 +275,7 @@ public:
                             {
                                 float x, y, z;
                                 target->GetPosition(x, y, z);
-                
+
                                 me->SummonCreature(CREATURE_DARK_MATTER_TARGET, x, y, z, 0, TEMPSUMMON_TIMED_DESPAWN, 20*IN_MILLISECONDS);
                                 pMatter->GetMotionMaster()->MovePoint(0, x, y, z);
                             }
@@ -314,7 +313,6 @@ public:
             }
         }
     };
-
 };
 
 class npc_brann_hos : public CreatureScript
@@ -452,13 +450,13 @@ public:
                                 pKaddrak = me->SummonCreature(CREATURE_KADDRAK, 927.265f, 333.200f, 218.780f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
                             else
                                 pKaddrak = me->SummonCreature(CREATURE_KADDRAK, 921.745f, 328.076f, 218.780f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
-                            
+
                             if (pKaddrak)
                                 CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->KaddrakGUIDList.push_back(pKaddrak->GetGUID());
 
                             ++uiPositionCounter;
                         }
-                        
+
                         CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->SetInCombat();
                         CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->bKaddrakActivated = true;
                     }
@@ -477,13 +475,13 @@ public:
                                 pMarnak = me->SummonCreature(CREATURE_MARNAK, 891.309f, 359.382f, 217.422f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
                             else
                                 pMarnak = me->SummonCreature(CREATURE_MARNAK, 895.834f, 363.436f, 217.422f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
-                            
+
                             if (pMarnak)
                                 CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->MarnakGUIDList.push_back(pMarnak->GetGUID());
 
                             ++uiPositionCounter;
                         }
-                        
+
                         CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->SetInCombat();
                         CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->bMarnakActivated = true;
                     }
@@ -502,13 +500,13 @@ public:
                                 pAbedneum = me->SummonCreature(CREATURE_ABEDNEUM, 897.865f, 328.341f, 223.84f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
                             else
                                 pAbedneum = me->SummonCreature(CREATURE_ABEDNEUM, 893.012f, 332.804f, 223.545f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
-                            
+
                             if (pAbedneum)
                                 CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->AbedneumGUIDList.push_back(pAbedneum->GetGUID());
 
                             ++uiPositionCounter;
                         }
-                        
+
                         CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->SetInCombat();
                         CAST_AI(mob_tribuna_controller::mob_tribuna_controllerAI, pTemp->AI())->bAbedneumActivated = true;
                     }
@@ -704,7 +702,7 @@ public:
 
                             pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_ABEDNEUM),true);
                             pInstance->SetData(DATA_BRANN_EVENT, DONE);
-                            DespawnSummon(); 
+                            DespawnSummon();
 
                         // Achievement criteria is with spell 59046 which does not exist.
                         // There is thus no way it can be given by casting the spell on the players.
@@ -873,12 +871,11 @@ public:
         // skip history lessons
         if (uiStepCount > 29 && uiStepCount < 49)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_PROGRESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-        
+
         player->SEND_GOSSIP_MENU(TEXT_ID_START, creature->GetGUID());
 
         return true;
     }
-
 };
 
 class mob_dark_matter : public CreatureScript
@@ -930,7 +927,7 @@ public:
                 }
 
                 uiCheckTimer = 1*IN_MILLISECONDS;
-            } 
+            }
             else uiCheckTimer -= diff;
         }
     };

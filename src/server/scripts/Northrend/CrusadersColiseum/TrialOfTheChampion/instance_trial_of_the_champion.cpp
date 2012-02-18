@@ -177,7 +177,7 @@ public:
                 case VEHICLE_THUNDER_BLUFF_KODO:
                     if (TeamInInstance == HORDE)
                         creature->UpdateEntry(VEHICLE_EXODAR_ELEKK, ALLIANCE);
-                    break;                
+                    break;
                 case VEHICLE_ORGRIMMAR_WOLF:
                     if (TeamInInstance == HORDE)
                         creature->UpdateEntry(VEHICLE_STORMWIND_STEED, ALLIANCE);
@@ -293,14 +293,12 @@ public:
                         pBlackKnight->SetReactState(REACT_DEFENSIVE);
                         pBlackKnight->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
                     }
-
                 }else if (uiData == IN_PROGRESS)
                 {
                     if (Creature* pBlackKnight =  instance->GetCreature(uiBlackKnightGUID))
                     {
                         DoScriptText(SAY_BLACK_KNIGHT_1, pBlackKnight);
                     }
-
                 }else if (uiData == DONE)
                 {
                     if (Creature* pBlackKnight =  instance->GetCreature(uiBlackKnightGUID))
@@ -320,11 +318,10 @@ public:
                     if (Creature* pBlackKnight =  instance->GetCreature(uiBlackKnightGUID))
                     {
                         pBlackKnight->SetOrientation(4.714f);
-			
+
 	    pBlackKnight->SetReactState(REACT_PASSIVE);
             pBlackKnight->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
                     }
-
                 }else if (uiData == IN_PROGRESS)
                 {
                     if (Creature* pBlackKnight =  instance->GetCreature(uiBlackKnightGUID))
@@ -335,7 +332,6 @@ public:
                             pAnnouncer->setDeathState(JUST_DIED);
                         }
                     }
-
                 }else if (uiData == DONE)
                 {
                     if (Creature* pBlackKnight =  instance->GetCreature(uiBlackKnightGUID))
@@ -551,7 +547,6 @@ public:
             OUT_LOAD_INST_DATA_COMPLETE;
         }
     };
-
 };
 
 void AddSC_instance_trial_of_the_champion()

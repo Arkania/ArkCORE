@@ -84,7 +84,6 @@ bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint3
             me->SetReactState(REACT_PASSIVE);
         }
     };
-
 };
 
 enum eWintergraspBattleMage

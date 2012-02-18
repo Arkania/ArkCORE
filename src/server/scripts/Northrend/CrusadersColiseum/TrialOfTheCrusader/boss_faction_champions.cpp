@@ -513,7 +513,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -640,7 +640,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -778,7 +778,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -926,7 +926,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1056,7 +1056,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1188,7 +1188,7 @@ public:
 
             m_uiSummonPetTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             //DoCast(SPELL_SUMMON_FELHUNTER);
-            trinket_timer = urand(5000, 20000);			
+            trinket_timer = urand(5000, 20000);
             if(Creature * pPet = me->FindNearestCreature(35465, 200.0f))
                 pPet->DespawnOrUnsummon();
             if(Creature * pPet = me->SummonCreature(35465, me->GetPositionX() + 3.0f, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 1000))
@@ -1208,7 +1208,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1351,7 +1351,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1461,7 +1461,7 @@ public:
         uint32 m_uiCommonTimer;
         uint32 m_uiSummonPetTimer;
         uint32 m_uiShotTimer;
-        uint32 trinket_timer;		
+        uint32 trinket_timer;
 
         void Reset()
         {
@@ -1477,7 +1477,7 @@ public:
 
             m_uiSummonPetTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             //DoCast(SPELL_CALL_PET);
-            trinket_timer = urand(5000, 20000);			
+            trinket_timer = urand(5000, 20000);
             if(Creature * pPet = me->FindNearestCreature(35610, 200.0f))
                 pPet->DespawnOrUnsummon();
             if(Creature * pPet = me->SummonCreature(35610, me->GetPositionX() + 3.0f, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 1000))
@@ -1497,7 +1497,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1651,7 +1651,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1786,7 +1786,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -1925,7 +1925,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -2050,7 +2050,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -2199,7 +2199,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}
@@ -2331,7 +2331,7 @@ public:
 			    RemoveCC();
 				trinket_timer = 120000;
 			}
-			else 
+			else
 			{
 				trinket_timer= 5000;
 			}

@@ -1,8 +1,8 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/> 
- * 
+ * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation; either version 2 of the License, or (at your
@@ -98,7 +98,7 @@ class at_frozen_throne_teleport : public AreaTriggerScript
                     Spell::SendCastResult(player, spell, 0, SPELL_FAILED_AFFECTING_COMBAT);
                 return true;
             }
-            
+
             if (InstanceScript* instance = player->GetInstanceScript())
                 if (instance->GetBossState(DATA_PROFESSOR_PUTRICIDE) == DONE &&
                     instance->GetBossState(DATA_BLOOD_QUEEN_LANA_THEL) == DONE &&

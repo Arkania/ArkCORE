@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -1097,7 +1097,6 @@ public:
                                         pEpoch->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                                         pEpoch->SetReactState(REACT_AGGRESSIVE);
                                     }
-
                                 }
                             JumpToNextStep(1000);
                             break;
@@ -1202,7 +1201,6 @@ public:
                 DoCast(me, SPELL_HOLY_LIGHT);
         }
     };
-
 };
 
 class npc_crate_helper : public CreatureScript

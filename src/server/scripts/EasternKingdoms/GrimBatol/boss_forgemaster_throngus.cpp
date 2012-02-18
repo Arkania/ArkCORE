@@ -44,7 +44,7 @@ enum Spells
 	SPELL_FLAMING_SHIELD = 90819, // Wowhead is wrong
 
 	SPELL_FLAMING_ARROW = 45101, // Casted by the Archers
-	SPELL_FLAMING_ARROW_VISUAL = 74944, 
+	SPELL_FLAMING_ARROW_VISUAL = 74944,
 
 	// Swords Phase
 	SPELL_DUAL_BLADES_BUFF = 74981,
@@ -76,7 +76,6 @@ enum Events
 
 	// Twilight Archer
 	EVENT_ARCHER_SHOOT = 6,
-
 };
 
 enum Weapon
@@ -114,8 +113,8 @@ Position const TwilightArcherSummonPos[13] =
 
 class boss_forgemaster_throngus: public CreatureScript
 {
-public: 
-	boss_forgemaster_throngus() : CreatureScript("boss_forgemaster_throngus") { } 
+public:
+	boss_forgemaster_throngus() : CreatureScript("boss_forgemaster_throngus") { }
 
 	CreatureAI* GetAI(Creature* pCreature) const
 	{
@@ -131,7 +130,7 @@ public:
 		uint32 currentWaepon;
 		uint8 phases [3];
 
-		void EnterCombat(Unit* /*who*/) 
+		void EnterCombat(Unit* /*who*/)
 		{
 			me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, NULL);
 
@@ -244,7 +243,6 @@ public:
 	private:
 		inline void IntializeWeapon()
 		{ // Intialize next Phase
-
 			// Choose Weapon
 			currentWaepon = GetNextPhase();
 
@@ -290,12 +288,10 @@ public:
 
 				break;
 			}
-
 		}
 
 		inline void ResetWeapon()
 		{ // Resets last Phase
-
 			events.Reset();
 			DespawnCreatures(NPC_TWILIGHT_ARCHER);
 
@@ -311,16 +307,14 @@ public:
 			// Mace Phase
 			me->RemoveAura(SPELL_LAVA_PATCH);
 			me->RemoveAura(SPELL_ENCUMBERED);
-
 		}
 
 		inline uint8 GetNextPhase()
 		{	// [100%] Working
-
 			// zit. Wowhead
 			// The three weapon phases will switch randomly,
 			// but Throngus will always go through all three
-			// before he picks the first one again. 
+			// before he picks the first one again.
 
 			uint8 base[3] = {WEAPON_SHIELD, WEAPON_SWORDS, WEAPON_MACE};
 
@@ -339,7 +333,6 @@ public:
 				uint8 v = phases[0];
 				phases[0] = 0;
 				return v;
-
 			}else
 			{ // If Throngus was still in a Phase, just get next Phase
 				for(uint8 i = 0; i <= 2; i++)
@@ -422,7 +415,7 @@ public:
 	};
 };
 
-void AddSC_boss_forgemaster_throngus() 
+void AddSC_boss_forgemaster_throngus()
 {
 	new boss_forgemaster_throngus();
 	new mob_twilight_archer();

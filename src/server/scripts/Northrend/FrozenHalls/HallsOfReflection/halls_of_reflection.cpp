@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  *
@@ -71,7 +71,6 @@ enum
 	//Lich King dialog
 	SAY_UTHER_A_16                     = -1668020,
 	SAY_JAINA_20                       = -1668042,
-
 
 	SAY_UTHER_H_16                     = -1668035,
 	SAY_SYLVANA_20                     = -1668043,
@@ -673,7 +672,6 @@ public:
     {
         return new npc_jaina_and_sylvana_HRintroAI(creature);
     }
-
 };
 
 class npc_jaina_and_sylvana_HRextro : public CreatureScript
@@ -775,7 +773,6 @@ public:
             }
             if(m_pInstance->GetData(TYPE_LICH_KING) == DONE)
                 me->SetVisible(false);
-
         }
 
         void AttackStart(Unit* who)
@@ -790,7 +787,6 @@ public:
                 return;
 
             npc_escortAI::AttackStart(who);
-
         }
 
         void JustDied(Unit* killer)
@@ -1354,9 +1350,9 @@ public:
                 return;
             DoScriptText(SAY_DEATH, me);
             m_pInstance->SetData(TYPE_FROST_GENERAL, DONE);
-            
+
             me->SummonCreature(BOSS_LICH_KING, 5564.25f, 2274.69f, 733.01f, 3.93f, TEMPSUMMON_DEAD_DESPAWN);
-            
+
             if(m_pInstance->GetData(DATA_TEAM_IN_INSTANCE)==ALLIANCE)
                 me->SummonCreature(NPC_JAINA_OUTRO, 5556.27f, 2266.28f, 733.01f, 0.8f, TEMPSUMMON_DEAD_DESPAWN);
             else
@@ -1575,7 +1571,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class npc_phantom_mage : public CreatureScript
@@ -1652,7 +1647,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class npc_phantom_hallucination : public CreatureScript
@@ -1676,7 +1670,6 @@ public:
             DoCast(SPELL_HALLUCINATION_2);
         }
     };
-
 };
 
 class npc_shadowy_mercenary : public CreatureScript
@@ -1747,7 +1740,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class npc_spectral_footman : public CreatureScript
@@ -1812,7 +1804,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class npc_tortured_rifleman : public CreatureScript
@@ -1885,7 +1876,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_halls_of_reflection()

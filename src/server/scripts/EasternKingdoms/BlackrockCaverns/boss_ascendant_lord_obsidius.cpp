@@ -74,7 +74,7 @@ public:
 			events.Reset();
 
 			me->GetMotionMaster()->MoveTargetedHome();
-	
+
 			// Spawns his Shadows and Respawns
 			for(uint8 i = 0; i <= RAID_MODE(1,2); i++)
 			{
@@ -89,14 +89,14 @@ public:
 			}
 		}
 
-		void EnterCombat(Unit* /*who*/) 
+		void EnterCombat(Unit* /*who*/)
 		{
 			events.ScheduleEvent(EVENT_TWILIGHT_CORRUPTION, 10000);
 			events.ScheduleEvent(EVENT_STONE_BLOW, 13000);
 
 			if(me->GetMap()->IsHeroic())
 			events.ScheduleEvent(EVENT_THUNDERCLAP, 7000);
-			
+
 			Phase = 0;
 
 			for(uint8 i = 0; i <= RAID_MODE(1,2); i++)
@@ -113,7 +113,7 @@ public:
 			if ((me->HealthBelowPct(69) && Phase == 0) || (me->HealthBelowPct(34) && Phase == 1))
 			{
 				Phase++;
-				
+
 				// Switch Position with a random Shadow of Obsidius and empty Threat list
 
 				Creature* target = ShadowOfObsidiusList[urand(0,RAID_MODE(1,2))];
@@ -127,7 +127,7 @@ public:
 
 				// Resetts Aggro
 				me->getThreatManager().resetAllAggro();
-		
+
 				me->MonsterYell("Your kind has no place in the master's world.", LANG_UNIVERSAL, NULL);
 
 				return;
@@ -139,7 +139,6 @@ public:
 			{
 				switch (eventId)
 				{
-
 				case EVENT_THUNDERCLAP:
 					DoCastAOE(SPELL_THUNDERCLAP);
 					events.ScheduleEvent(EVENT_THUNDERCLAP, 7000);

@@ -107,7 +107,7 @@ public:
         {
             DoScriptText(SAY_AGGRO, me);
             DoCast(me, SPELL_BATTLE_SHOUT);
-            
+
             me->RemoveAurasDueToSpell(SPELL_FROZEN_PRISON);
 
             if (instance)
@@ -210,7 +210,7 @@ public:
         {
             if (!UpdateVictim())
                 return;
-            
+
             if (Unit *target = DoSelectLowestHpFriendly(40.0f))
             {
                 if (uiFlashHeal_Timer <= uiDiff)
@@ -231,8 +231,8 @@ public:
                 if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     DoCast(target, SPELL_SHADOW_WORD_DEATH);
                 uiShadowWordDeath_Timer = urand(4500,5500);
-            } else uiShadowWordDeath_Timer -= uiDiff;     
-            
+            } else uiShadowWordDeath_Timer -= uiDiff;
+
             DoMeleeAttackIfReady();
         }
     };
@@ -258,7 +258,7 @@ public:
         uint32 uiRapidShot_Timer;
         uint32 uiIncendiaryShot_Timer;
         uint32 uiShoot_Timer;
-        
+
         uint8 i;
 
         void Reset()
@@ -309,7 +309,7 @@ public:
                     DoCast(target, SPELL_SHOOT);
                 uiShoot_Timer = urand(2500,3000);
             } else uiShoot_Timer -= uiDiff;
-            
+
             if (uiRapidShot_Timer <= uiDiff)
             {
                 DoCastAOE(SPELL_RAPID_SHOT);
@@ -355,7 +355,7 @@ public:
         {
             me->RemoveAurasDueToSpell(SPELL_FROZEN_PRISON);
         }
-        
+
         Creature* SelectRandomFriendlyMissingBuff(uint32 spell)
         {
             std::list<Creature *> lst = DoFindFriendlyMissingBuff(40.0f, spell);

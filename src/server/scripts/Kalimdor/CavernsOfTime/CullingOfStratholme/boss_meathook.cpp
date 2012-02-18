@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -134,7 +134,6 @@ public:
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
     };
-
 };
 
 void AddSC_boss_meathook()

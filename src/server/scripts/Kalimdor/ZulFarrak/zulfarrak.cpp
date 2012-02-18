@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -194,7 +194,6 @@ public:
                    crew->setFaction(FACTION_HOSTILE);
         }
     };
-
 };
 
 /*######
@@ -232,7 +231,6 @@ public:
         }
         return false;
     }
-
 };
 
 /*######
@@ -392,7 +390,6 @@ public:
             }
         }
     };
-
 };
 
 /*######
@@ -427,7 +424,6 @@ public:
         go->AddUse();
         return false;
     }
-
 };
 
 /*######
@@ -455,7 +451,6 @@ public:
         pZumrah->setFaction(ZUMRAH_HOSTILE_FACTION);
         return true;
     }
-
 };
 
 void AddSC_zulfarrak()

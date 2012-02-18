@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -274,7 +274,7 @@ public:
                 return;
             }
 
-            // ShatteringStomp all the Time, 
+            // ShatteringStomp all the Time,
             if (!m_bHasTemper && !m_bMove)
             {
                 if (m_uiShatteringStomp_Timer <= uiDiff)
@@ -323,7 +323,6 @@ public:
 
                 DoScriptText(RAND(SAY_FORGE_1, SAY_FORGE_2), me);
 
-
                 if (me->GetDistance(pAnvil) > 5)
                 {
                     me->GetMotionMaster()->Clear();
@@ -358,11 +357,9 @@ public:
                 //else
                     //m_uiCheckTimer-=uiDiff;
 
-
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 /*######
@@ -466,7 +463,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_boss_volkhan()

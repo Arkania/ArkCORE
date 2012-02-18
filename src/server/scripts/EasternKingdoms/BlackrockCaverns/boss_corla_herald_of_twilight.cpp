@@ -53,7 +53,7 @@ enum Spells
 enum Events
 {
 	EVENT_DARK_COMMAND = 1,
-	
+
 	EVENT_FORCE_BLAST = 2,
 	EVENT_GRAVITY_STRIKE = 3,
 	EVENT_GRIEVOUS_WHIRL = 4,
@@ -94,7 +94,7 @@ public:
 				NetherEssenceTrigger[i] = NULL;
 
 			for(uint8 i = 0; i <= RAID_MODE(1,2); i++)
-				TwilightZealotsList[i] = NULL;	
+				TwilightZealotsList[i] = NULL;
 		}
 
 		InstanceScript* instance;
@@ -125,7 +125,7 @@ public:
 				TwilightZealotsList[i]->RemoveAura(SPELL_AURA_OF_ACCELERATION);
 				TwilightZealotsList[i]->RemoveAura(SPELL_TWILIGHT_EVOLUTION);
 				TwilightZealotsList[i]->RemoveAura(SPELL_EVOLUTION);
-				
+
 				TwilightZealotsList[i]->NearTeleportTo(summonPositions[i].GetPositionX(),summonPositions[i].GetPositionY(),summonPositions[i].GetPositionZ(),summonPositions[i].GetOrientation());
 
 				if(!TwilightZealotsList[i]->HasAura(SPELL_KNEELING_IN_SUPPLICATION))
@@ -201,7 +201,6 @@ public:
 		}
 	};
 };
-
 
 class mob_twilight_zealot : public CreatureScript
 {
@@ -349,15 +348,13 @@ public:
 				}
 
 				uiCheckPlayerIsBetween = 175;
-
 			} else uiCheckPlayerIsBetween -= diff;
-			
-			
+
 			if (uiNetherEssenceVisual <= diff)
 			{
 				me->CastSpell(me, SPELL_NETHERESSENCE_VISUAL, true);
 				uiNetherEssenceVisual = urand(3500,4000);
-			} else uiNetherEssenceVisual -= diff;	
+			} else uiNetherEssenceVisual -= diff;
 		}
 
 		void IsSummonedBy(Unit* summoner)

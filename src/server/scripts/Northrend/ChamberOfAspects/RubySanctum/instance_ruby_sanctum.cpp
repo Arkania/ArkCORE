@@ -18,7 +18,6 @@
 #include "ScriptPCH.h"
 #include "ruby_sanctum.h"
 
-
 DoorData const doorData[] =
 {
     {GO_FIRE_FIELD, DATA_BALTHARUS_THE_WARBORN, DOOR_TYPE_PASSAGE, BOUNDARY_E },
@@ -299,7 +298,7 @@ public:
                 OUT_SAVE_INST_DATA_COMPLETE;
                 return saveStream.str();
             }
-            
+
             void FillInitialWorldStates(WorldPacket& data)
             {
                 data << uint32(WORLDSTATE_CORPOREALITY_MATERIAL) << uint32(50);

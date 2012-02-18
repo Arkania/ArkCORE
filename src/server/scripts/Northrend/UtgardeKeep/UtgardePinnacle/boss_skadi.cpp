@@ -344,7 +344,7 @@ public:
             }
         }
 
-        void SpellHitTarget(Unit *target, const SpellEntry *spell) 
+        void SpellHitTarget(Unit *target, const SpellEntry *spell)
                     {
             if (spell->Id == DUNGEON_MODE(SPELL_POISONED_SPEAR, H_SPELL_POISONED_SPEAR))
                 target->CastSpell(target, DUNGEON_MODE(SPELL_POISONED_SPEAR_DOT, H_SPELL_POISONED_SPEAR_DOT), true);
@@ -415,17 +415,17 @@ public:
                             case 3:
                                 switch (urand(0,1))
                                 {
-                                    case 0: 
-                                        BreathSide = LEFT; 
+                                    case 0:
+                                        BreathSide = LEFT;
                                         m_Start = 8;
                                         m_End = 37;
                                         m_LocNr = 69;
                                         break;
-                                    case 1: 
+                                    case 1:
                                         BreathSide = RIGHT;
                                         m_Start = 38;
                                         m_End = 68;
-                                        m_LocNr = 70; 
+                                        m_LocNr = 70;
                                         break;
                                 }
                                 me->GetMotionMaster()->MovePoint(0, Location[m_LocNr].GetPositionX(), Location[m_LocNr].GetPositionY(), Location[m_LocNr].GetPositionZ());
@@ -516,7 +516,7 @@ public:
                             {
                                 me->GetMotionMaster()->Clear();
                                 me->GetMotionMaster()->MovePoint(0,whirlTarget->GetPositionX(),whirlTarget->GetPositionY(),whirlTarget->GetPositionZ());
-                            } 
+                            }
                             else if (Unit *newTarget = SelectTarget(SELECT_TARGET_RANDOM, 1)) //whirl target died
                             {
                                 me->GetMotionMaster()->Clear();
@@ -545,7 +545,7 @@ public:
             if (m_pInstance)
             {
                 m_pInstance->SetData(DATA_SKADI_THE_RUTHLESS_EVENT, DONE);
-    
+
                 if (IsHeroic() && m_bAchiev)
                     m_pInstance->DoCompleteAchievement(ACHIEV_MY_GIRL_LOVES_TO_SKADI);
             }
@@ -589,7 +589,6 @@ public:
                 me->SummonCreature(CREATURE_TRIGGER, Location[i]);
         }
     };
-
 };
 
 class go_harpoon_launcher : public GameObjectScript

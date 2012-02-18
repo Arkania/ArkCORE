@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -63,10 +63,9 @@ public:
         void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
              Pet* pet = GetCaster()->ToPlayer()->GetPet();
              pet->CastCustomSpell(pet->getVictim(), (uint32)GetEffectValue(), 0, NULL, NULL, true, NULL, NULL, pet->GetGUID());
-
         }
 
-        void Register() 
+        void Register()
         {
             OnCheckCast += SpellCheckCastFn(spell_hun_kill_command_SpellScript::CheckCast);
             OnEffect += SpellEffectFn(spell_hun_kill_command_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
@@ -112,7 +111,7 @@ public:
              caster->CastCustomSpell(pet, 83468, &bp, NULL, NULL, true, NULL, NULL, caster->GetGUID());
         }
 
-        void Register() 
+        void Register()
         {
             OnCheckCast += SpellCheckCastFn(spell_hun_focus_fire_SpellScript::CheckCast);
             OnEffect += SpellEffectFn(spell_hun_focus_fire_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_APPLY_AURA);

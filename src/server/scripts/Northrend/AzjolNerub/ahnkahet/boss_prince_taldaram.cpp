@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -244,7 +244,6 @@ public:
                                 uiPhaseTimer = 500;
                                 if (Unit* pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                     uiEmbraceTarget = pEmbraceTarget->GetGUID();
-
                             }
                             uiVanishTimer = urand(25*IN_MILLISECONDS, 35*IN_MILLISECONDS);
                         } else uiVanishTimer -= diff;

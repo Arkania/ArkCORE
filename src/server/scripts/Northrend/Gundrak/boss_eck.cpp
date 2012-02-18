@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -34,9 +34,9 @@ enum Spells
     SPELL_SPRING                                  = 55652
 };
 
-static Position EckSpawnPoint = 
-{ 
-    1643.877930f, 936.278015f, 107.204948f, 0.668432f 
+static Position EckSpawnPoint =
+{
+    1643.877930f, 936.278015f, 107.204948f, 0.668432f
 };
 
 class boss_eck : public CreatureScript
@@ -98,9 +98,9 @@ public:
                     me->AddThreat(pUnit, 0.1f);
                 }
             }
-            
+
             //needed?
-            if (victim && victim->isAlive()) 
+            if (victim && victim->isAlive())
             {
                 AttackStart(victim);
                 me->AddThreat(victim, 10.0f);
@@ -131,7 +131,7 @@ public:
                 if (target && target->GetTypeId() == TYPEID_PLAYER)
                 {
                     if (me->GetExactDist(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ()) < 35)
-                    { 
+                    {
                     DoCast(target, RAND(SPELL_ECK_SPRING_1, SPELL_ECK_SPRING_2));
                         EckResetThread(target); //test
 
@@ -160,7 +160,6 @@ public:
                 pInstance->SetData(DATA_ECK_THE_FEROCIOUS_EVENT, DONE);
         }
     };
-
 };
 
 #define RANGE_ECK 1000.0f
@@ -233,11 +232,10 @@ public:
                 pInstance->SetData64(DATA_RUIN_DWELLER_DIED, me->GetGUID());
                 if (pInstance->GetData(DATA_ALIVE_RUIN_DWELLERS) == 0)
                     me->SummonCreature(CREATURE_ECK, EckSpawnPoint, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300*IN_MILLISECONDS);
-                }            
-            } 
+                }
+            }
         }
     };
-
 };
 
 void AddSC_boss_eck()

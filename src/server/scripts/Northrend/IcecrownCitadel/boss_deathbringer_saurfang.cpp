@@ -1023,7 +1023,7 @@ class npc_blood_beast : public CreatureScript
                 if(summoner)
                    BloodLinkTimer = 2*IN_MILLISECONDS;
             }
-			
+
             void UpdateAI(uint32 const diff)
             {
                 if (!UpdateVictim())
@@ -1045,9 +1045,8 @@ class npc_blood_beast : public CreatureScript
                 }
     private:
         uint32 BloodLinkTimer;
-
             };
-			
+
             CreatureAI* GetAI(Creature* creature) const
             {
                 return GetIcecrownCitadelAI<npc_blood_beastAI>(creature);
@@ -1365,19 +1364,18 @@ class spell_deathbringer_boiling_blood : public SpellScriptLoader
         class spell_deathbringer_boiling_bloodAuraScript : public AuraScript
         {
             PrepareAuraScript(spell_deathbringer_boiling_bloodAuraScript);
-			
+
             void HandleEffectPeriodic(AuraEffect const* aurEff)
             {
                 if(Unit* target = GetTarget())
                    if (Unit * saurfang = target->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG,300.0f,true))
                        target->CastCustomSpell(SPELL_BLOOD_LINK_DUMMY, SPELLVALUE_BASE_POINT0, 1, saurfang, true);
             }
-			
+
             void Register()
             {
                 OnEffectPeriodic += AuraEffectPeriodicFn(spell_deathbringer_boiling_bloodAuraScript::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_DUMMY);
             }
-              
         };*/
 
         SpellScript * GetSpellScript() const

@@ -3006,7 +3006,7 @@ public:
 
     struct npc_shadowy_apparitionAI : public ScriptedAI
     {
-        npc_shadowy_apparitionAI(Creature* c) : ScriptedAI(c) 
+        npc_shadowy_apparitionAI(Creature* c) : ScriptedAI(c)
         {
             me->SetReactState(REACT_AGGRESSIVE);
         }
@@ -3018,7 +3018,7 @@ public:
             Unit * owner = me->GetOwner();
 
             if (!owner)
-				return;   
+				return;
 
             owner->CastSpell(me, 87213, true);
 
@@ -3052,7 +3052,7 @@ public:
                 Unit * owner = me->GetOwner();
 
                 if (!owner)
-			        return; 
+			        return;
 
                 if (Unit* target = owner->getAttackerForHelper())
                 {
@@ -3063,7 +3063,6 @@ public:
                 }
             }
         }
-
     };
 
     CreatureAI* GetAI(Creature* creature) const
@@ -3073,7 +3072,7 @@ public:
 };
 
 // Uncomment this once guardians are able to cast spells
-// on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts. 
+// on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts.
 /*
  enum GuardianSpellsAndEntries
  {
@@ -3084,7 +3083,6 @@ public:
  SPELL_ANCIENT_CRUSADER_PLAYER   = 86703,
  SPELL_ANCIENT_CRUSADER_GUARDIAN = 86701
  };
-
 
  class npc_guardian_of_ancient_kings : public CreatureScript
  {

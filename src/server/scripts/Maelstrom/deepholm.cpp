@@ -155,14 +155,12 @@ class npc_flint_oremantle : public CreatureScript
 public:
     npc_flint_oremantle() : CreatureScript("npc_flint_oremantle") { }
 
-	
 	bool OnGossipHello(Player* pPlayer, Creature* creature)
 	{
-		
 		if(creature->isInCombat() || pPlayer->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE)
 		return false;
-		
-		char const* _message = "Follow me to the Earthcaller!";	
+
+		char const* _message = "Follow me to the Earthcaller!";
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,_message,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
 		pPlayer->SEND_GOSSIP_MENU(68,creature->GetGUID());
 
@@ -182,10 +180,10 @@ public:
 
 				creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
          }
-	
+
 		return true;
 	}
-    
+
     CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_flint_oremantleAI(creature);
@@ -273,7 +271,6 @@ public:
 			{
 				switch(DialogNumber)
 				{
-				
 				case 1:
 					me->MonsterYell("Hah! Did you mistake me for Diamant, $r? Or perhaps some other whimpering, complaint stone trogg who cares?",LANG_UNIVERSAL,0);
 					uiProcessDialog = 4000;
@@ -283,7 +280,7 @@ public:
 					me->MonsterYell("If you seek peace, relinquish the World Pillar and leave Deepholm. This is our realm. Your only welcome here shall be found underneath my stone foot.",LANG_UNIVERSAL,0);
 					uiProcessDialog = 1200;
 					break;
-					
+
 				case 3:
 					if(SpeakPlayer)
 					me->CastSpell(SpeakPlayer,SPELL_IMPOSING_CONFRONTATION_CREDIT,true);
@@ -295,7 +292,6 @@ public:
 					DialogNumber++;
 				}else
 					DialogNumber = 0;
-
 			} else uiProcessDialog -= diff;
 		}
     };
@@ -311,7 +307,7 @@ enum eRicketTicker
 	NPC_DEEP_AMETHYST_BUNNY = 49866,
 	NPC_DEEP_GRANAT_BUNNY = 49867,
 	NPC_DEEP_ALABASTER_BUNNY = 49824,
-	
+
 	ITEM_DEEP_CELESTITE_CRYSTAL = 65507,
 	ITEM_DEEP_AMETHYST_CRYSTAL = 65508,
 	ITEM_DEEP_GRANAT_CRYSTAL = 65510,
@@ -332,7 +328,7 @@ public:
     {
         npc_ricket_tickerAI(Creature* creature) : ScriptedAI(creature), uiExplode(NULL) { }
 
-		uint32 uiExplode;	
+		uint32 uiExplode;
 		Player* player;
 
 		void Reset()
@@ -352,9 +348,9 @@ public:
 				return;
 
 			if (uiExplode <= diff)
-			{	
+			{
 				DoCastAOE(SPELL_EXPLODE,true);
-			
+
 				// Checks weather a Deep Crystal is in Range
 				if(me->FindNearestCreature(NPC_DEEP_CELESTITE_BUNNY, 7.0f, true))
 						player->AddItem(ITEM_DEEP_CELESTITE_CRYSTAL,1);
@@ -369,7 +365,6 @@ public:
 						player->AddItem(ITEM_DEEP_ALABASTER_CRYSTAL,1);
 
 				me->DespawnOrUnsummon();
-
         	} else uiExplode -= diff;
 		}
     };

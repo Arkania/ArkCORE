@@ -213,7 +213,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class boss_dalronn_the_controller : public CreatureScript
@@ -403,7 +402,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_boss_skarvald_dalronn()

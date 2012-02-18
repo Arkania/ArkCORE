@@ -234,7 +234,7 @@ class spell_koralon_meteor_fists : public SpellScriptLoader
                         unitList.remove(target);
                         continue;
                     }
-                    
+
                     totalTargets++;
                 }
             }
