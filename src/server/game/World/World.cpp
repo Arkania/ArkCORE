@@ -606,7 +606,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_INTERVAL_SAVE] = sConfig->GetIntDefault("PlayerSaveInterval", 15 * MINUTE * IN_MILLISECONDS);
     m_int_configs[CONFIG_INTERVAL_DISCONNECT_TOLERANCE] = sConfig->GetIntDefault("DisconnectToleranceInterval", 0);
     m_bool_configs[CONFIG_STATS_SAVE_ONLY_ON_LOGOUT] = sConfig->GetBoolDefault("PlayerSave.Stats.SaveOnlyOnLogout", true);
-	m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN] = sConfig->GetBoolDefault("DuelResetCooldown", false);
+    m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN] = sConfig->GetBoolDefault("DuelResetCooldown", false);
 
     m_int_configs[CONFIG_MIN_LEVEL_STAT_SAVE] = sConfig->GetIntDefault("PlayerSave.Stats.MinLevel", 0);
     if (m_int_configs[CONFIG_MIN_LEVEL_STAT_SAVE] > MAX_LEVEL)
@@ -1248,11 +1248,11 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_ENABLE]  = sConfig->GetBoolDefault("OutdoorPvP.Wintergrasp.Antifarm.Enable", true);
     m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_ATK]  = sConfig->GetIntDefault("OutdoorPvP.Wintergrasp.Antifarm.Atk", 5);
     m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_DEF]  = sConfig->GetIntDefault("OutdoorPvP.Wintergrasp.Antifarm.Def", 5);
-	
-	// Area DuelReset
+
+    // Area DuelReset
     m_int_configs[CONFIG_DUEL_RESET_ONE] = sConfig->GetIntDefault("Duel.Reset.Area.One", 1);
-    m_int_configs[CONFIG_DUEL_RESET_TWO] = sConfig->GetIntDefault("Duel.Reset.Area.Two", 616);	
-	
+    m_int_configs[CONFIG_DUEL_RESET_TWO] = sConfig->GetIntDefault("Duel.Reset.Area.Two", 616);
+
     sScriptMgr->OnConfigLoad(reload);
 }
 
@@ -2934,7 +2934,7 @@ void World::SendWintergraspState()
         if (pvpWG->isWarTime()) // "Battle in progress"
         {
             itr->second->GetPlayer()->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
-        } 
+        }
         else // Time to next battle
         {
             pvpWG->SendInitWorldStatesTo(itr->second->GetPlayer());

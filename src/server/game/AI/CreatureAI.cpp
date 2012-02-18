@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,87 +32,87 @@
 
 //Disable CreatureAI when charmed
 void CreatureAI::OnCharmed(bool /*apply*/) {
-	//me->IsAIEnabled = !apply;*/
-	me->NeedChangeAI = true;
-	me->IsAIEnabled = false;
+    //me->IsAIEnabled = !apply;*/
+    me->NeedChangeAI = true;
+    me->IsAIEnabled = false;
 }
 
 AISpellInfoType * UnitAI::AISpellInfo;
 AISpellInfoType * GetAISpellInfo(uint32 i) {
-	return &CreatureAI::AISpellInfo[i];
+    return &CreatureAI::AISpellInfo[i];
 }
 
 void CreatureAI::Talk(uint8 id, uint64 WhisperGuid) {
-	sCreatureTextMgr->SendChat(me, id, WhisperGuid);
+    sCreatureTextMgr->SendChat(me, id, WhisperGuid);
 }
 
 void CreatureAI::DoZoneInCombat(Creature* creature) {
-	if (!creature)
-		creature = me;
+    if (!creature)
+        creature = me;
 
-	if (!creature->CanHaveThreatList())
-		return;
+    if (!creature->CanHaveThreatList())
+        return;
 
-	Map *map = creature->GetMap();
-	if (!map->IsDungeon()) //use IsDungeon instead of Instanceable, in case battlegrounds will be instantiated
-	{
-		sLog->outError(
-				"DoZoneInCombat call for map that isn't an instance (creature entry = %d)",
-				creature->GetTypeId() == TYPEID_UNIT ?
-						creature->ToCreature()->GetEntry() : 0);
-		return;
-	}
+    Map *map = creature->GetMap();
+    if (!map->IsDungeon()) //use IsDungeon instead of Instanceable, in case battlegrounds will be instantiated
+    {
+        sLog->outError(
+                "DoZoneInCombat call for map that isn't an instance (creature entry = %d)",
+                creature->GetTypeId() == TYPEID_UNIT ?
+                        creature->ToCreature()->GetEntry() : 0);
+        return;
+    }
 
-	if (!creature->HasReactState(REACT_PASSIVE) && !creature->getVictim()) {
-		if (Unit *target = creature->SelectNearestTarget(50))
-			creature->AI()->AttackStart(target);
-		else if (creature->isSummon()) {
-			if (Unit *summoner = creature->ToTempSummon()->GetSummoner()) {
-				Unit *target = summoner->getAttackerForHelper();
-				if (!target && summoner->CanHaveThreatList()
-						&& !summoner->getThreatManager().isThreatListEmpty())
-					target = summoner->getThreatManager().getHostilTarget();
-				if (target
-						&& (creature->IsFriendlyTo(summoner)
-								|| creature->IsHostileTo(target)))
-					creature->AI()->AttackStart(target);
-			}
-		}
-	}
+    if (!creature->HasReactState(REACT_PASSIVE) && !creature->getVictim()) {
+        if (Unit *target = creature->SelectNearestTarget(50))
+            creature->AI()->AttackStart(target);
+        else if (creature->isSummon()) {
+            if (Unit *summoner = creature->ToTempSummon()->GetSummoner()) {
+                Unit *target = summoner->getAttackerForHelper();
+                if (!target && summoner->CanHaveThreatList()
+                        && !summoner->getThreatManager().isThreatListEmpty())
+                    target = summoner->getThreatManager().getHostilTarget();
+                if (target
+                        && (creature->IsFriendlyTo(summoner)
+                                || creature->IsHostileTo(target)))
+                    creature->AI()->AttackStart(target);
+            }
+        }
+    }
 
-	if (!creature->HasReactState(REACT_PASSIVE) && !creature->getVictim()) {
-		sLog->outError(
-				"DoZoneInCombat called for creature that has empty threat list (creature entry = %u)",
-				creature->GetEntry());
-		return;
-	}
+    if (!creature->HasReactState(REACT_PASSIVE) && !creature->getVictim()) {
+        sLog->outError(
+                "DoZoneInCombat called for creature that has empty threat list (creature entry = %u)",
+                creature->GetEntry());
+        return;
+    }
 
-	Map::PlayerList const &PlList = map->GetPlayers();
+    Map::PlayerList const &PlList = map->GetPlayers();
 
-	if (PlList.isEmpty())
-		return;
+    if (PlList.isEmpty())
+        return;
 
-	for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end();
-			++i) {
-		if (Player* pPlayer = i->getSource()) {
-			if (pPlayer->isGameMaster())
-				continue;
+    for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end();
+            ++i) {
+        if (Player* pPlayer = i->getSource()) {
+            if (pPlayer->isGameMaster())
+                continue;
 
-			if (pPlayer->isAlive()) {
-				creature->SetInCombatWith(pPlayer);
-				pPlayer->SetInCombatWith(creature);
-				creature->AddThreat(pPlayer, 0.0f);
-			}
+            if (pPlayer->isAlive()) {
+                creature->SetInCombatWith(pPlayer);
+                pPlayer->SetInCombatWith(creature);
+                creature->AddThreat(pPlayer, 0.0f);
+            }
 
-			/* Causes certain things to never leave the threat list (Priest Lightwell, etc):
-			 for (Unit::ControlList::const_iterator itr = pPlayer->m_Controlled.begin(); itr != pPlayer->m_Controlled.end(); ++itr)
-			 {
-			 creature->SetInCombatWith(*itr);
-			 (*itr)->SetInCombatWith(creature);
-			 creature->AddThreat(*itr, 0.0f);
-			 }*/
-		}
-	}
+            /* Causes certain things to never leave the threat list (Priest Lightwell, etc):
+             for (Unit::ControlList::const_iterator itr = pPlayer->m_Controlled.begin(); itr != pPlayer->m_Controlled.end(); ++itr)
+             {
+             creature->SetInCombatWith(*itr);
+             (*itr)->SetInCombatWith(creature);
+             creature->AddThreat(*itr, 0.0f);
+             }*/
+        }
+    }
 }
 
 void CreatureAI::DoAttackerAreaInCombat(Unit* attacker, float range, Unit* pUnit)
@@ -168,49 +168,49 @@ void CreatureAI::DoAttackerGroupInCombat(Player* attacker)
 // scripts does not take care about MoveInLineOfSight loops
 // MoveInLineOfSight can be called inside another MoveInLineOfSight and cause stack overflow
 void CreatureAI::MoveInLineOfSight_Safe(Unit *who) {
-	if (m_MoveInLineOfSight_locked == true)
-		return;
-	m_MoveInLineOfSight_locked = true;
-	MoveInLineOfSight(who);
-	m_MoveInLineOfSight_locked = false;
+    if (m_MoveInLineOfSight_locked == true)
+        return;
+    m_MoveInLineOfSight_locked = true;
+    MoveInLineOfSight(who);
+    m_MoveInLineOfSight_locked = false;
 }
 
 void CreatureAI::MoveInLineOfSight(Unit *who) {
-	if (me->getVictim())
-		return;
+    if (me->getVictim())
+        return;
 
-	if (me->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET) // non-combat pets should just stand there and look good;)
-		return;
+    if (me->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET) // non-combat pets should just stand there and look good;)
+        return;
 
-	if (me->canStartAttack(who, false))
-		AttackStart(who);
-	//else if (who->getVictim() && me->IsFriendlyTo(who)
-	//    && me->IsWithinDistInMap(who, sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_RADIUS))
-	//    && me->canStartAttack(who->getVictim(), true)) // TODO: if we use true, it will not attack it when it arrives
-	//    me->GetMotionMaster()->MoveChase(who->getVictim());
+    if (me->canStartAttack(who, false))
+        AttackStart(who);
+    //else if (who->getVictim() && me->IsFriendlyTo(who)
+    //    && me->IsWithinDistInMap(who, sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_RADIUS))
+    //    && me->canStartAttack(who->getVictim(), true)) // TODO: if we use true, it will not attack it when it arrives
+    //    me->GetMotionMaster()->MoveChase(who->getVictim());
 }
 
 void CreatureAI::EnterEvadeMode() {
-	if (!_EnterEvadeMode())
-		return;
+    if (!_EnterEvadeMode())
+        return;
 
-	sLog->outDebug(LOG_FILTER_UNITS, "Creature %u enters evade mode.",
-			me->GetEntry());
+    sLog->outDebug(LOG_FILTER_UNITS, "Creature %u enters evade mode.",
+            me->GetEntry());
 
-	if (!me->GetVehicle()) // otherwise me will be in evade mode forever
-	{
-		if (Unit *owner = me->GetCharmerOrOwner()) {
-			me->GetMotionMaster()->Clear(false);
-			me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST,
-					me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
-		} else
-			me->GetMotionMaster()->MoveTargetedHome();
-	}
+    if (!me->GetVehicle()) // otherwise me will be in evade mode forever
+    {
+        if (Unit *owner = me->GetCharmerOrOwner()) {
+            me->GetMotionMaster()->Clear(false);
+            me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST,
+                    me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
+        } else
+            me->GetMotionMaster()->MoveTargetedHome();
+    }
 
-	Reset();
+    Reset();
 
-	if (me->IsVehicle()) // use the same sequence of addtoworld, aireset may remove all summons!
-		me->GetVehicleKit()->Reset();
+    if (me->IsVehicle()) // use the same sequence of addtoworld, aireset may remove all summons!
+        me->GetVehicleKit()->Reset();
 }
 
 /*void CreatureAI::AttackedBy(Unit* attacker)

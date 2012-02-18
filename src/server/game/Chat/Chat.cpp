@@ -447,7 +447,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NULL,             0,                  false, NULL,                                                "", NULL }
     };
 
-	static ChatCommand wintergraspCommandTable[] =
+    static ChatCommand wintergraspCommandTable[] =
     {
         { "status",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspStatusCommand>,       "", NULL },
         { "enable",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspEnableCommand>,       "", NULL },
@@ -457,7 +457,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "timer",          SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleWintergraspTimerCommand>,        "", NULL },
         { NULL,             0,                  false, NULL,                                               "", NULL }
     };
-	
+
     static ChatCommand commandTable[] =
     {
         { "gm",             SEC_MODERATOR,      true,  NULL,                                           "", gmCommandTable       },
@@ -555,7 +555,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bindsight",      SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleBindSightCommand>,           "", NULL },
         { "unbindsight",    SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleUnbindSightCommand>,         "", NULL },
         { "wg",             SEC_ADMINISTRATOR,  false, NULL,                                    "", wintergraspCommandTable },
-		{ "playall",        SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandlePlayAllCommand>,             "", NULL },
+        { "playall",        SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandlePlayAllCommand>,             "", NULL },
         { NULL,             0,                  false, NULL,                                           "", NULL }
     };
 
@@ -1894,7 +1894,6 @@ char const *fmtstring(char const *format, ...)
 
     return buf;
 }
-
 
 GameObject* ChatHandler::GetNearbyGameObject()
 {

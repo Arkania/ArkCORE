@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -542,9 +542,9 @@ struct AreaTableEntry
         if (mapid == 609)
             return true;
         if (zone == 4395) // Dalaran City
-			return true;
+            return true;
         if (zone == 3703) // Shattrath City
-			return true;
+            return true;
         return (flags & AREA_FLAG_SANCTUARY);
     }
 };
@@ -898,12 +898,12 @@ struct FactionEntry
     DBCString name;                                         // 23       m_name_lang
     //DBCString description;                                // 24       m_description_lang
     //uint32                                                // 25                                                       // 56 string flags
-    
-	// helpers
+
+    // helpers
     bool CanHaveReputation() const
     {
         return reputationListID >= 0;
-    }	
+    }
 };
 
 #define MAX_FACTION_RELATIONS 4
