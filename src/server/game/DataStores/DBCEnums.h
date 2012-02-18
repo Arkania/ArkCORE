@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -351,7 +351,7 @@ enum FactionTemplateFlags
 {
     FACTION_TEMPLATE_FLAG_PVP                = 0x00000800,   // flagged for PvP
     FACTION_TEMPLATE_FLAG_CONTESTED_GUARD    = 0x00001000,   // faction will attack players that were involved in PvP combats
-	FACTION_TEMPLATE_FLAG_HOSTILE_BY_DEFAULT = 0x00002000,
+    FACTION_TEMPLATE_FLAG_HOSTILE_BY_DEFAULT = 0x00002000,
 };
 
 enum FactionMasks

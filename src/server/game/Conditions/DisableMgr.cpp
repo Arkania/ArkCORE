@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -258,7 +258,6 @@ bool DisableMgr::IsDisabledFor(DisableType type, uint32 entry, Unit const* pUnit
                         return false; // Spell is disabled in another area, but not this one, return false
                     }else
                         return true; // Spell disabled for all maps
-
                 }
                 return false;
             }
@@ -266,7 +265,6 @@ bool DisableMgr::IsDisabledFor(DisableType type, uint32 entry, Unit const* pUnit
                 if(flags & SPELL_DISABLE_DEPRECATED_SPELL)
                     // call not from spellcast
                     return true;
-
 
             break;
         }
