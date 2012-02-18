@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -132,7 +132,7 @@ enum Opcodes
     CMSG_GUILD_INFO                                  = 0x06884, // 4.0.6a 13623
     SMSG_GUILD_INFO                                  = 0x020A8, // 4.0.6a 13623
     CMSG_GUILD_ROSTER                                = 0x0B2A4, // 4.0.6a 13623
-    CMSG_REQUEST_GUILD_ROSTER                        = 0x0250D, // 4.0.6a 13623	
+    CMSG_REQUEST_GUILD_ROSTER                        = 0x0250D, // 4.0.6a 13623
     SMSG_GUILD_ROSTER                                = 0x04D5C, // 4.0.6a 13623
     CMSG_GUILD_PROMOTE                               = 0x02109, // 4.0.6a 13623
     CMSG_GUILD_DEMOTE                                = 0x0330D, // 4.0.6a 13623
@@ -288,7 +288,7 @@ enum Opcodes
     CMSG_AUTOEQUIP_GROUND_ITEM                       = 0x10044, //
     CMSG_AUTOSTORE_GROUND_ITEM                       = 0x02FC8, // 4.0.6a 13623
     CMSG_AUTOSTORE_LOOT_ITEM                         = 0x0B2E8, // 4.0.6a 13623
-	CMSG_AUTOSTORE_LOOT_CURRENCY                     = 0x00991, // 4.0.6a 13623
+    CMSG_AUTOSTORE_LOOT_CURRENCY                     = 0x00991, // 4.0.6a 13623
     CMSG_STORE_LOOT_IN_SLOT                          = 0x07FCC, // 4.0.6a 13623
     CMSG_AUTOEQUIP_ITEM                              = 0x0E1C0, // 4.0.6a 13623
     CMSG_AUTOSTORE_BAG_ITEM                          = 0x0EDCC, // 4.0.6a 13623
@@ -589,7 +589,7 @@ enum Opcodes
     SMSG_JOINED_BATTLEGROUND_QUEUE                   = 0x0090E, // 4.0.6a 13623
     CMSG_REQUEST_RATED_BG_INFO                       = 0x08501, // 4.0.6a 13623
     CMSG_REQUEST_PVP_OPTIONS_ENABLED                 = 0x00188, // 4.0.6a 13623
-	CMSG_JOIN_RATED_BATTLEFIELD                      = 0x00591, // 4.0.6a 13623	
+    CMSG_JOIN_RATED_BATTLEFIELD                      = 0x00591, // 4.0.6a 13623
     CMSG_TAXICLEARNODE                               = 0x100AD, //
     CMSG_TAXIENABLENODE                              = 0x100AE, //
     CMSG_ITEM_TEXT_QUERY                             = 0x0F280, // 4.0.6a 13623
@@ -780,7 +780,7 @@ enum Opcodes
     SMSG_RAID_INSTANCE_MESSAGE                       = 0x06680, // 4.0.6a 13623
     SMSG_COMPRESSED_MOVES                            = 0x06FE4, // 4.0.6a 13623
     CMSG_GUILD_INFO_TEXT                             = 0x0270D, // 4.0.6a 13623
-	SMSG_GUILD_PARTY_STATE_UPDATE                    = 0x0450C, // 4.0.6a 13623
+    SMSG_GUILD_PARTY_STATE_UPDATE                    = 0x0450C, // 4.0.6a 13623
     SMSG_CHAT_RESTRICTED                             = 0x03EC8, // 4.0.6a 13623
     SMSG_SPLINE_SET_RUN_SPEED                        = 0x0F9E8, // 4.0.6a 13623
     SMSG_SPLINE_SET_RUN_BACK_SPEED                   = 0x0E9C0, // 4.0.6a 13623
@@ -1313,26 +1313,26 @@ enum Opcodes
     SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
     CMSG_REFORGE                                     = 0x00313, // 4.0.6a 13623
     SMSG_SHOW_REFORGE                                = 0x00C5C, // 4.0.6a 13623
-	SMSG_GUILD_CRITERIA_DATA                         = 0x0400E, // 4.0.6a 13623
-	SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
-	CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
-	CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
-	CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
-	CMSG_CLEAR_RAID_MARKER                           = 0x02218, // 4.0.6a 13623
-	SMSG_SEND_GUILD_ACHIEVEMENT_MEMBERS              = 0x0414E, // 4.0.6a 13623
-	CMSG_GET_GUILD_ACHIEVEMENT_MEMBERS               = 0x02509, // 4.0.6a 13623
-	SMSG_SEND_ERROR_MESSAGE                          = 0x0480C, // 4.0.6a 13623 this has its own enum u8+u32+u32 special
-	SMSG_TALENT_ERROR                                = 0x068A4, // 4.0.6a 13623
-	SMSG_SERVER_MESSAGE_BOX                          = 0x0080C, // Server msgbox-like 4.0.6a 13623
-	SMSG_REQUEST_WAR_GAME_RESPONSE                   = 0x00C1C, // 4.0.6a 13623
-	SMSG_UNKNOWN_GOLD                                = 0x0004E, // 4.0.6a 13623 gives gold to the player
-	CMSG_SET_FOCUSED_ACHIEVEMENT                     = 0x03109, // 4.0.6a 13623
+    SMSG_GUILD_CRITERIA_DATA                         = 0x0400E, // 4.0.6a 13623
+    SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
+    CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
+    CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
+    CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
+    CMSG_CLEAR_RAID_MARKER                           = 0x02218, // 4.0.6a 13623
+    SMSG_SEND_GUILD_ACHIEVEMENT_MEMBERS              = 0x0414E, // 4.0.6a 13623
+    CMSG_GET_GUILD_ACHIEVEMENT_MEMBERS               = 0x02509, // 4.0.6a 13623
+    SMSG_SEND_ERROR_MESSAGE                          = 0x0480C, // 4.0.6a 13623 this has its own enum u8+u32+u32 special
+    SMSG_TALENT_ERROR                                = 0x068A4, // 4.0.6a 13623
+    SMSG_SERVER_MESSAGE_BOX                          = 0x0080C, // Server msgbox-like 4.0.6a 13623
+    SMSG_REQUEST_WAR_GAME_RESPONSE                   = 0x00C1C, // 4.0.6a 13623
+    SMSG_UNKNOWN_GOLD                                = 0x0004E, // 4.0.6a 13623 gives gold to the player
+    CMSG_SET_FOCUSED_ACHIEVEMENT                     = 0x03109, // 4.0.6a 13623
     CMSG_COMPLETED_ARTIFACTS                         = 0x00A13, // 4.0.6a 13623
     SMSG_COMPLETED_ARTIFACTS                         = 0x0044E, // 4.0.6a 13623 structure: uint32 (count) loop: uint32(id), uint32(date), uint32(number of times completed) :endloop
-    SMSG_ARTIFACT_COMPLETED                          = 0x0491C, // 4.0.6a 13623	
-	SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
-	SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
-	//SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
+    SMSG_ARTIFACT_COMPLETED                          = 0x0491C, // 4.0.6a 13623
+    SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
+    SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
+    //SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B7  // last unknown opcode + 1.
 };
 
@@ -1344,38 +1344,38 @@ extern void InitOpcodeTable();
 
 /// Player state
 enum SessionStatus {
-	STATUS_AUTHED = 0, // Player authenticated (_player == NULL, m_playerRecentlyLogout = false or will be reset before handler call, m_GUID have garbage)
-	STATUS_LOGGEDIN, // Player in game (_player != NULL, m_GUID == _player->GetGUID(), inWorld())
-	STATUS_TRANSFER, // Player transferring to another map (_player != NULL, m_GUID == _player->GetGUID(), !inWorld())
-	STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT, // _player!= NULL or _player == NULL && m_playerRecentlyLogout, m_GUID store last _player guid)
-	STATUS_NEVER, // Opcode not accepted from client (deprecated or server side only)
-	STATUS_UNHANDLED
+    STATUS_AUTHED = 0, // Player authenticated (_player == NULL, m_playerRecentlyLogout = false or will be reset before handler call, m_GUID have garbage)
+    STATUS_LOGGEDIN, // Player in game (_player != NULL, m_GUID == _player->GetGUID(), inWorld())
+    STATUS_TRANSFER, // Player transferring to another map (_player != NULL, m_GUID == _player->GetGUID(), !inWorld())
+    STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT, // _player!= NULL or _player == NULL && m_playerRecentlyLogout, m_GUID store last _player guid)
+    STATUS_NEVER, // Opcode not accepted from client (deprecated or server side only)
+    STATUS_UNHANDLED
 // Opcode not handled yet
 };
 
 enum PacketProcessing {
-	PROCESS_INPLACE = 0, //process packet whenever we receive it - mostly for non-handled or non-implemented packets
-	PROCESS_THREADUNSAFE, //packet is not thread-safe - process it in World::UpdateSessions()
-	PROCESS_THREADSAFE
+    PROCESS_INPLACE = 0, //process packet whenever we receive it - mostly for non-handled or non-implemented packets
+    PROCESS_THREADUNSAFE, //packet is not thread-safe - process it in World::UpdateSessions()
+    PROCESS_THREADSAFE
 //packet is thread-safe - process it in Map::Update()
 };
 
 class WorldPacket;
 
 struct OpcodeHandler {
-	char const* name;
-	SessionStatus status;
-	PacketProcessing packetProcessing;
-	void (WorldSession::*handler)(WorldPacket& recvPacket);
+    char const* name;
+    SessionStatus status;
+    PacketProcessing packetProcessing;
+    void (WorldSession::*handler)(WorldPacket& recvPacket);
 };
 
 extern OpcodeHandler opcodeTable[NUM_MSG_TYPES];
 
 /// Lookup opcode name for human understandable logging
 inline const char* LookupOpcodeName(uint32 id) {
-	if (id >= NUM_MSG_TYPES)
-		return "Received unknown opcode, it's more than max!";
-	return opcodeTable[id].name;
+    if (id >= NUM_MSG_TYPES)
+        return "Received unknown opcode, it's more than max!";
+    return opcodeTable[id].name;
 }
 #endif
 /// @}

@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -73,7 +73,7 @@ typedef std::list<SavedAddon> SavedAddonsList;
 class AddonMgr
 {
 	friend class ACE_Singleton<AddonMgr, ACE_Null_Mutex>;
-	
+
 	AddonMgr();
 	~AddonMgr();
 
@@ -84,7 +84,7 @@ class AddonMgr
 	SavedAddon const* GetAddonInfo(const std::string& name) const;
 
 	private:
-	
+
 	SavedAddonsList m_knownAddons; // Known addons.
 };
 

@@ -1229,17 +1229,17 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target) {
         if (canEffectTrigger && missInfo != SPELL_MISS_REFLECT) {
             caster->ProcDamageAndSpell(unitTarget, procAttacker, procVictim, procEx, damageInfo.damage, m_attackType, m_spellInfo, m_triggeredByAuraSpell);
             if (caster->GetTypeId() == TYPEID_PLAYER && (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET) == 0 && (m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE || m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_RANGED))
-				caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
+                caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
         caster->DealSpellDamage(&damageInfo, true);
 
-		// Cobra Strikes
-		if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && m_spellInfo->SpellFamilyFlags[1] & 0x10000000)
-			if (Unit * owner = caster->GetOwner())
-				if (Aura* pAura = owner->GetAura(53257))
-					pAura->DropCharge();
-		
+        // Cobra Strikes
+        if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && m_spellInfo->SpellFamilyFlags[1] & 0x10000000)
+            if (Unit * owner = caster->GetOwner())
+                if (Aura* pAura = owner->GetAura(53257))
+                    pAura->DropCharge();
+
         // Used in spell scripts
         m_final_damage = damageInfo.damage;
 
@@ -1749,7 +1749,7 @@ void Spell::SearchChainTarget(std::list<Unit*> &TagUnitMap, float max_range,
                     && !m_caster->isInFrontInMap(*next, max_range))
                     || !m_caster->canSeeOrDetect(*next)
                     || !cur->IsWithinLOSInMap(*next)
-					|| (*next)->GetCreatureType() == CREATURE_TYPE_CRITTER
+                    || (*next)->GetCreatureType() == CREATURE_TYPE_CRITTER
                     || ((GetSpellInfo()->AttributesEx6
                             & SPELL_ATTR6_IGNORE_CROWD_CONTROL_TARGETS)
                             && !(*next)->CanFreeMove())) {
@@ -2912,7 +2912,7 @@ void Spell::SelectEffectTargets(uint32 i, uint32 cur) {
                 }
               }
             }
-            break;				
+            break;
                     case 27285: // Seed of Corruption proc spell
                         unitList.remove(m_targets.getUnitTarget());
                         break;
@@ -3533,12 +3533,12 @@ void Spell::handle_immediate() {
             m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
             SendChannelStart(duration);
         }
-		else if (duration == -1)
-		{
-			m_spellState = SPELL_STATE_CASTING;
-			m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
-			SendChannelStart(duration);
-		}
+        else if (duration == -1)
+        {
+            m_spellState = SPELL_STATE_CASTING;
+            m_caster->AddInterruptMask(m_spellInfo->ChannelInterruptFlags);
+            SendChannelStart(duration);
+        }
     }
 
     PrepareTargetProcessing();
@@ -4007,8 +4007,8 @@ void Spell::SendCastResult(Player* caster, SpellEntry const* spellInfo,
                     << uint32(spellInfo->TotemCategory[1]);
             break;
         case SPELL_FAILED_EQUIPPED_ITEM_CLASS:
-		case SPELL_FAILED_EQUIPPED_ITEM_CLASS_MAINHAND:
-		case SPELL_FAILED_EQUIPPED_ITEM_CLASS_OFFHAND:
+        case SPELL_FAILED_EQUIPPED_ITEM_CLASS_MAINHAND:
+        case SPELL_FAILED_EQUIPPED_ITEM_CLASS_OFFHAND:
             data << uint32(spellInfo->EquippedItemClass);
             data << uint32(spellInfo->EquippedItemSubClassMask);
             break;
@@ -4016,9 +4016,9 @@ void Spell::SendCastResult(Player* caster, SpellEntry const* spellInfo,
             uint32 item = 0;
             for (int8 x = 0; x < 3; x++)
                 if (spellInfo->EffectItemType[x]) item = spellInfo->EffectItemType[x];
-					ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(item);
-				if (pProto && pProto->ItemLimitCategory) 
-					data << uint32(pProto->ItemLimitCategory);
+                    ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(item);
+                if (pProto && pProto->ItemLimitCategory)
+                    data << uint32(pProto->ItemLimitCategory);
             break;
         }
         default:
@@ -5754,7 +5754,7 @@ SpellCastResult Spell::CheckCast(bool strict) {
                         // Wintergrasp Antifly check
                         if (sWorld->getBoolConfig(CONFIG_OUTDOORPVP_WINTERGRASP_ENABLED))
                         {
-	                      OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
+                          OutdoorPvPWG *pvpWG = (OutdoorPvPWG*)sOutdoorPvPMgr->GetOutdoorPvPToZoneId(4197);
                           if (m_originalCaster->GetZoneId() == 4197 && pvpWG && pvpWG != 0  && pvpWG->isWarTime())
                               return (_triggeredCastFlags & TRIGGERED_DONT_REPORT_CAST_ERROR) ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_NOT_HERE;
                         }
