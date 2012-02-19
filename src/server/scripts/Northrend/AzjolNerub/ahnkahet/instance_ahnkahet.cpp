@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -323,7 +323,6 @@ public:
 
                 spheres[0] = data5;
                 spheres[1] = data6;
-
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;

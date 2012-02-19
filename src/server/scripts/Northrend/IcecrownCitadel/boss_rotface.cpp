@@ -211,7 +211,7 @@ class boss_rotface : public CreatureScript
                                 float minDist = 0.0f;
                                 if (targets.size() >= minTargets)
                                     minDist = -5.0f;
-							
+
                                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, minDist, true))
                                     DoCast(target, SPELL_VILE_GAS,true);
                                 events.ScheduleEvent(EVENT_VILE_GAS, urand(15000, 20000));

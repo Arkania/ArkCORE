@@ -1,8 +1,8 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/> 
- * 
+ * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation; either version 2 of the License, or (at your
@@ -303,7 +303,7 @@ class boss_sindragosa : public CreatureScript
                         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
                             me->GetMotionMaster()->MovementExpired();
                         DoStartMovement(me->getVictim());
-                        _isInAirPhase = false;						
+                        _isInAirPhase = false;
                         // trigger Asphyxiation
                         summons.DoAction(NPC_ICE_TOMB, ACTION_TRIGGER_ASPHYXIATION);
                         break;

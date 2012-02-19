@@ -131,7 +131,6 @@ public:
                     {
                         near_f = i + 1;
                         diff = me->GetDistance2d(temp);
-
                     }
                 }
             }
@@ -156,7 +155,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 /*######
@@ -201,7 +199,6 @@ public:
         void AttackStart(Unit *who) { return; }
         void EnterCombat(Unit *who) { }
     };
-
 };
 
 #define SPELL_ENRAGE            42745
@@ -223,7 +220,7 @@ public:
             uiPounceTimer=0;
         }
 
-        void EnterCombat(Unit *who) 
+        void EnterCombat(Unit *who)
         {
             me->CallForHelp(15);
         }
@@ -251,7 +248,6 @@ public:
     {
         return new npc_savage_worgAI(pCreature);
     }
-
 };
 void AddSC_utgarde_keep()
 {

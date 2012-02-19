@@ -101,7 +101,7 @@ public:
             SpellShroudOfDarknessTimer = 22000;
             SpellVoidShiftTimer = 15000;
             SpellSummonVoidTimer = 12000;
-			
+
             bVoidWalkerKilled = false;
         }
 
@@ -220,7 +220,6 @@ public:
             Summons.Summon(summon);
         }
     };
-
 };
 
 class npc_void_sentry : public CreatureScript

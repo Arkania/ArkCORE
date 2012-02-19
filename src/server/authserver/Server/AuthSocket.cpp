@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -353,7 +353,7 @@ bool AuthSocket::_HandleLogonChallenge() {
 	// Verify that this IP is not in the ip_banned table
 	LoginDatabase.Execute(
 			LoginDatabase.GetPreparedStatement(LOGIN_SET_EXPIREDIPBANS));
-			
+
     LoginDatabase.Execute(
         LoginDatabase.GetPreparedStatement(LOGIN_SET_ACCOUNT_PREMIUM)
             );

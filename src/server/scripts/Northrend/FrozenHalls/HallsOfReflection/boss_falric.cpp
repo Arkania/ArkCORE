@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
@@ -112,12 +112,12 @@ public:
           DoScriptText(SAY_FALRIC_DEATH, me);
         }
 
-        void AttackStart(Unit* who) 
-        { 
+        void AttackStart(Unit* who)
+        {
             if(!m_pInstance) return;
 
                if(m_pInstance->GetData(TYPE_FALRIC) != IN_PROGRESS)
-                 return; 
+                 return;
 
              ScriptedAI::AttackStart(who);
         }
@@ -138,7 +138,7 @@ public:
                          case 3: summon = NPC_DARK_6; break;
                        }
                        break;
-                   case 1: 
+                   case 1:
                        switch(urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_2; break;
@@ -146,7 +146,7 @@ public:
                          case 3: summon = NPC_DARK_4; break;
                        }
                        break;
-                   case 2: 
+                   case 2:
                        switch(urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_2; break;
@@ -154,7 +154,7 @@ public:
                          case 3: summon = NPC_DARK_6; break;
                        }
                        break;
-                   case 3: 
+                   case 3:
                        switch(urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_1; break;
@@ -171,7 +171,7 @@ public:
                     m_uiSummonGUID[i] = Summon->GetGUID();
                     Summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     Summon->setFaction(974);
-                    Summon->SetReactState(REACT_PASSIVE); 
+                    Summon->SetReactState(REACT_PASSIVE);
                  }
                  m_uiLocNo++;
              }
@@ -196,18 +196,18 @@ public:
         {
             if(!m_pInstance) return;
 
-            if (m_pInstance->GetData(TYPE_FALRIC) == SPECIAL) 
+            if (m_pInstance->GetData(TYPE_FALRIC) == SPECIAL)
             {
-                if(!m_bIsCall) 
+                if(!m_bIsCall)
                 {
                    m_bIsCall = true;
                    Summon();
                 }
 
-                if (m_uiSummonTimer < uiDiff) 
+                if (m_uiSummonTimer < uiDiff)
                 {
                         ++SummonCount;
-                        if(SummonCount > 4) 
+                        if(SummonCount > 4)
                         {
                             m_pInstance->SetData(TYPE_FALRIC, IN_PROGRESS);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -251,7 +251,7 @@ public:
                 m_uiBerserkTimer = 180000;
             } else  m_uiBerserkTimer -= uiDiff;
 
-            DoMeleeAttackIfReady();  
+            DoMeleeAttackIfReady();
 
             return;
         }

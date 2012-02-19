@@ -1,6 +1,6 @@
 /*
 * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
-* 
+*
 * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
 *
 * This program is free software; you can redistribute it and/or modify it
@@ -81,7 +81,6 @@ enum CreatureIds {
 	// Romogg Bonecrusher
 	NPC_ANGERED_EARTH = 50376,
 	NPC_CHAINS_OF_WOE = 40447,
-
 };
 
 enum GameObjectIds {

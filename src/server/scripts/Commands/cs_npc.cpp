@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  *
@@ -148,7 +148,7 @@ public:
 				chr->GetTransport()->AddNPCPassengerInInstance(0, id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
 				WorldDatabase.PQuery("INSERT INTO creature_transport (guid, transport_entry, npc_entry, TransOffsetX, TransOffsetY, TransOffsetZ, TransOffsetO, emote) values (%u, %u, %u, %f, %f, %f, %f, 0)", 0, chr->GetTransport()->GetEntry(),id, chr->GetTransOffsetX(), chr->GetTransOffsetY(), chr->GetTransOffsetZ(), chr->GetTransOffsetO());
 			}
-            return true;			
+            return true;
 		}
 
 		Creature* pCreature = new Creature;

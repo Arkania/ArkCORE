@@ -50,25 +50,22 @@ enum eSpells
 
     //Monk
     SPELL_DIVINE                = 67251,
-    SPELL_FINAL                 = 67255,	
+    SPELL_FINAL                 = 67255,
     SPELL_FLURRY                = 67233,
 	SPELL_PUMMEL                = 67235,
-		
+
     //Priestess
     SPELL_SSMITE                = 36176,
-    SPELL_SSMITE_H              = 67289,		
+    SPELL_SSMITE_H              = 67289,
     SPELL_PAIN                  = 34941,
-    SPELL_PAIN_H                = 34941,	
+    SPELL_PAIN_H                = 34941,
     SPELL_MIND                  = 67229,
-	
+
     //Lightwielder
     SPELL_LIGHT				    = 67247,
     SPELL_LIGHT_H               = 67290,
     SPELL_STRIKE                = 67237,
     SPELL_CLEAVE                = 15284,
-		
-
-
 
     SPELL_FONT                  = 67194,
 
@@ -210,7 +207,7 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            DoScriptText(SAY_START_E, me);           
+            DoScriptText(SAY_START_E, me);
         }
 
         void KilledUnit(Unit* victim)
@@ -338,7 +335,7 @@ public:
             if (uiId == 1)
             {
                 me->RemoveAura(SPELL_SHIELD);
-                DoScriptText(SAY_MEM_DIE, me); 
+                DoScriptText(SAY_MEM_DIE, me);
         }
         }
 
@@ -366,7 +363,7 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            DoScriptText(SAY_START_P, me);           
+            DoScriptText(SAY_START_P, me);
         }
 
         void KilledUnit(Unit* victim)
@@ -591,7 +588,6 @@ public:
     };
 };
 
-
 // THIS AI NEEDS MORE IMPROVEMENTS
 class npc_argent_soldier : public CreatureScript
 {
@@ -624,7 +620,7 @@ public:
         uint32 uiCleaveTimer;
         uint32 uiStrikeTimer;
         uint32 uiblazingLightTimer;
-        uint32 uiFlurryTimer;				
+        uint32 uiFlurryTimer;
         uint32 uiPummelTimer;
         uint32 uiPainTimer;
         uint32 uiMindTimer;
@@ -636,14 +632,13 @@ public:
         uint32 uiDivineTimer;
         uint32 uiResetTimer;
 
-
         uint32 uiHolySmiteTimer;
         uint32 uiFountainTimer;
         bool Shielded;
-				
+
         void Reset()
         {
-                    uiCleaveTimer = 10000;									
+                    uiCleaveTimer = 10000;
                     uiStrikeTimer = 12000;
                     uiblazingLightTimer = 9000;
                     uiFlurryTimer = 8000;
@@ -693,10 +688,8 @@ public:
                     if (GameObject* pGO = GameObject::GetGameObject(*me, pInstance->GetData64(DATA_MAIN_GATE)))
                         pInstance->HandleGameObject(pGO->GetGUID(),false);
                         break;
-
                 }
                 me->SendMovementFlagUpdate();
-
             }
         }
 
@@ -760,7 +753,7 @@ public:
 
         void DamageTaken(Unit * /*done_by*/, uint32 &damage)
         {
-            if (me->GetEntry() == NPC_ARGENT_MONK && IsHeroic() && Shielded==false) 
+            if (me->GetEntry() == NPC_ARGENT_MONK && IsHeroic() && Shielded==false)
             {
                 if (damage >= me->GetHealth())
                 {
@@ -771,7 +764,7 @@ public:
                     Shielded = true;
                 }
             }
-        } 
+        }
 
         void UpdateAI(const uint32 uiDiff)
         {
@@ -789,7 +782,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         DoCast(target,SPELL_STRIKE);
                         uiCleaveTimer = 12000;
-                } else 
+                } else
 				      uiCleaveTimer -= uiDiff;
 
                 if (uiStrikeTimer <= uiDiff)
@@ -797,14 +790,14 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         DoCast(target,SPELL_CLEAVE);
                         uiStrikeTimer = 10000;
-                } else 
+                } else
 				      uiStrikeTimer -= uiDiff;
 
                 if (uiLightTimer <= uiDiff)
                 {
                         DoCast(me, RAID_MODE(SPELL_LIGHT, SPELL_LIGHT_H));
                         uiLightTimer = urand (12000, 15000);
-                } else 
+                } else
 				      uiLightTimer -= uiDiff;
                 break;
             }
@@ -814,14 +807,14 @@ public:
                 {
                         DoCast(me,SPELL_DIVINE);
                         uiDivineTimer = 85000;
-                } else 
+                } else
 				      uiDivineTimer -= uiDiff;
 
                 if (uiFinalTimer <= uiDiff)
                 {
                         DoCast(me,SPELL_FINAL);
                         uiFinalTimer = 70000;
-                } else 
+                } else
 				      uiFinalTimer -= uiDiff;
 
                 if (uiPummelTimer <= uiDiff)
@@ -829,14 +822,14 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         DoCast(target,SPELL_PUMMEL);
                         uiPummelTimer = 15000;
-                } else 
+                } else
 				      uiPummelTimer -= uiDiff;
 
                 if (uiFlurryTimer <= uiDiff)
                 {
                         DoCast(me,SPELL_FLURRY);
                         uiFlurryTimer = 15000;
-                } else 
+                } else
 				      uiFlurryTimer -= uiDiff;
                 break;
             }
@@ -846,7 +839,7 @@ public:
                 {
                         DoCast(me,SPELL_FONT);
                         uiFontTimer = urand (15000, 17000);
-                } else 
+                } else
 				      uiFontTimer -= uiDiff;
 
                 if (uiPainTimer <= uiDiff)
@@ -854,7 +847,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         DoCast(target,SPELL_PAIN);
                         uiPainTimer = 25000;
-                } else 
+                } else
 				      uiPainTimer -= uiDiff;
 
                 if (uiMindTimer <= uiDiff)
@@ -862,7 +855,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         DoCast(target,SPELL_MIND);
                         uiMindTimer = 90000;
-                } else 
+                } else
 				      uiMindTimer -= uiDiff;
 
                 if (uiSsmiteTimer <= uiDiff)
@@ -870,7 +863,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         DoCast(target,SPELL_SSMITE);
                         uiSsmiteTimer = 9000;
-                } else 
+                } else
 				      uiSsmiteTimer -= uiDiff;
                 break;
             }

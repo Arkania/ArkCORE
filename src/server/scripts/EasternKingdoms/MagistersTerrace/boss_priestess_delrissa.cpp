@@ -333,7 +333,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eHealingPotion
@@ -576,7 +575,6 @@ public:
                 DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eWarlockSpells
@@ -673,7 +671,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eKickDown
@@ -730,7 +727,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eMageSpells
@@ -861,7 +857,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eWarriorSpells
@@ -981,7 +976,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eHunterSpells
@@ -1102,7 +1096,6 @@ public:
             }
         }
     };
-
 };
 
 enum Spells
@@ -1202,7 +1195,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 enum eEngineerSpells
@@ -1297,7 +1289,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 /*

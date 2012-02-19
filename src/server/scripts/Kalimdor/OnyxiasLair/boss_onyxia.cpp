@@ -125,7 +125,7 @@ public:
             m_instance = creature->GetInstanceScript();
             Reset();
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            me->ApplySpellImmune(0, IMMUNITY_ID, 49560, true); // Death Grip jump effect			
+            me->ApplySpellImmune(0, IMMUNITY_ID, 49560, true); // Death Grip jump effect
         }
 
         InstanceScript* m_instance;
@@ -531,7 +531,7 @@ public:
 
         bool novadone;
         bool ignitedone;
-    
+
         void Reset()
         {
             novadone = false;

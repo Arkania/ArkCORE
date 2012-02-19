@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  *
@@ -33,7 +33,7 @@ public:
 
     struct instance_halls_of_reflection_InstanceMapScript : public InstanceScript
     {
-        instance_halls_of_reflection_InstanceMapScript(Map* map) : InstanceScript(map) 
+        instance_halls_of_reflection_InstanceMapScript(Map* map) : InstanceScript(map)
         {
             Difficulty = map->GetDifficulty();
             Initialize();
@@ -48,7 +48,7 @@ public:
         uint8 m_uiSummons;
 
         uint64 m_uiFalricGUID;
-        uint64 m_uiMarwynGUID;  
+        uint64 m_uiMarwynGUID;
         uint64 m_uiLichKingGUID;
         uint64 m_uiLiderGUID;
 
@@ -115,26 +115,26 @@ public:
             switch(creature->GetEntry())
             {
                 case NPC_FALRIC:
-                       m_uiFalricGUID = creature->GetGUID(); 
+                       m_uiFalricGUID = creature->GetGUID();
                     break;
                 case NPC_MARWYN:
-                       m_uiMarwynGUID = creature->GetGUID();  
+                       m_uiMarwynGUID = creature->GetGUID();
                     break;
-                case BOSS_LICH_KING: 
+                case BOSS_LICH_KING:
                        m_uiLichKingGUID = creature->GetGUID();
                     break;
                 case NPC_FROST_GENERAL:
                        m_uiFrostGeneralGUID = creature->GetGUID();
                     break;
-                case NPC_SYLVANA: 
+                case NPC_SYLVANA:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_JAINA, ALLIANCE);
                        break;
-                case NPC_DARK_RANGER: 
+                case NPC_DARK_RANGER:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_ARCHMAGE, ALLIANCE);
                        break;
-                case NPC_SYLVANA_OUTRO: 
+                case NPC_SYLVANA_OUTRO:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_JAINA_OUTRO, ALLIANCE);
                        break;
@@ -152,7 +152,7 @@ public:
             ALLIANCE_CONTROL_PHASE_SHIFT_1 = 55774,
             ALLIANCE_CONTROL_PHASE_SHIFT_2 = 60027,
         };
-        
+
          if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GROUP)) return;
 
             switch (player->GetTeam())
@@ -163,12 +163,11 @@ public:
                       player->CastSpell(player, HORDE_CONTROL_PHASE_SHIFT_2, false);
                     break;
                 case HORDE:
-                      if (player && player->IsInWorld() && player->HasAura(ALLIANCE_CONTROL_PHASE_SHIFT_1)) 
+                      if (player && player->IsInWorld() && player->HasAura(ALLIANCE_CONTROL_PHASE_SHIFT_1))
                           player->RemoveAurasDueToSpell(ALLIANCE_CONTROL_PHASE_SHIFT_1);
                       player->CastSpell(player, ALLIANCE_CONTROL_PHASE_SHIFT_2, false);
                       break;
             };
-
         };
 
         void OnGameObjectCreate(GameObject* go)
@@ -183,24 +182,24 @@ public:
                 case GO_PORTAL:            m_uiPortalGUID = go->GetGUID(); break;
                 case GO_CAPTAIN_CHEST_1:
                                       if (Difficulty == RAID_DIFFICULTY_10MAN_NORMAL)
-                                      m_uiCaptainsChestHordeGUID = go->GetGUID(); 
+                                      m_uiCaptainsChestHordeGUID = go->GetGUID();
                     break;
                 case GO_CAPTAIN_CHEST_3:
                                       if (Difficulty == RAID_DIFFICULTY_25MAN_NORMAL)
-                                      m_uiCaptainsChestHordeGUID = go->GetGUID(); 
+                                      m_uiCaptainsChestHordeGUID = go->GetGUID();
                     break;
                 case GO_CAPTAIN_CHEST_2:
                                       if (Difficulty == RAID_DIFFICULTY_10MAN_NORMAL)
-                                      m_uiCaptainsChestAllianceGUID = go->GetGUID(); 
+                                      m_uiCaptainsChestAllianceGUID = go->GetGUID();
                     break;
                 case GO_CAPTAIN_CHEST_4:
                                       if (Difficulty == RAID_DIFFICULTY_25MAN_NORMAL)
-                                      m_uiCaptainsChestAllianceGUID = go->GetGUID(); 
+                                      m_uiCaptainsChestAllianceGUID = go->GetGUID();
                     break;
                 case GO_ICE_WALL_1:
                     m_uiIceWall1GUID = go->GetGUID();
                     go->SetGoState(GO_STATE_ACTIVE);
-                    break;				
+                    break;
                 case GO_ICE_WALL_2:
                     m_uiIceWall2GUID = go->GetGUID();
                     go->SetGoState(GO_STATE_ACTIVE);
@@ -239,7 +238,7 @@ public:
                                                    OpenDoor(m_uiExitGateGUID);
                     }
                     break;
-                case TYPE_FROST_GENERAL:        m_auiEncounter[uiType] = uiData; 
+                case TYPE_FROST_GENERAL:        m_auiEncounter[uiType] = uiData;
                                                 if(uiData == DONE)
                                                    OpenDoor(m_uiDoor2GUID);
                     break;
@@ -379,7 +378,6 @@ public:
 
             OUT_LOAD_INST_DATA_COMPLETE;
         }
-
     };
 
     InstanceScript* GetInstanceScript (InstanceMap* map) const

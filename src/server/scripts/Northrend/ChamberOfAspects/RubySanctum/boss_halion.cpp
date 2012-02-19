@@ -15,12 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
+/*
  * SDBlockData
  * SDAuthor: Kapoeira
  * SDBaseAuthor: Kaelima
  * SDPercent: 75% (or less)
- * SDNote: Twilight Cutter is not blizzlike 
+ * SDNote: Twilight Cutter is not blizzlike
             and probably not working correctly, though it's hard to test alone
            Most probably have to make Halion Controller share the health pool with both Halions
  */
@@ -262,7 +262,7 @@ public:
                     if (tHalion->isAlive())
                         killer->Kill(tHalion);
             }
-		
+
 		void JustReachedHome()
         {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -320,7 +320,7 @@ public:
 
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
-				
+
                 while (uint32 eventId = events.ExecuteEvent())
                 {
                     switch (eventId)
@@ -770,8 +770,8 @@ public:
                                     canUpdate = (corporealityValue != 100);
                                     if (canUpdate) { corporealityValue += 10; }
                                 }
-                    } 
-                else 
+                    }
+                else
                 {
                                 if (Creature* halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION)))
                                 {
@@ -779,7 +779,7 @@ public:
                                     for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
                                         if (Player* player = i->getSource())
                                             Talk(EMOTE_REGENERATE, player->GetGUID());
-                                    DoCast(halion, SPELL_TWILIGHT_MENDING);            
+                                    DoCast(halion, SPELL_TWILIGHT_MENDING);
                                 }
                                 _events.ScheduleEvent(EVENT_CHECK_CORPOREALITY, 15000);
                                 break;
@@ -821,7 +821,7 @@ public:
                                         {
                                             if (player->HasAura(SPELL_TWILIGHT_REALM))
                                                 Talk(EMOTE_TWILIGHT_OUT_TWILIGHT, player->GetGUID());
-            else 
+            else
                                                 Talk(EMOTE_PHYSICAL_IN_PHYSICAL, player->GetGUID());
 				}
 				else

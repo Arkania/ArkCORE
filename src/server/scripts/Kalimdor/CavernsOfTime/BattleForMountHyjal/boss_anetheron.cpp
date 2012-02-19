@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -232,7 +232,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 #define SPELL_IMMOLATION     31303
@@ -317,7 +316,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_boss_anetheron()

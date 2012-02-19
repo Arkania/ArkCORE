@@ -27,7 +27,7 @@ EndScriptData */
 #include "trial_of_the_champion.h"
 #include "Vehicle.h"
 
-#define NPC_BLACK_KNIGHT 35451 
+#define NPC_BLACK_KNIGHT 35451
 
 enum eEnums
 {
@@ -297,7 +297,7 @@ public:
                             {
                                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 {
-                                    if (target && target->isAlive()) 
+                                    if (target && target->isAlive())
                                     {
                                         if (IsHeroic())
                                             DoCast(target,SPELL_DEATH_RESPITE_H);
@@ -318,7 +318,7 @@ public:
                             me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
                             if (IsHeroic())
                                 DoCast(me, SPELL_ARMY_DEAD_H);
-                            else							
+                            else
                             DoCast(me, SPELL_ARMY_DEAD);
                         }
 
@@ -340,7 +340,7 @@ public:
                                     {
                                         if (IsHeroic())
                                             DoCast(target,SPELL_DESECRATION_H);
-                                        else 
+                                        else
                                             DoCast(target,SPELL_DESECRATION);
                                     }
                             }
@@ -378,7 +378,7 @@ public:
                             {
                                 if (IsHeroic())
                                     DoCast(target,SPELL_MARKED_DEATH);
-                                else 
+                                else
                                     DoCast(target,SPELL_MARKED_DEATH_H);
                             }
                         }
@@ -526,7 +526,7 @@ public:
             pInstance = creature->GetInstanceScript();
         }
         InstanceScript* pInstance;
-		
+
         Vehicle* vehicle;
 
         void Reset()
@@ -596,12 +596,6 @@ public:
     };
 };
 
-
-
-
-
-
-
 class npc_gr : public CreatureScript
 {
 public:
@@ -614,7 +608,6 @@ public:
 
     struct npc_grAI : public npc_escortAI
     {
-
         npc_grAI(Creature* creature) : npc_escortAI(creature)
         {
             Start(false,true,0,NULL);
@@ -676,7 +669,6 @@ public:
             }
         }
 
-
         void UpdateAI(const uint32 uiDiff)
         {
             npc_escortAI::UpdateAI(uiDiff);
@@ -684,7 +676,6 @@ public:
             if (!UpdateVictim())
                 return;
         }
-
 };
 };
 

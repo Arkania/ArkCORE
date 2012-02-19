@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -55,7 +55,6 @@ enum Yells
     SAY_SLAY_2                                    = -1604026,
     SAY_SLAY_3                                    = -1604027,
     SAY_DEATH                                     = -1604028
-
 };
 
 enum Displays
@@ -306,7 +305,6 @@ public:
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
     };
-
 };
 
 class achievement_share_the_love : public AchievementCriteriaScript
@@ -359,14 +357,13 @@ public:
             {
                 me->DisappearAndDie();
             } else uiDespawnTimer -= diff;
-        }   
+        }
     };
-
 };
 
 void AddSC_boss_gal_darah()
 {
     new boss_gal_darah();
-    new achievement_share_the_love();	
+    new achievement_share_the_love();
     new mob_rhino_spirit();
 }

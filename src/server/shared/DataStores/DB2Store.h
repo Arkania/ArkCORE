@@ -6,7 +6,7 @@
  * Copyright (C) 2010 - 2012 Strawberry-Pr0jcts <http://www.strawberry-pr0jcts.com/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify

@@ -195,7 +195,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_pure_energy : public CreatureScript
@@ -227,7 +226,6 @@ public:
         void MoveInLineOfSight(Unit* /*who*/) {}
         void AttackStart(Unit* /*who*/) {}
     };
-
 };
 
 void AddSC_boss_vexallus()

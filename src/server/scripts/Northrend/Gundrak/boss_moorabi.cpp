@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -72,7 +72,7 @@ public:
         boss_moorabiAI(Creature* creature) : ScriptedAI(creature)
         {
                 _instance = creature->GetInstanceScript();
-        
+
             // make 55098 interruptable
             SpellEntry* spell = (SpellEntry*)sSpellStore.LookupEntry(SPELL_TRANSFORMATION);
             if (spell)

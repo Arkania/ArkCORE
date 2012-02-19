@@ -122,7 +122,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NOT_ATTACKABLE_1|UNIT_FLAG_OOC_NOT_ATTACKABLE);
             me->SetStandState(UNIT_STAND_STATE_STAND);
             DoCast(me, SPELL_FREEZE);
-        
+
             me->SetReactState(REACT_DEFENSIVE);
 
             for (uint32 i = 0; i < 4; i++)
@@ -279,7 +279,6 @@ public:
             currentPhase = move;
         }
     };
-
 };
 
 //ravenous furbolg's spells
@@ -323,7 +322,7 @@ public:
             uiTerrifyingRoarTimer = 15*IN_MILLISECONDS;
 
             me->SetReactState(REACT_DEFENSIVE);
-        
+
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NOT_ATTACKABLE_1|UNIT_FLAG_OOC_NOT_ATTACKABLE);
             me->SetStandState(UNIT_STAND_STATE_STAND);
             DoCast(me, SPELL_FREEZE);
@@ -384,7 +383,6 @@ public:
             }
         }
     };
-
 };
 
 //frenzied worgen's spells
@@ -426,7 +424,7 @@ public:
             uiEnraged = false;
 
             me->SetReactState(REACT_DEFENSIVE);
-     
+
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NOT_ATTACKABLE_1|UNIT_FLAG_OOC_NOT_ATTACKABLE);
             me->SetStandState(UNIT_STAND_STATE_STAND);
             DoCast(me, SPELL_FREEZE);
@@ -477,7 +475,6 @@ public:
             }
         }
     };
-
 };
 
 //ferocious rhino's spells
@@ -518,7 +515,7 @@ public:
             uiStompTimer = 5*IN_MILLISECONDS;
             uiGoreTimer = 10*IN_MILLISECONDS;
             uiGrievousWoundTimer = 12*IN_MILLISECONDS;
-        
+
             me->SetReactState(REACT_DEFENSIVE);
 
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NOT_ATTACKABLE_1|UNIT_FLAG_OOC_NOT_ATTACKABLE);
@@ -572,7 +569,6 @@ public:
             }
         }
     };
-
 };
 
 //massive jormungar's spells
@@ -618,7 +614,7 @@ public:
             uiAcidSpitTimer = 5*IN_MILLISECONDS;
             uiAcidSplatterTimer = 12*IN_MILLISECONDS;
             uiPoisonBreathTimer = 15*IN_MILLISECONDS;
-        
+
             me->SetReactState(REACT_DEFENSIVE);
 
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NOT_ATTACKABLE_1|UNIT_FLAG_OOC_NOT_ATTACKABLE);
@@ -680,7 +676,6 @@ public:
             }
         }
     };
-
 };
 
 class mob_palehoof_orb : public CreatureScript
@@ -792,9 +787,7 @@ public:
             SetInCombat();
         }
     };
-
 };
-
 
 class go_palehoof_sphere : public GameObjectScript
 {
@@ -815,9 +808,7 @@ public:
         }
         return true;
     }
-
 };
-
 
 void AddSC_boss_palehoof()
 {

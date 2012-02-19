@@ -60,5 +60,4 @@ enum eEvents {
 };
 
 void AddSC_blackwing_descent() {
-
 }

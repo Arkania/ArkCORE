@@ -113,10 +113,10 @@ enum BossSpells
     SPELL_DARK_ESSENCE_25_H          = 67178,
     SPELL_BERSERK                    = 64238,
     SPELL_NONE                       = 0,
-	
+
     SPELL_TWIN_EMPATHY_1             = 66132,
     SPELL_TWIN_EMPATHY_2             = 66133,
-	
+
     SPELL_EMPOWERED_DARK             = 67215,
     SPELL_EMPOWERED_LIGHT            = 67218,
     SPELL_UNLEASHED_DARK_10          = 67172,
@@ -572,7 +572,7 @@ public:
     {
         boss_eydisAI(Creature* creature) : boss_twin_baseAI(creature) {}
 
-        void Reset() 
+        void Reset()
 		{
             boss_twin_baseAI::Reset();
             SetEquipmentSlots(false, EQUIP_MAIN_2, EQUIP_OFFHAND_2, EQUIP_RANGED_2);
@@ -605,7 +605,6 @@ public:
         }
     };
 };
-
 
 class mob_essence_of_twin : public CreatureScript
 {
@@ -846,13 +845,13 @@ enum PoweringUpSpells
     SPELL_SURGE_OF_SPEED_2      = 67241,
     SPELL_SURGE_OF_SPEED_3      = 67242,
     SPELL_SURGE_OF_SPEED_4      = 67243,
-   
+
     SPELL_POWERING_UP_1         = 67590,
     SPELL_POWERING_UP_2         = 67602,
     SPELL_POWERING_UP_3         = 67603,
     SPELL_POWERING_UP_4         = 67604,
 };
- 
+
 class spell_powering_up : public SpellScriptLoader
 {
 public:

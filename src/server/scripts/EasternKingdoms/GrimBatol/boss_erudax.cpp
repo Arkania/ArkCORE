@@ -19,7 +19,6 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 /* ToDo:
 - Damage of Shadow Gale needs to be fixed
 - Shadow Gale is not displayed right
@@ -41,18 +40,17 @@ enum ScriptTexts
     SAY_SLAY                            = -1810004,
 };
 
-
 enum Spells
 {
 	// Erudax
 	SPELL_ENFEEBLING_BLOW				= 75789,
 	SPELL_SHADOW_GALE_VISUAL			= 75664,
 
-	// (litte hole at the caster, it is a pre visual aura of shadow gale) 
+	// (litte hole at the caster, it is a pre visual aura of shadow gale)
 	SPELL_SHADOW_GALE_SPEED_TRIGGER		= 75675,
 	SPELL_SHADOW_GALE_DEBUFF			= 75694,
 
-	// Spawns 1 (NH - 40600) or 2 (HC - 48844) Faceless 
+	// Spawns 1 (NH - 40600) or 2 (HC - 48844) Faceless
 	SPELL_SPAWN_FACELESS				= 75704,
 	SPELL_TWILIGHT_PORTAL_VISUAL		= 95716,
 
@@ -90,8 +88,8 @@ enum Points
 
 class boss_erudax: public CreatureScript
 {
-public: 
-	boss_erudax() : CreatureScript("boss_erudax") { } 
+public:
+	boss_erudax() : CreatureScript("boss_erudax") { }
 
 	CreatureAI* GetAI(Creature* creature) const
 	{
@@ -123,7 +121,7 @@ public:
 			RemoveShadowGaleDebuffFromPlayers();
 		}
 
-		void EnterCombat(Unit* /*who*/) 
+		void EnterCombat(Unit* /*who*/)
 		{
 			ShouldSummonAdds = false;
 
@@ -179,7 +177,6 @@ public:
 			{
 				switch (eventId)
 				{
-
 				case EVENT_ENFEEBLING_BLOW:
 					DoCastVictim(SPELL_ENFEEBLING_BLOW);
 					events.ScheduleEvent(EVENT_ENFEEBLING_BLOW, urand(19000,24000));
@@ -224,7 +221,7 @@ public:
 		}
 
 		void JustDied(Unit* /*killer*/)
-		{	
+		{
 			ResetMinions();
 			RemoveShadowGaleDebuffFromPlayers();
 			DoScriptText(SAY_DEATH, me);
@@ -244,7 +241,7 @@ public:
 				case POINT_ERUDAX_IS_AT_STALKER:
 
 					// if Erudax is not at the Stalkers poision while he is casting
-					// the Casting Effect would not displayed right				
+					// the Casting Effect would not displayed right
 					DoCast(SPELL_SHADOW_GALE_VISUAL);
 					ShouldSummonAdds = true;
 
@@ -288,7 +285,7 @@ public:
 				return;
 
 			for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
-			{	
+			{
 				if((*iter)->isDead())
 					(*iter)->Respawn();
 
@@ -350,7 +347,7 @@ public:
 		}
 
 		void UpdateAI(const uint32 diff)
-		{	
+		{
 			if (pTarget == NULL || !isAtAnEgg || me->HasUnitState(UNIT_STAT_CASTING))
 				return;
 
@@ -371,7 +368,6 @@ public:
 
 			if(isCastingUmbraMending)
 			{	// If the Egg is Death and Umbra Mending was casted go to the next Egg
-
 				pTarget = GetNextEgg();
 
 				if(pTarget != NULL) // Solves Crashes if the Faceless killed all eggs
@@ -423,12 +419,11 @@ public:
 
 	private:
 		Creature* GetRandomEgg()
-		{	
+		{
 			// I know that this is looking strange but it works! ^^
 
 			std::list<Creature*> creatures;
 			GetCreatureListWithEntryInGrid(creatures, me, NPC_ALEXSTRASZAS_EGG, 300.0f);
-
 
 			if (creatures.empty())
 				return GetNextEgg();
@@ -475,7 +470,6 @@ public:
 
 		void JustDied(Unit* killer)
 		{	// Summon Twilight Hatchlings
-
 			// Despawn of the Hatchlings is handled by Erudax
 			// The behaviour of the hatchlings is handled through SmartAI
 
@@ -519,7 +513,7 @@ public:
 		}
 
 		void UpdateAI(const uint32 diff)
-		{	
+		{
 			if(VisualEffectCasted)
 			{
 				events.Update(diff);
@@ -562,7 +556,7 @@ public:
 	};
 };
 
-void AddSC_boss_erudax() 
+void AddSC_boss_erudax()
 {
 	new boss_erudax();
 	new mob_faceless();

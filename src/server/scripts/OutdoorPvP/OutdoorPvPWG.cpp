@@ -1114,7 +1114,7 @@ bool OutdoorPvPWG::UpdateCreatureInfo(Creature *creature)
                     {
                         if (getDefenderTeam() == TEAM_ALLIANCE)
                             creature->SetPhaseMask(1, true);
-                        else 
+                        else
                             creature->SetPhaseMask(2, true);
                         break;
                     }
@@ -1123,7 +1123,7 @@ bool OutdoorPvPWG::UpdateCreatureInfo(Creature *creature)
                     {
                         if (getDefenderTeam() == TEAM_ALLIANCE)
                             creature->SetPhaseMask(2, true);
-                        else 
+                        else
                             creature->SetPhaseMask(1, true);
                         break;
                     }
@@ -1639,7 +1639,6 @@ void OutdoorPvPWG::forceStartBattle()
 
 void OutdoorPvPWG::forceStopBattle()
 {// Uptime will do all the work.
-
     if (!isWarTime())
         m_wartime = true;
     if (m_timer != 1)
