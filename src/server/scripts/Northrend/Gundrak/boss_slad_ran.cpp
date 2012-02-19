@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -214,8 +214,8 @@ public:
                     if (temp && temp->isAlive() && (temp->GetDistance2d(me) < 100))
                         temp->CompletedAchievement(achievSnakes);
                 }
-            } 
-     
+            }
+
             if (pInstance)
                 pInstance->SetData(DATA_SLAD_RAN_EVENT, DONE);
         }
@@ -231,7 +231,6 @@ public:
             lSummons.Summon(summoned);
         }
     };
-
 };
 
 class mob_slad_ran_constrictor : public CreatureScript
@@ -278,10 +277,10 @@ public:
                      if (stackcount >= 4)
                      {
                           target->RemoveAurasDueToSpell(SPELL_GRIP_OF_SLAD_RAN);
-                    
+
                           me->AddUnitState(UNIT_STAT_ROOT); //dont interrupt channelling by moving
                           DoCast(target, SPELL_SNAKE_WRAP);
-                    
+
                           bEnwrapping = true;
                           uiWrapTarget = target->GetGUID();
                      }
@@ -298,12 +297,12 @@ public:
             if (uiGripOfSladRanTimer <= diff)
             {
                 Unit* target = me->getVictim();
-            
+
                 CastGrip(target);
-            
+
                 uiGripOfSladRanTimer = 5*IN_MILLISECONDS;
             } else uiGripOfSladRanTimer -= diff;
-    
+
             if (bEnwrapping)
             {
                 if (uiEnwrapTimer <= diff)
@@ -311,7 +310,7 @@ public:
                     if (Unit* target = Unit::GetUnit((*me), uiWrapTarget))
                     {
                         target->CastSpell(target, SPELL_SNAKE_WRAP_STUN, true);
-                    
+
                         // replace with Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_SLADRAN) : 0) later
                         if (Creature* pSladran = GetClosestCreatureWithEntry(me, CREATURE_SLAD_RAN, 100.0f))
                             CAST_AI(boss_slad_ran::boss_slad_ranAI, pSladran->AI())->GotWrapped(target);
@@ -326,7 +325,6 @@ public:
         }
     };
 };
-
 
 class mob_slad_ran_viper : public CreatureScript
 {
@@ -363,7 +361,6 @@ public:
             } else uiVenomousBiteTimer -= diff;
         }
     };
-
 };
 
 class mob_snake_wrap : public CreatureScript
@@ -381,8 +378,8 @@ public:
         mob_snake_wrapAI(Creature *c) : ScriptedAI(c) {}
         uint64 WrapTargetGUID;
         void Reset()
-        { 
-            WrapTargetGUID = 0; 
+        {
+            WrapTargetGUID = 0;
         }
 
         void EnterCombat(Unit* /*who*/) {}
@@ -413,7 +410,6 @@ public:
                 me->DealDamage(me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
         }
     };
-
 };
 
 void AddSC_boss_slad_ran()

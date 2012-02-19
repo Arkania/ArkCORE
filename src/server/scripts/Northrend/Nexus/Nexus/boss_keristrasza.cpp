@@ -181,11 +181,11 @@ public:
             }
         }
 
-        void SpellHitTarget(Unit* target, const SpellEntry *spell) 
+        void SpellHitTarget(Unit* target, const SpellEntry *spell)
         {
             if (target->GetTypeId() != TYPEID_PLAYER)
                 return;
-            
+
             if (spell->Id == SPELL_INTENSE_COLD_TRIGGERED)
                  if (Aura* pColdAura = target->GetAura(SPELL_INTENSE_COLD_TRIGGERED))
                      if (pColdAura->GetStackAmount() > 2)
@@ -236,7 +236,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class containment_sphere : public GameObjectScript
@@ -259,7 +258,6 @@ public:
         }
         return true;
     }
-
 };
 
 void AddSC_boss_keristrasza()

@@ -4,7 +4,7 @@
  * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
@@ -113,7 +113,7 @@ public:
                          case 3: summon = NPC_DARK_6; break;
                        }
                        break;
-                   case 1: 
+                   case 1:
                        switch(urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_2; break;
@@ -121,7 +121,7 @@ public:
                          case 3: summon = NPC_DARK_4; break;
                        }
                        break;
-                   case 2: 
+                   case 2:
                        switch(urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_2; break;
@@ -129,7 +129,7 @@ public:
                          case 3: summon = NPC_DARK_6; break;
                        }
                        break;
-                   case 3: 
+                   case 3:
                        switch(urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_1; break;
@@ -194,12 +194,12 @@ public:
           DoScriptText(SAY_MARWYN_AGGRO, me);
         }
 
-        void AttackStart(Unit* who) 
-        { 
+        void AttackStart(Unit* who)
+        {
             if (!m_pInstance) return;
 
                if (m_pInstance->GetData(TYPE_MARWYN) != IN_PROGRESS)
-                 return; 
+                 return;
 
              ScriptedAI::AttackStart(who);
         }
@@ -208,24 +208,24 @@ public:
         {
             if(!m_pInstance) return;
 
-            if (m_pInstance->GetData(TYPE_FALRIC) == SPECIAL) 
+            if (m_pInstance->GetData(TYPE_FALRIC) == SPECIAL)
             {
-                if(!m_bIsCall) 
+                if(!m_bIsCall)
                 {
                    m_bIsCall = true;
                    Summon();
                 }
             }
 
-            if(m_pInstance->GetData(TYPE_MARWYN) == SPECIAL) 
+            if(m_pInstance->GetData(TYPE_MARWYN) == SPECIAL)
             {
-               if(m_uiSummonTimer < uiDiff) 
+               if(m_uiSummonTimer < uiDiff)
                {
                        ++SummonCount;
                        if(SummonCount == 1)
                           DoScriptText(SAY_MARWYN_INTRO, me);
 
-                       if(SummonCount > 4) 
+                       if(SummonCount > 4)
                        {
                             m_pInstance->SetData(TYPE_MARWYN, IN_PROGRESS);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -246,7 +246,7 @@ public:
                 m_uiObliterateTimer = urand(8000, 12000);
             } else m_uiObliterateTimer -= uiDiff;
 
-            if (m_uiWellTimer < uiDiff) 
+            if (m_uiWellTimer < uiDiff)
             {
                 DoScriptText(SAY_MARWYN_SP02, me);
                 if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -254,14 +254,14 @@ public:
                 m_uiWellTimer= urand(25000, 30000);
             } else m_uiWellTimer -= uiDiff;
 
-            if (m_uiSharedSufferingTimer < uiDiff) 
+            if (m_uiSharedSufferingTimer < uiDiff)
             {
                 if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                    DoCast(target, Regular ? SPELL_SHARED_SUFFERING_N : SPELL_SHARED_SUFFERING_H);
                 m_uiSharedSufferingTimer = urand(15000, 20000);
             } else m_uiSharedSufferingTimer -= uiDiff;
 
-            if (m_uiFleshTimer < uiDiff) 
+            if (m_uiFleshTimer < uiDiff)
             {
                 DoScriptText(SAY_MARWYN_SP01, me);
                 if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -284,7 +284,6 @@ public:
     {
         return new boss_marwynAI(creature);
     }
-
 };
 
 void AddSC_boss_marwyn()

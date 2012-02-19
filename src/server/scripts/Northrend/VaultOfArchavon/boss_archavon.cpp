@@ -65,7 +65,7 @@ struct InRangePlayerSelector : public std::unary_function<Unit*, bool>
     {
         return (target->GetTypeId() == TYPEID_PLAYER && target->IsInRange(_me, _minRange, _maxRange) && target->IsWithinLOSInMap(_me));
     }
- 
+
     Creature* _me;
     float _minRange, _maxRange;
 };

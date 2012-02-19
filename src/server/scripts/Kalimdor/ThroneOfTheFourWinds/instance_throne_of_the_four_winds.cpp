@@ -63,10 +63,6 @@ public:
 
 		void OnPlayerEnter(Player* player)
 		{ // If Conclave of Wind is not DONE check weather they must be spawed
-
-
-
-
 		}
 
 		bool IsEncounterInProgress() const

@@ -250,7 +250,7 @@ public:
                         {
                             if (Creature* target = ObjectAccessor::GetCreature(*me, _targetGUID))
                             {
-                                DoCast(target, _isUndead ? DUNGEON_MODE(SPELL_DARK_SMASH, H_SPELL_DARK_SMASH) 
+                                DoCast(target, _isUndead ? DUNGEON_MODE(SPELL_DARK_SMASH, H_SPELL_DARK_SMASH)
                                                          : DUNGEON_MODE(SPELL_SMASH, H_SPELL_SMASH));
                                 me->SetFacingToObject(target);
                             }

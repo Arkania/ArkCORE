@@ -357,7 +357,6 @@ public:
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
     };
-
 };
 
 class mob_ichor_globule : public CreatureScript
@@ -421,7 +420,6 @@ public:
                     pIchoron->AI()->DoAction(ACTION_WATER_ELEMENT_KILLED);
         }
     };
-
 };
 
 class achievement_dehydration : public AchievementCriteriaScript

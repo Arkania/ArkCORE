@@ -45,7 +45,7 @@ enum Bosses
     NPC_VAROS                   = 27447,
     NPC_UROM                    = 27655,
     NPC_EREGOS                  = 27656,
- 
+
     NPC_AZURE_RING_GUARDIAN     = 28236,
     NPC_CENTRIFUGE_CONSTRUCT    = 27641,
 };

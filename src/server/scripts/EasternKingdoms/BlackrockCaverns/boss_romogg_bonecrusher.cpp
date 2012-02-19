@@ -15,7 +15,6 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 /**********
 * Script Coded by Naios
 * Script Complete 80% (or less)
@@ -89,7 +88,7 @@ public:
 		}
 
 		void UpdateAI(const uint32 diff)
-		{			
+		{
 			if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))
 				return;
 
@@ -97,7 +96,7 @@ public:
 				if(chainsOfWoe->isAlive())
 				{
 					/* Buggy!
-					
+
 					Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
 
 					if (!PlayerList.isEmpty())
@@ -106,13 +105,11 @@ public:
 							if (!i->getSource()->HasAura(SPELL_CHAINS_OF_WOE_AURA))
 								me->CastSpell(i->getSource(),SPELL_CHAINS_OF_WOE_AURA,true);
 					}*/
-
 				}else
 					{
 						chainsOfWoe->DespawnOrUnsummon();
 						chainsOfWoe = NULL;
 					}
-
 
 				if(castSkullCracker)
 				{
@@ -135,7 +132,6 @@ public:
 
 						if(me->GetMap()->IsHeroic())
 						{ // Summon Angered Earth
-
 							Position myPos;
 							me->GetPosition(&myPos);
 
@@ -157,7 +153,6 @@ public:
 						events.ScheduleEvent(EVENT_WOUNDING_STRIKE, 15000);
 						break;
 					}
-
 				}
 
 				DoMeleeAttackIfReady();
@@ -172,7 +167,6 @@ public:
 				summon->CastSpell(summon, SPELL_CHAINS_OF_WOE_VISUAL, true);
 				summon->SetReactState(REACT_PASSIVE);
 				chainsOfWoe = summon;
-
 			}else if(summon->GetEntry() == NPC_ANGERED_EARTH)
 			{
 				summon->GetMotionMaster()->MoveChase(me->getVictim());

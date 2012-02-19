@@ -42,8 +42,6 @@ enum CreatureIds
 
    // Conclave of Wind
    NPC_ICE_PATCH = 46186,
-
-
 };
 
 #endif

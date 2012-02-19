@@ -294,7 +294,6 @@ public:
                             DrainCrystalTimer = 20000 + rand()%5000;
                     } else DrainCrystalTimer -= diff;
                 }
-
             }else
             {
                 if (IsDraining)
@@ -322,7 +321,6 @@ public:
             DoMeleeAttackIfReady();                             // No need to check if we are draining crystal here, as the spell has a stun.
         }
     };
-
 };
 
 class mob_fel_crystal : public CreatureScript
@@ -368,7 +366,6 @@ public:
             } else sLog->outError(ERROR_INST_DATA);
         }
     };
-
 };
 
 void AddSC_boss_selin_fireheart()

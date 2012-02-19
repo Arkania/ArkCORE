@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -157,7 +157,7 @@ public:
                     break;
                 }
         }
-		
+
 		void OnGameObjectCreate(GameObject* go)
 		{
 			switch (go->GetEntry())
@@ -186,13 +186,13 @@ public:
 				}
 				break;
                     case DATA_GARFROST:
-					
+
                         if(state == DONE)
                         {
 				            {
 					         if(GetBossState(DATA_ICK)==DONE)
 						     HandleGameObject(uiIceWall,true,NULL);
-				             }					
+				             }
                             if (Creature* summoner = instance->GetCreature(_garfrostGUID))
                             {
                                 if (_teamInInstance == ALLIANCE)

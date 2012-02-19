@@ -189,7 +189,6 @@ public:
                     m_auiEncounter[i] = NOT_STARTED;
         }
     };
-
 };
 
 void AddSC_instance_obsidian_sanctum()

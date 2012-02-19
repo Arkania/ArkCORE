@@ -415,7 +415,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_saboteur : public CreatureScript
@@ -542,7 +541,6 @@ public:
             instance->SetData(DATA_START_BOSS_ENCOUNTER, 1);
         }
     };
-
 };
 
 class npc_teleportation_portal_vh : public CreatureScript
@@ -677,7 +675,6 @@ public:
                 instance->SetData64(DATA_DEL_TRASH_MOB, summoned->GetGUID());
         }
     };
-
 };
 
 struct violet_hold_trashAI : public npc_escortAI
@@ -800,7 +797,6 @@ struct violet_hold_trashAI : public npc_escortAI
         if (instance)
             instance->SetData(DATA_NPC_PRESENCE_AT_DOOR_ADD, 1);
     }
-
 };
 
 class mob_azure_invader : public CreatureScript
@@ -878,7 +874,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_binder : public CreatureScript
@@ -956,7 +951,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_mage_slayer : public CreatureScript
@@ -1016,7 +1010,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_raider : public CreatureScript
@@ -1068,7 +1061,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_stalker : public CreatureScript
@@ -1132,7 +1124,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_spellbreaker : public CreatureScript
@@ -1263,7 +1254,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class mob_azure_sorceror : public CreatureScript
@@ -1320,7 +1310,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_violet_hold()

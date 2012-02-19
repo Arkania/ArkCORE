@@ -109,8 +109,8 @@ public:
                 case 26686:    uiFerociousRhino = creature->GetGUID();                 break;
                 case 29281:    uiSvala = creature->GetGUID();                          break;
                 case 26688:    uiPalehoofOrb = creature->GetGUID();                    break;
-                case 27273:    
-                    (uiFlameBrazier_1 ? uiFlameBrazier_2 : uiFlameBrazier_1) =  creature->GetGUID();  
+                case 27273:
+                    (uiFlameBrazier_1 ? uiFlameBrazier_2 : uiFlameBrazier_1) =  creature->GetGUID();
                                                                                         break;
                 case 27327:    uiRitualTarget = creature->GetGUID();                   break;
             }
@@ -245,7 +245,6 @@ public:
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
                     if (m_auiEncounter[i] == IN_PROGRESS)
                         m_auiEncounter[i] = NOT_STARTED;
-
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;

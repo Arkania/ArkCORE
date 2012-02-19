@@ -160,7 +160,7 @@ enum Events
     EVENT_OUTRO_HORDE_1,
     EVENT_OUTRO_HORDE_2,
     EVENT_OUTRO_HORDE_3,
-    
+
    //Fly
     EVENT_START_FLY,
 
@@ -309,7 +309,6 @@ struct mortarMarksLoc
     Position location;
 };
 
-
 //Function find player special for Gunship battle
 typedef std::list<Player*> TPlayerLists;
 
@@ -400,9 +399,8 @@ void RelocateTransport(Transport* t)
     }
 
     t->Update(0);
-    t->UpdateNPCPositions(); 
+    t->UpdateNPCPositions();
 }
-
 
 //Function stop motion of the ship
 void StopFlyShip(Transport* t)
@@ -551,7 +549,7 @@ void RestartEvent(Transport* t1, Transport* t2, Map* instance, uint64 TeamInInst
                             th->AddNPCPassengerInInstance(NPC_GB_KORKRON_AXETHROWER, 24.70331f, 25.36584f, 35.97845f, 1.66527f);
                             th->AddNPCPassengerInInstance(NPC_GB_KORKRON_ROCKETEER, -11.44849f, -25.71838f, 33.64343f, 1.49248f);
                             th->AddNPCPassengerInInstance(NPC_GB_KORKRON_ROCKETEER, 12.30336f, -25.69653f, 35.32373f, 1.49248f);
-                        }                        
+                        }
                         else
                         {
                             th->AddNPCPassengerInInstance(NPC_GB_KORKRON_AXETHROWER, -3.170555f, 28.30652f, 34.21082f, 1.66527f);
@@ -667,7 +665,7 @@ void RestartEvent(Transport* t1, Transport* t2, Map* instance, uint64 TeamInInst
                             t->AddNPCPassengerInInstance(NPC_GB_SKYBREAKER_MORTAR_SOLDIER, -20.9583f, 14.8875f, 20.4428f, 4.77865f);
                         }
                     }
-                 
+
                     if(Transport* th = sMapMgr->LoadTransportInMap(instance,GO_ORGRIM_S_HAMMER_HORDE_ICC, 77800))
                     {
                         th->AddNPCPassengerInInstance(NPC_GB_ORGRIMS_HAMMER, 1.845810f, 1.268872f, 34.526218f, 1.5890f);
@@ -702,7 +700,6 @@ void RestartEvent(Transport* t1, Transport* t2, Map* instance, uint64 TeamInInst
                         }
                     }
                 }
-
 }
 
 //Stop Fight
@@ -789,7 +786,6 @@ class npc_muradin_gunship : public CreatureScript
             npc_muradin_gunshipAI(Creature *creature) : ScriptedAI(creature),
                 _instance(creature->GetInstanceScript())
             {
-
             }
 
             void Reset()
@@ -932,7 +928,7 @@ class npc_muradin_gunship : public CreatureScript
                 {
                    damage = 0;
                 }
-                
+
                 if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == ALLIANCE && me->GetHealthPct() < 2.0f )
                 {
                    damage = 0;
@@ -953,7 +949,7 @@ class npc_muradin_gunship : public CreatureScript
             {
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
-                
+
                 if (!HealthAbovePct(75))
                 {
                     me->SetHealth(me->GetMaxHealth() / 100 * 76); // find a better way to avoid the hardcore spell spam ....
@@ -1197,7 +1193,7 @@ class npc_gunship_skybreaker : public CreatureScript
                     if (Creature* pMuradin = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GB_MURADIN_BRONZEBEARD)))
                         pMuradin->AI()->DoAction(ACTION_FAIL);
                 }
-                
+
                 else if(_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
                 {
                     if (Creature* pSaurfang = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GB_HIGH_OVERLORD_SAURFANG)))
@@ -1254,7 +1250,7 @@ class npc_gunship_orgrimmar : public CreatureScript
                     if (Creature* pMuradin = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GB_MURADIN_BRONZEBEARD)))
                         pMuradin->AI()->DoAction(ACTION_DONE);
                 }
-                
+
                 else if(_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
                 {
                     if (Creature* pSaurfang = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GB_HIGH_OVERLORD_SAURFANG)))
@@ -1320,7 +1316,7 @@ class npc_korkron_axethrower_rifleman : public CreatureScript
                     if (Creature* pSaurfangBoss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GB_HIGH_OVERLORD_SAURFANG)))
                         pSaurfangBoss->AI()->DoAction(ACTION_AXES_RIFL_DIE);
                 }
-                 
+
                 if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
                 {
                     if (Creature* pMuradin = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GB_MURADIN_BRONZEBEARD)))
@@ -1332,10 +1328,10 @@ class npc_korkron_axethrower_rifleman : public CreatureScript
             {
                 if (_instance->GetBossState(DATA_GUNSHIP_EVENT) != IN_PROGRESS)
                     return;
-                
+
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
-                    
+
                 me->AI()->AttackStart(SelectRandomPlayerInTheMaps(me->GetMap()));
 
                 if (!UpdateVictim())
@@ -1441,7 +1437,7 @@ class npc_sergeant : public CreatureScript
 
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
-                    
+
                 events.Update(diff);
 
                 while (uint32 eventId = events.ExecuteEvent())
@@ -1505,7 +1501,6 @@ class npc_sergeant : public CreatureScript
                 }
 
                 DoMeleeAttackIfReady();
-
             }
                 uint32 DesperateResolve;
                 bool desperated;
@@ -1667,7 +1662,7 @@ class npc_gunship_mage : public CreatureScript
                             {
                                 if (Vehicle* veh = (*itr)->GetVehicleKit())
                                     veh->RemoveAllPassengers();
-									
+
                                 DoCast((*itr),SPELL_BELOW_ZERO,true);
                             }
                         }
@@ -1679,7 +1674,7 @@ class npc_gunship_mage : public CreatureScript
                             {
                                 if (Vehicle* veh = (*itr)->GetVehicleKit())
                                     veh->RemoveAllPassengers();
-									
+
                                  DoCast((*itr),SPELL_BELOW_ZERO,true);
                             }
                         }
@@ -1697,7 +1692,7 @@ class npc_gunship_mage : public CreatureScript
                             pSaurfangBoss->AI()->DoAction(ACTION_MAGE_DIE);
                     }
                  }
-                 
+
                  if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
                  {
                      if (me->GetGUID() == _instance->GetData64(DATA_GB_BATTLE_MAGE))
@@ -1715,7 +1710,7 @@ class npc_gunship_mage : public CreatureScript
 
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
-                    
+
                 if (me->GetGUID() == _instance->GetData64(DATA_GB_BATTLE_MAGE))
                 {
                     if( timer_BelowZero <= diff)
@@ -1785,7 +1780,7 @@ class npc_gunship_cannon : public CreatureScript
                 {
                     me->RemoveAurasByType(SPELL_AURA_CONTROL_VEHICLE);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-					
+
                     if (Vehicle* veh = me->GetVehicleKit())
                         veh->RemoveAllPassengers();
                 }
@@ -1794,7 +1789,6 @@ class npc_gunship_cannon : public CreatureScript
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 }
             }
-
         };
 
         CreatureAI* GetAI(Creature* pCreature) const
@@ -1848,7 +1842,7 @@ class npc_mortar_soldier_or_rocketeer : public CreatureScript
 
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
-                    
+
                 events.Update(diff);
 
                 while (uint32 eventId = events.ExecuteEvent())
@@ -2130,7 +2124,7 @@ class npc_saurfang_gunship : public CreatureScript
                 {
                     damage = 0;
                 }
-                
+
                 if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE && me->GetHealthPct() < 2.0f )
                 {
                     damage = 0;
@@ -2151,14 +2145,14 @@ class npc_saurfang_gunship : public CreatureScript
             {
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
-                    
+
                 if(_instance->GetBossState(DATA_GUNSHIP_EVENT) == IN_PROGRESS)
                 {
                     if (!HealthAbovePct(75))
                     {
                         me->SetHealth(me->GetMaxHealth() / 100 * 76); // find a better way to avoid the hardcore spell spam ....
                         DoCast(me, SPELL_TASTE_OF_BLOOD);
-                    } 
+                    }
 
                     if (UpdateVictim())
                     {
@@ -2328,7 +2322,6 @@ class npc_saurfang_gunship : public CreatureScript
                 DoMeleeAttackIfReady();
             }
 
-
             private:
                 Transport* orgrimmar;
                 uint32 RocketerDieCount;
@@ -2374,7 +2367,6 @@ class npc_gunship_portal : public CreatureScript
 
             void UpdateAI( const uint32 diff)
             {
-
              events.Update(diff);
 
                 while (uint32 eventId = events.ExecuteEvent())
@@ -2391,7 +2383,6 @@ class npc_gunship_portal : public CreatureScript
     private:
         EventMap events;
         InstanceScript* _instance;
-
         };
 
         CreatureAI* GetAI(Creature* pCreature) const
@@ -2399,7 +2390,6 @@ class npc_gunship_portal : public CreatureScript
             return new npc_gunship_portalAI(pCreature);
         }
 };
-
 
 class npc_gunship_trigger : public CreatureScript
 {
@@ -2410,7 +2400,6 @@ class npc_gunship_trigger : public CreatureScript
         {
             npc_gunship_triggerAI(Creature *creature) : Scripted_NoMovementAI(creature),_instance(creature->GetInstanceScript())
             {
-
                 Reset();
             }
 
@@ -2434,7 +2423,6 @@ class npc_gunship_trigger : public CreatureScript
 
             void UpdateAI(const uint32 diff)
             {
-
             }
 
             private:
@@ -2902,7 +2890,6 @@ class npc_skybreaker_protector: public CreatureScript
             return new npc_skybreaker_protectorAI(pCreature);
         }
 };
-
 
 /* Spire Frostwyrm  37230*/
 class npc_icc_spire_frostwyrm: public CreatureScript

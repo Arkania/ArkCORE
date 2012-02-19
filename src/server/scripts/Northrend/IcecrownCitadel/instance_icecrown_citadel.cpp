@@ -1,8 +1,8 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/> 
- * 
+ * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation; either version 2 of the License, or (at your
@@ -1002,10 +1002,9 @@ class instance_icecrown_citadel : public InstanceMapScript
 
                 return false;
             }
-			
+
             bool CheckRequiredBosses(uint32 bossId, Player const* player = NULL) const
             {
-
                 if ((player->GetSession()->GetSecurity() > SEC_GAMEMASTER ))
                     return true;
 
@@ -1440,7 +1439,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                             t->AddNPCPassengerInInstance(NPC_GB_SKYBREAKER_MORTAR_SOLDIER, -20.9583f, 14.8875f, 20.4428f, 4.77865f);
                       }
                  }
-                 
+
                     if(Transport* th = sMapMgr->LoadTransportInMap(instance,GO_ORGRIM_S_HAMMER_HORDE_ICC, 77800))
                   {
                         th->AddNPCPassengerInInstance(NPC_GB_ORGRIMS_HAMMER, 1.845810f, 1.268872f, 34.526218f, 1.5890f);

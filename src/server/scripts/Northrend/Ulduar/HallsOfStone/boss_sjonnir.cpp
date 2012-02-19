@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,7 +20,6 @@
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
 
-
 #define SPELL_LIGHTING_RING                                 DUNGEON_MODE(51849,59861) //Periodic Trigger (interval 2s) spell = 50841/59849
 #define SPELL_LIGHTING_RING_1                               DUNGEON_MODE(50840,59848) //Periodic Trigger (interval 2s) spell = 50841/59849
 #define SPELL_STATIC_CHARGE                                 DUNGEON_MODE(50834,59846) //Periodic Trigger /interval 2s) spell = 50835/50847
@@ -28,7 +27,6 @@
 #define SPELL_LIGHTING_SHIELD                               DUNGEON_MODE(50831,59845)
 #define SPELL_TOXIC_VOLLEY                                  DUNGEON_MODE(50838,59853)
 #define SPELL_FRENZY                                        28747
-
 
 enum Yells
 {
@@ -100,7 +98,7 @@ public:
         uint32 uiSummonTimer;
         uint32 uiCheckPhaseTimer;
         uint8 abuseTheOoze;
-        uint32 uiSummonEntry;        
+        uint32 uiSummonEntry;
         uint8 uiSummonPhase;
 
         SummonList lSummons;
@@ -125,7 +123,7 @@ public:
 
             if (pInstance)
                 pInstance->SetData(DATA_SJONNIR_EVENT, NOT_STARTED);
-            
+
             CheckLightningShield();
         }
 
@@ -211,7 +209,7 @@ public:
                     uiSummonEntry = CREATURE_FORGED_IRON_TROGG;
                     uiSummonTimer = 1000;
                     uiSummonPhase = 2;
-                } 
+                }
                 else if (HealthBelowPct(50) && uiSummonPhase == 2)
                 {
                     uiSummonEntry = CREATURE_MALFORMED_OOZE;
@@ -224,15 +222,14 @@ public:
                     uiSummonTimer = 1000;
                     uiSummonPhase = 4;
                 }
-                
-                uiCheckPhaseTimer = 1000;
 
+                uiCheckPhaseTimer = 1000;
             } else uiCheckPhaseTimer -= diff;
 
             if (uiSummonTimer <= diff)
             {
                     uint32 rnd = urand(0, 1);
-                    
+
                     if (uiSummonEntry)
                         me->SummonCreature(uiSummonEntry, PipeLocations[rnd].x, PipeLocations[rnd].y, PipeLocations[rnd].z, 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
 
@@ -243,7 +240,6 @@ public:
                         case 3: uiSummonTimer = 2500; break;
                     case 4: uiSummonTimer = 5000; break;
                     }
-
             } else uiSummonTimer -= diff;
 
             if (!bIsFrenzy)
@@ -315,7 +311,6 @@ public:
             return 0;
         }
     };
-
 };
 
 class mob_malformed_ooze : public CreatureScript
@@ -330,7 +325,7 @@ public:
 
     struct mob_malformed_oozeAI : public ScriptedAI
     {
-        mob_malformed_oozeAI(Creature* c) : ScriptedAI(c) 
+        mob_malformed_oozeAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -345,7 +340,7 @@ public:
 
         void JustSummoned(Creature* pSummon)
         {
-            if (pInstance)               
+            if (pInstance)
                 if (Creature* pSjonnir = Unit::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
                     if (Unit* pTarget = CAST_AI(boss_sjonnir::boss_sjonnirAI, pSjonnir->AI())->SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         pSummon->AI()->AttackStart(pTarget);
@@ -368,7 +363,6 @@ public:
             } else uiMergeTimer -= diff;
         }
     };
-
 };
 
 class mob_iron_sludge : public CreatureScript
@@ -390,7 +384,7 @@ public:
 
         InstanceScript* pInstance;
         uint32 uiToxicVolleyTimer;
-        
+
         void Reset()
         {
             uiToxicVolleyTimer = 2000;
@@ -416,9 +410,7 @@ public:
                 if (Creature* Sjonnir = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_SJONNIR)))
                     Sjonnir->AI()->DoAction(ACTION_OOZE_DEAD);
         }
-
     };
-
 };
 
 class achievement_abuse_the_ooze : public AchievementCriteriaScript

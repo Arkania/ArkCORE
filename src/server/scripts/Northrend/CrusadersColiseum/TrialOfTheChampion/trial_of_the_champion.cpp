@@ -75,7 +75,6 @@ enum Creatures
     CREATURE_ANNOUNCER                    = 35004
 };
 
-
 class npc_anstart : public CreatureScript
 {
 public:
@@ -160,7 +159,6 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-
             if (Phase != INTRO)
                 return;
 
@@ -507,7 +505,6 @@ public:
                                 break;
                         }
                     }
-
                 }
             }
         }
@@ -527,10 +524,10 @@ public:
                         pTrash->SetReactState(REACT_AGGRESSIVE);
                     }
                     if (Creature* pTrash = me->SummonCreature(NPC_ARGENT_MONK,SpawnPosition))
-                    {    
+                    {
                         pTrash->AI()->SetData(i,0);
                         pTrash->SetReactState(REACT_AGGRESSIVE);
-                    }       
+                    }
                     if (Creature* pTrash = me->SummonCreature(NPC_PRIESTESS,SpawnPosition))
                     {
                         pTrash->AI()->SetData(i,0);
@@ -604,7 +601,6 @@ public:
                     me->SetReactState(REACT_AGGRESSIVE);
                     DoScriptText(SAY_START5, me);
                 }
-
             }
         }
 
@@ -626,7 +622,7 @@ public:
                 {
                     if (player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT) && !player->isGameMaster())
                     {
-                        Creature* pCreature = player->GetVehicleBase()->ToCreature();  
+                        Creature* pCreature = player->GetVehicleBase()->ToCreature();
 
                         if (pCreature)
                         {
@@ -647,13 +643,12 @@ public:
                         player->SetInCombatWith(pTemp);
                         pTemp->AddThreat(player, 0.0f);
                     }
-                    
+
                     if (player->isGameMaster())
-                        continue;                   
+                        continue;
                 }
             }
         }
-
 
        void UpdateAI(const uint32 uiDiff)
         {

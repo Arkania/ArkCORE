@@ -24,7 +24,7 @@
 * Script Complete 90% (or less)
 **********/
 
-/*	
+/*
 Known Bugs:
 # The Mount system does not work
 
@@ -83,7 +83,7 @@ enum Events
 	EVENT_SUMMON_INVOKED_FLAME_SPIRIT	= 2,
 
 	EVENT_VALIONAS_FLAME				= 3,
-	EVENT_SHREDDING_SWIPE				= 4,		
+	EVENT_SHREDDING_SWIPE				= 4,
 	EVENT_SEEPING_TWILIGHT				= 5,
 	EVENT_DEVOURING_FLAMES				= 6,
 
@@ -268,7 +268,6 @@ public:
 				pValiona->GetAI()->DoAction(ACTION_VALIONA_SHOULD_FLY_AWAY);
 
 				pValiona = NULL;
-
 			}
 
 			events.Update(diff);
@@ -569,7 +568,7 @@ public:
 		}
 
 		void UpdateAI(const uint32 Diff)
-		{	
+		{
 			if (!UpdateVictim())
 				return;
 

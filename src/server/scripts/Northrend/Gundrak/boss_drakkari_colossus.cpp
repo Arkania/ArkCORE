@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 #include "ScriptPCH.h"
 #include "gundrak.h"
@@ -188,7 +187,7 @@ class boss_drakkari_colossus : public CreatureScript
             {
                 if (_instance)
                     _instance->SetData(DATA_DRAKKARI_COLOSSUS_EVENT, IN_PROGRESS);
-           
+
                 me->RemoveAura(SPELL_FREEZE_ANIM);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
                 _phase = 1;
@@ -300,11 +299,11 @@ class boss_drakkari_elemental : public CreatureScript
             {
                 if (Creature* colossus = Unit::GetCreature(*me, _instance ? _instance->GetData64(DATA_DRAKKARI_COLOSSUS) : 0))
                     colossus->AI()->DoAction(ACTION_UNFREEZE);
-            
+
                 me->SetVisible(false);
                 me->DisappearAndDie();
             }
-       
+
             void EnterCombat(Unit* /*who*/)
             {
                 DoCast(me, DUNGEON_MODE<uint32>(SPELL_MOJO_VOLLEY, H_SPELL_MOJO_VOLLEY));

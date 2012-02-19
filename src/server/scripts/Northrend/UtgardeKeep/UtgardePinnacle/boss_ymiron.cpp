@@ -69,7 +69,6 @@ enum Yells
     SAY_SLAY_3                              = -1575038,
     SAY_SLAY_4                              = -1575039,
     SAY_DEATH                               = -1575040,
-
 };
 
 enum Creatures
@@ -432,7 +431,7 @@ public:
             DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3, SAY_SLAY_4), me);
         }
 
-        void SpellHitTarget(Unit* target, const SpellEntry *spell) 
+        void SpellHitTarget(Unit* target, const SpellEntry *spell)
         {
             if (spell->Id == SPELL_BANE_TRIGGERED)
                 m_bAchievement = false;
@@ -447,7 +446,6 @@ public:
             m_uiCreatureGUID = 0;
         }
     };
-
 };
 
 void AddSC_boss_ymiron()

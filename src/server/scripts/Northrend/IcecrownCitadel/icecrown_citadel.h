@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/> 
+ * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -304,7 +304,7 @@ enum CreaturesIds
     NPC_FROST_BOMB                              = 37186,
     NPC_ICE_TOMB                                = 36980,
     NPC_TRIGGER                                 = 38667,
-	
+
     // The Lich King
     NPC_THE_LICH_KING                           = 36597,
     NPC_HIGHLORD_TIRION_FORDRING_LK             = 38995,
@@ -320,7 +320,7 @@ enum CreaturesIds
     NPC_VILE_SPIRIT                             = 37799,
     NPC_WICKED_SPIRIT                           = 39190,
     NPC_STRANGULATE_VEHICLE                     = 36598,
-    NPC_WORLD_TRIGGER                           = 22515,	
+    NPC_WORLD_TRIGGER                           = 22515,
     NPC_WORLD_TRIGGER_INFINITE_AOI              = 36171,
     NPC_SPIRIT_BOMB                             = 39189,
     NPC_FROSTMOURNE_TRIGGER                     = 38584,

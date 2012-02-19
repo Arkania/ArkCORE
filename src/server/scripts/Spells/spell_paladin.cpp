@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- * 
+ *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -643,5 +643,5 @@ void AddSC_paladin_spell_scripts() {
     new spell_pal_guarded_by_the_light();
     new spell_pal_judgement_of_command();
     new spell_pal_shield_of_righteous();
-    new spell_pal_judgements_of_the_wise();	
+    new spell_pal_judgements_of_the_wise();
 }

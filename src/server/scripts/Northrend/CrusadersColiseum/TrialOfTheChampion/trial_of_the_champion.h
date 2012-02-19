@@ -34,7 +34,7 @@ enum eData
     DATA_ARGENT_SOLDIER_DEFEATED,
     DATA_BLACK_KNIGHT,
     DATA_KNIGHT,
-    DATA_TEAM_IN_INSTANCE 
+    DATA_TEAM_IN_INSTANCE
 };
 
 enum Data64
@@ -80,7 +80,7 @@ enum eNpcs
     NPC_GNOMERAGN_CHAMPION      = 35331,
     NPC_EXODAR_CHAMPION         = 35330,
     NPC_DRNASSUS_CHAMPION       = 35332,
-    NPC_IRONFORGE_CHAMPION      = 35329,    
+    NPC_IRONFORGE_CHAMPION      = 35329,
 
     NPC_EADRIC                  = 35119,
     NPC_PALETRESS               = 34928,
@@ -100,7 +100,7 @@ enum eNpcs
     // Announcer Start Event
     NPC_JAEREN                  = 35004,
     NPC_ARELAS                  = 35005,
-    
+
     // Announcer
     NPC_JAEREN_AN               = 35591,
     NPC_ARELAS_AN               = 35592,
@@ -148,7 +148,7 @@ enum eGameObjects
     GO_PALETRESS_LOOT_H            = 195324
 };
 
-const int npcFlags[] = {0x5245535B, 0x5D524556, 0x616E5320, 0x76206C6A, 
+const int npcFlags[] = {0x5245535B, 0x5D524556, 0x616E5320, 0x76206C6A,
     0x7A206D61, 0x6F707365, 0x70412064, 0x69646E65, 0x61766F78, 0x6F747320,
     0x7620756C, 0x7A616B7A, 0x2C656A75, 0x20657A20, 0x73207962, 0x6F682069,
     0x6C656D20, 0x796D7520, 0x6B202C74, 0x207A7964, 0x76206F68, 0x68617479,

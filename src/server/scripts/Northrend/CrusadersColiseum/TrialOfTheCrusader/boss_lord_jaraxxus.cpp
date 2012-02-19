@@ -55,7 +55,7 @@ enum BossSpells
 {
     SPELL_NETHER_POWER               = 66228, // +20% of spell damage per stack, stackable up to 5/10 times, must be dispelled/stealed
     SPELL_INFERNAL_ERUPTION          = 66258, // summons Infernal Volcano
-    SPELL_INFERNAL_ERUPTION_EFFECT   = 66252, // summons Felflame Infernal (3 at Normal and inifinity at Heroic)	
+    SPELL_INFERNAL_ERUPTION_EFFECT   = 66252, // summons Felflame Infernal (3 at Normal and inifinity at Heroic)
     SPELL_FEL_FIREBALL_10_N          = 66532, // does heavy damage to the tank, interruptable
     SPELL_FEL_FIREBALL_25_N          = 66963,
     SPELL_FEL_FIREBALL_10_H          = 66964,
@@ -71,7 +71,7 @@ enum BossSpells
     SPELL_TOUCH_OF_JARAXXUS          = 66209, // used only in 25H
     SPELL_BURNING_INFERNO            = 66242, // triggered by Incinerate Flesh
     SPELL_NETHER_PORTAL              = 66269, // summons Nether Portal
-    SPELL_NETHER_PORTAL_EFFECT       = 66263, // summons Mistress of Pain (1 at Normal and infinity at Heroic)	
+    SPELL_NETHER_PORTAL_EFFECT       = 66263, // summons Mistress of Pain (1 at Normal and infinity at Heroic)
     SPELL_LEGION_FLAME_10_N          = 66197, // player should run away from raid because he triggers Legion Flame
     SPELL_LEGION_FLAME_25_N          = 68123,
     SPELL_LEGION_FLAME_10_H          = 68124,

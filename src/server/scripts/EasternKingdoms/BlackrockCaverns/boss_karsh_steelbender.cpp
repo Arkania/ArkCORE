@@ -108,7 +108,6 @@ public:
 
 			if((!me->HasAura(SPELL_QUECKSILVER_ARMOR)) && (!me->HasAura(SPELL_SUPERHEATED_QUECKSILVER_ARMOR)))
 			{	// Summon Adds
-
 				LavaSpoutErrupt();
 
 				me->MonsterYell("Feel the burn!", LANG_UNIVERSAL, NULL);
@@ -147,7 +146,7 @@ public:
 					if(me->GetDistance(237.166f, 785.067f, 95.67f /*Stream of Molten*/) < 4.5f)
 					{
 						me->RemoveAura(SPELL_QUECKSILVER_ARMOR);
-						
+
 						// We cant do that with CastSpell because with the Spell the Normal Armor is applied too
 						me->SetAuraStack(SPELL_SUPERHEATED_QUECKSILVER_ARMOR,me,me->GetAuraCount(SPELL_SUPERHEATED_QUECKSILVER_ARMOR)+1);
 						me->GetAura(SPELL_SUPERHEATED_QUECKSILVER_ARMOR)->RefreshDuration();
@@ -176,7 +175,7 @@ public:
 			SpawnCount--;
 
 			if(SpawnCount == 0)
-				DoCastAOE(SPELL_LAVA_POOL,true);			
+				DoCastAOE(SPELL_LAVA_POOL,true);
 			}
 		}
 

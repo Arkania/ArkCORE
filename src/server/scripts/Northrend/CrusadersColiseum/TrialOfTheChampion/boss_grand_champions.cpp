@@ -109,7 +109,7 @@ void AggroAllPlayers(Creature* pTemp)
         {
             if (player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT) && !player->isGameMaster())
             {
-                Creature* creature = player->GetVehicleBase()->ToCreature();  
+                Creature* creature = player->GetVehicleBase()->ToCreature();
 
                 if (creature)
                 {
@@ -466,7 +466,6 @@ public:
     };
 };
 
-
 // Ambrose Boltspark && Eressea Dawnsinger || Mage
 class boss_mage_toc5 : public CreatureScript
 {
@@ -564,7 +563,6 @@ public:
                 uiFireBallTimer = 5000;
             } else uiFireBallTimer -= uiDiff;
 
-
             if (!UpdateVictim() || me->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
                 return;
 
@@ -606,7 +604,6 @@ public:
         }
     };
 };
-
 
 // Colosos && Runok Wildmane || Shaman
 class boss_shaman_toc5 : public CreatureScript
@@ -755,7 +752,6 @@ public:
     };
 };
 
-
 // Jaelyne Evensong && Zul'tore || Hunter
 class boss_hunter_toc5 : public CreatureScript
 {
@@ -872,7 +868,6 @@ public:
                     DoCast(target,SPELL_LIGHTNING_ARROWS);
 
                 uiLightningArrowsTimer = 7000;
-
             } else uiLightningArrowsTimer -= uiDiff;
 
             if (uiShootTimer <= uiDiff)
@@ -925,7 +920,6 @@ public:
         }
     };
 };
-
 
 // Lana Stouthammer Evensong && Deathstalker Visceri || Rouge
 class boss_rouge_toc5 : public CreatureScript

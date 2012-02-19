@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/> 
+ * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -107,8 +107,8 @@ class boss_lord_marrowgar : public CreatureScript
                     me->IsAIEnabled = false;
                 else if (!me->isDead())
                     Reset();
-            }			
-			
+            }
+
             void Reset()
             {
                 _Reset();
