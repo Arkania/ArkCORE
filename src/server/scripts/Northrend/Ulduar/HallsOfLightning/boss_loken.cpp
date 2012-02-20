@@ -119,26 +119,26 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_AGGRO, me);
-
-            if (m_pInstance)
+           
+            if(m_pInstance)
             {
                 m_pInstance->SetData(TYPE_LOKEN, IN_PROGRESS);
                 m_pInstance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMELY_DEATH_START_EVENT);
-            }
-
-            if (m_pInstance->GetData(TYPE_IONAR)!=DONE)
-            {
-                Map* pMap = me->GetMap();
-                if (pMap->IsDungeon())
+               
+                if (m_pInstance->GetData(TYPE_IONAR)!=DONE)
                 {
-                    Map::PlayerList const &PlayerList = pMap->GetPlayers();
-                    if (PlayerList.isEmpty())
-                        return;
-
-                    float fDist=0;
-                    for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                        if (i->getSource() && i->getSource()->isAlive() && !i->getSource()->isGameMaster())
-                            me->DealDamage(i->getSource(),i->getSource()->GetMaxHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+                    Map *pMap = me->GetMap();
+                    if (pMap->IsDungeon())
+                    {
+                        Map::PlayerList const &PlayerList = pMap->GetPlayers();
+                        if (PlayerList.isEmpty())
+                            return;
+ 
+                        float fDist=0;
+                        for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
+                            if (i->getSource() && i->getSource()->isAlive() && !i->getSource()->isGameMaster())
+                                me->DealDamage(i->getSource(),i->getSource()->GetMaxHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+                    }
                 }
             }
         }
