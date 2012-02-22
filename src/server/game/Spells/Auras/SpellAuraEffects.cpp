@@ -6375,15 +6375,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const *aurApp, uint8 mode,
                     caster->ToPlayer()->RemoveSpellCooldown(86346, true);
                 break;
             }
-            case 34026: // kill command
-            {
-                Unit *pet = target->GetGuardianPet();
-                if (!pet)
-                    break;
-
-                pet->CastSpell(target, 83381, true, NULL, this);
-                break;
-            }
             case 37096: // Blood Elf Illusion
             {
                 if (caster) {
