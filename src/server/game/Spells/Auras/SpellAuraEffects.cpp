@@ -1865,11 +1865,11 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
             break;
         }
         case 29841: // Second Wind r1
-            damage = int32(caster->GetMaxHealth() * 0.002f);
+            damage = int32(caster->GetMaxHealth() * 0.02f);
             break;
         case 29842: // Second Wind r2
         case 42771: // Second Wind r2
-            damage = int32(caster->GetMaxHealth() * 0.005f);
+            damage = int32(caster->GetMaxHealth() * 0.05f);
             break;
         default:
             break;
