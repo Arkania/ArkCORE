@@ -788,7 +788,7 @@ public:
 };
 
 /*######
- ## go_merchant_square_door
+ ## go_merchant_square_door - crash fixed by john2308
  ######*/
 
 enum eMerchant_square_door {
