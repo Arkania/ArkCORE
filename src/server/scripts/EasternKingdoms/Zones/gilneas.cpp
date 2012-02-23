@@ -811,7 +811,7 @@ public:
 	uint32 DoorTimer;
 
 	bool OnGossipHello(Player *player, GameObject *pGO) {
-		if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
+		if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && pGO->GetGoState() == GO_STATE_READY)
 		{
 			aPlayer = player;
 			opened = 1;
