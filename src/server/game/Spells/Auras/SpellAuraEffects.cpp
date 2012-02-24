@@ -388,9 +388,9 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] = { &AuraEffect::HandleNULL, /
         &AuraEffect::HandleNULL, //329
         &AuraEffect::HandleNULL, //330
         &AuraEffect::HandleNULL, //331
-        &AuraEffect::HandleNULL, //332
-        &AuraEffect::HandleModTrapLauncher, //333 SPELL_AURA_MOD_TRAP_LAUNCHER
-        &AuraEffect::HandleNULL, //334
+        &AuraEffect::HandleAuraReplaceSpell,//332 SPELL_AURA_332_REPLACE_SPELL
+		&AuraEffect::HandleAuraReplaceSpell,//333 SPELL_AURA_333_REPLACE_SPELL
+		&AuraEffect::HandleNULL, //334
         &AuraEffect::HandleNULL, //335
         &AuraEffect::HandleNULL, //336
         &AuraEffect::HandleAuraSaleForGuild,//337
@@ -7417,4 +7417,69 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const * aurApp,
         data.Initialize(SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA, 0);
         target->ToPlayer()->GetSession()->SendPacket(&data);
     }
+}
+void AuraEffect::HandleAuraReplaceSpell(AuraApplication const * aurApp, uint8 mode, bool apply) const
+{     
+        if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                return;
+        Player* target = aurApp->GetTarget()->ToPlayer();
+        if (!target || !target->IsInWorld())
+                return;
+        uint32 overrideId = GetAmount();
+        if (!overrideId)
+                return;
+        SpellEntry const* spell = sSpellStore.LookupEntry(overrideId);
+        if (!spell)
+                return;
+        uint32 affspell = 0;
+      
+        if (overrideId == 93402)            // Sunfire
+        {
+                if (target->HasAura(48517))     // Sunfire talent
+                        affspell = 8921;            // Moonfire
+                else
+                        return;
+        }
+        if (overrideId == 91711)
+        {
+                if (target->HasAura(91713)) //The nether ward talent
+                        affspell = 6229;
+                else
+                        return;
+        }
+        if (overrideId == 92315) // Pyroblast
+                affspell = 11366;
+        if (overrideId == 82928) // Fire!
+                affspell = 19434;
+        if (overrideId == 89420) // Drain Life
+                affspell = 689;
+        if (overrideId == 81170) // Ravage
+                affspell = 6785;
+        if (overrideId == 93402) // Eclipse (Solar)
+                affspell = 8921;
+        if (overrideId == 92283) // Frostfire Orb Override
+                affspell = 82731;
+        if (overrideId == 88625) // Chakra: Serenity
+                affspell = 2050;
+        if (overrideId == 86213) // Soul Swap: Exhale
+                affspell = 86121;
+        if (overrideId == 88684 || overrideId == 88685) // Chakra
+                affspell = 88625;
+
+        if (apply)
+        {
+                target->AddTemporarySpell(overrideId);
+                WorldPacket data(SMSG_SUPERCEDED_SPELL, 4 + 4);
+                data << uint32(affspell); // here should be affected spell - not really necessary, after casting the real spell again, it auto-fixes
+                data << uint32(overrideId);
+                target->GetSession()->SendPacket(&data);
+        }
+        else
+        {
+                target->RemoveTemporarySpell(overrideId);
+                WorldPacket data(SMSG_SUPERCEDED_SPELL, 4 + 4);
+                data << uint32(overrideId);
+                data << uint32(affspell); // here should be affected spell - not really necessary, after casting the real spell again, it auto-fixes
+                target->GetSession()->SendPacket(&data);
+        }
 }
