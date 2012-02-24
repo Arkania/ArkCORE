@@ -6978,6 +6978,21 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             }
             break;
         }
+          case SPELLFAMILY_MAGE:
+        {
+            if (m_spellInfo->Id == 11129) //Combustion
+            {
+                //I assume initial periodic damage is 0 if no Dots on target
+                int32 bp = 0;
+                Unit::AuraEffectList const &mPeriodic =    unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_DAMAGE);
+                //Cycle trough all periodic auras to increase Combustion periodic damage
+                for (Unit::AuraEffectList::const_iterator i = mPeriodic.begin(); i != mPeriodic.end(); ++i)                 
+                    if ((*i)->GetCasterGUID() == m_caster->GetGUID())
+                        bp += (*i)->GetAmount();             
+                m_caster->CastCustomSpell(unitTarget, 83853, &bp,NULL, NULL, true);
+            }
+            break;
+        }
         case SPELLFAMILY_PRIEST:
         {
             if (m_spellInfo->Id == 87151)
