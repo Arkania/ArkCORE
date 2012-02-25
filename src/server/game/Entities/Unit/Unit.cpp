@@ -12647,13 +12647,6 @@ uint32 Unit::SpellHealingBonus(Unit *pVictim, SpellEntry const *spellProto,
                 if (pVictim->HealthBelowPct(50)) DoneTotalMod *=
                         ((*i)->GetAmount() + 100.0f) / 100.0f;
                 break;
-            case 7798: // Glyph of Regrowth
-            {
-                if (pVictim->GetAuraEffect(SPELL_AURA_PERIODIC_HEAL,
-                        SPELLFAMILY_DRUID, 0x40, 0, 0)) DoneTotalMod *=
-                        ((*i)->GetAmount() + 100.0f) / 100.0f;
-                break;
-            }
             case 8477: // Nourish Heal Boost
             {
                 int32 stepPercent = (*i)->GetAmount();
