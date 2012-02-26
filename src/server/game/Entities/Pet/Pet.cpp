@@ -605,6 +605,9 @@ void Pet::Update(uint32 diff)
                             m_regenTimer += PET_FOCUS_REGEN_INTERVAL - diff;
                             if (!m_regenTimer) ++m_regenTimer;
                             break;
+                            //  Fix for focus regen getting stuck
+                            if (m_regenTimer > PET_FOCUS_REGEN_INTERVAL)
+                                m_regenTimer = PET_FOCUS_REGEN_INTERVAL;							
                             // in creature::update
                             //case POWER_ENERGY:
                             //    Regenerate(POWER_ENERGY);
@@ -2140,8 +2143,8 @@ void Pet::SynchronizeLevelWithOwner()
             // can't be greater owner level
         case HUNTER_PET:
             if (getLevel() > owner->getLevel()) GivePetLevel(owner->getLevel());
-            else if (getLevel() + 5 < owner->getLevel()) GivePetLevel(
-                    owner->getLevel() - 5);
+            else if (getLevel() + 3 < owner->getLevel()) GivePetLevel(
+                    owner->getLevel() - 3);
             break;
         default:
             break;
