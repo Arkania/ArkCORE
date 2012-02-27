@@ -864,7 +864,7 @@ DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
 INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
 (@ENTRY,0,0,0,4,0,100,1,0,0,0,0,11,75002,0,0,0,0,0,2,0,0,0,0,0,0,0,'Cast Leaping Rush on Aggro'),
 (@ENTRY,0,1,0,0,0,100,0,4000,4500,18000,22000,11,31279,0,0,0,0,0,2,0,0,0,0,0,0,0,'Cast Swipe'),
-(@ENTRY,0,1,0,1,0,30,0,45000,55000,120000,300000,11,71232,0,0,0,0,0,9,38141,8,25,0,0,0,0,'Cast Wild Pounce OOC');
+(@ENTRY,0,2,0,1,0,30,0,45000,55000,120000,300000,11,71232,0,0,0,0,0,9,38141,8,25,0,0,0,0,'Cast Wild Pounce OOC');
 
 -- Yarrog Baneshadow
 SET @ENTRY := 3183;
@@ -884,7 +884,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (@ENTRY,0,10,0,1,0,100,1,1000,1000,1000,1000,11,51733,2,0,0,0,0,1,0,0,0,0,0,0,0,'Cast Shadow Aura on Spawn'),
 (@ENTRY,0,11,0,0,1,100,0,8000,12000,22000,29000,11,37628,0,0,0,0,0,2,0,0,0,0,0,0,0,'Cast Immolate');
 
---  
+-- Docile Island Boar
 SET @ENTRY := 38141;
 UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry`=@ENTRY;
 DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
