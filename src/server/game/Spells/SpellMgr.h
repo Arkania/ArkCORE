@@ -676,6 +676,15 @@ struct SpellEnchantProcEntry {
 typedef UNORDERED_MAP<uint32, SpellEnchantProcEntry> SpellEnchantProcEventMap;
 typedef UNORDERED_MAP<uint32, SpellBonusEntry> SpellBonusMap;
 
+
+struct ActionBarSpellOverride
+{
+    uint32 affSpell;
+    uint32 aura;
+};
+
+typedef UNORDERED_MAP<uint32, ActionBarSpellOverride> ActionBarSpellOverrideMap;
+
 enum SpellGroup {
     SPELL_GROUP_ELIXIR_BATTLE = 1,
     SPELL_GROUP_ELIXIR_GUARDIAN = 2,
@@ -1068,6 +1077,9 @@ public:
         return NULL;
     }
 
+    // Actionbar override spell
+    ActionBarSpellOverride const* GetActionBarSpellOverride(uint32 overrideSpell) const;
+
     // Spell bonus data
     SpellBonusEntry const* GetSpellBonusData(uint32 spellId) const {
         // Lookup data
@@ -1449,6 +1461,7 @@ public:
     void LoadSkillLineAbilityMap();
     void LoadSpellPetAuras();
     void LoadSpellCustomAttr();
+    void LoadActionBarSpellOverride();
     void LoadEnchantCustomAttr();
     void LoadSpellEnchantProcData();
     void LoadSpellLinked();
@@ -1488,6 +1501,7 @@ private:
     SpellAreaForAuraMap mSpellAreaForAuraMap;
     SpellAreaForAreaMap mSpellAreaForAreaMap;
     SpellDifficultySearcherMap mSpellDifficultySearcherMap;
+    ActionBarSpellOverrideMap  mActionBarSpellOverrideMap;
 };
 
 #define sSpellMgr ACE_Singleton<SpellMgr, ACE_Null_Mutex>::instance()
