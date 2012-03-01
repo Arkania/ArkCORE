@@ -1384,9 +1384,6 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading Spell Group Stack Rules...");
     sSpellMgr->LoadSpellGroupStackRules();
-	
-    sLog->outString("Loading Actionbar Spell override...");
-    sSpellMgr->LoadActionBarSpellOverride();
 
     sLog->outString("Loading NPC Texts...");
     sObjectMgr->LoadGossipText();
