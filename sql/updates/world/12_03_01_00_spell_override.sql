@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `spell_override` (
 	PRIMARY KEY	(`overrideSpell`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
-INSERT INTO spell_override VALUES
+REPLACE INTO spell_override VALUES
 (93402, 8921, 48517, "Eclipse (Solar)"),
 (91711, 6229, 9173,  "Nether Ward Talent"),
 (92315, 11366, 0,  "Pyroblast !"),
