@@ -2130,6 +2130,8 @@ public:
 /*######
  # npc_shadowfiend
  ######*/
+
+#define MANA_LEECH                        28305
 #define GLYPH_OF_SHADOWFIEND_MANA         58227
 #define GLYPH_OF_SHADOWFIEND              58228
 
@@ -2143,6 +2145,14 @@ public:
 		npc_shadowfiendAI(Creature* pCreature) :
 				ScriptedAI(pCreature) {
 		}
+
+        void Reset()
+        {
+            if (me->isSummon())
+                if (Unit* pOwner = me->ToTempSummon()->GetSummoner())
+                    if (Unit* pet = pOwner->GetGuardianPet())
+                        pet->CastSpell(pet, MANA_LEECH, true);
+        }
 
 		void DamageTaken(Unit* /*pKiller*/, uint32 &damage) {
 			if (me->isSummon())
