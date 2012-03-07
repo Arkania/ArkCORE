@@ -627,7 +627,9 @@ bool Guild::Member::LoadFromDB(Field* fields) {
      "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
      //   13                 14                15                 16                17                 18
      "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
-     //   19      20       21       22      23         24
+     //   19                 20                21                 22
+     "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
+     //   23      24       25       26      27         28
      "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
      "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC", CONNECTION_SYNCH);
      */
@@ -641,10 +643,12 @@ bool Guild::Member::LoadFromDB(Field* fields) {
         m_bankRemaining[i].value = fields[8 + i * 2].GetUInt32();
     }
 
-    SetStats(fields[19].GetString(), fields[20].GetUInt8(),
-            fields[21].GetUInt8(), fields[22].GetUInt16(),
-            fields[23].GetUInt32());
-    m_logoutTime = fields[24].GetUInt32();
+    SetStats(fields[23].GetString(),
+             fields[24].GetUInt8(),
+             fields[25].GetUInt8(),
+             fields[26].GetUInt16(),
+             fields[27].GetUInt32());
+    m_logoutTime = fields[28].GetUInt32();
 
     if (!CheckStats())
         return false;
