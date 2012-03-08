@@ -4085,17 +4085,24 @@ void ObjectMgr::LoadGuilds() {
 
     // 9. Validate loaded guild data
     uint32 totalGuilds = 0;
+    std::set<Guild*> rm; // temporary storage to avoid modifying GuildStore with RemoveGuild() while iterating
     sLog->outString("Validating data of loaded guilds...");
-    for (GuildMap::iterator itr = mGuildMap.begin(); itr != mGuildMap.end();
-            ++itr) {
+    for (GuildMap::iterator itr = mGuildMap.begin(); itr != mGuildMap.end(); ++itr)
+    {
         Guild* pGuild = *itr;
-        if (pGuild) {
-            if (!pGuild->Validate()) {
-                RemoveGuild(pGuild->GetId());
-                delete pGuild;
-            } else
+        if (pGuild)
+        {
+            if (!pGuild->Validate())
+                rm.insert(pGuild);
+            else
                 ++totalGuilds;
         }
+    }
+    for (std::set<Guild*>::iterator itr = rm.begin(); itr != rm.end(); ++itr)
+    {
+        Guild* pGuild = *itr;
+        RemoveGuild(pGuild->GetId());
+        delete pGuild;
     }
     // Cleanup
     // Delete orphan guild ranks
