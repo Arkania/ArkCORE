@@ -29,7 +29,7 @@ class Battleground;
 
 enum BG_BG_NodeObjectId
 {
-    BG_BG_OBJECTID_NODE_BANNER_0    = 205557,       // Lighthouse banner
+    BG_BG_OBJECTID_NODE_BANNER_0    = 208779,       // Lighthouse banner
     BG_BG_OBJECTID_NODE_BANNER_1    = 208782,       // Mine banner
     BG_BG_OBJECTID_NODE_BANNER_2    = 208785,       // Watterworks banner
 };
@@ -52,12 +52,16 @@ enum BG_BG_ObjectType
 /* Object id templates from DB */
 enum BG_BG_ObjectTypes
 {
-    // BG_BG_OBJECTID_BANNER_A             =
-    // BG_BG_OBJECTID_BANNER_CONT_A        =
-    // BG_BG_OBJECTID_BANNER_H             =
-    // BG_BG_OBJECTID_BANNER_CONT_H        =
+    BG_BG_OBJECTID_BANNER_A             = 208673,
+    BG_BG_OBJECTID_BANNER_CONT_A        = 208763,
+    BG_BG_OBJECTID_BANNER_H             = 208748,
+    BG_BG_OBJECTID_BANNER_CONT_H        = 208733,
+	
+	BG_BG_OBJECTID_AURA_A 				= 180100,
+	BG_BG_OBJECTID_AURA_H 				= 180101,
+	BG_BG_OBJECTID_AURA_C 				= 180102,
 
-    BG_BG_OBJECTID_GATE_A               = 205496,
+    BG_BG_OBJECTID_GATE_A               = 207177,
     BG_BG_OBJECTID_GATE_H               = 207178
 };
 
