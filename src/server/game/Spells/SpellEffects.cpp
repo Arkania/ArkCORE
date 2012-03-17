@@ -593,6 +593,9 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                     damage = uint32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45); // wowwiki formula
                     m_caster->RemoveAurasDueToSpell(32216); // Victorious
                 }
+                // Heroic Leap
+                else if (m_spellInfo->Id == 52174)
+                    damage = uint32(8 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.5 + 1);
                 // Cleave
                 else if (m_spellInfo->Id == 845)
                     damage = uint32(6 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45);
