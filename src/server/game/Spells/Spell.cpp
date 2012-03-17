@@ -3937,6 +3937,18 @@ void Spell::finish(bool ok) {
                 }
             }
             break;
+      case 33395: // Improved Freeze
+            {
+                if (Unit* owner = m_caster->GetOwner()) {
+                    if (owner->HasAura(86259) && roll_chance_i(33)
+                            || (owner->HasAura(86260) && roll_chance_i(67))
+                            || (owner->HasAura(86314))) {
+                        //Gives your Water Elemental's Freeze spell a % chance to grant 2 charges of Fingers of Frost.
+                        owner->SetAuraStack(44544, owner, 2);
+                    }
+                }
+                break;
+            }
         case 30455: // Ice Lance
         case 44572: // Deep Freeze
             if (m_caster->HasAura(44544)) // Fingers of Frost
