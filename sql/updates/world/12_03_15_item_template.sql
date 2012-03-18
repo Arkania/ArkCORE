@@ -39,6 +39,8 @@ SET @ENTRY33 := 65079;
 SET @ENTRY34 := 63498;
 SET @ENTRY35 := 65376;
 SET @ENTRY36 := 54504;
+SET @ENTRY37 := 65066;
+SET @ENTRY38 := 59312;
 
 UPDATE `item_template` SET `RequiredDisenchantSkill` = @SKILL,
 `DisenchantID` = @ENTRY1 WHERE `item_template`.`entry` =@ENTRY1;
@@ -112,6 +114,10 @@ UPDATE `item_template` SET `RequiredDisenchantSkill` = @SKILL,
 `DisenchantID` = @ENTRY35 WHERE `item_template`.`entry` =@ENTRY35;
 UPDATE `item_template` SET `RequiredDisenchantSkill` = @SKILL,
 `DisenchantID` = @ENTRY36 WHERE `item_template`.`entry` =@ENTRY36;
+UPDATE `item_template` SET `RequiredDisenchantSkill` = @SKILL,
+`DisenchantID` = @ENTRY37 WHERE `item_template`.`entry` =@ENTRY37;
+UPDATE `item_template` SET `RequiredDisenchantSkill` = @SKILL,
+`DisenchantID` = @ENTRY38 WHERE `item_template`.`entry` =@ENTRY38;
 
 
 REPLACE INTO `disenchant_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
@@ -150,5 +156,7 @@ REPLACE INTO `disenchant_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 (@ENTRY33, @ITEM, 100, 1, 0, 1, 2),
 (@ENTRY34, @ITEM, 100, 1, 0, 1, 2),
 (@ENTRY35, @ITEM, 100, 1, 0, 1, 2),
-(@ENTRY66, @ITEM, 100, 1, 0, 1, 2);
+(@ENTRY36, @ITEM, 100, 1, 0, 1, 2),
+(@ENTRY37, @ITEM, 100, 1, 0, 1, 2),
+(@ENTRY38, @ITEM, 100, 1, 0, 1, 2);
 

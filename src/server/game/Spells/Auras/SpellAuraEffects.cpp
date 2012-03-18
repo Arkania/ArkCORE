@@ -1537,9 +1537,9 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
 
             // Serpent String
             if (GetSpellProto()->Id == 1978)
-                damage = int32(
+                damage = int32((
                         GetBase()->GetCaster()->GetTotalAttackPowerValue(
-                                RANGED_ATTACK) * 0.4f + (damage * 15 / 3));
+                                RANGED_ATTACK) * 0.4f + (damage * 15 / 3))/5);
 
             // There is a Chance to make a Soul Shard when Drain soul does damage
             if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_WARLOCK
