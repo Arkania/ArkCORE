@@ -1498,6 +1498,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
 
         // ignore non positive values (can be result apply spellmods to aura damage
         uint32 damage = GetAmount() > 0 ? GetAmount() : 0;
+    damage = int32(damage / 2);
 
         if (GetAuraType() == SPELL_AURA_PERIODIC_DAMAGE) {
             damage += caster->SpellDamageBonus(target, GetSpellProto(),
@@ -1526,6 +1527,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
                     damage += (damage + 1) / 2; // +1 prevent 0.5 damage possible lost at 1..4 ticks
                 // 5..8 ticks have normal tick damage
             }
+
             // Explosive Shot
             if (GetSpellProto()->Id == 53301)
                 damage =
@@ -1535,7 +1537,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
                                                 * GetBase()->GetCaster()->GetTotalAttackPowerValue(
                                                         RANGED_ATTACK)));
 
-            // Serpent String
+            // Serpent Sting
             if (GetSpellProto()->Id == 1978)
                 damage = int32((
                         GetBase()->GetCaster()->GetTotalAttackPowerValue(
