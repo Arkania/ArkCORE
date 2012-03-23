@@ -642,6 +642,16 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                     if (urand(0, 1))
                            m_caster->CastSpell(m_caster, trig_spell, true);
                 }
+
+                // Unshackled Fury (Fury Mastery)
+                if (m_caster->getClass() == CLASS_WARRIOR && m_spellInfo->Id == 85288)
+                {
+                    if (m_caster->HasAuraType(SPELL_AURA_MASTERY))
+                    {
+                        if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_WARRIOR_FURY)
+                            damage *= float(1.0f + (0.45f + (m_caster->ToPlayer()->GetMasteryPoints() * 0.056f)));
+                    }
+                }
                 break;
             }
             case SPELLFAMILY_WARLOCK:
