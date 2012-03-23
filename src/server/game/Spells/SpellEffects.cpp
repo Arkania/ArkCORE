@@ -583,64 +583,61 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                 // Bloodthirst
                 if (m_spellInfo->SpellFamilyFlags [1] & 0x400)
                 {
-                    damage = uint32(
-                            m_caster->GetTotalAttackPowerValue(BASE_ATTACK)
-                                    * 0.8);
+          damage = uint32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 50/100);
                 }
                 // Victory Rush
-                else if (m_spellInfo->SpellFamilyFlags[1] & 0x100)
-                {
-                    damage = uint32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45); // wowwiki formula
+        else if (m_spellInfo->SpellFamilyFlags[1] & 0x100)
+        {
+          damage = uint32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 45/100); 
                     m_caster->RemoveAurasDueToSpell(32216); // Victorious
                 }
                 // Heroic Leap
                 else if (m_spellInfo->Id == 52174)
                     damage = uint32(8 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.5 + 1);
                 // Cleave
-                else if (m_spellInfo->Id == 845)
-                    damage = uint32(6 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45);
+        else if (m_spellInfo->Id == 845) 
+          damage = uint32(6 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45);
                 // Intercept
-                else if (m_spellInfo->Id == 20253)
-                    damage = uint32(1+ m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.12);
-                // Execute
-                else if (m_spellInfo->Id == 5308)
-                {
+        else if (m_spellInfo->Id == 20253)
+          damage = uint32(1+ m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.12);
+        // Execute
+        else if (m_spellInfo->Id == 5308)
+        {
                     float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
                     damage = uint32(10 + ap * 0.437 * 100 / 100);
                     uint32 power = m_caster->GetPower(POWER_RAGE);
-                    if (power > 0)
-                    {
-                        uint32 mod = power > 20 ? 20 : power;
+          if (power > 0)
+          {
                         uint32 bonus_rage = 0;
 
-                        if (m_caster->HasAura(29723)) bonus_rage = 5;
-                        if (m_caster->HasAura(29725)) bonus_rage = 10;
-
-                        damage += uint32(ap * 0.874 * 100 / 100 - 1);
-                        m_caster->SetPower(POWER_RAGE,(power - mod) + bonus_rage);
+            if (m_caster->HasAura(29723))
+              bonus_rage = 5;
+            if (m_caster->HasAura(29725))
+              bonus_rage = 10;
+              
+            damage += uint32(ap * 0.874 * 100 / 100 - 1);
+            m_caster->SetPower(POWER_RAGE, 0 + bonus_rage);
                     }
-                }
-                // Heroic Strike
-                else if (m_spellInfo->Id == 78)
-                       damage = uint32(8 + (m_caster->GetTotalAttackPowerValue(BASE_ATTACK)) * 0.6);
-                // Shockwave
-                else if (m_spellInfo->Id == 46968)
-                {
-                    int32 pct = m_caster->CalculateSpellDamage(unitTarget,m_spellInfo, 2);
-                    if (pct > 0)
-                        damage += int32(CalculatePctN(m_caster->GetTotalAttackPowerValue(BASE_ATTACK), pct));
-                }
-                else if (m_spellInfo->Id == 6343)
-                {
-                    uint32 trig_spell;
-                    if (m_caster->HasAura(80979))
-                       trig_spell = 87095;
-                    else if (m_caster->HasAura(80980))
-                       trig_spell = 87096;
-                    else
-                       break;
-                    if (urand(0, 1))
-                           m_caster->CastSpell(m_caster, trig_spell, true);
+        }
+        // Heroic Strike
+        else if (m_spellInfo->Id == 78)
+          damage = uint32(8 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 60/100);
+        // Shockwave
+        else if (m_spellInfo->Id == 46968)
+        {
+          damage = uint32(75/100 * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
+        }
+        // Thunder Clap
+        else if (m_spellInfo->Id == 6343)
+        {
+          uint32 trig_spell = 0;
+          if (m_caster->HasAura(80979))
+            trig_spell = 87095;
+          else if (m_caster->HasAura(80980))
+            trig_spell = 87096;
+          else
+            break;
+          m_caster->CastSpell(m_caster, trig_spell, true);
                 }
 
                 // Unshackled Fury (Fury Mastery)
@@ -1973,42 +1970,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         true, 0);
                 return;
             }
-            // Execute
-            if (m_spellInfo->SpellFamilyFlags [EFFECT_0]
-                    & SPELLFAMILYFLAG_WARRIOR_EXECUTE)
-            {
-                if (!unitTarget) return;
-
-                spell_id = 20647;
-
-                int32 rageUsed = std::min < int32
-                        > (300 - m_powerCost, m_caster->GetPower(POWER_RAGE));
-                int32 newRage = std::max < int32
-                        > (0, m_caster->GetPower(POWER_RAGE) - rageUsed);
-
-                // Sudden Death rage save
-                if (AuraEffect * aurEff = m_caster->GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_GENERIC, 1989, EFFECT_0))
-                {
-                    int32 ragesave = SpellMgr::CalculateSpellEffectAmount(
-                            aurEff->GetSpellProto(), EFFECT_1) * 10;
-                    newRage = std::max(newRage, ragesave);
-                }
-
-                m_caster->SetPower(POWER_RAGE, uint32(newRage));
-
-                // Glyph of Execution bonus
-                if (AuraEffect * aurEff = m_caster->GetAuraEffect(58367, EFFECT_0)) rageUsed +=
-                        aurEff->GetAmount() * 10;
-
-                bp =
-                        damage
-                                + int32(
-                                        rageUsed
-                                                * m_spellInfo->EffectDamageMultiplier [effIndex]
-                                                + m_caster->GetTotalAttackPowerValue(
-                                                        BASE_ATTACK) * 0.2f);
-                break;
-            }
             // Concussion Blow
             if (m_spellInfo->SpellFamilyFlags [0]
                     & SPELLFAMILYFLAG_WARRIOR_CONCUSSION_BLOW)
@@ -2023,8 +1984,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 // Bloodthirst
                 case 23881:
                 {
-                    m_caster->CastCustomSpell(unitTarget, 23885, &damage, NULL,
-                            NULL, true, NULL);
+          if (!m_caster->HasAura(23885))
+            m_caster->CastCustomSpell(unitTarget, 23885, &damage, NULL, NULL, true, NULL);
                     return;
                 }
                     // Intercept
