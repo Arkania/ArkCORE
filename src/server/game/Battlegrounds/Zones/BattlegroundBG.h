@@ -21,19 +21,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 #ifndef __BattlegroundBG_H
 #define __BattlegroundBG_H
-
 class Battleground;
 
 enum BG_BG_NodeObjectId
 {
     BG_BG_OBJECTID_NODE_BANNER_0    = 208779,       // Lighthouse banner
     BG_BG_OBJECTID_NODE_BANNER_1    = 208782,       // Mine banner
-    BG_BG_OBJECTID_NODE_BANNER_2    = 208785,       // Watterworks banner
+  BG_BG_OBJECTID_NODE_BANNER_2    = 208785,       // Watterworks banner
 };
-
 enum BG_BG_ObjectType
 {
     BG_BG_OBJECT_BANNER_NEUTRAL          = 0,
@@ -56,10 +53,10 @@ enum BG_BG_ObjectTypes
     BG_BG_OBJECTID_BANNER_CONT_A        = 208763,
     BG_BG_OBJECTID_BANNER_H             = 208748,
     BG_BG_OBJECTID_BANNER_CONT_H        = 208733,
-	
-	BG_BG_OBJECTID_AURA_A 		= 180100,
-	BG_BG_OBJECTID_AURA_H 		= 180101,
-	BG_BG_OBJECTID_AURA_C 		= 180102,
+
+  BG_BG_OBJECTID_AURA_A     = 180100,
+  BG_BG_OBJECTID_AURA_H     = 180101,
+  BG_BG_OBJECTID_AURA_C     = 180102,
 
     BG_BG_OBJECTID_GATE_A               = 207177,
     BG_BG_OBJECTID_GATE_H               = 207178
@@ -83,7 +80,7 @@ enum BG_BG_BattlegroundNodes
     BG_BG_NODE_WATERWORKS       = 1,
     BG_BG_NODE_MINE             = 2,
 
-    BG_BG_DYNAMIC_NODES_COUNT   = 3,                        // dynamic nodes that can be captured
+    BG_BG_DYNAMIC_NODES_COUNT   = 4,                        // dynamic nodes that can be captured
 
     BG_BG_SPIRIT_ALIANCE        = 3,
     BG_BG_SPIRIT_HORDE          = 4,
@@ -117,6 +114,12 @@ enum BG_BG_Objectives
     BG_OBJECTIVE_ASSAULT_BASE           = 122,
     BG_OBJECTIVE_DEFEND_BASE            = 123
 };
+// x, y, z, o
+const float BG_BG_NodePositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
+    { 1057.7800f, 1278.260010f, 3.192400f, 1.864820f }, // Lighthouse
+    { 980.1835f, 947.8692f, 14.1178f, 1.8587f }, // Watterwork
+    { 1251.010f, 958.3939f, 5.680f, 2.7698f } // mine
+};
 
 // x, y, z, o, rot0, rot1, rot2, rot3
 const float BG_BG_DoorPositions[2][8] = {
@@ -129,6 +132,23 @@ const uint32 BG_BG_TickPoints[4] = {0, 10, 10, 30};
 
 // WorldSafeLocs ids for 3 nodes, and for ally, and horde starting location
 const uint32 BG_BG_GraveyardIds[BG_BG_ALL_NODES_COUNT] = {1735, 1736, 1738, 1739, 1740};
+
+// x, y, z, o
+const float BG_BG_BuffPositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
+    { 990.95f, 984.46f, 13.01f, 4.57f }, // Watterworks
+    { 1063.39f, 1309.09f, 4.91f, 3.98f }, // Lighthouse
+    { 1196.65f, 1020.01f, 7.97f, 5.74f }, // Mine
+    { 1107.57f, 912.18f, 27.54f, 5.53f } // Mine side path to Watterworks
+};
+
+// x, y, z, o
+const float BG_BG_SpiritGuidePos[BG_BG_ALL_NODES_COUNT][4] = {
+    { 886.44f, 938.06f, 24.13f, 0.53f }, // Watterworks
+    { 1252.39f, 831.77f, 27.78f, 1.59f }, // Mine
+    { 898.15f, 1341.58f, 27.66f, 6.06f }, // alliance starting base
+    { 1408.16f, 977.34f, 7.44f, 3.18f }, // horde starting base
+    { 1036.32f, 1341.61f, 11.55f, 4.78f } // Lighthouse
+};
 
 struct BG_BG_BannerTimer
 {
@@ -147,27 +167,41 @@ class BattlegroundBGScore : public BattlegroundScore
 };
 
 class BattlegroundBG : public Battleground
+
 {
+
     friend class BattlegroundMgr;
 
+
+
     public:
+
         BattlegroundBG();
+
         ~BattlegroundBG();
+
         void Update(uint32 diff);
 
+
+
         /* inherited from BattlegroundClass */
+
         virtual void AddPlayer(Player *plr);
         virtual void StartingEventCloseDoors();
+
         virtual void StartingEventOpenDoors();
 
+
+
         void RemovePlayer(Player *plr, uint64 guid);
+
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
-        bool SetupBattleground();
-        void EndBattleground(uint32 winner);
 
-        /* Scorekeeping */
-        void UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor = true);
-
-    private:
+ bool SetupBattleground();
+ void EndBattleground(uint32 winner);
+ /* Scorekeeping */
+ void UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor = true);
+ private:
 };
+
 #endif
