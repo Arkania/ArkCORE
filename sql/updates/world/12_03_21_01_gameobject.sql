@@ -12,5 +12,6 @@ DELETE FROM `creature_loot_template` WHERE (`entry`=38813);
 INSERT INTO `creature_loot_template` VALUES 
 (38813, 52024, -100, 1, 0, 1, 1);
 
+DELETE FROM creature_loot_template WHERE entry = 38811 and item = 52024;
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (38811, 52024, '-0.5', 1, 0, 1, 1);
