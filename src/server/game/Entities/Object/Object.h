@@ -514,10 +514,10 @@ struct Position {
     }
 
     Position::PositionXYZStreamer PositionXYZStream() {
-        return Position::PositionXYZStreamer(*this);
+        return PositionXYZStreamer(*this);
     }
     Position::PositionXYZOStreamer PositionXYZOStream() {
-        return Position::PositionXYZOStreamer(*this);
+        return PositionXYZOStreamer(*this);
     }
 
     bool IsPositionValid() const;
