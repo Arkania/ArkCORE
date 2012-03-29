@@ -52,15 +52,25 @@ public:
         void Reset()
         {
             ChainLightningTimer = 15000;
+            
+            if (instance)
+            {
+                instance->SetData(DATA_ASAAD, NOT_STARTED);
+            }
         }
 
         void EnterCombat(Unit* /*who*/)
         {
+            if (instance)
+            {
+                instance->SetData(DATA_ASAAD, IN_PROGRESS);
+            }
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            instance->SetData(DATA_ASAAD, DONE);
+            if (instance)
+                instance->SetData(DATA_ASAAD, DONE);
 
             Map::PlayerList const &PlList = me->GetMap()->GetPlayers();
 

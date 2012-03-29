@@ -52,15 +52,25 @@ public:
         void Reset()
         {
             LightningBoltTimer = 7000;
+            
+            if (instance)
+            {
+                instance->SetData(DATA_GRAND_VIZIER_ERTAN, NOT_STARTED);
+            }
         }
 
         void EnterCombat(Unit* /*who*/)
         {
+            if (instance)
+            {
+                instance->SetData(DATA_GRAND_VIZIER_ERTAN, IN_PROGRESS);
+            }
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            instance->SetData(DATA_GRAND_VIZIER_ERTAN, DONE);
+            if (instance)
+                instance->SetData(DATA_GRAND_VIZIER_ERTAN, DONE);
 
             Creature * Slipstream = me->SummonCreature(NPC_SLIPSTREAM, -775.51f, -70.93f, 640.31f, 1.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
             Slipstream->SetUInt32Value(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_GOSSIP);
