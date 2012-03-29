@@ -834,9 +834,8 @@ void npc_doctor::npc_doctorAI::UpdateAI(const uint32 diff) {
 					CAST_AI(npc_injured_patient::npc_injured_patientAI, Patient->AI())->Doctorguid =
 							me->GetGUID();
 
-					if (Point)
-						CAST_AI(npc_injured_patient::npc_injured_patientAI, Patient->AI())->Coord =
-								Point;
+					CAST_AI(npc_injured_patient::npc_injured_patientAI, Patient->AI())->Coord =
+							Point;
 
 					Coordinates.erase(itr);
 				}
