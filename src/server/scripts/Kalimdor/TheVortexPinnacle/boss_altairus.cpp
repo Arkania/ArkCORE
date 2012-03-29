@@ -52,15 +52,25 @@ public:
         void Reset()
         {
             ChillingBreathTimer = 15000;
+            
+            if (instance)
+            {
+                instance->SetData(DATA_ALTAIRUS, NOT_STARTED);
+            }
         }
 
         void EnterCombat(Unit* /*who*/)
         {
+		    if (instance)
+            {
+                instance->SetData(DATA_ALTAIRUS, IN_PROGRESS);
+            }
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            instance->SetData(DATA_ALTAIRUS, DONE);
+            if (instance)
+                instance->SetData(DATA_ALTAIRUS, DONE);
 
             Creature* Slipstream = me->SummonCreature(NPC_SLIPSTREAM, -1190.88f, 125.20f, 737.62f, 1.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
             Slipstream->SetUInt32Value(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_GOSSIP);
