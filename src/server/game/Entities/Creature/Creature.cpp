@@ -2459,3 +2459,25 @@ bool Creature::IsDungeonBoss() const {
     CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(GetEntry());
     return cinfo && (cinfo->flags_extra & CREATURE_FLAG_EXTRA_DUNGEON_BOSS);
 }
+
+bool Creature::SetWalk(bool enable)
+{
+    if (!Unit::SetWalk(enable))
+        return false;
+
+    WorldPacket data(enable ? SMSG_SPLINE_MOVE_SET_WALK_MODE : SMSG_SPLINE_MOVE_SET_RUN_MODE, 9);
+    data.append(GetPackGUID());
+    SendMessageToSet(&data, true);
+    return true;
+}
+
+bool Creature::SetLevitate(bool enable)
+{
+    if (!Unit::SetLevitate(enable))
+        return false;
+
+    WorldPacket data(enable ? SMSG_SPLINE_MOVE_GRAVITY_DISABLE : SMSG_SPLINE_MOVE_GRAVITY_ENABLE, 9);
+    data.append(GetPackGUID());
+    SendMessageToSet(&data, true);
+    return true;
+}

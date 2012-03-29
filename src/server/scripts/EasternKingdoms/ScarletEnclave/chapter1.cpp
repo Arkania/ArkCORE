@@ -573,205 +573,211 @@ public:
 };
 
 /*######
- ## npc_dark_rider_of_acherus
- ######*/
+## npc_dark_rider_of_acherus
+######*/
 
 #define DESPAWN_HORSE 52267
 #define SAY_DARK_RIDER      "The realm of shadows awaits..."
 
-class npc_dark_rider_of_acherus: public CreatureScript {
+class npc_dark_rider_of_acherus : public CreatureScript
+{
 public:
-	npc_dark_rider_of_acherus() :
-			CreatureScript("npc_dark_rider_of_acherus") {
-	}
+    npc_dark_rider_of_acherus() : CreatureScript("npc_dark_rider_of_acherus") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_dark_rider_of_acherusAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_dark_rider_of_acherusAI(creature);
+    }
 
-	struct npc_dark_rider_of_acherusAI: public ScriptedAI {
-		npc_dark_rider_of_acherusAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct npc_dark_rider_of_acherusAI : public ScriptedAI
+    {
+        npc_dark_rider_of_acherusAI(Creature* creature) : ScriptedAI(creature) {}
 
-		uint32 PhaseTimer;
-		uint32 Phase;
-		bool Intro;
-		uint64 TargetGUID;
+        uint32 PhaseTimer;
+        uint32 Phase;
+        bool Intro;
+        uint64 TargetGUID;
 
-		void Reset() {
-			PhaseTimer = 4000;
-			Phase = 0;
-			Intro = false;
-			TargetGUID = 0;
-		}
+        void Reset()
+        {
+            PhaseTimer = 4000;
+            Phase = 0;
+            Intro = false;
+            TargetGUID = 0;
+        }
 
-		void UpdateAI(const uint32 diff) {
-			if (!Intro || !TargetGUID)
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            if (!Intro || !TargetGUID)
+                return;
 
-			if (PhaseTimer <= diff) {
-				switch (Phase) {
-				case 0:
-					me->MonsterSay(SAY_DARK_RIDER, LANG_UNIVERSAL, 0);
-					PhaseTimer = 5000;
-					Phase = 1;
-					break;
-				case 1:
-					if (Unit *pTarget = Unit::GetUnit(*me, TargetGUID))
-						DoCast(pTarget, DESPAWN_HORSE, true);
-					PhaseTimer = 3000;
-					Phase = 2;
-					break;
-				case 2:
-					me->SetVisible(false);
-					PhaseTimer = 2000;
-					Phase = 3;
-					break;
-				case 3:
-					me->ForcedDespawn();
-					break;
-				default:
-					break;
-				}
-			} else
-				PhaseTimer -= diff;
-		}
+            if (PhaseTimer <= diff)
+            {
+                switch (Phase)
+                {
+                   case 0:
+                        me->MonsterSay(SAY_DARK_RIDER, LANG_UNIVERSAL, 0);
+                        PhaseTimer = 5000;
+                        Phase = 1;
+                        break;
+                    case 1:
+                        if (Unit* target = Unit::GetUnit(*me, TargetGUID))
+                            DoCast(target, DESPAWN_HORSE, true);
+                        PhaseTimer = 3000;
+                        Phase = 2;
+                        break;
+                    case 2:
+                        me->SetVisible(false);
+                        PhaseTimer = 2000;
+                        Phase = 3;
+                        break;
+                    case 3:
+                        me->DespawnOrUnsummon();
+                        break;
+                    default:
+                        break;
+                }
+            } else PhaseTimer -= diff;
+        }
 
-		void InitDespawnHorse(Unit *who) {
-			if (!who)
-				return;
+        void InitDespawnHorse(Unit* who)
+        {
+            if (!who)
+                return;
 
-			TargetGUID = who->GetGUID();
-			me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
-			me->SetSpeed(MOVE_RUN, 0.4f);
-			me->GetMotionMaster()->MoveChase(who);
-			me->SetUInt64Value(UNIT_FIELD_TARGET, TargetGUID);
-			Intro = true;
-		}
-	};
+            TargetGUID = who->GetGUID();
+            me->SetWalk(true);
+            me->SetSpeed(MOVE_RUN, 0.4f);
+            me->GetMotionMaster()->MoveChase(who);
+            me->SetTarget(TargetGUID);
+            Intro = true;
+        }
+    };
 };
 
 /*######
- ## npc_salanar_the_horseman
- ######*/
+## npc_salanar_the_horseman
+######*/
 
-enum eSalanar {
-	REALM_OF_SHADOWS = 52693,
-	EFFECT_STOLEN_HORSE = 52263,
-	DELIVER_STOLEN_HORSE = 52264,
-	CALL_DARK_RIDER = 52266,
-	SPELL_EFFECT_OVERTAKE = 52349
+enum eSalanar
+{
+    REALM_OF_SHADOWS            = 52693,
+    EFFECT_STOLEN_HORSE         = 52263,
+    DELIVER_STOLEN_HORSE        = 52264,
+    CALL_DARK_RIDER             = 52266,
+    SPELL_EFFECT_OVERTAKE       = 52349
 };
 
-class npc_salanar_the_horseman: public CreatureScript {
+class npc_salanar_the_horseman : public CreatureScript
+{
 public:
-	npc_salanar_the_horseman() :
-			CreatureScript("npc_salanar_the_horseman") {
-	}
+    npc_salanar_the_horseman() : CreatureScript("npc_salanar_the_horseman") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_salanar_the_horsemanAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_salanar_the_horsemanAI(creature);
+    }
 
-	struct npc_salanar_the_horsemanAI: public ScriptedAI {
-		npc_salanar_the_horsemanAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct npc_salanar_the_horsemanAI : public ScriptedAI
+    {
+        npc_salanar_the_horsemanAI(Creature* creature) : ScriptedAI(creature) {}
 
-		void SpellHit(Unit *caster, const SpellEntry *spell) {
-			if (spell->Id == DELIVER_STOLEN_HORSE) {
-				if (caster->GetTypeId() == TYPEID_UNIT && caster->IsVehicle()) {
-					if (Unit *charmer = caster->GetCharmer()) {
-						charmer->RemoveAurasDueToSpell(EFFECT_STOLEN_HORSE);
-						caster->RemoveFlag(UNIT_NPC_FLAGS,
-								UNIT_NPC_FLAG_SPELLCLICK);
-						caster->setFaction(35);
-						DoCast(caster, CALL_DARK_RIDER, true);
-						if (Creature* Dark_Rider = me->FindNearestCreature(28654, 15))
-							CAST_AI(npc_dark_rider_of_acherus::npc_dark_rider_of_acherusAI, Dark_Rider->AI())->InitDespawnHorse(
-									caster);
-					}
-				}
-			}
-		}
+        void SpellHit(Unit* caster, const SpellEntry* spell)
+        {
+            if (spell->Id == DELIVER_STOLEN_HORSE)
+            {
+                if (caster->GetTypeId() == TYPEID_UNIT && caster->IsVehicle())
+                {
+                    if (Unit* charmer = caster->GetCharmer())
+                    {
+                        if (charmer->HasAura(EFFECT_STOLEN_HORSE))
+                        {
+                            charmer->RemoveAurasDueToSpell(EFFECT_STOLEN_HORSE);
+                            caster->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+                            caster->setFaction(35);
+                            DoCast(caster, CALL_DARK_RIDER, true);
+                            if (Creature* Dark_Rider = me->FindNearestCreature(28654, 15))
+                                CAST_AI(npc_dark_rider_of_acherus::npc_dark_rider_of_acherusAI, Dark_Rider->AI())->InitDespawnHorse(caster);
+                        }
+                    }
+                }
+            }
+        }
 
-		void MoveInLineOfSight(Unit *who) {
-			ScriptedAI::MoveInLineOfSight(who);
+        void MoveInLineOfSight(Unit* who)
+        {
+            ScriptedAI::MoveInLineOfSight(who);
 
-			if (who->GetTypeId() == TYPEID_UNIT && who->IsVehicle()
-					&& me->IsWithinDistInMap(who, 5.0f)) {
-				if (Unit *charmer = who->GetCharmer()) {
-					if (charmer->GetTypeId() == TYPEID_PLAYER) {
-						// for quest Into the Realm of Shadows(12687)
-						if (me->GetEntry() == 28788
-								&& CAST_PLR(charmer)->GetQuestStatus(12687)
-										== QUEST_STATUS_INCOMPLETE) {
-							CAST_PLR(charmer)->GroupEventHappens(12687, me);
-							charmer->RemoveAurasDueToSpell(
-									SPELL_EFFECT_OVERTAKE);
-							CAST_CRE(who)->ForcedDespawn();
-							//CAST_CRE(who)->Respawn(true);
-						}
+            if (who->GetTypeId() == TYPEID_UNIT && who->IsVehicle() && me->IsWithinDistInMap(who, 5.0f))
+            {
+                if (Unit* charmer = who->GetCharmer())
+                {
+                    if (charmer->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        // for quest Into the Realm of Shadows(12687)
+                        if (me->GetEntry() == 28788 && CAST_PLR(charmer)->GetQuestStatus(12687) == QUEST_STATUS_INCOMPLETE)
+                        {
+                            CAST_PLR(charmer)->GroupEventHappens(12687, me);
+                            charmer->RemoveAurasDueToSpell(SPELL_EFFECT_OVERTAKE);
+                            CAST_CRE(who)->ForcedDespawn();
+                            //CAST_CRE(who)->Respawn(true);
+                        }
 
-						if (CAST_PLR(charmer)->HasAura(REALM_OF_SHADOWS))
-							charmer->RemoveAurasDueToSpell(REALM_OF_SHADOWS);
-					}
-				}
-			}
-		}
-	};
+                        if (CAST_PLR(charmer)->HasAura(REALM_OF_SHADOWS))
+                            charmer->RemoveAurasDueToSpell(REALM_OF_SHADOWS);
+                    }
+                }
+            }
+        }
+    };
 };
 
 /*######
- ## npc_ros_dark_rider
- ######*/
+## npc_ros_dark_rider
+######*/
 
-class npc_ros_dark_rider: public CreatureScript {
+class npc_ros_dark_rider : public CreatureScript
+{
 public:
-	npc_ros_dark_rider() :
-			CreatureScript("npc_ros_dark_rider") {
-	}
+    npc_ros_dark_rider() : CreatureScript("npc_ros_dark_rider") { }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new npc_ros_dark_riderAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_ros_dark_riderAI(creature);
+    }
 
-	struct npc_ros_dark_riderAI: public ScriptedAI {
-		npc_ros_dark_riderAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct npc_ros_dark_riderAI : public ScriptedAI
+    {
+        npc_ros_dark_riderAI(Creature* creature) : ScriptedAI(creature) {}
 
-		void EnterCombat(Unit * /*who*/) {
-			me->ExitVehicle();
-		}
+        void EnterCombat(Unit* /*who*/)
+        {
+            me->ExitVehicle();
+        }
 
-		void Reset() {
-			Creature* deathcharger = me->FindNearestCreature(28782, 30);
-			if (!deathcharger)
-				return;
-			deathcharger->RestoreFaction();
-			deathcharger->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
-			deathcharger->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-			if (!me->GetVehicle() && deathcharger->IsVehicle()
-					&& deathcharger->GetVehicleKit()->HasEmptySeat(0))
-				me->EnterVehicle(deathcharger);
-		}
+        void Reset()
+        {
+            Creature* deathcharger = me->FindNearestCreature(28782, 30);
+            if (!deathcharger) return;
+            deathcharger->RestoreFaction();
+            deathcharger->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+            deathcharger->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            if (!me->GetVehicle() && deathcharger->IsVehicle() && deathcharger->GetVehicleKit()->HasEmptySeat(0))
+                me->EnterVehicle(deathcharger);
+        }
 
-		void JustDied(Unit *killer) {
-			Creature* deathcharger = me->FindNearestCreature(28782, 30);
-			if (!deathcharger)
-				return;
-			if (killer->GetTypeId() == TYPEID_PLAYER
-					&& deathcharger->GetTypeId() == TYPEID_UNIT
-					&& deathcharger->IsVehicle()) {
-				deathcharger->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
-				deathcharger->RemoveFlag(UNIT_FIELD_FLAGS,
-						UNIT_FLAG_NOT_SELECTABLE);
-				deathcharger->setFaction(2096);
-			}
-		}
-	};
+        void JustDied(Unit* killer)
+        {
+            Creature* deathcharger = me->FindNearestCreature(28782, 30);
+            if (!deathcharger) return;
+            if (killer->GetTypeId() == TYPEID_PLAYER && deathcharger->GetTypeId() == TYPEID_UNIT && deathcharger->IsVehicle())
+            {
+                deathcharger->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+                deathcharger->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                deathcharger->setFaction(2096);
+            }
+        }
+    };
 };
 
 // correct way: 52312 52314 52555 ...

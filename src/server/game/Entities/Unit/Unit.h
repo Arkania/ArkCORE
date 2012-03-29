@@ -1768,10 +1768,13 @@ public:
     void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 MoveFlags, uint32 time, float speedZ, Player *player = NULL);
     void SendMonsterMove(MonsterMoveData const& moveData, Player* receiver = NULL);
     void SendMonsterMoveTransport(Unit *vehicleOwner);
-    void SendMonsterMoveWithSpeed(float x, float y, float z,
-            uint32 transitTime = 0, Player* player = NULL);
+    void SendMonsterMoveWithSpeed(float x, float y, float z, uint32 transitTime = 0, Player* player = NULL);
     void SendMonsterMoveWithSpeedToCurrentDestination(Player* player = NULL);
     void SendMovementFlagUpdate();
+	bool IsLevitating() const { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_LEVITATING);}
+	bool IsWalking() const { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_WALKING);}
+    virtual bool SetWalk(bool enable);
+    virtual bool SetLevitate(bool enable);	
 
     template<typename PathElem, typename PathNode>
     void SendMonsterMoveByPath(Path<PathElem, PathNode> const& path

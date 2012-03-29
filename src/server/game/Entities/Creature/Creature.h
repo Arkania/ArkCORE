@@ -527,9 +527,11 @@ public:
 
     bool AIM_Initialize(CreatureAI* ai = NULL);
     void Motion_Initialize();
+	
+    bool SetWalk(bool enable);
+    bool SetLevitate(bool enable);	
 
-    void AI_SendMoveToPacket(float x, float y, float z, uint32 time,
-            uint32 MovementFlags, uint8 type);
+    void AI_SendMoveToPacket(float x, float y, float z, uint32 time, uint32 MovementFlags, uint8 type);
     CreatureAI * AI() const {
         return (CreatureAI*) i_AI;
     }
