@@ -140,7 +140,7 @@ public:
 
         void EnterCombat(Unit* /*pWho*/)
         {
-			if (pInstance)
+            if (pInstance)
                 pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, IN_PROGRESS);
         }
 
