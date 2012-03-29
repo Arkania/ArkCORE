@@ -57,7 +57,7 @@ public:
 			Rohash = 0;
 			Alakir = 0;
 
-			for (uint8 i = 0 ; i<ENCOUNTERS; ++i)
+			for (uint8 i = 0 ; i < ENCOUNTERS; ++i)
 				Encounter[i] = NOT_STARTED;
 		}
 
