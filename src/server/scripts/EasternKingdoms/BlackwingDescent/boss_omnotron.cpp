@@ -140,17 +140,20 @@ public:
 
         void EnterCombat(Unit* /*pWho*/)
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, IN_PROGRESS);
+			if (pInstance)
+                pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, IN_PROGRESS);
         }
 
         void JustReachedHome()
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, FAIL);
+            if (pInstance)
+                pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, FAIL);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, DONE);
+            if (pInstance)
+                pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, DONE);
         }
 
         void UpdateAI(const uint32 Diff)
