@@ -61,7 +61,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-		    if (instance)
+            if (instance)
             {
                 instance->SetData(DATA_ALTAIRUS, IN_PROGRESS);
             }
