@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
  *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
@@ -797,11 +797,11 @@ enum eMerchant_square_door {
 #define DOOR_TIMER 30*IN_MILLISECONDS
 };
 
-class go_merchant_square_door: public GameObjectScript {
+class go_merchant_square_door: public GameObjectScript 
+{
 public:
 	go_merchant_square_door() :
-			GameObjectScript("go_merchant_square_door") {
-	}
+			GameObjectScript("go_merchant_square_door") {}
 
 	float x, y, z, wx, wy, angle, tQuestCredit;
 	bool opened;
@@ -810,7 +810,8 @@ public:
 	GameObject* pGO;
 	uint32 DoorTimer;
 
-	bool OnGossipHello(Player *player, GameObject *pGO) {
+	bool OnGossipHello(Player* player, GameObject* pGO) 
+	{
 		if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && pGO->GetGoState() == GO_STATE_READY)
 		{
 			aPlayer = player;
@@ -826,13 +827,18 @@ public:
 			wx = x - cos(angle) * 2;
 			wy = y - sin(angle) * 2;
 
-			if (spawnKind < 3) {
-				if (Creature *spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) {
+			if (spawnKind < 3) 
+			{
+				if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) 
+				{
 					spawnedCreature->SetPhaseMask(6, 1);
 					spawnedCreature->Respawn(1);
 				}
-			} else {
-				if (Creature *spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_2,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) {
+			}
+			else 
+			{
+				if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_2,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) 
+				{
 					spawnedCreature->SetPhaseMask(6, 1);
 					spawnedCreature->Respawn(1);
 				}
@@ -842,13 +848,17 @@ public:
 		return false;
 	}
 
-	void OnUpdate(GameObject *pGO, uint32 diff) {
-		if (opened == 1) {
-			if (tQuestCredit <= ((float) diff / 8)) {
+	void OnUpdate(GameObject* pGO, uint32 diff) 
+	{
+		if (opened == 1) 
+		{
+			if (tQuestCredit <= ((float) diff / 8)) 
+			{
 				opened = 0;
-				aPlayer->KilledMonsterCredit(35830, 0);
-				if (spawnKind == 3) {
-					if (Creature *spawnedCreature = pGO->SummonCreature(NPC_RAMPAGING_WORGEN_2,wx,wy,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) {
+				//aPlayer->KilledMonsterCredit(35830, me->GetGUID());
+				if (spawnKind == 3)
+				{
+					if (Creature* spawnedCreature = pGO->SummonCreature(NPC_RAMPAGING_WORGEN_2,wx,wy,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) {
 						spawnedCreature->SetPhaseMask(6, 1);
 						spawnedCreature->Respawn(1);
 						spawnedCreature->getThreatManager().resetAllAggro();
@@ -856,13 +866,13 @@ public:
 						spawnedCreature->AddThreat(aPlayer, 1.0f);
 					}
 				}
-			} else
-				tQuestCredit -= ((float) diff / 8);
+			}
+			else tQuestCredit -= ((float) diff / 8);
 		}
 		if (DoorTimer <= diff)
         {
           if(pGO->GetGoState() == GO_STATE_ACTIVE)
-            pGO->SetGoState(GO_STATE_READY);
+             pGO->SetGoState(GO_STATE_READY);
       
           DoorTimer = DOOR_TIMER;
         }
