@@ -55,6 +55,7 @@ public:
             
             if (instance)
             {
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
                 instance->SetData(DATA_ALTAIRUS, NOT_STARTED);
             }
         }
@@ -63,6 +64,7 @@ public:
         {
             if (instance)
             {
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_ADD, me);
                 instance->SetData(DATA_ALTAIRUS, IN_PROGRESS);
             }
         }
@@ -70,7 +72,10 @@ public:
         void JustDied(Unit* /*Killer*/)
         {
             if (instance)
+            {
                 instance->SetData(DATA_ALTAIRUS, DONE);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+            }
 
             Creature* Slipstream = me->SummonCreature(NPC_SLIPSTREAM, -1190.88f, 125.20f, 737.62f, 1.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
             Slipstream->SetUInt32Value(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_GOSSIP);
@@ -96,7 +101,9 @@ public:
                     me->CastSpell(target, DUNGEON_MODE(SPELL_CIILLING_BREATH_N, SPELL_CIILLING_BREATH_H), true);
 
                 ChillingBreathTimer = urand(12*IN_MILLISECONDS,17*IN_MILLISECONDS);
-            } else ChillingBreathTimer -= diff;
+            } 
+            else 
+                ChillingBreathTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
