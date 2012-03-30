@@ -22,7 +22,14 @@
 #include "vortex_pinnacle.h"
 #include "ScriptPCH.h"
 
-enum eSpells
+enum Texts
+{
+    SAY_AGGRO                   = 0,
+    SAY_LIGHTNING               = 1,
+    SAY_DEATH                   = 2,
+};
+
+enum Spells
 {
     SPELL_CHAIN_LIGHTNING_N       = 87622,
     SPELL_CHAIN_LIGHTNING_H       = 93993,
@@ -56,6 +63,7 @@ public:
             if (instance)
             {
                 instance->SetData(DATA_ASAAD, NOT_STARTED);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
             }
         }
 
@@ -64,13 +72,17 @@ public:
             if (instance)
             {
                 instance->SetData(DATA_ASAAD, IN_PROGRESS);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_ADD, me);
             }
         }
 
         void JustDied(Unit* /*Killer*/)
         {
             if (instance)
+            {
                 instance->SetData(DATA_ASAAD, DONE);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+            }
 
             Map::PlayerList const &PlList = me->GetMap()->GetPlayers();
 
