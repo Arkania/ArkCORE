@@ -22,7 +22,12 @@
 #include "vortex_pinnacle.h"
 #include "ScriptPCH.h"
 
-enum eSpells
+enum Texts
+{
+    SAY_AGGRO                   = 0,    //todo: find texts + sound id
+};
+
+enum Spells
 {
     SPELL_LIGHTNING_BOLT_NORMAL = 86331,
     SPELL_LIGHTNING_BOLT_HEROIC = 93990,
@@ -56,6 +61,7 @@ public:
             if (instance)
             {
                 instance->SetData(DATA_GRAND_VIZIER_ERTAN, NOT_STARTED);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
             }
         }
 
@@ -63,14 +69,19 @@ public:
         {
             if (instance)
             {
+                Talk(SAY_AGGRO);    // lets use creature texts for that
                 instance->SetData(DATA_GRAND_VIZIER_ERTAN, IN_PROGRESS);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_ADD, me);
             }
         }
 
         void JustDied(Unit* /*Killer*/)
         {
             if (instance)
+            {
                 instance->SetData(DATA_GRAND_VIZIER_ERTAN, DONE);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+            }
 
             Creature * Slipstream = me->SummonCreature(NPC_SLIPSTREAM, -775.51f, -70.93f, 640.31f, 1.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
             Slipstream->SetUInt32Value(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_GOSSIP);
