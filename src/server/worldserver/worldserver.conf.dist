@@ -3089,33 +3089,33 @@ OutdoorPvP.Wintergrasp.Antifarm.Def = 15
 # AuctionHouseBot.DEBUG enables (1) or disables (0) Debug output
 # AuctionHouseBot.EnableSeller enables (1) or disables (0) the Seller
 # AuctionHouseBot.EnableBuyer enables (1) or disables (0) the Buyer
-# AuctionHouseBot.UseBuyPriceForSeller Use SellPrice (0) or BuyPrice (1) for #determining prices
-# AuctionHouseBot.UseBuyPriceForBuyer Use SellPrice (0) or BuyPrice (1) for #determining prices
-# AuctionHouseBot.Account is the account number (in realmd->account table) of #the player you want to run as the auction bot. Note: a value of 0 will #disable the bot.
-# AuctionHouseBot.GUID is the GUID (in characters->characters table) of the #player you want to run as the auction bot. Note: a value of 0 will disable #the bot.
-# AuctionHouseBot.ItemsPerCycle determines how many items are added each time #AHBot is run (once per minute, by default)
+# AuctionHouseBot.UseBuyPriceForSeller Use SellPrice (0) or BuyPrice (1) for determining prices
+# AuctionHouseBot.UseBuyPriceForBuyer Use SellPrice (0) or BuyPrice (1) for determining prices
+# AuctionHouseBot.Account is the account number (in realmd->account table) of the player you want to run as the auction bot. Note: a value of 0 will #disable the bot.
+# AuctionHouseBot.GUID is the GUID (in characters->characters table) of the player you want to run as the auction bot. Note: a value of 0 will disable #the bot.
+# AuctionHouseBot.ItemsPerCycle determines how many items are added each time AHBot is run (once per minute, by default)
 #
-# AuctionHouseBot.VendorItems is a boolean value (0 or 1) that indicates #whether to include Vendor only items
-# AuctionHouseBot.VendorTradeGoods is a boolean value (0 or 1) that indicates #whether to include Vendor only Trade Goods
-# AuctionHouseBot.LootItems  is a boolean value (0 or 1) that indicates #whether to include Loot/Fish/Skin/etc. only items
-# AuctionHouseBot.LootTradeGoods  is a boolean value (0 or 1) that indicates #whether to include Loot/Fish/Skin/etc. only Trade Goods
-# AuctionHouseBot.OtherItems  is a boolean value (0 or 1) that indicates #whether to include Other items not covered by the first 2
-# AuctionHouseBot.OtherTradeGoods  is a boolean value (0 or 1) that indicates #whether to include Other Trade Goods not covered by the first 2
-# AuctionHouseBot.No_Bind is a boolean value (0 or 1) that indicates whether #to include items with a bonding of 0
-# AuctionHouseBot.Bind_When_Picked_Up = is a boolean value (0 or 1) that #indicates whether to include items with a bonding of 1
-# AuctionHouseBot.Bind_When_Equipped = is a boolean value (0 or 1) that #indicates whether to include items with a bonding of 2
-# AuctionHouseBot.Bind_When_Use = is a boolean value (0 or 1) that indicates #whether to include items with a bonding of 3
-# AuctionHouseBot.Bind_Quest_Item = is a boolean value (0 or 1) that indicates #whether to include items with a bonding of 4
-# AuctionHouseBot.DisableBeta_PTR_Unused is a boolean value (0 or 1) that will #Disable certain items that are usually unavailable to Players
-# AuctionHouseBot.DisablePermEnchant is a boolean value (0 or 1) that will #Disable Items with a Permanent Enchantment
-# AuctionHouseBot.DisableConjured is a boolean value (0 or 1) that will #Disable Conjured Items
+# AuctionHouseBot.VendorItems is a boolean value (0 or 1) that indicates whether to include Vendor only items
+# AuctionHouseBot.VendorTradeGoods is a boolean value (0 or 1) that indicates whether to include Vendor only Trade Goods
+# AuctionHouseBot.LootItems  is a boolean value (0 or 1) that indicates whether to include Loot/Fish/Skin/etc. only items
+# AuctionHouseBot.LootTradeGoods  is a boolean value (0 or 1) that indicates whether to include Loot/Fish/Skin/etc. only Trade Goods
+# AuctionHouseBot.OtherItems  is a boolean value (0 or 1) that indicates whether to include Other items not covered by the first 2
+# AuctionHouseBot.OtherTradeGoods  is a boolean value (0 or 1) that indicates whether to include Other Trade Goods not covered by the first 2
+# AuctionHouseBot.No_Bind is a boolean value (0 or 1) that indicates whether to include items with a bonding of 0
+# AuctionHouseBot.Bind_When_Picked_Up = is a boolean value (0 or 1) that indicates whether to include items with a bonding of 1
+# AuctionHouseBot.Bind_When_Equipped = is a boolean value (0 or 1) that indicates whether to include items with a bonding of 2
+# AuctionHouseBot.Bind_When_Use = is a boolean value (0 or 1) that indicates whether to include items with a bonding of 3
+# AuctionHouseBot.Bind_Quest_Item = is a boolean value (0 or 1) that indicates whether to include items with a bonding of 4
+# AuctionHouseBot.DisableBeta_PTR_Unused is a boolean value (0 or 1) that will Disable certain items that are usually unavailable to Players
+# AuctionHouseBot.DisablePermEnchant is a boolean value (0 or 1) that will Disable Items with a Permanent Enchantment
+# AuctionHouseBot.DisableConjured is a boolean value (0 or 1) that will Disable Conjured Items
 # AuctionHouseBot.DisableGems is a boolean value (0 or 1) that will Disable #Gems
 # AuctionHouseBot.DisableMoney is a boolean value (0 or 1) that will Disable #Items that are used as money
-# AuctionHouseBot.DisableMoneyLoot is a boolean value (0 or 1) that will #Disable Items that have Money as a loot
-# AuctionHouseBot.DisableLootable is a boolean value (0 or 1) that will #Disable Items that have other items as loot
-# AuctionHouseBot.DisableKeys is a boolean value (0 or 1) that will Disable #Items that are keys
-# AuctionHouseBot.DisableDuration is a boolean value (0 or 1) that will #Disable Items with a duration
-# AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel is a boolean value (0 or 1) #that will Disable items that are BOP or Quest Item with a Required level that #is less than the Item Level
+# AuctionHouseBot.DisableMoneyLoot is a boolean value (0 or 1) that will Disable Items that have Money as a loot
+# AuctionHouseBot.DisableLootable is a boolean value (0 or 1) that will Disable Items that have other items as loot
+# AuctionHouseBot.DisableKeys is a boolean value (0 or 1) that will Disable Items that are keys
+# AuctionHouseBot.DisableDuration is a boolean value (0 or 1) that will Disable Items with a duration
+# AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel is a boolean value (0 or 1) that will Disable items that are BOP or Quest Item with a Required level that #is less than the Item Level
 #
 ###################################################################################################
 
@@ -3185,4 +3185,3 @@ AuctionHouseBot.DisableTGsBelowReqSkillRank = 0
 AuctionHouseBot.DisableTGsAboveReqSkillRank = 0
 
 ###################################################################################################
-
