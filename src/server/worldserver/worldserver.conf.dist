@@ -3083,6 +3083,7 @@ OutdoorPvP.Wintergrasp.Antifarm.Def = 15
 #
 ###################################################################################################
 
+<<<<<<< HEAD
 ###################################################################################################
 # AH Bot
 #
@@ -3185,3 +3186,5 @@ AuctionHouseBot.DisableTGsBelowReqSkillRank = 0
 AuctionHouseBot.DisableTGsAboveReqSkillRank = 0
 
 ###################################################################################################
+=======
+>>>>>>> parent of a0f17aa... Auction House Bot Thanks to Naios' Repo for the Code

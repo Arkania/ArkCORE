@@ -29,7 +29,6 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
-#include "AuctionHouseBot.h"
 #include "AuctionHouseMgr.h"
 #include "Log.h"
 #include "Opcodes.h"

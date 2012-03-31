@@ -1126,8 +1126,7 @@ public:
 
     static bool BuildEnumData(QueryResult result, WorldPacket * p_data);
 
-    
-    //virtual uint8 getClass() const = 0; /* Can't declare -AHBplayer with this */
+    virtual uint8 getClass() const = 0;
 
     void SetInWater(bool apply);
 

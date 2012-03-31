@@ -31,8 +31,6 @@
 #include "DatabaseEnv.h"
 #include "DBCStructure.h"
 
-#include "AuctionHouseBot/AuctionHouseBot.h"
-
 class Item;
 class Player;
 class WorldPacket;
