@@ -3914,7 +3914,12 @@ void Spell::finish(bool ok) {
     if (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET) m_caster->AttackStop();
 
     // TODO: Kill these hacks
-    switch (m_spellInfo->Id) {
+    switch (m_spellInfo->Id)
+        {
+      case 586: // Fade
+                if (m_caster->HasAura(47570) || (m_caster->HasAura(47569) && roll_chance_i(50))) // Phantasm
+                    m_caster->RemoveMovementImpairingAuras();
+                break;
         case 49143: // Frost Strike
         case 47541: // Death Coil
         case 56815: // Rune Strike
