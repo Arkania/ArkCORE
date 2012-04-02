@@ -262,6 +262,46 @@ public:
 	}
 };
 
+// Mark Of The Wild
+// Spell Id: 1126
+class spell_dru_mark_of_the_wild : public SpellScriptLoader
+{
+    public:
+        spell_dru_mark_of_the_wild() : SpellScriptLoader("spell_dru_mark_of_the_wild") { }
+
+        class spell_dru_mark_of_the_wild_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_dru_mark_of_the_wild_SpellScript);
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    if (caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    std::list<Unit*> PartyMembers;
+                    caster->GetPartyMembers(PartyMembers);
+
+                    if (PartyMembers.size() > 1)
+                        caster->CastSpell(GetHitUnit(), 79061, true); // Mark of the Wild (Raid)
+                    else
+                        caster->CastSpell(GetHitUnit(), 79060, true); // Mark of the Wild (Caster)
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_dru_mark_of_the_wild_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_dru_mark_of_the_wild_SpellScript;
+        }
+};
+
 // 50334 Berserk
 class spell_dru_berserk: public SpellScriptLoader {
 public:
