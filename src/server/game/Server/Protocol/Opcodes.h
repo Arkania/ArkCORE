@@ -849,7 +849,7 @@ enum Opcodes
     SMSG_MOVE_SET_FLIGHT                             = 0x0C57F, //
     SMSG_MOVE_UNSET_FLIGHT                           = 0x0BDA0, // 4.0.6a 13623   Not sure.
     CMSG_MOVE_FLIGHT_ACK                             = 0x0A3C8, // 4.0.6a 13623
-    MSG_MOVE_START_SWIM_CHEAT                        = 0x026C0, // 4.0.6a 13623
+    MSG_MOVE_START_SWIM_CHEAT                        = 0x100F2, // 4.0.6a 13623
     MSG_MOVE_STOP_SWIM_CHEAT                         = 0x06988, // 4.0.6a 13623
     SMSG_MOVE_SET_CAN_FLY                            = 0x0BDA0, // 4.0.6a 13623
     SMSG_MOVE_UNSET_CAN_FLY                          = 0x03084, // 4.0.6a 13623
@@ -1077,7 +1077,7 @@ enum Opcodes
     CMSG_ACCEPT_LEVEL_GRANT                          = 0x0B5CC, // 4.0.6a 13623
     SMSG_REFER_A_FRIEND_FAILURE                      = 0x07F7C, // 4.0.6a 13623
     SMSG_SPLINE_MOVE_SET_FLYING                      = 0x05D54, //
-    SMSG_SPLINE_MOVE_UNSET_FLYING                    = 0x07688, // 4.0.6a 13623
+    SMSG_SPLINE_MOVE_UNSET_FLYING                    = 0x0257D, // 4.0.6a 13623
     SMSG_SUMMON_CANCEL                               = 0x070A8, // 4.0.6a 13623
     CMSG_CHANGE_PERSONAL_ARENA_RATING                = 0x101B2, //
     CMSG_ALTER_APPEARANCE                            = 0x034A4, // 4.0.6a 13623
@@ -1269,7 +1269,7 @@ enum Opcodes
     SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x05557, // 4.0.6a 13623
     CMSG_CHAR_RACE_CHANGE                            = 0x06EA4, // 4.0.6a 13623
     SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x02A84, // 4.0.6a 13623
-    SMSG_UNKNOWN_1276                                = 0x00093, // 4.0.6a 13623
+    SMSG_UNKNOWN_1276                                = 0x1023A, // 4.0.6a 13623
     SMSG_LOOT_SLOT_CHANGED                           = 0x031EC, // 4.0.6a 13623
     CMSG_READY_FOR_ACCOUNT_DATA_TIMES                = 0x07DA8, // 4.0.6a 13623
     CMSG_QUERY_QUESTS_COMPLETED                      = 0x0ECE8, // 4.0.6a 13623
