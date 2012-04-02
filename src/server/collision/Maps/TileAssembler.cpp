@@ -277,6 +277,8 @@ bool TileAssembler::calculateTransformedBound(ModelSpawn &spawn) {
 	// temporary use defines to simplify read/check code (close file and return at fail)
 #define READ_OR_RETURN(V,S) if(fread((V), (S), 1, rf) != 1) { \
                                         fclose(rf); printf("readfail, op = %i\n", readOperation); return(false); }readOperation++;
+#define READ_OR_RETURN_WITH_DELETE(V,S) if(fread((V), (S), 1, rf) != 1) { \
+                                        fclose(rf); printf("readfail, op = %i\n", readOperation); delete[] V; return(false); }readOperation++;
 #define CMP_OR_RETURN(V,S)  if(strcmp((V),(S)) != 0)        { \
                                         fclose(rf); printf("cmpfail, %s!=%s\n", V, S);return(false); }
 
@@ -323,10 +325,11 @@ bool TileAssembler::calculateTransformedBound(ModelSpawn &spawn) {
 
 		if (nvectors > 0) {
 			vectorarray = new float[nvectors * 3];
-			READ_OR_RETURN(vectorarray, nvectors*sizeof(float)*3);
+			READ_OR_RETURN_WITH_DELETE(vectorarray, nvectors*sizeof(float)*3);
 		} else {
 			std::cout << "error: model '" << spawn.name << "' has no geometry!"
 					<< std::endl;
+			fclose(rf);
 			return false;
 		}
 
@@ -342,8 +345,9 @@ bool TileAssembler::calculateTransformedBound(ModelSpawn &spawn) {
 		}
 		delete[] vectorarray;
 		// drop of temporary use defines
-#undef READ_OR_RETURN
-#undef CMP_OR_RETURN
+        #undef READ_OR_RETURN
+        #undef READ_OR_RETURN_WITH_DELETE 
+        #undef CMP_OR_RETURN
 	}
 	spawn.iBound = modelBound + spawn.iPos;
 	spawn.flags |= MOD_HAS_BOUND;
@@ -381,6 +385,8 @@ bool TileAssembler::convertRawFile(const std::string& pModelFilename) {
 	// temporary use defines to simplify read/check code (close file and return at fail)
 #define READ_OR_RETURN(V,S) if(fread((V), (S), 1, rf) != 1) { \
                                         fclose(rf); printf("readfail, op = %i\n", readOperation); return(false); }readOperation++;
+#define READ_OR_RETURN_WITH_DELETE(V,S) if(fread((V), (S), 1, rf) != 1) { \
+                                        fclose(rf); printf("readfail, op = %i\n", readOperation); delete[] V; return(false); }readOperation++;
 #define CMP_OR_RETURN(V,S)  if(strcmp((V),(S)) != 0)        { \
                                         fclose(rf); printf("cmpfail, %s!=%s\n", V, S);return(false); }
 
@@ -437,7 +443,7 @@ bool TileAssembler::convertRawFile(const std::string& pModelFilename) {
 		READ_OR_RETURN(&nindexes, sizeof(uint32));
 		if (nindexes > 0) {
 			uint16 *indexarray = new uint16[nindexes];
-			READ_OR_RETURN(indexarray, nindexes*sizeof(uint16));
+			READ_OR_RETURN_WITH_DELETE(indexarray, nindexes*sizeof(uint16));
 			for (uint32 i = 0; i < nindexes; i += 3) {
 				triangles.push_back(
 						MeshTriangle(indexarray[i], indexarray[i + 1],
@@ -455,7 +461,7 @@ bool TileAssembler::convertRawFile(const std::string& pModelFilename) {
 
 		if (nvectors > 0) {
 			float *vectorarray = new float[nvectors * 3];
-			READ_OR_RETURN(vectorarray, nvectors*sizeof(float)*3);
+			READ_OR_RETURN_WITH_DELETE(vectorarray, nvectors*sizeof(float)*3);
 			for (uint32 i = 0; i < nvectors; ++i) {
 				vertexArray.push_back(Vector3(vectorarray + 3 * i));
 			}
@@ -484,15 +490,16 @@ bool TileAssembler::convertRawFile(const std::string& pModelFilename) {
 		groupsArray.back().setLiquidData(liquid);
 
 		// drop of temporary use defines
-#undef READ_OR_RETURN
-#undef CMP_OR_RETURN
+        #undef READ_OR_RETURN
+        #undef READ_OR_RETURN_WITH_DELETE
+        #undef CMP_OR_RETURN
 	}
 	fclose(rf);
 
 	// write WorldModel
 	WorldModel model;
 	model.setRootWmoID(RootWMOID);
-	if (groupsArray.size()) {
+	if (!groupsArray.empty()) {
 		model.setGroupModels(groupsArray);
 		success = model.writeFile(iDestDir + "/" + pModelFilename + ".vmo");
 	}
