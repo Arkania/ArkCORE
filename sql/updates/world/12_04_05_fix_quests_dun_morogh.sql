@@ -112,23 +112,19 @@ UPDATE quest_template SET OfferRewardText='To Ironforge? Well first, you''ll nee
 -- Quick fix for NPC Hands Springsprocket (6782) who should talk when rewarding and giving its quests
 UPDATE creature_template SET AIName='SmartAI' WHERE entry='6782';
 
-INSERT INTO creature_text
-VALUES (6782,0,0,'Alright, so you''re just going to head through this tunnel and whaaaaa....?',12,0,100,1,3,0,'Hands Springsprocket 1st sentence');
+DELETE FROM creature_text WHERE entry = 6782;
+INSERT INTO creature_text 
+VALUES 
+	(6782,0,0,'Alright, so you''re just going to head through this tunnel and whaaaaa....?',12,0,100,1,3,0,'Hands Springsprocket 1st sentence'),
+	(6782,1,0,'I recommend that you return to Anvilmar, $N... and quickly! I''ll send the signal to the Gnomeregan Airmen.',12,0,100,1,3,0,'Hands Springsprocket 2nd sentence'),
+	(6782,2,0,'Look for a fellow by the name of Milo Geartwinge. I suppose I''ll see what I can do about this cave-in.',12,0,100,1,3,0,'Hands Springsprocket 3rd sentence');
 
-INSERT INTO creature_text
-VALUES (6782,1,0,'I recommend that you return to Anvilmar, $N... and quickly! I''ll send the signal to the Gnomeregan Airmen.',12,0,100,1,3,0,'Hands Springsprocket 2nd sentence');
-
-INSERT INTO creature_text
-VALUES (6782,2,0,'Look for a fellow by the name of Milo Geartwinge. I suppose I''ll see what I can do about this cave-in.',12,0,100,1,3,0,'Hands Springsprocket 3rd sentence');
-
-INSERT INTO smart_scripts
-VALUES (6782,0,0,0,20,0,100,0,24490,0,0,0,1,0,4000,0,0,0,0,7,0,0,0,0,0,0,0,'Say when quest 24490 rewarded');
-
-INSERT INTO smart_scripts
-VALUES (6782,0,1,0,19,0,100,0,24491,0,0,0,1,1,4000,0,0,0,0,7,0,0,0,0,0,0,0,'Say when quest 24491 accepted');
-
-INSERT INTO smart_scripts
-VALUES (6782,0,2,0,52,0,100,0,1,6782,0,0,1,2,4000,0,0,0,0,7,0,0,0,0,0,0,0,'Second sentence when quest 24491 accepted');
+DELETE FROM creature_text WHERE entry = 6782;
+INSERT INTO smart_scripts 
+VALUES 
+	(6782,0,0,0,20,0,100,0,24490,0,0,0,1,0,4000,0,0,0,0,7,0,0,0,0,0,0,0,'Say when quest 24490 rewarded'),
+	(6782,0,1,0,19,0,100,0,24491,0,0,0,1,1,4000,0,0,0,0,7,0,0,0,0,0,0,0,'Say when quest 24491 accepted'),
+	(6782,0,2,0,52,0,100,0,1,6782,0,0,1,2,4000,0,0,0,0,7,0,0,0,0,0,0,0,'Second sentence when quest 24491 accepted');
 
 UPDATE quest_template SET QuestFlags='262144' where entry='24491';
 
@@ -146,14 +142,11 @@ UPDATE quest_template SET OfferRewardText='Coldridge Valley? I''ve got my own pr
 
 
 -- Fixing "Pack Your Bags" quest reward
-INSERT INTO item_loot_template
-VALUES(57540,57541,100,1,1,1,1);
 
+DELETE FROM item_loot_template WHERE entry = 57540;
 INSERT INTO item_loot_template
-VALUES(57540,57542,100,1,2,1,1);
-
-INSERT INTO item_loot_template
-VALUES(57540,57543,100,1,3,3,3);
-
-INSERT INTO item_loot_template
-VALUES(57540,57544,100,1,4,5,5);
+VALUES
+	(57540,57541,100,1,1,1,1),
+	(57540,57542,100,1,2,1,1),
+	(57540,57543,100,1,3,3,3),
+	(57540,57544,100,1,4,5,5);
