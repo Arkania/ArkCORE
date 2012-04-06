@@ -668,8 +668,8 @@ UpdateMask Player::updateVisualBits;
 #ifdef _MSC_VER
 #pragma warning(disable:4355)
 #endif
-Player::Player(WorldSession *session) :
-        Unit(), m_achievementMgr(this), m_reputationMgr(this)
+
+Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputationMgr(this)
 {
 #ifdef _MSC_VER
 #pragma warning(default:4355)
@@ -700,7 +700,8 @@ Player::Player(WorldSession *session) :
     eclipse = 0;
 
     // players always accept
-    if (GetSession()->GetSecurity() == SEC_PLAYER) SetAcceptWhispers(true);
+    if (GetSession()->GetSecurity() == SEC_PLAYER)
+        SetAcceptWhispers(true);
 
     m_curSelection = 0;
     m_lootGuid = 0;
@@ -724,7 +725,7 @@ Player::Player(WorldSession *session) :
 
     clearResurrectRequestData();
 
-    memset(m_items, 0, sizeof(Item*) * PLAYER_SLOTS_COUNT);
+    memset(m_items, 0, sizeof(Item*)*PLAYER_SLOTS_COUNT);
 
     m_social = NULL;
     m_guildId = 0;
@@ -760,8 +761,8 @@ Player::Player(WorldSession *session) :
     m_DailyQuestChanged = false;
     m_lastDailyQuestTime = 0;
 
-    for (uint8 i = 0; i < MAX_TIMERS; i++)
-        m_MirrorTimer [i] = DISABLED_MIRROR_TIMER;
+    for (uint8 i=0; i<MAX_TIMERS; i++)
+        m_MirrorTimer[i] = DISABLED_MIRROR_TIMER;
 
     m_MirrorTimerFlags = UNDERWATER_NONE;
     m_MirrorTimerFlagsLast = UNDERWATER_NONE;
@@ -776,8 +777,8 @@ Player::Player(WorldSession *session) :
 
     for (uint8 j = 0; j < PLAYER_MAX_BATTLEGROUND_QUEUES; ++j)
     {
-        m_bgBattlegroundQueueID [j].bgQueueTypeId = BATTLEGROUND_QUEUE_NONE;
-        m_bgBattlegroundQueueID [j].invitedToInstance = 0;
+        m_bgBattlegroundQueueID[j].bgQueueTypeId  = BATTLEGROUND_QUEUE_NONE;
+        m_bgBattlegroundQueueID[j].invitedToInstance = 0;
     }
 
     m_logintime = time(NULL);
@@ -799,13 +800,13 @@ Player::Player(WorldSession *session) :
     m_lastpetnumber = 0;
 
     ////////////////////Rest System/////////////////////
-    time_inn_enter = 0;
-    inn_pos_mapid = 0;
-    inn_pos_x = 0;
-    inn_pos_y = 0;
-    inn_pos_z = 0;
-    m_rest_bonus = 0;
-    rest_type = REST_TYPE_NO;
+    time_inn_enter=0;
+    inn_pos_mapid=0;
+    inn_pos_x=0;
+    inn_pos_y=0;
+    inn_pos_z=0;
+    m_rest_bonus=0;
+    rest_type=REST_TYPE_NO;
     ////////////////////Rest System/////////////////////
 
     m_mailsLoaded = false;
@@ -818,7 +819,7 @@ Player::Player(WorldSession *session) :
     m_itemUpdateQueueBlocked = false;
 
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
-        m_forced_speed_changes [i] = 0;
+        m_forced_speed_changes[i] = 0;
 
     /////////////////// Instance System /////////////////////
 
@@ -835,20 +836,20 @@ Player::Player(WorldSession *session) :
     for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
     {
         for (uint8 g = 0; g < MAX_GLYPH_SLOT_INDEX; ++g)
-            m_Glyphs [i] [g] = 0;
+            m_Glyphs[i][g] = 0;
 
-        m_talents [i] = new PlayerTalentMap();
+        m_talents[i] = new PlayerTalentMap();
 
-        m_branchSpec [i] = 0;
+        m_branchSpec[i] = 0;
     }
     for (uint8 i = 0; i < BASEMOD_END; ++i)
     {
-        m_auraBaseMod [i] [FLAT_MOD] = 0.0f;
-        m_auraBaseMod [i] [PCT_MOD] = 1.0f;
+        m_auraBaseMod[i][FLAT_MOD] = 0.0f;
+        m_auraBaseMod[i][PCT_MOD] = 1.0f;
     }
 
     for (uint8 i = 0; i < MAX_COMBAT_RATING; i++)
-        m_baseRatingValue [i] = 0;
+        m_baseRatingValue[i] = 0;
 
     m_spellPowerFromIntellect = 0;
 
@@ -862,12 +863,10 @@ Player::Player(WorldSession *session) :
     m_lastHonorUpdateTime = time(NULL);
     //m_honorPoints = 0;
     //m_arenaPoints = 0;
-    m_maxWeekRating [CP_SOURCE_ARENA] = 0;
-    m_maxWeekRating [CP_SOURCE_RATED_BG] = 0;
-    m_conquestPointsWeekCap [CP_SOURCE_ARENA] =
-            PLAYER_DEFAULT_CONQUEST_POINTS_WEEK_CAP;
-    m_conquestPointsWeekCap [CP_SOURCE_RATED_BG] = uint16(
-            PLAYER_DEFAULT_CONQUEST_POINTS_WEEK_CAP * 1.222f); // +22, 2%
+    m_maxWeekRating[CP_SOURCE_ARENA] = 0;
+    m_maxWeekRating[CP_SOURCE_RATED_BG] = 0;
+    m_conquestPointsWeekCap[CP_SOURCE_ARENA] = PLAYER_DEFAULT_CONQUEST_POINTS_WEEK_CAP;
+    m_conquestPointsWeekCap[CP_SOURCE_RATED_BG] = uint16(PLAYER_DEFAULT_CONQUEST_POINTS_WEEK_CAP * 1.222f); // +22, 2%
 
     m_IsBGRandomWinner = false;
 
@@ -904,10 +903,254 @@ Player::Player(WorldSession *session) :
     sWorld->IncreasePlayerCount();
 
     m_ChampioningFaction = 0;
-    m_ChampioningFactionDungeonLevel = 0;
 
     for (uint8 i = 0; i < MAX_POWERS; ++i)
-        m_powerFraction [i] = 0;
+        m_powerFraction[i] = 0;
+
+    m_globalCooldowns.clear();
+
+    m_ConditionErrorMsgId = 0;
+
+    SetPendingBind(NULL, 0);
+}
+
+Player::Player (WorldSession &session): Unit(), m_achievementMgr(this), m_reputationMgr(this)
+{
+#ifdef _MSC_VER
+#pragma warning(default:4355)
+#endif
+
+    m_speakTime = 0;
+    m_speakCount = 0;
+
+    m_petSlotUsed = 0;
+    m_currentPetSlot = PET_SLOT_DELETED;
+
+    m_emote = 0;
+
+    m_objectType |= TYPEMASK_PLAYER;
+    m_objectTypeId = TYPEID_PLAYER;
+
+    m_valuesCount = PLAYER_END;
+
+    m_session = &session;
+
+    m_divider = 0;
+
+    m_ExtraFlags = 0;
+
+    m_spellModTakingSpell = NULL;
+    //m_pad = 0;
+
+    eclipse = 0;
+
+    // players always accept
+    if (GetSession()->GetSecurity() == SEC_PLAYER)
+        SetAcceptWhispers(true);
+
+    m_curSelection = 0;
+    m_lootGuid = 0;
+
+    m_comboTarget = 0;
+    m_comboPoints = 0;
+
+    m_usedTalentCount = 0;
+    m_questRewardTalentCount = 0;
+
+    m_regenTimer = 0;
+    m_regenTimerCount = 0;
+    m_weaponChangeTimer = 0;
+
+    m_zoneUpdateId = 0;
+    m_zoneUpdateTimer = 0;
+
+    m_areaUpdateId = 0;
+
+    m_nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
+
+    clearResurrectRequestData();
+
+    memset(m_items, 0, sizeof(Item*)*PLAYER_SLOTS_COUNT);
+
+    m_social = NULL;
+    m_guildId = 0;
+
+    // group is initialized in the reference constructor
+    SetGroupInvite(NULL);
+    m_groupUpdateMask = 0;
+    m_auraRaidUpdateMask = 0;
+    m_bPassOnGroupLoot = false;
+
+    duel = NULL;
+
+    m_GuildIdInvited = 0;
+    m_ArenaTeamIdInvited = 0;
+
+    m_atLoginFlags = AT_LOGIN_NONE;
+
+    mSemaphoreTeleport_Near = false;
+    mSemaphoreTeleport_Far = false;
+
+    m_DelayedOperations = 0;
+    m_bCanDelayTeleport = false;
+    m_bHasDelayedTeleport = false;
+    m_teleport_options = 0;
+
+    m_trade = NULL;
+
+    m_cinematic = 0;
+
+    PlayerTalkClass = new PlayerMenu(GetSession());
+    m_currentBuybackSlot = BUYBACK_SLOT_START;
+
+    m_DailyQuestChanged = false;
+    m_lastDailyQuestTime = 0;
+
+    for (uint8 i=0; i<MAX_TIMERS; i++)
+        m_MirrorTimer[i] = DISABLED_MIRROR_TIMER;
+
+    m_MirrorTimerFlags = UNDERWATER_NONE;
+    m_MirrorTimerFlagsLast = UNDERWATER_NONE;
+    m_isInWater = false;
+    m_drunkTimer = 0;
+    m_drunk = 0;
+    m_restTime = 0;
+    m_deathTimer = 0;
+    m_deathExpireTime = 0;
+
+    m_swingErrorMsg = 0;
+
+    for (uint8 j = 0; j < PLAYER_MAX_BATTLEGROUND_QUEUES; ++j)
+    {
+        m_bgBattlegroundQueueID[j].bgQueueTypeId  = BATTLEGROUND_QUEUE_NONE;
+        m_bgBattlegroundQueueID[j].invitedToInstance = 0;
+    }
+
+    m_logintime = time(NULL);
+    m_Last_tick = m_logintime;
+    m_Save_Time = m_logintime + 360;
+    m_WeaponProficiency = 0;
+    m_ArmorProficiency = 0;
+    m_canParry = false;
+    m_canBlock = false;
+    m_canDualWield = false;
+    m_canTitanGrip = false;
+    m_ammoDPS = 0.0f;
+
+    m_temporaryUnsummonedPetNumber = 0;
+    //cache for UNIT_CREATED_BY_SPELL to allow
+    //returning reagents for temporarily removed pets
+    //when dying/logging out
+    m_oldpetspell = 0;
+    m_lastpetnumber = 0;
+
+    ////////////////////Rest System/////////////////////
+    time_inn_enter=0;
+    inn_pos_mapid=0;
+    inn_pos_x=0;
+    inn_pos_y=0;
+    inn_pos_z=0;
+    m_rest_bonus=0;
+    rest_type=REST_TYPE_NO;
+    ////////////////////Rest System/////////////////////
+
+    m_mailsLoaded = false;
+    m_mailsUpdated = false;
+    unReadMails = 0;
+    m_nextMailDelivereTime = 0;
+
+    m_resetTalentsCost = 0;
+    m_resetTalentsTime = 0;
+    m_itemUpdateQueueBlocked = false;
+
+    for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
+        m_forced_speed_changes[i] = 0;
+
+    /////////////////// Instance System /////////////////////
+
+    m_HomebindTimer = 0;
+    m_InstanceValid = true;
+    m_dungeonDifficulty = DUNGEON_DIFFICULTY_NORMAL;
+    m_raidDifficulty = RAID_DIFFICULTY_10MAN_NORMAL;
+
+    m_lastPotionId = 0;
+
+    m_activeSpec = 0;
+    m_specsCount = 1;
+
+    for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+    {
+        for (uint8 g = 0; g < MAX_GLYPH_SLOT_INDEX; ++g)
+            m_Glyphs[i][g] = 0;
+
+        m_talents[i] = new PlayerTalentMap();
+
+        m_branchSpec[i] = 0;
+    }
+    for (uint8 i = 0; i < BASEMOD_END; ++i)
+    {
+        m_auraBaseMod[i][FLAT_MOD] = 0.0f;
+        m_auraBaseMod[i][PCT_MOD] = 1.0f;
+    }
+
+    for (uint8 i = 0; i < MAX_COMBAT_RATING; i++)
+        m_baseRatingValue[i] = 0;
+
+    m_spellPowerFromIntellect = 0;
+
+    m_baseSpellPower = 0;
+    m_baseFeralAP = 0;
+    m_baseManaRegen = 0;
+    m_baseHealthRegen = 0;
+    m_spellPenetrationItemMod = 0;
+
+    // Honor System
+    m_lastHonorUpdateTime = time(NULL);
+    //m_honorPoints = 0;
+    //m_arenaPoints = 0;
+    m_maxWeekRating[CP_SOURCE_ARENA] = 0;
+    m_maxWeekRating[CP_SOURCE_RATED_BG] = 0;
+    m_conquestPointsWeekCap[CP_SOURCE_ARENA] = PLAYER_DEFAULT_CONQUEST_POINTS_WEEK_CAP;
+    m_conquestPointsWeekCap[CP_SOURCE_RATED_BG] = uint16(PLAYER_DEFAULT_CONQUEST_POINTS_WEEK_CAP * 1.222f); // +22, 2%
+
+    m_IsBGRandomWinner = false;
+
+    // Player summoning
+    m_summon_expire = 0;
+    m_summon_mapid = 0;
+    m_summon_x = 0.0f;
+    m_summon_y = 0.0f;
+    m_summon_z = 0.0f;
+
+    //Default movement to run mode
+    //m_unit_movement_flags = 0;
+
+    m_AreaID = 0;
+
+    m_mover = this;
+    m_movedPlayer = this;
+    m_seer = this;
+
+    m_contestedPvPTimer = 0;
+
+    m_declinedname = NULL;
+
+    m_isActive = true;
+
+    m_runes = NULL;
+
+    m_lastFallTime = 0;
+    m_lastFallZ = 0;
+
+    m_ControlledByPlayer = true;
+    m_isWorldObject = true;
+
+    sWorld->IncreasePlayerCount();
+
+    m_ChampioningFaction = 0;
+
+    for (uint8 i = 0; i < MAX_POWERS; ++i)
+        m_powerFraction[i] = 0;
 
     m_globalCooldowns.clear();
 
@@ -918,7 +1161,7 @@ Player::Player(WorldSession *session) :
 
 Player::~Player()
 {
-    // it must be unloaded already in PlayerLogout and accessed only for loggined player
+    // it must be unloaded already in PlayerLogout and accessed only for logged in player
     //m_social = NULL;
 
     // Note: buy back item already deleted from DB when player was saved
