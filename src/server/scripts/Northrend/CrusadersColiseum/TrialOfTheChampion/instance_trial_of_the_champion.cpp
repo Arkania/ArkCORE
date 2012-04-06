@@ -319,7 +319,7 @@ public:
                     {
                         pBlackKnight->SetOrientation(4.714f);
 
-	    pBlackKnight->SetReactState(REACT_PASSIVE);
+        pBlackKnight->SetReactState(REACT_PASSIVE);
             pBlackKnight->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
                     }
                 }else if (uiData == IN_PROGRESS)

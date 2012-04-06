@@ -389,8 +389,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS] = { &AuraEffect::HandleNULL, /
         &AuraEffect::HandleNULL, //330
         &AuraEffect::HandleNULL, //331
         &AuraEffect::HandleAuraReplaceSpell,//332 SPELL_AURA_332_REPLACE_SPELL
-		&AuraEffect::HandleAuraReplaceSpell,//333 SPELL_AURA_333_REPLACE_SPELL
-		&AuraEffect::HandleNULL, //334
+        &AuraEffect::HandleAuraReplaceSpell,//333 SPELL_AURA_333_REPLACE_SPELL
+        &AuraEffect::HandleNULL, //334
         &AuraEffect::HandleNULL, //335
         &AuraEffect::HandleNULL, //336
         &AuraEffect::HandleAuraSaleForGuild,//337
@@ -1872,8 +1872,8 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit * caster) const {
         case 29842: // Second Wind r2
         case 42771: // Second Wind r2
             damage = int32(caster->GetMaxHealth() * 0.01f);
-					break;
-				 case 8936: // Recrecimiento
+                    break;
+                 case 8936: // Recrecimiento
                     if (caster->HasAura(54743) && target->HealthBelowPct(50))
                         this->GetBase()->RefreshDuration();
             break;
