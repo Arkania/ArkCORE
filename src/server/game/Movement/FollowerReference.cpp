@@ -28,13 +28,13 @@
 #include "FollowerReference.h"
 
 void FollowerReference::targetObjectBuildLink() {
-	getTarget()->addFollower(this);
+    getTarget()->addFollower(this);
 }
 
 void FollowerReference::targetObjectDestroyLink() {
-	getTarget()->removeFollower(this);
+    getTarget()->removeFollower(this);
 }
 
 void FollowerReference::sourceObjectDestroyLink() {
-	getSource()->stopFollowing();
+    getSource()->stopFollowing();
 }

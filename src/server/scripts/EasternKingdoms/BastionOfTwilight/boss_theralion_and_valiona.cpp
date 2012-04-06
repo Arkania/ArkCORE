@@ -114,7 +114,7 @@ class boss_theralion : public CreatureScript
                 Creature * Valiona = GetValiona();
 
                 if (!UpdateVictim())
-					return;
+                    return;
 
                 if (uiPhaseTimer <= uiDiff)
                 {
@@ -256,7 +256,7 @@ class boss_valiona : public CreatureScript
                 {
                     case 2:
                         if (!UpdateVictim())
-					    return;
+                        return;
 
                         if (uiBlackoutTimer <= uiDiff && uiBlackoutCount <= 2)
                         {

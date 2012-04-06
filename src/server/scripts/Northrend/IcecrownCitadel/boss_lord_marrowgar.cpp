@@ -233,7 +233,7 @@ class boss_lord_marrowgar : public CreatureScript
                             if (unit)
                                 if (unit->isPet() || unit->isTotem())
                                     unit = SelectTarget(SELECT_TARGET_RANDOM, 1);
-								else me->GetMotionMaster()->MovePoint(POINT_TARGET_BONESTORM_PLAYER, unit->GetPositionX(), unit->GetPositionY(), unit->GetPositionZ());
+                                else me->GetMotionMaster()->MovePoint(POINT_TARGET_BONESTORM_PLAYER, unit->GetPositionX(), unit->GetPositionY(), unit->GetPositionZ());
                             break;
                         }
                         case EVENT_BONE_STORM_END:

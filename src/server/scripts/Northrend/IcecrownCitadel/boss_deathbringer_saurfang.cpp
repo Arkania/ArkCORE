@@ -1051,7 +1051,7 @@ class npc_blood_beast : public CreatureScript
             {
                 return GetIcecrownCitadelAI<npc_blood_beastAI>(creature);
             }
-	    };
+        };
 
 class spell_deathbringer_blood_link : public SpellScriptLoader
 {

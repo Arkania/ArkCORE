@@ -598,6 +598,6 @@ void AddSC_boss_jaraxxus()
     new mob_fel_infernal();
     new mob_nether_portal();
     new mob_mistress_of_pain();
-	new spell_spinning_pain_strike();
+    new spell_spinning_pain_strike();
     new spell_eject_all_passengers();
 }

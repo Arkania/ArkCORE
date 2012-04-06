@@ -117,9 +117,9 @@ void ConvertPartHeader(void * partHeader)
 #ifdef PLATFORM_MAC
 static void ConvertUTCDateTimeToFileTime(const UTCDateTimePtr inTime, ULONGLONG * pFT)
 {
-	UInt64 intTime = ((UInt64)inTime->highSeconds << 32) + inTime->lowSeconds;
-	intTime *= 10000000;
-	intTime += 0x0153b281e0fb4000ull;
+    UInt64 intTime = ((UInt64)inTime->highSeconds << 32) + inTime->lowSeconds;
+    intTime *= 10000000;
+    intTime += 0x0153b281e0fb4000ull;
 
     *pFT = intTime;
 }
@@ -605,7 +605,7 @@ static bool File_GetSize(
 #endif
 
 #ifdef PLATFORM_MAC
-	SInt64 fileLength = 0;
+    SInt64 fileLength = 0;
     OSErr theErr;
 
     theErr = FSGetForkSize((short)(long)pStream->hFile, &fileLength);
@@ -1407,9 +1407,9 @@ bool FileStream_GetLastWriteTime(
 #endif
 
 #ifdef PLATFORM_MAC
-	OSErr theErr;
-	FSRef theFileRef;
-	FSCatalogInfo theCatInfo;
+    OSErr theErr;
+    FSRef theFileRef;
+    FSCatalogInfo theCatInfo;
 
     theErr = FSGetForkCBInfo((short)(long)pStream->hFile, 0, NULL, NULL, NULL, &theFileRef, NULL);
     if (theErr != noErr)

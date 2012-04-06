@@ -960,8 +960,8 @@ class boss_the_lich_king : public CreatureScript
                         case EVENT_HARVEST_SOUL:
                             Talk(SAY_LK_HARVEST_SOUL);
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-							//TODO: Implement SpellTargetSelector
-							//if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, SpellTargetSelector(me, SPELL_HARVEST_SOUL)))
+                            //TODO: Implement SpellTargetSelector
+                            //if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, SpellTargetSelector(me, SPELL_HARVEST_SOUL)))
                                 DoCast(target, SPELL_HARVEST_SOUL);
                             events.ScheduleEvent(EVENT_HARVEST_SOUL, 75000, 0, PHASE_THREE);
                             break;
@@ -1690,8 +1690,8 @@ class npc_strangulate_vehicle : public CreatureScript
                                 {
                                     summoner->CastSpell((Unit*)NULL, SPELL_HARVEST_SOUL_VISUAL, true);
                                     //TODO: update ExitVehicle code
-									// summoner->ExitVehicle(summoner);
-									summoner->ExitVehicle();
+                                    // summoner->ExitVehicle(summoner);
+                                    summoner->ExitVehicle();
                                     if (!IsHeroic())
                                         summoner->CastSpell(summoner, SPELL_HARVEST_SOUL_TELEPORT, true);
                                     else

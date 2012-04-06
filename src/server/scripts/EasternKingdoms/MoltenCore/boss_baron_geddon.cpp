@@ -42,74 +42,74 @@
 
 class boss_baron_geddon: public CreatureScript {
 public:
-	boss_baron_geddon() :
-			CreatureScript("boss_baron_geddon") {
-	}
+    boss_baron_geddon() :
+            CreatureScript("boss_baron_geddon") {
+    }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_baron_geddonAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const {
+        return new boss_baron_geddonAI(pCreature);
+    }
 
-	struct boss_baron_geddonAI: public ScriptedAI {
-		boss_baron_geddonAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_baron_geddonAI: public ScriptedAI {
+        boss_baron_geddonAI(Creature *c) :
+                ScriptedAI(c) {
+        }
 
-		uint32 Inferno_Timer;
-		uint32 IgniteMana_Timer;
-		uint32 LivingBomb_Timer;
+        uint32 Inferno_Timer;
+        uint32 IgniteMana_Timer;
+        uint32 LivingBomb_Timer;
 
-		void Reset() {
-			Inferno_Timer = 45000; //These times are probably wrong
-			IgniteMana_Timer = 30000;
-			LivingBomb_Timer = 35000;
-		}
+        void Reset() {
+            Inferno_Timer = 45000; //These times are probably wrong
+            IgniteMana_Timer = 30000;
+            LivingBomb_Timer = 35000;
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-		}
+        void EnterCombat(Unit * /*who*/) {
+        }
 
-		void UpdateAI(const uint32 diff) {
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff) {
+            if (!UpdateVictim())
+                return;
 
-			//If we are <2% hp cast Armageddom
-			if (!HealthAbovePct(2)) {
-				me->InterruptNonMeleeSpells(true);
-				DoCast(me, SPELL_ARMAGEDDOM);
-				DoScriptText(EMOTE_SERVICE, me);
-				return;
-			}
+            //If we are <2% hp cast Armageddom
+            if (!HealthAbovePct(2)) {
+                me->InterruptNonMeleeSpells(true);
+                DoCast(me, SPELL_ARMAGEDDOM);
+                DoScriptText(EMOTE_SERVICE, me);
+                return;
+            }
 
-			//Inferno_Timer
-			if (Inferno_Timer <= diff) {
-				DoCast(me, SPELL_INFERNO);
-				Inferno_Timer = 45000;
-			} else
-				Inferno_Timer -= diff;
+            //Inferno_Timer
+            if (Inferno_Timer <= diff) {
+                DoCast(me, SPELL_INFERNO);
+                Inferno_Timer = 45000;
+            } else
+                Inferno_Timer -= diff;
 
-			//IgniteMana_Timer
-			if (IgniteMana_Timer <= diff) {
-				if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-					DoCast(pTarget, SPELL_IGNITEMANA);
+            //IgniteMana_Timer
+            if (IgniteMana_Timer <= diff) {
+                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_IGNITEMANA);
 
-				IgniteMana_Timer = 30000;
-			} else
-				IgniteMana_Timer -= diff;
+                IgniteMana_Timer = 30000;
+            } else
+                IgniteMana_Timer -= diff;
 
-			//LivingBomb_Timer
-			if (LivingBomb_Timer <= diff) {
-				if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-					DoCast(pTarget, SPELL_LIVINGBOMB);
+            //LivingBomb_Timer
+            if (LivingBomb_Timer <= diff) {
+                if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                    DoCast(pTarget, SPELL_LIVINGBOMB);
 
-				LivingBomb_Timer = 35000;
-			} else
-				LivingBomb_Timer -= diff;
+                LivingBomb_Timer = 35000;
+            } else
+                LivingBomb_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
 void AddSC_boss_baron_geddon() {
-	new boss_baron_geddon();
+    new boss_baron_geddon();
 }
