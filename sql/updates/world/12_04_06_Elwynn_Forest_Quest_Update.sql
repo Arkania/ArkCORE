@@ -65,7 +65,7 @@ UPDATE creature_loot_template SET ChanceOrQuestChance = '100',groupid='1' WHERE 
 
 -- Add a gameobject "Bounty board" (203733), source WoW Retail
 DELETE FROM gameobject WHERE id='203733';
-INSERT INTO gameobject(guid,id,position_x,position_y,position_z,orientation,spawntimesecs) VALUES (XXXX,203733,-9613.166,-1033.3981,40.258,1.679,300);
+INSERT INTO gameobject(id,position_x,position_y,position_z,orientation,spawntimesecs) VALUES (203733,-9613.166,-1033.3981,40.258,1.679,300);
 
 -- Make the gameobject give quests "Bounty on Murlocs" (46) and "Wanted: James Clark" (26152), source WoW retail
 DELETE FROM gameobject_questrelation WHERE id='203733';
@@ -73,14 +73,14 @@ INSERT INTO gameobject_questrelation VALUES
 (203733,46),(203733,26152);
 
 -- Create the gossip menu that gives the quests
-/*DELETE FROM npc_text WHERE ID='YYYY';
-INSERT INTO npc_text(ID,text0_1,prob0) VALUES (YYYY,'There bounties on this board.',1);
+-- /*DELETE FROM npc_text WHERE ID='YYYY';
+-- INSERT INTO npc_text(ID,text0_1,prob0) VALUES (YYYY,'There bounties on this board.',1);
 
-DELETE FROM gossip_menu WHERE entry='ZZZZ';
-INSERT INTO gossip_menu VALUES (ZZZZ,YYYY);
+-- DELETE FROM gossip_menu WHERE entry='ZZZZ';
+-- INSERT INTO gossip_menu VALUES (ZZZZ,YYYY);
 
-DELETE FROM gossip_menu_option WHERE menu_id='ZZZZ';
-INSERT INTO gossip_menu_option(menu_id,id,option_id) VALUES (ZZZZ,1,2);
+-- DELETE FROM gossip_menu_option WHERE menu_id='ZZZZ';
+-- INSERT INTO gossip_menu_option(menu_id,id,option_id) VALUES (ZZZZ,1,2);
 
 -- Update the gameobject template with the gossip menu created above
-UPDATE gameobject_template SET data3='ZZZZ' where entry='203733';*/
+-- UPDATE gameobject_template SET data3='ZZZZ' where entry='203733';*/
