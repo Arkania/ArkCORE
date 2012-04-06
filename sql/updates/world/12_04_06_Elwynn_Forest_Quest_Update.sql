@@ -73,7 +73,7 @@ INSERT INTO gameobject_questrelation VALUES
 (203733,46),(203733,26152);
 
 -- Create the gossip menu that gives the quests
-DELETE FROM npc_text WHERE ID='YYYY';
+/*DELETE FROM npc_text WHERE ID='YYYY';
 INSERT INTO npc_text(ID,text0_1,prob0) VALUES (YYYY,'There bounties on this board.',1);
 
 DELETE FROM gossip_menu WHERE entry='ZZZZ';
@@ -83,4 +83,4 @@ DELETE FROM gossip_menu_option WHERE menu_id='ZZZZ';
 INSERT INTO gossip_menu_option(menu_id,id,option_id) VALUES (ZZZZ,1,2);
 
 -- Update the gameobject template with the gossip menu created above
-UPDATE gameobject_template SET data3='ZZZZ' where entry='203733';
+UPDATE gameobject_template SET data3='ZZZZ' where entry='203733';*/
