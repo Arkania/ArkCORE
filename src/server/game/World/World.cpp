@@ -1795,7 +1795,7 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculating currency week cap reset time..." );
     InitCurrencyResetTime();
     
-    sLog->outString("Initializing the Auction House Bot, have fun! ...");
+    sLog->outString("Initializing the Auction House Bot, have fun...");
     auctionbot.Initialize();
 
     // possibly enable db logging; avoid massive startup spam by doing it here.

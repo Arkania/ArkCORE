@@ -34,7 +34,6 @@
 #include "Item.h"
 #include "AuctionHouseMgr.h"
 #include "AuctionHouseBot.h"
-#include "AuctionHouseBot.h"
 
 MailSender::MailSender(Object* sender, MailStationery stationery) :
         m_stationery(stationery) {
@@ -194,13 +193,6 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver,
     if (receiver.GetPlayerGUIDLow() == auctionbot.GetAHBplayerGUID())
     {
         if (sender.GetMailMessageType() == MAIL_AUCTION)        // auction mail with items
-            deleteIncludedItems(trans, true);
-        return;
-    }
-    
-    if (receiver.GetPlayerGUIDLow() == auctionbot.GetAHBplayerGUID())
-    {
-        if (sender.GetMailMessageType() == MAIL_AUCTION)  // auction mail with items
             deleteIncludedItems(trans, true);
         return;
     }
