@@ -65,7 +65,7 @@ UPDATE creature_loot_template SET ChanceOrQuestChance = '100',groupid='1' WHERE 
 
 -- Add a gameobject "Bounty board" (203733), source WoW Retail
 DELETE FROM gameobject WHERE id='203733';
-INSERT INTO gameobject(guid,id,position_x,position_y,position_z,orientation,spawntimesecs) VALUES (XXXX,203733,-9613.166,-1033.3981,40.258,1.679,300);
+INSERT INTO gameobject(guid,id,position_x,position_y,position_z,orientation,spawntimesecs) VALUES (NULL,203733,-9613.166,-1033.3981,40.258,1.679,300);
 
 -- Make the gameobject give quests "Bounty on Murlocs" (46) and "Wanted: James Clark" (26152), source WoW retail
 DELETE FROM gameobject_questrelation WHERE id='203733';
