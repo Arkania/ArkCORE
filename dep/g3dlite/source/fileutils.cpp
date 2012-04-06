@@ -89,8 +89,8 @@ std::string resolveFilename(const std::string& filename) {
 }
 
 bool zipfileExists(const std::string& filename) {
-	std::string	outZipfile;
-	std::string	outInternalFile;
+    std::string	outZipfile;
+    std::string	outInternalFile;
     return zipfileExists(filename, outZipfile, outInternalFile);
 }
 
@@ -111,7 +111,7 @@ std::string readWholeFile(
         FILE* f = FileSystem::fopen(filename.c_str(), "rb");
         debugAssert(f);
         int ret = fread(buffer, 1, length, f);
-	    debugAssert(ret == length);(void)ret;
+        debugAssert(ret == length);(void)ret;
         FileSystem::fclose(f);
 
         buffer[length] = '\0';
@@ -168,7 +168,7 @@ void zipRead(const std::string& file,
 }
 
 void zipClose(void* data) {
-	System::alignedFree(data);
+    System::alignedFree(data);
 }
 
 int64 fileLength(const std::string& filename) {
@@ -177,25 +177,25 @@ int64 fileLength(const std::string& filename) {
 
     if (result == -1) {
 #if _HAVE_ZIP /* G3DFIX: Use ZIP-library only if defined */
-		std::string zip, contents;
-		if(zipfileExists(filename, zip, contents)){
-			int64 requiredMem;
+        std::string zip, contents;
+        if(zipfileExists(filename, zip, contents)){
+            int64 requiredMem;
 
                         struct zip *z = zip_open( zip.c_str(), ZIP_CHECKCONS, NULL );
                         debugAssertM(z != NULL, zip + ": zip open failed.");
-			{
+            {
                                 struct zip_stat info;
                                 zip_stat_init( &info );    // TODO: Docs unclear if zip_stat_init is required.
                                 int success = zip_stat( z, contents.c_str(), ZIP_FL_NOCASE, &info );
-				(void)success;
+                (void)success;
                                 debugAssertM(success == 0, zip + ": " + contents + ": zip stat failed.");
                                 requiredMem = info.size;
-			}
+            }
                         zip_close( z );
-			return requiredMem;
-		} else {
+            return requiredMem;
+        } else {
         return -1;
-		}
+        }
 #else
         return -1;
 #endif
@@ -240,9 +240,9 @@ void writeWholeFile(
  */
 void createDirectory(
     const std::string&  dir) {
-	if (dir == "") {
-		return;
-	}
+    if (dir == "") {
+        return;
+    }
 
     std::string d;
 
@@ -296,34 +296,34 @@ void createDirectory(
 /* Helper methods for zipfileExists()*/
 // Given a string (the drive) and an array (the path), computes the directory
 static void _zip_resolveDirectory(std::string& completeDir, const std::string& drive, const Array<std::string>& path, const int length){
-	completeDir = drive;
-	int tempLength;
-	// if the given length is longer than the array, we correct it
-	if(length > path.length()){
-		tempLength = path.length();
-	} else{
-		tempLength = length;
-	}
+    completeDir = drive;
+    int tempLength;
+    // if the given length is longer than the array, we correct it
+    if(length > path.length()){
+        tempLength = path.length();
+    } else{
+        tempLength = length;
+    }
 
-	for(int t = 0; t < tempLength; ++t){
-		if(t > 0){
-			completeDir += "/";
-		}
-		completeDir += path[t];
-	}
+    for(int t = 0; t < tempLength; ++t){
+        if(t > 0){
+            completeDir += "/";
+        }
+        completeDir += path[t];
+    }
 }
 
 // assumes that zipDir references a .zip file
 static bool _zip_zipContains(const std::string& zipDir, const std::string& desiredFile){
         struct zip *z = zip_open( zipDir.c_str(), ZIP_CHECKCONS, NULL );
-	//the last parameter, an int, determines case sensitivity:
-	//1 is sensitive, 2 is not, 0 is default
+    //the last parameter, an int, determines case sensitivity:
+    //1 is sensitive, 2 is not, 0 is default
         int test = zip_name_locate( z, desiredFile.c_str(), ZIP_FL_NOCASE );
         zip_close( z );
-	if(test == -1){
-		return false;
-	}
-	return true;
+    if(test == -1){
+        return false;
+    }
+    return true;
 }
 #endif
 
@@ -658,10 +658,10 @@ static void getFileOrDirListNormal
  */
 static void _zip_addEntry(const std::string& path,
                           const std::string& prefix,
-						  const std::string& file,
-						  Set<std::string>& files,
-						  bool wantFiles,
-						  bool includePath) {
+                          const std::string& file,
+                          Set<std::string>& files,
+                          bool wantFiles,
+                          bool includePath) {
     // Make certain we are within the desired parent folder (prefix)
     if (beginsWith(file, prefix)) {
         // validityTest was prefix/file
@@ -727,12 +727,12 @@ static void getFileOrDirListZip(const std::string& path,
 }
 
 static void determineFileOrDirList(
-	const std::string&			filespec,
-	Array<std::string>&			files,
-	bool						wantFiles,
-	bool						includePath) {
-	// if it is a .zip, prefix will specify the folder within
-	// whose contents we want to see
+    const std::string&			filespec,
+    Array<std::string>&			files,
+    bool						wantFiles,
+    bool						includePath) {
+    // if it is a .zip, prefix will specify the folder within
+    // whose contents we want to see
     std::string prefix = "";
     std::string path = filenamePath(filespec);
 
@@ -766,10 +766,10 @@ void getFiles(const std::string&			filespec,
 }
 
 void getDirs(
-	const std::string&			filespec,
-	Array<std::string>&			files,
-	bool						includePath) {
-	determineFileOrDirList(filespec, files, false, includePath);
+    const std::string&			filespec,
+    Array<std::string>&			files,
+    bool						includePath) {
+    determineFileOrDirList(filespec, files, false, includePath);
 }
 
 std::string filenameBaseExt(const std::string& filename) {
@@ -836,23 +836,23 @@ std::string filenamePath(const std::string& filename) {
 }
 
 bool isZipfile(const std::string& filename) {
-	FILE* f = fopen(filename.c_str(), "r");
-	if (f == NULL) {
-		return false;
-	}
-	uint8 header[4];
-	fread(header, 4, 1, f);
+    FILE* f = fopen(filename.c_str(), "r");
+    if (f == NULL) {
+        return false;
+    }
+    uint8 header[4];
+    fread(header, 4, 1, f);
 
-	const uint8 zipHeader[4] = {0x50, 0x4b, 0x03, 0x04};
-	for (int i = 0; i < 4; ++i) {
-		if (header[i] != zipHeader[i]) {
-			fclose(f);
-			return false;
-		}
-	}
+    const uint8 zipHeader[4] = {0x50, 0x4b, 0x03, 0x04};
+    for (int i = 0; i < 4; ++i) {
+        if (header[i] != zipHeader[i]) {
+            fclose(f);
+            return false;
+        }
+    }
 
-	fclose(f);
-	return true;
+    fclose(f);
+    return true;
 }
 
 bool isDirectory(const std::string& filename) {

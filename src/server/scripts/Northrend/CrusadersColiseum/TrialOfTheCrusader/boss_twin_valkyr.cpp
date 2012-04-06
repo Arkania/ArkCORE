@@ -309,16 +309,16 @@ struct boss_twin_baseAI : public ScriptedAI
             m_pInstance->SetData(DATA_HEALTH_TWIN_SHARED, me->GetHealth() >= uiDamage ? me->GetHealth() - uiDamage : 0);
     }
 
-	void SpellHit(Unit* caster, const SpellEntry* spell) {
-		if (caster->ToCreature() == me)
-			if (spell->Effect[0] == 136) //Effect Heal
-				if (m_pInstance)
-					m_pInstance->SetData(
-							DATA_HEALTH_TWIN_SHARED,
-							me->GetHealth()
-									+ me->CountPctFromMaxHealth(
-											spell->EffectBasePoints[0]));
-	}
+    void SpellHit(Unit* caster, const SpellEntry* spell) {
+        if (caster->ToCreature() == me)
+            if (spell->Effect[0] == 136) //Effect Heal
+                if (m_pInstance)
+                    m_pInstance->SetData(
+                            DATA_HEALTH_TWIN_SHARED,
+                            me->GetHealth()
+                                    + me->CountPctFromMaxHealth(
+                                            spell->EffectBasePoints[0]));
+    }
 
     void SummonColorballs(uint8 quantity)
     {
@@ -409,9 +409,9 @@ struct boss_twin_baseAI : public ScriptedAI
                 if (m_uiSpecialAbilityTimer <= uiDiff)
                 {
                     if (Creature* pSister = GetSister())
-					{
+                    {
                         pSister->AI()->DoAction(ACTION_VORTEX);
-					}
+                    }
                     DoScriptText(m_uiVortexEmote, me);
                     DoScriptText(m_uiVortexSay, me);
                     DoCastAOE(m_uiVortexSpellId);
@@ -419,17 +419,17 @@ struct boss_twin_baseAI : public ScriptedAI
                     m_uiSpecialAbilityTimer = 45*IN_MILLISECONDS;
                 }
                 else
-				{
+                {
                     m_uiSpecialAbilityTimer -= uiDiff;
-				}
+                }
                 break;
             case 2: // Shield+Pact
                 if (m_uiSpecialAbilityTimer <= uiDiff)
                 {
                     if (Creature* pSister = GetSister())
-					{
+                    {
                         pSister->AI()->DoAction(ACTION_PACT);
-					}
+                    }
                     DoScriptText(EMOTE_SHIELD, me);
                     DoScriptText(SAY_SHIELD, me);
                     DoCast(me, m_uiShieldSpellId);
@@ -438,9 +438,9 @@ struct boss_twin_baseAI : public ScriptedAI
                     m_uiSpecialAbilityTimer = 45*IN_MILLISECONDS;
                 }
                 else
-				{
+                {
                     m_uiSpecialAbilityTimer -= uiDiff;
-				}
+                }
                 break;
             default:
                 break;
@@ -487,9 +487,9 @@ struct boss_twin_baseAI : public ScriptedAI
             m_bIsBerserk = true;
         }
         else
-		{
+        {
             m_uiBerserkTimer -= uiDiff;
-		}
+        }
         DoMeleeAttackIfReady();
     }
 };
@@ -548,7 +548,7 @@ public:
             {
                 m_pInstance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT,  EVENT_START_TWINS_FIGHT);
                if (Creature* pEydis = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_DARKBANE)))
-				   me->AddAura(SPELL_TWIN_EMPATHY_1, pEydis);
+                   me->AddAura(SPELL_TWIN_EMPATHY_1, pEydis);
             }
         }
     };
@@ -573,7 +573,7 @@ public:
         boss_eydisAI(Creature* creature) : boss_twin_baseAI(creature) {}
 
         void Reset()
-		{
+        {
             boss_twin_baseAI::Reset();
             SetEquipmentSlots(false, EQUIP_MAIN_2, EQUIP_OFFHAND_2, EQUIP_RANGED_2);
             m_uiStage = 1;
@@ -868,27 +868,27 @@ public:
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
             if (Unit* pTarget = GetTargetUnit())
-			{
+            {
                 if (urand(0, 100) <= 30)
-				{
-					switch(GetSpellInfo()->Id)
-					{
-						case SPELL_POWERING_UP_1:
-							pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_1, true);
-							break;
-						case SPELL_POWERING_UP_2:
-							pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_2, true);
-							break;
-						case SPELL_POWERING_UP_3:
-							pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_3, true);
-							break;
-						case SPELL_POWERING_UP_4:
-							pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_4, true);
-							break;
-					}
-				}
-			}
-		}
+                {
+                    switch(GetSpellInfo()->Id)
+                    {
+                        case SPELL_POWERING_UP_1:
+                            pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_1, true);
+                            break;
+                        case SPELL_POWERING_UP_2:
+                            pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_2, true);
+                            break;
+                        case SPELL_POWERING_UP_3:
+                            pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_3, true);
+                            break;
+                        case SPELL_POWERING_UP_4:
+                            pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_4, true);
+                            break;
+                    }
+                }
+            }
+        }
 
         void Register()
         {
@@ -908,5 +908,5 @@ void AddSC_boss_twin_valkyr()
     new mob_unleashed_light();
     new mob_unleashed_dark();
     new mob_essence_of_twin();
-	new spell_powering_up();
+    new spell_powering_up();
 }

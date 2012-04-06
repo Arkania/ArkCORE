@@ -277,7 +277,7 @@ public:
         CreatureAI* GetAI(Creature* creature) const
         {
             return new mob_geist_ambusherAI(creature);
-	}
+    }
 };
 
 class spell_trash_mob_glacial_strike : public SpellScriptLoader

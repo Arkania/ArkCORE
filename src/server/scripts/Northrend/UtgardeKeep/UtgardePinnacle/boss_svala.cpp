@@ -282,7 +282,7 @@ public:
 
         void Reset()
         {
-    	    if (IsHeroic())
+            if (IsHeroic())
             DoCast(me, SPELL_SHADOWS_IN_THE_DARK);
         }
 

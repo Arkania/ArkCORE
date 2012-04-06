@@ -51,7 +51,7 @@ public:
             {
                 if (!_teamInInstance)
                     _teamInInstance = player->GetTeam();
-		}
+        }
 
         void OnCreatureCreate(Creature* creature)
         {
@@ -116,15 +116,15 @@ public:
                     case NPC_HORDE_SLAVE_1:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_ALLIANCE_SLAVE_1, ALLIANCE);
-					break;
+                    break;
                     case NPC_HORDE_SLAVE_2:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_ALLIANCE_SLAVE_2, ALLIANCE);
-					break;
+                    break;
                     case NPC_HORDE_SLAVE_3:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_ALLIANCE_SLAVE_3, ALLIANCE);
-					break;
+                    break;
                     case NPC_HORDE_SLAVE_4:
                         if (_teamInInstance == ALLIANCE)
                            creature->UpdateEntry(NPC_ALLIANCE_SLAVE_4, ALLIANCE);
@@ -158,17 +158,17 @@ public:
                 }
         }
 
-		void OnGameObjectCreate(GameObject* go)
-		{
-			switch (go->GetEntry())
-			{
-			case GO_ICE_WALL:
-				uiIceWall = go->GetGUID();
-				if(GetBossState(DATA_GARFROST) == DONE && GetBossState(DATA_ICK) == DONE)
-					HandleGameObject(NULL,true,go);
-				break;
-			}
-		}
+        void OnGameObjectCreate(GameObject* go)
+        {
+            switch (go->GetEntry())
+            {
+            case GO_ICE_WALL:
+                uiIceWall = go->GetGUID();
+                if(GetBossState(DATA_GARFROST) == DONE && GetBossState(DATA_ICK) == DONE)
+                    HandleGameObject(NULL,true,go);
+                break;
+            }
+        }
 
             bool SetBossState(uint32 type, EncounterState state)
             {
@@ -177,22 +177,22 @@ public:
 
                 switch (type)
                 {
-			case DATA_ICK:
-				switch(state)
-				{
-				case DONE:
-					if(GetBossState(DATA_GARFROST)==DONE)
-						HandleGameObject(uiIceWall,true,NULL);
-				}
-				break;
+            case DATA_ICK:
+                switch(state)
+                {
+                case DONE:
+                    if(GetBossState(DATA_GARFROST)==DONE)
+                        HandleGameObject(uiIceWall,true,NULL);
+                }
+                break;
                     case DATA_GARFROST:
 
                         if(state == DONE)
                         {
-				            {
-					         if(GetBossState(DATA_ICK)==DONE)
-						     HandleGameObject(uiIceWall,true,NULL);
-				             }
+                            {
+                             if(GetBossState(DATA_ICK)==DONE)
+                             HandleGameObject(uiIceWall,true,NULL);
+                             }
                             if (Creature* summoner = instance->GetCreature(_garfrostGUID))
                             {
                                 if (_teamInInstance == ALLIANCE)
@@ -315,7 +315,7 @@ public:
             uint64 _tyrannusEventGUID;
             uint64 _jainaOrSylvanas1GUID;
             uint64 _jainaOrSylvanas2GUID;
-		    uint64 uiIceWall;
+            uint64 uiIceWall;
 
             uint32 _teamInInstance;
     };

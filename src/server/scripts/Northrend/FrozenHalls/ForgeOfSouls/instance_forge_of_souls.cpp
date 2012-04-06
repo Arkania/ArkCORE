@@ -40,21 +40,21 @@ class instance_forge_of_souls : public InstanceMapScript
         {
             instance_forge_of_souls_InstanceScript(Map* map) : InstanceScript(map){}
 
-			uint64 uiJainaOrSylvanas1;
-			uint64 uiJainaOrSylvanas2;
+            uint64 uiJainaOrSylvanas1;
+            uint64 uiJainaOrSylvanas2;
 
-			uint64 uiKaliraOrElandra;
-			uint64 uiLoralenOrKolern;
+            uint64 uiKaliraOrElandra;
+            uint64 uiLoralenOrKolern;
 
-			uint64 uiChampion1;
-			uint64 uiChampion2;
+            uint64 uiChampion1;
+            uint64 uiChampion2;
 
-			uint32 uiEncounter[MAX_ENCOUNTER];
+            uint32 uiEncounter[MAX_ENCOUNTER];
 
-			void Initialize()
+            void Initialize()
             {
-				for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-					uiEncounter[i] = NOT_STARTED;
+                for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+                    uiEncounter[i] = NOT_STARTED;
 
                 uiBronjahm = 0;
                 uiDevourerOfSouls = 0;
@@ -64,10 +64,10 @@ class instance_forge_of_souls : public InstanceMapScript
             {
                 Map::PlayerList const &players = instance->GetPlayers();
                 if (!players.isEmpty())
-				{
-					if (Player* player = players.begin()->getSource())
-						uiTeamInInstance = player->GetTeam();
-				}
+                {
+                    if (Player* player = players.begin()->getSource())
+                        uiTeamInInstance = player->GetTeam();
+                }
 
                 switch (creature->GetEntry())
                 {
@@ -77,35 +77,35 @@ class instance_forge_of_souls : public InstanceMapScript
                     case CREATURE_DEVOURER:
                         uiDevourerOfSouls = creature->GetGUID();
                         break;
-					case NPC_SYLVANAS_PART1:
-						if (uiTeamInInstance == ALLIANCE)
-							creature->UpdateEntry(NPC_JAINA_PART1, ALLIANCE);
-						uiJainaOrSylvanas1 = creature->GetGUID();
-						break;
-					case NPC_SYLVANAS_PART2:
-						if (uiTeamInInstance == ALLIANCE)
-							creature->UpdateEntry(NPC_JAINA_PART2, ALLIANCE);
-						uiJainaOrSylvanas2 = creature->GetGUID();
-						break;
-					case NPC_KALIRA:
-						if (uiTeamInInstance == ALLIANCE)
-							creature->UpdateEntry(NPC_ELANDRA, ALLIANCE);
-						uiKaliraOrElandra = creature->GetGUID();
-						break;
-					case NPC_LORALEN:
-						if (uiTeamInInstance == ALLIANCE)
-							creature->UpdateEntry(NPC_KORELN, ALLIANCE);
-						uiLoralenOrKolern = creature->GetGUID();
-						break;
-					case NPC_CHAMPION_1_HORDE:
-						if (uiTeamInInstance == ALLIANCE)
-							creature->UpdateEntry(NPC_CHAMPION_1_ALLIANCE, ALLIANCE);
-						uiChampion1 = creature->GetGUID();
-						break;
-					case NPC_CHAMPION_2_HORDE:
-						if (uiTeamInInstance == ALLIANCE)
-							creature->UpdateEntry(NPC_CHAMPION_2_ALLIANCE, ALLIANCE);
-						uiChampion2 = creature->GetGUID();
+                    case NPC_SYLVANAS_PART1:
+                        if (uiTeamInInstance == ALLIANCE)
+                            creature->UpdateEntry(NPC_JAINA_PART1, ALLIANCE);
+                        uiJainaOrSylvanas1 = creature->GetGUID();
+                        break;
+                    case NPC_SYLVANAS_PART2:
+                        if (uiTeamInInstance == ALLIANCE)
+                            creature->UpdateEntry(NPC_JAINA_PART2, ALLIANCE);
+                        uiJainaOrSylvanas2 = creature->GetGUID();
+                        break;
+                    case NPC_KALIRA:
+                        if (uiTeamInInstance == ALLIANCE)
+                            creature->UpdateEntry(NPC_ELANDRA, ALLIANCE);
+                        uiKaliraOrElandra = creature->GetGUID();
+                        break;
+                    case NPC_LORALEN:
+                        if (uiTeamInInstance == ALLIANCE)
+                            creature->UpdateEntry(NPC_KORELN, ALLIANCE);
+                        uiLoralenOrKolern = creature->GetGUID();
+                        break;
+                    case NPC_CHAMPION_1_HORDE:
+                        if (uiTeamInInstance == ALLIANCE)
+                            creature->UpdateEntry(NPC_CHAMPION_1_ALLIANCE, ALLIANCE);
+                        uiChampion1 = creature->GetGUID();
+                        break;
+                    case NPC_CHAMPION_2_HORDE:
+                        if (uiTeamInInstance == ALLIANCE)
+                            creature->UpdateEntry(NPC_CHAMPION_2_ALLIANCE, ALLIANCE);
+                        uiChampion2 = creature->GetGUID();
                         break;
                 }
             }
