@@ -78,6 +78,7 @@
 #include "CreatureTextMgr.h"
 #include "SmartAI.h"
 #include "Channel.h"
+#include "AuctionHouseBot.h"
 
 #include "OutdoorPvPWG.h"
 
@@ -1782,17 +1783,20 @@ void World::SetInitialWorldSettings()
     sLog->outString("Starting objects Pooling system...");
     sPoolMgr->Initialize();
 
-    sLog->outString("Calculate next daily quest reset time...");
+    sLog->outString("Calculating next daily quest reset time...");
     InitDailyQuestResetTime();
 
-    sLog->outString("Calculate next weekly quest reset time..." );
+    sLog->outString("Calculating next weekly quest reset time..." );
     InitWeeklyQuestResetTime();
 
-    sLog->outString("Calculate random battleground reset time..." );
+    sLog->outString("Calculating random battleground reset time..." );
     InitRandomBGResetTime();
 
-    sLog->outString("Calculate currency week cap reset time..." );
+    sLog->outString("Calculating currency week cap reset time..." );
     InitCurrencyResetTime();
+    
+    sLog->outString("Initializing the Auction House Bot, have fun...");
+    auctionbot.Initialize();
 
     // possibly enable db logging; avoid massive startup spam by doing it here.
     if (sLog->GetLogDBLater())
@@ -1964,6 +1968,7 @@ void World::Update(uint32 diff)
     /// <ul><li> Handle auctions when the timer has passed
     if (m_timers[WUPDATE_AUCTIONS].Passed())
     {
+          auctionbot.Update();
         m_timers[WUPDATE_AUCTIONS].Reset();
 
         ///- Update mails (return old mails with item, or delete them)
