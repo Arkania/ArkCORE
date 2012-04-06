@@ -52,7 +52,7 @@ enum eSpells
     SPELL_DIVINE                = 67251,
     SPELL_FINAL                 = 67255,
     SPELL_FLURRY                = 67233,
-	SPELL_PUMMEL                = 67235,
+    SPELL_PUMMEL                = 67235,
 
     //Priestess
     SPELL_SSMITE                = 36176,
@@ -644,7 +644,7 @@ public:
                     uiFlurryTimer = 8000;
                     uiPummelTimer = 10000;
                     Shielded = false;
-					uiPainTimer = 8000;
+                    uiPainTimer = 8000;
             uiMindTimer = 7000;
               uiSsmiteTimer = 9000;
             uiResetTimer = 3000;
@@ -783,7 +783,7 @@ public:
                         DoCast(target,SPELL_STRIKE);
                         uiCleaveTimer = 12000;
                 } else
-				      uiCleaveTimer -= uiDiff;
+                      uiCleaveTimer -= uiDiff;
 
                 if (uiStrikeTimer <= uiDiff)
                 {
@@ -791,14 +791,14 @@ public:
                         DoCast(target,SPELL_CLEAVE);
                         uiStrikeTimer = 10000;
                 } else
-				      uiStrikeTimer -= uiDiff;
+                      uiStrikeTimer -= uiDiff;
 
                 if (uiLightTimer <= uiDiff)
                 {
                         DoCast(me, RAID_MODE(SPELL_LIGHT, SPELL_LIGHT_H));
                         uiLightTimer = urand (12000, 15000);
                 } else
-				      uiLightTimer -= uiDiff;
+                      uiLightTimer -= uiDiff;
                 break;
             }
             case NPC_ARGENT_MONK:
@@ -808,14 +808,14 @@ public:
                         DoCast(me,SPELL_DIVINE);
                         uiDivineTimer = 85000;
                 } else
-				      uiDivineTimer -= uiDiff;
+                      uiDivineTimer -= uiDiff;
 
                 if (uiFinalTimer <= uiDiff)
                 {
                         DoCast(me,SPELL_FINAL);
                         uiFinalTimer = 70000;
                 } else
-				      uiFinalTimer -= uiDiff;
+                      uiFinalTimer -= uiDiff;
 
                 if (uiPummelTimer <= uiDiff)
                 {
@@ -823,14 +823,14 @@ public:
                         DoCast(target,SPELL_PUMMEL);
                         uiPummelTimer = 15000;
                 } else
-				      uiPummelTimer -= uiDiff;
+                      uiPummelTimer -= uiDiff;
 
                 if (uiFlurryTimer <= uiDiff)
                 {
                         DoCast(me,SPELL_FLURRY);
                         uiFlurryTimer = 15000;
                 } else
-				      uiFlurryTimer -= uiDiff;
+                      uiFlurryTimer -= uiDiff;
                 break;
             }
             case NPC_PRIESTESS:
@@ -840,7 +840,7 @@ public:
                         DoCast(me,SPELL_FONT);
                         uiFontTimer = urand (15000, 17000);
                 } else
-				      uiFontTimer -= uiDiff;
+                      uiFontTimer -= uiDiff;
 
                 if (uiPainTimer <= uiDiff)
                 {
@@ -848,7 +848,7 @@ public:
                         DoCast(target,SPELL_PAIN);
                         uiPainTimer = 25000;
                 } else
-				      uiPainTimer -= uiDiff;
+                      uiPainTimer -= uiDiff;
 
                 if (uiMindTimer <= uiDiff)
                 {
@@ -856,7 +856,7 @@ public:
                         DoCast(target,SPELL_MIND);
                         uiMindTimer = 90000;
                 } else
-				      uiMindTimer -= uiDiff;
+                      uiMindTimer -= uiDiff;
 
                 if (uiSsmiteTimer <= uiDiff)
                 {
@@ -864,7 +864,7 @@ public:
                         DoCast(target,SPELL_SSMITE);
                         uiSsmiteTimer = 9000;
                 } else
-				      uiSsmiteTimer -= uiDiff;
+                      uiSsmiteTimer -= uiDiff;
                 break;
             }
         }

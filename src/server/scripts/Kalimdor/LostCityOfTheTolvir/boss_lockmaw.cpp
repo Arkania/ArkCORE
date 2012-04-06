@@ -26,123 +26,123 @@
 #include"SpellAuraEffects.h"
 
 enum Spells {
-	SPELL_DUST_FLAIL = 81642,
-	SPELL_SCENT_OF_BLOOD = 81690,
-	H_SPELL_SCENT_OF_BLOOD = 89998,
-	SPELL_VENOMOUS_RAGE = 81706,
-	SPELL_VISCOUS_POISON = 81630,
-	H_SPELL_VISCOUS_POISON = 90004,
+    SPELL_DUST_FLAIL = 81642,
+    SPELL_SCENT_OF_BLOOD = 81690,
+    H_SPELL_SCENT_OF_BLOOD = 89998,
+    SPELL_VENOMOUS_RAGE = 81706,
+    SPELL_VISCOUS_POISON = 81630,
+    H_SPELL_VISCOUS_POISON = 90004,
 };
 
 enum Events {
-	EVENT_DUST_FLAIL = 1,
-	EVENT_SCENT_OF_BLOOD = 2,
-	EVENT_VENOMOUS_RAGE = 3,
-	EVENT_VISCOUS_POISON = 4,
+    EVENT_DUST_FLAIL = 1,
+    EVENT_SCENT_OF_BLOOD = 2,
+    EVENT_VENOMOUS_RAGE = 3,
+    EVENT_VISCOUS_POISON = 4,
 };
 
 enum SummonIds {
-	NPC_FRENZIED_CROCOLISK = 43658,
+    NPC_FRENZIED_CROCOLISK = 43658,
 };
 
 const Position SummonLocations[4] = {
 //Frenzied Crocolisks
-		{ -11033.29f, -1674.57f, -0.56f, 1.09f }, { -11029.84f, -1673.09f,
-				-0.37f, 2.33f }, { -11007.25f, -1666.37f, -0.23f, 2.46f }, {
-				-11006.83f, -1666.85f, -0.25f, 2.23f }, };
+        { -11033.29f, -1674.57f, -0.56f, 1.09f }, { -11029.84f, -1673.09f,
+                -0.37f, 2.33f }, { -11007.25f, -1666.37f, -0.23f, 2.46f }, {
+                -11006.83f, -1666.85f, -0.25f, 2.23f }, };
 
 class boss_lockmaw: public CreatureScript {
 public:
-	boss_lockmaw() :
-			CreatureScript("boss_lockmaw") {
-	}
+    boss_lockmaw() :
+            CreatureScript("boss_lockmaw") {
+    }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_lockmawAI(pCreature);
-	}
-	struct boss_lockmawAI: public ScriptedAI {
-		boss_lockmawAI(Creature* pCreature) :
-				ScriptedAI(pCreature), Summons(me) {
-			pInstance = pCreature->GetInstanceScript();
-		}
+    CreatureAI* GetAI(Creature* pCreature) const {
+        return new boss_lockmawAI(pCreature);
+    }
+    struct boss_lockmawAI: public ScriptedAI {
+        boss_lockmawAI(Creature* pCreature) :
+                ScriptedAI(pCreature), Summons(me) {
+            pInstance = pCreature->GetInstanceScript();
+        }
 
-		InstanceScript* pInstance;
-		EventMap events;
-		SummonList Summons;
-		bool check_in;
+        InstanceScript* pInstance;
+        EventMap events;
+        SummonList Summons;
+        bool check_in;
 
-		void Reset() {
-			events.Reset();
-			Summons.DespawnAll();
+        void Reset() {
+            events.Reset();
+            Summons.DespawnAll();
 
-			if (pInstance
-					&& (pInstance->GetData(DATA_LOCKMAW_EVENT) != DONE
-							&& !check_in))
-				pInstance->SetData(DATA_LOCKMAW_EVENT, NOT_STARTED);
+            if (pInstance
+                    && (pInstance->GetData(DATA_LOCKMAW_EVENT) != DONE
+                            && !check_in))
+                pInstance->SetData(DATA_LOCKMAW_EVENT, NOT_STARTED);
 
-			check_in = false;
-		}
+            check_in = false;
+        }
 
-		void JustDied(Unit* /*Kill*/) {
-			Summons.DespawnAll();
-			if (pInstance)
-				pInstance->SetData(DATA_LOCKMAW_EVENT, DONE);
-		}
+        void JustDied(Unit* /*Kill*/) {
+            Summons.DespawnAll();
+            if (pInstance)
+                pInstance->SetData(DATA_LOCKMAW_EVENT, DONE);
+        }
 
-		void EnterCombat(Unit* /*Ent*/) {
-			if (pInstance)
-				pInstance->SetData(DATA_LOCKMAW_EVENT, IN_PROGRESS);
+        void EnterCombat(Unit* /*Ent*/) {
+            if (pInstance)
+                pInstance->SetData(DATA_LOCKMAW_EVENT, IN_PROGRESS);
 
-			DoZoneInCombat();
-		}
+            DoZoneInCombat();
+        }
 
-		void UpdateAI(const uint32 uiDiff) {
-			if (!UpdateVictim()) /* No target to kill */
-				return;
+        void UpdateAI(const uint32 uiDiff) {
+            if (!UpdateVictim()) /* No target to kill */
+                return;
 
-			events.Update(uiDiff);
+            events.Update(uiDiff);
 
-			if (me->HasUnitState(UNIT_STAT_CASTING))
-				return;
+            if (me->HasUnitState(UNIT_STAT_CASTING))
+                return;
 
-			while (uint32 eventId = events.ExecuteEvent()) {
-				switch (eventId) {
-				case EVENT_DUST_FLAIL:
-					DoCast(me->getVictim(), SPELL_DUST_FLAIL);
-					events.ScheduleEvent(EVENT_DUST_FLAIL, urand(6000, 10000));
-					return;
-				case EVENT_VISCOUS_POISON:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
-						DoCast(me->getVictim(), SPELL_VISCOUS_POISON);
-					events.ScheduleEvent(EVENT_VISCOUS_POISON, 2000);
-					return;
-				case EVENT_SCENT_OF_BLOOD:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
-						DoCast(me->getVictim(), SPELL_SCENT_OF_BLOOD);
-					for (uint8 i = 0; i < 4; i++) {
-						Creature* Crocolisk = me->SummonCreature(
-								NPC_FRENZIED_CROCOLISK, SummonLocations[i],
-								TEMPSUMMON_CORPSE_DESPAWN);
-						Crocolisk->AddThreat(me->getVictim(), 0.0f);
-						DoZoneInCombat(Crocolisk);
-					}
-					events.ScheduleEvent(EVENT_SCENT_OF_BLOOD, 6000);
-					return;
-				case EVENT_VENOMOUS_RAGE:
-					if (me->GetHealthPct() < 30)
-						DoCast(me, SPELL_VENOMOUS_RAGE);
-					events.ScheduleEvent(EVENT_VENOMOUS_RAGE, 1000);
-					return;
-				default:
-					break;
-				}
-			}
+            while (uint32 eventId = events.ExecuteEvent()) {
+                switch (eventId) {
+                case EVENT_DUST_FLAIL:
+                    DoCast(me->getVictim(), SPELL_DUST_FLAIL);
+                    events.ScheduleEvent(EVENT_DUST_FLAIL, urand(6000, 10000));
+                    return;
+                case EVENT_VISCOUS_POISON:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
+                        DoCast(me->getVictim(), SPELL_VISCOUS_POISON);
+                    events.ScheduleEvent(EVENT_VISCOUS_POISON, 2000);
+                    return;
+                case EVENT_SCENT_OF_BLOOD:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
+                        DoCast(me->getVictim(), SPELL_SCENT_OF_BLOOD);
+                    for (uint8 i = 0; i < 4; i++) {
+                        Creature* Crocolisk = me->SummonCreature(
+                                NPC_FRENZIED_CROCOLISK, SummonLocations[i],
+                                TEMPSUMMON_CORPSE_DESPAWN);
+                        Crocolisk->AddThreat(me->getVictim(), 0.0f);
+                        DoZoneInCombat(Crocolisk);
+                    }
+                    events.ScheduleEvent(EVENT_SCENT_OF_BLOOD, 6000);
+                    return;
+                case EVENT_VENOMOUS_RAGE:
+                    if (me->GetHealthPct() < 30)
+                        DoCast(me, SPELL_VENOMOUS_RAGE);
+                    events.ScheduleEvent(EVENT_VENOMOUS_RAGE, 1000);
+                    return;
+                default:
+                    break;
+                }
+            }
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
 void AddSC_boss_lockmaw() {
-	new boss_lockmaw();
+    new boss_lockmaw();
 }

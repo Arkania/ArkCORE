@@ -4744,12 +4744,12 @@ void SpellMgr::LoadActionBarSpellOverride()
 
 ActionBarSpellOverride const* SpellMgr::GetActionBarSpellOverride(uint32 overrideSpell) const
 {
-	ActionBarSpellOverrideMap::const_iterator itr = mActionBarSpellOverrideMap.find(overrideSpell);
+    ActionBarSpellOverrideMap::const_iterator itr = mActionBarSpellOverrideMap.find(overrideSpell);
 
-	if(itr == mActionBarSpellOverrideMap.end())
-		return NULL;
-	else
-		return &itr->second;
+    if(itr == mActionBarSpellOverrideMap.end())
+        return NULL;
+    else
+        return &itr->second;
 }
 
 // Fill custom data about enchancments

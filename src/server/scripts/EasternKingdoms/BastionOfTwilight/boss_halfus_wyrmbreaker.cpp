@@ -25,227 +25,227 @@
 
 class boss_halfus_wyrmbreaker : public CreatureScript
 {
-	public:
-		boss_halfus_wyrmbreaker() : CreatureScript("boss_halfus_wyrmbreaker") {}
+    public:
+        boss_halfus_wyrmbreaker() : CreatureScript("boss_halfus_wyrmbreaker") {}
 
-		struct boss_halfus_wyrmbreakerAI : public BossAI
-		{
-			boss_halfus_wyrmbreakerAI(Creature * creature) : BossAI(creature, DATA_WYRMBREAKER)
-			{
-				pInstance = (InstanceScript*)creature->GetInstanceScript();
-			}
+        struct boss_halfus_wyrmbreakerAI : public BossAI
+        {
+            boss_halfus_wyrmbreakerAI(Creature * creature) : BossAI(creature, DATA_WYRMBREAKER)
+            {
+                pInstance = (InstanceScript*)creature->GetInstanceScript();
+            }
 
-			void Reset()
-			{
-				uiBerserkTimer = 360000;
-				uiMalevolentStrikeTimer = 155000;
-				uiFuriousRoarTimer = 30000;
-				uiShadowNovaTimer = 30000;
-				pInstance->SetData(DATA_WYRMBREAKER_EVENT,NOT_STARTED);
-			}
+            void Reset()
+            {
+                uiBerserkTimer = 360000;
+                uiMalevolentStrikeTimer = 155000;
+                uiFuriousRoarTimer = 30000;
+                uiShadowNovaTimer = 30000;
+                pInstance->SetData(DATA_WYRMBREAKER_EVENT,NOT_STARTED);
+            }
 
-			void EnterCombat()
-			{
-				if (pInstance)
-					pInstance->SetData(DATA_WYRMBREAKER_EVENT,IN_PROGRESS);
-			}
+            void EnterCombat()
+            {
+                if (pInstance)
+                    pInstance->SetData(DATA_WYRMBREAKER_EVENT,IN_PROGRESS);
+            }
 
-			void JustDied()
-			{
-				if (!pInstance)
-					return;
+            void JustDied()
+            {
+                if (!pInstance)
+                    return;
 
-				pInstance->SetData(DATA_WYRMBREAKER_EVENT,DONE);
-			}
+                pInstance->SetData(DATA_WYRMBREAKER_EVENT,DONE);
+            }
 
-			void UpdateAI(const uint32 uiDiff)
-			{
-				if (!UpdateVictim())
-					return;
+            void UpdateAI(const uint32 uiDiff)
+            {
+                if (!UpdateVictim())
+                    return;
 
-				if (!HealthAbovePct(50))
-				{
-					if (uiFuriousRoarTimer <= uiDiff)
-					{
-						DoCast(SPELL_FURIOUS_ROAR);
-						DoCast(SPELL_SHADOW_NOVA);
-					} else uiFuriousRoarTimer -= uiDiff;
-				}
+                if (!HealthAbovePct(50))
+                {
+                    if (uiFuriousRoarTimer <= uiDiff)
+                    {
+                        DoCast(SPELL_FURIOUS_ROAR);
+                        DoCast(SPELL_SHADOW_NOVA);
+                    } else uiFuriousRoarTimer -= uiDiff;
+                }
 
-				if (me->HasAura(SPELL_MALEVOLENT_STRIKES))
-				{
-					if (uiMalevolentStrikeTimer <= uiDiff)
-					{
-						DoCastVictim(SPELL_MALEVOLENT_STRIKES_DEBUFF);
-						uiMalevolentStrikeTimer = 155000;
-					} else uiMalevolentStrikeTimer -= uiDiff;
-				}
+                if (me->HasAura(SPELL_MALEVOLENT_STRIKES))
+                {
+                    if (uiMalevolentStrikeTimer <= uiDiff)
+                    {
+                        DoCastVictim(SPELL_MALEVOLENT_STRIKES_DEBUFF);
+                        uiMalevolentStrikeTimer = 155000;
+                    } else uiMalevolentStrikeTimer -= uiDiff;
+                }
 
-				if (me->HasAura(SPELL_SHADOW_WARPED))
-				{
-					if (uiShadowNovaTimer <= uiDiff)
-					{
-						DoCast(SPELL_SHADOW_NOVA);
-					} else uiShadowNovaTimer -= uiDiff;
-				}
+                if (me->HasAura(SPELL_SHADOW_WARPED))
+                {
+                    if (uiShadowNovaTimer <= uiDiff)
+                    {
+                        DoCast(SPELL_SHADOW_NOVA);
+                    } else uiShadowNovaTimer -= uiDiff;
+                }
 
-				if (uiBerserkTimer <= uiDiff)
-				{
-					me->AddAura(SPELL_BERSERK_HALFUS,me);
-					uiBerserkTimer = 360000;
-				} else uiBerserkTimer -= uiDiff;
+                if (uiBerserkTimer <= uiDiff)
+                {
+                    me->AddAura(SPELL_BERSERK_HALFUS,me);
+                    uiBerserkTimer = 360000;
+                } else uiBerserkTimer -= uiDiff;
 
-				DoMeleeAttackIfReady();
-			}
+                DoMeleeAttackIfReady();
+            }
         private:
 
-			InstanceScript* pInstance;
+            InstanceScript* pInstance;
 
-			uint32 uiBerserkTimer;
-			uint32 uiFuriousRoarTimer;
-			uint32 uiMalevolentStrikeTimer;
-			uint32 uiShadowNovaTimer;
-		};
+            uint32 uiBerserkTimer;
+            uint32 uiFuriousRoarTimer;
+            uint32 uiMalevolentStrikeTimer;
+            uint32 uiShadowNovaTimer;
+        };
 
-		CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* creature) const
         {
-			return new boss_halfus_wyrmbreakerAI(creature);
+            return new boss_halfus_wyrmbreakerAI(creature);
         }
 };
 
 class npc_proto_behemoth : public CreatureScript{
-	public :
-		npc_proto_behemoth() : CreatureScript("npc_proto_behemoth") { }
+    public :
+        npc_proto_behemoth() : CreatureScript("npc_proto_behemoth") { }
 
-		struct npc_proto_behemothAI : public ScriptedAI {
-			npc_proto_behemothAI(Creature * creature) : ScriptedAI(creature)
-			{
-				pInstance = (InstanceScript*)creature->GetInstanceScript();
-			}
+        struct npc_proto_behemothAI : public ScriptedAI {
+            npc_proto_behemothAI(Creature * creature) : ScriptedAI(creature)
+            {
+                pInstance = (InstanceScript*)creature->GetInstanceScript();
+            }
 
-			InstanceScript* pInstance;
+            InstanceScript* pInstance;
 
-			uint64 uiFireballTimer;
-			//uint64 uiScorchingBreathTimer;
-			uint64 uiFireballBaradgeTimer;
+            uint64 uiFireballTimer;
+            //uint64 uiScorchingBreathTimer;
+            uint64 uiFireballBaradgeTimer;
 
-			void Reset()
-			{
-				uiFireballTimer = 120000;
-				//uiScorchingBreathTimer = 360000;
-				uiFireballBaradgeTimer = 145000;
-			}
+            void Reset()
+            {
+                uiFireballTimer = 120000;
+                //uiScorchingBreathTimer = 360000;
+                uiFireballBaradgeTimer = 145000;
+            }
 
-			void UpdateAI(const uint32 uiDiff)
-			{
+            void UpdateAI(const uint32 uiDiff)
+            {
                 if (!UpdateVictim())
-					return;
+                    return;
 
-				if (me->HasAura(SPELL_DANCING_FLAMES))
-				{
-					if (uiFireballBaradgeTimer <= uiDiff)
-					{
-						if (Unit * Target = SelectTarget(SELECT_TARGET_RANDOM, 1, 50.0f, true))
-						{
-							DoCast(Target,SPELL_FIREBALL_BARADGE);
-						}
-						uiFireballBaradgeTimer = 145000;
-					} else uiFireballBaradgeTimer -= uiDiff;
-				}
+                if (me->HasAura(SPELL_DANCING_FLAMES))
+                {
+                    if (uiFireballBaradgeTimer <= uiDiff)
+                    {
+                        if (Unit * Target = SelectTarget(SELECT_TARGET_RANDOM, 1, 50.0f, true))
+                        {
+                            DoCast(Target,SPELL_FIREBALL_BARADGE);
+                        }
+                        uiFireballBaradgeTimer = 145000;
+                    } else uiFireballBaradgeTimer -= uiDiff;
+                }
 
-				if (uiFireballTimer <= uiDiff)
-				{
-					if (Unit * Target = SelectTarget(SELECT_TARGET_RANDOM, 1, 50.0f, true))
-					{
-						DoCast(Target,SPELL_FIREBALL);
-					}
-				} else uiFireballTimer -= uiDiff;
-			}
-		};
+                if (uiFireballTimer <= uiDiff)
+                {
+                    if (Unit * Target = SelectTarget(SELECT_TARGET_RANDOM, 1, 50.0f, true))
+                    {
+                        DoCast(Target,SPELL_FIREBALL);
+                    }
+                } else uiFireballTimer -= uiDiff;
+            }
+        };
 
-		CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* creature) const
         {
-			return new npc_proto_behemothAI(creature);
+            return new npc_proto_behemothAI(creature);
         }
 };
 
 class npc_halfus_dragon : public CreatureScript{
-	public:
-		npc_halfus_dragon() : CreatureScript("npc_halfus_dragon") { }
+    public:
+        npc_halfus_dragon() : CreatureScript("npc_halfus_dragon") { }
 
-		struct npc_halfus_dragonAI : public ScriptedAI {
-			npc_halfus_dragonAI(Creature * creature) : ScriptedAI(creature)
-			{
-				pInstance = (InstanceScript*)creature->GetInstanceScript();
-			}
+        struct npc_halfus_dragonAI : public ScriptedAI {
+            npc_halfus_dragonAI(Creature * creature) : ScriptedAI(creature)
+            {
+                pInstance = (InstanceScript*)creature->GetInstanceScript();
+            }
 
-			InstanceScript* pInstance;
+            InstanceScript* pInstance;
 
-			void Reset()
-			{
-				me->SetReactState(REACT_PASSIVE);
+            void Reset()
+            {
+                me->SetReactState(REACT_PASSIVE);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-				me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-			}
+                me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            }
 
-			void UpdateAI(const uint32 uiDiff)
-			{
-				if (me->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE))
-				{
-					me->SetReactState(REACT_PASSIVE);
-				}
+            void UpdateAI(const uint32 uiDiff)
+            {
+                if (me->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE))
+                {
+                    me->SetReactState(REACT_PASSIVE);
+                }
 
-				DoMeleeAttackIfReady();
-			}
-		};
+                DoMeleeAttackIfReady();
+            }
+        };
 
-		CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* creature) const
         {
-			return new npc_halfus_dragonAI(creature);
+            return new npc_halfus_dragonAI(creature);
         }
 
-		bool OnGossipHello(Player* pPlayer, Creature* creature){
-			char const* _message = "Simple Text!";
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,_message,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
-			pPlayer->SEND_GOSSIP_MENU(68,creature->GetGUID());
+        bool OnGossipHello(Player* pPlayer, Creature* creature){
+            char const* _message = "Simple Text!";
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,_message,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->SEND_GOSSIP_MENU(68,creature->GetGUID());
 
-			return true;
-		}
+            return true;
+        }
 
-		bool OnGossipSelect(Player* pPlayer, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+        bool OnGossipSelect(Player* pPlayer, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
         {
-            	pPlayer->PlayerTalkClass->ClearMenus();
-				InstanceScript* pInstance;
-            	pInstance = (InstanceScript*)creature->GetInstanceScript();
-				if (!pInstance) return false;
+                pPlayer->PlayerTalkClass->ClearMenus();
+                InstanceScript* pInstance;
+                pInstance = (InstanceScript*)creature->GetInstanceScript();
+                if (!pInstance) return false;
 
-				pPlayer->CLOSE_GOSSIP_MENU();
+                pPlayer->CLOSE_GOSSIP_MENU();
 
-            	switch (uiAction)
-            	{
-					case GOSSIP_ACTION_INFO_DEF+1:
-						if (Creature * Halfus = Unit::GetCreature(*creature,pInstance->GetData64(DATA_WYRMBREAKER)))
-						{
-							switch (creature->GetEntry())
-							{
-								case NPC_SLATE_DRAKE:
-									creature->AddAura(SPELL_STONE_TOUCH,Halfus);
-									break;
-								case NPC_NETHER_SCION:
-									creature->AddAura(SPELL_NETHER_BLINDNESS,Halfus);
-									break;
-								case NPC_STORM_RIDER:
+                switch (uiAction)
+                {
+                    case GOSSIP_ACTION_INFO_DEF+1:
+                        if (Creature * Halfus = Unit::GetCreature(*creature,pInstance->GetData64(DATA_WYRMBREAKER)))
+                        {
+                            switch (creature->GetEntry())
+                            {
+                                case NPC_SLATE_DRAKE:
+                                    creature->AddAura(SPELL_STONE_TOUCH,Halfus);
+                                    break;
+                                case NPC_NETHER_SCION:
+                                    creature->AddAura(SPELL_NETHER_BLINDNESS,Halfus);
+                                    break;
+                                case NPC_STORM_RIDER:
                                     creature->CastSpell(creature->GetPositionX(),creature->GetPositionY(),creature->GetPositionZ(),SPELL_CYCLONE_WINDS,false);
-									break;
-							}
-							Halfus->AddAura(SPELL_BIND_WILL,creature);
+                                    break;
+                            }
+                            Halfus->AddAura(SPELL_BIND_WILL,creature);
                             creature->SetAuraStack(SPELL_DRAGON_VENGEANCE,Halfus,Halfus->GetAuraCount(SPELL_DRAGON_VENGEANCE)+1);
-							creature->SetReactState(REACT_AGGRESSIVE);
-							creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
-						}
-						break;
-				}
-            	return true;
+                            creature->SetReactState(REACT_AGGRESSIVE);
+                            creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+                        }
+                        break;
+                }
+                return true;
         }
 };
 
@@ -322,8 +322,8 @@ class spell_cyclon_winds : public SpellScriptLoader
 };
 void AddSC_boss_halfus_wyrmbreaker()
 {
-	new boss_halfus_wyrmbreaker();
-	new npc_halfus_dragon();
-	new npc_proto_behemoth();
+    new boss_halfus_wyrmbreaker();
+    new npc_halfus_dragon();
+    new npc_proto_behemoth();
     new spell_cyclon_winds();
 }

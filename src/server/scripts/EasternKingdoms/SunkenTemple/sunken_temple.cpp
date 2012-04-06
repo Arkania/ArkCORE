@@ -36,18 +36,18 @@
 
 class at_malfurion_stormrage: public AreaTriggerScript {
 public:
-	at_malfurion_stormrage() :
-			AreaTriggerScript("at_malfurion_stormrage") {
-	}
+    at_malfurion_stormrage() :
+            AreaTriggerScript("at_malfurion_stormrage") {
+    }
 
-	bool OnTrigger(Player* pPlayer, const AreaTriggerEntry * /*at*/) {
-		if (pPlayer->GetInstanceScript()
-				&& !pPlayer->FindNearestCreature(15362, 15))
-			pPlayer->SummonCreature(15362, pPlayer->GetPositionX(),
-					pPlayer->GetPositionY(), pPlayer->GetPositionZ(), -1.52f,
-					TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 100000);
-		return false;
-	}
+    bool OnTrigger(Player* pPlayer, const AreaTriggerEntry * /*at*/) {
+        if (pPlayer->GetInstanceScript()
+                && !pPlayer->FindNearestCreature(15362, 15))
+            pPlayer->SummonCreature(15362, pPlayer->GetPositionX(),
+                    pPlayer->GetPositionY(), pPlayer->GetPositionZ(), -1.52f,
+                    TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 100000);
+        return false;
+    }
 };
 /*#####
  # go_atalai_statue
@@ -55,18 +55,18 @@ public:
 
 class go_atalai_statue: public GameObjectScript {
 public:
-	go_atalai_statue() :
-			GameObjectScript("go_atalai_statue") {
-	}
+    go_atalai_statue() :
+            GameObjectScript("go_atalai_statue") {
+    }
 
-	bool OnGossipHello(Player* pPlayer, GameObject* pGo) {
-		if (InstanceScript* pInstance = pPlayer->GetInstanceScript())
-			pInstance->SetData(EVENT_STATE, pGo->GetEntry());
-		return false;
-	}
+    bool OnGossipHello(Player* pPlayer, GameObject* pGo) {
+        if (InstanceScript* pInstance = pPlayer->GetInstanceScript())
+            pInstance->SetData(EVENT_STATE, pGo->GetEntry());
+        return false;
+    }
 };
 
 void AddSC_sunken_temple() {
-	new at_malfurion_stormrage();
-	new go_atalai_statue();
+    new at_malfurion_stormrage();
+    new go_atalai_statue();
 }

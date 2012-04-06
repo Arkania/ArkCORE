@@ -63,79 +63,79 @@
 
 class boss_majordomo: public CreatureScript {
 public:
-	boss_majordomo() :
-			CreatureScript("boss_majordomo") {
-	}
+    boss_majordomo() :
+            CreatureScript("boss_majordomo") {
+    }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_majordomoAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const {
+        return new boss_majordomoAI(pCreature);
+    }
 
-	struct boss_majordomoAI: public ScriptedAI {
-		boss_majordomoAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_majordomoAI: public ScriptedAI {
+        boss_majordomoAI(Creature *c) :
+                ScriptedAI(c) {
+        }
 
-		uint32 MagicReflection_Timer;
-		uint32 DamageReflection_Timer;
-		uint32 Blastwave_Timer;
+        uint32 MagicReflection_Timer;
+        uint32 DamageReflection_Timer;
+        uint32 Blastwave_Timer;
 
-		void Reset() {
-			MagicReflection_Timer = 30000; //Damage reflection first so we alternate
-			DamageReflection_Timer = 15000;
-			Blastwave_Timer = 10000;
-		}
+        void Reset() {
+            MagicReflection_Timer = 30000; //Damage reflection first so we alternate
+            DamageReflection_Timer = 15000;
+            Blastwave_Timer = 10000;
+        }
 
-		void KilledUnit(Unit* /*victim*/) {
-			if (rand() % 5)
-				return;
+        void KilledUnit(Unit* /*victim*/) {
+            if (rand() % 5)
+                return;
 
-			DoScriptText(SAY_SLAY, me);
-		}
+            DoScriptText(SAY_SLAY, me);
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-			DoScriptText(SAY_AGGRO, me);
-		}
+        void EnterCombat(Unit * /*who*/) {
+            DoScriptText(SAY_AGGRO, me);
+        }
 
-		void UpdateAI(const uint32 diff) {
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff) {
+            if (!UpdateVictim())
+                return;
 
-			//Cast Ageis if less than 50% hp
-			if (HealthBelowPct(50)) {
-				DoCast(me, SPELL_AEGIS);
-			}
+            //Cast Ageis if less than 50% hp
+            if (HealthBelowPct(50)) {
+                DoCast(me, SPELL_AEGIS);
+            }
 
-			//MagicReflection_Timer
-			//        if (MagicReflection_Timer <= diff)
-			//        {
-			//            DoCast(me, SPELL_MAGICREFLECTION);
+            //MagicReflection_Timer
+            //        if (MagicReflection_Timer <= diff)
+            //        {
+            //            DoCast(me, SPELL_MAGICREFLECTION);
 
-			//60 seconds until we should cast this agian
-			//            MagicReflection_Timer = 30000;
-			//        } else MagicReflection_Timer -= diff;
+            //60 seconds until we should cast this agian
+            //            MagicReflection_Timer = 30000;
+            //        } else MagicReflection_Timer -= diff;
 
-			//DamageReflection_Timer
-			//        if (DamageReflection_Timer <= diff)
-			//        {
-			//            DoCast(me, SPELL_DAMAGEREFLECTION);
+            //DamageReflection_Timer
+            //        if (DamageReflection_Timer <= diff)
+            //        {
+            //            DoCast(me, SPELL_DAMAGEREFLECTION);
 
-			//60 seconds until we should cast this agian
-			//            DamageReflection_Timer = 30000;
-			//        } else DamageReflection_Timer -= diff;
+            //60 seconds until we should cast this agian
+            //            DamageReflection_Timer = 30000;
+            //        } else DamageReflection_Timer -= diff;
 
-			//Blastwave_Timer
-			if (Blastwave_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_BLASTWAVE);
-				Blastwave_Timer = 10000;
-			} else
-				Blastwave_Timer -= diff;
+            //Blastwave_Timer
+            if (Blastwave_Timer <= diff) {
+                DoCast(me->getVictim(), SPELL_BLASTWAVE);
+                Blastwave_Timer = 10000;
+            } else
+                Blastwave_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
 void AddSC_boss_majordomo() {
-	new boss_majordomo();
+    new boss_majordomo();
 }

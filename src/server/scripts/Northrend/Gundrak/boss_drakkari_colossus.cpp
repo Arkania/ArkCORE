@@ -81,7 +81,7 @@ class boss_drakkari_colossus : public CreatureScript
                 // 100% too much?
                 SpellEntry* spell = (SpellEntry*)sSpellStore.LookupEntry(SPELL_MORTAL_STRIKE);
               //TODO: Fix spell proc
-			  // if (spell)
+              // if (spell)
               //      spell->ProcChance = 50;
             }
 
