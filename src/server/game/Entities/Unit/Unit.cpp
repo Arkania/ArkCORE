@@ -7155,10 +7155,9 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
             {
                 // "refresh your Slice and Dice duration to its 5 combo point maximum"
                 // lookup Slice and Dice
-                if (AuraEffect const* aur = GetAuraEffect(SPELL_AURA_MOD_MELEE_HASTE, SPELLFAMILY_ROGUE, 0x40000, 0, 0))
+                if (AuraEffect const* aur = GetAuraEffect(SPELL_AURA_319, SPELLFAMILY_ROGUE, 0x40000, 0, 0)) 
                 {
-                    aur->GetBase()->SetDuration(
-                            GetSpellMaxDuration(aur->GetSpellProto()), true);
+                    aur->GetBase()->SetDuration(GetSpellMaxDuration(aur->GetSpellProto()), true);
                     return true;
                 }
                 return false;

@@ -39,72 +39,72 @@
 #define SPELL_THUNDERCLAP               15548               //Not sure if right ID. 23931 would be a harder possibility.
 class boss_drakkisath: public CreatureScript {
 public:
-	boss_drakkisath() :
-			CreatureScript("boss_drakkisath") {
-	}
+    boss_drakkisath() :
+            CreatureScript("boss_drakkisath") {
+    }
 
-	CreatureAI* GetAI(Creature* pCreature) const {
-		return new boss_drakkisathAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const {
+        return new boss_drakkisathAI(pCreature);
+    }
 
-	struct boss_drakkisathAI: public ScriptedAI {
-		boss_drakkisathAI(Creature *c) :
-				ScriptedAI(c) {
-		}
+    struct boss_drakkisathAI: public ScriptedAI {
+        boss_drakkisathAI(Creature *c) :
+                ScriptedAI(c) {
+        }
 
-		uint32 FireNova_Timer;
-		uint32 Cleave_Timer;
-		uint32 Confliguration_Timer;
-		uint32 Thunderclap_Timer;
+        uint32 FireNova_Timer;
+        uint32 Cleave_Timer;
+        uint32 Confliguration_Timer;
+        uint32 Thunderclap_Timer;
 
-		void Reset() {
-			FireNova_Timer = 6000;
-			Cleave_Timer = 8000;
-			Confliguration_Timer = 15000;
-			Thunderclap_Timer = 17000;
-		}
+        void Reset() {
+            FireNova_Timer = 6000;
+            Cleave_Timer = 8000;
+            Confliguration_Timer = 15000;
+            Thunderclap_Timer = 17000;
+        }
 
-		void EnterCombat(Unit * /*who*/) {
-		}
+        void EnterCombat(Unit * /*who*/) {
+        }
 
-		void UpdateAI(const uint32 diff) {
-			//Return since we have no target
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff) {
+            //Return since we have no target
+            if (!UpdateVictim())
+                return;
 
-			//FireNova_Timer
-			if (FireNova_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_FIRENOVA);
-				FireNova_Timer = 10000;
-			} else
-				FireNova_Timer -= diff;
+            //FireNova_Timer
+            if (FireNova_Timer <= diff) {
+                DoCast(me->getVictim(), SPELL_FIRENOVA);
+                FireNova_Timer = 10000;
+            } else
+                FireNova_Timer -= diff;
 
-			//Cleave_Timer
-			if (Cleave_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_CLEAVE);
-				Cleave_Timer = 8000;
-			} else
-				Cleave_Timer -= diff;
+            //Cleave_Timer
+            if (Cleave_Timer <= diff) {
+                DoCast(me->getVictim(), SPELL_CLEAVE);
+                Cleave_Timer = 8000;
+            } else
+                Cleave_Timer -= diff;
 
-			//Confliguration_Timer
-			if (Confliguration_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_CONFLIGURATION);
-				Confliguration_Timer = 18000;
-			} else
-				Confliguration_Timer -= diff;
+            //Confliguration_Timer
+            if (Confliguration_Timer <= diff) {
+                DoCast(me->getVictim(), SPELL_CONFLIGURATION);
+                Confliguration_Timer = 18000;
+            } else
+                Confliguration_Timer -= diff;
 
-			//Thunderclap_Timer
-			if (Thunderclap_Timer <= diff) {
-				DoCast(me->getVictim(), SPELL_THUNDERCLAP);
-				Thunderclap_Timer = 20000;
-			} else
-				Thunderclap_Timer -= diff;
+            //Thunderclap_Timer
+            if (Thunderclap_Timer <= diff) {
+                DoCast(me->getVictim(), SPELL_THUNDERCLAP);
+                Thunderclap_Timer = 20000;
+            } else
+                Thunderclap_Timer -= diff;
 
-			DoMeleeAttackIfReady();
-		}
-	};
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
 void AddSC_boss_drakkisath() {
-	new boss_drakkisath();
+    new boss_drakkisath();
 }
