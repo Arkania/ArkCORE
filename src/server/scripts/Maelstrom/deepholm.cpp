@@ -155,34 +155,34 @@ class npc_flint_oremantle : public CreatureScript
 public:
     npc_flint_oremantle() : CreatureScript("npc_flint_oremantle") { }
 
-    bool OnGossipHello(Player* pPlayer, Creature* creature)
-    {
-        if(creature->isInCombat() || pPlayer->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE)
-        return false;
+	bool OnGossipHello(Player* pPlayer, Creature* creature)
+	{
+		if(creature->isInCombat() || pPlayer->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE)
+		return false;
 
-        char const* _message = "Follow me to the Earthcaller!";
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,_message,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
-        pPlayer->SEND_GOSSIP_MENU(68,creature->GetGUID());
+		char const* _message = "Follow me to the Earthcaller!";
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,_message,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
+		pPlayer->SEND_GOSSIP_MENU(68,creature->GetGUID());
 
-        return true;
-    }
+		return true;
+	}
 
-    bool OnGossipSelect(Player* pPlayer, Creature* creature, uint32 uiSender, uint32 uiAction)
-    {
-        pPlayer->PlayerTalkClass->ClearMenus();
+	bool OnGossipSelect(Player* pPlayer, Creature* creature, uint32 uiSender, uint32 uiAction)
+	{
+		pPlayer->PlayerTalkClass->ClearMenus();
 
-        pPlayer->CLOSE_GOSSIP_MENU();
+		pPlayer->CLOSE_GOSSIP_MENU();
 
          if (npc_flint_oremantleAI* npc_flint_oremantleAI = CAST_AI(npc_flint_oremantle::npc_flint_oremantleAI, creature->AI()))
          {
                 creature->SetStandState(UNIT_STAND_STATE_STAND);
                 npc_flint_oremantleAI->StartFollow(pPlayer, 35, 0);
 
-                creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+				creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
          }
 
-        return true;
-    }
+		return true;
+	}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -193,11 +193,11 @@ public:
     {
         npc_flint_oremantleAI(Creature* creature) : FollowerAI(creature), HomePosition(creature->GetHomePosition()) { }
 
-        Position HomePosition;
+		Position HomePosition;
 
-        void Reset()
+		void Reset()
         {
-            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+			me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -211,9 +211,9 @@ public:
                     if (Player* player = GetLeaderForFollower())
                     {
                         if (player->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) == QUEST_STATUS_INCOMPLETE)
-                            player->KilledMonsterCredit(44207, 0);
+							player->KilledMonsterCredit(44207, 0);
 
-                        me->DespawnOrUnsummon(30000);
+						me->DespawnOrUnsummon(30000);
                     }
 
                     SetFollowComplete(true);
@@ -226,9 +226,9 @@ public:
 // Boden the Imposing for Quest: 26315
 enum eBoden
 {
-    QUEST_IMPOSING_CONFRONTATION = 26315,
-    SPELL_EARTHEN_RING_PROCLAMATION = 79715,
-    SPELL_IMPOSING_CONFRONTATION_CREDIT = 79843,
+	QUEST_IMPOSING_CONFRONTATION = 26315,
+	SPELL_EARTHEN_RING_PROCLAMATION = 79715,
+	SPELL_IMPOSING_CONFRONTATION_CREDIT = 79843,
 };
 
 class npc_boden_the_imposing : public CreatureScript
@@ -245,55 +245,55 @@ public:
     {
         npc_boden_the_imposingAI(Creature* creature) : ScriptedAI(creature), DialogNumber(0), SpeakPlayer(NULL) {}
 
-        uint16 DialogNumber;
-        uint64 uiProcessDialog;
-        Unit* SpeakPlayer;
+		uint16 DialogNumber;
+		uint64 uiProcessDialog;
+		Unit* SpeakPlayer;
 
         void SpellHit(Unit* Caster,const SpellEntry* Spell)
-        {
-            if(Spell->Id != SPELL_EARTHEN_RING_PROCLAMATION/* || Caster->ToPlayer()->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE*/) // The Quest if clause didn't work^^ don#t know why
-                return;
+		{
+			if(Spell->Id != SPELL_EARTHEN_RING_PROCLAMATION/* || Caster->ToPlayer()->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE*/) // The Quest if clause didn't work^^ don#t know why
+				return;
 
-            Caster->ToPlayer()->Say("Boden the Imposing. I come on behalf of the Earthen Ring. We wish your kind no harm. We seek to repair the rift between our worlds. Why do you attack us?", LANG_UNIVERSAL);
+			Caster->ToPlayer()->Say("Boden the Imposing. I come on behalf of the Earthen Ring. We wish your kind no harm. We seek to repair the rift between our worlds. Why do you attack us?", LANG_UNIVERSAL);
 
-            DialogNumber = 1;
-            uiProcessDialog = 2000;
+			DialogNumber = 1;
+			uiProcessDialog = 2000;
 
-            SpeakPlayer = Caster;
-        }
+			SpeakPlayer = Caster;
+		}
 
         void UpdateAI(const uint32 diff)
         {
             if(DialogNumber == NULL)
-                return;
+				return;
 
-            if (uiProcessDialog <= diff)
-            {
-                switch(DialogNumber)
-                {
-                case 1:
-                    me->MonsterYell("Hah! Did you mistake me for Diamant, $r? Or perhaps some other whimpering, complaint stone trogg who cares?",LANG_UNIVERSAL,0);
-                    uiProcessDialog = 4000;
-                    break;
+			if (uiProcessDialog <= diff)
+			{
+				switch(DialogNumber)
+				{
+				case 1:
+					me->MonsterYell("Hah! Did you mistake me for Diamant, $r? Or perhaps some other whimpering, complaint stone trogg who cares?",LANG_UNIVERSAL,0);
+					uiProcessDialog = 4000;
+					break;
 
-                case 2:
-                    me->MonsterYell("If you seek peace, relinquish the World Pillar and leave Deepholm. This is our realm. Your only welcome here shall be found underneath my stone foot.",LANG_UNIVERSAL,0);
-                    uiProcessDialog = 1200;
-                    break;
+				case 2:
+					me->MonsterYell("If you seek peace, relinquish the World Pillar and leave Deepholm. This is our realm. Your only welcome here shall be found underneath my stone foot.",LANG_UNIVERSAL,0);
+					uiProcessDialog = 1200;
+					break;
 
-                case 3:
-                    if(SpeakPlayer)
-                    me->CastSpell(SpeakPlayer,SPELL_IMPOSING_CONFRONTATION_CREDIT,true);
-                    break;
-                }
+				case 3:
+					if(SpeakPlayer)
+					me->CastSpell(SpeakPlayer,SPELL_IMPOSING_CONFRONTATION_CREDIT,true);
+					break;
+				}
 
-                if(DialogNumber != 3)
-                {
-                    DialogNumber++;
-                }else
-                    DialogNumber = 0;
-            } else uiProcessDialog -= diff;
-        }
+				if(DialogNumber != 3)
+				{
+					DialogNumber++;
+				}else
+					DialogNumber = 0;
+			} else uiProcessDialog -= diff;
+		}
     };
 };
 
@@ -301,17 +301,17 @@ public:
 
 enum eRicketTicker
 {
-    SPELL_EXPLODE = 91981,
+	SPELL_EXPLODE = 91981,
 
-    NPC_DEEP_CELESTITE_BUNNY = 49865,
-    NPC_DEEP_AMETHYST_BUNNY = 49866,
-    NPC_DEEP_GRANAT_BUNNY = 49867,
-    NPC_DEEP_ALABASTER_BUNNY = 49824,
+	NPC_DEEP_CELESTITE_BUNNY = 49865,
+	NPC_DEEP_AMETHYST_BUNNY = 49866,
+	NPC_DEEP_GRANAT_BUNNY = 49867,
+	NPC_DEEP_ALABASTER_BUNNY = 49824,
 
-    ITEM_DEEP_CELESTITE_CRYSTAL = 65507,
-    ITEM_DEEP_AMETHYST_CRYSTAL = 65508,
-    ITEM_DEEP_GRANAT_CRYSTAL = 65510,
-    ITEM_DEEP_ALABASTER_CRYSTAL = 65504,
+	ITEM_DEEP_CELESTITE_CRYSTAL = 65507,
+	ITEM_DEEP_AMETHYST_CRYSTAL = 65508,
+	ITEM_DEEP_GRANAT_CRYSTAL = 65510,
+	ITEM_DEEP_ALABASTER_CRYSTAL = 65504,
 };
 
 class npc_ricket_ticker : public CreatureScript
@@ -328,45 +328,45 @@ public:
     {
         npc_ricket_tickerAI(Creature* creature) : ScriptedAI(creature), uiExplode(NULL) { }
 
-        uint32 uiExplode;
-        Player* player;
+		uint32 uiExplode;
+		Player* player;
 
-        void Reset()
-        {
-            uiExplode = 0;
-        }
+		void Reset()
+		{
+			uiExplode = 0;
+		}
 
-        void IsSummonedBy(Unit* summoner)
-        {
-            uiExplode = 3500;
-            player = summoner->ToPlayer();
-        }
+		void IsSummonedBy(Unit* summoner)
+		{
+			uiExplode = 3500;
+			player = summoner->ToPlayer();
+		}
 
         void UpdateAI(const uint32 diff)
         {
-            if (uiExplode == NULL)
-                return;
+			if (uiExplode == NULL)
+				return;
 
-            if (uiExplode <= diff)
-            {
-                DoCastAOE(SPELL_EXPLODE,true);
+			if (uiExplode <= diff)
+			{
+				DoCastAOE(SPELL_EXPLODE,true);
 
-                // Checks weather a Deep Crystal is in Range
-                if(me->FindNearestCreature(NPC_DEEP_CELESTITE_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_CELESTITE_CRYSTAL,1);
+				// Checks weather a Deep Crystal is in Range
+				if(me->FindNearestCreature(NPC_DEEP_CELESTITE_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_CELESTITE_CRYSTAL,1);
 
-                if(me->FindNearestCreature(NPC_DEEP_AMETHYST_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_AMETHYST_CRYSTAL,1);
+				if(me->FindNearestCreature(NPC_DEEP_AMETHYST_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_AMETHYST_CRYSTAL,1);
 
-                if(me->FindNearestCreature(NPC_DEEP_GRANAT_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_GRANAT_CRYSTAL,1);
+				if(me->FindNearestCreature(NPC_DEEP_GRANAT_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_GRANAT_CRYSTAL,1);
 
-                if(me->FindNearestCreature(NPC_DEEP_ALABASTER_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_ALABASTER_CRYSTAL,1);
+				if(me->FindNearestCreature(NPC_DEEP_ALABASTER_BUNNY, 7.0f, true))
+						player->AddItem(ITEM_DEEP_ALABASTER_CRYSTAL,1);
 
-                me->DespawnOrUnsummon();
-            } else uiExplode -= diff;
-        }
+				me->DespawnOrUnsummon();
+        	} else uiExplode -= diff;
+		}
     };
 };
 
@@ -374,9 +374,9 @@ public:
 
 enum eBanner
 {
-    NPC_STONEHEART_DEFENDER = 43138,
-    SPELL_BUFF_OF_THE_STONEFATHER = 80668,
-    SPELL_BANNER_HITS_GROUND = 80669,
+	NPC_STONEHEART_DEFENDER = 43138,
+	SPELL_BUFF_OF_THE_STONEFATHER = 80668,
+	SPELL_BANNER_HITS_GROUND = 80669,
 };
 
 class npc_stonefathers_banner : public CreatureScript
@@ -393,28 +393,28 @@ public:
     {
         npc_stonefathers_bannerAI(Creature* creature) : ScriptedAI(creature) {}
 
-        void Reset()
-        {
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE	| UNIT_FLAG_NOT_SELECTABLE);
-        }
+		void Reset()
+		{
+			me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE	| UNIT_FLAG_NOT_SELECTABLE);
+		}
 
-        void IsSummonedBy(Unit* summoner)
-        {
-            DoCastAOE(SPELL_BANNER_HITS_GROUND, true);
+		void IsSummonedBy(Unit* summoner)
+		{
+			DoCastAOE(SPELL_BANNER_HITS_GROUND, true);
 
-            std::list<Creature*> creatures;
-            GetCreatureListWithEntryInGrid(creatures, me, NPC_STONEHEART_DEFENDER, 10.0f /*Range is official*/);
+			std::list<Creature*> creatures;
+			GetCreatureListWithEntryInGrid(creatures, me, NPC_STONEHEART_DEFENDER, 10.0f /*Range is official*/);
 
-            if (creatures.empty())
-                return;
+			if (creatures.empty())
+				return;
 
-            for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
-                if(!(*iter)->HasAura(SPELL_BUFF_OF_THE_STONEFATHER))
-                {
-                    (*iter)->CastSpell((*iter),SPELL_BUFF_OF_THE_STONEFATHER, true);
-                    summoner->ToPlayer()->KilledMonsterCredit(NPC_STONEHEART_DEFENDER, 0);
-                }
-        }
+			for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
+				if(!(*iter)->HasAura(SPELL_BUFF_OF_THE_STONEFATHER))
+				{
+					(*iter)->CastSpell((*iter),SPELL_BUFF_OF_THE_STONEFATHER, true);
+					summoner->ToPlayer()->KilledMonsterCredit(NPC_STONEHEART_DEFENDER, 0);
+				}
+		}
     };
 };
 
@@ -422,8 +422,8 @@ void AddSC_deepholm()
 {
     new npc_lodestone();
     new npc_slaincrewmember();
-    new npc_flint_oremantle();
-    new npc_boden_the_imposing();
-    new npc_ricket_ticker();
-    new npc_stonefathers_banner();
+	new npc_flint_oremantle();
+	new npc_boden_the_imposing();
+	new npc_ricket_ticker();
+	new npc_stonefathers_banner();
 }

@@ -168,7 +168,7 @@ public:
             RemoveSummons();
             me->SetDisplayId(me->GetNativeDisplayId());
             me->ClearUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED);
-            me->SetReactState(REACT_PASSIVE);
+	        me->SetReactState(REACT_PASSIVE);
             me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
 
             bEventInProgress = false;

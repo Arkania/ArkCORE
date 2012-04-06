@@ -263,7 +263,7 @@ public:
                         killer->Kill(tHalion);
             }
 
-        void JustReachedHome()
+		void JustReachedHome()
         {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
@@ -312,7 +312,7 @@ public:
                 me->SetHealth(instance->GetData(DATA_HALION_SHARED_HEALTH));
 
                 if (!UpdateVictim() && (events.GetPhaseMask() & (PHASE_ONE_MASK | PHASE_THREE_MASK)))
-                return;
+				return;
 
                 // Events won't be updated under phase two.
                 if (!(events.GetPhaseMask() & PHASE_TWO_MASK))
@@ -823,12 +823,12 @@ public:
                                                 Talk(EMOTE_TWILIGHT_OUT_TWILIGHT, player->GetGUID());
             else
                                                 Talk(EMOTE_PHYSICAL_IN_PHYSICAL, player->GetGUID());
-                }
-                else
-                {
+				}
+				else
+				{
                                             if (player->HasAura(SPELL_TWILIGHT_REALM))
                                                 Talk(EMOTE_TWILIGHT_IN_TWILIGHT, player->GetGUID());
-                    else
+					else
                                                 Talk(EMOTE_PHYSICAL_OUT_PHYSICAL, player->GetGUID());
                                         }
                                     }
@@ -1022,7 +1022,7 @@ class npc_meteor_strike : public CreatureScript
             void UpdateAI(uint32 const diff)
             {
                 if (_spawnCount > 5)
-                            return;
+							return;
 
                 _events.Update(diff);
 

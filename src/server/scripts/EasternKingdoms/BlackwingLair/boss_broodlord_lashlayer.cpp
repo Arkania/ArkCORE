@@ -43,79 +43,79 @@
 
 class boss_broodlord: public CreatureScript {
 public:
-    boss_broodlord() :
-            CreatureScript("boss_broodlord") {
-    }
+	boss_broodlord() :
+			CreatureScript("boss_broodlord") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const {
-        return new boss_broodlordAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new boss_broodlordAI(pCreature);
+	}
 
-    struct boss_broodlordAI: public ScriptedAI {
-        boss_broodlordAI(Creature *c) :
-                ScriptedAI(c) {
-        }
+	struct boss_broodlordAI: public ScriptedAI {
+		boss_broodlordAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 Cleave_Timer;
-        uint32 BlastWave_Timer;
-        uint32 MortalStrike_Timer;
-        uint32 KnockBack_Timer;
+		uint32 Cleave_Timer;
+		uint32 BlastWave_Timer;
+		uint32 MortalStrike_Timer;
+		uint32 KnockBack_Timer;
 
-        void Reset() {
-            Cleave_Timer = 8000; //These times are probably wrong
-            BlastWave_Timer = 12000;
-            MortalStrike_Timer = 20000;
-            KnockBack_Timer = 30000;
-        }
+		void Reset() {
+			Cleave_Timer = 8000; //These times are probably wrong
+			BlastWave_Timer = 12000;
+			MortalStrike_Timer = 20000;
+			KnockBack_Timer = 30000;
+		}
 
-        void EnterCombat(Unit * /*who*/) {
-            DoScriptText(SAY_AGGRO, me);
-            DoZoneInCombat();
-        }
+		void EnterCombat(Unit * /*who*/) {
+			DoScriptText(SAY_AGGRO, me);
+			DoZoneInCombat();
+		}
 
-        void UpdateAI(const uint32 diff) {
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!UpdateVictim())
+				return;
 
-            //Cleave_Timer
-            if (Cleave_Timer <= diff) {
-                DoCast(me->getVictim(), SPELL_CLEAVE);
-                Cleave_Timer = 7000;
-            } else
-                Cleave_Timer -= diff;
+			//Cleave_Timer
+			if (Cleave_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_CLEAVE);
+				Cleave_Timer = 7000;
+			} else
+				Cleave_Timer -= diff;
 
-            // BlastWave
-            if (BlastWave_Timer <= diff) {
-                DoCast(me->getVictim(), SPELL_BLASTWAVE);
-                BlastWave_Timer = urand(8000, 16000);
-            } else
-                BlastWave_Timer -= diff;
+			// BlastWave
+			if (BlastWave_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_BLASTWAVE);
+				BlastWave_Timer = urand(8000, 16000);
+			} else
+				BlastWave_Timer -= diff;
 
-            //MortalStrike_Timer
-            if (MortalStrike_Timer <= diff) {
-                DoCast(me->getVictim(), SPELL_MORTALSTRIKE);
-                MortalStrike_Timer = urand(25000, 35000);
-            } else
-                MortalStrike_Timer -= diff;
+			//MortalStrike_Timer
+			if (MortalStrike_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_MORTALSTRIKE);
+				MortalStrike_Timer = urand(25000, 35000);
+			} else
+				MortalStrike_Timer -= diff;
 
-            if (KnockBack_Timer <= diff) {
-                DoCast(me->getVictim(), SPELL_KNOCKBACK);
-                //Drop 50% aggro
-                if (DoGetThreat(me->getVictim()))
-                    DoModifyThreatPercent(me->getVictim(), -50);
+			if (KnockBack_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_KNOCKBACK);
+				//Drop 50% aggro
+				if (DoGetThreat(me->getVictim()))
+					DoModifyThreatPercent(me->getVictim(), -50);
 
-                KnockBack_Timer = urand(15000, 30000);
-            } else
-                KnockBack_Timer -= diff;
+				KnockBack_Timer = urand(15000, 30000);
+			} else
+				KnockBack_Timer -= diff;
 
-            if (EnterEvadeIfOutOfCombatArea(diff))
-                DoScriptText(SAY_LEASH, me);
+			if (EnterEvadeIfOutOfCombatArea(diff))
+				DoScriptText(SAY_LEASH, me);
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
 void AddSC_boss_broodlord() {
-    new boss_broodlord();
+	new boss_broodlord();
 }

@@ -55,7 +55,7 @@ public:
         uint64 m_uiIonarGUID;
         uint64 m_uiLokenGUID;
         uint64 m_uiVolkhanGUID;
-        uint64 m_uiVolkhanAnvilGUID;
+	    uint64 m_uiVolkhanAnvilGUID;
 
         uint64 m_uiBjarngrimDoorGUID;
         uint64 m_uiVolkhanDoorGUID;
@@ -71,7 +71,7 @@ public:
             m_uiVolkhanGUID          = 0;
             m_uiIonarGUID            = 0;
             m_uiLokenGUID            = 0;
-            m_uiVolkhanAnvilGUID	 = 0;
+		    m_uiVolkhanAnvilGUID	 = 0;
 
             m_uiBjarngrimDoorGUID    = 0;
             m_uiVolkhanDoorGUID      = 0;
@@ -146,12 +146,12 @@ public:
             {
                 case TYPE_BJARNGRIM:
                     if (uiData == DONE)
-                {
+				{
                         if (GameObject* pDoor = instance->GetGameObject(m_uiBjarngrimDoorGUID))
                             pDoor->SetGoState(GO_STATE_ACTIVE);
-                    GameObject* pGo = instance->GetGameObject(m_uiBjarngrimDoorGUID);
-                    pGo->SetGoState(GO_STATE_ACTIVE);
-                }
+					GameObject* pGo = instance->GetGameObject(m_uiBjarngrimDoorGUID);
+					pGo->SetGoState(GO_STATE_ACTIVE);
+				}
                     m_auiEncounter[0] = uiData;
                     break;
                 case TYPE_VOLKHAN:
@@ -211,8 +211,8 @@ public:
                     return m_uiIonarGUID;
                 case DATA_LOKEN:
                     return m_uiLokenGUID;
-            case DATA_VOLKHAN_ANVIL:
-                return m_uiVolkhanAnvilGUID;
+			case DATA_VOLKHAN_ANVIL:
+				return m_uiVolkhanAnvilGUID;
             }
             return 0;
         }

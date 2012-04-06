@@ -44,7 +44,7 @@ enum Spells
     SPELL_SPIRIT_STRIKE                       = 48423,
     H_SPELL_SPIRIT_STRIKE                     = 59304,
     SPELL_ANCESTORS_VENGEANCE                 = 16939,
-    SPELL_WITHER                              = 48584,
+	SPELL_WITHER                              = 48584,
 
     SPELL_SUMMON_AVENGING_SPIRIT              = 48592,
     SPELL_SUMMON_SPIRIT_FOUNT                 = 48386,

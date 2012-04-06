@@ -560,7 +560,7 @@ public:
                 novadone = true;
             }
 
-            if (m_uiLairGuardCleaveTimer <= uiDiff)
+	        if (m_uiLairGuardCleaveTimer <= uiDiff)
             {
                 DoCast(me->getVictim(), SPELL_LAIRGUARDCLEAVE);
                 m_uiLairGuardCleaveTimer = urand(5000, 10000);
@@ -569,7 +569,7 @@ public:
                 m_uiLairGuardCleaveTimer -= uiDiff;
 
             DoMeleeAttackIfReady();
-        }
+	    }
     };
 };
 

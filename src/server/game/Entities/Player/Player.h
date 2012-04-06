@@ -55,7 +55,6 @@ class PlayerMenu;
 class PlayerSocial;
 class SpellCastTargets;
 class UpdateMask;
-class Player_Bot;
 
 typedef std::deque<Mail*> PlayerMails;
 
@@ -1087,8 +1086,7 @@ class Player: public Unit, public GridObject<Player> {
     friend void Item::AddToUpdateQueueOf(Player *player);
     friend void Item::RemoveFromUpdateQueueOf(Player *player);
 public:
-    explicit Player (WorldSession *session);
-    explicit Player(WorldSession &);
+    explicit Player(WorldSession *session);
     ~Player();
 
     void CleanupsBeforeDelete(bool finalCleanup = true);
@@ -3197,16 +3195,6 @@ private:
     InstanceTimeMap _instanceResetTimes;
     InstanceSave* _pendingBind;
     uint32 _pendingBindTimer;
-};
-
-class Player_bot : public Player
-{
-	public:
-	    ~Player_bot (){};
-	    const uint64 GetGUID() { }
-	    Player_bot(WorldSession * session) : Player(session) {}
-	    Player_bot(WorldSession &session) : Player(session) {};
-	    virtual uint8 getClass() const { return CLASS_DEATH_KNIGHT; }
 };
 
 void AddItemsSetItem(Player*player, Item *item);

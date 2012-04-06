@@ -55,26 +55,26 @@
 
 class go_shadowforge_brazier: public GameObjectScript {
 public:
-    go_shadowforge_brazier() :
-            GameObjectScript("go_shadowforge_brazier") {
-    }
+	go_shadowforge_brazier() :
+			GameObjectScript("go_shadowforge_brazier") {
+	}
 
-    bool OnGossipHello(Player* /*pPlayer*/, GameObject* pGo) {
-        if (InstanceScript* pInstance = pGo->GetInstanceScript()) {
-            if (pInstance->GetData(TYPE_LYCEUM) == IN_PROGRESS)
-                pInstance->SetData(TYPE_LYCEUM, DONE);
-            else
-                pInstance->SetData(TYPE_LYCEUM, IN_PROGRESS);
-            // If used brazier open linked doors (North or South)
-            if (pGo->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_N))
-                pInstance->HandleGameObject(
-                        pInstance->GetData64(DATA_GOLEM_DOOR_N), true);
-            else if (pGo->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_S))
-                pInstance->HandleGameObject(
-                        pInstance->GetData64(DATA_GOLEM_DOOR_S), true);
-        }
-        return false;
-    }
+	bool OnGossipHello(Player* /*pPlayer*/, GameObject* pGo) {
+		if (InstanceScript* pInstance = pGo->GetInstanceScript()) {
+			if (pInstance->GetData(TYPE_LYCEUM) == IN_PROGRESS)
+				pInstance->SetData(TYPE_LYCEUM, DONE);
+			else
+				pInstance->SetData(TYPE_LYCEUM, IN_PROGRESS);
+			// If used brazier open linked doors (North or South)
+			if (pGo->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_N))
+				pInstance->HandleGameObject(
+						pInstance->GetData64(DATA_GOLEM_DOOR_N), true);
+			else if (pGo->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_S))
+				pInstance->HandleGameObject(
+						pInstance->GetData64(DATA_GOLEM_DOOR_S), true);
+		}
+		return false;
+	}
 };
 
 /*######
@@ -82,48 +82,48 @@ public:
  ######*/
 
 enum eGrimstone {
-    NPC_GRIMSTONE = 10096, NPC_THELDREN = 16059,
+	NPC_GRIMSTONE = 10096, NPC_THELDREN = 16059,
 
-    //4 or 6 in total? 1+2+1 / 2+2+2 / 3+3. Depending on this, code should be changed.
-    MAX_MOB_AMOUNT = 4
+	//4 or 6 in total? 1+2+1 / 2+2+2 / 3+3. Depending on this, code should be changed.
+	MAX_MOB_AMOUNT = 4
 };
 
 uint32 RingMob[] = { 8925, // Dredge Worm
-        8926, // Deep Stinger
-        8927, // Dark Screecher
-        8928, // Burrowing Thundersnout
-        8933, // Cave Creeper
-        8932, // Borer Beetle
-        };
+		8926, // Deep Stinger
+		8927, // Dark Screecher
+		8928, // Burrowing Thundersnout
+		8933, // Cave Creeper
+		8932, // Borer Beetle
+		};
 
 uint32 RingBoss[] = { 9027, // Gorosh
-        9028, // Grizzle
-        9029, // Eviscerator
-        9030, // Ok'thor
-        9031, // Anub'shiah
-        9032, // Hedrum
-        };
+		9028, // Grizzle
+		9029, // Eviscerator
+		9030, // Ok'thor
+		9031, // Anub'shiah
+		9032, // Hedrum
+		};
 
 class at_ring_of_law: public AreaTriggerScript {
 public:
-    at_ring_of_law() :
-            AreaTriggerScript("at_ring_of_law") {
-    }
+	at_ring_of_law() :
+			AreaTriggerScript("at_ring_of_law") {
+	}
 
-    bool OnTrigger(Player* pPlayer, const AreaTriggerEntry * /*at*/) {
-        if (InstanceScript* pInstance = pPlayer->GetInstanceScript()) {
-            if (pInstance->GetData(TYPE_RING_OF_LAW) == IN_PROGRESS
-                    || pInstance->GetData(TYPE_RING_OF_LAW) == DONE)
-                return false;
+	bool OnTrigger(Player* pPlayer, const AreaTriggerEntry * /*at*/) {
+		if (InstanceScript* pInstance = pPlayer->GetInstanceScript()) {
+			if (pInstance->GetData(TYPE_RING_OF_LAW) == IN_PROGRESS
+					|| pInstance->GetData(TYPE_RING_OF_LAW) == DONE)
+				return false;
 
-            pInstance->SetData(TYPE_RING_OF_LAW, IN_PROGRESS);
-            pPlayer->SummonCreature(NPC_GRIMSTONE, 625.559f, -205.618f,
-                    -52.735f, 2.609f, TEMPSUMMON_DEAD_DESPAWN, 0);
+			pInstance->SetData(TYPE_RING_OF_LAW, IN_PROGRESS);
+			pPlayer->SummonCreature(NPC_GRIMSTONE, 625.559f, -205.618f,
+					-52.735f, 2.609f, TEMPSUMMON_DEAD_DESPAWN, 0);
 
-            return false;
-        }
-        return false;
-    }
+			return false;
+		}
+		return false;
+	}
 };
 
 /*######
@@ -131,226 +131,226 @@ public:
  ######*/
 
 enum GrimstoneTexts {
-    SCRIPT_TEXT1 = -1000000,
-    SCRIPT_TEXT2 = -1000001,
-    SCRIPT_TEXT3 = -1000002,
-    SCRIPT_TEXT4 = -1000003,
-    SCRIPT_TEXT5 = -1000004,
-    SCRIPT_TEXT6 = -1000005
+	SCRIPT_TEXT1 = -1000000,
+	SCRIPT_TEXT2 = -1000001,
+	SCRIPT_TEXT3 = -1000002,
+	SCRIPT_TEXT4 = -1000003,
+	SCRIPT_TEXT5 = -1000004,
+	SCRIPT_TEXT6 = -1000005
 };
 
 //TODO: implement quest part of event (different end boss)
 class npc_grimstone: public CreatureScript {
 public:
-    npc_grimstone() :
-            CreatureScript("npc_grimstone") {
-    }
+	npc_grimstone() :
+			CreatureScript("npc_grimstone") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const {
-        return new npc_grimstoneAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new npc_grimstoneAI(pCreature);
+	}
 
-    struct npc_grimstoneAI: public npc_escortAI {
-        npc_grimstoneAI(Creature *c) :
-                npc_escortAI(c) {
-            pInstance = c->GetInstanceScript();
-            MobSpawnId = rand() % 6;
-        }
+	struct npc_grimstoneAI: public npc_escortAI {
+		npc_grimstoneAI(Creature *c) :
+				npc_escortAI(c) {
+			pInstance = c->GetInstanceScript();
+			MobSpawnId = rand() % 6;
+		}
 
-        InstanceScript* pInstance;
+		InstanceScript* pInstance;
 
-        uint8 EventPhase;
-        uint32 Event_Timer;
+		uint8 EventPhase;
+		uint32 Event_Timer;
 
-        uint8 MobSpawnId;
-        uint8 MobCount;
-        uint32 MobDeath_Timer;
+		uint8 MobSpawnId;
+		uint8 MobCount;
+		uint32 MobDeath_Timer;
 
-        uint64 RingMobGUID[4];
-        uint64 RingBossGUID;
+		uint64 RingMobGUID[4];
+		uint64 RingBossGUID;
 
-        bool CanWalk;
+		bool CanWalk;
 
-        void Reset() {
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		void Reset() {
+			me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-            EventPhase = 0;
-            Event_Timer = 1000;
+			EventPhase = 0;
+			Event_Timer = 1000;
 
-            MobCount = 0;
-            MobDeath_Timer = 0;
+			MobCount = 0;
+			MobDeath_Timer = 0;
 
-            for (uint8 i = 0; i < MAX_MOB_AMOUNT; ++i)
-                RingMobGUID[i] = 0;
+			for (uint8 i = 0; i < MAX_MOB_AMOUNT; ++i)
+				RingMobGUID[i] = 0;
 
-            RingBossGUID = 0;
+			RingBossGUID = 0;
 
-            CanWalk = false;
-        }
+			CanWalk = false;
+		}
 
-        //TODO: move them to center
-        void SummonRingMob() {
-            if (Creature* tmp = me->SummonCreature(RingMob[MobSpawnId], 608.960f, -235.322f, -53.907f, 1.857f, TEMPSUMMON_DEAD_DESPAWN, 0))
-                RingMobGUID[MobCount] = tmp->GetGUID();
+		//TODO: move them to center
+		void SummonRingMob() {
+			if (Creature* tmp = me->SummonCreature(RingMob[MobSpawnId], 608.960f, -235.322f, -53.907f, 1.857f, TEMPSUMMON_DEAD_DESPAWN, 0))
+				RingMobGUID[MobCount] = tmp->GetGUID();
 
-            ++MobCount;
+			++MobCount;
 
-            if (MobCount == MAX_MOB_AMOUNT)
-                MobDeath_Timer = 2500;
-        }
+			if (MobCount == MAX_MOB_AMOUNT)
+				MobDeath_Timer = 2500;
+		}
 
-        //TODO: move them to center
-        void SummonRingBoss() {
-            if (Creature* tmp = me->SummonCreature(RingBoss[rand()%6], 644.300f, -175.989f, -53.739f, 3.418f, TEMPSUMMON_DEAD_DESPAWN, 0))
-                RingBossGUID = tmp->GetGUID();
+		//TODO: move them to center
+		void SummonRingBoss() {
+			if (Creature* tmp = me->SummonCreature(RingBoss[rand()%6], 644.300f, -175.989f, -53.739f, 3.418f, TEMPSUMMON_DEAD_DESPAWN, 0))
+				RingBossGUID = tmp->GetGUID();
 
-            MobDeath_Timer = 2500;
-        }
+			MobDeath_Timer = 2500;
+		}
 
-        void WaypointReached(uint32 i) {
-            switch (i) {
-            case 0:
-                DoScriptText(SCRIPT_TEXT1, me); //2
-                CanWalk = false;
-                Event_Timer = 5000;
-                break;
-            case 1:
-                DoScriptText(SCRIPT_TEXT2, me); //4
-                CanWalk = false;
-                Event_Timer = 5000;
-                break;
-            case 2:
-                CanWalk = false;
-                break;
-            case 3:
-                DoScriptText(SCRIPT_TEXT3, me); //5
-                break;
-            case 4:
-                DoScriptText(SCRIPT_TEXT4, me); //6
-                CanWalk = false;
-                Event_Timer = 5000;
-                break;
-            case 5:
-                if (pInstance) {
-                    pInstance->SetData(TYPE_RING_OF_LAW, DONE);
-                    sLog->outDebug(
-                            LOG_FILTER_TSCR,
-                            "TSCR: npc_grimstone: event reached end and set complete.");
-                }
-                break;
-            }
-        }
+		void WaypointReached(uint32 i) {
+			switch (i) {
+			case 0:
+				DoScriptText(SCRIPT_TEXT1, me); //2
+				CanWalk = false;
+				Event_Timer = 5000;
+				break;
+			case 1:
+				DoScriptText(SCRIPT_TEXT2, me); //4
+				CanWalk = false;
+				Event_Timer = 5000;
+				break;
+			case 2:
+				CanWalk = false;
+				break;
+			case 3:
+				DoScriptText(SCRIPT_TEXT3, me); //5
+				break;
+			case 4:
+				DoScriptText(SCRIPT_TEXT4, me); //6
+				CanWalk = false;
+				Event_Timer = 5000;
+				break;
+			case 5:
+				if (pInstance) {
+					pInstance->SetData(TYPE_RING_OF_LAW, DONE);
+					sLog->outDebug(
+							LOG_FILTER_TSCR,
+							"TSCR: npc_grimstone: event reached end and set complete.");
+				}
+				break;
+			}
+		}
 
-        void HandleGameObject(uint32 id, bool open) {
-            pInstance->HandleGameObject(pInstance->GetData64(id), open);
-        }
+		void HandleGameObject(uint32 id, bool open) {
+			pInstance->HandleGameObject(pInstance->GetData64(id), open);
+		}
 
-        void UpdateAI(const uint32 diff) {
-            if (!pInstance)
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!pInstance)
+				return;
 
-            if (MobDeath_Timer) {
-                if (MobDeath_Timer <= diff) {
-                    MobDeath_Timer = 2500;
+			if (MobDeath_Timer) {
+				if (MobDeath_Timer <= diff) {
+					MobDeath_Timer = 2500;
 
-                    if (RingBossGUID) {
-                        Creature *boss = Unit::GetCreature(*me, RingBossGUID);
-                        if (boss && !boss->isAlive() && boss->isDead()) {
-                            RingBossGUID = 0;
-                            Event_Timer = 5000;
-                            MobDeath_Timer = 0;
-                            return;
-                        }
-                        return;
-                    }
+					if (RingBossGUID) {
+						Creature *boss = Unit::GetCreature(*me, RingBossGUID);
+						if (boss && !boss->isAlive() && boss->isDead()) {
+							RingBossGUID = 0;
+							Event_Timer = 5000;
+							MobDeath_Timer = 0;
+							return;
+						}
+						return;
+					}
 
-                    for (uint8 i = 0; i < MAX_MOB_AMOUNT; ++i) {
-                        Creature *mob = Unit::GetCreature(*me, RingMobGUID[i]);
-                        if (mob && !mob->isAlive() && mob->isDead()) {
-                            RingMobGUID[i] = 0;
-                            --MobCount;
+					for (uint8 i = 0; i < MAX_MOB_AMOUNT; ++i) {
+						Creature *mob = Unit::GetCreature(*me, RingMobGUID[i]);
+						if (mob && !mob->isAlive() && mob->isDead()) {
+							RingMobGUID[i] = 0;
+							--MobCount;
 
-                            //seems all are gone, so set timer to continue and discontinue this
-                            if (!MobCount) {
-                                Event_Timer = 5000;
-                                MobDeath_Timer = 0;
-                            }
-                        }
-                    }
-                } else
-                    MobDeath_Timer -= diff;
-            }
+							//seems all are gone, so set timer to continue and discontinue this
+							if (!MobCount) {
+								Event_Timer = 5000;
+								MobDeath_Timer = 0;
+							}
+						}
+					}
+				} else
+					MobDeath_Timer -= diff;
+			}
 
-            if (Event_Timer) {
-                if (Event_Timer <= diff) {
-                    switch (EventPhase) {
-                    case 0:
-                        DoScriptText(SCRIPT_TEXT5, me); //1
-                        HandleGameObject(DATA_ARENA4, false);
-                        Start(false, false);
-                        CanWalk = true;
-                        Event_Timer = 0;
-                        break;
-                    case 1:
-                        CanWalk = true;
-                        Event_Timer = 0;
-                        break;
-                    case 2:
-                        Event_Timer = 2000;
-                        break;
-                    case 3:
-                        HandleGameObject(DATA_ARENA1, true);
-                        Event_Timer = 3000;
-                        break;
-                    case 4:
-                        CanWalk = true;
-                        me->SetVisible(false);
-                        SummonRingMob();
-                        Event_Timer = 8000;
-                        break;
-                    case 5:
-                        SummonRingMob();
-                        SummonRingMob();
-                        Event_Timer = 8000;
-                        break;
-                    case 6:
-                        SummonRingMob();
-                        Event_Timer = 0;
-                        break;
-                    case 7:
-                        me->SetVisible(true);
-                        HandleGameObject(DATA_ARENA1, false);
-                        DoScriptText(SCRIPT_TEXT6, me); //4
-                        CanWalk = true;
-                        Event_Timer = 0;
-                        break;
-                    case 8:
-                        HandleGameObject(DATA_ARENA2, true);
-                        Event_Timer = 5000;
-                        break;
-                    case 9:
-                        me->SetVisible(false);
-                        SummonRingBoss();
-                        Event_Timer = 0;
-                        break;
-                    case 10:
-                        //if quest, complete
-                        HandleGameObject(DATA_ARENA2, false);
-                        HandleGameObject(DATA_ARENA3, true);
-                        HandleGameObject(DATA_ARENA4, true);
-                        CanWalk = true;
-                        Event_Timer = 0;
-                        break;
-                    }
-                    ++EventPhase;
-                } else
-                    Event_Timer -= diff;
-            }
+			if (Event_Timer) {
+				if (Event_Timer <= diff) {
+					switch (EventPhase) {
+					case 0:
+						DoScriptText(SCRIPT_TEXT5, me); //1
+						HandleGameObject(DATA_ARENA4, false);
+						Start(false, false);
+						CanWalk = true;
+						Event_Timer = 0;
+						break;
+					case 1:
+						CanWalk = true;
+						Event_Timer = 0;
+						break;
+					case 2:
+						Event_Timer = 2000;
+						break;
+					case 3:
+						HandleGameObject(DATA_ARENA1, true);
+						Event_Timer = 3000;
+						break;
+					case 4:
+						CanWalk = true;
+						me->SetVisible(false);
+						SummonRingMob();
+						Event_Timer = 8000;
+						break;
+					case 5:
+						SummonRingMob();
+						SummonRingMob();
+						Event_Timer = 8000;
+						break;
+					case 6:
+						SummonRingMob();
+						Event_Timer = 0;
+						break;
+					case 7:
+						me->SetVisible(true);
+						HandleGameObject(DATA_ARENA1, false);
+						DoScriptText(SCRIPT_TEXT6, me); //4
+						CanWalk = true;
+						Event_Timer = 0;
+						break;
+					case 8:
+						HandleGameObject(DATA_ARENA2, true);
+						Event_Timer = 5000;
+						break;
+					case 9:
+						me->SetVisible(false);
+						SummonRingBoss();
+						Event_Timer = 0;
+						break;
+					case 10:
+						//if quest, complete
+						HandleGameObject(DATA_ARENA2, false);
+						HandleGameObject(DATA_ARENA3, true);
+						HandleGameObject(DATA_ARENA4, true);
+						CanWalk = true;
+						Event_Timer = 0;
+						break;
+					}
+					++EventPhase;
+				} else
+					Event_Timer -= diff;
+			}
 
-            if (CanWalk)
-                npc_escortAI::UpdateAI(diff);
-        }
-    };
+			if (CanWalk)
+				npc_escortAI::UpdateAI(diff);
+		}
+	};
 };
 
 /*######
@@ -358,67 +358,67 @@ public:
  ######*/
 
 enum PhalanxSpells {
-    SPELL_THUNDERCLAP = 8732,
-    SPELL_FIREBALLVOLLEY = 22425,
-    SPELL_MIGHTYBLOW = 14099
+	SPELL_THUNDERCLAP = 8732,
+	SPELL_FIREBALLVOLLEY = 22425,
+	SPELL_MIGHTYBLOW = 14099
 };
 
 class mob_phalanx: public CreatureScript {
 public:
-    mob_phalanx() :
-            CreatureScript("mob_phalanx") {
-    }
+	mob_phalanx() :
+			CreatureScript("mob_phalanx") {
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const {
-        return new mob_phalanxAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new mob_phalanxAI(pCreature);
+	}
 
-    struct mob_phalanxAI: public ScriptedAI {
-        mob_phalanxAI(Creature *c) :
-                ScriptedAI(c) {
-        }
+	struct mob_phalanxAI: public ScriptedAI {
+		mob_phalanxAI(Creature *c) :
+				ScriptedAI(c) {
+		}
 
-        uint32 ThunderClap_Timer;
-        uint32 FireballVolley_Timer;
-        uint32 MightyBlow_Timer;
+		uint32 ThunderClap_Timer;
+		uint32 FireballVolley_Timer;
+		uint32 MightyBlow_Timer;
 
-        void Reset() {
-            ThunderClap_Timer = 12000;
-            FireballVolley_Timer = 0;
-            MightyBlow_Timer = 15000;
-        }
+		void Reset() {
+			ThunderClap_Timer = 12000;
+			FireballVolley_Timer = 0;
+			MightyBlow_Timer = 15000;
+		}
 
-        void UpdateAI(const uint32 diff) {
-            //Return since we have no target
-            if (!UpdateVictim())
-                return;
+		void UpdateAI(const uint32 diff) {
+			//Return since we have no target
+			if (!UpdateVictim())
+				return;
 
-            //ThunderClap_Timer
-            if (ThunderClap_Timer <= diff) {
-                DoCast(me->getVictim(), SPELL_THUNDERCLAP);
-                ThunderClap_Timer = 10000;
-            } else
-                ThunderClap_Timer -= diff;
+			//ThunderClap_Timer
+			if (ThunderClap_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_THUNDERCLAP);
+				ThunderClap_Timer = 10000;
+			} else
+				ThunderClap_Timer -= diff;
 
-            //FireballVolley_Timer
-            if (HealthBelowPct(51)) {
-                if (FireballVolley_Timer <= diff) {
-                    DoCast(me->getVictim(), SPELL_FIREBALLVOLLEY);
-                    FireballVolley_Timer = 15000;
-                } else
-                    FireballVolley_Timer -= diff;
-            }
+			//FireballVolley_Timer
+			if (HealthBelowPct(51)) {
+				if (FireballVolley_Timer <= diff) {
+					DoCast(me->getVictim(), SPELL_FIREBALLVOLLEY);
+					FireballVolley_Timer = 15000;
+				} else
+					FireballVolley_Timer -= diff;
+			}
 
-            //MightyBlow_Timer
-            if (MightyBlow_Timer <= diff) {
-                DoCast(me->getVictim(), SPELL_MIGHTYBLOW);
-                MightyBlow_Timer = 10000;
-            } else
-                MightyBlow_Timer -= diff;
+			//MightyBlow_Timer
+			if (MightyBlow_Timer <= diff) {
+				DoCast(me->getVictim(), SPELL_MIGHTYBLOW);
+				MightyBlow_Timer = 10000;
+			} else
+				MightyBlow_Timer -= diff;
 
-            DoMeleeAttackIfReady();
-        }
-    };
+			DoMeleeAttackIfReady();
+		}
+	};
 };
 
 /*######
@@ -426,7 +426,7 @@ public:
  ######*/
 
 enum KharamQuests {
-    QUEST_4001 = 4001, QUEST_4342 = 4342
+	QUEST_4001 = 4001, QUEST_4342 = 4342
 };
 
 #define GOSSIP_ITEM_KHARAN_1    "I need to know where the princess are, Kharan!"
@@ -443,75 +443,75 @@ enum KharamQuests {
 
 class npc_kharan_mighthammer: public CreatureScript {
 public:
-    npc_kharan_mighthammer() :
-            CreatureScript("npc_kharan_mighthammer") {
-    }
+	npc_kharan_mighthammer() :
+			CreatureScript("npc_kharan_mighthammer") {
+	}
 
-    bool OnGossipSelect(Player* pPlayer, Creature* pCreature,
-            uint32 /*uiSender*/, uint32 uiAction) {
-        pPlayer->PlayerTalkClass->ClearMenus();
-        switch (uiAction) {
-        case GOSSIP_ACTION_INFO_DEF + 1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-            pPlayer->SEND_GOSSIP_MENU(2475, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
-            pPlayer->SEND_GOSSIP_MENU(2476, pCreature->GetGUID());
-            break;
+	bool OnGossipSelect(Player* pPlayer, Creature* pCreature,
+			uint32 /*uiSender*/, uint32 uiAction) {
+		pPlayer->PlayerTalkClass->ClearMenus();
+		switch (uiAction) {
+		case GOSSIP_ACTION_INFO_DEF + 1:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+			pPlayer->SEND_GOSSIP_MENU(2475, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 2:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+			pPlayer->SEND_GOSSIP_MENU(2476, pCreature->GetGUID());
+			break;
 
-        case GOSSIP_ACTION_INFO_DEF + 3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_5, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
-            pPlayer->SEND_GOSSIP_MENU(2477, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 4:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_6, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
-            pPlayer->SEND_GOSSIP_MENU(2478, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 5:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_7, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
-            pPlayer->SEND_GOSSIP_MENU(2479, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 6:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_8, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+7);
-            pPlayer->SEND_GOSSIP_MENU(2480, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 7:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_9, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+8);
-            pPlayer->SEND_GOSSIP_MENU(2481, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 8:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_10, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+9);
-            pPlayer->SEND_GOSSIP_MENU(2482, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 9:
-            pPlayer->CLOSE_GOSSIP_MENU();
-            if (pPlayer->GetTeam() == HORDE)
-                pPlayer->AreaExploredOrEventHappens(QUEST_4001);
-            else
-                pPlayer->AreaExploredOrEventHappens(QUEST_4342);
-            break;
-        }
-        return true;
-    }
+		case GOSSIP_ACTION_INFO_DEF + 3:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_5, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
+			pPlayer->SEND_GOSSIP_MENU(2477, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 4:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_6, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
+			pPlayer->SEND_GOSSIP_MENU(2478, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 5:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_7, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
+			pPlayer->SEND_GOSSIP_MENU(2479, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 6:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_8, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+7);
+			pPlayer->SEND_GOSSIP_MENU(2480, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 7:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_9, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+8);
+			pPlayer->SEND_GOSSIP_MENU(2481, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 8:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_10, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+9);
+			pPlayer->SEND_GOSSIP_MENU(2482, pCreature->GetGUID());
+			break;
+		case GOSSIP_ACTION_INFO_DEF + 9:
+			pPlayer->CLOSE_GOSSIP_MENU();
+			if (pPlayer->GetTeam() == HORDE)
+				pPlayer->AreaExploredOrEventHappens(QUEST_4001);
+			else
+				pPlayer->AreaExploredOrEventHappens(QUEST_4342);
+			break;
+		}
+		return true;
+	}
 
-    bool OnGossipHello(Player* pPlayer, Creature* pCreature) {
-        if (pCreature->isQuestGiver())
-            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	bool OnGossipHello(Player* pPlayer, Creature* pCreature) {
+		if (pCreature->isQuestGiver())
+			pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-        if (pPlayer->GetQuestStatus(QUEST_4001) == QUEST_STATUS_INCOMPLETE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+		if (pPlayer->GetQuestStatus(QUEST_4001) == QUEST_STATUS_INCOMPLETE)
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
-        if (pPlayer->GetQuestStatus(4342) == QUEST_STATUS_INCOMPLETE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+		if (pPlayer->GetQuestStatus(4342) == QUEST_STATUS_INCOMPLETE)
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
 
-        if (pPlayer->GetTeam() == HORDE)
-            pPlayer->SEND_GOSSIP_MENU(2473, pCreature->GetGUID());
-        else
-            pPlayer->SEND_GOSSIP_MENU(2474, pCreature->GetGUID());
+		if (pPlayer->GetTeam() == HORDE)
+			pPlayer->SEND_GOSSIP_MENU(2473, pCreature->GetGUID());
+		else
+			pPlayer->SEND_GOSSIP_MENU(2474, pCreature->GetGUID());
 
-        return true;
-    }
+		return true;
+	}
 };
 
 /*######
@@ -519,15 +519,15 @@ public:
  ######*/
 
 enum LokhtosItems {
-    ITEM_THRORIUM_BROTHERHOOD_CONTRACT = 18628, ITEM_SULFURON_INGOT = 17203
+	ITEM_THRORIUM_BROTHERHOOD_CONTRACT = 18628, ITEM_SULFURON_INGOT = 17203
 };
 
 enum LokhtosQuests {
-    QUEST_A_BINDING_CONTRACT = 7604
+	QUEST_A_BINDING_CONTRACT = 7604
 };
 
 enum LokhtosSpells {
-    SPELL_CREATE_THORIUM_BROTHERHOOD_CONTRACT_DND = 23059
+	SPELL_CREATE_THORIUM_BROTHERHOOD_CONTRACT_DND = 23059
 };
 
 #define GOSSIP_ITEM_SHOW_ACCESS     "Show me what I have access to, Lothos."
@@ -535,46 +535,46 @@ enum LokhtosSpells {
 
 class npc_lokhtos_darkbargainer: public CreatureScript {
 public:
-    npc_lokhtos_darkbargainer() :
-            CreatureScript("npc_lokhtos_darkbargainer") {
-    }
+	npc_lokhtos_darkbargainer() :
+			CreatureScript("npc_lokhtos_darkbargainer") {
+	}
 
-    bool OnGossipSelect(Player* pPlayer, Creature* pCreature,
-            uint32 /*uiSender*/, uint32 uiAction) {
-        pPlayer->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
-            pPlayer->CLOSE_GOSSIP_MENU();
-            pPlayer->CastSpell(pPlayer,
-                    SPELL_CREATE_THORIUM_BROTHERHOOD_CONTRACT_DND, false);
-        }
-        if (uiAction == GOSSIP_ACTION_TRADE)
-            pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
+	bool OnGossipSelect(Player* pPlayer, Creature* pCreature,
+			uint32 /*uiSender*/, uint32 uiAction) {
+		pPlayer->PlayerTalkClass->ClearMenus();
+		if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
+			pPlayer->CLOSE_GOSSIP_MENU();
+			pPlayer->CastSpell(pPlayer,
+					SPELL_CREATE_THORIUM_BROTHERHOOD_CONTRACT_DND, false);
+		}
+		if (uiAction == GOSSIP_ACTION_TRADE)
+			pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
 
-        return true;
-    }
+		return true;
+	}
 
-    bool OnGossipHello(Player* pPlayer, Creature* pCreature) {
-        if (pCreature->isQuestGiver())
-            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	bool OnGossipHello(Player* pPlayer, Creature* pCreature) {
+		if (pCreature->isQuestGiver())
+			pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-        if (pCreature->isVendor()
-                && pPlayer->GetReputationRank(59) >= REP_FRIENDLY)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_ITEM_SHOW_ACCESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+		if (pCreature->isVendor()
+				&& pPlayer->GetReputationRank(59) >= REP_FRIENDLY)
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_ITEM_SHOW_ACCESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
 
-        if (pPlayer->GetQuestRewardStatus(QUEST_A_BINDING_CONTRACT) != 1
-                && !pPlayer->HasItemCount(ITEM_THRORIUM_BROTHERHOOD_CONTRACT, 1,
-                        true)
-                && pPlayer->HasItemCount(ITEM_SULFURON_INGOT, 1)) {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GET_CONTRACT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
+		if (pPlayer->GetQuestRewardStatus(QUEST_A_BINDING_CONTRACT) != 1
+				&& !pPlayer->HasItemCount(ITEM_THRORIUM_BROTHERHOOD_CONTRACT, 1,
+						true)
+				&& pPlayer->HasItemCount(ITEM_SULFURON_INGOT, 1)) {
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GET_CONTRACT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+		}
 
-        if (pPlayer->GetReputationRank(59) < REP_FRIENDLY)
-            pPlayer->SEND_GOSSIP_MENU(3673, pCreature->GetGUID());
-        else
-            pPlayer->SEND_GOSSIP_MENU(3677, pCreature->GetGUID());
+		if (pPlayer->GetReputationRank(59) < REP_FRIENDLY)
+			pPlayer->SEND_GOSSIP_MENU(3673, pCreature->GetGUID());
+		else
+			pPlayer->SEND_GOSSIP_MENU(3677, pCreature->GetGUID());
 
-        return true;
-    }
+		return true;
+	}
 };
 
 /*######
@@ -582,7 +582,7 @@ public:
  ######*/
 
 enum DughalQuests {
-    QUEST_JAIL_BREAK = 4322
+	QUEST_JAIL_BREAK = 4322
 };
 
 #define SAY_DUGHAL_FREE         "Thank you, $N! I'm free!!!"
@@ -1175,138 +1175,138 @@ int wp = 0;
  ######*/
 
 enum RocknotSays {
-    SAY_GOT_BEER = -1230000
+	SAY_GOT_BEER = -1230000
 };
 
 enum RocknotSpells {
-    SPELL_DRUNKEN_RAGE = 14872
+	SPELL_DRUNKEN_RAGE = 14872
 };
 
 enum RocknotQuests {
-    QUEST_ALE = 4295
+	QUEST_ALE = 4295
 };
 
 class npc_rocknot: public CreatureScript {
 public:
-    npc_rocknot() :
-            CreatureScript("npc_rocknot") {
-    }
+	npc_rocknot() :
+			CreatureScript("npc_rocknot") {
+	}
 
-    bool ChooseReward(Player* /*pPlayer*/, Creature* pCreature,
-            const Quest *_Quest, uint32 /*item*/) {
-        InstanceScript* pInstance = pCreature->GetInstanceScript();
+	bool ChooseReward(Player* /*pPlayer*/, Creature* pCreature,
+			const Quest *_Quest, uint32 /*item*/) {
+		InstanceScript* pInstance = pCreature->GetInstanceScript();
 
-        if (!pInstance)
-            return true;
+		if (!pInstance)
+			return true;
 
-        if (pInstance->GetData(TYPE_BAR) == DONE
-                || pInstance->GetData(TYPE_BAR) == SPECIAL)
-            return true;
+		if (pInstance->GetData(TYPE_BAR) == DONE
+				|| pInstance->GetData(TYPE_BAR) == SPECIAL)
+			return true;
 
-        if (_Quest->GetQuestId() == QUEST_ALE) {
-            if (pInstance->GetData(TYPE_BAR) != IN_PROGRESS)
-                pInstance->SetData(TYPE_BAR, IN_PROGRESS);
+		if (_Quest->GetQuestId() == QUEST_ALE) {
+			if (pInstance->GetData(TYPE_BAR) != IN_PROGRESS)
+				pInstance->SetData(TYPE_BAR, IN_PROGRESS);
 
-            pInstance->SetData(TYPE_BAR, SPECIAL);
+			pInstance->SetData(TYPE_BAR, SPECIAL);
 
-            //keep track of amount in instance script, returns SPECIAL if amount ok and event in progress
-            if (pInstance->GetData(TYPE_BAR) == SPECIAL) {
-                DoScriptText(SAY_GOT_BEER, pCreature);
-                pCreature->CastSpell(pCreature, SPELL_DRUNKEN_RAGE, false);
-                if (npc_escortAI* pEscortAI = CAST_AI(npc_rocknot::npc_rocknotAI, pCreature->AI()))
-                    pEscortAI->Start(false, false);
-            }
-        }
+			//keep track of amount in instance script, returns SPECIAL if amount ok and event in progress
+			if (pInstance->GetData(TYPE_BAR) == SPECIAL) {
+				DoScriptText(SAY_GOT_BEER, pCreature);
+				pCreature->CastSpell(pCreature, SPELL_DRUNKEN_RAGE, false);
+				if (npc_escortAI* pEscortAI = CAST_AI(npc_rocknot::npc_rocknotAI, pCreature->AI()))
+					pEscortAI->Start(false, false);
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    CreatureAI* GetAI(Creature* pCreature) const {
-        return new npc_rocknotAI(pCreature);
-    }
+	CreatureAI* GetAI(Creature* pCreature) const {
+		return new npc_rocknotAI(pCreature);
+	}
 
-    struct npc_rocknotAI: public npc_escortAI {
-        npc_rocknotAI(Creature *c) :
-                npc_escortAI(c) {
-            pInstance = c->GetInstanceScript();
-        }
+	struct npc_rocknotAI: public npc_escortAI {
+		npc_rocknotAI(Creature *c) :
+				npc_escortAI(c) {
+			pInstance = c->GetInstanceScript();
+		}
 
-        InstanceScript* pInstance;
+		InstanceScript* pInstance;
 
-        uint32 BreakKeg_Timer;
-        uint32 BreakDoor_Timer;
+		uint32 BreakKeg_Timer;
+		uint32 BreakDoor_Timer;
 
-        void Reset() {
-            if (HasEscortState(STATE_ESCORT_ESCORTING))
-                return;
+		void Reset() {
+			if (HasEscortState(STATE_ESCORT_ESCORTING))
+				return;
 
-            BreakKeg_Timer = 0;
-            BreakDoor_Timer = 0;
-        }
+			BreakKeg_Timer = 0;
+			BreakDoor_Timer = 0;
+		}
 
-        void DoGo(uint32 id, uint32 state) {
-            if (GameObject* pGo = pInstance->instance->GetGameObject(pInstance->GetData64(id)))
-                pGo->SetGoState((GOState) state);
-        }
+		void DoGo(uint32 id, uint32 state) {
+			if (GameObject* pGo = pInstance->instance->GetGameObject(pInstance->GetData64(id)))
+				pGo->SetGoState((GOState) state);
+		}
 
-        void WaypointReached(uint32 i) {
-            if (!pInstance)
-                return;
+		void WaypointReached(uint32 i) {
+			if (!pInstance)
+				return;
 
-            switch (i) {
-            case 1:
-                me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
-                break;
-            case 2:
-                me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACKUNARMED);
-                break;
-            case 3:
-                me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACKUNARMED);
-                break;
-            case 4:
-                me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
-                break;
-            case 5:
-                me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
-                BreakKeg_Timer = 2000;
-                break;
-            }
-        }
+			switch (i) {
+			case 1:
+				me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
+				break;
+			case 2:
+				me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACKUNARMED);
+				break;
+			case 3:
+				me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACKUNARMED);
+				break;
+			case 4:
+				me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
+				break;
+			case 5:
+				me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
+				BreakKeg_Timer = 2000;
+				break;
+			}
+		}
 
-        void UpdateAI(const uint32 diff) {
-            if (!pInstance)
-                return;
+		void UpdateAI(const uint32 diff) {
+			if (!pInstance)
+				return;
 
-            if (BreakKeg_Timer) {
-                if (BreakKeg_Timer <= diff) {
-                    DoGo(DATA_GO_BAR_KEG, 0);
-                    BreakKeg_Timer = 0;
-                    BreakDoor_Timer = 1000;
-                } else
-                    BreakKeg_Timer -= diff;
-            }
+			if (BreakKeg_Timer) {
+				if (BreakKeg_Timer <= diff) {
+					DoGo(DATA_GO_BAR_KEG, 0);
+					BreakKeg_Timer = 0;
+					BreakDoor_Timer = 1000;
+				} else
+					BreakKeg_Timer -= diff;
+			}
 
-            if (BreakDoor_Timer) {
-                if (BreakDoor_Timer <= diff) {
-                    DoGo(DATA_GO_BAR_DOOR, 2);
-                    DoGo(DATA_GO_BAR_KEG_TRAP, 0); //doesn't work very well, leaving code here for future
-                    //spell by trap has effect61, this indicate the bar go hostile
+			if (BreakDoor_Timer) {
+				if (BreakDoor_Timer <= diff) {
+					DoGo(DATA_GO_BAR_DOOR, 2);
+					DoGo(DATA_GO_BAR_KEG_TRAP, 0); //doesn't work very well, leaving code here for future
+					//spell by trap has effect61, this indicate the bar go hostile
 
-                    if (Unit *tmp = Unit::GetUnit(*me, pInstance->GetData64(DATA_PHALANX)))
-                        tmp->setFaction(14);
+					if (Unit *tmp = Unit::GetUnit(*me, pInstance->GetData64(DATA_PHALANX)))
+						tmp->setFaction(14);
 
-                    //for later, this event(s) has alot more to it.
-                    //optionally, DONE can trigger bar to go hostile.
-                    pInstance->SetData(TYPE_BAR, DONE);
+					//for later, this event(s) has alot more to it.
+					//optionally, DONE can trigger bar to go hostile.
+					pInstance->SetData(TYPE_BAR, DONE);
 
-                    BreakDoor_Timer = 0;
-                } else
-                    BreakDoor_Timer -= diff;
-            }
+					BreakDoor_Timer = 0;
+				} else
+					BreakDoor_Timer -= diff;
+			}
 
-            npc_escortAI::UpdateAI(diff);
-        }
-    };
+			npc_escortAI::UpdateAI(diff);
+		}
+	};
 };
 
 /*######
@@ -1314,15 +1314,15 @@ public:
  ######*/
 
 void AddSC_blackrock_depths() {
-    new go_shadowforge_brazier();
-    new at_ring_of_law();
-    new npc_grimstone();
-    new mob_phalanx();
-    new npc_kharan_mighthammer();
-    new npc_lokhtos_darkbargainer();
-    //new npc_dughal_stormwing();
-    //new npc_tobias_seecher();
-    //new npc_marshal_windsor();
-    //new npc_marshal_reginald_windsor();
-    new npc_rocknot();
+	new go_shadowforge_brazier();
+	new at_ring_of_law();
+	new npc_grimstone();
+	new mob_phalanx();
+	new npc_kharan_mighthammer();
+	new npc_lokhtos_darkbargainer();
+	//new npc_dughal_stormwing();
+	//new npc_tobias_seecher();
+	//new npc_marshal_windsor();
+	//new npc_marshal_reginald_windsor();
+	new npc_rocknot();
 }

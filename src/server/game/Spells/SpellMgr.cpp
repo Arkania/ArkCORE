@@ -2901,77 +2901,76 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(
     }
 
     // bg spell checks
-    switch (spellInfo->Id) 
+    switch (spellInfo->Id) {
+    case 23333: // Warsong Flag
+    case 23335: // Silverwing Flag
+        return map_id == 489 || 726 && player && player->InBattleground() ?
+                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+    case 34976: // Netherstorm Flag
+        return map_id == 566 && player && player->InBattleground() ?
+                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+    case 2584: // Waiting to Resurrect
+    case 22011: // Spirit Heal Channel
+    case 22012: // Spirit Heal
+    case 24171: // Resurrection Impact Visual
+    case 42792: // Recently Dropped Flag
+    case 43681: // Inactive
+    case 44535: // Spirit Heal (mana)
     {
-	    case 23333: // Warsong Flag
-	    case 23335: // Silverwing Flag
-	        return map_id == 489 || 726 && player && player->InBattleground() ?
-	                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-	    case 34976: // Netherstorm Flag
-	        return map_id == 566 && player && player->InBattleground() ?
-	                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-	    case 2584: // Waiting to Resurrect
-	    case 22011: // Spirit Heal Channel
-	    case 22012: // Spirit Heal
-	    case 24171: // Resurrection Impact Visual
-	    case 42792: // Recently Dropped Flag
-	    case 43681: // Inactive
-	    case 44535: // Spirit Heal (mana)
-	    {
-	        MapEntry const* mapEntry = sMapStore.LookupEntry(map_id);
-	        if (!mapEntry)
-	            return SPELL_FAILED_INCORRECT_AREA;
-	
-	        return zone_id == 4197
-	                || (mapEntry->IsBattleground() && player
-	                        && player->InBattleground()) ?
-	                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-	    }
-	    case 44521: // Preparation
-	    {
-	        if (!player)
-	            return SPELL_FAILED_REQUIRES_AREA;
-	
-	        MapEntry const *mapEntry = sMapStore.LookupEntry(map_id);
-	        if (!mapEntry)
-	            return SPELL_FAILED_INCORRECT_AREA;
-	
-	        if (!mapEntry->IsBattleground())
-	            return SPELL_FAILED_REQUIRES_AREA;
-	
-	        Battleground* bg = player->GetBattleground();
-	        return bg && bg->GetStatus() == STATUS_WAIT_JOIN ?
-	                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-	    }
-	    case 32724: // Gold Team (Alliance)
-	    case 32725: // Green Team (Alliance)
-	    case 35774: // Gold Team (Horde)
-	    case 35775: // Green Team (Horde)
-	    {
-	        MapEntry const *mapEntry = sMapStore.LookupEntry(map_id);
-	        if (!mapEntry)
-	            return SPELL_FAILED_INCORRECT_AREA;
-	
-	        return mapEntry->IsBattleArena() && player && player->InBattleground() ?
-	                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-	    }
-	    case 32727: // Arena Preparation
-	    {
-	        if (!player)
-	            return SPELL_FAILED_REQUIRES_AREA;
-	
-	        MapEntry const *mapEntry = sMapStore.LookupEntry(map_id);
-	        if (!mapEntry)
-	            return SPELL_FAILED_INCORRECT_AREA;
-	
-	        if (!mapEntry->IsBattleArena())
-	            return SPELL_FAILED_REQUIRES_AREA;
-	
-	        Battleground *bg = player->GetBattleground();
-	        return bg && bg->GetStatus() == STATUS_WAIT_JOIN ?
-	                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-	    }
-	}
+        MapEntry const* mapEntry = sMapStore.LookupEntry(map_id);
+        if (!mapEntry)
+            return SPELL_FAILED_INCORRECT_AREA;
+
+        return zone_id == 4197
+                || (mapEntry->IsBattleground() && player
+                        && player->InBattleground()) ?
+                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+    }
+    case 44521: // Preparation
+    {
+        if (!player)
+            return SPELL_FAILED_REQUIRES_AREA;
+
+        MapEntry const *mapEntry = sMapStore.LookupEntry(map_id);
+        if (!mapEntry)
+            return SPELL_FAILED_INCORRECT_AREA;
+
+        if (!mapEntry->IsBattleground())
+            return SPELL_FAILED_REQUIRES_AREA;
+
+        Battleground* bg = player->GetBattleground();
+        return bg && bg->GetStatus() == STATUS_WAIT_JOIN ?
+                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+    }
+    case 32724: // Gold Team (Alliance)
+    case 32725: // Green Team (Alliance)
+    case 35774: // Gold Team (Horde)
+    case 35775: // Green Team (Horde)
+    {
+        MapEntry const *mapEntry = sMapStore.LookupEntry(map_id);
+        if (!mapEntry)
+            return SPELL_FAILED_INCORRECT_AREA;
+
+        return mapEntry->IsBattleArena() && player && player->InBattleground() ?
+                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+    }
+    case 32727: // Arena Preparation
+    {
+        if (!player)
+            return SPELL_FAILED_REQUIRES_AREA;
+
+        MapEntry const *mapEntry = sMapStore.LookupEntry(map_id);
+        if (!mapEntry)
+            return SPELL_FAILED_INCORRECT_AREA;
+
+        if (!mapEntry->IsBattleArena())
+            return SPELL_FAILED_REQUIRES_AREA;
+
+        Battleground *bg = player->GetBattleground();
+        return bg && bg->GetStatus() == STATUS_WAIT_JOIN ?
+                SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+    }
+    }
 
     // aura limitations
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i) {
@@ -4745,12 +4744,12 @@ void SpellMgr::LoadActionBarSpellOverride()
 
 ActionBarSpellOverride const* SpellMgr::GetActionBarSpellOverride(uint32 overrideSpell) const
 {
-    ActionBarSpellOverrideMap::const_iterator itr = mActionBarSpellOverrideMap.find(overrideSpell);
+	ActionBarSpellOverrideMap::const_iterator itr = mActionBarSpellOverrideMap.find(overrideSpell);
 
-    if(itr == mActionBarSpellOverrideMap.end())
-        return NULL;
-    else
-        return &itr->second;
+	if(itr == mActionBarSpellOverrideMap.end())
+		return NULL;
+	else
+		return &itr->second;
 }
 
 // Fill custom data about enchancments

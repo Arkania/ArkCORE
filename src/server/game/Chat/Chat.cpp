@@ -482,8 +482,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { "ticket",         SEC_MODERATOR,      false,  NULL,                                          "", ticketCommandTable },
         { "opcode",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleOpcodeTestCommand>,          "", NULL },
 
-        { "ahbotoptions",   SEC_GAMEMASTER,     true,  OldHandler<&ChatHandler::HandleAHBotOptionsCommand>,        "", NULL },
-        
         { "aura",           SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleAuraCommand>,                "", NULL },
         { "unaura",         SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleUnAuraCommand>,              "", NULL },
         { "nameannounce",   SEC_MODERATOR,      false, OldHandler<&ChatHandler::HandleNameAnnounceCommand>,        "", NULL },

@@ -220,43 +220,43 @@ public:
 
         EventMap events;
 
-        void EnterCombat(Unit * /*who*/)
-        {
-            EnterPhaseGround();
-        }
+		void EnterCombat(Unit * /*who*/)
+		{
+			EnterPhaseGround();
+		}
 
-        void EnterPhaseGround()
-        {
-            events.ScheduleEvent(EVENT_GRIFFE, 2000);
-            events.ScheduleEvent(EVENT_MAL, 6000);
-            events.ScheduleEvent(EVENT_MOGUD, 12000);
-        }
+		void EnterPhaseGround()
+		{
+			events.ScheduleEvent(EVENT_GRIFFE, 2000);
+			events.ScheduleEvent(EVENT_MAL, 6000);
+			events.ScheduleEvent(EVENT_MOGUD, 12000);
+		}
 
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
                 return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-                while (uint32 eventId = events.ExecuteEvent())
-                {
-                    switch(eventId)
-                    {
-                        case EVENT_GRIFFE:
-                            DoCastVictim(SPELL_GRIFFE);
-                            events.ScheduleEvent(EVENT_GRIFFE, 2000);
-                            return;
-                        case EVENT_MAL:
-                            DoCastVictim(SPELL_MAL);
-                            events.ScheduleEvent(EVENT_MAL, 6000);
-                            return;
-                        case EVENT_MOGUD:
-                            DoCastVictim(SPELL_MODGUD);
-                            events.ScheduleEvent(EVENT_MOGUD, 12000);
-                            return;
-                    }
-                }
+				while (uint32 eventId = events.ExecuteEvent())
+				{
+					switch(eventId)
+					{
+						case EVENT_GRIFFE:
+							DoCastVictim(SPELL_GRIFFE);
+							events.ScheduleEvent(EVENT_GRIFFE, 2000);
+							return;
+						case EVENT_MAL:
+							DoCastVictim(SPELL_MAL);
+							events.ScheduleEvent(EVENT_MAL, 6000);
+							return;
+						case EVENT_MOGUD:
+							DoCastVictim(SPELL_MODGUD);
+							events.ScheduleEvent(EVENT_MOGUD, 12000);
+							return;
+					}
+				}
 
             DoMeleeAttackIfReady();
         }
@@ -282,33 +282,33 @@ public:
 
         EventMap events;
 
-        void EnterCombat(Unit * /*who*/)
-        {
-            EnterPhaseGround();
-        }
+		void EnterCombat(Unit * /*who*/)
+		{
+			EnterPhaseGround();
+		}
 
-        void EnterPhaseGround()
-        {
-            events.ScheduleEvent(EVENT_GRIFFE, 5000);
-        }
+		void EnterPhaseGround()
+		{
+			events.ScheduleEvent(EVENT_GRIFFE, 5000);
+		}
 
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
                 return;
 
-            events.Update(diff);
+			events.Update(diff);
 
-                while (uint32 eventId = events.ExecuteEvent())
-                {
-                    switch(eventId)
-                    {
-                        case EVENT_GRIFFE:
-                            DoCastVictim(SPELL_GRIFFE);
-                            events.ScheduleEvent(EVENT_GRIFFE, 5000);
-                            return;
-                    }
-                }
+				while (uint32 eventId = events.ExecuteEvent())
+				{
+					switch(eventId)
+					{
+						case EVENT_GRIFFE:
+							DoCastVictim(SPELL_GRIFFE);
+							events.ScheduleEvent(EVENT_GRIFFE, 5000);
+							return;
+					}
+				}
 
             DoMeleeAttackIfReady();
         }
@@ -323,6 +323,6 @@ public:
 void AddSC_boss_general_umbriss()
 {
     new boss_general_umbriss();
-    new npc_habitant();
-    new npc_malveillant();
+	new npc_habitant();
+	new npc_malveillant();
 }

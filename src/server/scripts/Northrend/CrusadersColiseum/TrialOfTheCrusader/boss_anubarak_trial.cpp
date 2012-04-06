@@ -151,7 +151,7 @@ public:
         bool   m_bReachedPhase3;
         uint64 m_uiTargetGUID;
         uint8  m_uiScarabSummoned;
-        uint64 m_uiSpikeGUID;
+		uint64 m_uiSpikeGUID;
 
         void Reset()
         {
@@ -248,7 +248,7 @@ public:
                     break;
                 case NPC_SPIKE:
                     pSummoned->CombatStart(target);
-                    m_uiSpikeGUID = pSummoned->GetGUID();
+					m_uiSpikeGUID = pSummoned->GetGUID();
                     DoScriptText(EMOTE_SPIKE, me, target);
                     break;
             }
@@ -370,7 +370,7 @@ public:
                 case 3:
                     m_uiStage = 0;
                     DoCast(SPELL_SPIKE_TELE);
-                    if (Creature* pSpike = Unit::GetCreature(*me, m_uiSpikeGUID))
+					if (Creature* pSpike = Unit::GetCreature(*me, m_uiSpikeGUID))
                         me->NearTeleportTo(pSpike->GetPositionX(), pSpike->GetPositionY(), pSpike->GetPositionZ(), pSpike->GetOrientation());
                     Summons.DespawnEntry(NPC_SPIKE);
                     me->RemoveAurasDueToSpell(SPELL_SUBMERGE_ANUBARAK);

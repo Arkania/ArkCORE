@@ -499,9 +499,9 @@ bool WINAPI SFileOpenPatchArchive(
     if (nError == ERROR_SUCCESS)
     {
         if ((ha->pStream->StreamFlags & STREAM_FLAG_READ_ONLY) == 0)
-        {
+		{
             nError = ERROR_ACCESS_DENIED;
-        }
+		}
     }
 
     // Open the archive like it is normal archive

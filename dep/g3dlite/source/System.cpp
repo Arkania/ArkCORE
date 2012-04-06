@@ -286,30 +286,30 @@ void System::init() {
         m_secondsPerNS = 1.0 / 1.0e9;
 
         // System Architecture:
-    const NXArchInfo* pInfo = NXGetLocalArchInfo();
+	const NXArchInfo* pInfo = NXGetLocalArchInfo();
 
-    if (pInfo) {
-        m_cpuArch = pInfo->description;
+	if (pInfo) {
+	    m_cpuArch = pInfo->description;
 
-        switch (pInfo->cputype) {
-        case CPU_TYPE_POWERPC:
-            switch(pInfo->cpusubtype){
-        case CPU_SUBTYPE_POWERPC_750:
-        case CPU_SUBTYPE_POWERPC_7400:
-        case CPU_SUBTYPE_POWERPC_7450:
-            m_cpuVendor = "Motorola";
-            break;
-        case CPU_SUBTYPE_POWERPC_970:
-            m_cpuVendor = "IBM";
-            break;
-        }
-        break;
+	    switch (pInfo->cputype) {
+	    case CPU_TYPE_POWERPC:
+	        switch(pInfo->cpusubtype){
+		case CPU_SUBTYPE_POWERPC_750:
+		case CPU_SUBTYPE_POWERPC_7400:
+		case CPU_SUBTYPE_POWERPC_7450:
+		    m_cpuVendor = "Motorola";
+		    break;
+		case CPU_SUBTYPE_POWERPC_970:
+		    m_cpuVendor = "IBM";
+		    break;
+		}
+		break;
 
             case CPU_TYPE_I386:
                 m_cpuVendor = "Intel";
                 break;
-        }
-    }
+	    }
+	}
 #   endif
 
     initTime();
@@ -1594,7 +1594,7 @@ std::string System::getClipboardText() {
             if (h) {
                 char* temp = (char*)GlobalLock(h);
                 if (temp) {
-                    s = temp;
+    	            s = temp;
                 }
                 temp = NULL;
                 GlobalUnlock(h);
