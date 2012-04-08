@@ -126,6 +126,7 @@ enum Vehicles {
 #define EMOTE_PURSUE          "Flame Leviathan pursues $N."
 #define EMOTE_OVERLOAD        "Flame Leviathan's circuits overloaded."
 #define EMOTE_REPAIR          "Automatic repair sequence initiated."
+#define DATA_SHUTOUT      29112912 // 2911, 2912 are achievement IDs
 
 enum Yells {
     SAY_AGGRO = -1603060,
@@ -665,6 +666,23 @@ public:
             return true;
         }
     };
+};
+
+class achievement_three_car_garage_demolisher : public AchievementCriteriaScript
+{
+    public:
+        achievement_three_car_garage_demolisher() : AchievementCriteriaScript("achievement_three_car_garage_demolisher") { }
+
+        bool OnCheck(Player* source, Unit* /*target*/)
+        {
+            if (Creature* vehicle = source->GetVehicleCreatureBase())
+            {
+                if (vehicle->GetEntry() == VEHICLE_DEMOLISHER)
+                    return true;
+            }
+
+            return false;
+        }
 };
 
 class boss_flame_leviathan_defense_turret: public CreatureScript {
@@ -1253,6 +1271,22 @@ public:
     }
 };
 
+class achievement_shutout : public AchievementCriteriaScript
+{
+    public:
+        achievement_shutout() : AchievementCriteriaScript("achievement_shutout") { }
+
+        bool OnCheck(Player* /*source*/, Unit* target)
+        {
+            if (target)
+                if (Creature* leviathan = target->ToCreature())
+                    if (leviathan->AI()->GetData(DATA_SHUTOUT))
+                        return true;
+
+            return false;
+        }
+};
+
 class at_RX_214_repair_o_matic_station: public AreaTriggerScript {
 public:
     at_RX_214_repair_o_matic_station() :
@@ -1270,6 +1304,22 @@ public:
         return true;
     }
 };
+
+class achievement_unbroken : public AchievementCriteriaScript
+{
+    public:
+        achievement_unbroken() : AchievementCriteriaScript("achievement_unbroken") { }
+
+        bool OnCheck(Player* /*source*/, Unit* target)
+        {
+            if (target)
+                if (InstanceScript* instance = target->GetInstanceScript())
+                    return instance->GetData(DATA_UNBROKEN);
+
+            return false;
+        }
+};
+
 
 void AddSC_boss_flame_leviathan() {
     new boss_flame_leviathan();
@@ -1289,4 +1339,7 @@ void AddSC_boss_flame_leviathan() {
     // new npc_brann_bronzebeard();
     new go_ulduar_tower();
     new at_RX_214_repair_o_matic_station();
+	new achievement_shutout();
+	new achievement_three_car_garage_demolisher();
+	new achievement_unbroken();
 }

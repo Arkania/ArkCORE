@@ -86,4 +86,10 @@ enum eAchievementCriteria {
 	ACHIEVEMENT_CRITERIA_HOT_POCKET_10 = 10430, //ignis
 	ACHIEVEMENT_CRITERIA_HOT_POCKET_25 = 10431,
 };
+
+enum UlduarAchievementData
+{
+    // FL Achievement boolean
+    DATA_UNBROKEN = 29052906, // 2905, 2906 are achievement IDs,
+};
 #endif

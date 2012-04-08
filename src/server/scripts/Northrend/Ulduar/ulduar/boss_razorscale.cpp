@@ -47,6 +47,7 @@ enum Says {
 };
 
 #define GOSSIP_ITEM_1 "Activate Harpoones!"
+#define DATA_QUICK_SHAVE                         29192921 // 2919, 2921 are achievement IDs
 
 enum Spells {
     SPELL_FLAMEBUFFET = 64016,
@@ -775,6 +776,22 @@ public:
     };
 };
 
+class achievement_quick_shave : public AchievementCriteriaScript
+{
+    public:
+        achievement_quick_shave() : AchievementCriteriaScript("achievement_quick_shave") { }
+
+        bool OnCheck(Player* /*source*/, Unit* target)
+        {
+           if (target)
+                if (Creature* razorscale = target->ToCreature())
+                    if (razorscale->AI()->GetData(DATA_QUICK_SHAVE))
+                        return true;
+
+            return false;
+        }
+};
+
 void AddSC_boss_razorscale() {
     new boss_razorscale();
     new npc_expedition_commander();
@@ -783,4 +800,5 @@ void AddSC_boss_razorscale() {
     new npc_darkrune_watcher();
     new npc_darkrune_guardian();
     new npc_darkrune_sentinel();
+	new achievement_quick_shave();
 }
