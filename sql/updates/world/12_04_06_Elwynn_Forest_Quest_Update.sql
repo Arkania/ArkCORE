@@ -76,7 +76,7 @@ INSERT INTO gameobject_questrelation VALUES
 -- Create the gossip menu that gives the quests
 SET @NPC_TEXT_ID='69';
 DELETE FROM npc_text WHERE ID=@NPC_TEXT_ID;
-INSERT INTO npc_text(ID,text0_1,prob0) VALUES (SET @NPC_TEXT_ID,'There bounties on this board.',1);
+INSERT INTO npc_text(ID,text0_1,prob0) VALUES (@NPC_TEXT_ID,'There are bounties on this board.',1);
 
 SET @GOSSIP_MENU_ID='86';
 DELETE FROM gossip_menu WHERE entry=@GOSSIP_MENU_ID;
