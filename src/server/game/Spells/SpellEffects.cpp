@@ -2041,6 +2041,13 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 else SendCastResult(SPELL_FAILED_FIZZLE);
                 return;
             }
+            switch(m_spellInfo->Id){
+        case 19028:// Soul Link
+            if(m_caster->GetTypeId() == TYPEID_PLAYER)
+              if(Pet* pet =  m_caster->ToPlayer()->GetPet())
+                pet->AddAura(25228,pet);
+              break;
+        }
             break;
         case SPELLFAMILY_DRUID:
         {
