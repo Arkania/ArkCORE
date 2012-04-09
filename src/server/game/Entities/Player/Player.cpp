@@ -8058,6 +8058,16 @@ uint8 Player::GetRankFromDB(uint64 guid)
     else return 0;
 }
 
+uint32 Player::GetGuildIdFromGuid(uint64 guid)
+{
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_GUILD_ID);
+    stmt->setUInt64(0, guid);
+    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
+        return (*result)[0].GetUInt32();
+
+    return 0;
+}
+
 uint32 Player::GetArenaTeamIdFromDB(uint64 guid, uint8 type)
 {
     QueryResult result =

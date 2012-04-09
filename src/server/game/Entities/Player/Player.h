@@ -2110,6 +2110,7 @@ public:
     uint8 GetRank() {return uint8(GetUInt32Value(PLAYER_GUILDRANK));}
     void SetGuildIdInvited(uint32 GuildId) {m_GuildIdInvited = GuildId;}
     uint32 GetGuildId() {return m_guildId;}
+	static uint32 GetGuildIdFromGuid(uint64 guid);
     static uint32 GetGuildIdFromDB(uint64 guid);
     static uint8 GetRankFromDB(uint64 guid);
     int GetGuildIdInvited() {return m_GuildIdInvited;}
