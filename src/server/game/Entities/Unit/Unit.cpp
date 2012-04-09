@@ -6371,8 +6371,8 @@ bool Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage,
                     // Victorious
                 case 32216:
                 {
-                    RemoveAura(dummySpell->Id);
-                    return false;
+                    //RemoveAura(dummySpell->Id);
+                    //return false;
                 }
                     // Improved Spell Reflection
                 case 59088:
@@ -16994,8 +16994,8 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Aura * aura,
 
         if (pVictim) allow = ToPlayer()->isHonorOrXPTarget(pVictim);
 
-        // Shadow Word: Death - can trigger from every kill
-        if (aura->GetId() == 32409) allow = true;
+    // Shadow Word: Death & Victory Rush - can trigger from every kill
+    if (aura->GetId() == 32409 || aura->GetId() == 32215) allow = true;
         if (!allow) return false;
     }
     // Aura added by spell can`t trigger from self (prevent drop charges/do triggers)
