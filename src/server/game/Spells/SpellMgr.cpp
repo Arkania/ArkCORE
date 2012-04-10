@@ -842,6 +842,8 @@ bool SpellMgr::_isPositiveEffect(uint32 spellId, uint32 effIndex,
         case 61988: // Divine Shield exclude aura
             return false;
         case 30877: // Tag Murloc
+    	case 61716: // Rabbit Costume
+		case 61734: // Noblegarden Bunny
             return true;
         default:
             break;
