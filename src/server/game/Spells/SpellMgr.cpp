@@ -3848,6 +3848,10 @@ void SpellMgr::LoadSpellCustomAttr() {
         }
 
         switch (i) {
+        case 53592: // Touched by The Light
+            spellInfo->EffectMiscValue[2] = 2;
+            count++;
+            break;        	
         case 77515: // Mastery: Dreadblade
             spellInfo->EffectBasePoints[0] = 20;
             count++;
