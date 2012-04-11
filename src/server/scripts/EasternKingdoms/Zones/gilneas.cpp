@@ -797,87 +797,60 @@ enum eMerchant_square_door {
 #define DOOR_TIMER 30*IN_MILLISECONDS
 };
 
-class go_merchant_square_door: public GameObjectScript 
+class go_merchant_square_door : public GameObjectScript
 {
 public:
-    go_merchant_square_door() :
-            GameObjectScript("go_merchant_square_door") {}
+    go_merchant_square_door() : GameObjectScript("go_merchant_square_door") {}
 
-    float x, y, z, wx, wy, angle, tQuestCredit;
-    bool opened;
+    float x, y, z, wx, wy, angle;
     uint8 spawnKind;
-    Player* aPlayer;
-    GameObject* pGO;
-    uint32 DoorTimer;
 
-    bool OnGossipHello(Player* player, GameObject* pGO) 
+    bool OnGossipHello(Player* player, GameObject* go)
     {
-        if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && pGO->GetGoState() == GO_STATE_READY)
-        {
-            aPlayer = player;
-            opened = 1;
-            tQuestCredit = 2500;
-            pGO->SetGoState(GO_STATE_ACTIVE);
-            DoorTimer = DOOR_TIMER;
-            spawnKind = urand(1, 3); //1,2=citizen, 3=citizen&worgen (66%,33%)
-            angle = pGO->GetOrientation();
-            x = pGO->GetPositionX() - cos(angle) * 2;
-            y = pGO->GetPositionY() - sin(angle) * 2;
-            z = pGO->GetPositionZ();
-            wx = x - cos(angle) * 2;
-            wy = y - sin(angle) * 2;
+        if(!player)
+            return false;
 
-            if (spawnKind < 3) 
-            {
-                if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) 
-                {
-                    spawnedCreature->SetPhaseMask(6, 1);
-                    spawnedCreature->Respawn(1);
-                }
-            }
-            else 
-            {
-                if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_2,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) 
-                {
-                    spawnedCreature->SetPhaseMask(6, 1);
-                    spawnedCreature->Respawn(1);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    void OnUpdate(GameObject* pGO, uint32 diff) 
-    {
-        if (opened == 1) 
+        if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
         {
-            if (tQuestCredit <= ((float) diff / 8)) 
+            spawnKind = urand(0, 1);
+
+            go->SetGoState(GO_STATE_ACTIVE);
+            angle = go->GetOrientation();
+            x = go->GetPositionX()-cos(angle)*2;
+            y = go->GetPositionY()-sin(angle)*2;
+            z = go->GetPositionZ();
+            wx = x-cos(angle)*2;
+            wy = y-sin(angle)*2;
+
+            if (spawnKind)
             {
-                opened = 0;
-                //aPlayer->KilledMonsterCredit(35830, 0);
-                if (spawnKind == 3)
+                if (Creature* spawnedCitizen = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                 {
-                    if (Creature* spawnedCreature = pGO->SummonCreature(NPC_RAMPAGING_WORGEN_2,wx,wy,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL)) {
-                        spawnedCreature->SetPhaseMask(6, 1);
-                        spawnedCreature->Respawn(1);
-                        spawnedCreature->getThreatManager().resetAllAggro();
-                        aPlayer->AddThreat(spawnedCreature, 1.0f);
-                        spawnedCreature->AddThreat(aPlayer, 1.0f);
+                    spawnedCitizen->SetPhaseMask(6, 1);
+                    spawnedCitizen->Respawn(1);
+
+                    if (Creature* spawnedWorgen = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
+                    {
+                        spawnedWorgen->SetPhaseMask(6, 1);
+                        spawnedWorgen->Respawn(1);
+                        spawnedWorgen->getThreatManager().resetAllAggro();
+                        spawnedWorgen->AddThreat(spawnedCitizen, 1.0f);
                     }
                 }
             }
-            else tQuestCredit -= ((float) diff / 8);
+            else
+            {
+                if (Creature* spawnedCitizen = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_2, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
+                {
+                    spawnedCitizen->SetPhaseMask(6, 1);
+                    spawnedCitizen->Respawn(1);
+                }
+            }
+
+            player->KilledMonsterCredit(35830, 0);
+            return true;
         }
-        if (DoorTimer <= diff)
-        {
-          if(pGO->GetGoState() == GO_STATE_ACTIVE)
-             pGO->SetGoState(GO_STATE_READY);
-      
-          DoorTimer = DOOR_TIMER;
-        }
-        else 
-            DoorTimer -= diff;
+        return false;
     }
 };
 
