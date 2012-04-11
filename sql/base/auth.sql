@@ -1,5 +1,7 @@
 /*
-MySQL - 5.5.16 : Database - auth
+http://arkania.net
+Auth database
+Update: 11/04/2012
 *********************************************************************
 */
 
@@ -11,6 +13,8 @@ MySQL - 5.5.16 : Database - auth
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`auth` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
 /*Table structure for table `account` */
 
 DROP TABLE IF EXISTS `account`;
@@ -37,6 +41,8 @@ CREATE TABLE `account` (
   UNIQUE KEY `idx_username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
 
+/*Data for the table `account` */
+
 /*Table structure for table `account_access` */
 
 DROP TABLE IF EXISTS `account_access`;
@@ -47,6 +53,8 @@ CREATE TABLE `account_access` (
   `RealmID` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`id`,`RealmID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+/*Data for the table `account_access` */
 
 /*Table structure for table `account_banned` */
 
@@ -62,6 +70,8 @@ CREATE TABLE `account_banned` (
   PRIMARY KEY (`id`,`bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Ban List';
 
+/*Data for the table `account_banned` */
+
 /*Table structure for table `account_premium` */
 
 DROP TABLE IF EXISTS `account_premium`;
@@ -74,6 +84,8 @@ CREATE TABLE `account_premium` (
   `active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`,`setdate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Premium Accounts';
+
+/*Data for the table `account_premium` */
 
 /*Table structure for table `ip_banned` */
 
@@ -88,6 +100,8 @@ CREATE TABLE `ip_banned` (
   PRIMARY KEY (`ip`,`bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Banned IPs';
 
+/*Data for the table `ip_banned` */
+
 /*Table structure for table `logs` */
 
 DROP TABLE IF EXISTS `logs`;
@@ -98,6 +112,8 @@ CREATE TABLE `logs` (
   `type` int(4) NOT NULL,
   `string` text
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+/*Data for the table `logs` */
 
 /*Table structure for table `realmcharacters` */
 
@@ -110,6 +126,8 @@ CREATE TABLE `realmcharacters` (
   PRIMARY KEY (`realmid`,`acctid`),
   KEY `acctid` (`acctid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm Character Tracker';
+
+/*Data for the table `realmcharacters` */
 
 /*Table structure for table `realmlist` */
 
@@ -131,6 +149,8 @@ CREATE TABLE `realmlist` (
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm System';
 
+/*Data for the table `realmlist` */
+
 /*Table structure for table `uptime` */
 
 DROP TABLE IF EXISTS `uptime`;
@@ -144,6 +164,8 @@ CREATE TABLE `uptime` (
   `revision` varchar(255) NOT NULL DEFAULT 'Trinitycore',
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Uptime system';
+
+/*Data for the table `uptime` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
