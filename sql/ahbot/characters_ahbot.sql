@@ -1,4 +1,4 @@
-DROP TABLE `auctionhousebot`;
+DROP TABLE IF EXISTS `auctionhousebot`;
 
 CREATE TABLE `auctionhousebot` (
     `auctionhouse` INT(11) NOT NULL DEFAULT '0' COMMENT 'mapID of the auctionhouse.',
