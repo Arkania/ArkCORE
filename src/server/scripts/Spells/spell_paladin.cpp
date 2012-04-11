@@ -232,7 +232,7 @@ public:
                                     if (caster->ToPlayer()->GetTalentBranchSpec(caster->ToPlayer()->GetActiveSpec()) == BS_PALADIN_HOLY)
                                     {
                                         int32 bp0 = int32(caster->ToPlayer()->GetHealingDoneInPastSecs(15) * (12.0f + (1.5f * caster->ToPlayer()->GetMasteryPoints())) /100);
-                                        caster->CastCustomSpell(caster, 86273, &bp0, NULL, NULL, true);
+                                        caster->CastCustomSpell(unitTarget, 86273, &bp0, NULL, NULL, true);
                                         caster->ToPlayer()->ResetHealingDoneInPastSecs(15);
                                     }
                                 }
