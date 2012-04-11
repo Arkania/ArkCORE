@@ -97,6 +97,7 @@ source_group(Tools FILES ${sources_Tools})
 source_group(Tickets FILES ${sources_Tickets})
 source_group(Weather FILES ${sources_Weather})
 source_group(World FILES ${sources_World})
+source_group(Anticheat FILES ${sources_Anticheat})
 
 # Create game-libary
 
