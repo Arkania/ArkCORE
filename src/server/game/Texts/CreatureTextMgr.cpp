@@ -55,7 +55,7 @@ void CreatureTextMgr::LoadCreatureTexts()
         temp.entry          = fields[0].GetUInt32();
         temp.group          = fields[1].GetUInt8();
         temp.id             = fields[2].GetUInt8();
-        temp.text           = fields[3].GetString();
+        temp.content_default= fields[3].GetString();
         temp.type           = ChatMsg(fields[4].GetUInt8());
         temp.lang           = Language(fields[5].GetUInt8());
         temp.probability    = fields[6].GetFloat();
@@ -191,7 +191,7 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, uint64 whisp
     if ((*iter).emote)
         SendEmote(srcPlr ? srcPlr->ToUnit() : source, (*iter).emote);
 
-    SendChatString(srcPlr ? srcPlr->ToUnit() : source, (*iter).text.c_str(), finalType, finalLang, whisperGuid, range, team, gmOnly);
+    SendChatString(srcPlr ? srcPlr->ToUnit() : source, (*iter).content_default.c_str(), finalType, finalLang, whisperGuid, range, team, gmOnly);
     if (isEqualChanced || (!isEqualChanced && totalChance == 100.0f))
         SetRepeatId(source, textGroup, (*iter).id);
 
