@@ -2303,14 +2303,14 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
                 {
-                    if (m_caster->ToPlayer()->HasSpell(50029)) //Temp check for spec
+                    if (m_caster->ToPlayer()->HasSpell(50029)) //Blood Shield Mastery Blood
                     {
                         if (m_caster->HasAura(48263))
                         {
                             int32 shield =
                                     int32(
                                             bp
-                                                    * (50.0f
+                                                    * (0.5f
                                                             + (6.25f
                                                                     * m_caster->ToPlayer()->GetMasteryPoints()))
                                                     / 100.0f);
