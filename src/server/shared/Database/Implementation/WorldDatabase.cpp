@@ -37,7 +37,7 @@ void WorldDatabaseConnection::DoPrepareStatements() {
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(
             WORLD_LOAD_CRETEXT,
-            "SELECT entry, groupid, id, text, type, language, probability, emote, duration, sound FROM creature_text",
+            "SELECT entry, groupid, id, content_default, type, language, probability, emote, duration, sound FROM creature_text",
             CONNECTION_SYNCH);
     PREPARE_STATEMENT(
             WORLD_LOAD_SMART_SCRIPTS,
