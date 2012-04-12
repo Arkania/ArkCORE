@@ -1398,11 +1398,11 @@ void Guild::SendGuildRankInfo(WorldSession* session)
         data7 << uint32(m_ranks[i].GetRights());
 
         for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(0xFFFFFFFF);
+            data7 << uint32(m_ranks[i].GetBankTabRights(j));
         for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(0xFFFFFFFF);
+            data7 << uint32(m_ranks[i].GetBankTabSlotsPerDay(j));
 
-        data7 << uint32(0xFFFFFFFF); // GuildBankRightsAndSlots
+        data7 << uint32(m_ranks[i].GetBankMoneyPerDay()); // GuildBankRightsAndSlots
     }
 
     if (session)
