@@ -41,6 +41,98 @@ enum DeathKnightSpells
     DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED = 63622,
 };
 
+class spell_dk_death_coil : public SpellScriptLoader
+{
+public:
+    spell_dk_death_coil() : SpellScriptLoader("spell_dk_death_coil") { }
+
+  class spell_dk_death_coil_SpellScript : public SpellScript
+  {
+    PrepareSpellScript(spell_dk_death_coil_SpellScript);
+
+    enum Spells
+    {
+      DK_SPELL_DEATH_COIL = 47541,
+      DK_SPELL_DARK_TRANSFORMATION_TRIGGERED = 93426,
+      DK_SPELL_DARK_INFUSION = 91342,
+    };
+
+    bool Validate(SpellEntry const * /*spellEntry*/)
+    {
+      return sSpellStore.LookupEntry(DK_SPELL_DEATH_COIL);
+    }
+
+    void HandleAfterHit()
+    {
+      Unit* caster = GetCaster();
+
+      if (Unit* target = GetHitUnit())
+      {
+        if (!target)//
+          return;
+        Unit * pet = caster->GetGuardianPet();
+        if (pet->GetAuraApplication(DK_SPELL_DARK_INFUSION)->GetBase()->GetStackAmount() >= 5)
+          caster->CastSpell(caster,DK_SPELL_DARK_TRANSFORMATION_TRIGGERED,true);
+      }
+    }
+
+    void Register()
+    {
+      AfterHit += SpellHitFn(spell_dk_death_coil_SpellScript::HandleAfterHit);
+    }
+  };
+
+  SpellScript *GetSpellScript() const
+  {
+    return new spell_dk_death_coil_SpellScript();
+  }
+};
+
+class spell_dk_dark_transformation : public SpellScriptLoader
+{
+public:
+  spell_dk_dark_transformation() : SpellScriptLoader("spell_dk_dark_transformation") { }
+
+  class spell_dk_dark_transformation_SpellScript : public SpellScript
+  {
+    PrepareSpellScript(spell_dk_dark_transformation_SpellScript);
+
+    enum Spells
+    {
+      DK_SPELL_DARK_TRANSFORMATION = 63560,
+      DK_SPELL_DARK_TRANSFORMATION_TRIGGERED = 93426,
+      DK_SPELL_DARK_INFUSION = 91342,
+    };
+
+    bool Validate(SpellEntry const * /*spellEntry*/)
+    {
+      return sSpellStore.LookupEntry(DK_SPELL_DARK_TRANSFORMATION);
+      return sSpellStore.LookupEntry(DK_SPELL_DARK_TRANSFORMATION_TRIGGERED);
+      return sSpellStore.LookupEntry(DK_SPELL_DARK_INFUSION);
+    }
+
+    void HandleBeforeHit()
+    {
+      Unit* caster = GetCaster();      
+      Unit * pet = caster->GetGuardianPet();
+
+      caster->RemoveAura(DK_SPELL_DARK_TRANSFORMATION_TRIGGERED);
+      pet->RemoveAura(DK_SPELL_DARK_INFUSION);
+    }
+
+    void Register()
+    {
+      BeforeHit += SpellHitFn(spell_dk_dark_transformation_SpellScript::HandleBeforeHit);
+    }
+  };
+
+  SpellScript *GetSpellScript() const
+  {
+    return new spell_dk_dark_transformation_SpellScript();
+  }
+};
+
+
 class spell_dk_necrotic_strike : public SpellScriptLoader
 {
 public:
@@ -591,6 +683,8 @@ class spell_dk_chains_of_ice : public SpellScriptLoader
 
 void AddSC_deathknight_spell_scripts()
 {
+    new spell_dk_dark_transformation();
+    new spell_dk_death_coil();
     new spell_dk_necrotic_strike();    
     new spell_dk_anti_magic_shell_raid();
     new spell_dk_anti_magic_shell_self();
