@@ -21,7 +21,6 @@
  */
 
 #include "gamePCH.h"
-#include "AnticheatMgr.h"
 #include "Common.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
@@ -352,9 +351,6 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data) {
                                 movementInfo.pos.GetPositionY(),
                                 movementInfo.pos.GetPositionZ()));
     }
-    
-    if (plMover)
-        sAnticheatMgr->StartHackDetection(plMover, movementInfo, opcode);
 
     /*----------------------*/
 
