@@ -1091,6 +1091,27 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                         != TYPEID_UNIT
                         || !(unitTarget->IsImmunedToSpellEffect(
                                 sSpellStore.LookupEntry(44572), 0))) return;
+                // FrostBolt
+                if(m_spellInfo->Id == 116)
+                {
+                    // Early Frost
+                    if (AuraEffect* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_MAGE, 189, 0))
+                    {
+                        uint32 spellId = 0;
+                        switch (aurEff->GetId())
+                        {
+                            case 83049:
+                                spellId = 83162;
+                                break;
+                            case 83050:
+                                spellId = 83239;
+                                break;
+                        }
+                        
+                        if(spellId && !m_caster->HasAura(spellId))
+                            m_caster->CastSpell(m_caster, spellId, true);
+                    }
+                }								
                 break;
             }
         }
