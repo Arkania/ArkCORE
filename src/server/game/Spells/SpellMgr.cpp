@@ -4615,6 +4615,10 @@ void SpellMgr::LoadSpellCustomAttr() {
             spellInfo->EffectBasePoints[0] = 1;
             count++;
             break;
+        case 61719: // Easter Lay Noblegarden Egg Aura
+            spellInfo->AuraInterruptFlags = 0; 
+            count++;
+            break;
         default:
             break;
         }
