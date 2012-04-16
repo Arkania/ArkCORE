@@ -2709,6 +2709,13 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
             // Coldflame
         case 33801:
             return; // just make the core stfu
+		case 91565: // Feral Agression
+                if (m_caster->HasAura(16859) || m_caster->HasAura(16858)){ 
+                    uint8 count=0;
+                    if (m_caster->HasAura(16859))count = m_caster->GetAuraEffect(16859,0)->GetAmount()-1;
+                    if (m_caster->HasAura(16858))count = m_caster->GetAuraEffect(16858,0)->GetAmount()-1;
+                    while(count){m_caster->CastSpell(unitTarget,triggered_spell_id,true);count--;}
+                }
     }
 
     // normal case
