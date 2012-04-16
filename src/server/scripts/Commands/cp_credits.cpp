@@ -67,12 +67,12 @@ class credits_commandscript : public CommandScript
 
         ChatCommand* GetCommands() const
         {
-            static ChatCommand HelloWorldCommandTable[] =
+            static ChatCommand CreditsCommandTable[] =
             {
                 { "credits",        SEC_PLAYER,         true,   &HandleCreditsCommand,        "", NULL },
                 { NULL,             0,                  false,  NULL,                         "", NULL }
             };
-            return HelloWorldCommandTable;
+            return CreditsCommandTable;
         }
 };
 
