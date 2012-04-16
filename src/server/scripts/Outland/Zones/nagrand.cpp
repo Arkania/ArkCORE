@@ -883,6 +883,41 @@ public:
     };
 };
 
+/*######
+## go_warmaul_prison
+######*/
+ 
+enum FindingTheSurvivorsData
+{
+    QUEST_FINDING_THE_SURVIVORS                    = 9948,
+    NPC_MAGHAR_PRISONER                            = 18428,
+ 
+    SAY_FREE                                      = 0,
+};
+ 
+class go_warmaul_prison : public GameObjectScript
+{
+public:
+    go_warmaul_prison() : GameObjectScript("go_warmaul_prison") { }
+ 
+    bool OnGossipHello(Player* player, GameObject* go)
+    {
+        if (Creature* prisoner = go->FindNearestCreature(NPC_MAGHAR_PRISONER, 1.0f))
+        {
+            if (prisoner)
+            {
+                go->UseDoorOrButton();
+                if (player)
+                    player->KilledMonsterCredit(NPC_MAGHAR_PRISONER, 0);
+ 
+                prisoner->AI()->Talk(SAY_FREE), player->GetGUID();
+                prisoner->ForcedDespawn(6000);
+            }
+        }
+        return true;
+    }
+};
+
 /*####
 #
 ####*/
@@ -898,4 +933,5 @@ void AddSC_nagrand()
     new npc_maghar_captive();
     new npc_creditmarker_visit_with_ancestors();
     new mob_sparrowhawk();
+	new go_warmaul_prison();
 }

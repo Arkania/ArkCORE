@@ -8081,16 +8081,6 @@ uint8 Player::GetRankFromDB(uint64 guid)
     else return 0;
 }
 
-uint32 Player::GetGuildIdFromGuid(uint64 guid)
-{
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_GUILD_ID);
-    stmt->setUInt64(0, guid);
-    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
-        return (*result)[0].GetUInt32();
-
-    return 0;
-}
-
 uint32 Player::GetArenaTeamIdFromDB(uint64 guid, uint8 type)
 {
     QueryResult result =
@@ -19963,7 +19953,7 @@ void Player::ConvertInstancesToGroup(Player *player, Group *group,
 
     // if the player's not online we don't know what binds it has
     if (!player || !group || has_binds) CharacterDatabase.PExecute(
-            "INSERT INTO group_instance SELECT guid, instance, permanent FROM character_instance WHERE guid = '%u'",
+            "REPLACE INTO group_instance SELECT guid, instance, permanent FROM character_instance WHERE guid = '%u'",
             GUID_LOPART(player_guid));
     // the following should not get executed when changing leaders
     if (!player || has_solo) CharacterDatabase.PExecute(

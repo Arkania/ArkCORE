@@ -1091,6 +1091,27 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                         != TYPEID_UNIT
                         || !(unitTarget->IsImmunedToSpellEffect(
                                 sSpellStore.LookupEntry(44572), 0))) return;
+                // FrostBolt
+                if(m_spellInfo->Id == 116)
+                {
+                    // Early Frost
+                    if (AuraEffect* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_MAGE, 189, 0))
+                    {
+                        uint32 spellId = 0;
+                        switch (aurEff->GetId())
+                        {
+                            case 83049:
+                                spellId = 83162;
+                                break;
+                            case 83050:
+                                spellId = 83239;
+                                break;
+                        }
+                        
+                        if(spellId && !m_caster->HasAura(spellId))
+                            m_caster->CastSpell(m_caster, spellId, true);
+                    }
+                }								
                 break;
             }
         }
@@ -2688,6 +2709,13 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
             // Coldflame
         case 33801:
             return; // just make the core stfu
+		case 91565: // Feral Agression
+                if (m_caster->HasAura(16859) || m_caster->HasAura(16858)){ 
+                    uint8 count=0;
+                    if (m_caster->HasAura(16859))count = m_caster->GetAuraEffect(16859,0)->GetAmount()-1;
+                    if (m_caster->HasAura(16858))count = m_caster->GetAuraEffect(16858,0)->GetAmount()-1;
+                    while(count){m_caster->CastSpell(unitTarget,triggered_spell_id,true);count--;}
+                }
     }
 
     // normal case

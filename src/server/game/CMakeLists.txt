@@ -48,6 +48,7 @@ file(GLOB_RECURSE sources_Quests Quests/*.cpp Quests/*.h)
 file(GLOB_RECURSE sources_Reputation Reputation/*.cpp Reputation/*.h)
 file(GLOB_RECURSE sources_Scripting Scripting/*.cpp Scripting/*.h)
 file(GLOB_RECURSE sources_Server Server/*.cpp Server/*.h)
+file(GLOB_RECURSE sources_Handlers Handlers/*.cpp Handlers/*.h)
 file(GLOB_RECURSE sources_Skills Skills/*.cpp Skills/*.h)
 file(GLOB_RECURSE sources_Spells Spells/*.cpp Spells/*.h)
 file(GLOB_RECURSE sources_Texts Texts/*.cpp Texts/*.h)
@@ -90,6 +91,7 @@ source_group(Quests FILES ${sources_Quests})
 source_group(Reputation FILES ${sources_Reputation})
 source_group(Scripting FILES ${sources_Scripting})
 source_group(Server FILES ${sources_Server})
+source_group(Handlers FILES ${sources_Handlers})
 source_group(Skills FILES ${sources_Skills})
 source_group(Spells FILES ${sources_Spells})
 source_group(Texts FILES ${sources_Texts})
@@ -142,6 +144,7 @@ set(game_STAT_SRCS
   ${sources_Reputation}
   ${sources_Scripting}
   ${sources_Server}
+  ${sources_Handlers}
   ${sources_Skills}
   ${sources_Spells}
   ${sources_Texts}
@@ -234,7 +237,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Reputation
   ${CMAKE_CURRENT_SOURCE_DIR}/Scripting
   ${CMAKE_CURRENT_SOURCE_DIR}/Server/Protocol
-  ${CMAKE_CURRENT_SOURCE_DIR}/Server/Protocol/Handlers
+  ${CMAKE_CURRENT_SOURCE_DIR}/Handlers
   ${CMAKE_CURRENT_SOURCE_DIR}/Server
   ${CMAKE_CURRENT_SOURCE_DIR}/Skills
   ${CMAKE_CURRENT_SOURCE_DIR}/Spells

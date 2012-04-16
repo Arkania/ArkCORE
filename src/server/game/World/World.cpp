@@ -1255,8 +1255,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_DEF]  = sConfig->GetIntDefault("OutdoorPvP.Wintergrasp.Antifarm.Def", 5);
 
     // Area DuelReset
-    m_int_configs[CONFIG_DUEL_RESET_ONE] = sConfig->GetIntDefault("Duel.Reset.Area.One", 1);
-    m_int_configs[CONFIG_DUEL_RESET_TWO] = sConfig->GetIntDefault("Duel.Reset.Area.Two", 616);
+    m_int_configs[CONFIG_DUEL_RESET_COOLDOWN] = sConfig->GetIntDefault("DuelResetCooldown", 1);
 
     sScriptMgr->OnConfigLoad(reload);
 }
