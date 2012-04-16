@@ -1,4 +1,4 @@
-/*
+/* Copyright (C) 2008-2012 ArkCore <http://www.arkania.net/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -135,7 +135,7 @@ void GroupMgr::LoadGroups()
         {
             Field* fields = result->Fetch();
             Group* group = new Group;
-            group->LoadGroupFromDB(fields);
+            group->LoadGroupFromDB(fields[15].GetUInt32(), result, false);
             AddGroup(group);
 
             // Get the ID used for storing the group in the database and register it in the pool.
