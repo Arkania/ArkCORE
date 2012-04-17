@@ -2168,34 +2168,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     break;
                 }
-                case 20217: // Blessing of Kings
-                {
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        std::list <Unit*> PartyMembers;
-                        m_caster->GetPartyMembers(PartyMembers);
-                        bool Continue = false;
-                        uint32 player = 0;
-                        for (std::list <Unit*>::iterator itr =
-                                PartyMembers.begin(); itr != PartyMembers.end();
-                                ++itr) // If caster is in party with a player
-                        {
-                            ++player;
-                            if (Continue == false && player > 1) Continue =
-                                    true;
-                        }
-                        if (Continue == true) m_caster->CastSpell(unitTarget,
-                                79063, true); // Blessing of Kings (Raid)
-                        else m_caster->CastSpell(unitTarget, 79062, true); // Blessing of Kings (Caster)
-                    }
-                    break;
-                }
                 case 31789: // Righteous Defense (step 1)
                 {
                     // Clear targets for eff 1
-                    for (std::list <TargetInfo>::iterator ihit =
-                            m_UniqueTargetInfo.begin();
-                            ihit != m_UniqueTargetInfo.end(); ++ihit)
+                    for (std::list <TargetInfo>::iterator ihit = m_UniqueTargetInfo.begin();ihit != m_UniqueTargetInfo.end(); ++ihit)
                         ihit->effectMask &= ~(1 << 1);
 
                     // not empty (checked), copy

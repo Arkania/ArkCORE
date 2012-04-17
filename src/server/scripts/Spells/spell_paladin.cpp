@@ -45,6 +45,44 @@ enum PaladinSpells
     SPELL_DIVINE_PURPOSE_PROC                    = 90174,
 };
 
+//spell id=20217
+class spell_pall_bless_of_the_king : public SpellScriptLoader
+{
+    public:
+        spell_pall_bless_of_the_king() : SpellScriptLoader("spell_pall_bless_of_the_king") { }
+
+        class spell_pall_bless_of_the_king_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pall_bless_of_the_king_SpellScript);
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    if (caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    std::list<Unit*> PartyMembers;
+                    caster->GetPartyMembers(PartyMembers);
+
+                    if (PartyMembers.size() > 1)
+                        caster->CastSpell(GetHitUnit(), 79063, true);// Blessing of Kings (Raid)
+                    else
+                        caster->CastSpell(GetHitUnit(), 79062, true); // Blessing of Kings (Caster)
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pall_bless_of_the_king_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pall_bless_of_the_king_SpellScript;
+        }
+};
 // 31850 - Ardent Defender
 class spell_pal_ardent_defender: public SpellScriptLoader {
 public:
@@ -632,6 +670,7 @@ class spell_pal_judgements_of_the_wise : public SpellScriptLoader
 };
 
 void AddSC_paladin_spell_scripts() {
+    new spell_pall_bless_of_the_king();
     new spell_pal_ardent_defender();
     new spell_pal_blessing_of_faith();
     new spell_pal_holy_shock();
