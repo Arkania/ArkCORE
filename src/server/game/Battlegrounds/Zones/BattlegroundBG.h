@@ -14,7 +14,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTBGILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -121,7 +121,7 @@ enum BG_BG_BattlegroundNodes
     BG_BG_NODE_WATERWORKS       = 1,
     BG_BG_NODE_MINE             = 2,
 
-    BG_BG_DYNAMIC_NODES_COUNT   = 3,                        // dynamic nodes that can be captured
+    BG_BG_DYNAMIC_NODES_COUNT   = 3,                        // dynamic nodes that can be captured(it's normally 4)
 
     BG_BG_SPIRIT_ALIANCE        = 3,
     BG_BG_SPIRIT_HORDE          = 4,
@@ -183,6 +183,7 @@ const float BG_BG_BuffPositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
     { 990.95f, 984.46f, 13.01f, 4.57f }, // Watterworks
     { 1063.39f, 1309.09f, 4.91f, 3.98f }, // Lighthouse
     { 1196.65f, 1020.01f, 7.97f, 5.74f }, // Mine
+//	{ 1107.57f, 912.18f, 27.54f, 5.53f } To be named
 };
 
 // x, y, z, o
