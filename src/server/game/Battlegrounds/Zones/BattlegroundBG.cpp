@@ -220,9 +220,9 @@ void BattlegroundBG::HandleAreaTrigger(Player *Source, uint32 Trigger)
 
     switch(Trigger)
     {
-        case 3866:                                          // STABLES
-        case 3869:                                          // Gold Mine
-        case 3867:                                          // Farm
+        case 3866:                                          // Lighthouse
+        case 3869:                                          // Watterwork
+        case 3867:                                          // Mine
         case 4020:                                          // Unk1
         case 4021:                                          // Unk2
             //break;
