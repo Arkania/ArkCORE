@@ -9635,10 +9635,14 @@ bool Unit::HandleProcTriggerSpell(Unit *pVictim, uint32 damage,
             if (!HealthBelowPct(35)) return false;
             break;
         }
-            // Sacred Shield
+        // Sacred Shield
         case 85285:
         {
-            if (!HealthBelowPct(30)) return false;
+            if (!HealthBelowPctDamaged(30, damage))
+                return false;
+
+            int32 ap = int32(GetTotalAttackPowerValue(BASE_ATTACK) * 0.9f);
+            basepoints0 = int32(CalculatePctN(ap, 280));
             break;
         }
             // Improved Hamstring
