@@ -2094,8 +2094,18 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
             }
-            switch (m_spellInfo->Id)
+            switch(m_spellInfo->Id)
             {
+                 case 80964:  // Skull Bash (bear) 
+                 {
+                    m_caster->CastSpell(unitTarget,93983,true); 
+                    break; 
+                 }
+                 case 80965:  // Skull Bash(cat) 
+                 { 
+                    m_caster->CastSpell(unitTarget,93983,true); 
+                    break;
+                 }
                 case 1126: // Mark of the Wild
                 {
                     if (m_caster->GetTypeId() == TYPEID_PLAYER)
