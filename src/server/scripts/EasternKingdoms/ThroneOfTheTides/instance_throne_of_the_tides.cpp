@@ -20,7 +20,7 @@
 #include "ScriptPCH.h"
 #include "throne_of_the_tides.h"
 
-#define ENCOUNTERS 4
+#define ENCOUNTERS 5
 
 /*Boss Encounters
  -----------------

@@ -26,7 +26,7 @@ Süden->Westen 89501
 
 #include "throne_of_the_four_winds.h"
 
-#define ENCOUNTERS 2
+#define ENCOUNTERS 4
 
 class instance_throne_of_the_four_winds : public InstanceMapScript
 {
