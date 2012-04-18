@@ -19,7 +19,7 @@
 /* ScriptData
 Name: credits_commandscript
 %Complete: 100
-Comment: Show ArkCORE credits
+Comment: This shows ArkCORE credits.
 EndScriptData */
 
 #include "ScriptPCH.h"
@@ -35,14 +35,14 @@ class credits_commandscript : public CommandScript
         {
 			handler->PSendSysMessage("");
             handler->PSendSysMessage("__[ArkCORE Credits]______________________________________________");
-			sLog->outString("In this command will be included all the external people and projects/ppl/urls");
-			sLog->outString("that we really thanks for their contribution to our project,");
-			sLog->outString("even if they don't know in what they help us:");
+			sLog->outString("This command lists the people, projects, and urls");
+			sLog->outString("that we would like to thank for their contribution to our project,");
+			sLog->outString("whether their influence was direct or indirect.");
 			sLog->outString("");
-			sLog->outString("Thanks go out to the following people for various patches/code");
+			sLog->outString("Thanks goes out to the following people for various patches and/or code");
 			handler->PSendSysMessage("Chameleon, AlterEgo, Fabi, LordJZ, Azazel, Dvlpr, Brecky, Keany, Arktus, Sovak");
 			handler->PSendSysMessage("");
-			sLog->outString("Also the following people had contributed directly to our project:");
+			sLog->outString("The following people have contributed directly to our project:");
 			handler->PSendSysMessage("Blizz, raxume, cooler, Dekona, openmage, Venugh, Naios, billykitty, chark01,");
 			handler->PSendSysMessage("cocolino, Georgian Constantin, gpn39f, h.norrt, Maibenrai, MysteriousSoul,");
 			handler->PSendSysMessage("Nation, robo2104, Theoderic, wazy, Yuniorvoltes, zxelf, Aegwynn, BladeFight,");
@@ -52,14 +52,14 @@ class credits_commandscript : public CommandScript
 			handler->PSendSysMessage("Naffbeats, pek2011, PrinceCreed, sanctum32, sharq, thehacker66, Winston,");
 			handler->PSendSysMessage("Spyder, drakeos, kraven5, Booman666, gaal, nantesfer, Mrbytes, Mikadmin.");
 			handler->PSendSysMessage("");
-			sLog->outString("And the follow people had help us with donations:");
+			sLog->outString("These people have helped the project via donations:");
 			handler->PSendSysMessage("akaHaki, Betaman2k, bleu, Draken, GaryZywiec, glkrlos, ppops, Spazman2c,");
 			handler->PSendSysMessage("Swiss-Rainbow.");
 			handler->PSendSysMessage("");
-			sLog->outString("We want to thanks too to the folllow Sites or Communities:");
-			handler->PSendSysMessage("Community ProjectSkyfire: http://www.projectskyfire.org");
-			handler->PSendSysMessage("Community TrinityCore: http://www.trinitycore.org");
-			handler->PSendSysMessage("Community Mangos: http://www.getmangos.com");
+			sLog->outString("We would also like to thank the following Sites/Communities:");
+			handler->PSendSysMessage("ProjectSkyfire: http://www.projectskyfire.org");
+			handler->PSendSysMessage("TrinityCore: http://www.trinitycore.org");
+			handler->PSendSysMessage("Mangos: http://www.getmangos.com");
 			handler->PSendSysMessage("");
 			handler->PSendSysMessage("__[ArkCORE Credits]______________________________________________");
             return true;

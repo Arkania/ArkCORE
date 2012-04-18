@@ -325,10 +325,10 @@ public:
                     if (pCreature)
                         AddGUID[i] = pCreature->GetGUID();
                 } else {
-                    AI()->EnterEvadeMode();
-                    GetMap()->CreatureRelocation(me, Pos_X[i], POS_Y,
+                    pCreature->AI()->EnterEvadeMode();
+                    pCreature->GetMap()->CreatureRelocation(me, Pos_X[i], POS_Y,
                             POS_Z, ORIENT);
-                    StopMoving();
+                    pCreature->StopMoving();
                 }
             }
         }

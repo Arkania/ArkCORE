@@ -134,7 +134,7 @@ class boss_anraphet : public CreatureScript
                 events.ScheduleEvent(EVENT_CRUMBLING_RUIN, urand(10000, 16000));
                 events.ScheduleEvent(EVENT_NEMESIS_STRIKE, 12000);
                 events.ScheduleEvent(EVENT_OMEGA_STANCE, 10000);
-                DoRemoveAurasDueToSpellOnPlayers(SPELL_CRUMBLING_RUIN);
+                instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_CRUMBLING_RUIN);
 
                 DoZoneInCombat();
             }
