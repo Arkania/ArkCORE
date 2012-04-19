@@ -21,6 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+ 
 #ifndef __BattlegroundBG_H
 #define __BattlegroundBG_H
 
@@ -58,10 +59,11 @@ const uint32 BG_BG_OP_NODEICONS[3] = { 1842, 1846, 1845, };
 
 enum BG_BG_NodeObjectId
 {
-    BG_BG_OBJECTID_NODE_BANNER_0    = 208779,       // Lighthouse banner
+    BG_BG_OBJECTID_NODE_BANNER_0    = 208779,      // Lighthouse banner
     BG_BG_OBJECTID_NODE_BANNER_1    = 208782,      // Mine banner
-    BG_BG_OBJECTID_NODE_BANNER_2    = 208785      // Watterworks banner
+    BG_BG_OBJECTID_NODE_BANNER_2    = 208785       // Waterworks banner
 };
+
 enum BG_BG_ObjectType
 {
     BG_BG_OBJECT_BANNER_NEUTRAL          = 0,
@@ -75,43 +77,43 @@ enum BG_BG_ObjectType
     BG_BG_OBJECT_GATE_A                  = 25,
     BG_BG_OBJECT_GATE_H                  = 26,
 	//buffs
-	BG_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE = 27,
-	BG_BG_OBJECT_REGENBUFF_LIGHTHOUSE = 28,
-	BG_BG_OBJECT_BERSERKBUFF_LIGHTHOUSE = 29,
-	BG_BG_OBJECT_SPEEDBUFF_MINE = 30,
-	BG_BG_OBJECT_REGENBUFF_MINE = 31,
-	BG_BG_OBJECT_BERSERKBUFF_MINE = 32,
-	BG_BG_OBJECT_SPEEDBUFF_WATERWORKS = 33,
-	BG_BG_OBJECT_REGENBUFF_WATERWORKS = 34,
-	BG_BG_OBJECT_BERSERKBUFF_WATERWORKS = 35,
-	BG_BG_OBJECT_MAX = 36
+	BG_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE    = 27,
+	BG_BG_OBJECT_REGENBUFF_LIGHTHOUSE    = 28,
+	BG_BG_OBJECT_BERSERKBUFF_LIGHTHOUSE  = 29,
+	BG_BG_OBJECT_SPEEDBUFF_MINE          = 30,
+	BG_BG_OBJECT_REGENBUFF_MINE          = 31,
+	BG_BG_OBJECT_BERSERKBUFF_MINE        = 32,
+	BG_BG_OBJECT_SPEEDBUFF_WATERWORKS    = 33,
+	BG_BG_OBJECT_REGENBUFF_WATERWORKS    = 34,
+	BG_BG_OBJECT_BERSERKBUFF_WATERWORKS  = 35,
+	BG_BG_OBJECT_MAX                     = 36
 };
 
 /* Object id templates from DB */
 enum BG_BG_ObjectTypes
 {
-    BG_BG_OBJECTID_BANNER_A = 208673,
-    BG_BG_OBJECTID_BANNER_CONT_A = 208763,
-    BG_BG_OBJECTID_BANNER_H = 208748,
-    BG_BG_OBJECTID_BANNER_CONT_H = 208733,
+    BG_BG_OBJECTID_BANNER_A       = 208673,
+    BG_BG_OBJECTID_BANNER_CONT_A  = 208763,
+    BG_BG_OBJECTID_BANNER_H       = 208748,
+    BG_BG_OBJECTID_BANNER_CONT_H  = 208733,
 
-	BG_BG_OBJECTID_AURA_A = 180100,
-	BG_BG_OBJECTID_AURA_H = 180101,
-	BG_BG_OBJECTID_AURA_C = 180102,
+	BG_BG_OBJECTID_AURA_A         = 180100,
+	BG_BG_OBJECTID_AURA_H         = 180101,
+	BG_BG_OBJECTID_AURA_C         = 180102,
 
-    BG_BG_OBJECTID_GATE_A = 207177,
-    BG_BG_OBJECTID_GATE_H = 207178
+    BG_BG_OBJECTID_GATE_A         = 207177,
+    BG_BG_OBJECTID_GATE_H         = 207178
 };
 
 enum BG_BG_Timers
 {
-    BG_BG_FLAG_CAPTURING_TIME   = 60000,
+    BG_BG_FLAG_CAPTURING_TIME = 60000,
 };
 
 enum BG_BG_Score
 {
-    BG_BG_WARNING_NEAR_VICTORY_SCORE    = 1800,
-    BG_BG_MAX_TEAM_SCORE                = 2000
+    BG_BG_WARNING_NEAR_VICTORY_SCORE  = 1800,
+    BG_BG_MAX_TEAM_SCORE              = 2000
 };
 
 /* do NOT change the order, else wrong behaviour */
@@ -155,10 +157,12 @@ enum BG_BG_Objectives
     BG_OBJECTIVE_ASSAULT_BASE           = 122,
     BG_OBJECTIVE_DEFEND_BASE            = 123
 };
+
 #define BG_BG_NotBGBGWeekendHonorTicks      330
 #define BG_BG_BGBGWeekendHonorTicks         200
 #define BG_BG_NotBGBGWeekendReputationTicks 200
 #define BG_BG_BGBGWeekendReputationTicks    150
+
 // x, y, z, o
 const float BG_BG_NodePositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
     { 1057.7800f, 1278.260010f, 3.192400f, 1.864820f }, // Lighthouse
