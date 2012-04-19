@@ -35,7 +35,7 @@
 #include "Player.h"
 #include "Util.h"
 
-// these variBGles aren't used outside of this file, so declare them only here
+// these variables aren't used outside of this file, so declare them only here
 uint32 BG_BG_HonorScoreTicks[BG_HONOR_MODE_NUM] = {
     330, // normal honor
     200  // holiday
