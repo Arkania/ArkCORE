@@ -1,3 +1,15 @@
+DELETE FROM  `gameobject_template` WHERE entry = 208779;
+DELETE FROM  `gameobject_template` WHERE entry = 208780;
+DELETE FROM  `gameobject_template` WHERE entry = 208781;
+DELETE FROM  `gameobject_template` WHERE entry = 208782;
+DELETE FROM  `gameobject_template` WHERE entry = 208783;
+DELETE FROM  `gameobject_template` WHERE entry = 208784;
+DELETE FROM  `gameobject_template` WHERE entry = 208785;
+DELETE FROM  `gameobject_template` WHERE entry = 208786;
+DELETE FROM  `gameobject_template` WHERE entry = 208787;
+DELETE FROM  `gameobject_template` WHERE entry = 208788;
+DELETE FROM  `gameobject_template` WHERE entry = 208789;
+DELETE FROM  `gameobject_template` WHERE entry = 208790;
 INSERT INTO `gameobject_template` VALUES (208779, 10, 6271, 'Lighthouse Banner', '', 'Capturing', '', 0, 4, 1, 0, 0, 0, 0, 0, 0, 1479, 0, 0, 3000, 0, 0, 0, 0, 0, 0, 23932, 1, 0, 1, 37190, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 1);
 INSERT INTO `gameobject_template` VALUES (208780, 10, 6271, 'Lighthouse Banner', '', 'Capturing', '', 0, 4, 1, 0, 0, 0, 0, 0, 0, 1479, 0, 0, 3000, 0, 0, 0, 0, 0, 0, 23932, 1, 0, 1, 37190, 0, 1, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', 1);
 INSERT INTO `gameobject_template` VALUES (208781, 10, 6271, 'Lighthouse Banner', '', 'Capturing', '', 0, 4, 1, 0, 0, 0, 0, 0, 0, 1479, 0, 0, 3000, 0, 0, 0, 0, 0, 0, 23932, 1, 0, 1, 37190, 0, 1, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', 1);
