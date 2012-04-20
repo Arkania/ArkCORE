@@ -166,7 +166,7 @@ enum BG_BG_Objectives
 // x, y, z, o
 const float BG_BG_NodePositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
     { 1057.7800f, 1278.260010f, 3.192400f, 1.864820f }, // Lighthouse
-    { 980.1835f, 947.8692f, 13.998f, 5.9015f }, // Watterwork
+    { 980.1835f, 947.8692f, 13.998f, 5.9015f }, // Waterwork
     { 1251.010f, 958.3939f, 5.680f, 2.7698f } // mine
 };
 
@@ -180,12 +180,12 @@ const uint32 BG_BG_TickIntervals[4] = {0, 12000, 6000, 1000};
 const uint32 BG_BG_TickPoints[4] = {0, 10, 10, 30};
 
 // WorldSafeLocs ids for 3 nodes, and for ally, and horde starting location
-const uint32 BG_BG_GraveyardIds[BG_BG_ALL_NODES_COUNT] = {1735, 1736, 1738, 1740, 1739 };
+const uint32 BG_BG_GraveyardIds[BG_BG_ALL_NODES_COUNT] = {1736, 1738, 1735, 1740, 1739 };
 
 // x, y, z, o
 const float BG_BG_BuffPositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
-    { 990.95f, 984.46f, 13.01f, 4.57f }, // Watterworks
     { 1063.39f, 1309.09f, 4.91f, 3.98f }, // Lighthouse
+	{ 990.95f, 984.46f, 13.01f, 4.57f }, // Waterworks
     { 1196.65f, 1020.01f, 7.97f, 5.74f }, // Mine
 //	{ 1107.57f, 912.18f, 27.54f, 5.53f } To be named
 };
@@ -193,7 +193,7 @@ const float BG_BG_BuffPositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
 // x, y, z, o
 const float BG_BG_SpiritGuidePos[BG_BG_ALL_NODES_COUNT][4] = {
     { 1036.32f, 1341.61f, 11.55f, 4.78f }, // Lighthouse
-	{ 886.44f, 938.06f, 24.13f, 0.53f }, // Watterworks
+	{ 886.44f, 938.06f, 24.13f, 0.53f }, // Waterworks
 	{ 1252.39f, 831.77f, 27.78f, 1.59f }, // Mine
     { 898.15f, 1341.58f, 27.66f, 6.06f }, // alliance starting base
     { 1408.16f, 977.34f, 7.44f, 3.18f } // horde starting base
