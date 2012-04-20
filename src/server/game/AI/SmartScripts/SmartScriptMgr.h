@@ -432,8 +432,9 @@ enum SMART_ACTION {
 	SMART_ACTION_SET_DYNAMIC_FLAG = 94, // Flags
 	SMART_ACTION_ADD_DYNAMIC_FLAG = 95, // Flags
 	SMART_ACTION_REMOVE_DYNAMIC_FLAG = 96, // Flags
+	SMART_ACTION_SEND_GOSSIP_MENU = 98, // menuId, optionId
 
-	SMART_ACTION_END = 97,
+	SMART_ACTION_END = 99,
 };
 
 struct SmartAction {
@@ -753,6 +754,10 @@ struct SmartAction {
 		struct {
 			uint32 anim;
 		} sendGoCustomAnim;
+		struct {
+            uint32 gossipMenuId;
+            uint32 gossipNpcTextId;
+        } sendGossipMenu;
 		struct {
 			uint32 param1;
 			uint32 param2;

@@ -37,6 +37,7 @@
 #include "SmartScript.h"
 #include "SmartAI.h"
 #include "Group.h"
+#include "ScriptedGossip.h"
 
 SmartScript::SmartScript() {
     go = NULL;
@@ -1783,8 +1784,31 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0,
                         e.action.unitFlag.flag);
 
         delete targets;
-        break;
-    }
+		break;
+    }	
+	case SMART_ACTION_SEND_GOSSIP_MENU: {
+            if (!GetBaseObject())
+                break;
+
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                break;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                if (Player* player = (*itr)->ToPlayer())
+                {
+                    if (e.action.sendGossipMenu.gossipMenuId)
+                        player->PrepareGossipMenu(GetBaseObject(), e.action.sendGossipMenu.gossipMenuId, true);
+                    else
+                        player->PlayerTalkClass->ClearMenus();
+
+                    player->SEND_GOSSIP_MENU(e.action.sendGossipMenu.gossipNpcTextId, GetBaseObject()->GetGUID());
+                }
+
+            delete targets;
+            break;
+        }
+        
     default:
         sLog->outErrorDb("SmartScript::ProcessAction: Unhandled Action type %u",
                 e.GetActionType());
