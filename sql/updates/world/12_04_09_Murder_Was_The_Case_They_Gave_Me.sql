@@ -54,7 +54,7 @@ DELETE FROM creature_text WHERE entry='42559';
 DELETE FROM creature_text WHERE entry='42309';
 DELETE FROM creature_text WHERE entry='42308';
 
-INSERT INTO creature_text
+INSERT INTO creature_text(entry,groupid,id,content_default,`type`,`language`,probability,emote,duration,sound,`comment`)
 VALUES
 (42559,0,0,'It''s a real bloodshed, lieutenant. They were murdered.',12,0,100,1,3,0,'Stormwind investigator 1st sentence'),
 (42309,0,0,'According to body temperature, I''ll say they''ve been dead for less than six hours.',12,0,100,1,3,0,'Stormwind investigator 2nd sentence'),
@@ -131,7 +131,7 @@ UPDATE creature_template SET mingold='0',maxgold='0',flags_extra='64' WHERE entr
 -- Create the texts
 DELETE FROM creature_text WHERE entry='42391';
 
-INSERT INTO creature_text
+INSERT INTO creature_text(entry,groupid,id,content_default,`type`,`language`,probability,emote,duration,sound,`comment`)
 VALUES
 (42391,0,0,'I ain''t tellin'' you a damn thing!',12,0,100,1,3000,0,'Murder was the case 1st aggro sentence'),
 (42391,0,1,'You rich punks are all the same!',12,0,100,1,3000,0,'Murder was the case 2nd aggro sentence'),
@@ -197,7 +197,7 @@ UPDATE creature_template SET mingold='0',maxgold='0',flags_extra='64' WHERE entr
 -- Create the texts
 DELETE FROM creature_text WHERE entry='42386';
 
-INSERT INTO creature_text
+INSERT INTO creature_text(entry,groupid,id,content_default,`type`,`language`,probability,emote,duration,sound,`comment`)
 VALUES
 (42386,0,0,'I ain''t tellin'' you a damn thing!',12,0,100,1,3000,0,'Murder was the case 1st aggro sentence'),
 (42386,0,1,'You rich punks are all the same!',12,0,100,1,3000,0,'Murder was the case 2nd aggro sentence'),
