@@ -228,7 +228,6 @@ Unit::~Unit()
     _DeleteRemovedAuras();
 
     delete m_charmInfo;
-    delete m_vehicleKit;
 
     ASSERT(!m_duringRemoveFromWorld);
     ASSERT(!m_attacking);
@@ -14358,6 +14357,7 @@ void Unit::setDeathState(DeathState s)
 
         if (IsNonMeleeSpellCasted(false)) InterruptNonMeleeSpells(false);
 
+        ExitVehicle();
         UnsummonAllTotems();
         RemoveAllControlled();
         RemoveAllAurasOnDeath();
@@ -15495,7 +15495,12 @@ void Unit::RemoveFromWorld()
     if (IsInWorld())
     {
         m_duringRemoveFromWorld = true;
-        if (IsVehicle()) GetVehicleKit()->Uninstall();
+        if (IsVehicle())
+        {
+            GetVehicleKit()->Uninstall();
+            delete m_vehicleKit;
+            m_vehicleKit = NULL;
+         }
 
         RemoveCharmAuras();
         RemoveBindSightAuras();
