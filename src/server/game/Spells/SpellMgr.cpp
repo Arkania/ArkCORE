@@ -4299,6 +4299,10 @@ void SpellMgr::LoadSpellCustomAttr() {
             spellInfo->Stances = 1 << (FORM_TREE - 1);
             count++;
             break;
+        case 779: // Swipe Bear
+            spellInfo->EffectRadiusIndex[0] = 8;
+            count++;
+            break;
             case 51466: // Elemental Oath (Rank 1)
             case 51470: // Elemental Oath (Rank 2)
                 spellInfo->Effect[EFFECT_1] = SPELL_EFFECT_APPLY_AURA;
