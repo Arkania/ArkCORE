@@ -2,7 +2,9 @@
 -- By mikadmin for Arknania
 -- Fix Focus
 
-UPDATE `creature_template` SET `InhabitType` = '2' WHERE `creature_template`.`entry` =46868;
+UPDATE `creature_template` SET `InhabitType` = '2',
+`exp` = '3',
+`Health_mod` = '0.8323' WHERE `creature_template`.`entry` =46868;
 
 DELETE FROM `skinning_loot_template` WHERE (`entry`=46868);
 INSERT INTO `skinning_loot_template` VALUES 
