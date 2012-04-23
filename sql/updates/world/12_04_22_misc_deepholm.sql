@@ -1,6 +1,5 @@
 -- doomshroom shouldn't move
-UPDATE `creature` SET `SPAWNDIST` = 0 WHERE `entry` = 43388;
-
+ UPDATE `creature` SET `spawndist` = 0 WHERE `id` = 43388;
 
 -- decryption made easy alliance, accept worgens, set prevquest, not autocomplete
 
