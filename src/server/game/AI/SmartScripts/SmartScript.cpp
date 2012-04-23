@@ -102,7 +102,34 @@ void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0,
 
         if (eventType
                 == e/* && (!(*i).event.event_phase_mask || IsInPhase((*i).event.event_phase_mask)) && !((*i).event.event_flags & SMART_EVENT_FLAG_NOT_REPEATABLE && (*i).runOnce)*/)
-            ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
+		{
+			// Check if the event's invoker is a player, if not, execute script
+			if(IsPlayer(unit))
+			{
+				// Get the conditions for the event (if any)
+				ConditionList conds = sConditionMgr->GetConditionsForSmartEvent((*i).entryOrGuid, (*i).event_id, (*i).source_type);
+				// Check the conditions
+				if (sConditionMgr->IsPlayerMeetToConditions(unit->ToPlayer(),conds))
+				{
+					ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
+				}
+				else
+				{
+				sLog->outDebug(LOG_FILTER_TSCR,"SmartScript::Entry %d SourceType %u Event %u Action %u uses invalid Condition, skipped.", (*i).entryOrGuid, (*i).GetScriptType(), (*i).event_id, (*i).GetActionType());
+				}
+			}
+			//Smart event not triggered by pets
+			else if (IsCreature(unit))
+			{
+				Creature* crea = unit->ToCreature();
+				if(!crea->isPet())
+				{
+					ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
+				}
+			}
+			else
+				ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
+		}
     }
 }
 
@@ -2516,8 +2543,10 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0,
         break;
     }
     case SMART_EVENT_OOC_LOS: {
-        if (!me || me->isInCombat())
+		if (!me || me->isInCombat())
             return;
+		/*if (me->isGuardian())
+			return;*/
         //can trigger if closer than fMaxAllowedRange
         float range = (float) e.event.los.maxDist;
 
@@ -2937,6 +2966,9 @@ void SmartScript::OnInitialize(WorldObject* obj, AreaTriggerEntry const* at) {
 }
 
 void SmartScript::OnMoveInLineOfSight(Unit* who) {
+	/*if (me->isGuardian())
+		return;*/
+
     ProcessEventsFor(SMART_EVENT_OOC_LOS, who);
 
     if (!me)

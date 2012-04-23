@@ -234,6 +234,11 @@ bool Condition::Meets(Player * player, Unit* invoker)
         player->m_ConditionErrorMsgId = ErrorTextd;
 
     bool script = sScriptMgr->OnConditionCheck(this, player, invoker); // Returns true by default.
+
+	//Invert the condition if NegativeValue is true;
+	if(mNegativeValue)
+		condMeets = !condMeets;
+
     return condMeets && refMeets && script;
 }
 
@@ -349,6 +354,22 @@ ConditionList ConditionMgr::GetConditionsForVehicleSpell(uint32 creatureID, uint
     return cond;
 }
 
+ConditionList ConditionMgr::GetConditionsForSmartEvent(int32 entryOrGuid, uint32 eventId, uint32 sourceType)
+{
+	ConditionList cond;
+	SmartEventConditionMap::const_iterator itr = m_SmartEventConditions.find(std::make_pair(entryOrGuid,sourceType));
+	if (itr != m_SmartEventConditions.end())
+	{
+		ConditionTypeMap::const_iterator i = (*itr).second.find(eventId + 1);
+		if (i != (*itr).second.end())
+		{
+			cond = (*i).second;
+			sLog->outDebug(LOG_FILTER_CONDITIONSYS,"GetConditionsForSmartEvent: found conditions for Event entryOrGuid %d sourceType %u eventId %u", entryOrGuid, sourceType, eventId);
+		}
+	}
+	return cond;
+}
+
 void ConditionMgr::LoadConditions(bool isReload)
 {
     uint32 oldMSTime = getMSTime();
@@ -379,8 +400,8 @@ void ConditionMgr::LoadConditions(bool isReload)
         sObjectMgr->LoadGossipMenuItems();
     }
 
-    QueryResult result = WorldDatabase.Query("SELECT SourceTypeOrReferenceId, SourceGroup, SourceEntry, ElseGroup, ConditionTypeOrReference, "
-                                             " ConditionValue1, ConditionValue2, ConditionValue3, ErrorTextId, ScriptName FROM conditions");
+    QueryResult result = WorldDatabase.Query("SELECT SourceTypeOrReferenceId, SourceGroup, SourceEntry, SourceId, ElseGroup, ConditionTypeOrReference, "
+                                             " ConditionValue1, ConditionValue2, ConditionValue3, NegativeValue, ErrorTextId, ScriptName FROM conditions");
 
     if (!result)
     {
@@ -399,13 +420,15 @@ void ConditionMgr::LoadConditions(bool isReload)
         int32 iSourceTypeOrReferenceId   = fields[0].GetInt32();
         cond->mSourceGroup               = fields[1].GetUInt32();
         cond->mSourceEntry               = fields[2].GetUInt32();
-        cond->mElseGroup                 = fields[3].GetUInt32();
-        int32 iConditionTypeOrReference  = fields[4].GetInt32();
-        cond->mConditionValue1           = fields[5].GetUInt32();
-        cond->mConditionValue2           = fields[6].GetUInt32();
-        cond->mConditionValue3           = fields[7].GetUInt32();
-        cond->ErrorTextd                 = fields[8].GetUInt32();
-        cond->mScriptId                  = sObjectMgr->GetScriptId(fields[9].GetCString());
+		cond->mSourceId                  = fields[3].GetInt32();
+        cond->mElseGroup                 = fields[4].GetUInt32();
+        int32 iConditionTypeOrReference  = fields[5].GetInt32();
+        cond->mConditionValue1           = fields[6].GetUInt32();
+        cond->mConditionValue2           = fields[7].GetUInt32();
+        cond->mConditionValue3           = fields[8].GetUInt32();
+		cond->mNegativeValue             = fields[9].GetUInt8();
+        cond->ErrorTextd                 = fields[10].GetUInt32();
+        cond->mScriptId                  = sObjectMgr->GetScriptId(fields[11].GetCString());
 
         if (iConditionTypeOrReference >= 0)
             cond->mConditionType = ConditionType(iConditionTypeOrReference);
@@ -537,6 +560,14 @@ void ConditionMgr::LoadConditions(bool isReload)
                     ++count;
                     continue;   // do not add to m_AllocatedMemory to avoid double deleting
                 }
+				case CONDITION_SOURCE_TYPE_SMART_EVENT:
+					{
+                    std::pair<int32, uint32> key = std::make_pair(cond->mSourceId,cond->mSourceEntry);
+                    m_SmartEventConditions[key][cond->mSourceGroup].push_back(cond);
+                    bIsDone = true;
+                    ++count;
+                    continue;
+				}
                 default:
                     break;
             }
@@ -1017,6 +1048,7 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
         case CONDITION_SOURCE_TYPE_GOSSIP_MENU:
         case CONDITION_SOURCE_TYPE_GOSSIP_MENU_OPTION:
         case CONDITION_SOURCE_TYPE_NONE:
+		case CONDITION_SOURCE_TYPE_SMART_EVENT:
         default: //make gcc happy.
             break;
     }
@@ -1422,6 +1454,19 @@ void ConditionMgr::Clean()
     }
 
     m_VehicleSpellConditions.clear();
+
+    for (SmartEventConditionMap::iterator itr = m_SmartEventConditions.begin(); itr != m_SmartEventConditions.end(); ++itr)
+    {
+        for (ConditionTypeMap::iterator it = itr->second.begin(); it != itr->second.end(); ++it)
+        {
+            for (ConditionList::const_iterator i = it->second.begin(); i != it->second.end(); ++i)
+                delete *i;
+            it->second.clear();
+        }
+        itr->second.clear();
+    }
+
+    m_SmartEventConditions.clear();
 
     // this is a BIG hack, feel free to fix it if you can figure out the ConditionMgr ;)
     for (std::list<Condition*>::const_iterator itr = m_AllocatedMemory.begin(); itr != m_AllocatedMemory.end(); ++itr)

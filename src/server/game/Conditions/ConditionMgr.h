@@ -26,6 +26,7 @@
 #define ARKCORE_CONDITIONMGR_H
 
 #include "LootMgr.h"
+#include <ace/Singleton.h>
 
 class Player;
 class Unit;
@@ -101,7 +102,8 @@ enum ConditionSourceType
     CONDITION_SOURCE_TYPE_QUEST_ACCEPT                   = 19, //DONE
     CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK                = 20, //DONE
     CONDITION_SOURCE_TYPE_VEHICLE_SPELL                  = 21, //DONE
-    CONDITION_SOURCE_TYPE_MAX                            = 22//MAX
+	CONDITION_SOURCE_TYPE_SMART_EVENT                    = 22, //DONE
+    CONDITION_SOURCE_TYPE_MAX                            = 23//MAX
 };
 
 struct Condition
@@ -109,11 +111,13 @@ struct Condition
     ConditionSourceType     mSourceType;        //SourceTypeOrReferenceId
     uint32                  mSourceGroup;
     uint32                  mSourceEntry;
+	int32                   mSourceId;
     uint32                  mElseGroup;
     ConditionType           mConditionType;     //ConditionTypeOrReference
     uint32                  mConditionValue1;
     uint32                  mConditionValue2;
     uint32                  mConditionValue3;
+	bool                    mNegativeValue;
     uint32                  ErrorTextd;
     uint32                  mReferenceId;
     uint32                  mScriptId;
@@ -123,17 +127,19 @@ struct Condition
         mSourceType         = CONDITION_SOURCE_TYPE_NONE;
         mSourceGroup        = 0;
         mSourceEntry        = 0;
+		mSourceId		    = 0;
         mElseGroup          = 0;
         mConditionType      = CONDITION_NONE;
         mConditionValue1    = 0;
         mConditionValue2    = 0;
         mConditionValue3    = 0;
+		mNegativeValue      = false;
         mReferenceId        = 0;
         ErrorTextd          = 0;
         mScriptId           = 0;
     }
 
-    bool Meets(Player * player, Unit* invoker = NULL);
+    bool Meets(Player* player, Unit* invoker = NULL);
     bool isLoaded() const { return mConditionType > CONDITION_NONE || mReferenceId; }
 };
 
@@ -141,6 +147,7 @@ typedef std::list<Condition*> ConditionList;
 typedef std::map<uint32, ConditionList > ConditionTypeMap;
 typedef std::map<ConditionSourceType, ConditionTypeMap > ConditionMap;
 typedef std::map<uint32, ConditionTypeMap > VehicleSpellConditionMap;
+typedef std::map<std::pair<int32, uint32>, ConditionTypeMap> SmartEventConditionMap;
 
 typedef std::map<uint32, ConditionList > ConditionReferenceMap;//only used for references
 
@@ -159,12 +166,14 @@ class ConditionMgr
         bool IsPlayerMeetToConditions(Player* player, ConditionList conditions, Unit* invoker = NULL);
         ConditionList GetConditionsForNotGroupedEntry(ConditionSourceType sType, uint32 uEntry);
         ConditionList GetConditionsForVehicleSpell(uint32 creatureID, uint32 spellID);
+		ConditionList GetConditionsForSmartEvent(int32 entryOrGuid, uint32 eventId, uint32 sourceType);
 
     protected:
 
         ConditionMap                m_ConditionMap;
         ConditionReferenceMap       m_ConditionReferenceMap;
         VehicleSpellConditionMap    m_VehicleSpellConditions;
+		SmartEventConditionMap      m_SmartEventConditions;
 
     private:
 
@@ -190,7 +199,8 @@ class ConditionMgr
                     sourceType == CONDITION_SOURCE_TYPE_SPELL_LOOT_TEMPLATE ||
                     sourceType == CONDITION_SOURCE_TYPE_GOSSIP_MENU ||
                     sourceType == CONDITION_SOURCE_TYPE_GOSSIP_MENU_OPTION ||
-                    sourceType == CONDITION_SOURCE_TYPE_VEHICLE_SPELL);
+                    sourceType == CONDITION_SOURCE_TYPE_VEHICLE_SPELL ||
+					sourceType == CONDITION_SOURCE_TYPE_SMART_EVENT);
         }
 
         void Clean(); // free up resources
