@@ -4474,6 +4474,11 @@ void SpellMgr::LoadSpellCustomAttr() {
             spellInfo->targetAuraSpell = 0;
             count++;
             break;
+        case 94338: // Sunfire (Eclipse)
+            spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+            spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+            spellInfo->Effects[0].BasePoints = 93402;
+             break;
         case 70728: // Exploit Weakness
         case 70840: // Devious Minds
             spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
