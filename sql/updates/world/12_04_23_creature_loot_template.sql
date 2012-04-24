@@ -54,7 +54,7 @@ INSERT INTO `creature_loot_template` VALUES
 (46209, 59469, 24, 1, 0, 1, 1);
 
 -- 25h
-DELETE FROM `creature_loot_template` WHERE (`entry`=46209);
+DELETE FROM `creature_loot_template` WHERE (`entry`=46211);
 INSERT INTO `creature_loot_template` VALUES
 (46211, 67423, 67, 1, 0, 1, 1),
 (46211, 67425, 66, 1, 0, 1, 1),
