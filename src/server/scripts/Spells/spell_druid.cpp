@@ -169,99 +169,6 @@ public:
     }
 };
 
-// 69366 - Moonkin Form passive
-class spell_dru_moonkin_form_passive: public SpellScriptLoader {
-public:
-    spell_dru_moonkin_form_passive() :
-            SpellScriptLoader("spell_dru_moonkin_form_passive") {
-    }
-
-    class spell_dru_moonkin_form_passive_AuraScript: public AuraScript {
-        PrepareAuraScript(spell_dru_moonkin_form_passive_AuraScript)
-        ;
-
-        uint32 absorbPct;
-
-        bool Load() {
-            absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(),
-                    EFFECT_0, GetCaster());
-            return true;
-        }
-
-        void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount,
-                bool & /*canBeRecalculated*/) {
-            // Set absorbtion amount to unlimited
-            amount = -1;
-        }
-
-        void Absorb(AuraEffect * /*aurEff*/, DamageInfo & dmgInfo,
-                uint32 & absorbAmount) {
-            // reduces all damage taken while Stunned in Cat Form
-            if (GetTarget()->GetUInt32Value(UNIT_FIELD_FLAGS)
-                    & (UNIT_FLAG_STUNNED))
-                absorbAmount = CalculatePctN(dmgInfo.GetDamage(), absorbPct);
-        }
-
-        void Register() {
-            DoEffectCalcAmount +=
-                    AuraEffectCalcAmountFn(spell_dru_moonkin_form_passive_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-            OnEffectAbsorb +=
-                    AuraEffectAbsorbFn(spell_dru_moonkin_form_passive_AuraScript::Absorb, EFFECT_0);
-        }
-    };
-
-    AuraScript *GetAuraScript() const {
-        return new spell_dru_moonkin_form_passive_AuraScript();
-    }
-};
-
-// 33851 - Primal Tenacity
-class spell_dru_primal_tenacity: public SpellScriptLoader {
-public:
-    spell_dru_primal_tenacity() :
-            SpellScriptLoader("spell_dru_primal_tenacity") {
-    }
-
-    class spell_dru_primal_tenacity_AuraScript: public AuraScript {
-        PrepareAuraScript(spell_dru_primal_tenacity_AuraScript)
-        ;
-
-        uint32 absorbPct;
-
-        bool Load() {
-            absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(),
-                    EFFECT_1, GetCaster());
-            return true;
-        }
-
-        void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount,
-                bool & /*canBeRecalculated*/) {
-            // Set absorbtion amount to unlimited
-            amount = -1;
-        }
-
-        void Absorb(AuraEffect * /*aurEff*/, DamageInfo & dmgInfo,
-                uint32 & absorbAmount) {
-            // reduces all damage taken while Stunned in Cat Form
-            if ((GetTarget()->GetShapeshiftForm() == FORM_CAT)
-                    && (GetTarget()->GetUInt32Value(UNIT_FIELD_FLAGS)
-                            & (UNIT_FLAG_STUNNED)))
-                absorbAmount = CalculatePctN(dmgInfo.GetDamage(), absorbPct);
-        }
-
-        void Register() {
-            DoEffectCalcAmount +=
-                    AuraEffectCalcAmountFn(spell_dru_primal_tenacity_AuraScript::CalculateAmount, EFFECT_1, SPELL_AURA_SCHOOL_ABSORB);
-            OnEffectAbsorb +=
-                    AuraEffectAbsorbFn(spell_dru_primal_tenacity_AuraScript::Absorb, EFFECT_1);
-        }
-    };
-
-    AuraScript *GetAuraScript() const {
-        return new spell_dru_primal_tenacity_AuraScript();
-    }
-};
-
 // Mark Of The Wild
 // Spell Id: 1126
 class spell_dru_mark_of_the_wild : public SpellScriptLoader
@@ -328,31 +235,6 @@ public:
 
     AuraScript* GetAuraScript() const {
         return new spell_dru_berserk_AuraScript();
-    }
-};
-
-class spell_dru_starfall_aoe: public SpellScriptLoader {
-public:
-    spell_dru_starfall_aoe() :
-            SpellScriptLoader("spell_dru_starfall_aoe") {
-    }
-
-    class spell_dru_starfall_aoe_SpellScript: public SpellScript {
-        PrepareSpellScript(spell_dru_starfall_aoe_SpellScript)
-        ;
-
-        void FilterTargets(std::list<Unit*>& unitList) {
-            unitList.remove(GetTargetUnit());
-        }
-
-        void Register() {
-            OnUnitTargetSelect +=
-                    SpellUnitTargetFn(spell_dru_starfall_aoe_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ENEMY_DST);
-        }
-    };
-
-    SpellScript *GetSpellScript() const {
-        return new spell_dru_starfall_aoe_SpellScript();
     }
 };
 
@@ -425,10 +307,7 @@ void AddSC_druid_spell_scripts() {
     new spell_dru_savage_defense();
     new spell_dru_t10_restoration_4p_bonus();
     new spell_dru_glyph_of_starfire();
-    new spell_dru_moonkin_form_passive();
-    new spell_dru_primal_tenacity();
     new spell_dru_berserk();
-    new spell_dru_starfall_aoe();
     new spell_druid_rejuvenation();
     new spell_dru_swift_flight_passive();
 }
