@@ -7561,7 +7561,7 @@ void Player::CheckAreaExploreAndOutdoor()
 
         AreaTableEntry const *p = GetAreaEntryByAreaFlagAndMap(areaFlag,
                 GetMapId());
-        if (!p && !GetMapId() == 638) // FIXME: Hackfix for Worgen starting zone error.
+        if (!p)
         {
             sLog->outError(
                     "PLAYER: Player %u discovered unknown area (x: %f y: %f map: %u",
