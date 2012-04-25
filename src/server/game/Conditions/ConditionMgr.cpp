@@ -230,8 +230,8 @@ bool Condition::Meets(Player * player, Unit* invoker)
     else
         refMeets = true;
 
-    if (sendErrorMsg && ErrorTextd && (!condMeets || !refMeets))//send special error from DB
-        player->m_ConditionErrorMsgId = ErrorTextd;
+    if (sendErrorMsg && ErrorTextId && (!condMeets || !refMeets))//send special error from DB
+        player->m_ConditionErrorMsgId = ErrorTextId;
 
     bool script = sScriptMgr->OnConditionCheck(this, player, invoker); // Returns true by default.
 
@@ -427,7 +427,7 @@ void ConditionMgr::LoadConditions(bool isReload)
         cond->mConditionValue2           = fields[7].GetUInt32();
         cond->mConditionValue3           = fields[8].GetUInt32();
 		cond->mNegativeValue             = fields[9].GetUInt8();
-        cond->ErrorTextd                 = fields[10].GetUInt32();
+        cond->ErrorTextId                = fields[10].GetUInt32();
         cond->mScriptId                  = sObjectMgr->GetScriptId(fields[11].GetCString());
 
         if (iConditionTypeOrReference >= 0)

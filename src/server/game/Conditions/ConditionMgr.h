@@ -118,7 +118,7 @@ struct Condition
     uint32                  mConditionValue2;
     uint32                  mConditionValue3;
 	bool                    mNegativeValue;
-    uint32                  ErrorTextd;
+    uint32                  ErrorTextId;
     uint32                  mReferenceId;
     uint32                  mScriptId;
 
@@ -135,7 +135,7 @@ struct Condition
         mConditionValue3    = 0;
 		mNegativeValue      = false;
         mReferenceId        = 0;
-        ErrorTextd          = 0;
+        ErrorTextId         = 0;
         mScriptId           = 0;
     }
 
