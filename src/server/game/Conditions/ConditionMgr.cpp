@@ -453,6 +453,8 @@ void ConditionMgr::LoadConditions(bool isReload)
                 sLog->outErrorDb("Condition %s %i has useless data in value2 (%u)!", rowType, iSourceTypeOrReferenceId, cond->mConditionValue2);
             if (cond->mConditionValue3)
                 sLog->outErrorDb("Condition %s %i has useless data in value3 (%u)!", rowType, iSourceTypeOrReferenceId, cond->mConditionValue3);
+            if (cond->mNegativeValue)
+                sLog->outErrorDb("Condition %s %i has useless data in mNegativeValue (%u)!", rowType, iSourceTypeOrReferenceId, cond->mNegativeValue);
             if (cond->mSourceGroup && iSourceTypeOrReferenceId < 0)
                 sLog->outErrorDb("Condition %s %i has useless data in SourceGroup (%u)!", rowType, iSourceTypeOrReferenceId, cond->mSourceGroup);
             if (cond->mSourceEntry && iSourceTypeOrReferenceId < 0)
