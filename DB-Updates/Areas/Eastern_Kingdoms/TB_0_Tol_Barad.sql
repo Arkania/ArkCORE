@@ -3,7 +3,7 @@
 #    © by Saiifii   #
 #####################
 
-SET @NPC_GUID_START := 18000000;
+SET @NPC_GUID_START := 15795627;
 SET @GOB_GUID_START := 4500000;
 
 DELETE FROM `creature` WHERE `map` = 732;

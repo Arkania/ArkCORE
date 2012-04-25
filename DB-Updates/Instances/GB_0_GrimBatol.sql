@@ -3,7 +3,7 @@
 #       © by Saiifii         #
 ##############################
 
-SET @NPC_GUID_START := 18001500;
+SET @NPC_GUID_START := 15796747;
 
 -- Spawns are 100% clean Blizzlike!
 DELETE FROM creature WHERE map = 670;
