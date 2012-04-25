@@ -3,7 +3,7 @@
 #       © by Saiifii         #
 ##############################
 
-SET @NPC_GUID_START := 15812010;
+SET @NPC_GUID_START := 15812100;
 
 
 -- Spawns are 100% clean Blizzlike!
