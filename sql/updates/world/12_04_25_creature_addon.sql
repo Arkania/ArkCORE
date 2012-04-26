@@ -1,6 +1,9 @@
 -- Spezified Things
 -- Addons
 -- by Naios
+
+SET @NPC_GUID_START := 18001500;
+
 REPLACE INTO `creature_addon` (`guid`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
 -- Throngus for Waypoints by Naios
 (@NPC_GUID_START + 74, (@NPC_GUID_START + 74)*10, 0, 0, 0, 0, NULL);
