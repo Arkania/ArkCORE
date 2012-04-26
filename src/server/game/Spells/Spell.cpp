@@ -3762,34 +3762,39 @@ void Spell::update(uint32 difftime) {
 
     switch (m_spellState) {
         case SPELL_STATE_PREPARING: {
-            if (m_timer) {
-                if (difftime >= m_timer) m_timer = 0;
+            if (m_timer > 0)
+            {
+                if (difftime >= (uint32)m_timer)
+                    m_timer = 0;
                 else
                     m_timer -= difftime;
             }
 
-            if (m_timer == 0 && !IsNextMeleeSwingSpell() && !IsAutoRepeat()) cast(
-                    m_spellInfo->CastingTimeIndex == 1);
-        }
+            if (m_timer == 0 && !IsNextMeleeSwingSpell() && !IsAutoRepeat())
+                // don't CheckCast for instant spells - done in spell::prepare, skip duplicate checks, needed for range checks for example
+                cast(!m_casttime);
             break;
+        }
         case SPELL_STATE_CASTING: {
             if (m_timer > 0) {
                 // check if there are alive targets left
                 if (!UpdateChanneledTargetList()) {
-                    sLog->outDebug(
-                            LOG_FILTER_SPELLS_AURAS,
-                            "Channeled spell %d is removed due to lack of targets",
-                            m_spellInfo->Id);
+                    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Channeled spell %d is removed due to lack of targets", m_spellInfo->Id);
                     SendChannelUpdate(0);
                     finish();
                 }
 
-                if (difftime >= m_timer) m_timer = 0;
-                else
-                    m_timer -= difftime;
+                if (m_timer > 0)
+                {
+                    if (difftime >= (uint32)m_timer)
+                        m_timer = 0;
+                    else
+                        m_timer -= difftime;
+                }
             }
 
-            if (m_timer == 0) {
+            if (m_timer == 0)
+            {
                 SendChannelUpdate(0);
 
                 // channeled spell processed independently for quest targeting
