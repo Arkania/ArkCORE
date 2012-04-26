@@ -1,16 +1,89 @@
-# Lineendings
-*.sln        eol=crlf
-*.vcproj     eol=crlf
-*.vcxproj*   eol=crlf
+new fix boss beauty from Black rock Caverns.
+/*
+* Copyright (C) 2011 - 2012 PaladCore <https://Github.com/PaladMaster/>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+* ScriptAuthor: PaladMaster
+****************
 
-# Whitespace rules
-# strict (no trailing, no tabs)
-*.cpp        whitespace=trailing-space,space-before-tab,tab-in-indent,cr-at-eol
-*.h          whitespace=trailing-space,space-before-tab,tab-in-indent,cr-at-eol
+#include "ScriptPCH.h"
+#include "blackrock_caverns.h"
 
-# normal (no trailing)
-*.sql        whitespace=trailing-space,space-before-tab,cr-at-eol
-*.txt        whitespace=trailing-space,space-before-tab,cr-at-eol
+enum Spells
+{
+	SPELL_BERSEK                                  = 82395,
+    SPELL_CHARGE                                  = 76030,
+    SPELL_FLAMEBREAK                              = 76032,
+    SPELL_MAGMA_SPIT                              = 76031,
+    SPELL_TERRIFYNG_ROAR                          = 76028,
+};
 
-# special files which must ignore whitespace
-*.patch      whitespace=-trailing-space
+enum events
+{   
+    EVENT_NONE,
+    EVENT_BERSEK,
+    EVENT_BERSEKER_CHARGE,
+    EVENT_FLAMEBREAK,
+    EVENT_MAGMA_SPIT,
+    EVENT_TERRIFYNG_ROAR,
+};
+
+enum actions
+{
+    ACTION_BEAUTY_BERSEK,
+};
+
+class boss_beauty : public CreatureScript
+{
+public:
+    boss_beauty() : CreatureScript("boss_beauty") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new boss_beautyAI (creature);
+    }
+
+    struct boss_beautyAI : public BossAI
+    {
+        boss_beautyAI(Creature* creature) : BossAI(creature, DATA_BEAUTY_EVENT)
+        {
+            instance = creature->GetInstanceScript();
+        }
+
+        InstanceScript* instance;
+        EventMap events;
+
+        void Reset() 
+        {
+            events.Reset();
+        }
+
+        void EnterCombat(Unit* who)
+        {
+            events.ScheduleEvent(EVENT_BERSEKER_CHARGE, urand(15000, 24000), 0, 0);
+            events.ScheduleEvent(EVENT_FLAMEBREAK, urand(10000, 21000), 0, 0);
+            events.ScheduleEvent(EVENT_MAGMA_SPIT, urand(9000, 13000), 0, 0);
+            events.ScheduleEvent(EVENT_TERRIFYNG_ROAR, urand(15000, 22000), 0, 0);
+        }
+
+        void DoAction(const int32 action)
+        {
+            switch (action)
+            {
+                case ACTION_BEAUTY_BERSEK:
+                    events.ScheduleEvent(EVENT_BERSEK, 1000, 0, 0);
+                    break;
+            }
+        }
