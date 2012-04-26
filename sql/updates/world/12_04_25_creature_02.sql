@@ -1,4 +1,4 @@
-##############################
+﻿##############################
 #        Grim Batol          #
 #       © by Saiifii         #
 ##############################
@@ -598,20 +598,3 @@ INSERT INTO `creature`(`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`,
 (@NPC_GUID_START + 588, 41040, 670, 3, 1, 32270, 0, -658.879, -407.702, 199.785, 1.70995, 7200, 0, 0, 7749, 0, 0, 33556480, 526336, 0),
 (@NPC_GUID_START + 589, 41040, 670, 3, 1, 32270, 0, -658.014, -407.471, 199.786, 1.95497, 7200, 0, 0, 7749, 0, 0, 33556480, 526336, 0),
 (@NPC_GUID_START + 590, 41040, 670, 3, 1, 32270, 0, -655.482, -403.397, 199.78, 1.60634, 7200, 0, 0, 7749, 0, 0, 33556480, 526336, 0);
-
--- Spezified Things
--- Addons
--- by Naios
-REPLACE INTO `creature_addon` (`guid`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
--- Throngus for Waypoints by Naios
-(@NPC_GUID_START + 74, (@NPC_GUID_START + 74)*10, 0, 0, 0, 0, NULL);
-
--- Throngus Waypoints by Naios
-DELETE FROM `waypoint_data` WHERE `id` = (@NPC_GUID_START + 74)*10;
-INSERT INTO `waypoint_data` (`id`, `point`, `position_x`, `position_y`, `position_z`, `delay`, `move_flag`, `action`, `action_chance`, `wpguid`) VALUES
-((@NPC_GUID_START + 74)*10, 1, -492.303, -489.919, 271.914, 0, 0, 0, 100, 0),
-((@NPC_GUID_START + 74)*10, 2, -489.521271, -509.812469, 271.908356, 0, 0, 0, 100, 0),
-((@NPC_GUID_START + 74)*10, 3, -489.702423, -550.505005, 271.908264, 0, 0, 0, 100, 0),
-((@NPC_GUID_START + 74)*10, 4, -492.251, -570.199, 271.912, 0, 0, 0, 100, 0),
-((@NPC_GUID_START + 74)*10, 5, -489.702423, -550.505005, 271.908264, 0, 0, 0, 100, 0),
-((@NPC_GUID_START + 74)*10, 6, -489.521271, -509.812469, 271.908356, 0, 0, 0, 100, 0);
