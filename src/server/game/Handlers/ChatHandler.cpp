@@ -365,14 +365,14 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
         break;
     case CHAT_MSG_WHISPER:
     {
-        if (GetSecurity() == SEC_PLAYER)
-        {
-            if (_player->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_WHISPER_LEVEL_REQ))
-            {
-                SendNotification(GetArkCoreString(LANG_WHISPER_REQ), sWorld->getIntConfig(CONFIG_CHAT_WHISPER_LEVEL_REQ));
-                return;
-            }
-        }
+		// if (GetSecurity() == SEC_PLAYER)
+        // {
+            // if (_player->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_WHISPER_LEVEL_REQ))
+            // {
+                // SendNotification(GetArkCoreString(LANG_WHISPER_REQ), sWorld->getIntConfig(CONFIG_CHAT_WHISPER_LEVEL_REQ));
+                // return;
+            // }
+		// }
 
         if (!normalizePlayerName(to))
         {
@@ -539,7 +539,7 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
         break;
     case CHAT_MSG_CHANNEL:
     {
-        if (GetSecurity() == SEC_PLAYER)
+		if (GetSecurity() == SEC_PLAYER) // warning, this must be commited in case there is a problem with chatting in game
         {
             if (_player->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_CHANNEL_LEVEL_REQ))
             {
