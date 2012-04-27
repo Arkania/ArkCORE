@@ -206,7 +206,7 @@ public:
 
             if (uiCrystalfireBreathTimer <= diff)
             {
-            DoCast(me->getVictim(), DUNGEON_MODE(SPELL_CRYSTALFIRE_BREATH,H_SPELL_CRYSTALFIRE_BREATH));
+            DoCast(me->getVictim(), DUNGEON_MODE(SPELL_CRYSTALFIRE_BREATH, H_SPELL_CRYSTALFIRE_BREATH));
                 uiCrystalfireBreathTimer = 14*IN_MILLISECONDS;
             } else uiCrystalfireBreathTimer -= diff;
 

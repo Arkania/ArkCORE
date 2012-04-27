@@ -36,9 +36,9 @@
 #include "revision.h"
 #include "Util.h"
 
-bool ChatHandler::HandleHelpCommand(const char* args)
+bool ChatHandler::HandleHelpCommand (const char* args)
 {
-    char* cmd = strtok((char*)args, " ");
+    char* cmd = strtok((char*) args, " ");
     if (!cmd)
     {
         ShowHelpForCommand(getCommandTable(), "help");
@@ -53,13 +53,13 @@ bool ChatHandler::HandleHelpCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleCommandsCommand(const char* /*args*/)
+bool ChatHandler::HandleCommandsCommand (const char* /*args*/)
 {
     ShowHelpForCommand(getCommandTable(), "");
     return true;
 }
 
-bool ChatHandler::HandleStartCommand(const char* /*args*/)
+bool ChatHandler::HandleStartCommand (const char* /*args*/)
 {
     Player *chr = m_session->GetPlayer();
 
@@ -79,9 +79,9 @@ bool ChatHandler::HandleStartCommand(const char* /*args*/)
 
     if ((chr->isDead()) || (chr->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST)))
     {
-    // if player is dead and stuck, send ghost to graveyard
-    chr->RepopAtGraveyard();
-    return true;
+        // if player is dead and stuck, send ghost to graveyard
+        chr->RepopAtGraveyard();
+        return true;
     }
 
     // cast spell Stuck
@@ -89,7 +89,7 @@ bool ChatHandler::HandleStartCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleServerInfoCommand(const char* /*args*/)
+bool ChatHandler::HandleServerInfoCommand (const char* /*args*/)
 {
     uint32 PlayersNum = sWorld->GetPlayerCount();
     uint32 MaxPlayersNum = sWorld->GetMaxPlayerCount();
@@ -109,7 +109,7 @@ bool ChatHandler::HandleServerInfoCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleDismountCommand(const char* /*args*/)
+bool ChatHandler::HandleDismountCommand (const char* /*args*/)
 {
     //If player is not mounted, so go out :)
     if (!m_session->GetPlayer()->IsMounted())
@@ -131,7 +131,7 @@ bool ChatHandler::HandleDismountCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleSaveCommand(const char* /*args*/)
+bool ChatHandler::HandleSaveCommand (const char* /*args*/)
 {
     Player *player = m_session->GetPlayer();
 
@@ -145,13 +145,13 @@ bool ChatHandler::HandleSaveCommand(const char* /*args*/)
 
     // save if the player has last been saved over 20 seconds ago
     uint32 save_interval = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
-    if (save_interval == 0 || (save_interval > 20*IN_MILLISECONDS && player->GetSaveTimer() <= save_interval - 20*IN_MILLISECONDS))
+    if (save_interval == 0 || (save_interval > 20 * IN_MILLISECONDS && player->GetSaveTimer() <= save_interval - 20 * IN_MILLISECONDS))
         player->SaveToDB();
 
     return true;
 }
 
-bool ChatHandler::HandleGMListIngameCommand(const char* /*args*/)
+bool ChatHandler::HandleGMListIngameCommand (const char* /*args*/)
 {
     bool first = true;
 
@@ -160,8 +160,7 @@ bool ChatHandler::HandleGMListIngameCommand(const char* /*args*/)
     for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         AccountTypes itr_sec = itr->second->GetSession()->GetSecurity();
-        if ((itr->second->isGameMaster() || (itr_sec > SEC_PLAYER && itr_sec <= AccountTypes(sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_GM_LIST)))) &&
-            (!m_session || itr->second->IsVisibleGloballyFor(m_session->GetPlayer())))
+        if ((itr->second->isGameMaster() || (itr_sec > SEC_PLAYER && itr_sec <= AccountTypes(sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_GM_LIST)))) && (!m_session || itr->second->IsVisibleGloballyFor(m_session->GetPlayer())))
         {
             if (first)
             {
@@ -180,7 +179,7 @@ bool ChatHandler::HandleGMListIngameCommand(const char* /*args*/)
 }
 
 /// Display the 'Message of the day' for the realm
-bool ChatHandler::HandleServerMotdCommand(const char* /*args*/)
+bool ChatHandler::HandleServerMotdCommand (const char* /*args*/)
 {
     PSendSysMessage(LANG_MOTD_CURRENT, sWorld->GetMotd());
     return true;

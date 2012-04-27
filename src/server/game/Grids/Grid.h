@@ -44,97 +44,104 @@
 template<class A, class T, class O> class GridLoader;
 
 template<class ACTIVE_OBJECT, class WORLD_OBJECT_TYPES, class GRID_OBJECT_TYPES>
-class Grid {
-	// allows the GridLoader to access its internals
-	template<class A, class T, class O> friend class GridLoader;
+class Grid
+{
+    // allows the GridLoader to access its internals
+    template<class A, class T, class O> friend class GridLoader;
 public:
 
-	/** destructor to clean up its resources. This includes unloading the
-	 grid if it has not been unload.
-	 */
-	~Grid() {
-	}
+    /** destructor to clean up its resources. This includes unloading the
+     grid if it has not been unload.
+     */
+    ~Grid ()
+    {
+    }
 
-	/** an object of interested enters the grid
-	 */
-	template<class SPECIFIC_OBJECT> void AddWorldObject(SPECIFIC_OBJECT *obj) {
-		if (!i_objects.template insert<SPECIFIC_OBJECT>(obj))
-			ASSERT(false);
-	}
+    /** an object of interested enters the grid
+     */
+    template<class SPECIFIC_OBJECT> void AddWorldObject (SPECIFIC_OBJECT *obj)
+    {
+        if (!i_objects.template insert<SPECIFIC_OBJECT>(obj))
+            ASSERT(false);
+    }
 
-	/** an object of interested exits the grid
-	 */
-	template<class SPECIFIC_OBJECT> void RemoveWorldObject(
-			SPECIFIC_OBJECT *obj) {
-		if (!i_objects.template remove<SPECIFIC_OBJECT>(obj))
-			ASSERT(false);
-	}
+    /** an object of interested exits the grid
+     */
+    template<class SPECIFIC_OBJECT> void RemoveWorldObject (SPECIFIC_OBJECT *obj)
+    {
+        if (!i_objects.template remove<SPECIFIC_OBJECT>(obj))
+            ASSERT(false);
+    }
 
-	/** Refreshes/update the grid. This required for remote grids.
-	 */
-	void RefreshGrid(void) { /* TBI */
-	}
+    /** Refreshes/update the grid. This required for remote grids.
+     */
+    void RefreshGrid (void)
+    { /* TBI */
+    }
 
-	/** Locks a grid.  Any object enters must wait until the grid is unlock.
-	 */
-	void LockGrid(void) { /* TBI */
-	}
+    /** Locks a grid.  Any object enters must wait until the grid is unlock.
+     */
+    void LockGrid (void)
+    { /* TBI */
+    }
 
-	/** Unlocks the grid.
-	 */
-	void UnlockGrid(void) { /* TBI */
-	}
+    /** Unlocks the grid.
+     */
+    void UnlockGrid (void)
+    { /* TBI */
+    }
 
-	/** Grid visitor for grid objects
-	 */
-	template<class T> void Visit(
-			TypeContainerVisitor<T, TypeMapContainer<GRID_OBJECT_TYPES> > &visitor) {
-		visitor.Visit(i_container);
-	}
+    /** Grid visitor for grid objects
+     */
+    template<class T> void Visit (TypeContainerVisitor<T, TypeMapContainer<GRID_OBJECT_TYPES> > &visitor)
+    {
+        visitor.Visit(i_container);
+    }
 
-	/** Grid visitor for world objects
-	 */
-	template<class T> void Visit(
-			TypeContainerVisitor<T, TypeMapContainer<WORLD_OBJECT_TYPES> > &visitor) {
-		visitor.Visit(i_objects);
-	}
+    /** Grid visitor for world objects
+     */
+    template<class T> void Visit (TypeContainerVisitor<T, TypeMapContainer<WORLD_OBJECT_TYPES> > &visitor)
+    {
+        visitor.Visit(i_objects);
+    }
 
-	/** Returns the number of object within the grid.
-	 */
-	unsigned int ActiveObjectsInGrid(void) const {
-		return /*m_activeGridObjects.size()+*/i_objects.template Count<
-				ACTIVE_OBJECT>();
-	}
+    /** Returns the number of object within the grid.
+     */
+    unsigned int ActiveObjectsInGrid (void) const
+    {
+        return /*m_activeGridObjects.size()+*/i_objects.template Count<ACTIVE_OBJECT>();
+    }
 
-	/** Inserts a container type object into the grid.
-	 */
-	template<class SPECIFIC_OBJECT> void AddGridObject(SPECIFIC_OBJECT *obj) {
-		if (!i_container.template insert<SPECIFIC_OBJECT>(obj))
-			ASSERT(false);
-	}
+    /** Inserts a container type object into the grid.
+     */
+    template<class SPECIFIC_OBJECT> void AddGridObject (SPECIFIC_OBJECT *obj)
+    {
+        if (!i_container.template insert<SPECIFIC_OBJECT>(obj))
+            ASSERT(false);
+    }
 
-	/** Removes a containter type object from the grid
-	 */
-	template<class SPECIFIC_OBJECT> void RemoveGridObject(
-			SPECIFIC_OBJECT *obj) {
-		if (!i_container.template remove<SPECIFIC_OBJECT>(obj))
-			ASSERT(false);
-	}
+    /** Removes a containter type object from the grid
+     */
+    template<class SPECIFIC_OBJECT> void RemoveGridObject (SPECIFIC_OBJECT *obj)
+    {
+        if (!i_container.template remove<SPECIFIC_OBJECT>(obj))
+            ASSERT(false);
+    }
 
-	/*bool NoWorldObjectInGrid() const
-	 {
-	 return i_objects.GetElements().isEmpty();
-	 }
+    /*bool NoWorldObjectInGrid() const
+     {
+     return i_objects.GetElements().isEmpty();
+     }
 
-	 bool NoGridObjectInGrid() const
-	 {
-	 return i_container.GetElements().isEmpty();
-	 }*/
+     bool NoGridObjectInGrid() const
+     {
+     return i_container.GetElements().isEmpty();
+     }*/
 private:
 
-	TypeMapContainer<GRID_OBJECT_TYPES> i_container;
-	TypeMapContainer<WORLD_OBJECT_TYPES> i_objects;
-	//typedef std::set<void*> ActiveGridObjects;
-	//ActiveGridObjects m_activeGridObjects;
+    TypeMapContainer<GRID_OBJECT_TYPES> i_container;
+    TypeMapContainer<WORLD_OBJECT_TYPES> i_objects;
+    //typedef std::set<void*> ActiveGridObjects;
+    //ActiveGridObjects m_activeGridObjects;
 };
 #endif

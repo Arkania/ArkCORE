@@ -319,7 +319,7 @@ public:
 
                 if (uiCycloneTimer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                         DoCast(me, DUNGEON_MODE(SPELL_CYCLONE_STRIKE, SPELL_CYCLONE_STRIKE_H), false);
                         uiCycloneTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
@@ -328,7 +328,7 @@ public:
 
                 if (uiBoltTimer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, -5, true))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_LIGHTNING_BOLT, SPELL_LIGHTNING_BOLT_H), false);
@@ -339,7 +339,7 @@ public:
 
                 if (uiThunderTimer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_THUNDERSHOCK, SPELL_THUNDERSHOCK_H), false);

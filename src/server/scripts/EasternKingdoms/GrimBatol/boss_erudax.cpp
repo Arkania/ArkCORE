@@ -135,9 +135,9 @@ public:
             DoScriptText(SAY_AGGRO, me);
 
             // The Position of the Portal Stalker is the Summon Position of the Adds
-            FacelessPortalStalker = me->SummonCreature(NPC_FACELESS_PORTAL_STALKER,-641.515f,-827.8f,235.5f,3.069f,TEMPSUMMON_MANUAL_DESPAWN);
+            FacelessPortalStalker = me->SummonCreature(NPC_FACELESS_PORTAL_STALKER, -641.515f, -827.8f, 235.5f, 3.069f, TEMPSUMMON_MANUAL_DESPAWN);
 
-            FacelessPortalStalker->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
+            FacelessPortalStalker->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
         }
 
         void UpdateAI(const uint32 diff)
@@ -145,7 +145,7 @@ public:
             if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if(ShouldSummonAdds)
+            if (ShouldSummonAdds)
             {
                 // Despawns the Stalker
                 DespawnCreatures(NPC_SHADOW_GALE_STALKER);
@@ -159,16 +159,16 @@ public:
                     me->MonsterYell(SAY_SUMMON, LANG_UNIVERSAL, NULL);
 
                 //Adds a visual portal effect to the Stalker
-                FacelessPortalStalker->GetAI()->DoCast(FacelessPortalStalker,SPELL_TWILIGHT_PORTAL_VISUAL,true);
+                FacelessPortalStalker->GetAI()->DoCast(FacelessPortalStalker, SPELL_TWILIGHT_PORTAL_VISUAL, true);
                 events.ScheduleEvent(EVENT_REMOVE_TWILIGHT_PORTAL, 7000);
 
                 //Summons Faceless over the Spell
-                FacelessPortalStalker->GetAI()->DoCast(FacelessPortalStalker,SPELL_SPAWN_FACELESS,true);
+                FacelessPortalStalker->GetAI()->DoCast(FacelessPortalStalker, SPELL_SPAWN_FACELESS, true);
 
                 ShouldSummonAdds = false;
 
                 // DBM says that the Spell has 40s CD
-                events.ScheduleEvent(EVENT_SHADOW_GALE, urand(40000,44000));
+                events.ScheduleEvent(EVENT_SHADOW_GALE, urand(40000, 44000));
             }
 
             events.Update(diff);
@@ -179,13 +179,13 @@ public:
                 {
                 case EVENT_ENFEEBLING_BLOW:
                     DoCastVictim(SPELL_ENFEEBLING_BLOW);
-                    events.ScheduleEvent(EVENT_ENFEEBLING_BLOW, urand(19000,24000));
+                    events.ScheduleEvent(EVENT_ENFEEBLING_BLOW, urand(19000, 24000));
                     break;
 
                 case EVENT_SHADOW_GALE:
-                    ShadowGaleTrigger = me->SummonCreature(NPC_SHADOW_GALE_STALKER,-739.665f/*+(urand(0,20)-10)*/,-827.024f/*+(urand(0,20)-10)*/,232.412f,3.1f,TEMPSUMMON_CORPSE_DESPAWN);
+                    ShadowGaleTrigger = me->SummonCreature(NPC_SHADOW_GALE_STALKER, -739.665f/*+(urand(0, 20)-10)*/, -827.024f/*+(urand(0, 20)-10)*/, 232.412f, 3.1f, TEMPSUMMON_CORPSE_DESPAWN);
                     me->SetReactState(REACT_PASSIVE);
-                    me->GetMotionMaster()->MovePoint(POINT_ERUDAX_IS_AT_STALKER,ShadowGaleTrigger->GetPositionX(),ShadowGaleTrigger->GetPositionY(),ShadowGaleTrigger->GetPositionZ());
+                    me->GetMotionMaster()->MovePoint(POINT_ERUDAX_IS_AT_STALKER, ShadowGaleTrigger->GetPositionX(), ShadowGaleTrigger->GetPositionY(), ShadowGaleTrigger->GetPositionZ());
                     DoScriptText(SAY_GALE, me);
                     break;
 
@@ -197,9 +197,9 @@ public:
                 case EVENT_BINDING_SHADOWS:
 
                     if (Unit* tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
-                        DoCast(tempTarget,SPELL_BINDING_SHADOWS);
+                        DoCast(tempTarget, SPELL_BINDING_SHADOWS);
 
-                    events.ScheduleEvent(EVENT_BINDING_SHADOWS, urand(12000,17000));
+                    events.ScheduleEvent(EVENT_BINDING_SHADOWS, urand(12000, 17000));
                     break;
 
                 default:
@@ -286,7 +286,7 @@ public:
 
             for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
             {
-                if((*iter)->isDead())
+                if ((*iter)->isDead())
                     (*iter)->Respawn();
 
                 (*iter)->SetHealth(77500);
@@ -335,12 +335,12 @@ public:
             DoZoneInCombat();
             DoScriptText(SAY_SUMMON, summoner);
 
-            if(me->GetMap()->IsHeroic())
+            if (me->GetMap()->IsHeroic())
                 events.ScheduleEvent(EVENT_CAST_SHIELD_OF_NIGHTMARE_DELAY, 3000);
 
-            if(pTarget != NULL)
+            if (pTarget != NULL)
             {
-                me->GetMotionMaster()->MovePoint(POINT_FACELESS_IS_AT_AN_EGG,pTarget->GetPositionX()-4.0f,pTarget->GetPositionY()-4.0f,pTarget->GetPositionZ());
+                me->GetMotionMaster()->MovePoint(POINT_FACELESS_IS_AT_AN_EGG, pTarget->GetPositionX()-4.0f, pTarget->GetPositionY()-4.0f, pTarget->GetPositionZ());
             }
 
             me->SetReactState(REACT_PASSIVE); // That the Faceless are not running to Players while running to Eggs
@@ -366,12 +366,12 @@ public:
                 }
             }
 
-            if(isCastingUmbraMending)
+            if (isCastingUmbraMending)
             {	// If the Egg is Death and Umbra Mending was casted go to the next Egg
                 pTarget = GetNextEgg();
 
-                if(pTarget != NULL) // Solves Crashes if the Faceless killed all eggs
-                    me->GetMotionMaster()->MovePoint(POINT_FACELESS_IS_AT_AN_EGG,pTarget->GetPositionX(),pTarget->GetPositionY(),pTarget->GetPositionZ());
+                if (pTarget != NULL) // Solves Crashes if the Faceless killed all eggs
+                    me->GetMotionMaster()->MovePoint(POINT_FACELESS_IS_AT_AN_EGG, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
 
                 isAtAnEgg = false;
                 isCastingUmbraMending = false;
@@ -379,10 +379,10 @@ public:
                 return;
             }
 
-            if(pTarget->isDead())
+            if (pTarget->isDead())
             {
-                if(Unit* pErudax = me->FindNearestCreature(BOSS_ERUDAX,1000.0f, true))
-                    DoCast(pErudax, SPELL_UMBRAL_MENDING,false);
+                if (Unit* pErudax = me->FindNearestCreature(BOSS_ERUDAX, 1000.0f, true))
+                    DoCast(pErudax, SPELL_UMBRAL_MENDING, false);
 
                 isCastingUmbraMending = true;
 
@@ -391,8 +391,8 @@ public:
 
             pTarget->AI()->DoZoneInCombat();
 
-            DoCast(pTarget,SPELL_TWILIGHT_CORRUPTION_DOT,true);
-            DoCast(pTarget,SPELL_TWILIGHT_CORRUPTION_VISUAL,true);
+            DoCast(pTarget, SPELL_TWILIGHT_CORRUPTION_DOT, true);
+            DoCast(pTarget, SPELL_TWILIGHT_CORRUPTION_VISUAL, true);
         }
 
         void MovementInform(uint32 type, uint32 id)
@@ -413,7 +413,7 @@ public:
 
         void JustDied(Unit* killer)
         {	// Removes the Dot of the Egg if the Faceless dies
-            if(isAtAnEgg && pTarget->isAlive())
+            if (isAtAnEgg && pTarget->isAlive())
                 pTarget->RemoveAllAuras();
         }
 
@@ -429,7 +429,7 @@ public:
                 return GetNextEgg();
 
             uint32 c = 0;
-            uint32 r = urand(0,creatures.size());
+            uint32 r = urand(0, creatures.size());
 
             for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
             {
@@ -444,7 +444,7 @@ public:
 
         inline Creature* GetNextEgg()
         {
-            return me->FindNearestCreature(NPC_ALEXSTRASZAS_EGG,1000.0f, true);
+            return me->FindNearestCreature(NPC_ALEXSTRASZAS_EGG, 1000.0f, true);
         }
     };
 };
@@ -508,13 +508,13 @@ public:
         void IsSummonedBy(Unit* summoner)
         {
             pErudax = summoner;
-            me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
             DoCastAOE(SPELL_SHADOW_GALE_SPEED_TRIGGER);
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if(VisualEffectCasted)
+            if (VisualEffectCasted)
             {
                 events.Update(diff);
 
@@ -529,10 +529,10 @@ public:
                         if (!PlayerList.isEmpty())
                         {
                             for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                                if(me->GetDistance(i->getSource()) >= 3)
+                                if (me->GetDistance(i->getSource()) >= 3)
                                 {
                                     // ToDo Add Debuff and Deal damage
-                                    if(!i->getSource()->HasAura(SPELL_SHADOW_GALE_DEBUFF))
+                                    if (!i->getSource()->HasAura(SPELL_SHADOW_GALE_DEBUFF))
                                         me->CastSpell(i->getSource(), SPELL_SHADOW_GALE_DEBUFF, true);
                                 }else
                                     i->getSource()->RemoveAura(SPELL_SHADOW_GALE_DEBUFF);
@@ -547,7 +547,7 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if(!VisualEffectCasted)
+            if (!VisualEffectCasted)
             {
                 VisualEffectCasted = true;
                 events.ScheduleEvent(EVENT_TRIGGER_GALE_CHECK_PLAYERS, 1000);

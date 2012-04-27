@@ -34,16 +34,19 @@
 #include <vector>
 #include "Util.h"
 
-struct EnchStoreItem {
+struct EnchStoreItem
+{
     uint32 ench;
     float chance;
 
-    EnchStoreItem() :
-            ench(0), chance(0) {
+    EnchStoreItem () :
+            ench(0), chance(0)
+    {
     }
 
-    EnchStoreItem(uint32 _ench, float _chance) :
-            ench(_ench), chance(_chance) {
+    EnchStoreItem (uint32 _ench, float _chance) :
+            ench(_ench), chance(_chance)
+    {
     }
 };
 
@@ -52,18 +55,20 @@ typedef UNORDERED_MAP<uint32, EnchStoreList> EnchantmentStore;
 
 static EnchantmentStore RandomItemEnch;
 
-void LoadRandomEnchantmentsTable() {
+void LoadRandomEnchantmentsTable ()
+{
     uint32 oldMSTime = getMSTime();
 
-    RandomItemEnch.clear(); // for reload case
+    RandomItemEnch.clear();          // for reload case
 
-    QueryResult result = WorldDatabase.Query(
-            "SELECT entry, ench, chance FROM item_enchantment_template");
+    QueryResult result = WorldDatabase.Query("SELECT entry, ench, chance FROM item_enchantment_template");
 
-    if (result) {
+    if (result)
+    {
         uint32 count = 0;
 
-        do {
+        do
+        {
             Field *fields = result->Fetch();
 
             uint32 entry = fields[0].GetUInt32();
@@ -74,19 +79,21 @@ void LoadRandomEnchantmentsTable() {
                 RandomItemEnch[entry].push_back(EnchStoreItem(ench, chance));
 
             ++count;
-        } while (result->NextRow());
+        }
+        while (result->NextRow());
 
-        sLog->outString(">> Loaded %u Item Enchantment definitions in %u ms",
-                count, GetMSTimeDiffToNow(oldMSTime));
+        sLog->outString(">> Loaded %u Item Enchantment definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         sLog->outString();
-    } else {
-        sLog->outErrorDb(
-                ">> Loaded 0 Item Enchantment definitions. DB table `item_enchantment_template` is empty.");
+    }
+    else
+    {
+        sLog->outErrorDb(">> Loaded 0 Item Enchantment definitions. DB table `item_enchantment_template` is empty.");
         sLog->outString();
     }
 }
 
-uint32 GetItemEnchantMod(int32 entry) {
+uint32 GetItemEnchantMod (int32 entry)
+{
     if (!entry)
         return 0;
 
@@ -94,18 +101,17 @@ uint32 GetItemEnchantMod(int32 entry) {
         return 0;
 
     EnchantmentStore::const_iterator tab = RandomItemEnch.find(entry);
-    if (tab == RandomItemEnch.end()) {
-        sLog->outErrorDb(
-                "Item RandomProperty / RandomSuffix id #%u used in `item_template` but it does not have records in `item_enchantment_template` table.",
-                entry);
+    if (tab == RandomItemEnch.end())
+    {
+        sLog->outErrorDb("Item RandomProperty / RandomSuffix id #%u used in `item_template` but it does not have records in `item_enchantment_template` table.", entry);
         return 0;
     }
 
     double dRoll = rand_chance();
     float fCount = 0;
 
-    for (EnchStoreList::const_iterator ench_iter = tab->second.begin();
-            ench_iter != tab->second.end(); ++ench_iter) {
+    for (EnchStoreList::const_iterator ench_iter = tab->second.begin(); ench_iter != tab->second.end(); ++ench_iter)
+    {
         fCount += ench_iter->chance;
 
         if (fCount > dRoll)
@@ -116,8 +122,8 @@ uint32 GetItemEnchantMod(int32 entry) {
     dRoll = (irand(0, (int) floor(fCount * 100) + 1)) / 100;
     fCount = 0;
 
-    for (EnchStoreList::const_iterator ench_iter = tab->second.begin();
-            ench_iter != tab->second.end(); ++ench_iter) {
+    for (EnchStoreList::const_iterator ench_iter = tab->second.begin(); ench_iter != tab->second.end(); ++ench_iter)
+    {
         fCount += ench_iter->chance;
 
         if (fCount > dRoll)
@@ -127,7 +133,8 @@ uint32 GetItemEnchantMod(int32 entry) {
     return 0;
 }
 
-uint32 GenerateEnchSuffixFactor(uint32 item_id) {
+uint32 GenerateEnchSuffixFactor (uint32 item_id)
+{
     ItemPrototype const *itemProto = ObjectMgr::GetItemPrototype(item_id);
 
     if (!itemProto)
@@ -135,13 +142,13 @@ uint32 GenerateEnchSuffixFactor(uint32 item_id) {
     if (!itemProto->RandomSuffix)
         return 0;
 
-    RandomPropertiesPointsEntry const *randomProperty =
-            sRandomPropertiesPointsStore.LookupEntry(itemProto->ItemLevel);
+    RandomPropertiesPointsEntry const *randomProperty = sRandomPropertiesPointsStore.LookupEntry(itemProto->ItemLevel);
     if (!randomProperty)
         return 0;
 
     uint32 suffixFactor;
-    switch (itemProto->InventoryType) {
+    switch (itemProto->InventoryType)
+    {
     // Items of that type don`t have points
     case INVTYPE_NON_EQUIP:
     case INVTYPE_BAG:
@@ -188,7 +195,8 @@ uint32 GenerateEnchSuffixFactor(uint32 item_id) {
         return 0;
     }
     // Select rare/epic modifier
-    switch (itemProto->Quality) {
+    switch (itemProto->Quality)
+    {
     case ITEM_QUALITY_UNCOMMON:
         return randomProperty->UncommonPropertiesPoints[suffixFactor];
     case ITEM_QUALITY_RARE:
@@ -197,7 +205,7 @@ uint32 GenerateEnchSuffixFactor(uint32 item_id) {
         return randomProperty->EpicPropertiesPoints[suffixFactor];
     case ITEM_QUALITY_LEGENDARY:
     case ITEM_QUALITY_ARTIFACT:
-        return 0; // not have random properties
+        return 0;          // not have random properties
     default:
         break;
     }

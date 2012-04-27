@@ -1292,9 +1292,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                 if (isPrepared || GetBossState(DATA_GUNSHIP_EVENT) == DONE)
                     return;
 
-                if(TeamInInstance == ALLIANCE)
+                if (TeamInInstance == ALLIANCE)
                 {
-                    if(Transport* th = sMapMgr->LoadTransportInMap(instance, GO_ORGRIM_S_HAMMER_ALLIANCE_ICC, 108000))
+                    if (Transport* th = sMapMgr->LoadTransportInMap(instance, GO_ORGRIM_S_HAMMER_ALLIANCE_ICC, 108000))
                     {
                         th->AddNPCPassengerInInstance(NPC_GB_ORGRIMS_HAMMER, 1.845810f, 1.268872f, 34.526218f, 1.5890f);
                         th->AddNPCPassengerInInstance(NPC_GB_HIGH_OVERLORD_SAURFANG, 37.18615f, 0.00016f, 36.78849f, 3.13683f);
@@ -1339,7 +1339,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         }
                     }
 
-                    if(Transport* t = sMapMgr->LoadTransportInMap(instance, GO_THE_SKYBREAKER_ALLIANCE_ICC, 108000))
+                    if (Transport* t = sMapMgr->LoadTransportInMap(instance, GO_THE_SKYBREAKER_ALLIANCE_ICC, 108000))
                     {
                         t->AddNPCPassengerInInstance(NPC_GB_SKYBREAKER, -17.156807f, -1.633260f, 20.81273f, 4.52672f);
                         t->AddNPCPassengerInInstance(NPC_GB_MURADIN_BRONZEBEARD, 13.51547f, -0.160213f, 20.87252f, 3.10672f);
@@ -1386,9 +1386,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                     }
                 }
 
-               if(TeamInInstance == HORDE)
+               if (TeamInInstance == HORDE)
                 {
-                 if(Transport* t = sMapMgr->LoadTransportInMap(instance, GO_THE_SKYBREAKER_HORDE_ICC, 77800))
+                 if (Transport* t = sMapMgr->LoadTransportInMap(instance, GO_THE_SKYBREAKER_HORDE_ICC, 77800))
                  {
                         t->AddNPCPassengerInInstance(NPC_GB_SKYBREAKER, -17.156807f, -1.633260f, 20.81273f, 4.52672f);
                         t->AddNPCPassengerInInstance(NPC_GB_MURADIN_BRONZEBEARD, 13.51547f, -0.160213f, 20.87252f, 3.10672f);
@@ -1416,7 +1416,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         t->AddNPCPassengerInInstance(NPC_GB_GUNSHIP_HULL, 5.607554f, -6.350654f, 34.00357f, 1.6f);
                         t->AddNPCPassengerInInstance(NPC_GB_GUNSHIP_HULL, 4.780305f, -29.05227f, 35.09634f, 1.6f);
 
-                        if(instance->ToInstanceMap()->GetMaxPlayers() == 10)
+                        if (instance->ToInstanceMap()->GetMaxPlayers() == 10)
                       {
                             t->AddNPCPassengerInInstance(NPC_GB_SKYBREAKER_RIFLEMAN, -5.15231f, -22.9462f, 21.659f, 4.72416f);
                             t->AddNPCPassengerInInstance(NPC_GB_SKYBREAKER_RIFLEMAN, -14.9806f, -22.9462f, 21.659f, 4.72416f);
@@ -1440,7 +1440,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                       }
                  }
 
-                    if(Transport* th = sMapMgr->LoadTransportInMap(instance,GO_ORGRIM_S_HAMMER_HORDE_ICC, 77800))
+                    if (Transport* th = sMapMgr->LoadTransportInMap(instance, GO_ORGRIM_S_HAMMER_HORDE_ICC, 77800))
                   {
                         th->AddNPCPassengerInInstance(NPC_GB_ORGRIMS_HAMMER, 1.845810f, 1.268872f, 34.526218f, 1.5890f);
                         th->AddNPCPassengerInInstance(NPC_GB_HIGH_OVERLORD_SAURFANG, 37.18615f, 0.00016f, 36.78849f, 3.13683f);
@@ -1460,7 +1460,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         th->AddNPCPassengerInInstance(NPC_GB_GUNSHIP_HULL, -18.11516f, -0.196236f, 45.15709f, 2.9f);
                         th->AddNPCPassengerInInstance(NPC_GB_GUNSHIP_HULL, -18.11844f, -0.19624f, 49.18192f, 1.6f);
 
-                        if(instance->ToInstanceMap()->GetMaxPlayers() == 10)
+                        if (instance->ToInstanceMap()->GetMaxPlayers() == 10)
                         {
                             th->AddNPCPassengerInInstance(NPC_GB_HORDE_CANON, 22.6225f, 28.9309f, 36.3929f, 1.53591f);
                             th->AddNPCPassengerInInstance(NPC_GB_HORDE_CANON, -21.7509f, 29.4207f, 34.2588f, 1.53591f);

@@ -25,21 +25,21 @@
 enum Spells
 {
     // Toravon
-    SPELL_FREEZING_GROUND   = 72090,    // don't know cd... using 20 secs.
+    SPELL_FREEZING_GROUND   = 72090,   // don't know cd... using 20 secs.
     SPELL_FROZEN_ORB        = 72091,
-    SPELL_WHITEOUT          = 72034,    // Every 38 sec. cast. (after SPELL_FROZEN_ORB)
+    SPELL_WHITEOUT          = 72034,   // Every 38 sec. cast. (after SPELL_FROZEN_ORB)
     SPELL_FROZEN_MALLET     = 71993,
 
     // Frost Warder
-    SPELL_FROST_BLAST       = 72123,    // don't know cd... using 20 secs.
+    SPELL_FROST_BLAST       = 72123,   // don't know cd... using 20 secs.
     SPELL_FROZEN_MALLET_2   = 72122,
 
     // Frozen Orb
-    SPELL_FROZEN_ORB_DMG    = 72081,    // priodic dmg aura
-    SPELL_FROZEN_ORB_AURA   = 72067,    // make visible
+    SPELL_FROZEN_ORB_DMG    = 72081,   // priodic dmg aura
+    SPELL_FROZEN_ORB_AURA   = 72067,   // make visible
 
     // Frozen Orb Stalker
-    SPELL_FROZEN_ORB_SUMMON = 72093,    // summon orb
+    SPELL_FROZEN_ORB_SUMMON = 72093,   // summon orb
 };
 
 // Events boss

@@ -27,14 +27,17 @@
 #include "TargetedMovementGenerator.h"
 #include "FollowerReference.h"
 
-void FollowerReference::targetObjectBuildLink() {
+void FollowerReference::targetObjectBuildLink ()
+{
     getTarget()->addFollower(this);
 }
 
-void FollowerReference::targetObjectDestroyLink() {
+void FollowerReference::targetObjectDestroyLink ()
+{
     getTarget()->removeFollower(this);
 }
 
-void FollowerReference::sourceObjectDestroyLink() {
+void FollowerReference::sourceObjectDestroyLink ()
+{
     getSource()->stopFollowing();
 }

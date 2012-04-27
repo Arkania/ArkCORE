@@ -305,7 +305,7 @@ static BossAndAdd Boss[]=
 const Position SpawnPosition[] =
 {
     {5754.692f, -2939.46f, 286.276123f, 5.156380f}, // stinkbeard || orinoko || korrak
-    {5762.054199f, -2954.385010f, 273.826955f, 5.108289f},  //yggdras
+    {5762.054199f, -2954.385010f, 273.826955f, 5.108289f}, //yggdras
     {5776.855f, -2989.77979f, 272.96814f, 5.194f} // elementals
 };
 

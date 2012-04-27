@@ -257,14 +257,3 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (@NPC_GUID_START + 246, 52019, 657, 3, 1, 37713, 0, -634.928, 465.569, 646.631, 1.1532, 120, 0, 0, 22095, 0, 0, 0, 559104, 12),
 (@NPC_GUID_START + 247, 46492, 657, 3, 1, 11686, 0, -608.832, 515.175, 646.632, 0, 120, 0, 0, 64496, 0, 0, 2048, 33554432, 0),
 (@NPC_GUID_START + 248, 45455, 657, 3, 1, 34532, 0, -746.957, 529.141, 644.832, 0, 120, 0, 0, 64496, 0, 0, 67110912, 0, 0);
-
--- Slipstream Fix by Saiifii
-UPDATE creature_template SET InhabitType = 7 WHERE entry = 45455;
-REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
-(45455, 0, 0, 0, 0, 0, '85021');
-REPLACE INTO `creature_model_info` (`modelid`, `bounding_radius`, `combat_reach`, `gender`, `modelid_other_gender`) VALUES
-(34532, 10, 10, 2, 0);
-
--- Zephyr Fix
-REPLACE INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
-(45991, 0, 0, 0, 0, 0, '85740');

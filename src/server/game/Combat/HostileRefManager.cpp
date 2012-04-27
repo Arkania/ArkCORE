@@ -29,7 +29,7 @@
 #include "DBCStructure.h"
 #include "SpellMgr.h"
 
-HostileRefManager::~HostileRefManager()
+HostileRefManager::~HostileRefManager ()
 {
     deleteReferences();
 }
@@ -39,11 +39,11 @@ HostileRefManager::~HostileRefManager()
 // The pVictim is hated than by them as well
 // use for buffs and healing threat functionality
 
-void HostileRefManager::threatAssist(Unit *pVictim, float fThreat, SpellEntry const *pThreatSpell, bool pSingleTarget)
+void HostileRefManager::threatAssist (Unit *pVictim, float fThreat, SpellEntry const *pThreatSpell, bool pSingleTarget)
 {
     HostileReference* ref;
 
-    float size = pSingleTarget ? 1.0f : getSize();            // if pSingleTarget do not divide threat
+    float size = pSingleTarget ? 1.0f : getSize();          // if pSingleTarget do not divide threat
     ref = getFirst();
     while (ref != NULL)
     {
@@ -58,7 +58,7 @@ void HostileRefManager::threatAssist(Unit *pVictim, float fThreat, SpellEntry co
 
 //=================================================
 
-void HostileRefManager::addTempThreat(float fThreat, bool apply)
+void HostileRefManager::addTempThreat (float fThreat, bool apply)
 {
     HostileReference* ref = getFirst();
 
@@ -78,7 +78,7 @@ void HostileRefManager::addTempThreat(float fThreat, bool apply)
 
 //=================================================
 
-void HostileRefManager::addThreatPercent(int32 iPercent)
+void HostileRefManager::addThreatPercent (int32 iPercent)
 {
     HostileReference* ref;
 
@@ -93,7 +93,7 @@ void HostileRefManager::addThreatPercent(int32 iPercent)
 //=================================================
 // The online / offline status is given to the method. The calculation has to be done before
 
-void HostileRefManager::setOnlineOfflineState(bool bIsOnline)
+void HostileRefManager::setOnlineOfflineState (bool bIsOnline)
 {
     HostileReference* ref;
 
@@ -108,7 +108,7 @@ void HostileRefManager::setOnlineOfflineState(bool bIsOnline)
 //=================================================
 // The online / offline status is calculated and set
 
-void HostileRefManager::updateThreatTables()
+void HostileRefManager::updateThreatTables ()
 {
     HostileReference* ref = getFirst();
     while (ref)
@@ -122,7 +122,7 @@ void HostileRefManager::updateThreatTables()
 // The references are not needed anymore
 // tell the source to remove them from the list and free the mem
 
-void HostileRefManager::deleteReferences()
+void HostileRefManager::deleteReferences ()
 {
     HostileReference* ref = getFirst();
     while (ref)
@@ -137,7 +137,7 @@ void HostileRefManager::deleteReferences()
 //=================================================
 // delete one reference, defined by faction
 
-void HostileRefManager::deleteReferencesForFaction(uint32 faction)
+void HostileRefManager::deleteReferencesForFaction (uint32 faction)
 {
     HostileReference* ref = getFirst();
     while (ref)
@@ -155,7 +155,7 @@ void HostileRefManager::deleteReferencesForFaction(uint32 faction)
 //=================================================
 // delete one reference, defined by Unit
 
-void HostileRefManager::deleteReference(Unit *pCreature)
+void HostileRefManager::deleteReference (Unit *pCreature)
 {
     HostileReference* ref = getFirst();
     while (ref)
@@ -174,7 +174,7 @@ void HostileRefManager::deleteReference(Unit *pCreature)
 //=================================================
 // set state for one reference, defined by Unit
 
-void HostileRefManager::setOnlineOfflineState(Unit *pCreature, bool bIsOnline)
+void HostileRefManager::setOnlineOfflineState (Unit *pCreature, bool bIsOnline)
 {
     HostileReference* ref = getFirst();
     while (ref)
@@ -191,7 +191,7 @@ void HostileRefManager::setOnlineOfflineState(Unit *pCreature, bool bIsOnline)
 
 //=================================================
 
-void HostileRefManager::UpdateVisibility()
+void HostileRefManager::UpdateVisibility ()
 {
     HostileReference* ref = getFirst();
     while (ref)

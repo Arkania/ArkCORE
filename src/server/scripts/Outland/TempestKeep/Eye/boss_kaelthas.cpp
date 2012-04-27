@@ -485,7 +485,7 @@ class boss_kaelthas : public CreatureScript
                         Creature* Advisor = NULL;
 
                         //Subphase switch
-                        switch(PhaseSubphase)
+                        switch (PhaseSubphase)
                         {
                             //Subphase 1 - Start
                             case 0:

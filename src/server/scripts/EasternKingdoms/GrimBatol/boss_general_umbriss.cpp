@@ -131,7 +131,7 @@ class boss_general_umbriss : public CreatureScript
             void JustSummoned(Creature *pSummoned)
             {
                 pSummoned->SetInCombatWithZone();
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM,0))
+                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 pSummoned->AI()->AttackStart(pTarget);
 
                 Summons.Summon(pSummoned);
@@ -160,7 +160,7 @@ class boss_general_umbriss : public CreatureScript
 
                     while (uint32 eventId = events.ExecuteEvent())
                     {
-                        switch(eventId)
+                        switch (eventId)
                         {
                             case EVENT_SECOUSS:
                                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -178,7 +178,7 @@ class boss_general_umbriss : public CreatureScript
                                 events.ScheduleEvent(EVENT_PLAIE, 20000);
                                 return;
                             case EVENT_BERSERK:
-                                if(!HealthAbovePct(30))
+                                if (!HealthAbovePct(30))
                                     {
                                         DoCast(me, SPELL_BERSERK);
                                     }
@@ -241,7 +241,7 @@ public:
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_GRIFFE:
                             DoCastVictim(SPELL_GRIFFE);
@@ -301,7 +301,7 @@ public:
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_GRIFFE:
                             DoCastVictim(SPELL_GRIFFE);

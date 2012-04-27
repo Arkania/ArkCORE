@@ -155,23 +155,23 @@ public:
                 {
                     if ((uiPhase == 1) || (uiPhase == 2))
                         for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)
-                            me->SummonCreature(CREATURE_SNAKE, SpawnLoc[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN,1*IN_MILLISECONDS);
+                            me->SummonCreature(CREATURE_SNAKE, SpawnLoc[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1*IN_MILLISECONDS);
                     if (uiPhase == 2)
                         for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)
-                            me->SummonCreature(CREATURE_CONSTRICTORS, SpawnLoc[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN,1*IN_MILLISECONDS);
+                            me->SummonCreature(CREATURE_CONSTRICTORS, SpawnLoc[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1*IN_MILLISECONDS);
                     uiSpawnTimer = 10000;
                 } else uiSpawnTimer -= diff;
             }
 
             if (uiPhase == 0 && HealthBelowPct(90))
             {
-                DoScriptText(SAY_SUMMON_SNAKES,me);
+                DoScriptText(SAY_SUMMON_SNAKES, me);
                 uiPhase = 1;
             }
 
             if (uiPhase == 1 && HealthBelowPct(75))
             {
-                DoScriptText(SAY_SUMMON_CONSTRICTORS,me);
+                DoScriptText(SAY_SUMMON_CONSTRICTORS, me);
                 uiPhase = 2;
             }
 
@@ -182,7 +182,7 @@ public:
             if (uiPoisonNovaTimer <= diff)
             {
                 DoCast(me->getVictim(), DUNGEON_MODE(SPELL_POISON_NOVA, H_SPELL_POISON_NOVA));
-                DoScriptText(EMOTE_NOVA,me);
+                DoScriptText(EMOTE_NOVA, me);
                 uiPoisonNovaTimer = 23*IN_MILLISECONDS;
             } else uiPoisonNovaTimer -= diff;
 
@@ -399,7 +399,7 @@ public:
 
         void UpdateAI(const uint32 /*diff*/)
         {
-            if(!me->ToTempSummon())
+            if (!me->ToTempSummon())
                 return;
 
             if (Unit *summoner = me->ToTempSummon()->GetSummoner())

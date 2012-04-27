@@ -1205,7 +1205,7 @@ public:
  //bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
  //{
  //    pPlayer->PlayerTalkClass->ClearMenus();
- //    switch(uiAction)
+ //    switch (uiAction)
  //    {
  //        case GOSSIP_ACTION_INFO_DEF+1:
  //            if (pPlayer)
@@ -1320,7 +1320,6 @@ class achievement_unbroken : public AchievementCriteriaScript
         }
 };
 
-
 void AddSC_boss_flame_leviathan() {
     new boss_flame_leviathan();
     new boss_flame_leviathan_seat();
@@ -1339,7 +1338,7 @@ void AddSC_boss_flame_leviathan() {
     // new npc_brann_bronzebeard();
     new go_ulduar_tower();
     new at_RX_214_repair_o_matic_station();
-	new achievement_shutout();
-	new achievement_three_car_garage_demolisher();
-	new achievement_unbroken();
+    new achievement_shutout();
+    new achievement_three_car_garage_demolisher();
+    new achievement_unbroken();
 }

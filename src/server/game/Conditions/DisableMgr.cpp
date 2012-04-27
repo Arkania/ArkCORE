@@ -28,11 +28,11 @@
 #include "DisableMgr.h"
 #include "OutdoorPvP.h"
 
-DisableMgr::DisableMgr()
+DisableMgr::DisableMgr ()
 {
 }
 
-DisableMgr::~DisableMgr()
+DisableMgr::~DisableMgr ()
 {
     for (DisableMap::iterator itr = m_DisableMap.begin(); itr != m_DisableMap.end(); ++itr)
         itr->second.clear();
@@ -40,7 +40,7 @@ DisableMgr::~DisableMgr()
     m_DisableMap.clear();
 }
 
-void DisableMgr::LoadDisables()
+void DisableMgr::LoadDisables ()
 {
     uint32 oldMSTime = getMSTime();
 
@@ -50,7 +50,7 @@ void DisableMgr::LoadDisables()
 
     m_DisableMap.clear();
 
-    QueryResult result = WorldDatabase.Query("SELECT sourceType,entry,flags,params_0,params_1 FROM disables");
+    QueryResult result = WorldDatabase.Query("SELECT sourceType, entry, flags, params_0, params_1 FROM disables");
 
     uint32 total_count = 0;
 
@@ -82,100 +82,101 @@ void DisableMgr::LoadDisables()
 
         switch (type)
         {
-            case DISABLE_TYPE_SPELL:
+        case DISABLE_TYPE_SPELL:
+        {
+            if (!(sSpellStore.LookupEntry(entry) || flags & SPELL_DISABLE_DEPRECATED_SPELL))
             {
-                if (!(sSpellStore.LookupEntry(entry) || flags & SPELL_DISABLE_DEPRECATED_SPELL))
-                {
-                    sLog->outErrorDb("Spell entry %u from `disables` doesn't exist in dbc, skipped.", entry);
-                    continue;
-                }
-
-                if (!flags || flags > MAX_SPELL_DISABLE_TYPE)
-                {
-                    sLog->outErrorDb("Disable flags for spell %u are invalid, skipped.", entry);
-                    continue;
-                }
-
-                if (flags & SPELL_DISABLE_MAP)
-                {
-                    Tokens tokens(params_0, ',');
-                    for (uint8 i = 0; i < tokens.size(); )
-                        data.params[0].insert(atoi(tokens[i++]));
-                }
-
-                if (flags & SPELL_DISABLE_AREA)
-                {
-                    Tokens tokens(params_1, ',');
-                    for (uint8 i = 0; i < tokens.size(); )
-                        data.params[1].insert(atoi(tokens[i++]));
-                }
-            }   break;
-            // checked later
-            case DISABLE_TYPE_QUEST:
-                break;
-            case DISABLE_TYPE_MAP:
-            {
-                MapEntry const* mapEntry = sMapStore.LookupEntry(entry);
-                if (!mapEntry)
-                {
-                    sLog->outErrorDb("Map entry %u from `disables` doesn't exist in dbc, skipped.", entry);
-                    continue;
-                }
-                bool isFlagInvalid = false;
-                switch (mapEntry->map_type)
-                {
-                    case MAP_COMMON:
-                        if (flags)
-                            isFlagInvalid = true;
-                        break;
-                    case MAP_INSTANCE:
-                    case MAP_RAID:
-                        if (flags & DUNGEON_STATUSFLAG_HEROIC && !GetMapDifficultyData(entry, DUNGEON_DIFFICULTY_HEROIC))
-                            isFlagInvalid = true;
-                        else if (flags & RAID_STATUSFLAG_10MAN_HEROIC && !GetMapDifficultyData(entry, RAID_DIFFICULTY_10MAN_HEROIC))
-                            isFlagInvalid = true;
-                        else if (flags & RAID_STATUSFLAG_25MAN_HEROIC && !GetMapDifficultyData(entry, RAID_DIFFICULTY_25MAN_HEROIC))
-                            isFlagInvalid = true;
-                        break;
-                    case MAP_BATTLEGROUND:
-                    case MAP_ARENA:
-                        sLog->outErrorDb("Battleground map %u specified to be disabled in map case, skipped.", entry);
-                        continue;
-                }
-                if (isFlagInvalid)
-                {
-                    sLog->outErrorDb("Disable flags for map %u are invalid, skipped.", entry);
-                    continue;
-                }
-                break;
+                sLog->outErrorDb("Spell entry %u from `disables` doesn't exist in dbc, skipped.", entry);
+                continue;
             }
-            case DISABLE_TYPE_BATTLEGROUND:
-                if (!sBattlemasterListStore.LookupEntry(entry))
-                {
-                    sLog->outErrorDb("Battleground entry %u from `disables` doesn't exist in dbc, skipped.", entry);
-                    continue;
-                }
+
+            if (!flags || flags > MAX_SPELL_DISABLE_TYPE)
+            {
+                sLog->outErrorDb("Disable flags for spell %u are invalid, skipped.", entry);
+                continue;
+            }
+
+            if (flags & SPELL_DISABLE_MAP)
+            {
+                Tokens tokens(params_0, ',');
+                for (uint8 i = 0; i < tokens.size();)
+                    data.params[0].insert(atoi(tokens[i++]));
+            }
+
+            if (flags & SPELL_DISABLE_AREA)
+            {
+                Tokens tokens(params_1, ',');
+                for (uint8 i = 0; i < tokens.size();)
+                    data.params[1].insert(atoi(tokens[i++]));
+            }
+        }
+            break;
+            // checked later
+        case DISABLE_TYPE_QUEST:
+            break;
+        case DISABLE_TYPE_MAP:
+        {
+            MapEntry const* mapEntry = sMapStore.LookupEntry(entry);
+            if (!mapEntry)
+            {
+                sLog->outErrorDb("Map entry %u from `disables` doesn't exist in dbc, skipped.", entry);
+                continue;
+            }
+            bool isFlagInvalid = false;
+            switch (mapEntry->map_type)
+            {
+            case MAP_COMMON:
                 if (flags)
-                    sLog->outErrorDb("Disable flags specified for battleground %u, useless data.", entry);
+                    isFlagInvalid = true;
                 break;
-            case DISABLE_TYPE_OUTDOORPVP:
-                if (entry > MAX_OUTDOORPVP_TYPES)
-                {
-                    sLog->outErrorDb("OutdoorPvPTypes value %u from `disables` is invalid, skipped.", entry);
-                    continue;
-                }
-                if (flags)
-                    sLog->outErrorDb("Disable flags specified for outdoor PvP %u, useless data.", entry);
+            case MAP_INSTANCE:
+            case MAP_RAID:
+                if (flags & DUNGEON_STATUSFLAG_HEROIC && !GetMapDifficultyData(entry, DUNGEON_DIFFICULTY_HEROIC))
+                    isFlagInvalid = true;
+                else if (flags & RAID_STATUSFLAG_10MAN_HEROIC && !GetMapDifficultyData(entry, RAID_DIFFICULTY_10MAN_HEROIC))
+                    isFlagInvalid = true;
+                else if (flags & RAID_STATUSFLAG_25MAN_HEROIC && !GetMapDifficultyData(entry, RAID_DIFFICULTY_25MAN_HEROIC))
+                    isFlagInvalid = true;
                 break;
-            case DISABLE_TYPE_ACHIEVEMENT_CRITERIA:
-                if (!sAchievementCriteriaStore.LookupEntry(entry))
-                {
-                    sLog->outErrorDb("Achievement Criteria entry %u from `disables` doesn't exist in dbc, skipped.", entry);
-                    continue;
-                }
-                if (flags)
-                    sLog->outErrorDb("Disable flags specified for Achievement Criteria %u, useless data.", entry);
-                break;
+            case MAP_BATTLEGROUND:
+            case MAP_ARENA:
+                sLog->outErrorDb("Battleground map %u specified to be disabled in map case, skipped.", entry);
+                continue;
+            }
+            if (isFlagInvalid)
+            {
+                sLog->outErrorDb("Disable flags for map %u are invalid, skipped.", entry);
+                continue;
+            }
+            break;
+        }
+        case DISABLE_TYPE_BATTLEGROUND:
+            if (!sBattlemasterListStore.LookupEntry(entry))
+            {
+                sLog->outErrorDb("Battleground entry %u from `disables` doesn't exist in dbc, skipped.", entry);
+                continue;
+            }
+            if (flags)
+                sLog->outErrorDb("Disable flags specified for battleground %u, useless data.", entry);
+            break;
+        case DISABLE_TYPE_OUTDOORPVP:
+            if (entry > MAX_OUTDOORPVP_TYPES)
+            {
+                sLog->outErrorDb("OutdoorPvPTypes value %u from `disables` is invalid, skipped.", entry);
+                continue;
+            }
+            if (flags)
+                sLog->outErrorDb("Disable flags specified for outdoor PvP %u, useless data.", entry);
+            break;
+        case DISABLE_TYPE_ACHIEVEMENT_CRITERIA:
+            if (!sAchievementCriteriaStore.LookupEntry(entry))
+            {
+                sLog->outErrorDb("Achievement Criteria entry %u from `disables` doesn't exist in dbc, skipped.", entry);
+                continue;
+            }
+            if (flags)
+                sLog->outErrorDb("Disable flags specified for Achievement Criteria %u, useless data.", entry);
+            break;
         }
 
         m_DisableMap[type].insert(DisableTypeMap::value_type(entry, data));
@@ -187,7 +188,7 @@ void DisableMgr::LoadDisables()
     sLog->outString();
 }
 
-void DisableMgr::CheckQuestDisables()
+void DisableMgr::CheckQuestDisables ()
 {
     uint32 oldMSTime = getMSTime();
 
@@ -218,92 +219,92 @@ void DisableMgr::CheckQuestDisables()
     sLog->outString();
 }
 
-bool DisableMgr::IsDisabledFor(DisableType type, uint32 entry, Unit const* pUnit)
+bool DisableMgr::IsDisabledFor (DisableType type, uint32 entry, Unit const* pUnit)
 {
     ASSERT(type < MAX_DISABLE_TYPES);
     if (m_DisableMap[type].empty())
         return false;
 
     DisableTypeMap::iterator itr = m_DisableMap[type].find(entry);
-    if (itr == m_DisableMap[type].end())    // not disabled
+    if (itr == m_DisableMap[type].end())          // not disabled
         return false;
 
     switch (type)
     {
-        case DISABLE_TYPE_SPELL:
+    case DISABLE_TYPE_SPELL:
+    {
+        uint8 flags = itr->second.flags;
+        if (pUnit)
         {
-            uint8 flags = itr->second.flags;
-            if (pUnit)
+            if ((flags & SPELL_DISABLE_PLAYER && pUnit->GetTypeId() == TYPEID_PLAYER) || (pUnit->GetTypeId() == TYPEID_UNIT && (pUnit->ToCreature()->isPet() && flags & SPELL_DISABLE_PET || flags & SPELL_DISABLE_CREATURE)))
+
             {
-                if ((flags & SPELL_DISABLE_PLAYER && pUnit->GetTypeId() == TYPEID_PLAYER) ||
-                    (pUnit->GetTypeId() == TYPEID_UNIT && (pUnit->ToCreature()->isPet() && flags & SPELL_DISABLE_PET || flags & SPELL_DISABLE_CREATURE)))
-
+                if (flags & SPELL_DISABLE_MAP)
                 {
-                    if (flags & SPELL_DISABLE_MAP)
-                    {
-                        const std::set<uint32> & mapIds = itr->second.params[0];
-                        if(mapIds.find(pUnit->GetMapId()) != mapIds.end())
-                            return true; // Spell is disabled on current map
+                    const std::set<uint32> & mapIds = itr->second.params[0];
+                    if (mapIds.find(pUnit->GetMapId()) != mapIds.end())
+                        return true;          // Spell is disabled on current map
 
-                        if(!(flags & SPELL_DISABLE_AREA))
-                            return false; // Spell is disabled on another map, but not this one, return false
+                    if (!(flags & SPELL_DISABLE_AREA))
+                        return false;          // Spell is disabled on another map, but not this one, return false
 
-                        // Spell is disabled in an area, but not explicitly our current mapId. Continue processing.
-                    }
-                    if(flags & SPELL_DISABLE_AREA){
-                        const std::set<uint32> & areaIds = itr->second.params[1];
-                        if(areaIds.find(pUnit->GetAreaId()) != areaIds.end())
-                            return true; // Spell is disabled in this area
-
-                        return false; // Spell is disabled in another area, but not this one, return false
-                    }else
-                        return true; // Spell disabled for all maps
+                    // Spell is disabled in an area, but not explicitly our current mapId. Continue processing.
                 }
-                return false;
-            }
-            else
-                if(flags & SPELL_DISABLE_DEPRECATED_SPELL)
-                    // call not from spellcast
-                    return true;
-
-            break;
-        }
-        case DISABLE_TYPE_MAP:
-            if (Player const* pPlayer = pUnit->ToPlayer())
-            {
-                MapEntry const* mapEntry = sMapStore.LookupEntry(entry);
-                if (mapEntry->IsDungeon())
+                if (flags & SPELL_DISABLE_AREA)
                 {
-                    uint8 disabledModes = itr->second.flags;
-                    Difficulty targetDifficulty = pPlayer->GetDifficulty(mapEntry->IsRaid());
-                    GetDownscaledMapDifficultyData(entry, targetDifficulty);
-                    switch(targetDifficulty)
-                    {
-                        case DUNGEON_DIFFICULTY_NORMAL:
-                            return disabledModes & DUNGEON_STATUSFLAG_NORMAL;
-                        case DUNGEON_DIFFICULTY_HEROIC:
-                            return disabledModes & DUNGEON_STATUSFLAG_HEROIC;
-                        case RAID_DIFFICULTY_10MAN_HEROIC:
-                            return disabledModes & RAID_STATUSFLAG_10MAN_HEROIC;
-                        case RAID_DIFFICULTY_25MAN_HEROIC:
-                            return disabledModes & RAID_STATUSFLAG_25MAN_HEROIC;
-                    }
+                    const std::set<uint32> & areaIds = itr->second.params[1];
+                    if (areaIds.find(pUnit->GetAreaId()) != areaIds.end())
+                        return true;          // Spell is disabled in this area
+
+                    return false;          // Spell is disabled in another area, but not this one, return false
                 }
-                else if (mapEntry->map_type == MAP_COMMON)
-                    return true;
+                else
+                    return true;          // Spell disabled for all maps
             }
             return false;
-        case DISABLE_TYPE_QUEST:
-            if (!pUnit)
+        }
+        else if (flags & SPELL_DISABLE_DEPRECATED_SPELL)
+            // call not from spellcast
+            return true;
+
+        break;
+    }
+    case DISABLE_TYPE_MAP:
+        if (Player const* pPlayer = pUnit->ToPlayer())
+        {
+            MapEntry const* mapEntry = sMapStore.LookupEntry(entry);
+            if (mapEntry->IsDungeon())
+            {
+                uint8 disabledModes = itr->second.flags;
+                Difficulty targetDifficulty = pPlayer->GetDifficulty(mapEntry->IsRaid());
+                GetDownscaledMapDifficultyData(entry, targetDifficulty);
+                switch (targetDifficulty)
+                {
+                case DUNGEON_DIFFICULTY_NORMAL:
+                    return disabledModes & DUNGEON_STATUSFLAG_NORMAL;
+                case DUNGEON_DIFFICULTY_HEROIC:
+                    return disabledModes & DUNGEON_STATUSFLAG_HEROIC;
+                case RAID_DIFFICULTY_10MAN_HEROIC:
+                    return disabledModes & RAID_STATUSFLAG_10MAN_HEROIC;
+                case RAID_DIFFICULTY_25MAN_HEROIC:
+                    return disabledModes & RAID_STATUSFLAG_25MAN_HEROIC;
+                }
+            }
+            else if (mapEntry->map_type == MAP_COMMON)
                 return true;
-            if (Player const* pPlayer = pUnit->ToPlayer())
-                if (pPlayer->isGameMaster())
-                    return false;
+        }
+        return false;
+    case DISABLE_TYPE_QUEST:
+        if (!pUnit)
             return true;
-        case DISABLE_TYPE_BATTLEGROUND:
-        case DISABLE_TYPE_OUTDOORPVP:
-        case DISABLE_TYPE_ACHIEVEMENT_CRITERIA:
-            return true;
+        if (Player const* pPlayer = pUnit->ToPlayer())
+            if (pPlayer->isGameMaster())
+                return false;
+        return true;
+    case DISABLE_TYPE_BATTLEGROUND:
+    case DISABLE_TYPE_OUTDOORPVP:
+    case DISABLE_TYPE_ACHIEVEMENT_CRITERIA:
+        return true;
     }
 
     return false;

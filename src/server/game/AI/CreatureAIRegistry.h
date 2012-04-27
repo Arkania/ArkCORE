@@ -25,7 +25,8 @@
 #ifndef ARKCORE_CREATUREAIREGISTRY_H
 #define ARKCORE_CREATUREAIREGISTRY_H
 
-namespace AIRegistry {
-void Initialize(void);
+namespace AIRegistry
+{
+    void Initialize(void);
 }
 #endif

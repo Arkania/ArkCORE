@@ -34,37 +34,44 @@
 #include "ScriptMgr.h"
 #include "Chat.h"
 
-class achievement_commandscript: public CommandScript {
+class achievement_commandscript: public CommandScript
+{
 public:
-    achievement_commandscript() :
-            CommandScript("achievement_commandscript") {
+    achievement_commandscript () :
+            CommandScript("achievement_commandscript")
+    {
     }
 
-    ChatCommand* GetCommands() const {
-        static ChatCommand achievementCommandTable[] = {
-                { "add", SEC_ADMINISTRATOR, false, &HandleAchievementAddCommand,
-                        "", NULL }, { NULL, 0, false, NULL, "", NULL } };
-        static ChatCommand commandTable[] = { { "achievement",
-                SEC_ADMINISTRATOR, false, NULL, "", achievementCommandTable }, {
-                NULL, 0, false, NULL, "", NULL } };
+    ChatCommand* GetCommands () const
+    {
+        static ChatCommand achievementCommandTable[] =
+        {
+        { "add", SEC_ADMINISTRATOR, false, &HandleAchievementAddCommand, "", NULL },
+        { NULL, 0, false, NULL, "", NULL } };
+        static ChatCommand commandTable[] =
+        {
+        { "achievement", SEC_ADMINISTRATOR, false, NULL, "", achievementCommandTable },
+        { NULL, 0, false, NULL, "", NULL } };
         return commandTable;
     }
 
-    static bool HandleAchievementAddCommand(ChatHandler* handler,
-            const char *args) {
+    static bool HandleAchievementAddCommand (ChatHandler* handler, const char *args)
+    {
         if (!*args)
             return false;
 
         uint32 achievementId = atoi((char*) args);
-        if (!achievementId) {
-            if (char* cId = handler->extractKeyFromLink((char*)args, "Hachievement"))
+        if (!achievementId)
+        {
+            if (char* cId = handler->extractKeyFromLink((char*) args, "Hachievement"))
                 achievementId = atoi(cId);
             if (!achievementId)
                 return false;
         }
 
         Player* target = handler->getSelectedPlayer();
-        if (!target) {
+        if (!target)
+        {
             handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
@@ -77,6 +84,7 @@ public:
     }
 };
 
-void AddSC_achievement_commandscript() {
+void AddSC_achievement_commandscript ()
+{
     new achievement_commandscript();
 }

@@ -34,37 +34,40 @@
 #include "Weather.h"
 #include <ace/Singleton.h>
 
-class WeatherMgr {
-	friend class ACE_Singleton<WeatherMgr, ACE_Null_Mutex> ;
-	WeatherMgr() {
-	}
-	~WeatherMgr();
+class WeatherMgr
+{
+    friend class ACE_Singleton<WeatherMgr, ACE_Null_Mutex> ;
+    WeatherMgr ()
+    {
+    }
+    ~WeatherMgr ();
 
 public:
 
-	void LoadWeatherData();
+    void LoadWeatherData ();
 
-	Weather* FindWeather(uint32 id) const;
-	Weather* AddWeather(uint32 zone_id);
-	void RemoveWeather(uint32 zone_id);
+    Weather* FindWeather (uint32 id) const;
+    Weather* AddWeather (uint32 zone_id);
+    void RemoveWeather (uint32 zone_id);
 
-	WeatherData const* GetWeatherChances(uint32 zone_id) const {
-		WeatherZoneMap::const_iterator itr = mWeatherZoneMap.find(zone_id);
-		if (itr != mWeatherZoneMap.end())
-			return &itr->second;
-		else
-			return NULL;
-	}
+    WeatherData const* GetWeatherChances (uint32 zone_id) const
+    {
+        WeatherZoneMap::const_iterator itr = mWeatherZoneMap.find(zone_id);
+        if (itr != mWeatherZoneMap.end())
+            return &itr->second;
+        else
+            return NULL;
+    }
 
-	void Update(uint32 diff);
+    void Update (uint32 diff);
 
-	typedef UNORDERED_MAP<uint32, Weather*> WeatherMap;
-	typedef UNORDERED_MAP<uint32, WeatherData> WeatherZoneMap;
+    typedef UNORDERED_MAP<uint32, Weather*> WeatherMap;
+    typedef UNORDERED_MAP<uint32, WeatherData> WeatherZoneMap;
 
 private:
 
-	WeatherMap m_weathers;
-	WeatherZoneMap mWeatherZoneMap;
+    WeatherMap m_weathers;
+    WeatherZoneMap mWeatherZoneMap;
 };
 
 #define sWeatherMgr ACE_Singleton<WeatherMgr, ACE_Null_Mutex>::instance()

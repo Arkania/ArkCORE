@@ -152,7 +152,7 @@ public:
             DespawnCreatures(NPC_FIRE_PATCH);
             DespawnCreatures(NPC_TWILIGHT_ARCHER);
 
-            SetEquipmentSlots(false, 0, 0,0);
+            SetEquipmentSlots(false, 0, 0, 0);
         }
 
         void UpdateAI(const uint32 diff)
@@ -160,10 +160,10 @@ public:
             if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if(currentWaepon == WEAPON_SHIELD && me->GetMap()->IsHeroic() && (!me->HasAura(SPELL_FLAMING_SHIELD)))
+            if (currentWaepon == WEAPON_SHIELD && me->GetMap()->IsHeroic() && (!me->HasAura(SPELL_FLAMING_SHIELD)))
                     DoCast(me, SPELL_FLAMING_SHIELD, true);
 
-            if(currentWaepon == WEAPON_NON)
+            if (currentWaepon == WEAPON_NON)
             {
                 ResetWeapon();
                 currentWaepon = WEAPON_CHOOSING;
@@ -173,7 +173,7 @@ public:
                 return;
             }
 
-            if(currentWaepon == WEAPON_CHOOSING)
+            if (currentWaepon == WEAPON_CHOOSING)
             {
                 // Chooses a new Weapon
                 IntializeWeapon();
@@ -187,7 +187,7 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                 case EVENT_PICK_WEAPON:
                     // It is only need to set the Weapon to WEAPON_NON to switch the Weapon
@@ -225,18 +225,18 @@ public:
         {
             //summon->setActive(true);
 
-            summon->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
+            summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
 
-            if(summon->GetEntry() == NPC_FIRE_PATCH)
+            if (summon->GetEntry() == NPC_FIRE_PATCH)
                 summon->CastSpell(summon, SPELL_LAVA_PATCH_VISUAL, true);
         }
 
         void DamageDealt(Unit* victim, uint32& damage, DamageEffectType /*damageType*/)
         {
-            if(currentWaepon != WEAPON_SWORDS || !me->GetMap()->IsHeroic())
+            if (currentWaepon != WEAPON_SWORDS || !me->GetMap()->IsHeroic())
                 return;
 
-            if(me->GetMap()->IsHeroic() && damage > 0)
+            if (me->GetMap()->IsHeroic() && damage > 0)
                 me->CastSpell(me->getVictim(), SPELL_BURNING_FLAMES, true);
         }
 
@@ -249,17 +249,17 @@ public:
             // If you want to test a single Phase you can overwrite the rand value here
             // currentWaepon = WEAPON_MACE;
 
-            switch(currentWaepon)
+            switch (currentWaepon)
             {
             case WEAPON_SHIELD:
 
-                SetEquipmentSlots(false, 0, EQUIPMENT_ID_SHIELD,0);
+                SetEquipmentSlots(false, 0, EQUIPMENT_ID_SHIELD, 0);
 
-                if(me->GetMap()->IsHeroic())
+                if (me->GetMap()->IsHeroic())
                     DoCast(me, SPELL_FLAMING_SHIELD, true);
 
-                for(uint32 i = 0; i<=12; i++)
-                    me->SummonCreature(NPC_TWILIGHT_ARCHER,TwilightArcherSummonPos[i],TEMPSUMMON_MANUAL_DESPAWN);
+                for (uint32 i = 0; i<=12; i++)
+                    me->SummonCreature(NPC_TWILIGHT_ARCHER, TwilightArcherSummonPos[i], TEMPSUMMON_MANUAL_DESPAWN);
 
                 events.ScheduleEvent(EVENT_PERSONAL_PHALANX, 10000);
 
@@ -269,7 +269,7 @@ public:
                 DoCast(me, SPELL_DUAL_BLADES_BUFF, true);
                 DoCast(me, SPELL_TRASH_BUFF, true);
 
-                SetEquipmentSlots(false, EQUIPMENT_ID_SWORD, EQUIPMENT_ID_SWORD,0);
+                SetEquipmentSlots(false, EQUIPMENT_ID_SWORD, EQUIPMENT_ID_SWORD, 0);
 
                 events.ScheduleEvent(EVENT_DISORIENTING_ROAR, 11000);
 
@@ -277,12 +277,12 @@ public:
 
             case WEAPON_MACE:
 
-                if(me->GetMap()->IsHeroic())
+                if (me->GetMap()->IsHeroic())
                     DoCast(me, SPELL_LAVA_PATCH, true);
 
                 DoCast(me, SPELL_ENCUMBERED, true);
 
-                SetEquipmentSlots(false, EQUIPMENT_ID_MACE, 0,0);
+                SetEquipmentSlots(false, EQUIPMENT_ID_MACE, 0, 0);
 
                 events.ScheduleEvent(EVENT_IMPALING_SLAM, 7000);
 
@@ -320,11 +320,11 @@ public:
 
             if (phases[0]==0 && phases[1]==0 && phases[2]==0)
             { // If Throngus was in every phase or the fight has just begun calculate new phase string
-                for(uint8 i = 0; i <= 2; i++)
+                for (uint8 i = 0; i <= 2; i++)
                 {
                     while(phases[i] == 0)
                     {
-                        uint8 r = urand(0,2);
+                        uint8 r = urand(0, 2);
                         phases[i] = base[r];
                         base[r] = 0;
                     }
@@ -335,9 +335,9 @@ public:
                 return v;
             }else
             { // If Throngus was still in a Phase, just get next Phase
-                for(uint8 i = 0; i <= 2; i++)
+                for (uint8 i = 0; i <= 2; i++)
                 {
-                    if(phases[i] != 0)
+                    if (phases[i] != 0)
                     {
                         uint8 v = phases[i];
                         phases[i] = 0;
@@ -348,7 +348,7 @@ public:
             }
 
             // Should not happend but sure is sure
-            return urand(WEAPON_SHIELD,WEAPON_MACE);
+            return urand(WEAPON_SHIELD, WEAPON_MACE);
         }
 
         void DespawnCreatures(uint32 entry)
@@ -388,7 +388,7 @@ public:
         {
             DoZoneInCombat();
 
-            events.ScheduleEvent(EVENT_ARCHER_SHOOT, urand(1700,2500));
+            events.ScheduleEvent(EVENT_ARCHER_SHOOT, urand(1700, 2500));
         }
 
         void UpdateAI(const uint32 diff)
@@ -397,17 +397,17 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                 case EVENT_ARCHER_SHOOT:
 
-                    if(Unit* nearPlayer = SelectTarget(SELECT_TARGET_NEAREST, 0, 2, true))
+                    if (Unit* nearPlayer = SelectTarget(SELECT_TARGET_NEAREST, 0, 2, true))
                     {
-                        me->CastSpell(nearPlayer,SPELL_FLAMING_ARROW_VISUAL,true);
-                        me->CastSpell(nearPlayer,SPELL_FLAMING_ARROW,true);
+                        me->CastSpell(nearPlayer, SPELL_FLAMING_ARROW_VISUAL, true);
+                        me->CastSpell(nearPlayer, SPELL_FLAMING_ARROW, true);
                     }
 
-                    events.ScheduleEvent(EVENT_ARCHER_SHOOT, urand(1700,2500));
+                    events.ScheduleEvent(EVENT_ARCHER_SHOOT, urand(1700, 2500));
                     break;
                 }
             }

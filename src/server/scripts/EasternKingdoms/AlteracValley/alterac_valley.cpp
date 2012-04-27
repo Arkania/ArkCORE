@@ -26,44 +26,30 @@
 
 #include "ScriptPCH.h"
 
-enum Spells {
-    SPELL_CHARGE = 22911,
-    SPELL_CLEAVE = 40504,
-    SPELL_DEMORALIZING_SHOUT = 23511,
-    SPELL_ENRAGE = 8599,
-    SPELL_WHIRLWIND1 = 15589,
-    SPELL_WHIRLWIND2 = 13736,
-    SPELL_NORTH_MARSHAL = 45828,
-    SPELL_SOUTH_MARSHAL = 45829,
-    SPELL_STONEHEARTH_MARSHAL = 45830,
-    SPELL_ICEWING_MARSHAL = 45831,
-    SPELL_ICEBLOOD_WARMASTER = 45822,
-    SPELL_TOWER_POINT_WARMASTER = 45823,
-    SPELL_WEST_FROSTWOLF_WARMASTER = 45824,
-    SPELL_EAST_FROSTWOLF_WARMASTER = 45826
+enum Spells
+{
+    SPELL_CHARGE = 22911, SPELL_CLEAVE = 40504, SPELL_DEMORALIZING_SHOUT = 23511, SPELL_ENRAGE = 8599, SPELL_WHIRLWIND1 = 15589, SPELL_WHIRLWIND2 = 13736, SPELL_NORTH_MARSHAL = 45828, SPELL_SOUTH_MARSHAL = 45829, SPELL_STONEHEARTH_MARSHAL = 45830, SPELL_ICEWING_MARSHAL = 45831, SPELL_ICEBLOOD_WARMASTER = 45822, SPELL_TOWER_POINT_WARMASTER = 45823, SPELL_WEST_FROSTWOLF_WARMASTER = 45824, SPELL_EAST_FROSTWOLF_WARMASTER = 45826
 };
 
-enum Creatures {
-    NPC_NORTH_MARSHAL = 14762,
-    NPC_SOUTH_MARSHAL = 14763,
-    NPC_ICEWING_MARSHAL = 14764,
-    NPC_STONEHEARTH_MARSHAL = 14765,
-    NPC_EAST_FROSTWOLF_WARMASTER = 14772,
-    NPC_ICEBLOOD_WARMASTER = 14773,
-    NPC_TOWER_POINT_WARMASTER = 14776,
-    NPC_WEST_FROSTWOLF_WARMASTER = 14777
+enum Creatures
+{
+    NPC_NORTH_MARSHAL = 14762, NPC_SOUTH_MARSHAL = 14763, NPC_ICEWING_MARSHAL = 14764, NPC_STONEHEARTH_MARSHAL = 14765, NPC_EAST_FROSTWOLF_WARMASTER = 14772, NPC_ICEBLOOD_WARMASTER = 14773, NPC_TOWER_POINT_WARMASTER = 14776, NPC_WEST_FROSTWOLF_WARMASTER = 14777
 };
 
-class mob_av_marshal_or_warmaster: public CreatureScript {
+class mob_av_marshal_or_warmaster: public CreatureScript
+{
 public:
 
-    mob_av_marshal_or_warmaster() :
-            CreatureScript("mob_av_marshal_or_warmaster") {
+    mob_av_marshal_or_warmaster () :
+            CreatureScript("mob_av_marshal_or_warmaster")
+    {
     }
 
-    struct mob_av_marshal_or_warmasterAI: public ScriptedAI {
-        mob_av_marshal_or_warmasterAI(Creature *c) :
-                ScriptedAI(c) {
+    struct mob_av_marshal_or_warmasterAI: public ScriptedAI
+    {
+        mob_av_marshal_or_warmasterAI (Creature *c) :
+                ScriptedAI(c)
+        {
         }
 
         uint32 uiChargeTimer;
@@ -76,28 +62,30 @@ public:
 
         bool bHasAura;
 
-        void Reset() {
+        void Reset ()
+        {
             uiChargeTimer = urand(2 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
             uiCleaveTimer = urand(1 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
-            uiDemoralizingShoutTimer = urand(2 * IN_MILLISECONDS,
-                    2 * IN_MILLISECONDS);
-            uiWhirlwind1Timer = urand(1 * IN_MILLISECONDS,
-                    12 * IN_MILLISECONDS);
-            uiWhirlwind2Timer = urand(5 * IN_MILLISECONDS,
-                    20 * IN_MILLISECONDS);
+            uiDemoralizingShoutTimer = urand(2 * IN_MILLISECONDS, 2 * IN_MILLISECONDS);
+            uiWhirlwind1Timer = urand(1 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
+            uiWhirlwind2Timer = urand(5 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
             uiEnrageTimer = urand(5 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
             uiResetTimer = 5 * IN_MILLISECONDS;
 
             bHasAura = false;
         }
 
-        void JustRespawned() {
+        void JustRespawned ()
+        {
             Reset();
         }
 
-        void UpdateAI(const uint32 diff) {
-            if (!bHasAura) {
-                switch (me->GetEntry()) {
+        void UpdateAI (const uint32 diff)
+        {
+            if (!bHasAura)
+            {
+                switch (me->GetEntry())
+                {
                 case NPC_NORTH_MARSHAL:
                     DoCast(me, SPELL_NORTH_MARSHAL);
                     break;
@@ -130,66 +118,75 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiChargeTimer <= diff) {
+            if (uiChargeTimer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_CHARGE);
-                uiChargeTimer = urand(10 * IN_MILLISECONDS,
-                        25 * IN_MILLISECONDS);
-            } else
+                uiChargeTimer = urand(10 * IN_MILLISECONDS, 25 * IN_MILLISECONDS);
+            }
+            else
                 uiChargeTimer -= diff;
 
-            if (uiCleaveTimer <= diff) {
+            if (uiCleaveTimer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_CLEAVE);
-                uiCleaveTimer = urand(10 * IN_MILLISECONDS,
-                        16 * IN_MILLISECONDS);
-            } else
+                uiCleaveTimer = urand(10 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
+            }
+            else
                 uiCleaveTimer -= diff;
 
-            if (uiDemoralizingShoutTimer <= diff) {
+            if (uiDemoralizingShoutTimer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_DEMORALIZING_SHOUT);
-                uiDemoralizingShoutTimer = urand(10 * IN_MILLISECONDS,
-                        15 * IN_MILLISECONDS);
-            } else
+                uiDemoralizingShoutTimer = urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
+            }
+            else
                 uiDemoralizingShoutTimer -= diff;
 
-            if (uiWhirlwind1Timer <= diff) {
+            if (uiWhirlwind1Timer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_WHIRLWIND1);
-                uiWhirlwind1Timer = urand(6 * IN_MILLISECONDS,
-                        20 * IN_MILLISECONDS);
-            } else
+                uiWhirlwind1Timer = urand(6 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
+            }
+            else
                 uiWhirlwind1Timer -= diff;
 
-            if (uiWhirlwind2Timer <= diff) {
+            if (uiWhirlwind2Timer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_WHIRLWIND2);
-                uiWhirlwind2Timer = urand(10 * IN_MILLISECONDS,
-                        25 * IN_MILLISECONDS);
-            } else
+                uiWhirlwind2Timer = urand(10 * IN_MILLISECONDS, 25 * IN_MILLISECONDS);
+            }
+            else
                 uiWhirlwind2Timer -= diff;
 
-            if (uiEnrageTimer <= diff) {
+            if (uiEnrageTimer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_ENRAGE);
-                uiEnrageTimer = urand(10 * IN_MILLISECONDS,
-                        30 * IN_MILLISECONDS);
-            } else
+                uiEnrageTimer = urand(10 * IN_MILLISECONDS, 30 * IN_MILLISECONDS);
+            }
+            else
                 uiEnrageTimer -= diff;
 
             // check if creature is not outside of building
-            if (uiResetTimer <= diff) {
-                if (me->GetDistance2d(me->GetHomePosition().GetPositionX(),
-                        me->GetHomePosition().GetPositionY()) > 50)
+            if (uiResetTimer <= diff)
+            {
+                if (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) > 50)
                     EnterEvadeMode();
                 uiResetTimer = 5 * IN_MILLISECONDS;
-            } else
+            }
+            else
                 uiResetTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const {
+    CreatureAI* GetAI (Creature* creature) const
+    {
         return new mob_av_marshal_or_warmasterAI(creature);
     }
 };
 
-void AddSC_alterac_valley() {
+void AddSC_alterac_valley ()
+{
     new mob_av_marshal_or_warmaster();
 }

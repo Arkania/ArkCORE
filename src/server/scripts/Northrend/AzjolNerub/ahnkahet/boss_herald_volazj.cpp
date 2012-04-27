@@ -325,7 +325,7 @@ public:
 
         void KilledUnit(Unit* victim)
         {
-            DoScriptText(RAND(SAY_SLAY_1,SAY_SLAY_2,SAY_SLAY_3), me);
+            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
 
             if (victim->GetTypeId() == TYPEID_PLAYER)
                 victim->RemoveAurasDueToSpell(GetSpellForPhaseMask(victim->GetPhaseMask()));

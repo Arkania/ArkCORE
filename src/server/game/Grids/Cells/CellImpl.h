@@ -31,7 +31,7 @@
 #include "Map.h"
 #include "Object.h"
 
-inline Cell::Cell(CellPair const& p)
+inline Cell::Cell (CellPair const& p)
 {
     data.Part.grid_x = p.x_coord / MAX_NUMBER_OF_CELLS;
     data.Part.grid_y = p.y_coord / MAX_NUMBER_OF_CELLS;
@@ -42,13 +42,12 @@ inline Cell::Cell(CellPair const& p)
 }
 
 template<class T, class CONTAINER>
-inline void
-Cell::Visit(const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &visitor, Map &m) const
+inline void Cell::Visit (const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &visitor, Map &m) const
 {
     if (standing_cell.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || standing_cell.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
         return;
 
-    uint16 district = (District)this->data.Part.reserved;
+    uint16 district = (District) this->data.Part.reserved;
     if (district == CENTER_DISTRICT)
     {
         m.Visit(*this, visitor);
@@ -60,65 +59,73 @@ Cell::Visit(const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &v
     CellPair begin_cell = standing_cell;
     CellPair end_cell = standing_cell;
 
-    switch(district)
+    switch (district)
     {
-        case ALL_DISTRICT:
-        {
-            begin_cell << 1; begin_cell -= 1;               // upper left
-            end_cell >> 1; end_cell += 1;                   // lower right
-            break;
-        }
-        case UPPER_LEFT_DISTRICT:
-        {
-            begin_cell << 1; begin_cell -= 1;               // upper left
-            break;
-        }
-        case UPPER_RIGHT_DISTRICT:
-        {
-            begin_cell -= 1;                                // up
-            end_cell >> 1;                                  // right
-            break;
-        }
-        case LOWER_LEFT_DISTRICT:
-        {
-            begin_cell << 1;                                // left
-            end_cell += 1;                                  // down
-            break;
-        }
-        case LOWER_RIGHT_DISTRICT:
-        {
-            end_cell >> 1; end_cell += 1;                   // lower right
-            break;
-        }
-        case LEFT_DISTRICT:
-        {
-            begin_cell -= 1;                                // up
-            end_cell >> 1; end_cell += 1;                   // lower right
-            break;
-        }
-        case RIGHT_DISTRICT:
-        {
-            begin_cell << 1; begin_cell -= 1;               // upper left
-            end_cell += 1;                                  // down
-            break;
-        }
-        case UPPER_DISTRICT:
-        {
-            begin_cell << 1; begin_cell -= 1;               // upper left
-            end_cell >> 1;                                  // right
-            break;
-        }
-        case LOWER_DISTRICT:
-        {
-            begin_cell << 1;                                // left
-            end_cell >> 1; end_cell += 1;                   // lower right
-            break;
-        }
-        default:
-        {
-            ASSERT(false);
-            break;
-        }
+    case ALL_DISTRICT:
+    {
+        begin_cell << 1;
+        begin_cell -= 1;          // upper left
+        end_cell >> 1;
+        end_cell += 1;          // lower right
+        break;
+    }
+    case UPPER_LEFT_DISTRICT:
+    {
+        begin_cell << 1;
+        begin_cell -= 1;          // upper left
+        break;
+    }
+    case UPPER_RIGHT_DISTRICT:
+    {
+        begin_cell -= 1;          // up
+        end_cell >> 1;          // right
+        break;
+    }
+    case LOWER_LEFT_DISTRICT:
+    {
+        begin_cell << 1;          // left
+        end_cell += 1;          // down
+        break;
+    }
+    case LOWER_RIGHT_DISTRICT:
+    {
+        end_cell >> 1;
+        end_cell += 1;          // lower right
+        break;
+    }
+    case LEFT_DISTRICT:
+    {
+        begin_cell -= 1;          // up
+        end_cell >> 1;
+        end_cell += 1;          // lower right
+        break;
+    }
+    case RIGHT_DISTRICT:
+    {
+        begin_cell << 1;
+        begin_cell -= 1;          // upper left
+        end_cell += 1;          // down
+        break;
+    }
+    case UPPER_DISTRICT:
+    {
+        begin_cell << 1;
+        begin_cell -= 1;          // upper left
+        end_cell >> 1;          // right
+        break;
+    }
+    case LOWER_DISTRICT:
+    {
+        begin_cell << 1;          // left
+        end_cell >> 1;
+        end_cell += 1;          // lower right
+        break;
+    }
+    default:
+    {
+        ASSERT(false);
+        break;
+    }
     }
 
     // loop the cell range
@@ -134,28 +141,28 @@ Cell::Visit(const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &v
     }
 }
 
-inline int CellHelper(const float radius)
+inline int CellHelper (const float radius)
 {
     if (radius < 1.0f)
         return 0;
 
-    return (int)ceilf(radius/SIZE_OF_GRID_CELL);
+    return (int) ceilf(radius / SIZE_OF_GRID_CELL);
 }
 
-inline CellArea Cell::CalculateCellArea(const WorldObject &obj, float radius)
+inline CellArea Cell::CalculateCellArea (const WorldObject &obj, float radius)
 {
     return Cell::CalculateCellArea(obj.GetPositionX(), obj.GetPositionY(), radius);
 }
 
-inline CellArea Cell::CalculateCellArea(float x, float y, float radius)
+inline CellArea Cell::CalculateCellArea (float x, float y, float radius)
 {
     if (radius <= 0.0f)
         return CellArea();
 
     //lets calculate object coord offsets from cell borders.
     //TODO: add more correct/generic method for this task
-    const float x_offset = (x - CENTER_GRID_CELL_OFFSET)/SIZE_OF_GRID_CELL;
-    const float y_offset = (y - CENTER_GRID_CELL_OFFSET)/SIZE_OF_GRID_CELL;
+    const float x_offset = (x - CENTER_GRID_CELL_OFFSET) / SIZE_OF_GRID_CELL;
+    const float y_offset = (y - CENTER_GRID_CELL_OFFSET) / SIZE_OF_GRID_CELL;
 
     const float x_val = floor(x_offset + CENTER_GRID_CELL_ID + 0.5f);
     const float y_val = floor(y_offset + CENTER_GRID_CELL_ID + 0.5f);
@@ -174,8 +181,7 @@ inline CellArea Cell::CalculateCellArea(float x, float y, float radius)
 }
 
 template<class T, class CONTAINER>
-inline void
-Cell::Visit(const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &visitor, Map &m, float radius, float x_off, float y_off) const
+inline void Cell::Visit (const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &visitor, Map &m, float radius, float x_off, float y_off) const
 {
     if (standing_cell.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || standing_cell.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
         return;
@@ -237,8 +243,7 @@ Cell::Visit(const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &v
 }
 
 template<class T, class CONTAINER>
-inline void
-Cell::Visit(const CellPair& l, TypeContainerVisitor<T, CONTAINER> &visitor, Map &m, const WorldObject &obj, float radius) const
+inline void Cell::Visit (const CellPair& l, TypeContainerVisitor<T, CONTAINER> &visitor, Map &m, const WorldObject &obj, float radius) const
 {
     //we should increase search radius by object's radius, otherwise
     //we could have problems with huge creatures, which won't attack nearest players etc
@@ -246,11 +251,10 @@ Cell::Visit(const CellPair& l, TypeContainerVisitor<T, CONTAINER> &visitor, Map 
 }
 
 template<class T, class CONTAINER>
-inline void
-Cell::VisitCircle(TypeContainerVisitor<T, CONTAINER> &visitor, Map &m, const CellPair& begin_cell, const CellPair& end_cell) const
+inline void Cell::VisitCircle (TypeContainerVisitor<T, CONTAINER> &visitor, Map &m, const CellPair& begin_cell, const CellPair& end_cell) const
 {
     //here is an algorithm for 'filling' circum-squared octagon
-    uint32 x_shift = (uint32)ceilf((end_cell.x_coord - begin_cell.x_coord) * 0.3f - 0.5f);
+    uint32 x_shift = (uint32) ceilf((end_cell.x_coord - begin_cell.x_coord) * 0.3f - 0.5f);
     //lets calculate x_start/x_end coords for central strip...
     const uint32 x_start = begin_cell.x_coord + x_shift;
     const uint32 x_end = end_cell.x_coord - x_shift;

@@ -89,7 +89,7 @@ public:
 
             void DoAction(int32 const action)
             {
-                switch(action)
+                switch (action)
                 {
                     case ACTION_INTRO_BALTHARUS:
                         if (_introDone)
@@ -193,7 +193,7 @@ public:
                             events.ScheduleEvent(EVENT_CLEAVE, 24000, 0, PHASE_COMBAT);
                             break;
                         case EVENT_BLADE_TEMPEST:
-                DoCast(me,SPELL_BLADE_TEMPEST);
+                DoCast(me, SPELL_BLADE_TEMPEST);
                             events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24000, 0, PHASE_COMBAT);
                             break;
                         case EVENT_ENERVATING_BRAND:

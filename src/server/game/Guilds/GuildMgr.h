@@ -27,29 +27,31 @@
 
 #include "Guild.h"
 
-class GuildMgr {
-	friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex> ;
-	GuildMgr();
-	~GuildMgr();
+class GuildMgr
+{
+    friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex> ;
+    GuildMgr ();
+    ~GuildMgr ();
 
 public:
-	typedef UNORDERED_MAP<uint32, Guild*> GuildContainer;
+    typedef UNORDERED_MAP<uint32, Guild*> GuildContainer;
 
-	Guild* GetGuildByLeader(uint64 const& guid) const;
-	Guild* GetGuildById(uint32 guildId) const;
-	Guild* GetGuildByName(const std::string& guildName) const;
-	std::string GetGuildNameById(uint32 guildId) const;
+    Guild* GetGuildByLeader(uint64 const& guid) const;
+    Guild* GetGuildById(uint32 guildId) const;
+    Guild* GetGuildByName(const std::string& guildName) const;
+    std::string GetGuildNameById(uint32 guildId) const;
 
-	void LoadGuilds();
-	void AddGuild(Guild* guild);
-	void RemoveGuild(uint32 guildId);
+    void LoadGuilds();
+    void AddGuild(Guild* guild);
+    void RemoveGuild(uint32 guildId);
 
-	uint32 GenerateGuildId();
-	void SetNextGuildId(uint32 Id) {NextGuildId = Id;}
+    uint32 GenerateGuildId();
+    void SetNextGuildId(uint32 Id)
+    {   NextGuildId = Id;}
 
 protected:
-	uint32 NextGuildId;
-	GuildContainer GuildStore;
+    uint32 NextGuildId;
+    GuildContainer GuildStore;
 };
 
 #define sGuildMgr ACE_Singleton<GuildMgr, ACE_Null_Mutex>::instance()

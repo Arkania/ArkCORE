@@ -624,7 +624,7 @@ public:
                     player->RemoveAura(SPELL_DARK_ESSENCE_10_H);
                 if (player->HasAura(SPELL_DARK_ESSENCE_25_H))
                     player->RemoveAura(SPELL_DARK_ESSENCE_25_H);
-                switch(player->GetDifficulty(true))
+                switch (player->GetDifficulty(true))
                 {
                     case RAID_DIFFICULTY_10MAN_NORMAL:
                         player->CastSpell(player, SPELL_LIGHT_ESSENCE_10_N, false);
@@ -651,7 +651,7 @@ public:
                     player->RemoveAura(SPELL_LIGHT_ESSENCE_10_H);
                 if (player->HasAura(SPELL_LIGHT_ESSENCE_25_H))
                     player->RemoveAura(SPELL_LIGHT_ESSENCE_25_H);
-                switch(player->GetDifficulty(true))
+                switch (player->GetDifficulty(true))
                 {
                     case RAID_DIFFICULTY_10MAN_NORMAL:
                         player->CastSpell(player, SPELL_DARK_ESSENCE_10_N, false);
@@ -747,9 +747,9 @@ public:
             {
                 pWho->CastSpell(pWho, RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H), true);
                 int n = 5 + rand() % 8;
-                if(Aura * aura = pWho->GetAura(RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H)))
+                if (Aura * aura = pWho->GetAura(RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H)))
                 {
-                    if(aura->GetStackAmount()+n > 100 || aura->GetStackAmount() == 100)
+                    if (aura->GetStackAmount()+n > 100 || aura->GetStackAmount() == 100)
                     {
                         aura->SetStackAmount(100);
                         pWho->RemoveAurasDueToSpell(RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H));
@@ -804,9 +804,9 @@ public:
             {
                 pWho->CastSpell(pWho, RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H), true);
                 int n = 5 + rand() % 8;
-                if(Aura * aura = pWho->GetAura(RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H)))
+                if (Aura * aura = pWho->GetAura(RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H)))
                 {
-                    if(aura->GetStackAmount()+n > 100 || aura->GetStackAmount() == 100)
+                    if (aura->GetStackAmount()+n > 100 || aura->GetStackAmount() == 100)
                     {
                         pWho->RemoveAurasDueToSpell(RAID_MODE(SPELL_POWERING_UP_10_N, SPELL_POWERING_UP_25_N, SPELL_POWERING_UP_10_H, SPELL_POWERING_UP_25_H));
                         pWho->CastSpell(pWho, RAID_MODE(SPELL_EMPOWERED_LIGHT_10_N, SPELL_EMPOWERED_LIGHT_25_N, SPELL_EMPOWERED_LIGHT_10_H, SPELL_EMPOWERED_LIGHT_25_H), true);
@@ -871,7 +871,7 @@ public:
             {
                 if (urand(0, 100) <= 30)
                 {
-                    switch(GetSpellInfo()->Id)
+                    switch (GetSpellInfo()->Id)
                     {
                         case SPELL_POWERING_UP_1:
                             pTarget->CastSpell(pTarget, SPELL_SURGE_OF_SPEED_1, true);

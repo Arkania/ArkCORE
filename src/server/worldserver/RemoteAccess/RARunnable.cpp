@@ -38,8 +38,9 @@
 
 #include "RASocket.h"
 
-RARunnable::RARunnable() :
-        m_Reactor(NULL) {
+RARunnable::RARunnable () :
+        m_Reactor(NULL)
+{
     ACE_Reactor_Impl* imp = 0;
 
 #if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
@@ -59,11 +60,13 @@ RARunnable::RARunnable() :
     m_Reactor = new ACE_Reactor(imp, 1);
 }
 
-RARunnable::~RARunnable() {
+RARunnable::~RARunnable ()
+{
     delete m_Reactor;
 }
 
-void RARunnable::run() {
+void RARunnable::run ()
+{
     if (!sConfig->GetBoolDefault("Ra.Enable", false))
         return;
 
@@ -74,16 +77,16 @@ void RARunnable::run() {
 
     ACE_INET_Addr listen_addr(raport, stringip.c_str());
 
-    if (acceptor.open(listen_addr, m_Reactor) == -1) {
-        sLog->outError("Trinity RA can not bind to port %d on %s", raport,
-                stringip.c_str());
+    if (acceptor.open(listen_addr, m_Reactor) == -1)
+    {
+        sLog->outError("Trinity RA can not bind to port %d on %s", raport, stringip.c_str());
         return;
     }
 
-    sLog->outString("Starting Trinity RA on port %d on %s", raport,
-            stringip.c_str());
+    sLog->outString("Starting Trinity RA on port %d on %s", raport, stringip.c_str());
 
-    while (!World::IsStopped()) {
+    while (!World::IsStopped())
+    {
         // don't be too smart to move this outside the loop
         // the run_reactor_event_loop will modify interval
         ACE_Time_Value interval(0, 100000);

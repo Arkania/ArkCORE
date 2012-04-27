@@ -30,10 +30,11 @@
 class TargetedMovementGeneratorBase;
 class Unit;
 
-class FollowerReference: public Reference<Unit, TargetedMovementGeneratorBase> {
+class FollowerReference: public Reference<Unit, TargetedMovementGeneratorBase>
+{
 protected:
-	void targetObjectBuildLink();
-	void targetObjectDestroyLink();
-	void sourceObjectDestroyLink();
+    void targetObjectBuildLink ();
+    void targetObjectDestroyLink ();
+    void sourceObjectDestroyLink ();
 };
 #endif

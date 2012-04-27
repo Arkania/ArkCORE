@@ -93,7 +93,7 @@ struct ActiveBoatStruct
 {
     uint32 npc;
     uint32 say;
-    float MoveX,MoveY,MoveZ,SpawnX,SpawnY,SpawnZ,SpawnO;
+    float MoveX, MoveY, MoveZ, SpawnX, SpawnY, SpawnZ, SpawnO;
 };
 
 static ActiveBoatStruct ActiveBot[4] =
@@ -173,10 +173,10 @@ public:
             m_bIsActiveWithRANULF = false;
             m_bIsActiveWithTORGYN = false;
 
-            m_uiFetidRot_Timer            = urand(5*IN_MILLISECONDS,8*IN_MILLISECONDS);
-            m_uiBane_Timer                = urand(20*IN_MILLISECONDS,22*IN_MILLISECONDS);
-            m_uiDarkSlash_Timer           = urand(10*IN_MILLISECONDS,33*IN_MILLISECONDS);
-            m_uiAncestors_Vengeance_Timer = urand(60*IN_MILLISECONDS,45*IN_MILLISECONDS);
+            m_uiFetidRot_Timer            = urand(5*IN_MILLISECONDS, 8*IN_MILLISECONDS);
+            m_uiBane_Timer                = urand(20*IN_MILLISECONDS, 22*IN_MILLISECONDS);
+            m_uiDarkSlash_Timer           = urand(10*IN_MILLISECONDS, 33*IN_MILLISECONDS);
+            m_uiAncestors_Vengeance_Timer = urand(60*IN_MILLISECONDS, 45*IN_MILLISECONDS);
             m_uiPause_Timer               = 0;
             m_uiCheckSkadiTimer           = 10*IN_MILLISECONDS;
 
@@ -187,7 +187,7 @@ public:
 
             m_uiActivedNumber        = 0;
             m_uiHealthAmountModifier = 1;
-            m_uiHealthAmountMultipler = DUNGEON_MODE(33,20);
+            m_uiHealthAmountMultipler = DUNGEON_MODE(33, 20);
 
             DespawnBoatGhosts(m_uiActivedCreatureGUID);
             DespawnBoatGhosts(m_uiOrbGUID);
@@ -284,37 +284,37 @@ public:
                 // Normal spells ------------------------------------------------------------------------
                 if (m_uiBane_Timer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                     DoCast(me, DUNGEON_MODE(SPELL_BANE, H_SPELL_BANE));
-                        m_uiBane_Timer = urand(20*IN_MILLISECONDS,22*IN_MILLISECONDS);
+                        m_uiBane_Timer = urand(20*IN_MILLISECONDS, 22*IN_MILLISECONDS);
                     }
                 } else m_uiBane_Timer -= diff;
 
                 if (m_uiFetidRot_Timer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
                         DoCast(target, DUNGEON_MODE(SPELL_FETID_ROT, H_SPELL_FETID_ROT));
-                    m_uiFetidRot_Timer = urand(10*IN_MILLISECONDS,15*IN_MILLISECONDS);
+                    m_uiFetidRot_Timer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
                     }
                 } else m_uiFetidRot_Timer -= diff;
 
                 if (m_uiDarkSlash_Timer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                         int dmg = int(me->getVictim()->GetHealth()*0.5);
                         me->CastCustomSpell(me->getVictim(), SPELL_DARK_SLASH, &dmg, 0, 0, false);
-                        m_uiDarkSlash_Timer = urand(15*IN_MILLISECONDS,18*IN_MILLISECONDS);
+                        m_uiDarkSlash_Timer = urand(15*IN_MILLISECONDS, 18*IN_MILLISECONDS);
                     }
                 } else m_uiDarkSlash_Timer -= diff;
 
                 if (m_uiAncestors_Vengeance_Timer <= diff)
                 {
                     DoCast(me, SPELL_ANCESTORS_VENGEANCE);
-                    m_uiAncestors_Vengeance_Timer = DUNGEON_MODE(urand(60*IN_MILLISECONDS,65*IN_MILLISECONDS),urand(45*IN_MILLISECONDS,50*IN_MILLISECONDS));
+                    m_uiAncestors_Vengeance_Timer = DUNGEON_MODE(urand(60*IN_MILLISECONDS, 65*IN_MILLISECONDS), urand(45*IN_MILLISECONDS, 50*IN_MILLISECONDS));
                 } else m_uiAncestors_Vengeance_Timer -= diff;
 
                 // Abilities ------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ public:
 
                 if (m_bIsActiveWithHALDOR && m_uiAbility_HALDOR_Timer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                     DoCast(me->getVictim(), DUNGEON_MODE(SPELL_SPIRIT_STRIKE, H_SPELL_SPIRIT_STRIKE));
                     m_uiAbility_HALDOR_Timer = 5*IN_MILLISECONDS; // overtime
@@ -345,7 +345,7 @@ public:
 
                 if (m_bIsActiveWithRANULF && m_uiAbility_RANULF_Timer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                     DoCast(me, DUNGEON_MODE(SPELL_SPIRIT_BURST, H_SPELL_SPIRIT_BURST));
                     m_uiAbility_RANULF_Timer = 10*IN_MILLISECONDS; // overtime
@@ -398,7 +398,7 @@ public:
                     m_bIsActiveWithRANULF = false;
                     m_bIsActiveWithTORGYN = false;
 
-                    m_uiBane_Timer                = urand(20*IN_MILLISECONDS,22*IN_MILLISECONDS);
+                    m_uiBane_Timer                = urand(20*IN_MILLISECONDS, 22*IN_MILLISECONDS);
                     m_uiFetidRot_Timer            += 3*IN_MILLISECONDS;
                     m_uiDarkSlash_Timer           += 3*IN_MILLISECONDS;
                     m_uiAncestors_Vengeance_Timer += 8*IN_MILLISECONDS;

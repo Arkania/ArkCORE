@@ -24,50 +24,50 @@
 #include "ScriptLoader.h"
 
 //examples
-void AddSC_example_creature();
-void AddSC_example_escort();
-void AddSC_example_gossip_codebox();
-void AddSC_example_misc();
+void AddSC_example_creature ();
+void AddSC_example_escort ();
+void AddSC_example_gossip_codebox ();
+void AddSC_example_misc ();
 //player scripts
-void AddSC_player_mage_scripts();
-void AddSC_example_commandscript();
+void AddSC_player_mage_scripts ();
+void AddSC_example_commandscript ();
 
 // spells
-void AddSC_deathknight_spell_scripts();
-void AddSC_druid_spell_scripts();
-void AddSC_generic_spell_scripts();
-void AddSC_hunter_spell_scripts();
-void AddSC_mage_spell_scripts();
-void AddSC_paladin_spell_scripts();
-void AddSC_priest_spell_scripts();
-void AddSC_rogue_spell_scripts();
-void AddSC_shaman_spell_scripts();
-void AddSC_warlock_spell_scripts();
-void AddSC_warrior_spell_scripts();
-void AddSC_quest_spell_scripts();
-void AddSC_item_spell_scripts();
-void AddSC_example_spell_scripts();
+void AddSC_deathknight_spell_scripts ();
+void AddSC_druid_spell_scripts ();
+void AddSC_generic_spell_scripts ();
+void AddSC_hunter_spell_scripts ();
+void AddSC_mage_spell_scripts ();
+void AddSC_paladin_spell_scripts ();
+void AddSC_priest_spell_scripts ();
+void AddSC_rogue_spell_scripts ();
+void AddSC_shaman_spell_scripts ();
+void AddSC_warlock_spell_scripts ();
+void AddSC_warrior_spell_scripts ();
+void AddSC_quest_spell_scripts ();
+void AddSC_item_spell_scripts ();
+void AddSC_example_spell_scripts ();
 
-void AddSC_SmartSCripts();
+void AddSC_SmartSCripts ();
 
 //Commands
-void AddSC_anticheat_commandscript();
-void AddSC_account_commandscript();
-void AddSC_achievement_commandscript();
+void AddSC_anticheat_commandscript ();
+void AddSC_account_commandscript ();
+void AddSC_achievement_commandscript ();
 //void AddSC_gm_commandscript();
 //void AddSC_go_commandscript();
 //void AddSC_learn_commandscript();
 //void AddSC_modify_commandscript();
-void AddSC_npc_commandscript();
-void AddSC_debug_commandscript();
-void AddSC_reload_commandscript();
-void AddSC_titles_commandscript();
-void AddSC_wp_commandscript();
-void AddSC_gobject_commandscript();
-void AddSC_honor_commandscript();
-void AddSC_quest_commandscript();
-void AddSC_reload_commandscript();
-void AddSC_credits_commandscript();
+void AddSC_npc_commandscript ();
+void AddSC_debug_commandscript ();
+void AddSC_reload_commandscript ();
+void AddSC_titles_commandscript ();
+void AddSC_wp_commandscript ();
+void AddSC_gobject_commandscript ();
+void AddSC_honor_commandscript ();
+void AddSC_quest_commandscript ();
+void AddSC_reload_commandscript ();
+void AddSC_credits_commandscript ();
 
 #ifdef SCRIPTS
 //world
@@ -125,7 +125,7 @@ void AddSC_boss_flamegor();
 void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
-void AddSC_boss_omnotron_defense_system(); //Blackwing Descent
+void AddSC_boss_omnotron_defense_system();//Blackwing Descent
 void AddSC_boss_bd_nefarian();
 void AddSC_boss_maloriak();
 void AddSC_boss_atramedes();
@@ -478,12 +478,12 @@ void AddSC_pit_of_saron();
 void AddSC_boss_garfrost();
 void AddSC_boss_ick();
 void AddSC_boss_tyrannus();
-void AddSC_instance_halls_of_reflection();   // Halls of Reflection
+void AddSC_instance_halls_of_reflection();// Halls of Reflection
 void AddSC_halls_of_reflection();
 void AddSC_boss_falric();
 void AddSC_boss_marwyn();
 void AddSC_boss_lich_king_hr();
-void AddSC_boss_lord_marrowgar();       // Icecrown Citadel
+void AddSC_boss_lord_marrowgar();// Icecrown Citadel
 void AddSC_boss_lady_deathwhisper();
 void AddSC_boss_gunship_battle();
 void AddSC_boss_deathbringer_saurfang();
@@ -498,7 +498,7 @@ void AddSC_boss_the_lich_king();
 void AddSC_icecrown_citadel_teleport();
 void AddSC_instance_icecrown_citadel();
 void AddSC_icecrown_citadel();
-void AddSC_instance_ruby_sanctum();      // Ruby Sanctum
+void AddSC_instance_ruby_sanctum();// Ruby Sanctum
 void AddSC_ruby_sanctum();
 void AddSC_boss_baltharus_the_warborn();
 void AddSC_boss_saviana_ragefire();
@@ -584,7 +584,7 @@ void AddSC_boss_void_reaver();
 void AddSC_boss_high_astromancer_solarian();
 void AddSC_instance_the_eye();
 void AddSC_the_eye();
-void AddSC_boss_gatewatcher_iron_hand();	//TK The Mechanar
+void AddSC_boss_gatewatcher_iron_hand();//TK The Mechanar
 void AddSC_boss_nethermancer_sepethrea();
 void AddSC_boss_pathaleon_the_calculator();
 void AddSC_instance_mechanar();
@@ -607,9 +607,9 @@ void AddSC_deepholm();
 void AddSC_kezan();
 //void AddSC_tol_barad();
 
-void AddSC_the_stonecore();					 //TheStonecore
+void AddSC_the_stonecore();//TheStonecore
 void AddSC_instance_the_stonecore();
-void AddSC_instance_halls_of_origination();  //Halls of Origination
+void AddSC_instance_halls_of_origination();//Halls of Origination
 void AddSC_boss_temple_guardian_anhuur();
 void AddSC_boss_ptah();
 void AddSC_boss_anraphet();
@@ -617,32 +617,32 @@ void AddSC_boss_ammunae();
 void AddSC_boss_setesh();
 void AddSC_boss_rajh();
 void AddSC_boss_isiset();
-void AddSC_instance_baradin_hold();          //Baradin Hold
+void AddSC_instance_baradin_hold();//Baradin Hold
 void AddSC_boss_argaloth();
 void AddSC_boss_occuthar();
-void AddSC_lost_city_of_the_tolvir();		//The Lost City of the Tol'vir
+void AddSC_lost_city_of_the_tolvir();//The Lost City of the Tol'vir
 void AddSC_instance_lost_city_of_the_tolvir();
 void AddSC_boss_lockmaw();
 void AddSC_boss_high_prophet_barim();
-void AddSC_boss_altairus();                  //Vortex Pinnacle
+void AddSC_boss_altairus();//Vortex Pinnacle
 void AddSC_boss_asaad();
 void AddSC_boss_grand_vizier_ertan();
 void AddSC_vortex_pinnacle();
 void AddSC_instance_vortex_pinnacle();
-void AddSC_instance_throne_of_the_four_winds(); // Throne of the Four Winds
+void AddSC_instance_throne_of_the_four_winds();// Throne of the Four Winds
 void AddSC_throne_of_the_four_winds();
-void AddSC_boss_general_umbriss();           //Grimbatol
+void AddSC_boss_general_umbriss();//Grimbatol
 void AddSC_boss_forgemaster_throngus();
 void AddSC_boss_drahga_shadowburner();
 void AddSC_boss_erudax();
 void AddSC_instance_grim_batol();
-void AddSC_instance_throne_of_the_tides();	//Throne of the Tides
-void AddSC_instance_blackrock_caverns();	//Blackrock Caverns
+void AddSC_instance_throne_of_the_tides();//Throne of the Tides
+void AddSC_instance_blackrock_caverns();//Blackrock Caverns
 void AddSC_boss_romogg_bonecrusher();
 void AddSC_boss_corla_herald_of_twilight();
 void AddSC_boss_karsh_steelbender();
 void AddSC_boss_ascendant_lord_obsidius();
-void AddSC_boss_chogall(); 					//BastionOfTwilight
+void AddSC_boss_chogall();//BastionOfTwilight
 void AddSC_boss_ascendant_council();
 void AddSC_boss_halfus_wyrmbreaker();
 void AddSC_boss_theralion();
@@ -667,7 +667,8 @@ void AddSC_DuelReset();
 
 #endif
 
-void AddScripts() {
+void AddScripts ()
+{
     AddExampleScripts();
     AddPlayerScripts();
     AddSpellScripts();
@@ -686,7 +687,8 @@ void AddScripts() {
 #endif
 }
 
-void AddExampleScripts() {
+void AddExampleScripts ()
+{
     AddSC_example_creature();
     AddSC_example_escort();
     AddSC_example_gossip_codebox();
@@ -694,11 +696,13 @@ void AddExampleScripts() {
     AddSC_example_commandscript();
 }
 
-void AddPlayerScripts() {
+void AddPlayerScripts ()
+{
     AddSC_player_mage_scripts();
 }
 
-void AddSpellScripts() {
+void AddSpellScripts ()
+{
     AddSC_deathknight_spell_scripts();
     AddSC_druid_spell_scripts();
     AddSC_generic_spell_scripts();
@@ -715,8 +719,9 @@ void AddSpellScripts() {
     AddSC_example_spell_scripts();
 }
 
-void AddCommandScripts() {
-	AddSC_anticheat_commandscript();
+void AddCommandScripts ()
+{
+    AddSC_anticheat_commandscript();
     AddSC_account_commandscript();
     AddSC_achievement_commandscript();
     //AddSC_gm_commandscript();
@@ -725,7 +730,7 @@ void AddCommandScripts() {
     //AddSC_modify_commandscript();
     AddSC_npc_commandscript();
     AddSC_debug_commandscript();
-	AddSC_credits_commandscript();
+    AddSC_credits_commandscript();
     AddSC_reload_commandscript();
     AddSC_reload_commandscript();
     AddSC_titles_commandscript();
@@ -736,7 +741,8 @@ void AddCommandScripts() {
     AddSC_reload_commandscript();
 }
 
-void AddWorldScripts() {
+void AddWorldScripts ()
+{
 #ifdef SCRIPTS
     AddSC_areatrigger_scripts();
     AddSC_boss_emeriss();
@@ -757,9 +763,10 @@ void AddWorldScripts() {
 #endif
 }
 
-void AddEasternKingdomsScripts() {
+void AddEasternKingdomsScripts ()
+{
 #ifdef SCRIPTS
-    AddSC_alterac_valley(); //Alterac Valley
+    AddSC_alterac_valley();          //Alterac Valley
     AddSC_boss_balinda();
     AddSC_boss_drekthar();
     AddSC_boss_galvangar();
@@ -776,7 +783,7 @@ void AddEasternKingdomsScripts() {
     AddSC_boss_moira_bronzebeard();
     AddSC_boss_tomb_of_seven();
     AddSC_instance_blackrock_depths();
-    AddSC_boss_chogall(); 					//BastionOfTwilight
+    AddSC_boss_chogall();//BastionOfTwilight
     AddSC_boss_ascendant_council();
     AddSC_boss_halfus_wyrmbreaker();
     AddSC_boss_theralion();
@@ -802,7 +809,7 @@ void AddEasternKingdomsScripts() {
     AddSC_boss_chromaggus();
     AddSC_boss_nefarian();
     AddSC_boss_victor_nefarius();
-    AddSC_boss_omnotron_defense_system(); //Blackwing Descent
+    AddSC_boss_omnotron_defense_system();//Blackwing Descent
     AddSC_boss_bd_nefarian();
     AddSC_boss_maloriak();
     AddSC_boss_atramedes();
@@ -956,9 +963,10 @@ void AddEasternKingdomsScripts() {
 #endif
 }
 
-void AddKalimdorScripts() {
+void AddKalimdorScripts ()
+{
 #ifdef SCRIPTS
-    AddSC_blackfathom_deeps(); //Blackfathom Depths
+    AddSC_blackfathom_deeps();          //Blackfathom Depths
     AddSC_boss_gelihast();
     AddSC_boss_kelris();
     AddSC_boss_aku_mai();
@@ -1047,9 +1055,10 @@ void AddKalimdorScripts() {
 #endif
 }
 
-void AddOutlandScripts() {
+void AddOutlandScripts ()
+{
 #ifdef SCRIPTS
-    AddSC_boss_exarch_maladaar(); //Auchindoun Auchenai Crypts
+    AddSC_boss_exarch_maladaar();          //Auchindoun Auchenai Crypts
     AddSC_boss_shirrak_the_dead_watcher();
     AddSC_boss_nexusprince_shaffar();//Auchindoun Mana Tombs
     AddSC_boss_pandemonius();
@@ -1132,9 +1141,10 @@ void AddOutlandScripts() {
 #endif
 }
 
-void AddNorthrendScripts() {
+void AddNorthrendScripts ()
+{
 #ifdef SCRIPTS
-    AddSC_boss_slad_ran(); //Gundrak
+    AddSC_boss_slad_ran();          //Gundrak
     AddSC_boss_moorabi();
     AddSC_boss_drakkari_colossus();
     AddSC_boss_gal_darah();
@@ -1247,12 +1257,12 @@ void AddNorthrendScripts() {
     AddSC_boss_garfrost();
     AddSC_boss_ick();
     AddSC_boss_tyrannus();
-    AddSC_instance_halls_of_reflection();   // Halls of Reflection
+    AddSC_instance_halls_of_reflection();// Halls of Reflection
     AddSC_halls_of_reflection();
     AddSC_boss_falric();
     AddSC_boss_marwyn();
     AddSC_boss_lich_king_hr();
-    AddSC_boss_lord_marrowgar();        // Icecrown Citadel
+    AddSC_boss_lord_marrowgar();// Icecrown Citadel
     AddSC_boss_lady_deathwhisper();
     AddSC_boss_gunship_battle();
     AddSC_boss_deathbringer_saurfang();
@@ -1267,7 +1277,7 @@ void AddNorthrendScripts() {
     AddSC_icecrown_citadel_teleport();
     AddSC_instance_icecrown_citadel();
     AddSC_icecrown_citadel();
-    AddSC_instance_ruby_sanctum();      // Ruby Sanctum
+    AddSC_instance_ruby_sanctum();// Ruby Sanctum
     AddSC_ruby_sanctum();
     AddSC_boss_baltharus_the_warborn();
     AddSC_boss_saviana_ragefire();
@@ -1291,7 +1301,7 @@ void AddNorthrendScripts() {
     // Cataclysm Scripts
     AddSC_the_stonecore();//The Stonecore
     AddSC_instance_the_stonecore();
-    AddSC_instance_halls_of_origination();  //Halls of Origination
+    AddSC_instance_halls_of_origination();//Halls of Origination
     AddSC_boss_temple_guardian_anhuur();
     AddSC_boss_ptah();
     AddSC_boss_anraphet();
@@ -1305,20 +1315,20 @@ void AddNorthrendScripts() {
     AddSC_instance_lost_city_of_the_tolvir();
     AddSC_boss_lockmaw();
     AddSC_boss_high_prophet_barim();
-    AddSC_boss_altairus();                  //Vortex Pinnacle
+    AddSC_boss_altairus();//Vortex Pinnacle
     AddSC_boss_asaad();
     AddSC_boss_grand_vizier_ertan();
     AddSC_vortex_pinnacle();
     AddSC_instance_vortex_pinnacle();
-    AddSC_instance_throne_of_the_four_winds(); // Throne of the Four Winds
+    AddSC_instance_throne_of_the_four_winds();// Throne of the Four Winds
     AddSC_throne_of_the_four_winds();
-    AddSC_boss_general_umbriss();           //Grimbatol
+    AddSC_boss_general_umbriss();//Grimbatol
     AddSC_boss_forgemaster_throngus();
     AddSC_boss_drahga_shadowburner();
     AddSC_boss_erudax();
     AddSC_instance_grim_batol();
     AddSC_instance_throne_of_the_tides();//Throne of the Tides
-    AddSC_instance_blackrock_caverns(); //Blackrock Caverns
+    AddSC_instance_blackrock_caverns();//Blackrock Caverns
     AddSC_boss_romogg_bonecrusher();
     AddSC_boss_corla_herald_of_twilight();
     AddSC_boss_karsh_steelbender();
@@ -1327,7 +1337,8 @@ void AddNorthrendScripts() {
 #endif
 }
 
-void AddOutdoorPvPScripts() {
+void AddOutdoorPvPScripts ()
+{
 #ifdef SCRIPTS
     AddSC_outdoorpvp_ep();
     AddSC_outdoorpvp_hp();
@@ -1340,7 +1351,7 @@ void AddOutdoorPvPScripts() {
 #endif
 }
 
-void AddMaelstromScripts()
+void AddMaelstromScripts ()
 {
 #ifdef SCRIPTS
     AddSC_deepholm();
@@ -1349,7 +1360,8 @@ void AddMaelstromScripts()
 #endif
 }
 
-void AddBattlegroundScripts() {
+void AddBattlegroundScripts ()
+{
 #ifdef SCRIPTS
 #endif
 }
@@ -1359,7 +1371,8 @@ void AddBattlegroundScripts() {
 
 #endif
 
-void AddCustomScripts() {
+void AddCustomScripts ()
+{
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
 

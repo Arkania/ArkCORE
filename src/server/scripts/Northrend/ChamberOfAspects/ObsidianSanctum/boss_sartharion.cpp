@@ -185,22 +185,22 @@ static Position AcolyteofVesperon2 = { 3246.57f, 551.263f, 58.6164f };
 
 const Position TwilightEggs[] =
 {
-    {3219.28f, 669.121f , 88.5549f,0.0f},
-    {3221.55f, 682.852f , 90.5361f,0.0f},
-    {3239.77f, 685.94f , 90.3168f,0.0f},
-    {3250.33f, 669.749f , 88.7637f,0.0f},
-    {3246.6f, 642.365f , 84.8752f,0.0f},
-    {3233.68f, 653.117f , 85.7051f,0.0f}
+    {3219.28f, 669.121f , 88.5549f, 0.0f},
+    {3221.55f, 682.852f , 90.5361f, 0.0f},
+    {3239.77f, 685.94f , 90.3168f, 0.0f},
+    {3250.33f, 669.749f , 88.7637f, 0.0f},
+    {3246.6f, 642.365f , 84.8752f, 0.0f},
+    {3233.68f, 653.117f , 85.7051f, 0.0f}
 };
 
 const Position TwilightEggsSarth[] =
 {
-    {3252.73f, 515.762f , 58.5501f,0.0f},
-    {3256.56f, 521.119f , 58.6061f,0.0f},
-    {3255.63f, 527.513f , 58.7568f,0.0f},
-    {3264.90f, 525.865f , 58.6436f,0.0f},
-    {3264.26f, 516.364f , 58.8011f,0.0f},
-    {3257.54f, 502.285f , 58.2077f,0.0f}
+    {3252.73f, 515.762f , 58.5501f, 0.0f},
+    {3256.56f, 521.119f , 58.6061f, 0.0f},
+    {3255.63f, 527.513f , 58.7568f, 0.0f},
+    {3264.90f, 525.865f , 58.6436f, 0.0f},
+    {3264.26f, 516.364f , 58.8011f, 0.0f},
+    {3257.54f, 502.285f , 58.2077f, 0.0f}
 };
 
 enum FlameWallAction
@@ -387,7 +387,7 @@ public:
 
         void JustSummoned(Creature* pSummoned)
         {
-            switch(pSummoned->GetEntry())
+            switch (pSummoned->GetEntry())
             {
             case NPC_FLAME_TSUNAMI:
                 pSummoned->setFaction(me->getFaction());
@@ -558,9 +558,9 @@ public:
 
         // Selects a random Fire Cyclone and makes it cast Lava Strike.
         // FIXME: Frequency of the casts reduced to compensate 100% chance of spawning a Lava Blaze add
-        void CastLavaStrikeOnTarget(Unit* target,bool summon)
+        void CastLavaStrikeOnTarget(Unit* target, bool summon)
         {
-            if(m_guidFireCyclone == 0)
+            if (m_guidFireCyclone == 0)
         {
             std::list<Creature*> pFireCyclonesList;
             Trinity::AllCreaturesOfEntryInRange checker(me, NPC_FIRE_CYCLONE, 200.0f);
@@ -580,9 +580,9 @@ public:
                 m_guidFireCyclone = (*itr)->GetGUID();
             }
 
-            if(Creature* LavaCyclon = Creature::GetCreature((*me),m_guidFireCyclone))
+            if (Creature* LavaCyclon = Creature::GetCreature((*me), m_guidFireCyclone))
             {
-                if(summon)
+                if (summon)
                     LavaCyclon->CastSpell(target, SPELL_LAVA_STRIKE_SUMMON, true);
                 else
                     LavaCyclon->CastSpell(target, SPELL_LAVA_STRIKE_DAMAGE, true);
@@ -633,7 +633,7 @@ public:
             if (m_uiFlameTsunamiTimer <= uiDiff)
             {
                 SendFlameTsunami();
-                switch(urand(0,1))
+                switch (urand(0, 1))
                 {
                     case 0:
                     {
@@ -663,28 +663,28 @@ public:
             // flame breath
             if (m_uiFlameBreathTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoScriptText(SAY_SARTHARION_BREATH, me);
                 DoCast(me->getVictim(), RAID_MODE(SPELL_FLAME_BREATH, SPELL_FLAME_BREATH_H));
-                    m_uiFlameBreathTimer = urand(15000,30000);
+                    m_uiFlameBreathTimer = urand(15000, 30000);
             }
             }else m_uiFlameBreathTimer -= uiDiff;
 
             // Tail Sweep
             if (m_uiTailSweepTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                     DoCast(RAID_MODE(SPELL_TAIL_LASH, SPELL_TAIL_LASH_H));
-                    m_uiTailSweepTimer = urand(10000,20000);
+                    m_uiTailSweepTimer = urand(10000, 20000);
             }
             }else m_uiTailSweepTimer -= uiDiff;
 
             // Cleave
             if (m_uiCleaveTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCast(me->getVictim(), SPELL_CLEAVE);
                 m_uiCleaveTimer = urand(7000, 10000);
@@ -694,27 +694,27 @@ public:
             // Lavas Strike
             if (m_uiLavaStrikeTimer <= uiDiff)
             {
-                if(m_FireCycloneFireing)
+                if (m_FireCycloneFireing)
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        if(m_uifireCount < 10)
+                        if (m_uifireCount < 10)
                         {
-                            CastLavaStrikeOnTarget(target,false);
+                            CastLavaStrikeOnTarget(target, false);
                             m_uiLavaStrikeTimer = 1000;
                         }else
                         {
-                            CastLavaStrikeOnTarget(target,true);
+                            CastLavaStrikeOnTarget(target, true);
                             m_FireCycloneFireing = false;
                             m_guidFireCyclone = 0;
-                            m_uiLavaStrikeTimer = (m_bIsSoftEnraged ? urand(1400, 2000) : urand(10000,20000));
+                            m_uiLavaStrikeTimer = (m_bIsSoftEnraged ? urand(1400, 2000) : urand(10000, 20000));
                         }
                     m_uifireCount++;
                 }else
                 {
                     m_uifireCount = 0;
                     m_FireCycloneFireing = true;
-                    if(urand(0,5) == 0)
-                        DoScriptText(RAND(SAY_SARTHARION_SPECIAL_1,SAY_SARTHARION_SPECIAL_2,SAY_SARTHARION_SPECIAL_3), me);
+                    if (urand(0, 5) == 0)
+                        DoScriptText(RAND(SAY_SARTHARION_SPECIAL_1, SAY_SARTHARION_SPECIAL_2, SAY_SARTHARION_SPECIAL_3), me);
                     m_uiLavaStrikeTimer = (1000);
                 }
             }else m_uiLavaStrikeTimer -= uiDiff;
@@ -741,7 +741,7 @@ public:
             }else m_uiVesperonTimer -= uiDiff;
 
             // Don't attack current target if he's not visible for us.
-            //if(me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
+            //if (me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
             //    me->getThreatManager().modifyThreatPercent(me->getVictim(), -100);
 
             DoMeleeAttackIfReady();
@@ -899,7 +899,7 @@ struct dummy_dragonAI : public ScriptedAI
 
     void JustSummoned(Creature* pSummoned)
     {
-        switch(pSummoned->GetEntry())
+        switch (pSummoned->GetEntry())
         {
         case NPC_TWILIGHT_EGG:
         case NPC_SARTHARION_TWILIGHT_EGG:
@@ -915,12 +915,12 @@ struct dummy_dragonAI : public ScriptedAI
         pInstance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT_ENTER);
         pInstance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT);
 
-        //std::list<Player*> targets = me->GetNearestPlayersList(range,true);
+        //std::list<Player*> targets = me->GetNearestPlayersList(range, true);
         //for (std::list<Player*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
         //{
-        //    if((*itr))
+        //    if ((*itr))
         //    {
-        //        if((*itr)->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER,0))
+        //        if ((*itr)->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
         //        {
         //            (*itr)->RemoveAurasDueToSpell(SPELL_TWILIGHT_SHIFT_ENTER);
         //            (*itr)->RemoveAurasDueToSpell(SPELL_TWILIGHT_SHIFT);
@@ -931,7 +931,7 @@ struct dummy_dragonAI : public ScriptedAI
 
     GameObject* DoSpawnGameobject(uint32 uiId, float fX, float fY, float fZ, float fAngle, uint32 uiDespawntime)
     {
-        return me->SummonGameObject(uiId, me->GetPositionX()+fX, me->GetPositionY()+fY, me->GetPositionZ()+fZ, fAngle, 0,0,0,0, uiDespawntime);
+        return me->SummonGameObject(uiId, me->GetPositionX()+fX, me->GetPositionY()+fY, me->GetPositionZ()+fZ, fAngle, 0, 0, 0, 0, uiDespawntime);
     }
 
     //"opens" the portal and does the "opening" whisper
@@ -943,25 +943,25 @@ struct dummy_dragonAI : public ScriptedAI
 
         //using a grid search here seem to be more efficient than caching all four guids
         //in instance script and calculate range to each.
-        //GameObject* pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL,100.0f);
-        //if(!pPortal)
+        //GameObject* pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL, 100.0f);
+        //if (!pPortal)
         //{
         //    sLog.outError("Cannot find Portal");
         //    return;
         //}
 
-        GameObject* pPortal = DoSpawnGameobject(GO_TWILIGHT_PORTAL,(float)(rand()%10),(float)(rand()%10),-1.0f,me->GetOrientation(),0);
-        if(pPortal)
+        GameObject* pPortal = DoSpawnGameobject(GO_TWILIGHT_PORTAL, (float)(rand()%10), (float)(rand()%10), -1.0f, me->GetOrientation(), 0);
+        if (pPortal)
         {
             pPortal->SetFlag(GAMEOBJECT_FACTION, 35);
             pPortal->SetOwnerGUID(0);
             pPortal->SetGoState(GO_STATE_ACTIVE);
-            pPortal->SetPhaseMask(17,true);
+            pPortal->SetPhaseMask(17, true);
 
             m_guidPortal = pPortal->GetGUID();
         }
 
-        switch(me->GetEntry())
+        switch (me->GetEntry())
         {
             case NPC_TENEBRON:
             {
@@ -970,12 +970,12 @@ struct dummy_dragonAI : public ScriptedAI
                 {
                     if (pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                 {
-                    for(uint32 i = 0; i < 6; ++i)
+                    for (uint32 i = 0; i < 6; ++i)
                             DoSummon(NPC_TWILIGHT_EGG, TwilightEggs[i], 20000, TEMPSUMMON_CORPSE_TIMED_DESPAWN);
                 }
                 else
                 {
-                    for(uint32 i = 0; i < 6; ++i)
+                    for (uint32 i = 0; i < 6; ++i)
                             DoSummon(NPC_SARTHARION_TWILIGHT_EGG, TwilightEggsSarth[i], 20000, TEMPSUMMON_CORPSE_TIMED_DESPAWN);
                     }
                 }
@@ -984,9 +984,9 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_SHADRON:
             {
                 iTextId = WHISPER_OPEN_PORTAL;
-                if(pInstance)
+                if (pInstance)
                 {
-                    if(pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                    if (pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                         DoSummon(NPC_ACOLYTE_OF_SHADRON, AcolyteofShadron, 28000, TEMPSUMMON_CORPSE_TIMED_DESPAWN);
                 else
                         DoSummon(NPC_ACOLYTE_OF_SHADRON, AcolyteofShadron2, 28000, TEMPSUMMON_CORPSE_TIMED_DESPAWN);
@@ -1000,7 +1000,7 @@ struct dummy_dragonAI : public ScriptedAI
                 {
                     if (pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     {
-                        if(Creature* Acolyte = DoSummon(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon, 20000, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
+                        if (Creature* Acolyte = DoSummon(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon, 20000, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
                     {
                         me->InterruptNonMeleeSpells(true);
                         Acolyte->InterruptNonMeleeSpells(true);
@@ -1008,7 +1008,7 @@ struct dummy_dragonAI : public ScriptedAI
                 }
                 else
                 {
-                        if(Creature* Acolyte = DoSummon(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon2, 20000, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
+                        if (Creature* Acolyte = DoSummon(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon2, 20000, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
                     {
                         me->InterruptNonMeleeSpells(true);
                         Acolyte->InterruptNonMeleeSpells(true);
@@ -1034,7 +1034,7 @@ struct dummy_dragonAI : public ScriptedAI
     {
         RemovePhasingPlayer();
 
-        if(GameObject* pPortal = GameObject::GetGameObject((*me),m_guidPortal))
+        if (GameObject* pPortal = GameObject::GetGameObject((*me), m_guidPortal))
         {
             pPortal->SetOwnerGUID(me->GetGUID()); //Very important ... else Delete Crash Server
             pPortal->Delete();
@@ -1047,26 +1047,26 @@ struct dummy_dragonAI : public ScriptedAI
         if (!m_bCanLoot)
             me->SetLootRecipient(NULL);
 
-        if(pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+        if (pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
             me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
         int32 iTextId = 0;
         uint32 uiSpellId = 0;
 
-        switch(me->GetEntry())
+        switch (me->GetEntry())
         {
             case NPC_TENEBRON:
                 iTextId = SAY_TENEBRON_DEATH;
                 uiSpellId = SPELL_POWER_OF_TENEBRON;
-                if(pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                if (pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     pInstance->SetData(TYPE_TENEBRON_PREKILLED, DONE);
                 break;
             case NPC_SHADRON:
                 iTextId = SAY_SHADRON_DEATH;
                 uiSpellId = SPELL_POWER_OF_SHADRON;
-                if(pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                if (pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     pInstance->SetData(TYPE_SHADRON_PREKILLED, DONE);
-                if(Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_SHADRON, 100.0f))
+                if (Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_SHADRON, 100.0f))
                 {
                     pAcolyte->Kill(pAcolyte);
                 }
@@ -1074,9 +1074,9 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_VESPERON:
                 iTextId = SAY_VESPERON_DEATH;
                 uiSpellId = SPELL_POWER_OF_VESPERON;
-                if(pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                if (pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     pInstance->SetData(TYPE_VESPERON_PREKILLED, DONE);
-                if(Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 100.0f))
+                if (Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 100.0f))
                 {
                     pAcolyte->Kill(pAcolyte);
                 }
@@ -1174,7 +1174,7 @@ public:
 
         void DoAction(const int32 action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_CLOSE_PORTAL:
                 m_bHasPortalOpen = false;
@@ -1195,7 +1195,7 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE));
@@ -1218,7 +1218,7 @@ public:
             // shadow breath
             if (m_uiShadowBreathTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoScriptText(SAY_TENEBRON_BREATH, me);
                 DoCast(me->getVictim(), RAID_MODE(SPELL_SHADOW_BREATH, SPELL_SHADOW_BREATH_H));
@@ -1229,7 +1229,7 @@ public:
                 m_uiShadowBreathTimer -= uiDiff;
 
             // Don't attack current target if he's not visible for us.
-            //if(me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
+            //if (me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
             //    me->getThreatManager().modifyThreatPercent(me->getVictim(), -100);
 
             DoMeleeAttackIfReady();
@@ -1290,7 +1290,7 @@ public:
 
         void DoAction(const int32 action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_CLOSE_PORTAL:
                 m_bHasPortalOpen = false;
@@ -1311,12 +1311,12 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
 
-                m_uiShadowFissureTimer = urand(15000,20000);
+                m_uiShadowFissureTimer = urand(15000, 20000);
                 }
             }
             else
@@ -1343,7 +1343,7 @@ public:
             // shadow breath
             if (m_uiShadowBreathTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoScriptText(SAY_SHADRON_BREATH, me);
                 DoCast(me->getVictim(), RAID_MODE(SPELL_SHADOW_BREATH, SPELL_SHADOW_BREATH_H));
@@ -1354,7 +1354,7 @@ public:
                 m_uiShadowBreathTimer -= uiDiff;
 
             // Don't attack current target if he's not visible for us.
-            //if(me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
+            //if (me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
             //    me->getThreatManager().modifyThreatPercent(me->getVictim(), -100);
 
             DoMeleeAttackIfReady();
@@ -1409,7 +1409,7 @@ public:
 
         void DoAction(const int32 action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_CLOSE_PORTAL:
                 m_bHasPortalOpen = false;
@@ -1430,12 +1430,12 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
 
-                m_uiShadowFissureTimer = urand(15000,20000);
+                m_uiShadowFissureTimer = urand(15000, 20000);
                 }
             }
             else
@@ -1449,8 +1449,8 @@ public:
                 else
                 {
                     OpenPortal();
-                    DoCast(me->getVictim(), SPELL_TWILIGHT_TORMENT_VESP,true);
-                    m_uiAcolyteVesperonTimer = urand(60000,70000);
+                    DoCast(me->getVictim(), SPELL_TWILIGHT_TORMENT_VESP, true);
+                    m_uiAcolyteVesperonTimer = urand(60000, 70000);
                 }
             }
             else
@@ -1459,7 +1459,7 @@ public:
             // shadow breath
             if (m_uiShadowBreathTimer <= uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoScriptText(SAY_VESPERON_BREATH, me);
                 DoCast(me->getVictim(), RAID_MODE(SPELL_SHADOW_BREATH, SPELL_SHADOW_BREATH_H));
@@ -1470,7 +1470,7 @@ public:
                 m_uiShadowBreathTimer -= uiDiff;
 
             // Don't attack current target if he's not visible for us.
-            //if(me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
+            //if (me->getVictim() && me->getVictim()->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
             //    me->getThreatManager().modifyThreatPercent(me->getVictim(), -100);
 
             DoMeleeAttackIfReady();
@@ -1523,9 +1523,9 @@ public:
                 }
              }
 
-            me->SetPhaseMask(16,true);
+            me->SetPhaseMask(16, true);
 
-            //me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER,me);
+            //me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER, me);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -1533,7 +1533,7 @@ public:
             if (pInstance)
             {
                 Creature* Shadron = pInstance->instance->GetCreature(pInstance->GetData64(DATA_SHADRON));
-                if(Shadron)
+                if (Shadron)
                     Shadron->AI()->DoAction(ACTION_CLOSE_PORTAL);
 
                 Creature* pDebuffTarget = NULL;
@@ -1616,8 +1616,8 @@ public:
             uiDespawnTimer = 28000;
             if (pInstance)
             {
-                me->SetPhaseMask(16,true);
-                //me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER,me);
+                me->SetPhaseMask(16, true);
+                //me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER, me);
             }
             DoCast(me, SPELL_TWILIGHT_TORMENT_VESP_ACO);
         }
@@ -1646,12 +1646,12 @@ public:
 
                     for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                     {
-                        if (i->getSource()->isAlive() && i->getSource()->HasAura(SPELL_TWILIGHT_SHIFT_ENTER,0))
+                        if (i->getSource()->isAlive() && i->getSource()->HasAura(SPELL_TWILIGHT_SHIFT_ENTER, 0))
                         {
                             i->getSource()->RemoveAurasDueToSpell(SPELL_TWILIGHT_SHIFT);
                             i->getSource()->RemoveAurasDueToSpell(SPELL_TWILIGHT_SHIFT_ENTER);
                         }
-                        if (i->getSource()->isAlive() && i->getSource()->HasAura(SPELL_TWILIGHT_TORMENT_VESP,0))
+                        if (i->getSource()->isAlive() && i->getSource()->HasAura(SPELL_TWILIGHT_TORMENT_VESP, 0))
                             i->getSource()->RemoveAurasDueToSpell(SPELL_TWILIGHT_TORMENT_VESP);
                     }
                 }
@@ -1710,8 +1710,8 @@ public:
         {
             if (pInstance)
             {
-                me->SetPhaseMask(16,true);
-                //me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER,me);
+                me->SetPhaseMask(16, true);
+                //me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER, me);
             }
             m_uiFadeArmorTimer = 1000;
             m_uiHatchEggTimer = 20000;
@@ -1739,7 +1739,7 @@ public:
             if (m_uiHatchEggTimer <= uiDiff)
             {
                 Creature* Tenebron = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TENEBRON));
-                if(Tenebron)
+                if (Tenebron)
                     Tenebron->AI()->DoAction(ACTION_CLOSE_PORTAL);
                 SpawnWhelps();
             }
@@ -1772,9 +1772,9 @@ public:
             me->SetDisplayId(11686);
             me->SetFlying(true);
             me->AddAura(SPELL_FLAME_TSUNAMI, me);
-            DoCast(me,SPELL_FLAME_TSUNAMI_COMBINE_AURA,true);
+            DoCast(me, SPELL_FLAME_TSUNAMI_COMBINE_AURA, true);
             fwAction = ACTION_MOVE_NONE;
-            me->SetSpeed(MOVE_FLIGHT,2.0f,true);
+            me->SetSpeed(MOVE_FLIGHT, 2.0f, true);
         }
 
         //uint32 Tsunami_Timer;
@@ -1796,7 +1796,7 @@ public:
 
         void DoAction(const int32 action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_MOVE_RIGHT_1:
             case ACTION_MOVE_RIGHT_2:
@@ -1811,11 +1811,11 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(fwAction != ACTION_MOVE_NONE)
+            if (fwAction != ACTION_MOVE_NONE)
             {
-                if(move_Timer <= diff)
+                if (move_Timer <= diff)
                 {
-                    switch(fwAction)
+                    switch (fwAction)
                     {
                     case ACTION_MOVE_RIGHT_1:
                         me->GetMotionMaster()->MovePoint(0, FlameRight1Direction.GetPositionX(), FlameRight1Direction.GetPositionY(), FlameRight1Direction.GetPositionZ());
@@ -1837,18 +1837,18 @@ public:
                 }else move_Timer -= diff;
             }
 
-            //if(!me->HasAura(SPELL_FLAME_TSUNAMI_DMG_AURA))
-            //    DoCast(me,SPELL_FLAME_TSUNAMI_DMG_AURA,true);
+            //if (!me->HasAura(SPELL_FLAME_TSUNAMI_DMG_AURA))
+            //    DoCast(me, SPELL_FLAME_TSUNAMI_DMG_AURA, true);
 
             //if (Tsunami_Timer <= diff)
             //{
-            //    DoCast(me,SPELL_FLAME_TSUNAMI_DMG_AURA);
+            //    DoCast(me, SPELL_FLAME_TSUNAMI_DMG_AURA);
             //    Tsunami_Timer = 500;
             //}else Tsunami_Timer -= diff;
 
-            //if(TsunamiBuff_timer <= diff)
+            //if (TsunamiBuff_timer <= diff)
             //{
-            //    if (Unit* LavaBlaze = GetClosestCreatureWithEntry(me,NPC_LAVA_BLAZE, 10.0f, true))
+            //    if (Unit* LavaBlaze = GetClosestCreatureWithEntry(me, NPC_LAVA_BLAZE, 10.0f, true))
             //        LavaBlaze->CastSpell(LavaBlaze, SPELL_FLAME_TSUNAMI_BUFF, true);
             //    TsunamiBuff_timer = 1000;
             //}else TsunamiBuff_timer -= diff;
@@ -1892,7 +1892,7 @@ public:
         {
             if (VoidBlast_Timer <= diff)
             {
-                if(casted)
+                if (casted)
                 {
                     me->RemoveAllAuras();
                     me->Kill(me);
@@ -1966,17 +1966,17 @@ public:
 
     bool OnGossipHello(Player* player, GameObject * /*pGO*/)
     {
-        if(player->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER,0))
+        if (player->HasAuraEffect(SPELL_TWILIGHT_SHIFT_ENTER, 0))
         {
             player->RemoveAurasDueToSpell(SPELL_TWILIGHT_SHIFT_ENTER);
             player->RemoveAurasDueToSpell(SPELL_TWILIGHT_SHIFT);
-            player->CastSpell(player,SPELL_TWILIGHT_RESIDUE,true);
+            player->CastSpell(player, SPELL_TWILIGHT_RESIDUE, true);
         }else
         {
             player->RemoveAurasDueToSpell(SPELL_TWILIGHT_TORMENT_SHADOW);
             player->RemoveAurasDueToSpell(SPELL_TWILIGHT_TORMENT_SHAFIR);
 
-            player->CastSpell(player,SPELL_TWILIGHT_SHIFT_ENTER,true);
+            player->CastSpell(player, SPELL_TWILIGHT_SHIFT_ENTER, true);
         }
         return false;
     }

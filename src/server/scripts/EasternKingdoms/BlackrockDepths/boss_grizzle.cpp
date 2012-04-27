@@ -33,56 +33,70 @@
 
 #include "ScriptPCH.h"
 
-enum Spells {
+enum Spells
+{
     SPELL_GROUNDTREMOR = 6524, SPELL_FRENZY = 28371
 };
 
-class boss_grizzle: public CreatureScript {
+class boss_grizzle: public CreatureScript
+{
 public:
-    boss_grizzle() :
-            CreatureScript("boss_grizzle") {
+    boss_grizzle () :
+            CreatureScript("boss_grizzle")
+    {
     }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI (Creature* pCreature) const
+    {
         return new boss_grizzleAI(pCreature);
     }
 
-    struct boss_grizzleAI: public ScriptedAI {
-        boss_grizzleAI(Creature *c) :
-                ScriptedAI(c) {
+    struct boss_grizzleAI: public ScriptedAI
+    {
+        boss_grizzleAI (Creature *c) :
+                ScriptedAI(c)
+        {
         }
 
         uint32 GroundTremor_Timer;
         uint32 Frenzy_Timer;
 
-        void Reset() {
+        void Reset ()
+        {
             GroundTremor_Timer = 12000;
             Frenzy_Timer = 0;
         }
 
-        void EnterCombat(Unit * /*who*/) {
+        void EnterCombat (Unit * /*who*/)
+        {
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI (const uint32 diff)
+        {
             //Return since we have no target
             if (!UpdateVictim())
                 return;
 
             //GroundTremor_Timer
-            if (GroundTremor_Timer <= diff) {
+            if (GroundTremor_Timer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_GROUNDTREMOR);
                 GroundTremor_Timer = 8000;
-            } else
+            }
+            else
                 GroundTremor_Timer -= diff;
 
             //Frenzy_Timer
-            if (HealthBelowPct(51)) {
-                if (Frenzy_Timer <= diff) {
+            if (HealthBelowPct(51))
+            {
+                if (Frenzy_Timer <= diff)
+                {
                     DoCast(me, SPELL_FRENZY);
                     DoScriptText(EMOTE_GENERIC_FRENZY_KILL, me);
 
                     Frenzy_Timer = 15000;
-                } else
+                }
+                else
                     Frenzy_Timer -= diff;
             }
 
@@ -91,6 +105,7 @@ public:
     };
 };
 
-void AddSC_boss_grizzle() {
+void AddSC_boss_grizzle ()
+{
     new boss_grizzle();
 }

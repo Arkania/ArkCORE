@@ -30,24 +30,12 @@ class Unit;
 
 enum DisableType
 {
-    DISABLE_TYPE_SPELL                  = 0,
-    DISABLE_TYPE_QUEST                  = 1,
-    DISABLE_TYPE_MAP                    = 2,
-    DISABLE_TYPE_BATTLEGROUND           = 3,
-    DISABLE_TYPE_ACHIEVEMENT_CRITERIA   = 4,
-    DISABLE_TYPE_OUTDOORPVP             = 5,
+    DISABLE_TYPE_SPELL = 0, DISABLE_TYPE_QUEST = 1, DISABLE_TYPE_MAP = 2, DISABLE_TYPE_BATTLEGROUND = 3, DISABLE_TYPE_ACHIEVEMENT_CRITERIA = 4, DISABLE_TYPE_OUTDOORPVP = 5,
 };
 
 enum SpellDisableTypes
 {
-    SPELL_DISABLE_PLAYER            = 0x1,
-    SPELL_DISABLE_CREATURE          = 0x2,
-    SPELL_DISABLE_PET               = 0x4,
-    SPELL_DISABLE_DEPRECATED_SPELL  = 0x8,
-    SPELL_DISABLE_MAP               = 0x10,
-    SPELL_DISABLE_AREA              = 0x20,
-    MAX_SPELL_DISABLE_TYPE = (  SPELL_DISABLE_PLAYER | SPELL_DISABLE_CREATURE | SPELL_DISABLE_PET |
-                                SPELL_DISABLE_DEPRECATED_SPELL | SPELL_DISABLE_MAP | SPELL_DISABLE_AREA),
+    SPELL_DISABLE_PLAYER = 0x1, SPELL_DISABLE_CREATURE = 0x2, SPELL_DISABLE_PET = 0x4, SPELL_DISABLE_DEPRECATED_SPELL = 0x8, SPELL_DISABLE_MAP = 0x10, SPELL_DISABLE_AREA = 0x20, MAX_SPELL_DISABLE_TYPE = (SPELL_DISABLE_PLAYER | SPELL_DISABLE_CREATURE | SPELL_DISABLE_PET | SPELL_DISABLE_DEPRECATED_SPELL | SPELL_DISABLE_MAP | SPELL_DISABLE_AREA),
 };
 
 #define MAX_DISABLE_TYPES 6
@@ -55,27 +43,27 @@ enum SpellDisableTypes
 struct DisableData
 {
     uint8 flags;
-    std::set<uint32> params[2];                             // params0, params1
+    std::set<uint32> params[2];          // params0, params1
 };
 
-typedef std::map<uint32, DisableData> DisableTypeMap;       // single disables here with optional data
-typedef std::map<DisableType, DisableTypeMap> DisableMap;   // global disable map by source
+typedef std::map<uint32, DisableData> DisableTypeMap;          // single disables here with optional data
+typedef std::map<DisableType, DisableTypeMap> DisableMap;          // global disable map by source
 
 class DisableMgr
 {
-    friend class ACE_Singleton<DisableMgr, ACE_Null_Mutex>;
-    DisableMgr();
-    ~DisableMgr();
+    friend class ACE_Singleton<DisableMgr, ACE_Null_Mutex> ;
+    DisableMgr ();
+    ~DisableMgr ();
 
-    public:
+public:
 
-        void LoadDisables();
-        bool IsDisabledFor(DisableType type, uint32 entry, Unit const* pUnit);
-        void CheckQuestDisables();
+    void LoadDisables ();
+    bool IsDisabledFor (DisableType type, uint32 entry, Unit const* pUnit);
+    void CheckQuestDisables ();
 
-    protected:
+protected:
 
-        DisableMap m_DisableMap;
+    DisableMap m_DisableMap;
 };
 
 #define sDisableMgr ACE_Singleton<DisableMgr, ACE_Null_Mutex>::instance()

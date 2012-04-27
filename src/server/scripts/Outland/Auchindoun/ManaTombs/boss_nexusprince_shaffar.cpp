@@ -54,7 +54,7 @@ enum ePrince
     SPELL_FIREBALL                  = 32363,
     SPELL_FROSTNOVA                 = 32365,
 
-    SPELL_ETHEREAL_BEACON           = 32371,                // Summons NPC_BEACON
+    SPELL_ETHEREAL_BEACON           = 32371,               // Summons NPC_BEACON
     SPELL_ETHEREAL_BEACON_VISUAL    = 32368,
 
     NPC_BEACON                      = 18431,

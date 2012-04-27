@@ -31,29 +31,36 @@
 #include <ace/Guard_T.h>
 #include <ace/Method_Request.h>
 
-class WDBThreadStartReq1: public ACE_Method_Request {
+class WDBThreadStartReq1: public ACE_Method_Request
+{
 public:
 
-    WDBThreadStartReq1() {
+    WDBThreadStartReq1 ()
+    {
     }
 
-    virtual int call() {
+    virtual int call ()
+    {
         return 0;
     }
 };
 
-class WDBThreadEndReq1: public ACE_Method_Request {
+class WDBThreadEndReq1: public ACE_Method_Request
+{
 public:
 
-    WDBThreadEndReq1() {
+    WDBThreadEndReq1 ()
+    {
     }
 
-    virtual int call() {
+    virtual int call ()
+    {
         return 0;
     }
 };
 
-class MapUpdateRequest: public ACE_Method_Request {
+class MapUpdateRequest: public ACE_Method_Request
+{
 private:
 
     Map& m_map;
@@ -62,37 +69,43 @@ private:
 
 public:
 
-    MapUpdateRequest(Map& m, MapUpdater& u, ACE_UINT32 d) :
-            m_map(m), m_updater(u), m_diff(d) {
+    MapUpdateRequest (Map& m, MapUpdater& u, ACE_UINT32 d) :
+            m_map(m), m_updater(u), m_diff(d)
+    {
     }
 
-    virtual int call() {
+    virtual int call ()
+    {
         m_map.Update(m_diff);
         m_updater.update_finished();
         return 0;
     }
 };
 
-MapUpdater::MapUpdater() :
-        m_executor(), m_mutex(), m_condition(m_mutex), pending_requests(0) {
+MapUpdater::MapUpdater () :
+        m_executor(), m_mutex(), m_condition(m_mutex), pending_requests(0)
+{
 }
 
-MapUpdater::~MapUpdater() {
+MapUpdater::~MapUpdater ()
+{
     deactivate();
 }
 
-int MapUpdater::activate(size_t num_threads) {
-    return m_executor.activate((int) num_threads, new WDBThreadStartReq1,
-            new WDBThreadEndReq1);
+int MapUpdater::activate (size_t num_threads)
+{
+    return m_executor.activate((int) num_threads, new WDBThreadStartReq1, new WDBThreadEndReq1);
 }
 
-int MapUpdater::deactivate() {
+int MapUpdater::deactivate ()
+{
     wait();
 
     return m_executor.deactivate();
 }
 
-int MapUpdater::wait() {
+int MapUpdater::wait ()
+{
     ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, m_mutex, -1);
 
     while (pending_requests > 0)
@@ -101,14 +114,15 @@ int MapUpdater::wait() {
     return 0;
 }
 
-int MapUpdater::schedule_update(Map& map, ACE_UINT32 diff) {
+int MapUpdater::schedule_update (Map& map, ACE_UINT32 diff)
+{
     ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, m_mutex, -1);
 
     ++pending_requests;
 
-    if (m_executor.execute(new MapUpdateRequest(map, *this, diff)) == -1) {
-        ACE_DEBUG(
-                (LM_ERROR, ACE_TEXT("(%t) \n"), ACE_TEXT("Failed to schedule Map Update")));
+    if (m_executor.execute(new MapUpdateRequest(map, *this, diff)) == -1)
+    {
+        ACE_DEBUG( (LM_ERROR, ACE_TEXT("(%t) \n"), ACE_TEXT("Failed to schedule Map Update")));
 
         --pending_requests;
         return -1;
@@ -117,16 +131,18 @@ int MapUpdater::schedule_update(Map& map, ACE_UINT32 diff) {
     return 0;
 }
 
-bool MapUpdater::activated() {
+bool MapUpdater::activated ()
+{
     return m_executor.activated();
 }
 
-void MapUpdater::update_finished() {
+void MapUpdater::update_finished ()
+{
     ACE_GUARD(ACE_Thread_Mutex, guard, m_mutex);
 
-    if (pending_requests == 0) {
-        ACE_ERROR(
-                (LM_ERROR, ACE_TEXT("(%t)\n"), ACE_TEXT("MapUpdater::update_finished BUG, report to devs")));
+    if (pending_requests == 0)
+    {
+        ACE_ERROR( (LM_ERROR, ACE_TEXT("(%t)\n"), ACE_TEXT("MapUpdater::update_finished BUG, report to devs")));
         return;
     }
 

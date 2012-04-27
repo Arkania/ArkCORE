@@ -27,7 +27,7 @@ class SpellInfo;
 
 class SpellScaling
 {
-    bool  _canScale;
+    bool _canScale;
     int32 _castTime;
 
 public:
@@ -36,10 +36,16 @@ public:
     float max[3];
     float pts[3];
 
-    bool  CanUseScale() { return _canScale; }
-    int32 GetCastTime() { return _castTime; }
+    bool CanUseScale ()
+    {
+        return _canScale;
+    }
+    int32 GetCastTime ()
+    {
+        return _castTime;
+    }
 
-    float GetGtSpellScalingValue(int8 classId, uint8 level)
+    float GetGtSpellScalingValue (int8 classId, uint8 level)
     {
         classId = classId < 0 ? MAX_CLASSES : classId;
 
@@ -53,7 +59,7 @@ public:
         return _coef;
     }
 
-    SpellScaling(SpellInfo const* spellInfo, uint8 level)
+    SpellScaling (SpellInfo const* spellInfo, uint8 level)
     {
         _canScale = false;
         _castTime = 0;
@@ -101,12 +107,12 @@ public:
 
             avg[effIndex] = mult * gtCoef;
             if (castTimeMax > 0)
-                avg[effIndex] *= float(_castTime)/float(castTimeMax);
+                avg[effIndex] *= float(_castTime) / float(castTimeMax);
 
             min[effIndex] = roundf(avg[effIndex]) - std::floor(avg[effIndex] * randommult / 2);
             max[effIndex] = roundf(avg[effIndex]) + std::floor(avg[effIndex] * randommult / 2);
             pts[effIndex] = roundf(othermult * gtCoef);
-            avg[effIndex] = std::max((float)ceil(mult), roundf(avg[effIndex]));
+            avg[effIndex] = std::max((float) ceil(mult), roundf(avg[effIndex]));
         }
 
         _canScale = true;

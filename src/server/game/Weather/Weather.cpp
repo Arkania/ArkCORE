@@ -37,30 +37,31 @@
 #include "ScriptMgr.h"
 
 /// Create the Weather object
-Weather::Weather(uint32 zone, WeatherData const* weatherChances) :
-        m_zone(zone), m_weatherChances(weatherChances) {
+Weather::Weather (uint32 zone, WeatherData const* weatherChances) :
+        m_zone(zone), m_weatherChances(weatherChances)
+{
     m_timer.SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_CHANGEWEATHER));
     m_type = WEATHER_TYPE_FINE;
     m_grade = 0;
 
-    sLog->outDetail(
-            "WORLD: Starting weather system for zone %u (change every %u minutes).",
-            m_zone,
-            (uint32) (m_timer.GetInterval() / (MINUTE * IN_MILLISECONDS)));
+    sLog->outDetail("WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32) (m_timer.GetInterval() / (MINUTE * IN_MILLISECONDS)));
 }
 
 /// Launch a weather update
-bool Weather::Update(uint32 diff) {
+bool Weather::Update (uint32 diff)
+{
     if (m_timer.GetCurrent() >= 0)
         m_timer.Update(diff);
     else
         m_timer.SetCurrent(0);
 
     ///- If the timer has passed, ReGenerate the weather
-    if (m_timer.Passed()) {
+    if (m_timer.Passed())
+    {
         m_timer.Reset();
         // update only if Regenerate has changed the weather
-        if (ReGenerate()) {
+        if (ReGenerate())
+        {
             ///- Weather will be removed if not updated (no players in zone anymore)
             if (!UpdateWeather())
                 return false;
@@ -72,8 +73,10 @@ bool Weather::Update(uint32 diff) {
 }
 
 /// Calculate the new weather
-bool Weather::ReGenerate() {
-    if (!m_weatherChances) {
+bool Weather::ReGenerate ()
+{
+    if (!m_weatherChances)
+    {
         m_type = WEATHER_TYPE_FINE;
         m_grade = 0.0f;
         return false;
@@ -99,49 +102,54 @@ bool Weather::ReGenerate() {
     struct tm * ltime = localtime(&gtime);
     uint32 season = ((ltime->tm_yday - 78 + 365) / 91) % 4;
 
-    static char const* seasonName[WEATHER_SEASONS] = { "spring", "summer",
-            "fall", "winter" };
+    static char const* seasonName[WEATHER_SEASONS] =
+    { "spring", "summer", "fall", "winter" };
 
-    sLog->outDetail("Generating a change in %s weather for zone %u.",
-            seasonName[season], m_zone);
+    sLog->outDetail("Generating a change in %s weather for zone %u.", seasonName[season], m_zone);
 
-    if ((u < 60) && (m_grade < 0.33333334f)) // Get fair
-            {
+    if ((u < 60) && (m_grade < 0.33333334f))          // Get fair
+    {
         m_type = WEATHER_TYPE_FINE;
         m_grade = 0.0f;
     }
 
-    if ((u < 60) && (m_type != WEATHER_TYPE_FINE)) // Get better
-            {
+    if ((u < 60) && (m_type != WEATHER_TYPE_FINE))          // Get better
+    {
         m_grade -= 0.33333334f;
         return true;
     }
 
-    if ((u < 90) && (m_type != WEATHER_TYPE_FINE)) // Get worse
-            {
+    if ((u < 90) && (m_type != WEATHER_TYPE_FINE))          // Get worse
+    {
         m_grade += 0.33333334f;
         return true;
     }
 
-    if (m_type != WEATHER_TYPE_FINE) {
+    if (m_type != WEATHER_TYPE_FINE)
+    {
         /// Radical change:
         ///- if light -> heavy
         ///- if medium -> change weather type
         ///- if heavy -> 50% light, 50% change weather type
 
-        if (m_grade < 0.33333334f) {
-            m_grade = 0.9999f; // go nuts
+        if (m_grade < 0.33333334f)
+        {
+            m_grade = 0.9999f;          // go nuts
             return true;
-        } else {
-            if (m_grade > 0.6666667f) {
+        }
+        else
+        {
+            if (m_grade > 0.6666667f)
+            {
                 // Severe change, but how severe?
                 uint32 rnd = urand(0, 99);
-                if (rnd < 50) {
+                if (rnd < 50)
+                {
                     m_grade -= 0.6666667f;
                     return true;
                 }
             }
-            m_type = WEATHER_TYPE_FINE; // clear up
+            m_type = WEATHER_TYPE_FINE;          // clear up
             m_grade = 0;
         }
     }
@@ -167,11 +175,16 @@ bool Weather::ReGenerate() {
     ///- 7% heavy
     /// If fine 100% sun (no fog)
 
-    if (m_type == WEATHER_TYPE_FINE) {
+    if (m_type == WEATHER_TYPE_FINE)
+    {
         m_grade = 0.0f;
-    } else if (u < 90) {
+    }
+    else if (u < 90)
+    {
         m_grade = (float) rand_norm() * 0.3333f;
-    } else {
+    }
+    else
+    {
         // Severe change, but how severe?
         rnd = urand(0, 99);
         if (rnd < 50)
@@ -184,14 +197,16 @@ bool Weather::ReGenerate() {
     return m_type != old_type || m_grade != old_grade;
 }
 
-void Weather::SendWeatherUpdateToPlayer(Player *player) {
+void Weather::SendWeatherUpdateToPlayer (Player *player)
+{
     WorldPacket data(SMSG_WEATHER, (4 + 4 + 4));
 
     data << uint32(GetWeatherState()) << (float) m_grade << uint8(0);
     player->GetSession()->SendPacket(&data);
 }
 
-void Weather::SendFineWeatherUpdateToPlayer(Player *player) {
+void Weather::SendFineWeatherUpdateToPlayer (Player *player)
+{
     WorldPacket data(SMSG_WEATHER, (4 + 4 + 4));
 
     data << (uint32) WEATHER_STATE_FINE << (float) 0.0f << uint8(0);
@@ -199,7 +214,8 @@ void Weather::SendFineWeatherUpdateToPlayer(Player *player) {
 }
 
 /// Send the new weather to all players in the zone
-bool Weather::UpdateWeather() {
+bool Weather::UpdateWeather ()
+{
     Player* player = sWorld->FindPlayerInZone(m_zone);
     if (!player)
         return false;
@@ -218,7 +234,8 @@ bool Weather::UpdateWeather() {
 
     ///- Log the event
     char const* wthstr;
-    switch (state) {
+    switch (state)
+    {
     case WEATHER_STATE_LIGHT_RAIN:
         wthstr = "light rain";
         break;
@@ -264,7 +281,8 @@ bool Weather::UpdateWeather() {
 }
 
 /// Set the weather
-void Weather::SetWeather(WeatherType type, float grade) {
+void Weather::SetWeather (WeatherType type, float grade)
+{
     if (m_type == type && m_grade == grade)
         return;
 
@@ -274,11 +292,13 @@ void Weather::SetWeather(WeatherType type, float grade) {
 }
 
 /// Get the sound number associated with the current weather
-WeatherState Weather::GetWeatherState() const {
+WeatherState Weather::GetWeatherState () const
+{
     if (m_grade < 0.27f)
         return WEATHER_STATE_FINE;
 
-    switch (m_type) {
+    switch (m_type)
+    {
     case WEATHER_TYPE_RAIN:
         if (m_grade < 0.40f)
             return WEATHER_STATE_LIGHT_RAIN;

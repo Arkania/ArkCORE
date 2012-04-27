@@ -21,7 +21,7 @@
 #include "soapH.h"
 #include "soapStub.h"
 
-void TCSoapRunnable::run()
+void TCSoapRunnable::run ()
 {
     struct soap soap;
     soap_init(&soap);
@@ -43,10 +43,10 @@ void TCSoapRunnable::run()
     while (!World::IsStopped())
     {
         if (!soap_valid_socket(soap_accept(&soap)))
-            continue;   // ran into an accept timeout
+            continue;          // ran into an accept timeout
 
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip>>24)&0xFF, (int)(soap.ip>>16)&0xFF, (int)(soap.ip>>8)&0xFF, (int)soap.ip&0xFF);
-        struct soap* thread_soap = soap_copy(&soap);// make a safe copy
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: accepted connection from IP=%d.%d.%d.%d", (int) (soap.ip >> 24) & 0xFF, (int) (soap.ip >> 16) & 0xFF, (int) (soap.ip >> 8) & 0xFF, (int) soap.ip & 0xFF);
+        struct soap* thread_soap = soap_copy(&soap);          // make a safe copy
 
         ACE_Message_Block* mb = new ACE_Message_Block(sizeof(struct soap*));
         ACE_OS::memcpy(mb->wr_ptr(), &thread_soap, sizeof(struct soap*));
@@ -56,26 +56,27 @@ void TCSoapRunnable::run()
     soap_done(&soap);
 }
 
-void TCSoapRunnable::process_message(ACE_Message_Block* mb)
+void TCSoapRunnable::process_message (ACE_Message_Block* mb)
 {
     ACE_TRACE (ACE_TEXT ("SOAPWorkingThread::process_message"));
 
     struct soap* soap;
-    ACE_OS::memcpy(&soap, mb->rd_ptr (), sizeof(struct soap*));
+    ACE_OS::memcpy(&soap, mb->rd_ptr(), sizeof(struct soap*));
     mb->release();
 
     soap_serve(soap);
-    soap_destroy(soap); // dealloc C++ data
-    soap_end(soap); // dealloc data and clean up
-    soap_done(soap); // detach soap struct
+    soap_destroy(soap);
+    // dealloc C++ data
+    soap_end(soap);          // dealloc data and clean up
+    soap_done(soap);          // detach soap struct
     free(soap);
 }
 /*
-Code used for generating stubs:
+ Code used for generating stubs:
 
-int ns1__executeCommand(char* command, char** result);
-*/
-int ns1__executeCommand(soap* soap, char* command, char** result)
+ int ns1__executeCommand(char* command, char** result);
+ */
+int ns1__executeCommand (soap* soap, char* command, char** result)
 {
     // security check
     if (!soap->userid || !soap->passwd)
@@ -136,9 +137,9 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
         return soap_sender_fault(soap, printBuffer, printBuffer);
 }
 
-void SOAPCommand::commandFinished(void* soapconnection, bool success)
+void SOAPCommand::commandFinished (void* soapconnection, bool success)
 {
-    SOAPCommand* con = (SOAPCommand*)soapconnection;
+    SOAPCommand* con = (SOAPCommand*) soapconnection;
     con->setCommandSuccess(success);
     con->pendingCommands.release();
 }
@@ -150,10 +151,10 @@ void SOAPCommand::commandFinished(void* soapconnection, bool success)
 ////////////////////////////////////////////////////////////////////////////////
 
 struct Namespace namespaces[] =
-{   { "SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/", NULL, NULL }, // must be first
-    { "SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", NULL, NULL }, // must be second
-    { "xsi", "http://www.w3.org/1999/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL },
-    { "xsd", "http://www.w3.org/1999/XMLSchema",          "http://www.w3.org/*/XMLSchema", NULL },
-    { "ns1", "urn:TC", NULL, NULL },     // "ns1" namespace prefix
-    { NULL, NULL, NULL, NULL }
-};
+{
+{ "SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/", NULL, NULL },          // must be first
+{ "SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", NULL, NULL },          // must be second
+{ "xsi", "http://www.w3.org/1999/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL },
+{ "xsd", "http://www.w3.org/1999/XMLSchema", "http://www.w3.org/*/XMLSchema", NULL },
+{ "ns1", "urn:TC", NULL, NULL },          // "ns1" namespace prefix
+{ NULL, NULL, NULL, NULL } };

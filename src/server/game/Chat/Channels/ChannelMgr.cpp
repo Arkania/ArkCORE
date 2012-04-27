@@ -27,10 +27,10 @@
 
 #include "World.h"
 
-ChannelMgr* channelMgr(uint32 team)
+ChannelMgr* channelMgr (uint32 team)
 {
     if (sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
-        return ACE_Singleton<AllianceChannelMgr, ACE_Null_Mutex>::instance();        // cross-faction
+        return ACE_Singleton<AllianceChannelMgr, ACE_Null_Mutex>::instance();          // cross-faction
 
     if (team == ALLIANCE)
         return ACE_Singleton<AllianceChannelMgr, ACE_Null_Mutex>::instance();
@@ -40,7 +40,7 @@ ChannelMgr* channelMgr(uint32 team)
     return NULL;
 }
 
-ChannelMgr::~ChannelMgr()
+ChannelMgr::~ChannelMgr ()
 {
     for (ChannelMap::iterator itr = channels.begin(); itr != channels.end(); ++itr)
         delete itr->second;
@@ -48,7 +48,7 @@ ChannelMgr::~ChannelMgr()
     channels.clear();
 }
 
-Channel *ChannelMgr::GetJoinChannel(std::string name, uint32 channel_id)
+Channel *ChannelMgr::GetJoinChannel (std::string name, uint32 channel_id)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -64,7 +64,7 @@ Channel *ChannelMgr::GetJoinChannel(std::string name, uint32 channel_id)
     return channels[wname];
 }
 
-Channel *ChannelMgr::GetChannel(std::string name, Player *p, bool pkt)
+Channel *ChannelMgr::GetChannel (std::string name, Player *p, bool pkt)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -87,7 +87,7 @@ Channel *ChannelMgr::GetChannel(std::string name, Player *p, bool pkt)
         return i->second;
 }
 
-void ChannelMgr::LeftChannel(std::string name)
+void ChannelMgr::LeftChannel (std::string name)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -107,8 +107,8 @@ void ChannelMgr::LeftChannel(std::string name)
     }
 }
 
-void ChannelMgr::MakeNotOnPacket(WorldPacket *data, std::string name)
+void ChannelMgr::MakeNotOnPacket (WorldPacket *data, std::string name)
 {
-    data->Initialize(SMSG_CHANNEL_NOTIFY, (1+10));  // we guess size
-    (*data) << (uint8)0x05 << name;
+    data->Initialize(SMSG_CHANNEL_NOTIFY, (1 + 10));          // we guess size
+    (*data) << (uint8) 0x05 << name;
 }

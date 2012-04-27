@@ -49,28 +49,28 @@
  ## AreaTrigger_at_aldurthar_gate
  ######*/
 
-enum eAldurtharGate {
+enum eAldurtharGate
+{
     TRIGGER_SOUTH = 5284,
 
-    TRIGGER_CENTRAL = 5285,
-    TRIGGER_NORTH = 5286,
-    TRIGGER_NORTHWEST = 5287,
+    TRIGGER_CENTRAL = 5285, TRIGGER_NORTH = 5286, TRIGGER_NORTHWEST = 5287,
 
-    NPC_SOUTH_GATE = 32195,
-    NPC_CENTRAL_GATE = 32196,
-    NPC_NORTH_GATE = 32197,
-    NPC_NORTHWEST_GATE = 32199
+    NPC_SOUTH_GATE = 32195, NPC_CENTRAL_GATE = 32196, NPC_NORTH_GATE = 32197, NPC_NORTHWEST_GATE = 32199
 };
 
-class AreaTrigger_at_aldurthar_gate: public AreaTriggerScript {
+class AreaTrigger_at_aldurthar_gate: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_aldurthar_gate() :
-            AreaTriggerScript("at_aldurthar_gate") {
+    AreaTrigger_at_aldurthar_gate () :
+            AreaTriggerScript("at_aldurthar_gate")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger) {
-        switch (trigger->id) {
+    bool OnTrigger (Player* player, AreaTriggerEntry const* trigger)
+    {
+        switch (trigger->id)
+        {
         case TRIGGER_SOUTH:
             player->KilledMonsterCredit(NPC_SOUTH_GATE, 0);
             break;
@@ -92,18 +92,22 @@ public:
  ## at_coilfang_waterfall
  ######*/
 
-enum eCoilfangGOs {
+enum eCoilfangGOs
+{
     GO_COILFANG_WATERFALL = 184212
 };
 
-class AreaTrigger_at_coilfang_waterfall: public AreaTriggerScript {
+class AreaTrigger_at_coilfang_waterfall: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_coilfang_waterfall() :
-            AreaTriggerScript("at_coilfang_waterfall") {
+    AreaTrigger_at_coilfang_waterfall () :
+            AreaTriggerScript("at_coilfang_waterfall")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) {
+    bool OnTrigger (Player* player, AreaTriggerEntry const* /*trigger*/)
+    {
         if (GameObject* pGo = GetClosestGameObjectWithEntry(player, GO_COILFANG_WATERFALL, 35.0f))
             if (pGo->getLootState() == GO_READY)
                 pGo->UseDoorOrButton();
@@ -116,29 +120,34 @@ public:
  ## at_legion_teleporter
  #####*/
 
-enum eLegionTeleporter {
+enum eLegionTeleporter
+{
     SPELL_TELE_A_TO = 37387, QUEST_GAINING_ACCESS_A = 10589,
 
     SPELL_TELE_H_TO = 37389, QUEST_GAINING_ACCESS_H = 10604
 };
 
-class AreaTrigger_at_legion_teleporter: public AreaTriggerScript {
+class AreaTrigger_at_legion_teleporter: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_legion_teleporter() :
-            AreaTriggerScript("at_legion_teleporter") {
+    AreaTrigger_at_legion_teleporter () :
+            AreaTriggerScript("at_legion_teleporter")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) {
-        if (player->isAlive() && !player->isInCombat()) {
-            if (player->GetTeam() == ALLIANCE
-                    && player->GetQuestRewardStatus(QUEST_GAINING_ACCESS_A)) {
+    bool OnTrigger (Player* player, AreaTriggerEntry const* /*trigger*/)
+    {
+        if (player->isAlive() && !player->isInCombat())
+        {
+            if (player->GetTeam() == ALLIANCE && player->GetQuestRewardStatus(QUEST_GAINING_ACCESS_A))
+            {
                 player->CastSpell(player, SPELL_TELE_A_TO, false);
                 return true;
             }
 
-            if (player->GetTeam() == HORDE
-                    && player->GetQuestRewardStatus(QUEST_GAINING_ACCESS_H)) {
+            if (player->GetTeam() == HORDE && player->GetQuestRewardStatus(QUEST_GAINING_ACCESS_H))
+            {
                 player->CastSpell(player, SPELL_TELE_H_TO, false);
                 return true;
             }
@@ -149,20 +158,23 @@ public:
     }
 };
 
-enum eRavenholdt {
+enum eRavenholdt
+{
     QUEST_MANOR_RAVENHOLDT = 6681, NPC_RAVENHOLDT = 13936
 };
 
-class AreaTrigger_at_ravenholdt: public AreaTriggerScript {
+class AreaTrigger_at_ravenholdt: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_ravenholdt() :
-            AreaTriggerScript("at_ravenholdt") {
+    AreaTrigger_at_ravenholdt () :
+            AreaTriggerScript("at_ravenholdt")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) {
-        if (player->GetQuestStatus(QUEST_MANOR_RAVENHOLDT)
-                == QUEST_STATUS_INCOMPLETE)
+    bool OnTrigger (Player* player, AreaTriggerEntry const* /*trigger*/)
+    {
+        if (player->GetQuestStatus(QUEST_MANOR_RAVENHOLDT) == QUEST_STATUS_INCOMPLETE)
             player->KilledMonsterCredit(NPC_RAVENHOLDT, 0);
 
         return false;
@@ -173,30 +185,30 @@ public:
  ## at_warsong_farms
  ######*/
 
-enum eWarsongFarms {
+enum eWarsongFarms
+{
     QUEST_THE_WARSONG_FARMS = 11686,
 
-    NPC_CREDIT_SLAUGHTERHOUSE = 25672,
-    NPC_CREDIT_GRAINERY = 25669,
-    NPC_CREDIT_TORP_FARM = 25671,
+    NPC_CREDIT_SLAUGHTERHOUSE = 25672, NPC_CREDIT_GRAINERY = 25669, NPC_CREDIT_TORP_FARM = 25671,
 
-    AT_SLAUGHTERHOUSE = 4873,
-    AT_GRAINERY = 4871,
-    AT_TORP_FARM = 4872
+    AT_SLAUGHTERHOUSE = 4873, AT_GRAINERY = 4871, AT_TORP_FARM = 4872
 };
 
-class AreaTrigger_at_warsong_farms: public AreaTriggerScript {
+class AreaTrigger_at_warsong_farms: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_warsong_farms() :
-            AreaTriggerScript("at_warsong_farms") {
+    AreaTrigger_at_warsong_farms () :
+            AreaTriggerScript("at_warsong_farms")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger) {
-        if (!player->isDead()
-                && player->GetQuestStatus(QUEST_THE_WARSONG_FARMS)
-                        == QUEST_STATUS_INCOMPLETE) {
-            switch (trigger->id) {
+    bool OnTrigger (Player* player, AreaTriggerEntry const* trigger)
+    {
+        if (!player->isDead() && player->GetQuestStatus(QUEST_THE_WARSONG_FARMS) == QUEST_STATUS_INCOMPLETE)
+        {
+            switch (trigger->id)
+            {
             case AT_SLAUGHTERHOUSE:
                 player->KilledMonsterCredit(NPC_CREDIT_SLAUGHTERHOUSE, 0);
                 break;
@@ -216,25 +228,26 @@ public:
  ## at_stormwright_shelf
  ######*/
 
-enum eStormwrightShelf {
+enum eStormwrightShelf
+{
     QUEST_STRENGTH_OF_THE_TEMPEST = 12741,
 
     SPELL_CREATE_TRUE_POWER_OF_THE_TEMPEST = 53067
 };
 
-class AreaTrigger_at_stormwright_shelf: public AreaTriggerScript {
+class AreaTrigger_at_stormwright_shelf: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_stormwright_shelf() :
-            AreaTriggerScript("at_stormwright_shelf") {
+    AreaTrigger_at_stormwright_shelf () :
+            AreaTriggerScript("at_stormwright_shelf")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) {
-        if (!player->isDead()
-                && player->GetQuestStatus(QUEST_STRENGTH_OF_THE_TEMPEST)
-                        == QUEST_STATUS_INCOMPLETE)
-            player->CastSpell(player, SPELL_CREATE_TRUE_POWER_OF_THE_TEMPEST,
-                    false);
+    bool OnTrigger (Player* player, AreaTriggerEntry const* /*trigger*/)
+    {
+        if (!player->isDead() && player->GetQuestStatus(QUEST_STRENGTH_OF_THE_TEMPEST) == QUEST_STATUS_INCOMPLETE)
+            player->CastSpell(player, SPELL_CREATE_TRUE_POWER_OF_THE_TEMPEST, false);
 
         return true;
     }
@@ -244,26 +257,26 @@ public:
  ## at_scent_larkorwi
  ######*/
 
-enum eScentLarkorwi {
+enum eScentLarkorwi
+{
     QUEST_SCENT_OF_LARKORWI = 4291, NPC_LARKORWI_MATE = 9683
 };
 
-class AreaTrigger_at_scent_larkorwi: public AreaTriggerScript {
+class AreaTrigger_at_scent_larkorwi: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_scent_larkorwi() :
-            AreaTriggerScript("at_scent_larkorwi") {
+    AreaTrigger_at_scent_larkorwi () :
+            AreaTriggerScript("at_scent_larkorwi")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/) {
-        if (!player->isDead()
-                && player->GetQuestStatus(QUEST_SCENT_OF_LARKORWI)
-                        == QUEST_STATUS_INCOMPLETE) {
+    bool OnTrigger (Player* player, AreaTriggerEntry const* /*trigger*/)
+    {
+        if (!player->isDead() && player->GetQuestStatus(QUEST_SCENT_OF_LARKORWI) == QUEST_STATUS_INCOMPLETE)
+        {
             if (!player->FindNearestCreature(NPC_LARKORWI_MATE, 15))
-                player->SummonCreature(NPC_LARKORWI_MATE,
-                        player->GetPositionX() + 5, player->GetPositionY(),
-                        player->GetPositionZ(), 3.3f,
-                        TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 100000);
+                player->SummonCreature(NPC_LARKORWI_MATE, player->GetPositionX() + 5, player->GetPositionY(), player->GetPositionZ(), 3.3f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 100000);
         }
 
         return false;
@@ -274,35 +287,32 @@ public:
  ## at_last_rites
  #####*/
 
-enum eAtLastRites {
+enum eAtLastRites
+{
     QUEST_LAST_RITES = 12019, QUEST_BREAKING_THROUGH = 11898,
 };
 
-class AreaTrigger_at_last_rites: public AreaTriggerScript {
+class AreaTrigger_at_last_rites: public AreaTriggerScript
+{
 public:
 
-    AreaTrigger_at_last_rites() :
-            AreaTriggerScript("at_last_rites") {
+    AreaTrigger_at_last_rites () :
+            AreaTriggerScript("at_last_rites")
+    {
     }
 
-    bool OnTrigger(Player* player, AreaTriggerEntry const* trigger) {
-        if (!(player->GetQuestStatus(QUEST_LAST_RITES)
-                == QUEST_STATUS_INCOMPLETE
-                || player->GetQuestStatus(QUEST_LAST_RITES)
-                        == QUEST_STATUS_COMPLETE
-                || player->GetQuestStatus(QUEST_BREAKING_THROUGH)
-                        == QUEST_STATUS_INCOMPLETE
-                || player->GetQuestStatus(QUEST_BREAKING_THROUGH)
-                        == QUEST_STATUS_COMPLETE))
+    bool OnTrigger (Player* player, AreaTriggerEntry const* trigger)
+    {
+        if (!(player->GetQuestStatus(QUEST_LAST_RITES) == QUEST_STATUS_INCOMPLETE || player->GetQuestStatus(QUEST_LAST_RITES) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_BREAKING_THROUGH) == QUEST_STATUS_INCOMPLETE || player->GetQuestStatus(QUEST_BREAKING_THROUGH) == QUEST_STATUS_COMPLETE))
             return false;
 
         WorldLocation pPosition;
 
-        switch (trigger->id) {
+        switch (trigger->id)
+        {
         case 5332:
         case 5338:
-            pPosition = WorldLocation(571, 3733.68f, 3563.25f, 290.812f,
-                    3.665192f);
+            pPosition = WorldLocation(571, 3733.68f, 3563.25f, 290.812f, 3.665192f);
             break;
         case 5334:
             pPosition = WorldLocation(571, 3802.38f, 3585.95f, 49.5765f, 0.0f);
@@ -320,7 +330,8 @@ public:
     }
 };
 
-void AddSC_areatrigger_scripts() {
+void AddSC_areatrigger_scripts ()
+{
     new AreaTrigger_at_aldurthar_gate();
     new AreaTrigger_at_coilfang_waterfall();
     new AreaTrigger_at_legion_teleporter();

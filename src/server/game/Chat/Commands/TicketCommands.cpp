@@ -33,18 +33,18 @@
 #include "Chat.h"
 #include "Player.h"
 
-std::string ChatHandler::PGetParseString(int32 entry, ...)
+std::string ChatHandler::PGetParseString (int32 entry, ...)
 {
     const char *format = GetArkCoreString(entry);
     va_list ap;
-    char str [1024];
+    char str[1024];
     va_start(ap, entry);
     vsnprintf(str, 1024, format, ap);
     va_end(ap);
-    return (std::string)str;
+    return (std::string) str;
 }
 
-bool ChatHandler::HandleGMTicketListCommand(const char* /*args*/)
+bool ChatHandler::HandleGMTicketListCommand (const char* /*args*/)
 {
     SendSysMessage(LANG_COMMAND_TICKETSHOWLIST);
     for (GmTicketList::iterator itr = sTicketMgr->m_GMTicketList.begin(); itr != sTicketMgr->m_GMTicketList.end(); ++itr)
@@ -66,7 +66,7 @@ bool ChatHandler::HandleGMTicketListCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketListOnlineCommand(const char* /*args*/)
+bool ChatHandler::HandleGMTicketListOnlineCommand (const char* /*args*/)
 {
     SendSysMessage(LANG_COMMAND_TICKETSHOWONLINELIST);
     for (GmTicketList::iterator itr = sTicketMgr->m_GMTicketList.begin(); itr != sTicketMgr->m_GMTicketList.end(); ++itr)
@@ -87,7 +87,7 @@ bool ChatHandler::HandleGMTicketListOnlineCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketListClosedCommand(const char* /*args*/)
+bool ChatHandler::HandleGMTicketListClosedCommand (const char* /*args*/)
 {
     SendSysMessage(LANG_COMMAND_TICKETSHOWCLOSEDLIST);
     for (GmTicketList::iterator itr = sTicketMgr->m_GMTicketList.begin(); itr != sTicketMgr->m_GMTicketList.end(); ++itr)
@@ -109,7 +109,7 @@ bool ChatHandler::HandleGMTicketListClosedCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketListEscalatedCommand(const char* /*args*/)
+bool ChatHandler::HandleGMTicketListEscalatedCommand (const char* /*args*/)
 {
     SendSysMessage(LANG_COMMAND_TICKETSHOWESCALATEDLIST);
     for (GmTicketList::iterator itr = sTicketMgr->m_GMTicketList.begin(); itr != sTicketMgr->m_GMTicketList.end(); ++itr)
@@ -128,7 +128,7 @@ bool ChatHandler::HandleGMTicketListEscalatedCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketGetByIdCommand(const char* args)
+bool ChatHandler::HandleGMTicketGetByIdCommand (const char* args)
 {
     if (!*args)
         return false;
@@ -152,21 +152,21 @@ bool ChatHandler::HandleGMTicketGetByIdCommand(const char* args)
     if (sObjectMgr->GetPlayerNameByGUID(ticket->assignedToGM, gmname))
         ss << PGetParseString(LANG_COMMAND_TICKETLISTASSIGNEDTO, gmname.c_str());
 
-    ss <<  PGetParseString(LANG_COMMAND_TICKETLISTMESSAGE, ticket->message.c_str());
+    ss << PGetParseString(LANG_COMMAND_TICKETLISTMESSAGE, ticket->message.c_str());
 
     if (strlen(ticket->comment.c_str()) != 0)
-        ss <<  PGetParseString(LANG_COMMAND_TICKETLISTCOMMENT, ticket->comment.c_str());
+        ss << PGetParseString(LANG_COMMAND_TICKETLISTCOMMENT, ticket->comment.c_str());
 
     SendSysMessage(ss.str().c_str());
     return true;
 }
 
-bool ChatHandler::HandleGMTicketGetByNameCommand(const char* args)
+bool ChatHandler::HandleGMTicketGetByNameCommand (const char* args)
 {
     if (!*args)
         return false;
 
-    std::string name = (char*)args;
+    std::string name = (char*) args;
     normalizePlayerName(name);
 
     Player *plr = sObjectMgr->GetPlayer(name.c_str());
@@ -194,17 +194,17 @@ bool ChatHandler::HandleGMTicketGetByNameCommand(const char* args)
     if (sObjectMgr->GetPlayerNameByGUID(ticket->assignedToGM, gmname))
         ss << PGetParseString(LANG_COMMAND_TICKETLISTASSIGNEDTO, gmname.c_str());
 
-    ss <<  PGetParseString(LANG_COMMAND_TICKETLISTMESSAGE, ticket->message.c_str());
+    ss << PGetParseString(LANG_COMMAND_TICKETLISTMESSAGE, ticket->message.c_str());
 
     if (strlen(ticket->comment.c_str()) != 0)
-        ss <<  PGetParseString(LANG_COMMAND_TICKETLISTCOMMENT, ticket->comment.c_str());
+        ss << PGetParseString(LANG_COMMAND_TICKETLISTCOMMENT, ticket->comment.c_str());
 
     SendSysMessage(ss.str().c_str());
 
     return true;
 }
 
-bool ChatHandler::HandleGMTicketCloseByIdCommand(const char* args)
+bool ChatHandler::HandleGMTicketCloseByIdCommand (const char* args)
 {
     if (!*args)
         return false;
@@ -243,12 +243,12 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
+bool ChatHandler::HandleGMTicketAssignToCommand (const char* args)
 {
     if (!*args)
         return false;
 
-    char* tguid = strtok((char*)args, " ");
+    char* tguid = strtok((char*) args, " ");
     uint64 ticketGuid = atoi(tguid);
     char* targetgm = strtok(NULL, " ");
 
@@ -311,7 +311,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
+bool ChatHandler::HandleGMTicketUnAssignCommand (const char* args)
 {
     if (!*args)
         return false;
@@ -320,7 +320,7 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
     Player *cplr = m_session->GetPlayer();
     GM_Ticket *ticket = sTicketMgr->GetGMTicket(ticketGuid);
 
-    if (!ticket|| ticket->closed != 0)
+    if (!ticket || ticket->closed != 0)
     {
         SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
         return true;
@@ -354,12 +354,12 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketCommentCommand(const char* args)
+bool ChatHandler::HandleGMTicketCommentCommand (const char* args)
 {
     if (!*args)
         return false;
 
-    char* tguid = strtok((char*)args, " ");
+    char* tguid = strtok((char*) args, " ");
     uint64 ticketGuid = atoi(tguid);
     char* comment = strtok(NULL, "\n");
 
@@ -397,7 +397,7 @@ bool ChatHandler::HandleGMTicketCommentCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
+bool ChatHandler::HandleGMTicketDeleteByIdCommand (const char* args)
 {
     if (!*args)
         return false;
@@ -421,7 +421,7 @@ bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
     ss << PGetParseString(LANG_COMMAND_TICKETDELETED, m_session->GetPlayer()->GetName());
     SendGlobalGMSysMessage(ss.str().c_str());
     Player *plr = sObjectMgr->GetPlayer(ticket->playerGuid);
-    sTicketMgr->RemoveGMTicket(ticket, -1, true); // we don't need to care about who deleted it...
+    sTicketMgr->RemoveGMTicket(ticket, -1, true);          // we don't need to care about who deleted it...
     if (plr && plr->IsInWorld())
     {
         // Force abandon ticket
@@ -435,7 +435,7 @@ bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleToggleGMTicketSystem(const char* /* args */)
+bool ChatHandler::HandleToggleGMTicketSystem (const char* /* args */)
 {
     sTicketMgr->SetStatus(!sTicketMgr->GetStatus());
     if (sTicketMgr->GetStatus())
@@ -446,12 +446,12 @@ bool ChatHandler::HandleToggleGMTicketSystem(const char* /* args */)
     return true;
 }
 
-bool ChatHandler::HandleGoTicketCommand(const char * args)
+bool ChatHandler::HandleGoTicketCommand (const char * args)
 {
     if (!*args)
         return false;
 
-    char *cstrticket_id = strtok((char*)args, " ");
+    char *cstrticket_id = strtok((char*) args, " ");
 
     if (!cstrticket_id)
         return false;
@@ -467,7 +467,8 @@ bool ChatHandler::HandleGoTicketCommand(const char * args)
         return true;
     }
 
-    float x, y, z;
+    float x, y
+,    z;
     int mapid;
 
     x = ticket->pos_x;
@@ -481,14 +482,14 @@ bool ChatHandler::HandleGoTicketCommand(const char * args)
         _player->GetMotionMaster()->MovementExpired();
         _player->CleanupAfterTaxiFlight();
     }
-     else
+    else
         _player->SaveRecallPosition();
 
     _player->TeleportTo(mapid, x, y, z, 1, 0);
     return true;
 }
 
-bool ChatHandler::HandleGMTicketEscalateCommand(const char *args)
+bool ChatHandler::HandleGMTicketEscalateCommand (const char *args)
 {
     if (!*args)
         return false;
@@ -510,7 +511,7 @@ bool ChatHandler::HandleGMTicketEscalateCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketCompleteCommand(const char* args)
+bool ChatHandler::HandleGMTicketCompleteCommand (const char* args)
 {
     if (!*args)
         return false;
@@ -530,12 +531,12 @@ bool ChatHandler::HandleGMTicketCompleteCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketResponseAppendCommand(const char* args)
+bool ChatHandler::HandleGMTicketResponseAppendCommand (const char* args)
 {
     if (!*args)
         return false;
 
-    char* tguid = strtok((char*)args, " ");
+    char* tguid = strtok((char*) args, " ");
     uint64 ticketGuid = atoi(tguid);
     char* response = strtok(NULL, "\n");
 
@@ -565,12 +566,12 @@ bool ChatHandler::HandleGMTicketResponseAppendCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleGMTicketResponseAppendLnCommand(const char* args)
+bool ChatHandler::HandleGMTicketResponseAppendLnCommand (const char* args)
 {
     if (!*args)
         return false;
 
-    char* tguid = strtok((char*)args, " ");
+    char* tguid = strtok((char*) args, " ");
     uint64 ticketGuid = atoi(tguid);
     char* response = strtok(NULL, "\n");
 

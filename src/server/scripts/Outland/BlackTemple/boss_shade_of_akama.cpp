@@ -678,7 +678,7 @@ public:
             if (type != POINT_MOTION_TYPE)
                 return;
 
-            switch(id)
+            switch (id)
             {
             case 0: ++WayPointId; break;
 
@@ -808,7 +808,7 @@ public:
             {
                 if (SoulRetrieveTimer <= diff)
                 {
-                    switch(EndingTalkCount)
+                    switch (EndingTalkCount)
                     {
                     case 0:
                         me->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);

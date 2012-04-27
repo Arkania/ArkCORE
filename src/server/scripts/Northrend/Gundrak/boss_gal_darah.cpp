@@ -185,14 +185,14 @@ public:
                         if (uiStampedeTimer <= diff)
                         {
                             DoCast(me, SPELL_STAMPEDE);
-                            DoScriptText(RAND(SAY_SUMMON_1,SAY_SUMMON_2,SAY_SUMMON_3),me);
-                            uiStampedeTimer = urand(10*IN_MILLISECONDS,15*IN_MILLISECONDS);
+                            DoScriptText(RAND(SAY_SUMMON_1, SAY_SUMMON_2, SAY_SUMMON_3), me);
+                            uiStampedeTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
                         } else uiStampedeTimer -= diff;
 
                         if (uiWhirlingSlashTimer <= diff)
                         {
                             DoCast(me->getVictim(), DUNGEON_MODE(SPELL_WHIRLING_SLASH, H_SPELL_WHIRLING_SLASH));
-                            uiWhirlingSlashTimer = urand(18*IN_MILLISECONDS,22*IN_MILLISECONDS);;
+                            uiWhirlingSlashTimer = urand(18*IN_MILLISECONDS, 22*IN_MILLISECONDS);;
                             ++uiPhaseCounter;
                         } else uiWhirlingSlashTimer -= diff;
                     }
@@ -240,7 +240,7 @@ public:
                         if (uiStompTimer <= diff)
                         {
                             DoCast(me->getVictim(), DUNGEON_MODE(SPELL_STOMP, H_SPELL_STOMP));
-                            uiStompTimer = urand(10*IN_MILLISECONDS,15*IN_MILLISECONDS);
+                            uiStompTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
                         } else uiStompTimer -= diff;
 
                         if (uiImpalingChargeTimer <= diff)
@@ -294,7 +294,7 @@ public:
         void JustSummoned(Creature* summon)
         {
             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                summon->CastSpell(target, DUNGEON_MODE(SPELL_STAMPEDE_DMG, H_SPELL_STAMPEDE_DMG),true);
+                summon->CastSpell(target, DUNGEON_MODE(SPELL_STAMPEDE_DMG, H_SPELL_STAMPEDE_DMG), true);
         }
 
         void KilledUnit(Unit* victim)

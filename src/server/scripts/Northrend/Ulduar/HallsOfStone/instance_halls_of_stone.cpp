@@ -161,7 +161,7 @@ public:
                 case DATA_KRYSTALLUS_EVENT:
                     m_auiEncounter[0] = data;
                     if (m_auiEncounter[0] == DONE)
-                        HandleGameObject(uiMaidenOfGriefDoor,true);
+                        HandleGameObject(uiMaidenOfGriefDoor, true);
                     break;
                 case DATA_MAIDEN_OF_GRIEF_EVENT:
                     m_auiEncounter[1] = data;
@@ -172,10 +172,10 @@ public:
                     m_auiEncounter[2] = data;
                     if (m_auiEncounter[2] == DONE)
                     {
-                        HandleGameObject(uiSjonnirDoor,true);
+                        HandleGameObject(uiSjonnirDoor, true);
                         GameObject *go = instance->GetGameObject(uiTribunalChest);
                         if (go)
-                            go->RemoveFlag(GAMEOBJECT_FLAGS,GO_FLAG_INTERACT_COND);
+                            go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
                     }
                     break;
                 case DATA_SJONNIR_EVENT:

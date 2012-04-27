@@ -110,10 +110,10 @@ enum Points
 
 Position const position[5] =
 {
-    {-400.613f, -671.578f, 265.896f, 0.102f},	// Drahga Point from who he jump down
-    {-388.189f, -668.078f, 280.316f, 3.470f},	// Valionas Way to the Platform
+    {-400.613f, -671.578f, 265.896f, 0.102f}, 	// Drahga Point from who he jump down
+    {-388.189f, -668.078f, 280.316f, 3.470f}, 	// Valionas Way to the Platform
     {-435.54f, -695.072f, 280.316f, 3.4010f},
-    {-435.54f, -695.072f, 268.687f, 3.4010f},	// Valiona first land Position
+    {-435.54f, -695.072f, 268.687f, 3.4010f}, 	// Valiona first land Position
     {-375.742f, -519.749f, 300.663f, 0.0f}		// Valionas End Position
 };
 
@@ -171,9 +171,9 @@ public:
         {
             summon->setActive(true);
 
-            if(summon->GetEntry() == NPC_INVOCATION_OF_THE_FLAME_STALKER)
+            if (summon->GetEntry() == NPC_INVOCATION_OF_THE_FLAME_STALKER)
             {
-                summon->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
+                summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
 
                 summon->GetAI()->DoCast(SPELL_INVOCATION_TRIGGER);
             }
@@ -202,9 +202,9 @@ public:
                     me->SetSpeed(MOVE_RUN, 1.0f);
 
                     me->GetMotionMaster()->Clear();
-                    me->JumpTo(pValiona,2);
+                    me->JumpTo(pValiona, 2);
 
-                    events.ScheduleEvent(EVENT_DRAGAH_ENTER_VEHICLE,2000);
+                    events.ScheduleEvent(EVENT_DRAGAH_ENTER_VEHICLE, 2000);
 
                     break;
 
@@ -216,7 +216,7 @@ public:
 
         void DoAction(const int32 action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_DRAGAH_IS_ON_THE_GROUND:
 
@@ -240,7 +240,7 @@ public:
             if (!UpdateVictim() || me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            if(phase == PHASE_CASTER_PHASE && !HealthAbovePct(30))
+            if (phase == PHASE_CASTER_PHASE && !HealthAbovePct(30))
             {
                 phase = PHASE_DRAGON_PHASE;
                 me->SetSpeed(MOVE_RUN, 1.5f);
@@ -254,10 +254,10 @@ public:
                 events.Reset(); // He Should not cast while he is flying
                 me->GetMotionMaster()->MovePoint(POINT_DRAHGA_GO_TO_THE_LAVA, position[0]);
 
-                pValiona = me->SummonCreature(NPC_VALIONA,-375.33f,-667.291f,270.0f,3.29545f, TEMPSUMMON_CORPSE_DESPAWN);
+                pValiona = me->SummonCreature(NPC_VALIONA, -375.33f, -667.291f, 270.0f, 3.29545f, TEMPSUMMON_CORPSE_DESPAWN);
             }
 
-            if(phase == PHASE_DRAGON_PHASE && !HealthAbovePct(10))
+            if (phase == PHASE_DRAGON_PHASE && !HealthAbovePct(10))
             {
                 phase = PHASE_FINAL_PHASE;
 
@@ -279,9 +279,9 @@ public:
                 case EVENT_BURNING_SHADOWBOLT:
 
                     if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                        DoCast(pTarget, RAID_MODE(SPELL_BURNING_SHADOWBOLT,SPELL_BURNING_SHADOWBOLT_H));
+                        DoCast(pTarget, RAID_MODE(SPELL_BURNING_SHADOWBOLT, SPELL_BURNING_SHADOWBOLT_H));
 
-                    events.ScheduleEvent(EVENT_BURNING_SHADOWBOLT,4000);
+                    events.ScheduleEvent(EVENT_BURNING_SHADOWBOLT, 4000);
                     break;
                 case EVENT_SUMMON_INVOKED_FLAME_SPIRIT:
 
@@ -289,7 +289,7 @@ public:
 
                     DoCast(SPELL_INVOCATION_OF_FLAME);
 
-                    events.ScheduleEvent(EVENT_SUMMON_INVOKED_FLAME_SPIRIT,20000);
+                    events.ScheduleEvent(EVENT_SUMMON_INVOKED_FLAME_SPIRIT, 20000);
                     break;
 
                 case EVENT_DRAGAH_ENTER_VEHICLE:
@@ -322,10 +322,10 @@ public:
 
         void SaveDespawnCreatures()
         {
-            DespawnCreatures(NPC_INVOCATION_OF_THE_FLAME_STALKER,500.0f); // Maybe the Core crashes on unload the Trigger
-            DespawnCreatures(NPC_INVOKED_FLAMING_SPIRIT,500.0f);
-            DespawnCreatures(NPC_SEEPING_TWILIGHT_TRIGGER,500.0f);
-            DespawnCreatures(NPC_VALIONA,500.0f);
+            DespawnCreatures(NPC_INVOCATION_OF_THE_FLAME_STALKER, 500.0f); // Maybe the Core crashes on unload the Trigger
+            DespawnCreatures(NPC_INVOKED_FLAMING_SPIRIT, 500.0f);
+            DespawnCreatures(NPC_SEEPING_TWILIGHT_TRIGGER, 500.0f);
+            DespawnCreatures(NPC_VALIONA, 500.0f);
         }
     };
 };
@@ -376,13 +376,13 @@ public:
         {
             summon->setActive(true);
 
-            if(summon->GetEntry() == NPC_SEEPING_TWILIGHT_TRIGGER)
+            if (summon->GetEntry() == NPC_SEEPING_TWILIGHT_TRIGGER)
             {
-                summon->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
+                summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
                 summon->GetAI()->DoCast(SPELL_SEEPING_TWILIGHT);
             }
 
-            if(me->isInCombat())
+            if (me->isInCombat())
                 summon->AI()->DoZoneInCombat();
         }
 
@@ -405,20 +405,20 @@ public:
                 case EVENT_VALIONAS_FLAME:
                     if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                         DoCast(pTarget, SPELL_VALIONAS_FLAME);
-                    events.RepeatEvent(urand(15000,25000));
+                    events.RepeatEvent(urand(15000, 25000));
                     break;
 
                 case EVENT_SHREDDING_SWIPE:
 
-                    if(me->getVictim())
+                    if (me->getVictim())
                         DoCastVictim(SPELL_SHREDDING_SWIPE);
 
-                    events.RepeatEvent(urand(21000,30000));
+                    events.RepeatEvent(urand(21000, 30000));
                     break;
 
                 case EVENT_DEVOURING_FLAMES:
                     DoCast(SelectUnit(SELECT_TARGET_RANDOM, 0), SPELL_DEVOURING_FLAMES_H);
-                    events.RepeatEvent(urand(30000,35000));
+                    events.RepeatEvent(urand(30000, 35000));
                     break;
 
                 default:
@@ -432,7 +432,7 @@ public:
 
         void DoAction(const int32 action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_DRAGAH_CALLS_VALIONA_FOR_HELP:
                 DoZoneInCombat();
@@ -473,11 +473,11 @@ public:
             case POINT_VALIONA_FLY_IN_THE_AIR:
                 currentWaypoint++;
 
-                if(currentWaypoint < 3) // You can extend the Waypoints by yourself if you want
+                if (currentWaypoint < 3) // You can extend the Waypoints by yourself if you want
                 {
                     me->GetMotionMaster()->MovePoint(POINT_VALIONA_FLY_IN_THE_AIR, position[currentWaypoint]);
                 }else
-                    me->GetMotionMaster()->MoveLand(POINT_VALIONA_LAND, position[3],5);
+                    me->GetMotionMaster()->MoveLand(POINT_VALIONA_LAND, position[3], 5);
 
                 break;
 
@@ -493,15 +493,15 @@ public:
                 me->GetMotionMaster()->Clear();
                 me->GetMotionMaster()->MoveChase(me->getVictim());
 
-                events.ScheduleEvent(EVENT_VALIONAS_FLAME, urand(4000,7000));
-                events.ScheduleEvent(EVENT_SHREDDING_SWIPE, urand(10000,13000));
+                events.ScheduleEvent(EVENT_VALIONAS_FLAME, urand(4000, 7000));
+                events.ScheduleEvent(EVENT_SHREDDING_SWIPE, urand(10000, 13000));
 
-                if(/*me->GetMap()->IsHeroic()*/ true) // To test it on non heroic difficulty
-                    events.ScheduleEvent(EVENT_DEVOURING_FLAMES, urand(15000,17000));
+                if (/*me->GetMap()->IsHeroic()*/ true) // To test it on non heroic difficulty
+                    events.ScheduleEvent(EVENT_DEVOURING_FLAMES, urand(15000, 17000));
                 break;
 
             case POINT_VALIONA_FLY_AWAY:
-                DespawnCreatures(NPC_SEEPING_TWILIGHT_TRIGGER,500.0f);
+                DespawnCreatures(NPC_SEEPING_TWILIGHT_TRIGGER, 500.0f);
                 me->GetMotionMaster()->MovePoint(POINT_VALIONA_IS_AWAY, position[4]);
                 break;
 
@@ -557,7 +557,7 @@ public:
             {
             for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
             {
-            if(i == p)
+            if (i == p)
             pTarget = i->getSource();
             }
             }*/
@@ -572,9 +572,9 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if(me->GetDistance(me->getVictim()) < 1.0f )
+            if (me->GetDistance(me->getVictim()) < 1.0f )
             {
-                DoCastVictim(RAID_MODE(SPELL_SUPERNOVA,	SPELL_SUPERNOVA_H));
+                DoCastVictim(RAID_MODE(SPELL_SUPERNOVA, 	SPELL_SUPERNOVA_H));
                 me -> DespawnOrUnsummon();
             }
         }

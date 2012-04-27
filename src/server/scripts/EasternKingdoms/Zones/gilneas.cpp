@@ -907,11 +907,11 @@ enum Merchant_square_door
 #define SUMMON1_TTL 300000
 #define DOOR_TIMER 30 * IN_MILLISECONDS
 
-class go_merchant_square_door: public GameObjectScript 
+class go_merchant_square_door: public GameObjectScript
 {
 public:
     uint64 aPlayerGuid;
-    
+
     go_merchant_square_door() : GameObjectScript("go_merchant_square_door") { aPlayerGuid = 0; }
 
     float x, y, z, wx, wy, angle, tQuestCredit;
@@ -924,7 +924,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* pGO)
     {
     	  aPlayerGuid = 0;
-    	  
+
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && pGO->GetGoState() == GO_STATE_READY)
         {
             aPlayerGuid = player->GetGUID();
@@ -932,7 +932,7 @@ public:
             tQuestCredit = 2500;
             pGO->SetGoState(GO_STATE_ACTIVE);
             DoorTimer = DOOR_TIMER;
-            spawnKind = urand(1, 3); // 1,2=citizen, 3=citizen & worgen (66%,33%)
+            spawnKind = urand(1, 3); // 1, 2=citizen, 3=citizen & worgen (66%, 33%)
 
             angle = pGO->GetOrientation();
             x = pGO->GetPositionX() - cos(angle) * 2;
@@ -943,7 +943,7 @@ public:
 
             if (spawnKind < 3)
             {
-                if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN ,SUMMON1_TTL))
+                if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN , SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -966,18 +966,18 @@ public:
     {
     	  if (!pGO)
     	      return;
-    	         	      
+
         if (opened == 1)
         {
             if (tQuestCredit <= ((float) diff / 8))
             {
                 opened = 0;
-                
+
                 Player* aPlayer = sObjectAccessor->GetPlayer(*pGO, aPlayerGuid);
 
                 if (aPlayer)
                     aPlayer->KilledMonsterCredit(35830, 0);
-                
+
                 if (!aPlayer)
                     return;
 

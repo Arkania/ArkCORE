@@ -27,7 +27,8 @@
 #include "Player.h"
 #include "World.h"
 
-Quest::Quest(Field * questRecord) {
+Quest::Quest (Field * questRecord)
+{
     QuestId = questRecord[0].GetUInt32();
     QuestMethod = questRecord[1].GetUInt32();
     ZoneOrSort = questRecord[2].GetInt32();
@@ -150,12 +151,14 @@ Quest::Quest(Field * questRecord) {
     QuestGiverPortrait = questRecord[146].GetUInt32();
     QuestTurnInPortrait = questRecord[147].GetUInt32();
 
-    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i) {
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    {
         RewCurrencyId[i] = questRecord[148 + 2 * i].GetUInt32();
         RewCurrencyCount[i] = questRecord[148 + 2 * i + 1].GetUInt32();
     }
 
-    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i) {
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    {
         ReqCurrencyId[i] = questRecord[156 + 2 * i].GetUInt32();
         ReqCurrencyCount[i] = questRecord[156 + 2 * i + 1].GetUInt32();
     }
@@ -199,10 +202,11 @@ Quest::Quest(Field * questRecord) {
             ++m_rewchoiceitemscount;
 }
 
-uint32 Quest::XPValue(Player *pPlayer) const {
-    if (pPlayer) {
-        int32 quest_level =
-                (QuestLevel == -1 ? pPlayer->getLevel() : QuestLevel);
+uint32 Quest::XPValue (Player *pPlayer) const
+{
+    if (pPlayer)
+    {
+        int32 quest_level = (QuestLevel == -1 ? pPlayer->getLevel() : QuestLevel);
         const QuestXPEntry *xpentry = sQuestXPStore.LookupEntry(quest_level);
         if (!xpentry)
             return 0;
@@ -229,14 +233,16 @@ uint32 Quest::XPValue(Player *pPlayer) const {
     return 0;
 }
 
-int32 Quest::GetRewOrReqMoney() const {
+int32 Quest::GetRewOrReqMoney () const
+{
     if (RewOrReqMoney <= 0)
         return RewOrReqMoney;
 
     return int32(RewOrReqMoney * sWorld->getRate(RATE_DROP_MONEY));
 }
 
-bool Quest::IsAllowedInRaid() const {
+bool Quest::IsAllowedInRaid () const
+{
     if (IsRaidQuest())
         return true;
 

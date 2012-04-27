@@ -438,7 +438,7 @@ enum eWebbedCrusaderSpells {
     NPC_FREED_CRUSADER = 30274,
     SPELL_FREED_CRUSADER = 56423
 };
-// UPDATE creature_template SET scriptname = 'npc_webbed_crusader' WHERE entry in (30273,30268);
+// UPDATE creature_template SET scriptname = 'npc_webbed_crusader' WHERE entry in (30273, 30268);
 class npc_webbed_crusader: public CreatureScript {
 public:
     npc_webbed_crusader() :
@@ -458,11 +458,11 @@ public:
                 if (Player* pPlayer = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                     pPlayer->KilledMonsterCredit(NPC_FREED_CRUSADER,
                             temp->GetGUID());
-                //DoCast(me,SPELL_FREED_CRUSADER,true);
+                //DoCast(me, SPELL_FREED_CRUSADER, true);
             }
                 break;
             case 1: {
-                if (Creature* temp = DoSpawnCreature(NPC_FORGOTTEN_DEEPS_AMBUSHER,0,0,0,0,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,30000)) {
+                if (Creature* temp = DoSpawnCreature(NPC_FORGOTTEN_DEEPS_AMBUSHER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000)) {
                     temp->CastSpell(temp, 56418, true);
                     temp->SetStandState(UNIT_STAND_STATE_STAND);
                     temp->AI()->AttackStart(killer);
@@ -668,20 +668,20 @@ public:
                     if (say_Timer <= diff) {
                         switch (says) {
                         case 0:
-                            if (Creature* dalfors = GetClosestCreatureWithEntry(me,ENTRY_CRUSADER_LORD_DALFORS,100,true))
+                            if (Creature* dalfors = GetClosestCreatureWithEntry(me, ENTRY_CRUSADER_LORD_DALFORS, 100, true))
                                 dalfors->MonsterSay(SAY_PRE_1, LANG_UNIVERSAL,
                                         NULL);
                             say_Timer = 10000;
                             break;
                         case 1:
-                            if (Creature* dalfors = GetClosestCreatureWithEntry(me,ENTRY_CRUSADER_LORD_DALFORS,100,true))
+                            if (Creature* dalfors = GetClosestCreatureWithEntry(me, ENTRY_CRUSADER_LORD_DALFORS, 100, true))
                                 dalfors->MonsterSay(SAY_PRE_2, LANG_UNIVERSAL,
                                         NULL);
 
                             say_Timer = 10000;
                             break;
                         case 2:
-                            if (Creature* dalfors = GetClosestCreatureWithEntry(me,ENTRY_CRUSADER_LORD_DALFORS,100,true))
+                            if (Creature* dalfors = GetClosestCreatureWithEntry(me, ENTRY_CRUSADER_LORD_DALFORS, 100, true))
                                 dalfors->MonsterSay(SAY_START, LANG_UNIVERSAL,
                                         NULL);
 
@@ -812,7 +812,7 @@ public:
                     uiSummon_Timer -= diff;
 
                 if (PhaseCount > 8) {
-                    if (Creature* Halof = me->GetCreature(*me,guidHalof)) {
+                    if (Creature* Halof = me->GetCreature(*me, guidHalof)) {
                         if (Halof->isDead()) {
                             EventFinished = true;
                             DoCast(me, SPELL_CRUSADERS_SPIRE_VICTORY, true);
@@ -822,14 +822,14 @@ public:
                             Summons.DespawnEntry(ENTRY_SCOURGE_DRUDGE);
                             Summons.DespawnEntry(ENTRY_HALOF_THE_DEATHBRINGER);
 
-                            if (Creature* dalfors = GetClosestCreatureWithEntry(me,ENTRY_CRUSADER_LORD_DALFORS,100,true))
+                            if (Creature* dalfors = GetClosestCreatureWithEntry(me, ENTRY_CRUSADER_LORD_DALFORS, 100, true))
                                 dalfors->MonsterYell(YELL_FINISHED,
                                         LANG_UNIVERSAL, NULL);
 
                             for (std::list<uint64>::iterator itr =
                                     Summons.begin(); itr != Summons.end();
                                     ++itr) {
-                                if (Creature* temp = Creature::GetCreature(*me,*itr)) {
+                                if (Creature* temp = Creature::GetCreature(*me, *itr)) {
                                     temp->DespawnOrUnsummon(20000);
                                 }
                             }
@@ -1279,7 +1279,7 @@ public:
                 if (urand(0, 1) == 0) {
                     creature->AI()->DoAction(ACTION_ENRAGED);
                     creature->setFaction(16);
-                    //FIXME creature->CastSpell(creature,SPELL_SLAVE_ENRAGE);
+                    //FIXME creature->CastSpell(creature, SPELL_SLAVE_ENRAGE);
                     creature->AI()->AttackStart(player);
                 } else
                     creature->AI()->DoAction(ACTION_INSANE);
@@ -1743,7 +1743,7 @@ public:
         void EnterCombat(Unit* attacker) {
             guidAttacker = attacker->GetGUID();
             DoCast(me, SPELL_DEFEND_AURA_PERIODIC, true);
-            if (Aura* aur = me->AddAura(SPELL_DEFEND,me))
+            if (Aura* aur = me->AddAura(SPELL_DEFEND, me))
                 aur->ModStackAmount(1);
         }
 
@@ -1877,7 +1877,7 @@ public:
                 me->resetAttackTimer();
             }
 
-            if (Player* plr = Player::GetPlayer(*me,guidAttacker))
+            if (Player* plr = Player::GetPlayer(*me, guidAttacker))
                 if (!plr->HasAura(63034))
                     EnterEvadeMode();
         }
@@ -2207,7 +2207,7 @@ public:
             Position pos;
             creature->GetPosition(&pos);
             {
-                if (TempSummon* temp = creature->SummonCreature(NPC_BLACK_KNIGHT,pos,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,10000))
+                if (TempSummon* temp = creature->SummonCreature(NPC_BLACK_KNIGHT, pos, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
                     temp->AI()->SetGUID(pPlayer->GetGUID());
             }
             pPlayer->CLOSE_GOSSIP_MENU();
@@ -2273,7 +2273,7 @@ public:
         }
 
         void SetGUID(uint64 guid, int32) {
-            if (Player* plr = Player::GetPlayer(*me,guid)) {
+            if (Player* plr = Player::GetPlayer(*me, guid)) {
                 guidAttacker = guid;
                 mountDuel = true;
                 handDuel = false;
@@ -2293,7 +2293,7 @@ public:
 
         void EnterCombat(Unit* attacker) {
             DoCast(me, SPELL_DEFEND_AURA_PERIODIC, true);
-            if (Aura* aur = me->AddAura(SPELL_DEFEND,me))
+            if (Aura* aur = me->AddAura(SPELL_DEFEND, me))
                 aur->ModStackAmount(1);
         }
 
@@ -2308,7 +2308,7 @@ public:
                 if (me->getVictim())
                     me->GetMotionMaster()->MoveChase(me->getVictim());
             } else if (uiId == 2) {
-                if (Player* plr = Player::GetPlayer(*me,guidAttacker)) {
+                if (Player* plr = Player::GetPlayer(*me, guidAttacker)) {
                     AttackStart(plr);
                 }
             }
@@ -2379,7 +2379,7 @@ public:
                         me->GetMotionMaster()->MoveChase(me->getVictim());
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-                    if (Player* plr = Player::GetPlayer(*me,guidAttacker))
+                    if (Player* plr = Player::GetPlayer(*me, guidAttacker))
                         plr->ExitVehicle();
 
                     me->SetMaxHealth(12500);
@@ -2615,13 +2615,13 @@ public:
         if (!pPlayer)
             return true;
 
-        //if(canShowBank(creature))
+        //if (canShowBank(creature))
         //    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, GOSSIP_BANK, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_BANK);
 
-        //if(canShowShop(creature))
+        //if (canShowShop(creature))
         //    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TRADE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
 
-        //if(canShowPostman(creature))
+        //if (canShowPostman(creature))
         //    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_MAIL, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
         if (pPlayer->HasAchieved(ACHIEVEMENT_CHAMP_DARNASSUS))
@@ -2682,7 +2682,7 @@ public:
         //    pPlayer->GetSession()->SendListInventory(creature->GetGUID());
         //    break;
         //case GOSSIP_ACTION_INFO_DEF:
-        //    creature->MonsterSay("Nein, das kann ich nicht",LANG_UNIVERSAL,pPlayer->GetGUID());
+        //    creature->MonsterSay("Nein, das kann ich nicht", LANG_UNIVERSAL, pPlayer->GetGUID());
         //    break;
 
         case GOSSIP_ACTION_INFO_DEF + GOS_CHAMP_DAR:
@@ -2931,19 +2931,19 @@ public:
                 if (uiSpeakTimer <= uiDiff) {
                     switch (uiSpeakPhase) {
                     case 1:
-                        if (Creature* cre = Creature::GetCreature(*me,guidSaboteur))
+                        if (Creature* cre = Creature::GetCreature(*me, guidSaboteur))
                             cre->MonsterSay(SAY_SABOTEUR_1, LANG_UNIVERSAL, 0);
                         break;
                     case 2:
-                        if (Creature* cre = Creature::GetCreature(*me,guidSaboteur))
+                        if (Creature* cre = Creature::GetCreature(*me, guidSaboteur))
                             cre->MonsterSay(SAY_SABOTEUR_2, LANG_UNIVERSAL, 0);
                         break;
                     case 3:
-                        if (Creature* cre = Creature::GetCreature(*me,guidSaboteur))
+                        if (Creature* cre = Creature::GetCreature(*me, guidSaboteur))
                             cre->MonsterSay(SAY_SABOTEUR_3, LANG_UNIVERSAL, 0);
                         break;
                     case 4:
-                        if (Creature* cre = Creature::GetCreature(*me,guidAssassin)) {
+                        if (Creature* cre = Creature::GetCreature(*me, guidAssassin)) {
                             cre->MonsterSay(SAY_ASSASSIN_1, LANG_UNIVERSAL, 0);
                             cre->SetReactState(REACT_AGGRESSIVE);
                             cre->RemoveFlag(UNIT_FIELD_FLAGS,
@@ -2965,7 +2965,7 @@ public:
                 } else
                     uiSpeakTimer -= uiDiff;
 
-                if (Creature* cre = Creature::GetCreature(*me,guidAssassin)) {
+                if (Creature* cre = Creature::GetCreature(*me, guidAssassin)) {
                     if (cre->isDead()) {
                         StopEvent();
                     }

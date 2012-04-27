@@ -71,7 +71,7 @@ public:
 
         if (player->GetQuestStatus(QUEST_CHILDREN_OF_URSOC) == QUEST_STATUS_INCOMPLETE || player->GetQuestStatus(QUEST_THE_BEAR_GODS_OFFSPRING) == QUEST_STATUS_INCOMPLETE)
         {
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                 case NPC_ORSONN:
                     if (!player->GetReqKillOrCastCurrentCount(QUEST_CHILDREN_OF_URSOC, NPC_ORSONN_CREDIT) || !player->GetReqKillOrCastCurrentCount(QUEST_THE_BEAR_GODS_OFFSPRING, NPC_ORSONN_CREDIT))
@@ -99,7 +99,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
@@ -354,7 +354,7 @@ public:
         {
             if (Creature* Emily = GetClosestCreatureWithEntry(me, NPC_EMILY, 50.0f))
             {
-                switch(Who->GetEntry())
+                switch (Who->GetEntry())
                 {
                     case NPC_HUNGRY_WORG:
                         DoScriptText(SAY_WORGHAGGRO2, Emily);
@@ -546,7 +546,7 @@ public:
                 {
                     if (m_uiTimer <= uiDiff)
                     {
-                        switch(m_uiPhase)
+                        switch (m_uiPhase)
                         {
                             case 1:
                                 me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_LOOT);
@@ -620,7 +620,7 @@ public:
             {
                 caster->ToPlayer()->KilledMonsterCredit(CREDIT_NPC, 0);
                 DoScriptText(RAND(RANDOM_SAY_1, RANDOM_SAY_2, RANDOM_SAY_3), caster);
-                if(me->IsStandState())
+                if (me->IsStandState())
                     me->GetMotionMaster()->MovePoint(1, me->GetPositionX()+7, me->GetPositionY()+7, me->GetPositionZ());
                 else
                 {
@@ -852,21 +852,21 @@ public:
             {
                 alreadykissed = true;
 
-                if(urand(0,3) == 0)
+                if (urand(0, 3) == 0)
                 {
-                    DoCast(me,SPELL_TRANSFORM,true);
-                    me->MonsterSay(SAY_FREED,LANG_UNIVERSAL,player->GetGUID());
+                    DoCast(me, SPELL_TRANSFORM, true);
+                    me->MonsterSay(SAY_FREED, LANG_UNIVERSAL, player->GetGUID());
                     me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 }else
                 {
                     if (!player->HasAura(SPELL_WARTS_B_GONE))
                     {
-                    //FIXME    me->CastSpell(player,SPELL_WARTS);
+                    //FIXME    me->CastSpell(player, SPELL_WARTS);
                     }else
                         player->RemoveAurasDueToSpell(SPELL_WARTS_B_GONE);
 
-                        me->CastSpell(me,SPELL_FROG_LOVE,true);
-                        me->GetMotionMaster()->MoveFollow(player,1,float(rand_norm()*2*M_PI));
+                        me->CastSpell(me, SPELL_FROG_LOVE, true);
+                        me->GetMotionMaster()->MoveFollow(player, 1, float(rand_norm()*2*M_PI));
                 }
 
                 me->DespawnOrUnsummon(15000);
@@ -876,7 +876,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,GOSSIP_TEXT_GET_WEAPON , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_GET_WEAPON , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
 
         return true;
@@ -889,7 +889,7 @@ public:
 
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
         {
-            creature->CastSpell(player,SPELL_SUMMON_ASHWOOD_BRAND,true);
+            creature->CastSpell(player, SPELL_SUMMON_ASHWOOD_BRAND, true);
         }
 
         return true;

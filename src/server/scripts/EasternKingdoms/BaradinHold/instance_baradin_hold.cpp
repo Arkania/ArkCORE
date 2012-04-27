@@ -25,44 +25,48 @@
 class instance_baradin_hold: public InstanceMapScript
 {
 public:
-    instance_baradin_hold() : InstanceMapScript("instance_baradin_hold", 757) { }
+    instance_baradin_hold () :
+            InstanceMapScript("instance_baradin_hold", 757)
+    {
+    }
 
-    InstanceScript* GetInstanceScript(InstanceMap *map) const
+    InstanceScript* GetInstanceScript (InstanceMap *map) const
     {
         return new instance_baradin_hold_InstanceMapScript(map);
     }
 
     struct instance_baradin_hold_InstanceMapScript: public InstanceScript
     {
-        instance_baradin_hold_InstanceMapScript(InstanceMap *map) : InstanceScript(map)
+        instance_baradin_hold_InstanceMapScript (InstanceMap *map) :
+                InstanceScript(map)
         {
             SetBossNumber(MAX_ENCOUNTER);
         }
 
         /*
-void Initialize()
-{
-memset(&guid, 0, sizeof(guid));
-}
+         void Initialize()
+         {
+         memset(&guid, 0, sizeof(guid));
+         }
 
-void OnCreatureCreate(Creature* creature)
-{
-switch (creature->GetEntry())
-{
-case CREATURE_ARGALOTH: guid[DATA_ARGALOTH] = creature->GetGUID(); break;
-case CREATURE_OCCUTHAR: guid[DATA_OCCUTHAR] = creature->GetGUID(); break;
-}
-}
+         void OnCreatureCreate(Creature* creature)
+         {
+         switch (creature->GetEntry())
+         {
+         case CREATURE_ARGALOTH: guid[DATA_ARGALOTH] = creature->GetGUID(); break;
+         case CREATURE_OCCUTHAR: guid[DATA_OCCUTHAR] = creature->GetGUID(); break;
+         }
+         }
 
-uint64 GetData64(uint32 identifier) { return guid[identifier]; }
+         uint64 GetData64(uint32 identifier) { return guid[identifier]; }
 
-private:
-uint64 guid[MAX_ENCOUNTER];
-*/
+         private:
+         uint64 guid[MAX_ENCOUNTER];
+         */
     };
 };
 
-void AddSC_instance_baradin_hold()
+void AddSC_instance_baradin_hold ()
 {
     new instance_baradin_hold();
 }

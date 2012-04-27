@@ -34,7 +34,8 @@
 #include "UpdateData.h"
 #include "ObjectAccessor.h"
 
-void WorldSession::HandleSplitItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleSplitItemOpcode (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_SPLIT_ITEM");
     uint8 srcbag, srcslot, dstbag, dstslot;
     uint32 count;
@@ -49,15 +50,16 @@ void WorldSession::HandleSplitItemOpcode(WorldPacket & recv_data) {
         return;
 
     if (count == 0)
-        return; //check count - if zero it's fake packet
+        return;          //check count - if zero it's fake packet
 
-    if (!_player->IsValidPos(srcbag, srcslot, true)) {
+    if (!_player->IsValidPos(srcbag, srcslot, true))
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
     }
 
-    if (!_player->IsValidPos(dstbag, dstslot, false)) // can be autostore pos
-            {
+    if (!_player->IsValidPos(dstbag, dstslot, false))          // can be autostore pos
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_DOESNT_GO_TO_SLOT, NULL, NULL);
         return;
     }
@@ -65,7 +67,8 @@ void WorldSession::HandleSplitItemOpcode(WorldPacket & recv_data) {
     _player->SplitItem(src, dst, count);
 }
 
-void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleSwapInvItemOpcode (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_SWAP_INV_ITEM");
     uint8 srcslot, dstslot;
 
@@ -76,12 +79,14 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data) {
     if (srcslot == dstslot)
         return;
 
-    if (!_player->IsValidPos(INVENTORY_SLOT_BAG_0, srcslot, true)) {
+    if (!_player->IsValidPos(INVENTORY_SLOT_BAG_0, srcslot, true))
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
     }
 
-    if (!_player->IsValidPos(INVENTORY_SLOT_BAG_0, dstslot, true)) {
+    if (!_player->IsValidPos(INVENTORY_SLOT_BAG_0, dstslot, true))
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_DOESNT_GO_TO_SLOT, NULL, NULL);
         return;
     }
@@ -92,7 +97,8 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data) {
     _player->SwapItem(src, dst);
 }
 
-void WorldSession::HandleAutoEquipItemSlotOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleAutoEquipItemSlotOpcode (WorldPacket & recv_data)
+{
     uint64 itemguid;
     uint8 dstslot;
     recv_data >> itemguid >> dstslot;
@@ -110,7 +116,8 @@ void WorldSession::HandleAutoEquipItemSlotOpcode(WorldPacket & recv_data) {
     _player->SwapItem(item->GetPos(), dstpos);
 }
 
-void WorldSession::HandleSwapItem(WorldPacket & recv_data) {
+void WorldSession::HandleSwapItem (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_SWAP_ITEM");
     uint8 dstbag, dstslot, srcbag, srcslot;
 
@@ -124,12 +131,14 @@ void WorldSession::HandleSwapItem(WorldPacket & recv_data) {
     if (src == dst)
         return;
 
-    if (!_player->IsValidPos(srcbag, srcslot, true)) {
+    if (!_player->IsValidPos(srcbag, srcslot, true))
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
     }
 
-    if (!_player->IsValidPos(dstbag, dstslot, true)) {
+    if (!_player->IsValidPos(dstbag, dstslot, true))
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_DOESNT_GO_TO_SLOT, NULL, NULL);
         return;
     }
@@ -137,7 +146,8 @@ void WorldSession::HandleSwapItem(WorldPacket & recv_data) {
     _player->SwapItem(src, dst);
 }
 
-void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleAutoEquipItemOpcode (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_AUTOEQUIP_ITEM");
     uint8 srcbag, srcslot;
 
@@ -146,33 +156,35 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data) {
 
     Item *pSrcItem = _player->GetItemByPos(srcbag, srcslot);
     if (!pSrcItem)
-        return; // only at cheat
+        return;          // only at cheat
 
     uint16 dest;
-    uint8 msg = _player->CanEquipItem(NULL_SLOT, dest, pSrcItem,
-            !pSrcItem->IsBag());
-    if (msg != EQUIP_ERR_OK) {
+    uint8 msg = _player->CanEquipItem(NULL_SLOT, dest, pSrcItem, !pSrcItem->IsBag());
+    if (msg != EQUIP_ERR_OK)
+    {
         _player->SendEquipError(msg, pSrcItem, NULL);
         return;
     }
 
     uint16 src = pSrcItem->GetPos();
-    if (dest == src) // prevent equip in same slot, only at cheat
+    if (dest == src)          // prevent equip in same slot, only at cheat
         return;
 
     Item *pDstItem = _player->GetItemByPos(dest);
-    if (!pDstItem) // empty slot, simple case
+    if (!pDstItem)          // empty slot, simple case
     {
         _player->RemoveItem(srcbag, srcslot, true);
         _player->EquipItem(dest, pSrcItem, true);
         _player->AutoUnequipOffhandIfNeed();
-    } else // have currently equipped item, not simple case
+    }
+    else          // have currently equipped item, not simple case
     {
         uint8 dstbag = pDstItem->GetBagSlot();
         uint8 dstslot = pDstItem->GetSlot();
 
         msg = _player->CanUnequipItem(dest, !pSrcItem->IsBag());
-        if (msg != EQUIP_ERR_OK) {
+        if (msg != EQUIP_ERR_OK)
+        {
             _player->SendEquipError(msg, pDstItem, NULL);
             return;
         }
@@ -180,29 +192,31 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data) {
         // check dest->src move possibility
         ItemPosCountVec sSrc;
         uint16 eSrc = 0;
-        if (_player->IsInventoryPos(src)) {
+        if (_player->IsInventoryPos(src))
+        {
             msg = _player->CanStoreItem(srcbag, srcslot, sSrc, pDstItem, true);
             if (msg != EQUIP_ERR_OK)
-                msg = _player->CanStoreItem(srcbag, NULL_SLOT, sSrc, pDstItem,
-                        true);
+                msg = _player->CanStoreItem(srcbag, NULL_SLOT, sSrc, pDstItem, true);
             if (msg != EQUIP_ERR_OK)
-                msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, sSrc, pDstItem,
-                        true);
-        } else if (_player->IsBankPos(src)) {
+                msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, sSrc, pDstItem, true);
+        }
+        else if (_player->IsBankPos(src))
+        {
             msg = _player->CanBankItem(srcbag, srcslot, sSrc, pDstItem, true);
             if (msg != EQUIP_ERR_OK)
-                msg = _player->CanBankItem(srcbag, NULL_SLOT, sSrc, pDstItem,
-                        true);
+                msg = _player->CanBankItem(srcbag, NULL_SLOT, sSrc, pDstItem, true);
             if (msg != EQUIP_ERR_OK)
-                msg = _player->CanBankItem(NULL_BAG, NULL_SLOT, sSrc, pDstItem,
-                        true);
-        } else if (_player->IsEquipmentPos(src)) {
+                msg = _player->CanBankItem(NULL_BAG, NULL_SLOT, sSrc, pDstItem, true);
+        }
+        else if (_player->IsEquipmentPos(src))
+        {
             msg = _player->CanEquipItem(srcslot, eSrc, pDstItem, true);
             if (msg == EQUIP_ERR_OK)
                 msg = _player->CanUnequipItem(eSrc, true);
         }
 
-        if (msg != EQUIP_ERR_OK) {
+        if (msg != EQUIP_ERR_OK)
+        {
             _player->SendEquipError(msg, pDstItem, pSrcItem);
             return;
         }
@@ -226,7 +240,8 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data) {
     }
 }
 
-void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleDestroyItemOpcode (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_DESTROYITEM");
     uint8 bag, slot, count, data1, data2, data3;
 
@@ -236,60 +251,66 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data) {
     uint16 pos = (bag << 8) | slot;
 
     // prevent drop unequipable items (in combat, for example) and non-empty bags
-    if (_player->IsEquipmentPos(pos) || _player->IsBagPos(pos)) {
+    if (_player->IsEquipmentPos(pos) || _player->IsBagPos(pos))
+    {
         uint8 msg = _player->CanUnequipItem(pos, false);
-        if (msg != EQUIP_ERR_OK) {
+        if (msg != EQUIP_ERR_OK)
+        {
             _player->SendEquipError(msg, _player->GetItemByPos(pos), NULL);
             return;
         }
     }
 
     Item *pItem = _player->GetItemByPos(bag, slot);
-    if (!pItem) {
+    if (!pItem)
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
     }
 
-    if (pItem->GetProto()->Flags & ITEM_PROTO_FLAG_INDESTRUCTIBLE) {
+    if (pItem->GetProto()->Flags & ITEM_PROTO_FLAG_INDESTRUCTIBLE)
+    {
         _player->SendEquipError(EQUIP_ERR_CANT_DROP_SOULBOUND, NULL, NULL);
         return;
     }
 
-    if (count) {
+    if (count)
+    {
         uint32 i_count = count;
         _player->DestroyItemCount(pItem, i_count, true);
-    } else
+    }
+    else
         _player->DestroyItem(bag, slot, true);
 }
 
 // Only _static_ data send in this packet !!!
-void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
+void WorldSession::HandleRequestHotFix (WorldPacket & recv_data)
 {
     uint32 count, type;
     recv_data >> count >> type;
 
-    if(type != DB2TYPE_ITEM_SPARSE && type != DB2TYPE_ITEM)
+    if (type != DB2TYPE_ITEM_SPARSE && type != DB2TYPE_ITEM)
     {
         sLog->outString("Client tried to request update item data from non-handled update type");
         return;
     }
 
-    for(uint32 i = 0; i < count; ++i)
+    for (uint32 i = 0; i < count; ++i)
     {
         uint32 item;
         recv_data >> item;
         recv_data.read_skip(8);
-        WorldPacket data2(SMSG_DB_REPLY,700);
+        WorldPacket data2(SMSG_DB_REPLY, 700);
         ByteBuffer data;
 
-        data2 << uint32(type); // Needed?
+        data2 << uint32(type);          // Needed?
         data2 << uint32(item);
 
         ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item);
 
-        if(!proto) // Item does not exist
+        if (!proto)          // Item does not exist
         {
-            data2 << uint32(4); // sizeof(uint32)
+            data2 << uint32(4);          // sizeof(uint32)
             data2 << uint32(item | 0x80000000);
             SendPacket(&data2);
             continue;
@@ -297,7 +318,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         else
         {
             data << uint32(item);
-            if(type == DB2TYPE_ITEM) // Update the base item shit
+            if (type == DB2TYPE_ITEM)          // Update the base item shit
             {
                 data << uint32(proto->Class);
                 data << uint32(proto->SubClass);
@@ -307,7 +328,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->InventoryType);
                 data << uint32(proto->Sheath);
             }
-            else if(type == DB2TYPE_ITEM_SPARSE) // Send more advanced shit
+            else if (type == DB2TYPE_ITEM_SPARSE)          // Send more advanced shit
             {
                 data << uint32(proto->Quality);
                 data << uint32(proto->Flags);
@@ -331,14 +352,14 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << int32(proto->Stackable);
                 data << uint32(proto->ContainerSlots);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << uint32(proto->ItemStat[x].ItemStatType);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << int32(proto->ItemStat[x].ItemStatValue);
 
                 // Till here we are going good, now we start with the unk shit
-                for(uint32 x = 0; x < 20; ++x) // 20 unk fields
+                for (uint32 x = 0; x < 20; ++x)          // 20 unk fields
                     data << uint32(0);
 
                 data << uint32(proto->ScalingStatDistribution);
@@ -346,22 +367,22 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->Delay);
                 data << float(proto->RangedModRange);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellId);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellTrigger);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCharges);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCooldown);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellCategory);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCategoryCooldown);
 
                 data << uint32(proto->Bonding);
@@ -371,15 +392,15 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint16(strlen(str) + 1);
                 data << str;
 
-                for(uint32 x = 0; x < 3; ++x) // other 3 names
+                for (uint32 x = 0; x < 3; ++x)          // other 3 names
                 {
-                    const char* str = (const char*)"";
+                    const char* str = (const char*) "";
                     data << uint16(strlen(str) + 1);
                     data << str;
                 }
 
                 // Now we send item descriptions :S pascal string?
-                const char* str2 = (const char*)"";
+                const char* str2 = (const char*) "";
                 data << uint16(strlen(str2) + 1);
                 data << str2;
 
@@ -400,10 +421,10 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->BagFamily);
                 data << uint32(proto->TotemCategory);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Color);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Content);
 
                 data << uint32(proto->socketBonus);
@@ -413,7 +434,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->ItemLimitCategory);
                 data << uint32(proto->HolidayId);
 
-                data << float(0.0f); // StatScalingFactor
+                data << float(0.0f);          // StatScalingFactor
                 data << uint32(0);
                 data << uint32(0);
             }
@@ -427,7 +448,8 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleReadItem(WorldPacket & recv_data) {
+void WorldSession::HandleReadItem (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_READ_ITEM");
 
     uint8 bag, slot;
@@ -436,39 +458,43 @@ void WorldSession::HandleReadItem(WorldPacket & recv_data) {
     //sLog->outDetail("STORAGE: Read bag = %u, slot = %u", bag, slot);
     Item *pItem = _player->GetItemByPos(bag, slot);
 
-    if (pItem && pItem->GetProto()->PageText) {
+    if (pItem && pItem->GetProto()->PageText)
+    {
         WorldPacket data;
 
         uint8 msg = _player->CanUseItem(pItem);
-        if (msg == EQUIP_ERR_OK) {
+        if (msg == EQUIP_ERR_OK)
+        {
             data.Initialize(SMSG_READ_ITEM_OK, 8);
             sLog->outDetail("STORAGE: Item page sent");
-        } else {
+        }
+        else
+        {
             data.Initialize(SMSG_READ_ITEM_FAILED, 8);
             sLog->outDetail("STORAGE: Unable to read item");
             _player->SendEquipError(msg, pItem, NULL);
         }
         data << pItem->GetGUID();
         SendPacket(&data);
-    } else
+    }
+    else
         _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
 }
 
-void WorldSession::HandlePageQuerySkippedOpcode(WorldPacket & recv_data) {
-    sLog->outDebug(LOG_FILTER_NETWORKIO,
-            "WORLD: Received CMSG_PAGE_TEXT_QUERY");
+void WorldSession::HandlePageQuerySkippedOpcode (WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_PAGE_TEXT_QUERY");
 
     uint32 itemid;
     uint64 guid;
 
     recv_data >> itemid >> guid;
 
-    sLog->outDetail(
-            "Packet Info: itemid: %u guidlow: %u guidentry: %u guidhigh: %u",
-            itemid, GUID_LOPART(guid), GUID_ENPART(guid), GUID_HIPART(guid));
+    sLog->outDetail("Packet Info: itemid: %u guidlow: %u guidentry: %u guidhigh: %u", itemid, GUID_LOPART(guid), GUID_ENPART(guid), GUID_HIPART(guid));
 }
 
-void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleSellItemOpcode (WorldPacket & recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_SELL_ITEM");
     uint64 vendorguid, itemguid;
     uint32 count;
@@ -540,7 +566,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data) {
         {
             if (pProto->SellPrice > 0)
             {
-                if (count < pItem->GetCount()) // need split items
+                if (count < pItem->GetCount())          // need split items
                 {
                     Item *pNewItem = pItem->CloneItem(count, _player);
                     if (!pNewItem)
@@ -581,20 +607,18 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data) {
     return;
 }
 
-void WorldSession::HandleBuybackItem(WorldPacket & recv_data) {
+void WorldSession::HandleBuybackItem (WorldPacket & recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUYBACK_ITEM");
     uint64 vendorguid;
     uint32 slot;
 
     recv_data >> vendorguid >> slot;
 
-    Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorguid,
-            UNIT_NPC_FLAG_VENDOR);
-    if (!pCreature) {
-        sLog->outDebug(
-                LOG_FILTER_NETWORKIO,
-                "WORLD: HandleBuybackItem - Unit (GUID: %u) not found or you can not interact with him.",
-                uint32(GUID_LOPART(vendorguid)));
+    Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_VENDOR);
+    if (!pCreature)
+    {
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: HandleBuybackItem - Unit (GUID: %u) not found or you can not interact with him.", uint32(GUID_LOPART(vendorguid)));
         _player->SendSellError(SELL_ERR_CANT_FIND_VENDOR, NULL, 0, 0);
         return;
     }
@@ -604,37 +628,38 @@ void WorldSession::HandleBuybackItem(WorldPacket & recv_data) {
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
     Item *pItem = _player->GetItemFromBuyBackSlot(slot);
-    if (pItem) {
-        uint32 price = _player->GetUInt32Value(
-                PLAYER_FIELD_BUYBACK_PRICE_1 + slot - BUYBACK_SLOT_START);
-        if (!_player->HasEnoughMoney(price)) {
-            _player->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, pCreature,
-                    pItem->GetEntry(), 0);
+    if (pItem)
+    {
+        uint32 price = _player->GetUInt32Value(PLAYER_FIELD_BUYBACK_PRICE_1 + slot - BUYBACK_SLOT_START);
+        if (!_player->HasEnoughMoney(price))
+        {
+            _player->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, pCreature, pItem->GetEntry(), 0);
             return;
         }
 
         ItemPosCountVec dest;
-        uint8 msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, dest, pItem,
-                false);
-        if (msg == EQUIP_ERR_OK) {
+        uint8 msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, dest, pItem, false);
+        if (msg == EQUIP_ERR_OK)
+        {
             _player->ModifyMoney(-(int32) price);
             _player->RemoveItemFromBuyBackSlot(slot, false);
             _player->ItemAddedQuestCheck(pItem->GetEntry(), pItem->GetCount());
-            _player->GetAchievementMgr().UpdateAchievementCriteria(
-                    ACHIEVEMENT_CRITERIA_TYPE_RECEIVE_EPIC_ITEM,
-                    pItem->GetEntry(), pItem->GetCount());
+            _player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_RECEIVE_EPIC_ITEM, pItem->GetEntry(), pItem->GetCount());
             _player->StoreItem(dest, pItem, true);
-        } else
+        }
+        else
             _player->SendEquipError(msg, pItem, NULL);
         return;
-    } else
+    }
+    else
         _player->SendBuyError(BUY_ERR_CANT_FIND_ITEM, pCreature, 0, 0);
 }
 
-void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleBuyItemInSlotOpcode (WorldPacket & recv_data)
+{
     sLog
-            ->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM_IN_SLOT");
-            uint64 vendorguid, bagguid;
+    ->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM_IN_SLOT");
+    uint64 vendorguid, bagguid;
     uint32 item, slot, count;
     uint8 bagslot, unk;
 
@@ -673,7 +698,8 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data) {
     GetPlayer()->BuyItemFromVendorSlot(vendorguid, slot, item, count, bag, bagslot);
 }
 
-void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleBuyItemOpcode (WorldPacket & recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
     uint64 vendorguid;
     uint8 unk;
@@ -682,7 +708,7 @@ void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data) {
     uint8 unk2;
 
     recv_data >> vendorguid;
-    recv_data >> unk; // 4.0.6
+    recv_data >> unk;          // 4.0.6
     recv_data >> item >> slot >> count;
     recv_data >> unk1;// 4.0.6
     recv_data >> unk2;
@@ -696,7 +722,8 @@ void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data) {
     GetPlayer()->BuyItemFromVendorSlot(vendorguid, slot, item, count, NULL_BAG, NULL_SLOT);
 }
 
-void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleListInventoryOpcode (WorldPacket & recv_data)
+{
     uint64 guid;
 
     recv_data >> guid;
@@ -709,16 +736,14 @@ void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data) {
     SendListInventory(guid);
 }
 
-void WorldSession::SendListInventory(uint64 vendorguid) {
+void WorldSession::SendListInventory (uint64 vendorguid)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_LIST_INVENTORY");
 
-    Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorguid,
-            UNIT_NPC_FLAG_VENDOR);
-    if (!pCreature) {
-        sLog->outDebug(
-                LOG_FILTER_NETWORKIO,
-                "WORLD: SendListInventory - Unit (GUID: %u) not found or you can not interact with him.",
-                uint32(GUID_LOPART(vendorguid)));
+    Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_VENDOR);
+    if (!pCreature)
+    {
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: SendListInventory - Unit (GUID: %u) not found or you can not interact with him.", uint32(GUID_LOPART(vendorguid)));
         _player->SendSellError(SELL_ERR_CANT_FIND_VENDOR, NULL, 0, 0);
         return;
     }
@@ -732,11 +757,12 @@ void WorldSession::SendListInventory(uint64 vendorguid) {
         pCreature->StopMoving();
 
     VendorItemData const* vItems = pCreature->GetVendorItems();
-    if (!vItems) {
+    if (!vItems)
+    {
         WorldPacket data(SMSG_LIST_INVENTORY, (8 + 1 + 1 + 2), true);
         data << uint64(vendorguid);
-        data << uint8(0); // count==0, next will be error code
-        data << uint8(0); // "Vendor has no inventory"
+        data << uint8(0);          // count==0, next will be error code
+        data << uint8(0);          // "Vendor has no inventory"
         SendPacket(&data);
         return;
     }
@@ -744,8 +770,7 @@ void WorldSession::SendListInventory(uint64 vendorguid) {
     uint32 numitems = vItems->GetItemCount();
     uint8 count = 0;
 
-    WorldPacket data(SMSG_LIST_INVENTORY,
-            (8 + 1 + numitems * 9 * 4 + 1 * numitems + 2), true);
+    WorldPacket data(SMSG_LIST_INVENTORY, (8 + 1 + numitems * 9 * 4 + 1 * numitems + 2), true);
     data << uint64(vendorguid);
 
     size_t count_pos = data.wpos();
@@ -753,47 +778,35 @@ void WorldSession::SendListInventory(uint64 vendorguid) {
 
     float discountMod = _player->GetReputationPriceDiscount(pCreature);
 
-    for (uint32 vendorslot = 0; vendorslot < numitems; ++vendorslot) {
-        if (VendorItem const* crItem = vItems->GetItem(vendorslot)) {
-            if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(crItem->item)) {
-                if ((pProto->AllowableClass & _player->getClassMask()) == 0
-                        && pProto->Bonding == BIND_WHEN_PICKED_UP
-                        && !_player->isGameMaster())
+    for (uint32 vendorslot = 0; vendorslot < numitems; ++vendorslot)
+    {
+        if (VendorItem const* crItem = vItems->GetItem(vendorslot))
+        {
+            if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(crItem->item))
+            {
+                if ((pProto->AllowableClass & _player->getClassMask()) == 0 && pProto->Bonding == BIND_WHEN_PICKED_UP && !_player->isGameMaster())
                     continue;
                 // Only display items in vendor lists for the team the
                 // player is on. If GM on, display all items.
-                if (!_player->isGameMaster()
-                        && ((pProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY
-                                && _player->GetTeam() == ALLIANCE)
-                                || (pProto->Flags2
-                                        == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY
-                                        && _player->GetTeam() == HORDE)))
+                if (!_player->isGameMaster() && ((pProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY && _player->GetTeam() == ALLIANCE) || (pProto->Flags2 == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY && _player->GetTeam() == HORDE)))
                     continue;
                 ++count;
                 if (count == 150)
-                    break; // client can only display 15 pages
+                    break;          // client can only display 15 pages
 
                 // reputation discount
-                int32 price =
-                        crItem->IsGoldRequired(pProto) ?
-                                uint32(floor(pProto->BuyPrice * discountMod)) :
-                                0;
+                int32 price = crItem->IsGoldRequired(pProto) ? uint32(floor(pProto->BuyPrice * discountMod)) : 0;
 
-                data << uint32(vendorslot + 1); // client expects counting to start at 1
-                data << uint32(1); // unknow value 4.0.1, always 1
+                data << uint32(vendorslot + 1);          // client expects counting to start at 1
+                data << uint32(1);          // unknow value 4.0.1, always 1
                 data << uint32(crItem->item);
                 data << uint32(pProto->DisplayInfoID);
-                data
-                        << int32(
-                                crItem->maxcount <= 0 ?
-                                        0xFFFFFFFF :
-                                        pCreature->GetVendorItemCurrentCount(
-                                                crItem));
+                data << int32(crItem->maxcount <= 0 ? 0xFFFFFFFF : pCreature->GetVendorItemCurrentCount(crItem));
                 data << uint32(price);
                 data << uint32(pProto->MaxDurability);
                 data << uint32(pProto->BuyCount);
                 data << uint32(crItem->ExtendedCost);
-                data << uint8(0); // unk 4.0.1
+                data << uint8(0);          // unk 4.0.1
             }
         }
     }
@@ -820,7 +833,8 @@ void WorldSession::SendListInventory(uint64 vendorguid) {
      break;
      }*/
 
-    if (count == 0) {
+    if (count == 0)
+    {
         data << uint8(0);
         SendPacket(&data);
         return;
@@ -830,7 +844,8 @@ void WorldSession::SendListInventory(uint64 vendorguid) {
     SendPacket(&data);
 }
 
-void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleAutoStoreBagItemOpcode (WorldPacket & recv_data)
+{
     //sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AUTOSTORE_BAG_ITEM");
     uint8 srcbag, srcslot, dstbag;
 
@@ -841,8 +856,8 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data) {
     if (!pItem)
         return;
 
-    if (!_player->IsValidPos(dstbag, NULL_SLOT, false)) // can be autostore pos
-            {
+    if (!_player->IsValidPos(dstbag, NULL_SLOT, false))          // can be autostore pos
+    {
         _player->SendEquipError(EQUIP_ERR_ITEM_DOESNT_GO_TO_SLOT, NULL, NULL);
         return;
     }
@@ -850,9 +865,11 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data) {
     uint16 src = pItem->GetPos();
 
     // check unequip potability for equipped items and bank bags
-    if (_player->IsEquipmentPos(src) || _player->IsBagPos(src)) {
+    if (_player->IsEquipmentPos(src) || _player->IsBagPos(src))
+    {
         uint8 msg = _player->CanUnequipItem(src, !_player->IsBagPos(src));
-        if (msg != EQUIP_ERR_OK) {
+        if (msg != EQUIP_ERR_OK)
+        {
             _player->SendEquipError(msg, pItem, NULL);
             return;
         }
@@ -860,13 +877,15 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data) {
 
     ItemPosCountVec dest;
     uint8 msg = _player->CanStoreItem(dstbag, NULL_SLOT, dest, pItem, false);
-    if (msg != EQUIP_ERR_OK) {
+    if (msg != EQUIP_ERR_OK)
+    {
         _player->SendEquipError(msg, pItem, NULL);
         return;
     }
 
     // no-op: placed in same slot
-    if (dest.size() == 1 && dest[0].pos == src) {
+    if (dest.size() == 1 && dest[0].pos == src)
+    {
         // just remove grey item state
         _player->SendEquipError(EQUIP_ERR_NONE, pItem, NULL);
         return;
@@ -876,7 +895,8 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data) {
     _player->StoreItem(dest, pItem, true);
 }
 
-void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket) {
+void WorldSession::HandleBuyBankSlotOpcode (WorldPacket& recvPacket)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_BUY_BANK_SLOT");
 
     uint64 guid;
@@ -899,12 +919,12 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket) {
 
     sLog->outDetail("PLAYER: Buy bank bag slot, slot number = %u", slot);
 
-    BankBagSlotPricesEntry const* slotEntry =
-            sBankBagSlotPricesStore.LookupEntry(slot);
+    BankBagSlotPricesEntry const* slotEntry = sBankBagSlotPricesStore.LookupEntry(slot);
 
     WorldPacket data(SMSG_BUY_BANK_SLOT_RESULT, 4);
 
-    if (!slotEntry) {
+    if (!slotEntry)
+    {
         data << uint32(ERR_BANKSLOT_FAILED_TOO_MANY);
         SendPacket(&data);
         return;
@@ -912,7 +932,8 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket) {
 
     uint32 price = slotEntry->price;
 
-    if (!_player->HasEnoughMoney(price)) {
+    if (!_player->HasEnoughMoney(price))
+    {
         data << uint32(ERR_BANKSLOT_INSUFFICIENT_FUNDS);
         SendPacket(&data);
         return;
@@ -924,11 +945,11 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket) {
     data << uint32(ERR_BANKSLOT_OK);
     SendPacket(&data);
 
-    _player->GetAchievementMgr().UpdateAchievementCriteria(
-            ACHIEVEMENT_CRITERIA_TYPE_BUY_BANK_SLOT);
+    _player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BUY_BANK_SLOT);
 }
 
-void WorldSession::HandleAutoBankItemOpcode(WorldPacket& recvPacket) {
+void WorldSession::HandleAutoBankItemOpcode (WorldPacket& recvPacket)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AUTOBANK_ITEM");
     uint8 srcbag, srcslot;
 
@@ -957,7 +978,8 @@ void WorldSession::HandleAutoBankItemOpcode(WorldPacket& recvPacket) {
     _player->BankItem(dest, pItem, true);
 }
 
-void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket) {
+void WorldSession::HandleAutoStoreBankItemOpcode (WorldPacket& recvPacket)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AUTOSTORE_BANK_ITEM");
     uint8 srcbag, srcslot;
 
@@ -968,7 +990,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket) {
     if (!pItem)
     return;
 
-    if (_player->IsBankPos(srcbag, srcslot)) // moving from bank to inventory
+    if (_player->IsBankPos(srcbag, srcslot))          // moving from bank to inventory
     {
         ItemPosCountVec dest;
         uint8 msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, dest, pItem, false);
@@ -981,7 +1003,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket) {
         _player->RemoveItem(srcbag, srcslot, true);
         _player->StoreItem(dest, pItem, true);
     }
-    else // moving from inventory to bank
+    else          // moving from inventory to bank
     {
         ItemPosCountVec dest;
         uint8 msg = _player->CanBankItem(NULL_BAG, NULL_SLOT, dest, pItem, false);
@@ -996,8 +1018,10 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket) {
     }
 }
 
-void WorldSession::HandleSetAmmoOpcode(WorldPacket & recv_data) {
-    if (!GetPlayer()->isAlive()) {
+void WorldSession::HandleSetAmmoOpcode (WorldPacket & recv_data)
+{
+    if (!GetPlayer()->isAlive())
+    {
         GetPlayer()->SendEquipError(EQUIP_ERR_YOU_ARE_DEAD, NULL, NULL);
         return;
     }
@@ -1013,9 +1037,9 @@ void WorldSession::HandleSetAmmoOpcode(WorldPacket & recv_data) {
         GetPlayer()->SetAmmo(item);
 }
 
-void WorldSession::SendEnchantmentLog(uint64 Target, uint64 Caster,
-        uint32 ItemID, uint32 SpellID) {
-    WorldPacket data(SMSG_ENCHANTMENTLOG, (8 + 8 + 4 + 4 + 1)); // last check 4.0.6a
+void WorldSession::SendEnchantmentLog (uint64 Target, uint64 Caster, uint32 ItemID, uint32 SpellID)
+{
+    WorldPacket data(SMSG_ENCHANTMENTLOG, (8 + 8 + 4 + 4 + 1));          // last check 4.0.6a
     data << uint64(Target);
     data << uint64(Caster);
     data << uint32(ItemID);
@@ -1023,8 +1047,8 @@ void WorldSession::SendEnchantmentLog(uint64 Target, uint64 Caster,
     SendPacket(&data);
 }
 
-void WorldSession::SendItemEnchantTimeUpdate(uint64 Playerguid, uint64 Itemguid,
-        uint32 slot, uint32 Duration) {
+void WorldSession::SendItemEnchantTimeUpdate (uint64 Playerguid, uint64 Itemguid, uint32 slot, uint32 Duration)
+{
     // last check 2.0.10
     WorldPacket data(SMSG_ITEM_ENCHANT_TIME_UPDATE, (8 + 4 + 4 + 8));
     data << uint64(Itemguid);
@@ -1034,23 +1058,23 @@ void WorldSession::SendItemEnchantTimeUpdate(uint64 Playerguid, uint64 Itemguid,
     SendPacket(&data);
 }
 
-void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleItemNameQueryOpcode (WorldPacket & recv_data)
+{
     uint32 itemid;
     recv_data >> itemid;
-    recv_data.read_skip<uint64>(); // guid
+    recv_data.read_skip<uint64>();          // guid
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_ITEM_NAME_QUERY %u",
-            itemid);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_ITEM_NAME_QUERY %u", itemid);
     ItemSetNameEntry const *pName = sObjectMgr->GetItemSetNameEntry(itemid);
-    if (pName) {
+    if (pName)
+    {
         std::string Name = pName->name;
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
             if (ItemSetNameLocale const *isnl = sObjectMgr->GetItemSetNameLocale(itemid))
                 sObjectMgr->GetLocaleString(isnl->Name, loc_idx, Name);
 
-        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE,
-                (4 + Name.size() + 1 + 4));
+        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4 + Name.size() + 1 + 4));
         data << uint32(itemid);
         data << Name;
         data << uint32(pName->InventoryType);
@@ -1058,7 +1082,8 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data) {
     }
 }
 
-void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data) {
+void WorldSession::HandleWrapItemOpcode (WorldPacket& recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Received opcode CMSG_WRAP_ITEM");
 
     uint8 gift_bag, gift_slot, item_bag, item_slot;
@@ -1076,7 +1101,7 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data) {
         return;
     }
 
-    if (!(gift->GetProto()->Flags & ITEM_PROTO_FLAG_WRAPPER)) // cheating: non-wrapper wrapper
+    if (!(gift->GetProto()->Flags & ITEM_PROTO_FLAG_WRAPPER))          // cheating: non-wrapper wrapper
     {
         _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, gift, NULL);
         return;
@@ -1090,7 +1115,7 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data) {
         return;
     }
 
-    if (item == gift) // not possable with pacjket from real client
+    if (item == gift)          // not possable with pacjket from real client
     {
         _player->SendEquipError(EQUIP_ERR_WRAPPED_CANT_BE_WRAPPED, item, NULL);
         return;
@@ -1102,7 +1127,7 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data) {
         return;
     }
 
-    if (item->GetUInt64Value(ITEM_FIELD_GIFTCREATOR)) // HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAGS_WRAPPED);
+    if (item->GetUInt64Value(ITEM_FIELD_GIFTCREATOR))          // HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAGS_WRAPPED);
     {
         _player->SendEquipError(EQUIP_ERR_WRAPPED_CANT_BE_WRAPPED, item, NULL);
         return;
@@ -1150,7 +1175,7 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data) {
     item->SetUInt32Value(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED);
     item->SetState(ITEM_CHANGED, _player);
 
-    if (item->GetState() == ITEM_NEW) // save new item, to have alway for `character_gifts` record in `item_instance`
+    if (item->GetState() == ITEM_NEW)          // save new item, to have alway for `character_gifts` record in `item_instance`
     {
         // after save it will be impossible to remove the item from the queue
         item->RemoveFromUpdateQueueOf(_player);
@@ -1162,7 +1187,8 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data) {
     _player->DestroyItemCount(gift, count, true);
 }
 
-void WorldSession::HandleSocketOpcode(WorldPacket& recv_data) {
+void WorldSession::HandleSocketOpcode (WorldPacket& recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_SOCKET_GEMS");
 
     uint64 item_guid;
@@ -1176,13 +1202,11 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recv_data) {
         recv_data >> gem_guids[i];
 
     //cheat -> tried to socket same gem multiple times
-    if ((gem_guids[0]
-            && (gem_guids[0] == gem_guids[1] || gem_guids[0] == gem_guids[2]))
-            || (gem_guids[1] && (gem_guids[1] == gem_guids[2])))
+    if ((gem_guids[0] && (gem_guids[0] == gem_guids[1] || gem_guids[0] == gem_guids[2])) || (gem_guids[1] && (gem_guids[1] == gem_guids[2])))
         return;
 
     Item *itemTarget = _player->GetItemByGuid(item_guid);
-    if (!itemTarget) //missing item to socket
+    if (!itemTarget)          //missing item to socket
         return;
 
     ItemPrototype const* itemProto = itemTarget->GetProto();
@@ -1190,63 +1214,55 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recv_data) {
         return;
 
     //this slot is excepted when applying / removing meta gem bonus
-    uint8 slot =
-            itemTarget->IsEquipped() ? itemTarget->GetSlot() : uint8(NULL_SLOT);
+    uint8 slot = itemTarget->IsEquipped() ? itemTarget->GetSlot() : uint8(NULL_SLOT);
 
     Item *Gems[MAX_GEM_SOCKETS];
     for (int i = 0; i < MAX_GEM_SOCKETS; ++i)
         Gems[i] = gem_guids[i] ? _player->GetItemByGuid(gem_guids[i]) : NULL;
 
     GemPropertiesEntry const *GemProps[MAX_GEM_SOCKETS];
-    for (int i = 0; i < MAX_GEM_SOCKETS; ++i) //get geminfo from dbc storage
-        GemProps[i] =
-                (Gems[i]) ?
-                        sGemPropertiesStore.LookupEntry(
-                                Gems[i]->GetProto()->GemProperties) :
-                        NULL;
+    for (int i = 0; i < MAX_GEM_SOCKETS; ++i)          //get geminfo from dbc storage
+        GemProps[i] = (Gems[i]) ? sGemPropertiesStore.LookupEntry(Gems[i]->GetProto()->GemProperties) : NULL;
 
-    for (int i = 0; i < MAX_GEM_SOCKETS; ++i) //check for hack maybe
-            {
+    for (int i = 0; i < MAX_GEM_SOCKETS; ++i)          //check for hack maybe
+    {
         if (!GemProps[i])
             continue;
 
         // tried to put gem in socket where no socket exists (take care about prismatic sockets)
-        if (!itemProto->Socket[i].Color) {
+        if (!itemProto->Socket[i].Color)
+        {
             // no prismatic socket
             if (!itemTarget->GetEnchantmentId(PRISMATIC_ENCHANTMENT_SLOT))
                 return;
 
             // not first not-colored (not normaly used) socket
-            if (i != 0 && !itemProto->Socket[i - 1].Color
-                    && (i + 1 >= MAX_GEM_SOCKETS
-                            || itemProto->Socket[i + 1].Color))
+            if (i != 0 && !itemProto->Socket[i - 1].Color && (i + 1 >= MAX_GEM_SOCKETS || itemProto->Socket[i + 1].Color))
                 return;
 
             // ok, this is first not colored socket for item with prismatic socket
         }
 
         // tried to put normal gem in meta socket
-        if (itemProto->Socket[i].Color == SOCKET_COLOR_META
-                && GemProps[i]->color != SOCKET_COLOR_META)
+        if (itemProto->Socket[i].Color == SOCKET_COLOR_META && GemProps[i]->color != SOCKET_COLOR_META)
             return;
 
         // tried to put meta gem in normal socket
-        if (itemProto->Socket[i].Color != SOCKET_COLOR_META
-                && GemProps[i]->color == SOCKET_COLOR_META)
+        if (itemProto->Socket[i].Color != SOCKET_COLOR_META && GemProps[i]->color == SOCKET_COLOR_META)
             return;
     }
 
     uint32 GemEnchants[MAX_GEM_SOCKETS];
     uint32 OldEnchants[MAX_GEM_SOCKETS];
-    for (int i = 0; i < MAX_GEM_SOCKETS; ++i) //get new and old enchantments
-            {
+    for (int i = 0; i < MAX_GEM_SOCKETS; ++i)          //get new and old enchantments
+    {
         GemEnchants[i] = (GemProps[i]) ? GemProps[i]->spellitemenchantement : 0;
-        OldEnchants[i] = itemTarget->GetEnchantmentId(
-                EnchantmentSlot(SOCK_ENCHANTMENT_SLOT + i));
+        OldEnchants[i] = itemTarget->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT + i));
     }
 
     // check unique-equipped conditions
-    for (int i = 0; i < MAX_GEM_SOCKETS; ++i) {
+    for (int i = 0; i < MAX_GEM_SOCKETS; ++i)
+    {
         if (!Gems[i])
             continue;
 
@@ -1254,24 +1270,28 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recv_data) {
         ItemPrototype const* iGemProto = Gems[i]->GetProto();
 
         // unique item (for new and already placed bit removed enchantments
-        if (iGemProto->Flags & ITEM_PROTO_FLAG_UNIQUE_EQUIPPED) {
-            for (int j = 0; j < MAX_GEM_SOCKETS; ++j) {
-                if (i == j) // skip self
+        if (iGemProto->Flags & ITEM_PROTO_FLAG_UNIQUE_EQUIPPED)
+        {
+            for (int j = 0; j < MAX_GEM_SOCKETS; ++j)
+            {
+                if (i == j)          // skip self
                     continue;
 
-                if (Gems[j]) {
-                    if (iGemProto->ItemId == Gems[j]->GetEntry()) {
-                        _player->SendEquipError(
-                                EQUIP_ERR_ITEM_UNIQUE_EQUIPPABLE_SOCKETED,
-                                itemTarget, NULL);
+                if (Gems[j])
+                {
+                    if (iGemProto->ItemId == Gems[j]->GetEntry())
+                    {
+                        _player->SendEquipError(EQUIP_ERR_ITEM_UNIQUE_EQUIPPABLE_SOCKETED, itemTarget, NULL);
                         return;
                     }
-                } else if (OldEnchants[j]) {
-                    if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(OldEnchants[j])) {
-                        if (iGemProto->ItemId == enchantEntry->GemID) {
-                            _player->SendEquipError(
-                                    EQUIP_ERR_ITEM_UNIQUE_EQUIPPABLE_SOCKETED,
-                                    itemTarget, NULL);
+                }
+                else if (OldEnchants[j])
+                {
+                    if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(OldEnchants[j]))
+                    {
+                        if (iGemProto->ItemId == enchantEntry->GemID)
+                        {
+                            _player->SendEquipError(EQUIP_ERR_ITEM_UNIQUE_EQUIPPABLE_SOCKETED, itemTarget, NULL);
                             return;
                         }
                     }
@@ -1281,91 +1301,86 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recv_data) {
 
         // unique limit type item
         int32 limit_newcount = 0;
-        if (iGemProto->ItemLimitCategory) {
-            if (ItemLimitCategoryEntry const* limitEntry = sItemLimitCategoryStore.LookupEntry(iGemProto->ItemLimitCategory)) {
+        if (iGemProto->ItemLimitCategory)
+        {
+            if (ItemLimitCategoryEntry const* limitEntry = sItemLimitCategoryStore.LookupEntry(iGemProto->ItemLimitCategory))
+            {
                 // NOTE: limitEntry->mode is not checked because if item has limit then it is applied in equip case
-                for (int j = 0; j < MAX_GEM_SOCKETS; ++j) {
-                    if (Gems[j]) {
+                for (int j = 0; j < MAX_GEM_SOCKETS; ++j)
+                {
+                    if (Gems[j])
+                    {
                         // new gem
-                        if (iGemProto->ItemLimitCategory
-                                == Gems[j]->GetProto()->ItemLimitCategory)
+                        if (iGemProto->ItemLimitCategory == Gems[j]->GetProto()->ItemLimitCategory)
                             ++limit_newcount;
-                    } else if (OldEnchants[j]) {
+                    }
+                    else if (OldEnchants[j])
+                    {
                         // existing gem
                         if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(OldEnchants[j]))
                             if (ItemPrototype const* jProto = ObjectMgr::GetItemPrototype(enchantEntry->GemID))
-                                if (iGemProto->ItemLimitCategory
-                                        == jProto->ItemLimitCategory)
+                                if (iGemProto->ItemLimitCategory == jProto->ItemLimitCategory)
                                     ++limit_newcount;
                     }
                 }
 
-                if (limit_newcount > 0
-                        && uint32(limit_newcount) > limitEntry->maxCount) {
-                    _player->SendEquipError(
-                            EQUIP_ERR_ITEM_UNIQUE_EQUIPPABLE_SOCKETED,
-                            itemTarget, NULL);
+                if (limit_newcount > 0 && uint32(limit_newcount) > limitEntry->maxCount)
+                {
+                    _player->SendEquipError(EQUIP_ERR_ITEM_UNIQUE_EQUIPPABLE_SOCKETED, itemTarget, NULL);
                     return;
                 }
             }
         }
 
         // for equipped item check all equipment for duplicate equipped gems
-        if (itemTarget->IsEquipped()) {
-            if (uint8 res = _player->CanEquipUniqueItem(Gems[i], slot, limit_newcount >= 0 ? limit_newcount : 0)) {
+        if (itemTarget->IsEquipped())
+        {
+            if (uint8 res = _player->CanEquipUniqueItem(Gems[i], slot, limit_newcount >= 0 ? limit_newcount : 0))
+            {
                 _player->SendEquipError(res, itemTarget, NULL);
                 return;
             }
         }
     }
 
-    bool SocketBonusActivated = itemTarget->GemsFitSockets(); //save state of socketbonus
-    _player->ToggleMetaGemsActive(slot, false); //turn off all metagems (except for the target item)
+    bool SocketBonusActivated = itemTarget->GemsFitSockets();          //save state of socketbonus
+    _player->ToggleMetaGemsActive(slot, false);          //turn off all metagems (except for the target item)
 
     //if a meta gem is being equipped, all information has to be written to the item before testing if the conditions for the gem are met
 
     //remove ALL enchants
-    for (uint32 enchant_slot = SOCK_ENCHANTMENT_SLOT;
-            enchant_slot < SOCK_ENCHANTMENT_SLOT + MAX_GEM_SOCKETS;
-            ++enchant_slot)
-        _player->ApplyEnchantment(itemTarget, EnchantmentSlot(enchant_slot),
-                false);
+    for (uint32 enchant_slot = SOCK_ENCHANTMENT_SLOT; enchant_slot < SOCK_ENCHANTMENT_SLOT + MAX_GEM_SOCKETS; ++enchant_slot)
+        _player->ApplyEnchantment(itemTarget, EnchantmentSlot(enchant_slot), false);
 
-    for (int i = 0; i < MAX_GEM_SOCKETS; ++i) {
-        if (GemEnchants[i]) {
-            itemTarget->SetEnchantment(
-                    EnchantmentSlot(SOCK_ENCHANTMENT_SLOT + i), GemEnchants[i],
-                    0, 0);
+    for (int i = 0; i < MAX_GEM_SOCKETS; ++i)
+    {
+        if (GemEnchants[i])
+        {
+            itemTarget->SetEnchantment(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT + i), GemEnchants[i], 0, 0);
             if (Item* guidItem = _player->GetItemByGuid(gem_guids[i]))
-                _player->DestroyItem(guidItem->GetBagSlot(),
-                        guidItem->GetSlot(), true);
+                _player->DestroyItem(guidItem->GetBagSlot(), guidItem->GetSlot(), true);
         }
     }
 
-    for (uint32 enchant_slot = SOCK_ENCHANTMENT_SLOT;
-            enchant_slot < SOCK_ENCHANTMENT_SLOT + MAX_GEM_SOCKETS;
-            ++enchant_slot)
-        _player->ApplyEnchantment(itemTarget, EnchantmentSlot(enchant_slot),
-                true);
+    for (uint32 enchant_slot = SOCK_ENCHANTMENT_SLOT; enchant_slot < SOCK_ENCHANTMENT_SLOT + MAX_GEM_SOCKETS; ++enchant_slot)
+        _player->ApplyEnchantment(itemTarget, EnchantmentSlot(enchant_slot), true);
 
-    bool SocketBonusToBeActivated = itemTarget->GemsFitSockets(); //current socketbonus state
-    if (SocketBonusActivated ^ SocketBonusToBeActivated) //if there was a change...
-            {
+    bool SocketBonusToBeActivated = itemTarget->GemsFitSockets();          //current socketbonus state
+    if (SocketBonusActivated ^ SocketBonusToBeActivated)          //if there was a change...
+    {
         _player->ApplyEnchantment(itemTarget, BONUS_ENCHANTMENT_SLOT, false);
-        itemTarget->SetEnchantment(
-                BONUS_ENCHANTMENT_SLOT,
-                (SocketBonusToBeActivated ?
-                        itemTarget->GetProto()->socketBonus : 0), 0, 0);
+        itemTarget->SetEnchantment(BONUS_ENCHANTMENT_SLOT, (SocketBonusToBeActivated ? itemTarget->GetProto()->socketBonus : 0), 0, 0);
         _player->ApplyEnchantment(itemTarget, BONUS_ENCHANTMENT_SLOT, true);
         //it is not displayed, client has an inbuilt system to determine if the bonus is activated
     }
 
-    _player->ToggleMetaGemsActive(slot, true); //turn on all metagems (except for target item)
+    _player->ToggleMetaGemsActive(slot, true);          //turn on all metagems (except for target item)
 
-    itemTarget->SetSoulboundTradeable(NULL, _player, false); // clear tradeable flag
+    itemTarget->SetSoulboundTradeable(NULL, _player, false);          // clear tradeable flag
 }
 
-void WorldSession::HandleCancelTempEnchantmentOpcode(WorldPacket& recv_data) {
+void WorldSession::HandleCancelTempEnchantmentOpcode (WorldPacket& recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CANCEL_TEMP_ENCHANTMENT");
 
     uint32 eslot;
@@ -1388,14 +1403,16 @@ void WorldSession::HandleCancelTempEnchantmentOpcode(WorldPacket& recv_data) {
     item->ClearEnchantment(TEMP_ENCHANTMENT_SLOT);
 }
 
-void WorldSession::HandleItemRefundInfoRequest(WorldPacket& recv_data) {
+void WorldSession::HandleItemRefundInfoRequest (WorldPacket& recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_ITEM_REFUND_INFO");
 
     uint64 guid;
-    recv_data >> guid; // item guid
+    recv_data >> guid;          // item guid
 
     Item *item = _player->GetItemByGuid(guid);
-    if (!item) {
+    if (!item)
+    {
         sLog->outDebug(LOG_FILTER_NETWORKIO, "Item refund: item not found!");
         return;
     }
@@ -1403,13 +1420,15 @@ void WorldSession::HandleItemRefundInfoRequest(WorldPacket& recv_data) {
     GetPlayer()->SendRefundInfo(item);
 }
 
-void WorldSession::HandleItemRefund(WorldPacket &recv_data) {
+void WorldSession::HandleItemRefund (WorldPacket &recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_ITEM_REFUND");
     uint64 guid;
-    recv_data >> guid; // item guid
+    recv_data >> guid;          // item guid
 
     Item *item = _player->GetItemByGuid(guid);
-    if (!item) {
+    if (!item)
+    {
         sLog->outDebug(LOG_FILTER_NETWORKIO, "Item refund: item not found!");
         return;
     }
@@ -1422,27 +1441,31 @@ void WorldSession::HandleItemRefund(WorldPacket &recv_data) {
  *
  * This function is called when player clicks on item which has some flag set
  */
-void WorldSession::HandleItemTextQuery(WorldPacket & recv_data) {
+void WorldSession::HandleItemTextQuery (WorldPacket & recv_data)
+{
     uint64 itemGuid;
     recv_data >> itemGuid;
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_ITEM_TEXT_QUERY item guid: %u",
-            GUID_LOPART(itemGuid));
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_ITEM_TEXT_QUERY item guid: %u", GUID_LOPART(itemGuid));
 
-    WorldPacket data(SMSG_ITEM_TEXT_QUERY_RESPONSE, (4 + 10)); // guess size
+    WorldPacket data(SMSG_ITEM_TEXT_QUERY_RESPONSE, (4 + 10));          // guess size
 
-    if (Item *item = _player->GetItemByGuid(itemGuid)) {
-        data << uint8(0); // has text
-        data << uint64(itemGuid); // item guid
+    if (Item *item = _player->GetItemByGuid(itemGuid))
+    {
+        data << uint8(0);          // has text
+        data << uint64(itemGuid);          // item guid
         data << item->GetText();
-    } else {
-        data << uint8(1); // no text
+    }
+    else
+    {
+        data << uint8(1);          // no text
     }
 
     SendPacket(&data);
 }
 
-void WorldSession::HandleReforgeOpcode(WorldPacket & recv_data) {
+void WorldSession::HandleReforgeOpcode (WorldPacket & recv_data)
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Received packet CMSG_REFORGE");
 
     uint32 slot, reforgeEntry, bag;
@@ -1461,7 +1484,7 @@ void WorldSession::HandleReforgeOpcode(WorldPacket & recv_data) {
         return;
     }
 
-    if ((item->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_9_1)) && reforgeEntry) // prevent hackers and exploiting
+    if ((item->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_9_1)) && reforgeEntry)          // prevent hackers and exploiting
     {
         sLog->outError("Item %u was been alrdy reforged!");
         return;
@@ -1493,7 +1516,7 @@ void WorldSession::HandleReforgeOpcode(WorldPacket & recv_data) {
     {
         int32 price = proto->SellPrice;
         if (price < 1 * GOLD)
-        price = 1 * GOLD; // blizz: minimum reforge cost is 1 gold
+        price = 1 * GOLD;          // blizz: minimum reforge cost is 1 gold
 
         if (!_player->HasEnoughMoney(price))
         {

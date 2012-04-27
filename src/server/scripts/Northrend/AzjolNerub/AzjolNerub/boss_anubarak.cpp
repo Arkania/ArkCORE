@@ -35,7 +35,7 @@ enum Spells
     SPELL_IMPALE_DMG                              = 53454,
     SPELL_IMPALE_DMG_H                            = 59446,
     SPELL_IMPALE_SHAKEGROUND                      = 53455,
-    SPELL_IMPALE_SPIKE                            = 53539,   //this is not the correct visual effect
+    SPELL_IMPALE_SPIKE                            = 53539,  //this is not the correct visual effect
     //SPELL_IMPALE_TARGET                           = 53458,
 };
 

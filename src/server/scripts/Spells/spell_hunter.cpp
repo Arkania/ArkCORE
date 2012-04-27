@@ -28,27 +28,25 @@
 #include "ScriptPCH.h"
 #include "SpellAuraEffects.h"
 
-enum HunterSpells {
-    HUNTER_SPELL_READINESS = 23989,
-    HUNTER_SPELL_BESTIAL_WRATH = 19574,
-    HUNTER_PET_SPELL_LAST_STAND_TRIGGERED = 53479,
-    HUNTER_PET_HEART_OF_THE_PHOENIX = 55709,
-    HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED = 54114,
-    HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF = 55711,
-    HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED = 54045,
-    HUNTER_SPELL_INVIGORATION_TRIGGERED = 53398,
-    HUNTER_SPELL_MASTERS_CALL_TRIGGERED = 62305,
-    HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED = 53220
+enum HunterSpells
+{
+    HUNTER_SPELL_READINESS = 23989, HUNTER_SPELL_BESTIAL_WRATH = 19574, HUNTER_PET_SPELL_LAST_STAND_TRIGGERED = 53479, HUNTER_PET_HEART_OF_THE_PHOENIX = 55709, HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED = 54114, HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF = 55711, HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED = 54045, HUNTER_SPELL_INVIGORATION_TRIGGERED = 53398, HUNTER_SPELL_MASTERS_CALL_TRIGGERED = 62305, HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED = 53220
 };
 
-class spell_hun_kill_command: public SpellScriptLoader {
+class spell_hun_kill_command: public SpellScriptLoader
+{
 public:
-    spell_hun_kill_command() : SpellScriptLoader("spell_hun_kill_command") {}
+    spell_hun_kill_command () :
+            SpellScriptLoader("spell_hun_kill_command")
+    {
+    }
 
-    class spell_hun_kill_command_SpellScript: public SpellScript {
+    class spell_hun_kill_command_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_kill_command_SpellScript)
 
-        SpellCastResult CheckCast(){
+        SpellCastResult CheckCast ()
+        {
             Pet* pet = GetCaster()->ToPlayer()->GetPet();
 
             if (!pet || pet->isDead())
@@ -60,31 +58,39 @@ public:
             return SPELL_CAST_OK;
         }
 
-        void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
-             Pet* pet = GetCaster()->ToPlayer()->GetPet();
-             pet->CastCustomSpell(pet->getVictim(), (uint32)GetEffectValue(), 0, NULL, NULL, true, NULL, NULL, pet->GetGUID());
+        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
+        {
+            Pet* pet = GetCaster()->ToPlayer()->GetPet();
+            pet->CastCustomSpell(pet->getVictim(), (uint32) GetEffectValue(), 0, NULL, NULL, true, NULL, NULL, pet->GetGUID());
         }
 
-        void Register()
+        void Register ()
         {
             OnCheckCast += SpellCheckCastFn(spell_hun_kill_command_SpellScript::CheckCast);
             OnEffect += SpellEffectFn(spell_hun_kill_command_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_kill_command_SpellScript();
     }
 };
 
-class spell_hun_focus_fire: public SpellScriptLoader {
+class spell_hun_focus_fire: public SpellScriptLoader
+{
 public:
-    spell_hun_focus_fire() : SpellScriptLoader("spell_hun_focus_fire") {}
+    spell_hun_focus_fire () :
+            SpellScriptLoader("spell_hun_focus_fire")
+    {
+    }
 
-    class spell_hun_focus_fire_SpellScript: public SpellScript {
+    class spell_hun_focus_fire_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_focus_fire_SpellScript)
 
-        SpellCastResult CheckCast(){
+        SpellCastResult CheckCast ()
+        {
             Unit* caster = GetCaster();
             Pet* pet = caster->ToPlayer()->GetPet();
 
@@ -97,7 +103,8 @@ public:
             return SPELL_CAST_OK;
         }
 
-        void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
+        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
+        {
             Unit* caster = GetCaster();
             Pet* pet = GetCaster()->ToPlayer()->GetPet();
 
@@ -106,197 +113,210 @@ public:
                 uint8 aurCharges = aur->GetStackAmount();
                 caster->GetAura(82692)->SetStackAmount(aurCharges);
                 pet->RemoveAurasDueToSpell(19615);
-             }
-             int32 bp = GetEffectValue();
-             caster->CastCustomSpell(pet, 83468, &bp, NULL, NULL, true, NULL, NULL, caster->GetGUID());
+            }
+            int32 bp = GetEffectValue();
+            caster->CastCustomSpell(pet, 83468, &bp, NULL, NULL, true, NULL, NULL, caster->GetGUID());
         }
 
-        void Register()
+        void Register ()
         {
             OnCheckCast += SpellCheckCastFn(spell_hun_focus_fire_SpellScript::CheckCast);
             OnEffect += SpellEffectFn(spell_hun_focus_fire_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_APPLY_AURA);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_focus_fire_SpellScript();
     }
 };
 
 // 53412 Invigoration
-class spell_hun_invigoration: public SpellScriptLoader {
+class spell_hun_invigoration: public SpellScriptLoader
+{
 public:
-    spell_hun_invigoration() :
-            SpellScriptLoader("spell_hun_invigoration") {
+    spell_hun_invigoration () :
+            SpellScriptLoader("spell_hun_invigoration")
+    {
     }
 
-    class spell_hun_invigoration_SpellScript: public SpellScript {
+    class spell_hun_invigoration_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_invigoration_SpellScript)
-        bool Validate(SpellEntry const * /*spellEntry*/) {
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_INVIGORATION_TRIGGERED))
                 return false;
             return true;
         }
 
-        void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
+        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
+        {
             if (Unit* unitTarget = GetHitUnit())
                 if (AuraEffect* aurEff = unitTarget->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 3487, 0))
                     if (roll_chance_i(aurEff->GetAmount()))
-                        unitTarget->CastSpell(unitTarget,
-                                HUNTER_SPELL_INVIGORATION_TRIGGERED, true);
+                        unitTarget->CastSpell(unitTarget, HUNTER_SPELL_INVIGORATION_TRIGGERED, true);
         }
 
-        void Register() {
-            OnEffect +=
-                    SpellEffectFn(spell_hun_invigoration_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_hun_invigoration_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_invigoration_SpellScript();
     }
 };
 
-class spell_hun_last_stand_pet: public SpellScriptLoader {
+class spell_hun_last_stand_pet: public SpellScriptLoader
+{
 public:
-    spell_hun_last_stand_pet() :
-            SpellScriptLoader("spell_hun_last_stand_pet") {
+    spell_hun_last_stand_pet () :
+            SpellScriptLoader("spell_hun_last_stand_pet")
+    {
     }
 
-    class spell_hun_last_stand_pet_SpellScript: public SpellScript {
+    class spell_hun_last_stand_pet_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_last_stand_pet_SpellScript)
-        bool Validate(SpellEntry const * /*spellEntry*/) {
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
             if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_LAST_STAND_TRIGGERED))
                 return false;
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
             Unit *caster = GetCaster();
-            int32 healthModSpellBasePoints0 = int32(
-                    caster->CountPctFromMaxHealth(30));
-            caster->CastCustomSpell(caster,
-                    HUNTER_PET_SPELL_LAST_STAND_TRIGGERED,
-                    &healthModSpellBasePoints0, NULL, NULL, true, NULL);
+            int32 healthModSpellBasePoints0 = int32(caster->CountPctFromMaxHealth(30));
+            caster->CastCustomSpell(caster, HUNTER_PET_SPELL_LAST_STAND_TRIGGERED, &healthModSpellBasePoints0, NULL, NULL, true, NULL);
         }
 
-        void Register() {
+        void Register ()
+        {
             // add dummy effect spell handler to pet's Last Stand
-            OnEffect +=
-                    SpellEffectFn(spell_hun_last_stand_pet_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            OnEffect += SpellEffectFn(spell_hun_last_stand_pet_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_last_stand_pet_SpellScript();
     }
 };
 
-class spell_hun_masters_call: public SpellScriptLoader {
+class spell_hun_masters_call: public SpellScriptLoader
+{
 public:
-    spell_hun_masters_call() :
-            SpellScriptLoader("spell_hun_masters_call") {
+    spell_hun_masters_call () :
+            SpellScriptLoader("spell_hun_masters_call")
+    {
     }
 
-    class spell_hun_masters_call_SpellScript: public SpellScript {
+    class spell_hun_masters_call_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_masters_call_SpellScript)
-        bool Validate(SpellEntry const * spellEntry) {
+        bool Validate (SpellEntry const * spellEntry)
+        {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_MASTERS_CALL_TRIGGERED))
                 return false;
-            if (!sSpellStore.LookupEntry(
-                    SpellMgr::CalculateSpellEffectAmount(spellEntry, EFFECT_0)))
+            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(spellEntry, EFFECT_0)))
                 return false;
-            if (!sSpellStore.LookupEntry(
-                    SpellMgr::CalculateSpellEffectAmount(spellEntry, EFFECT_1)))
+            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(spellEntry, EFFECT_1)))
                 return false;
             return true;
         }
 
-        void HandleScriptEffect(SpellEffIndex /*effIndex*/) {
-            if (Unit * target = GetHitUnit()) {
+        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
+        {
+            if (Unit * target = GetHitUnit())
+            {
                 target->CastSpell(target, GetEffectValue(), true);
-                target->CastSpell(target, HUNTER_SPELL_MASTERS_CALL_TRIGGERED,
-                        true);
+                target->CastSpell(target, HUNTER_SPELL_MASTERS_CALL_TRIGGERED, true);
                 // there is a possibility that this effect should access effect 0 (dummy) target, but i dubt that
                 // it's more likely that on on retail it's possible to call target selector based on dbc values
                 // anyways, we're using GetTargetUnit() here and it's ok
-                if (Unit * ally = GetTargetUnit()) {
+                if (Unit * ally = GetTargetUnit())
+                {
                     target->CastSpell(ally, GetEffectValue(), true);
-                    target->CastSpell(
-                            ally,
-                            SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(),
-                                    EFFECT_0), true);
+                    target->CastSpell(ally, SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0), true);
                 }
             }
         }
 
-        void Register() {
-            OnEffect +=
-                    SpellEffectFn(spell_hun_masters_call_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_hun_masters_call_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_masters_call_SpellScript();
     }
 };
 
-class spell_hun_readiness: public SpellScriptLoader {
+class spell_hun_readiness: public SpellScriptLoader
+{
 public:
-    spell_hun_readiness() :
-            SpellScriptLoader("spell_hun_readiness") {
+    spell_hun_readiness () :
+            SpellScriptLoader("spell_hun_readiness")
+    {
     }
 
-    class spell_hun_readiness_SpellScript: public SpellScript {
+    class spell_hun_readiness_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_readiness_SpellScript)
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
             Unit *caster = GetCaster();
             if (caster->GetTypeId() != TYPEID_PLAYER)
                 return;
 
             // immediately finishes the cooldown on your other Hunter abilities except Bestial Wrath
-            const SpellCooldowns& cm =
-                    caster->ToPlayer()->GetSpellCooldownMap();
-            for (SpellCooldowns::const_iterator itr = cm.begin();
-                    itr != cm.end();) {
-                SpellEntry const *spellInfo = sSpellStore.LookupEntry(
-                        itr->first);
+            const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
+            for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
+            {
+                SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                 ///! If spellId in cooldown map isn't valid, the above will return a null pointer.
-                if (spellInfo
-                        && spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER
-                        && spellInfo->Id != HUNTER_SPELL_READINESS
-                        && spellInfo->Id != HUNTER_SPELL_BESTIAL_WRATH
-                        && GetSpellRecoveryTime(spellInfo) > 0)
-                    caster->ToPlayer()->RemoveSpellCooldown((itr++)->first,
-                            true);
+                if (spellInfo && spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && spellInfo->Id != HUNTER_SPELL_READINESS && spellInfo->Id != HUNTER_SPELL_BESTIAL_WRATH && GetSpellRecoveryTime(spellInfo) > 0)
+                    caster->ToPlayer()->RemoveSpellCooldown((itr++)->first, true);
                 else
                     ++itr;
             }
         }
 
-        void Register() {
+        void Register ()
+        {
             // add dummy effect spell handler to Readiness
-            OnEffect +=
-                    SpellEffectFn(spell_hun_readiness_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            OnEffect += SpellEffectFn(spell_hun_readiness_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_readiness_SpellScript();
     }
 };
 
 // 37506 Scatter Shot
-class spell_hun_scatter_shot: public SpellScriptLoader {
+class spell_hun_scatter_shot: public SpellScriptLoader
+{
 public:
-    spell_hun_scatter_shot() :
-            SpellScriptLoader("spell_hun_scatter_shot") {
+    spell_hun_scatter_shot () :
+            SpellScriptLoader("spell_hun_scatter_shot")
+    {
     }
 
-    class spell_hun_scatter_shot_SpellScript: public SpellScript {
+    class spell_hun_scatter_shot_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_scatter_shot_SpellScript)
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
             Unit* caster = GetCaster();
             if (caster->GetTypeId() != TYPEID_PLAYER)
                 return;
@@ -307,31 +327,37 @@ public:
             caster->ToPlayer()->SendAttackSwingCancelAttack();
         }
 
-        void Register() {
-            OnEffect +=
-                    SpellEffectFn(spell_hun_scatter_shot_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_hun_scatter_shot_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_scatter_shot_SpellScript();
     }
 };
 
 // 53302, 53303, 53304 Sniper Training
-enum eSniperTrainingSpells {
+enum eSniperTrainingSpells
+{
     SPELL_SNIPER_TRAINING_R1 = 53302, SPELL_SNIPER_TRAINING_BUFF_R1 = 64418,
 };
 
-class spell_hun_sniper_training: public SpellScriptLoader {
+class spell_hun_sniper_training: public SpellScriptLoader
+{
 public:
-    spell_hun_sniper_training() :
-            SpellScriptLoader("spell_hun_sniper_training") {
+    spell_hun_sniper_training () :
+            SpellScriptLoader("spell_hun_sniper_training")
+    {
     }
 
-    class spell_hun_sniper_training_AuraScript: public AuraScript {
+    class spell_hun_sniper_training_AuraScript: public AuraScript
+    {
         PrepareAuraScript(spell_hun_sniper_training_AuraScript)
-        bool Validate(SpellEntry const * /*entry*/) {
+        bool Validate (SpellEntry const * /*entry*/)
+        {
             if (!sSpellStore.LookupEntry(SPELL_SNIPER_TRAINING_R1))
                 return false;
             if (!sSpellStore.LookupEntry(SPELL_SNIPER_TRAINING_BUFF_R1))
@@ -339,7 +365,8 @@ public:
             return true;
         }
 
-        void HandlePeriodic(AuraEffect const * aurEff) {
+        void HandlePeriodic (AuraEffect const * aurEff)
+        {
             PreventDefaultAction();
             if (aurEff->GetAmount() > 0)
                 return;
@@ -349,149 +376,156 @@ public:
             if (!pTarget->ToPlayer()->isInCombat())
                 return;
 
-            uint32 spellId = SPELL_SNIPER_TRAINING_BUFF_R1 + GetId()
-                    - SPELL_SNIPER_TRAINING_R1;
+            uint32 spellId = SPELL_SNIPER_TRAINING_BUFF_R1 + GetId() - SPELL_SNIPER_TRAINING_R1;
 
-            if (!pTarget->HasAura(spellId)) {
-                SpellEntry const * triggeredSpellInfo = sSpellStore.LookupEntry(
-                        spellId);
-                Unit* triggerCaster = GetTriggeredSpellCaster(
-                        triggeredSpellInfo, GetCaster(), pTarget);
-                triggerCaster->CastSpell(pTarget, triggeredSpellInfo, true, 0,
-                        aurEff);
+            if (!pTarget->HasAura(spellId))
+            {
+                SpellEntry const * triggeredSpellInfo = sSpellStore.LookupEntry(spellId);
+                Unit* triggerCaster = GetTriggeredSpellCaster(triggeredSpellInfo, GetCaster(), pTarget);
+                triggerCaster->CastSpell(pTarget, triggeredSpellInfo, true, 0, aurEff);
             }
         }
 
-        void HandleUpdatePeriodic(AuraEffect * aurEff) {
+        void HandleUpdatePeriodic (AuraEffect * aurEff)
+        {
             Unit * pTarget = GetUnitOwner();
-            if (Player* pPlayerTarget = pTarget->ToPlayer()) {
+            if (Player* pPlayerTarget = pTarget->ToPlayer())
+            {
                 int32 baseAmount = aurEff->GetBaseAmount();
-                int32 amount =
-                        pPlayerTarget->isMoving() ?
-                                pTarget->CalculateSpellDamage(pTarget,
-                                        GetSpellProto(), aurEff->GetEffIndex(),
-                                        &baseAmount) :
-                                aurEff->GetAmount() - 1;
+                int32 amount = pPlayerTarget->isMoving() ? pTarget->CalculateSpellDamage(pTarget, GetSpellProto(), aurEff->GetEffIndex(), &baseAmount) : aurEff->GetAmount() - 1;
                 aurEff->SetAmount(amount);
             }
         }
 
-        void Register() {
-            OnEffectPeriodic +=
-                    AuraEffectPeriodicFn(spell_hun_sniper_training_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
-            OnEffectUpdatePeriodic +=
-                    AuraEffectUpdatePeriodicFn(spell_hun_sniper_training_AuraScript::HandleUpdatePeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+        void Register ()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_hun_sniper_training_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+            OnEffectUpdatePeriodic += AuraEffectUpdatePeriodicFn(spell_hun_sniper_training_AuraScript::HandleUpdatePeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
         }
     };
 
-    AuraScript *GetAuraScript() const {
+    AuraScript *GetAuraScript () const
+    {
         return new spell_hun_sniper_training_AuraScript();
     }
 };
 
-class spell_hun_pet_heart_of_the_phoenix: public SpellScriptLoader {
+class spell_hun_pet_heart_of_the_phoenix: public SpellScriptLoader
+{
 public:
-    spell_hun_pet_heart_of_the_phoenix() :
-            SpellScriptLoader("spell_hun_pet_heart_of_the_phoenix") {
+    spell_hun_pet_heart_of_the_phoenix () :
+            SpellScriptLoader("spell_hun_pet_heart_of_the_phoenix")
+    {
     }
 
-    class spell_hun_pet_heart_of_the_phoenix_SpellScript: public SpellScript {
+    class spell_hun_pet_heart_of_the_phoenix_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_pet_heart_of_the_phoenix_SpellScript)
-        bool Validate(SpellEntry const * /*spellEntry*/) {
-            if (!sSpellStore.LookupEntry(
-                    HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED))
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
+            if (!sSpellStore.LookupEntry(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED))
                 return false;
-            if (!sSpellStore.LookupEntry(
-                    HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF))
+            if (!sSpellStore.LookupEntry(HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF))
                 return false;
             return true;
         }
 
-        void HandleScript(SpellEffIndex /*effIndex*/) {
+        void HandleScript (SpellEffIndex /*effIndex*/)
+        {
             Unit *caster = GetCaster();
             Unit *owner = caster->GetOwner();
-            if (!owner
-                    || caster->HasAura(HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF))
+            if (!owner || caster->HasAura(HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF))
                 return;
-            owner->CastCustomSpell(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED,
-                    SPELLVALUE_BASE_POINT0, 100, caster, true);
-            caster->CastSpell(caster, HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF,
-                    true);
+            owner->CastCustomSpell(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED, SPELLVALUE_BASE_POINT0, 100, caster, true);
+            caster->CastSpell(caster, HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF, true);
         }
 
-        void Register() {
+        void Register ()
+        {
             // add dummy effect spell handler to pet's Last Stand
-            OnEffect +=
-                    SpellEffectFn(spell_hun_pet_heart_of_the_phoenix_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+            OnEffect += SpellEffectFn(spell_hun_pet_heart_of_the_phoenix_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
         }
 
-        bool Load() {
+        bool Load ()
+        {
             if (!GetCaster()->isPet())
                 return false;
             return true;
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_pet_heart_of_the_phoenix_SpellScript();
     }
 };
 
-class spell_hun_pet_carrion_feeder: public SpellScriptLoader {
+class spell_hun_pet_carrion_feeder: public SpellScriptLoader
+{
 public:
-    spell_hun_pet_carrion_feeder() :
-            SpellScriptLoader("spell_hun_pet_carrion_feeder") {
+    spell_hun_pet_carrion_feeder () :
+            SpellScriptLoader("spell_hun_pet_carrion_feeder")
+    {
     }
 
-    class spell_hun_pet_carrion_feeder_SpellScript: public SpellScript {
+    class spell_hun_pet_carrion_feeder_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_pet_carrion_feeder_SpellScript)
-        bool Validate(SpellEntry const * /*spellEntry*/) {
-            if (!sSpellStore.LookupEntry(
-                    HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED))
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
+            if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED))
                 return false;
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
             if (!GetHitUnit())
                 return;
             Unit *caster = GetCaster();
-            caster->CastSpell(caster, HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED,
-                    false);
+            caster->CastSpell(caster, HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED, false);
         }
 
-        void Register() {
+        void Register ()
+        {
             // add dummy effect spell handler to pet's Last Stand
-            OnEffect +=
-                    SpellEffectFn(spell_hun_pet_carrion_feeder_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            OnEffect += SpellEffectFn(spell_hun_pet_carrion_feeder_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
 
-        bool Load() {
+        bool Load ()
+        {
             if (!GetCaster()->isPet())
                 return false;
             return true;
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_pet_carrion_feeder_SpellScript();
     }
 };
 
 // 56641 Steady Shot
-class spell_hun_steady_shot: public SpellScriptLoader {
+class spell_hun_steady_shot: public SpellScriptLoader
+{
 public:
-    spell_hun_steady_shot() :
-            SpellScriptLoader("spell_hun_steady_shot") {
+    spell_hun_steady_shot () :
+            SpellScriptLoader("spell_hun_steady_shot")
+    {
     }
 
-    class spell_hun_steady_shot_SpellScript: public SpellScript {
+    class spell_hun_steady_shot_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_hun_steady_shot_SpellScript)
 
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
             ++castCount;
-            if (castCount > 1) {
-                if (Unit* caster = GetCaster()) {
+            if (castCount > 1)
+            {
+                if (Unit* caster = GetCaster())
+                {
                     int32 speed0 = 0;
                     if (caster->HasAura(53221))
                         speed0 = 5;
@@ -501,9 +535,7 @@ public:
                         speed0 = 15;
 
                     if (speed0)
-                        caster->CastCustomSpell(caster,
-                                HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED, &speed0,
-                                NULL, NULL, true, 0, 0, caster->GetGUID());
+                        caster->CastCustomSpell(caster, HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED, &speed0, NULL, NULL, true, 0, 0, caster->GetGUID());
 
                     castCount = 0;
 
@@ -515,21 +547,23 @@ public:
             }
         }
 
-        void Register() {
-            OnEffect +=
-                    SpellEffectFn(spell_hun_steady_shot_SpellScript::HandleDummy, EFFECT_2, SPELL_EFFECT_DUMMY);
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_hun_steady_shot_SpellScript::HandleDummy, EFFECT_2, SPELL_EFFECT_DUMMY);
         }
 
     private:
         int castCount;
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_hun_steady_shot_SpellScript();
     }
 };
 
-void AddSC_hunter_spell_scripts() {
+void AddSC_hunter_spell_scripts ()
+{
     new spell_hun_invigoration();
     new spell_hun_last_stand_pet();
     new spell_hun_masters_call();
