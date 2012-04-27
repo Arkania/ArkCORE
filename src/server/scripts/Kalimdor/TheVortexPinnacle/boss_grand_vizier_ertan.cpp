@@ -57,7 +57,7 @@ public:
         void Reset()
         {
             LightningBoltTimer = 7000;
-            
+
             if (instance)
             {
                 instance->SetData(DATA_GRAND_VIZIER_ERTAN, NOT_STARTED);

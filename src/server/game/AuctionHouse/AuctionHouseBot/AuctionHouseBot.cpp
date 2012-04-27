@@ -793,7 +793,7 @@ void AuctionHouseBot::addNewAuctionBuyerBotBid (Player *AHBplayer, AHBConfig *co
             auction->bid = bidprice;
 
             // Saving auction into database
-            CharacterDatabase.PExecute("UPDATE auctionhouse SET buyguid = '%u',lastbid = '%u' WHERE id = '%u'", auction->bidder, auction->bid, auction->Id);
+            CharacterDatabase.PExecute("UPDATE auctionhouse SET buyguid = '%u', lastbid = '%u' WHERE id = '%u'", auction->bidder, auction->bid, auction->Id);
         }
         else
         {
@@ -821,7 +821,6 @@ void AuctionHouseBot::addNewAuctionBuyerBotBid (Player *AHBplayer, AHBConfig *co
 
 void AuctionHouseBot::Update ()
 {
-
     time_t _newrun = time(NULL);
     if ((!AHBSeller) && (!AHBBuyer))
         return;

@@ -52,7 +52,7 @@ public:
         void Reset()
         {
             ChillingBreathTimer = 15000;
-            
+
             if (instance)
             {
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
@@ -101,8 +101,8 @@ public:
                     me->CastSpell(target, DUNGEON_MODE(SPELL_CIILLING_BREATH_N, SPELL_CIILLING_BREATH_H), true);
 
                 ChillingBreathTimer = urand(12*IN_MILLISECONDS,17*IN_MILLISECONDS);
-            } 
-            else 
+            }
+            else
                 ChillingBreathTimer -= diff;
 
             DoMeleeAttackIfReady();
