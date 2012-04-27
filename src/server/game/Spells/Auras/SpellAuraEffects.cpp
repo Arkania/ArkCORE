@@ -6347,6 +6347,28 @@ void AuraEffect::HandleAuraDummy (AuraApplication const *aurApp, uint8 mode, boo
                 caster->ToPlayer()->KilledMonsterCredit(39237, NULL);
                 break;
             }
+            case 74401:
+            {
+                caster->CastSpell(caster, GetAmount(), true);
+                break;
+            }
+            case 91565:          // Faerie Fire
+            {
+                if (!caster || (mode & AURA_EFFECT_HANDLE_REAPPLY))
+                    break;
+
+                uint8 stackAmount = 0;
+
+                if (caster->HasAura(16858))          // Feral Aggression
+                    stackAmount = 2;
+                if (caster->HasAura(16859))
+                    stackAmount = 3;
+
+                if (stackAmount)
+                    GetBase()->SetStackAmount(stackAmount);
+
+                break;
+            }
             }
         }
         // AT REMOVE
