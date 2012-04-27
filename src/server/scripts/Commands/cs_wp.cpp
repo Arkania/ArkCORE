@@ -819,7 +819,7 @@ public:
             Map *map = chr->GetMap();
 
             Creature* pCreature = new Creature;
-            if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map,chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
+            if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
             {
                 handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, id);
                 delete pCreature;
@@ -867,7 +867,7 @@ public:
             Map *map = chr->GetMap();
 
             Creature* pCreature = new Creature;
-            if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map,chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
+            if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
             {
                 handler->PSendSysMessage(LANG_WAYPOINT_NOTCREATED, id);
                 delete pCreature;

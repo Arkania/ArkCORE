@@ -93,12 +93,12 @@ public:
                 instance->SetData(DATA_CYANIGOSA_EVENT, IN_PROGRESS);
         }
 
-        void SpellHitTarget (Unit* target,const SpellEntry* spell)
+        void SpellHitTarget (Unit* target, const SpellEntry* spell)
         {
-            if(spell->Id == SPELL_ARCANE_VACUUM)
+            if (spell->Id == SPELL_ARCANE_VACUUM)
             {
-                if(target->ToPlayer())
-                    target->ToPlayer()->TeleportTo(me->GetMapId(),me->GetPositionX(),me->GetPositionY(),me->GetPositionZ(),0);
+                if (target->ToPlayer())
+                    target->ToPlayer()->TeleportTo(me->GetMapId(), me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0);
             }
         }
 
@@ -118,7 +118,7 @@ public:
 
             if (uiArcaneVacuumTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCast(SPELL_ARCANE_VACUUM);
                     uiArcaneVacuumTimer = 30000;
@@ -127,7 +127,7 @@ public:
 
             if (uiBlizzardTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_BLIZZARD);
@@ -137,9 +137,9 @@ public:
 
             if (uiTailSweepTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    DoCast(DUNGEON_MODE(SPELL_TAIL_SWEEP,H_SPELL_TAIL_SWEEP));
+                    DoCast(DUNGEON_MODE(SPELL_TAIL_SWEEP, H_SPELL_TAIL_SWEEP));
                     uiTailSweepTimer = 5000;
                 }
             } else uiTailSweepTimer -= diff;
@@ -154,7 +154,7 @@ public:
             {
                 if (uiManaDestructionTimer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, SPELL_MANA_DESTRUCTION);
@@ -192,7 +192,7 @@ class achievement_defenseless : public AchievementCriteriaScript
 
         bool OnCheck(Player* /*player*/, Unit* target)
         {
-            if(!target)
+            if (!target)
                 return false;
 
             InstanceScript* instance = target->GetInstanceScript();

@@ -22,11 +22,11 @@
 #include "ScriptPCH.h"
 #include "drak_tharon_keep.h"
 
-#define SPELL_ARCANE_BLAST                          DUNGEON_MODE(49198,59909)
+#define SPELL_ARCANE_BLAST                          DUNGEON_MODE(49198, 59909)
 #define SPELL_ARCANE_FIELD                          47346
-#define SPELL_BLIZZARD                              DUNGEON_MODE(49034,59854)
-#define SPELL_FROSTBOLT                             DUNGEON_MODE(49037,59855)
-#define SPELL_WARTH_OF_MISERY                       DUNGEON_MODE(50089,59856)
+#define SPELL_BLIZZARD                              DUNGEON_MODE(49034, 59854)
+#define SPELL_FROSTBOLT                             DUNGEON_MODE(49037, 59855)
+#define SPELL_WARTH_OF_MISERY                       DUNGEON_MODE(50089, 59856)
 #define SPELL_SUMMON_MINIONS                        59910
 
 //not in db
@@ -137,8 +137,8 @@ public:
         {
             DoScriptText(SAY_AGGRO, me);
             Phase = PHASE_1;
-            events.ScheduleEvent(EVENT_CRYSTAL,30000);
-            events.ScheduleEvent(EVENT_SUMMON,1000);
+            events.ScheduleEvent(EVENT_CRYSTAL, 30000);
+            events.ScheduleEvent(EVENT_SUMMON, 1000);
 
             me->RemoveAllAuras();
             DoCast(SPELL_ARCANE_FIELD);
@@ -155,7 +155,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-            DoAttackerAreaInCombat(who,100);
+            DoAttackerAreaInCombat(who, 100);
         }
 
         void UpdateAI(const uint32 diff)
@@ -173,49 +173,49 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                 case EVENT_CRYSTAL:
                     DoScriptText(SAY_NECRO_ADD, me);
-                    pCrystalHandler = me->SummonCreature(CREATURE_CRYSTAL_HANDLER, CrystalHandlerSpawnPoint, TEMPSUMMON_CORPSE_TIMED_DESPAWN,20*IN_MILLISECONDS);
+                    pCrystalHandler = me->SummonCreature(CREATURE_CRYSTAL_HANDLER, CrystalHandlerSpawnPoint, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20*IN_MILLISECONDS);
                     pCrystalHandler->GetMotionMaster()->MovePoint(0, AddDestinyPoint);
-                    events.ScheduleEvent(EVENT_CRYSTAL,20000);
-    //                events.ScheduleEvent(EVENT_CRYSTAL,urand(20000,30000));
+                    events.ScheduleEvent(EVENT_CRYSTAL, 20000);
+    //                events.ScheduleEvent(EVENT_CRYSTAL, urand(20000, 30000));
                     break;
                 case EVENT_SUMMON:
-                    summon = me->SummonCreature(RAND(CREATURE_FETID_TROLL_CORPSE,CREATURE_HULKING_CORPSE,CREATURE_RISEN_SHADOWCASTER), AddSpawnPoint, TEMPSUMMON_CORPSE_TIMED_DESPAWN,20*IN_MILLISECONDS);
+                    summon = me->SummonCreature(RAND(CREATURE_FETID_TROLL_CORPSE, CREATURE_HULKING_CORPSE, CREATURE_RISEN_SHADOWCASTER), AddSpawnPoint, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20*IN_MILLISECONDS);
                     summon->GetMotionMaster()->MovePoint(0, AddDestinyPoint);
-                    events.ScheduleEvent(EVENT_SUMMON,4000);
-    //                events.ScheduleEvent(EVENT_SUMMON,DUNGEON_MODE(3000,2000));
+                    events.ScheduleEvent(EVENT_SUMMON, 4000);
+    //                events.ScheduleEvent(EVENT_SUMMON, DUNGEON_MODE(3000, 2000));
                     break;
                 case EVENT_HERO_SUMMON:
                     for (int i=1;i<=MAX_SUMMONS;i++)
-                        me->SummonCreature(CREATURE_FETID_TROLL_CORPSE,me->GetPositionX(),me->GetPositionY(),me->GetPositionZ(),0,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,1000);
-                    events.ScheduleEvent(EVENT_HERO_SUMMON,urand(20000,30000));
-    //                events.ScheduleEvent(EVENT_HERO_SUMMON,urand(5000,15000));
+                        me->SummonCreature(CREATURE_FETID_TROLL_CORPSE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
+                    events.ScheduleEvent(EVENT_HERO_SUMMON, urand(20000, 30000));
+    //                events.ScheduleEvent(EVENT_HERO_SUMMON, urand(5000, 15000));
                 case EVENT_BLIZZARD:
-                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM,0,100,true))
-                        DoCast(target,SPELL_BLIZZARD);
-                    events.ScheduleEvent(EVENT_BLIZZARD,15000);
-    //                events.ScheduleEvent(EVENT_BLIZZARD,7500);
+                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        DoCast(target, SPELL_BLIZZARD);
+                    events.ScheduleEvent(EVENT_BLIZZARD, 15000);
+    //                events.ScheduleEvent(EVENT_BLIZZARD, 7500);
                     break;
                 case EVENT_BOLT:
-                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM,0,100,true))
+                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         if (!me->HasUnitState(UNIT_STAT_CASTING))
-                            DoCast(target,SPELL_FROSTBOLT);
-                        events.ScheduleEvent(EVENT_BOLT,2500);
+                            DoCast(target, SPELL_FROSTBOLT);
+                        events.ScheduleEvent(EVENT_BOLT, 2500);
                     break;
                 case EVENT_CURSE:
-                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM,0,100,true))
+                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         if (!me->HasUnitState(UNIT_STAT_CASTING))
-                            DoCast(target,SPELL_WARTH_OF_MISERY);
-                        events.ScheduleEvent(EVENT_CURSE,9000);
+                            DoCast(target, SPELL_WARTH_OF_MISERY);
+                        events.ScheduleEvent(EVENT_CURSE, 9000);
                     break;
                 case EVENT_BLAST:
-                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM,0,100,true))
+                    if (Unit* target=SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         if (!me->HasUnitState(UNIT_STAT_CASTING))
-                            DoCast(target,SPELL_ARCANE_BLAST);
-                        events.ScheduleEvent(EVENT_BLAST,urand(20000,30000));
+                            DoCast(target, SPELL_ARCANE_BLAST);
+                        events.ScheduleEvent(EVENT_BLAST, urand(20000, 30000));
                     break;
                 }
             }
@@ -223,13 +223,13 @@ public:
             /*
             if (!me->hasUnitState(UNIT_STAT_CASTING))
             {
-                uint8 cast=(urand(0,100));
+                uint8 cast=(urand(0, 100));
                 if (cast<=65)
-                    events.ScheduleEvent(EVENT_BOLT,0);
+                    events.ScheduleEvent(EVENT_BOLT, 0);
                 if (cast<90 && cast>65)
-                    events.ScheduleEvent(EVENT_CURSE,0);
+                    events.ScheduleEvent(EVENT_CURSE, 0);
                 if (cast>=90)
-                    events.ScheduleEvent(EVENT_BLAST,0);
+                    events.ScheduleEvent(EVENT_BLAST, 0);
             } */
         }
         void JustDied(Unit* /*killer*/)
@@ -283,13 +283,13 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 Phase = PHASE_2;
                 events.Reset();
-                events.ScheduleEvent(EVENT_BLIZZARD,0);
-                events.ScheduleEvent(EVENT_BLAST,urand(20000,30000));
-                events.ScheduleEvent(EVENT_CURSE,5000);
-                events.ScheduleEvent(EVENT_BOLT,2000);
+                events.ScheduleEvent(EVENT_BLIZZARD, 0);
+                events.ScheduleEvent(EVENT_BLAST, urand(20000, 30000));
+                events.ScheduleEvent(EVENT_CURSE, 5000);
+                events.ScheduleEvent(EVENT_BOLT, 2000);
 
                 if (IsHeroic())
-                    events.ScheduleEvent(EVENT_HERO_SUMMON,0);
+                    events.ScheduleEvent(EVENT_HERO_SUMMON, 0);
             }
         }
 

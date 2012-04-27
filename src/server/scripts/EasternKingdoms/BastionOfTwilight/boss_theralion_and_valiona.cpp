@@ -371,7 +371,7 @@ public:
 
         void Register ()
         {
-            OnEffectHitTarget += SpellEffectFn(spell_dazzling_destructionSpellScript::HandleDummy,EFFECT_0,SPELL_EFFECT_DUMMY);
+            OnEffectHitTarget += SpellEffectFn(spell_dazzling_destructionSpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
             OnHit += SpellHitFn(spell_dazzling_destructionSpellScript::HandleOnHit);
         }
     };

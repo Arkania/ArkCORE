@@ -80,7 +80,7 @@ public:
             uiEarthShockTimer = urand(2000, 8000);
             uiLightningBoltTimer = urand(5000, 10000);
             uiEarthShieldTimer = 20000;
-            uiBreakBoundsTimer = urand(10000,20000);
+            uiBreakBoundsTimer = urand(10000, 20000);
 
             if (instance)
             {
@@ -173,9 +173,9 @@ public:
 
             if (uiEarthShieldTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    DoCast(me, DUNGEON_MODE(SPELL_EARTH_SHIELD,H_SPELL_EARTH_SHIELD));
+                    DoCast(me, DUNGEON_MODE(SPELL_EARTH_SHIELD, H_SPELL_EARTH_SHIELD));
                 uiEarthShieldTimer = 20000;
                 }
             } else uiEarthShieldTimer -= diff;
@@ -185,7 +185,7 @@ public:
                 if (uint64 TargetGUID = GetChainHealTargetGUID())
                 {
                     if (Creature* target = Unit::GetCreature(*me, TargetGUID))
-                        DoCast(target, DUNGEON_MODE(SPELL_CHAIN_HEAL,H_SPELL_CHAIN_HEAL));
+                        DoCast(target, DUNGEON_MODE(SPELL_CHAIN_HEAL, H_SPELL_CHAIN_HEAL));
 
                     //If one of the adds is dead spawn heals faster
                     Creature* pGuard1 = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_EREKEM_GUARD_1) : 0);
@@ -196,38 +196,38 @@ public:
 
             if (uiBloodlustTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCast(me, SPELL_BLOODLUST);
-                uiBloodlustTimer = urand(35000,45000);
+                uiBloodlustTimer = urand(35000, 45000);
                 }
             } else uiBloodlustTimer -= diff;
 
             if (uiEarthShockTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCast(me->getVictim(), SPELL_EARTH_SHOCK);
-                uiEarthShockTimer = urand(8000,13000);
+                uiEarthShockTimer = urand(8000, 13000);
                 }
             } else uiEarthShockTimer -= diff;
 
             if (uiLightningBoltTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_LIGHTNING_BOLT);
-                uiLightningBoltTimer = urand(18000,24000);
+                uiLightningBoltTimer = urand(18000, 24000);
                 }
             } else uiLightningBoltTimer -= diff;
 
             if (uiBreakBoundsTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                     DoCast(me, SPELL_BREAK_BONDS);
-                    uiBreakBoundsTimer = urand(10000,20000);
+                    uiBreakBoundsTimer = urand(10000, 20000);
                 }
             } else uiBreakBoundsTimer -= diff;
 
@@ -242,7 +242,7 @@ public:
             {
                 if (instance->GetData(DATA_WAVE_COUNT) == 6)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
@@ -250,7 +250,7 @@ public:
                 }
                 else if (instance->GetData(DATA_WAVE_COUNT) == 12)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_2ND_BOSS_EVENT, DONE);

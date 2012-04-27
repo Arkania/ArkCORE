@@ -92,7 +92,7 @@ public:
             if (!player)
                 return;
 
-            switch(i)
+            switch (i)
             {
             case 1: SetRun(); break;
             case 10:
@@ -186,11 +186,11 @@ public:
 
     bool OnQuestReward(Player* player, Creature *_Creature, Quest const *_Quest, uint32 /*item*/)
     {
-        switch(_Quest->GetQuestId())
+        switch (_Quest->GetQuestId())
         {
         case QUEST_JUST_FOLLOWING_ORDERS:
-            player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_ORCLES),3000);
-            //player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_FRENZYHEART),-600);
+            player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_ORCLES), 3000);
+            //player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_FRENZYHEART), -600);
             break;
         }
         return true;
@@ -245,7 +245,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_VEKJIK_ITEM2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
@@ -560,7 +560,7 @@ public:
             pPlayer->ADD_GOSSIP_ITEM_EXTENDED(0, GOSSIP_JALOOT_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2, "", 0, false);
             pPlayer->ADD_GOSSIP_ITEM_EXTENDED(0, GOSSIP_MOODLE_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3, "", 0, false);
 
-            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(creature),creature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(creature), creature->GetGUID());
             return true;
         }
 
@@ -580,7 +580,7 @@ public:
             && pPlayer->GetQuestStatus(QUEST_A_HEROS_BURDEN) == QUEST_STATUS_NONE))
             pPlayer->ADD_GOSSIP_ITEM_EXTENDED(0, GOSSIP_MOODLE_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3, "", 0, false);
 
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(creature),creature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(creature), creature->GetGUID());
         return true;
     }
 };
@@ -642,10 +642,10 @@ public:
 
         void SetData(uint32 data, uint32 value)
         {
-            if(data == DATA_CHANGEFORCEAURAREMOVE)
+            if (data == DATA_CHANGEFORCEAURAREMOVE)
                 ChangeForceAuraRemove(value == 1);
 
-            if(data == DATA_CHANGEFORCEDESPAWN)
+            if (data == DATA_CHANGEFORCEDESPAWN)
                 ChangeForceDespawn(value == 1);
         }
 
@@ -653,7 +653,7 @@ public:
         {
             float radius = TRIGGER_SIGHT_DIST + 10;
 
-            if(me->FindNearestPlayer(radius) && (me->FindNearestPlayer(radius)->GetQuestStatus(QUEST_APPEASING_THE_GREAT_RAIN_STONE) == QUEST_STATUS_INCOMPLETE || me->FindNearestPlayer(radius)->GetQuestStatus(QUEST_GODS_LIKE_SHINEY_THINGS) == QUEST_STATUS_INCOMPLETE))
+            if (me->FindNearestPlayer(radius) && (me->FindNearestPlayer(radius)->GetQuestStatus(QUEST_APPEASING_THE_GREAT_RAIN_STONE) == QUEST_STATUS_INCOMPLETE || me->FindNearestPlayer(radius)->GetQuestStatus(QUEST_GODS_LIKE_SHINEY_THINGS) == QUEST_STATUS_INCOMPLETE))
                 return me->FindNearestPlayer(radius);
             return NULL;
         }
@@ -772,8 +772,8 @@ public:
             {
                 if (HasFollowState(STATE_FOLLOW_PAUSED | STATE_FOLLOW_INPROGRESS))
                     SetFollowPaused(false);
-                if (me->GetOwner() && Unit::GetPlayer(*me,me->GetOwner()->GetGUID()))
-                    StartFollow(Unit::GetPlayer(*me,me->GetOwner()->GetGUID()), FACTION_ID, 0);
+                if (me->GetOwner() && Unit::GetPlayer(*me, me->GetOwner()->GetGUID()))
+                    StartFollow(Unit::GetPlayer(*me, me->GetOwner()->GetGUID()), FACTION_ID, 0);
                 me->SetReactState(REACT_DEFENSIVE);
                 me->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
                 AlreadyMoved = false;
@@ -789,7 +789,7 @@ public:
 
             void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell)
             {
-                switch(pSpell->Id)
+                switch (pSpell->Id)
                 {
                 case DIG_UP_GLINTING_BUG:
                 case DIG_UP_SPARKLING_HARE:
@@ -808,13 +808,13 @@ public:
 
             void UpdateFollowerAI(const uint32 diff)
             {
-                if(me->GetEntry() == ENTRY_MOODLE)
+                if (me->GetEntry() == ENTRY_MOODLE)
                 {
-                    if(AreaCheckTimer <= diff)
+                    if (AreaCheckTimer <= diff)
                     {
-                        if(me->GetAreaId() == AREA_MOSSWALKER_VILLAGE)
-                            if(me->GetOwner() && me->GetOwner()->ToPlayer())
-                                if(me->GetOwner()->ToPlayer()->GetQuestStatus(QUEST_THE_ANGRY_GORLOC) == QUEST_STATUS_INCOMPLETE)
+                        if (me->GetAreaId() == AREA_MOSSWALKER_VILLAGE)
+                            if (me->GetOwner() && me->GetOwner()->ToPlayer())
+                                if (me->GetOwner()->ToPlayer()->GetQuestStatus(QUEST_THE_ANGRY_GORLOC) == QUEST_STATUS_INCOMPLETE)
                                     me->GetOwner()->ToPlayer()->CompleteQuest(QUEST_THE_ANGRY_GORLOC);
                         AreaCheckTimer = 5000;
                     }else AreaCheckTimer -= diff;
@@ -822,8 +822,8 @@ public:
 
                 if (CheckTimer <= diff)
                 {
-                    if (me->GetOwner() && Unit::GetPlayer(*me,me->GetOwner()->GetGUID()))
-                        isAway = Unit::GetPlayer(*me,me->GetOwner()->GetGUID())->isAFK();
+                    if (me->GetOwner() && Unit::GetPlayer(*me, me->GetOwner()->GetGUID()))
+                        isAway = Unit::GetPlayer(*me, me->GetOwner()->GetGUID())->isAFK();
 
                     if (!isAway)
                     {
@@ -835,12 +835,12 @@ public:
                         if (SayHome && !me->FindNearestCreature(NPC_HIGH_ORACLE_SOO_SAY, HOME_DIST))
                             SayHome = false;
 
-                        if (me->GetOwner() && Unit::GetPlayer(*me,me->GetOwner()->GetGUID()) && Unit::GetPlayer(*me,me->GetOwner()->GetGUID())->GetQuestStatus(QUEST_APPEASING_THE_GREAT_RAIN_STONE) == QUEST_STATUS_INCOMPLETE
-                                || Unit::GetPlayer(*me,me->GetOwner()->GetGUID())->GetQuestStatus(QUEST_GODS_LIKE_SHINEY_THINGS) == QUEST_STATUS_INCOMPLETE)
+                        if (me->GetOwner() && Unit::GetPlayer(*me, me->GetOwner()->GetGUID()) && Unit::GetPlayer(*me, me->GetOwner()->GetGUID())->GetQuestStatus(QUEST_APPEASING_THE_GREAT_RAIN_STONE) == QUEST_STATUS_INCOMPLETE
+                                || Unit::GetPlayer(*me, me->GetOwner()->GetGUID())->GetQuestStatus(QUEST_GODS_LIKE_SHINEY_THINGS) == QUEST_STATUS_INCOMPLETE)
                         {
                             if (Creature *OracleTrigger = me->FindNearestCreature(TRIGGER_ID, TRIGGER_SEARCH_DIST))
                             {
-                                OracleTrigger->AI()->SetData(DATA_CHANGEFORCEAURAREMOVE,1);
+                                OracleTrigger->AI()->SetData(DATA_CHANGEFORCEAURAREMOVE, 1);
                                 SetFollowPaused(true);
                                 if (HasFollowState(STATE_FOLLOW_PAUSED))
                                 {
@@ -896,7 +896,7 @@ public:
                         if (SearchCount > 4)
                         {
                             if (Creature *OracleTrigger = me->FindNearestCreature(TRIGGER_ID, TRIGGER_SEARCH_DIST-8))
-                                OracleTrigger->AI()->SetData(DATA_CHANGEFORCEDESPAWN,1);
+                                OracleTrigger->AI()->SetData(DATA_CHANGEFORCEDESPAWN, 1);
                             Reset();
                         }
 
@@ -928,15 +928,15 @@ public:
 
     bool OnQuestReward(Player* player, Creature *_Creature, Quest const *_Quest, uint32 /*item*/)
     {
-        switch(_Quest->GetQuestId())
+        switch (_Quest->GetQuestId())
         {
         case D_QUEST_FRENZYHEART_CHAMPION:
-            player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_FRENZYHEART),9000);
-            //player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_ORCLES),-4200);
+            player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_FRENZYHEART), 9000);
+            //player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_ORCLES), -4200);
             break;
         case D_QUEST_HAND_OF_THE_ORACLES:
-            player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_ORCLES),9000);
-            //player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_FRENZYHEART),-4200);
+            player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_ORCLES), 9000);
+            //player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(FACTION_FRENZYHEART), -4200);
             break;
         }
         return true;
@@ -964,7 +964,7 @@ public:
         void Reset()
         {
             check_Timer = 5000;
-            if(me->GetOwner() && me->GetOwner()->ToPlayer())
+            if (me->GetOwner() && me->GetOwner()->ToPlayer())
                 me->GetMotionMaster()->MoveFollow(me->GetOwner()->ToPlayer(), PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         }
 
@@ -972,12 +972,12 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(check_Timer <= diff)
+            if (check_Timer <= diff)
             {
-                if(me->GetAreaId() == AREA_MISTWHISPER_REFUGE)
-                    if(me->GetOwner() && me->GetOwner()->ToPlayer())
+                if (me->GetAreaId() == AREA_MISTWHISPER_REFUGE)
+                    if (me->GetOwner() && me->GetOwner()->ToPlayer())
                     {
-                        if(me->GetOwner()->ToPlayer()->GetQuestStatus(QUEST_A_ROUGH_RIDE) == QUEST_STATUS_INCOMPLETE)
+                        if (me->GetOwner()->ToPlayer()->GetQuestStatus(QUEST_A_ROUGH_RIDE) == QUEST_STATUS_INCOMPLETE)
                             me->GetOwner()->ToPlayer()->CompleteQuest(QUEST_A_ROUGH_RIDE);
                     }
                 check_Timer = 5000;
@@ -1040,19 +1040,19 @@ public:
         void CheckPulse(Player* pPlayer)
         {
             PulseChecked = true;
-            hasSurvived = (urand(0,1) == 0);
+            hasSurvived = (urand(0, 1) == 0);
             uint32 checkrand;
-            if(hasSurvived)
+            if (hasSurvived)
             {
-                checkrand = urand(0,3);
-                me->CastSpell(pPlayer,SPELL_MOSSWALKER_QUEST_CREDIT,true);
-                me->MonsterSay(survive_sayings[checkrand],LANG_UNIVERSAL, NULL);
+                checkrand = urand(0, 3);
+                me->CastSpell(pPlayer, SPELL_MOSSWALKER_QUEST_CREDIT, true);
+                me->MonsterSay(survive_sayings[checkrand], LANG_UNIVERSAL, NULL);
                 action_Timer = 15000;
             }
             else
             {
-                checkrand = urand(0,4);
-                me->MonsterSay(dead_sayings[checkrand],LANG_UNIVERSAL, NULL);
+                checkrand = urand(0, 4);
+                me->MonsterSay(dead_sayings[checkrand], LANG_UNIVERSAL, NULL);
                 action_Timer = 2000;
             }
         }
@@ -1062,18 +1062,18 @@ public:
         void AttackStart(Unit *who) {}
         void UpdateAI(const uint32 diff)
         {
-            if(PulseChecked)
+            if (PulseChecked)
             {
-                if(action_Timer <= diff)
+                if (action_Timer <= diff)
                 {
-                    if(hasSurvived)
+                    if (hasSurvived)
                     {
-                        me->DealDamage(me,me->GetHealth());
+                        me->DealDamage(me, me->GetHealth());
                         me->RemoveCorpse();
                     }else
                     {
                         //Spell for GO fehlt noch
-                        me->DealDamage(me,me->GetHealth());
+                        me->DealDamage(me, me->GetHealth());
                     }
                     action_Timer = 9999999;
                 }else action_Timer -= diff;
@@ -1083,10 +1083,10 @@ public:
 
     bool OnGossipSelect(Player* pPlayer, Creature* creature, uint32 sender, uint32 action )
     {
-        switch(action)
+        switch (action)
         {
         case GOSSIP_ACTION_INFO_DEF+1:
-            CAST_AI(npc_mosswalker_victim::npc_mosswalker_victimAI,creature->AI())->CheckPulse(pPlayer);
+            CAST_AI(npc_mosswalker_victim::npc_mosswalker_victimAI, creature->AI())->CheckPulse(pPlayer);
             break;
         }
         pPlayer->CLOSE_GOSSIP_MENU();
@@ -1095,7 +1095,7 @@ public:
 
     bool OnGossipHello(Player* pPlayer, Creature* creature)
     {
-        if(pPlayer->GetQuestStatus(QUEST_THE_MOSSWALKER_SAVIOR) == QUEST_STATUS_INCOMPLETE && !CAST_AI(npc_mosswalker_victim::npc_mosswalker_victimAI,creature->AI())->PulseChecked)
+        if (pPlayer->GetQuestStatus(QUEST_THE_MOSSWALKER_SAVIOR) == QUEST_STATUS_INCOMPLETE && !CAST_AI(npc_mosswalker_victim::npc_mosswalker_victimAI, creature->AI())->PulseChecked)
            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
         pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(creature), creature->GetGUID());
@@ -1135,15 +1135,15 @@ public:
         void Reset()
         {
             shoot_Timer = 2000;
-            nova_Timer = urand(20000,40000);
-            veins_Timer = urand(20000,40000);
+            nova_Timer = urand(20000, 40000);
+            veins_Timer = urand(20000, 40000);
         }
 
         bool TryDoCast(Unit *victim, uint32 spellId, bool triggered = false)
         {
-            if(me->IsNonMeleeSpellCasted(false)) return false;
+            if (me->IsNonMeleeSpellCasted(false)) return false;
 
-            DoCast(victim,spellId,triggered);
+            DoCast(victim, spellId, triggered);
             return true;
         }
 
@@ -1153,7 +1153,7 @@ public:
 
         void JustDied(Unit *killer)
         {
-            GameObject* object = me->SummonGameObject(ENTRY_ARTRUIS_URN,me->GetPositionX(),me->GetPositionY(),me->GetPositionZ(),0,0,0,0,0,600);
+            GameObject* object = me->SummonGameObject(ENTRY_ARTRUIS_URN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, 0, 0, 0, 0, 600);
         }
 
         void UpdateAI(const uint32 diff)
@@ -1161,21 +1161,21 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if(nova_Timer <= diff)
+            if (nova_Timer <= diff)
             {
-                if(TryDoCast(me,SPELL_ARTRUIS_FROST_NOVA))
-                    nova_Timer = urand(20000,40000);
+                if (TryDoCast(me, SPELL_ARTRUIS_FROST_NOVA))
+                    nova_Timer = urand(20000, 40000);
             }else nova_Timer -= diff;
 
-            if(veins_Timer <= diff)
+            if (veins_Timer <= diff)
             {
-                if(TryDoCast(me->getVictim(),SPELL_ARTRUIS_ICY_VEINS))
-                    veins_Timer = urand(20000,40000);
+                if (TryDoCast(me->getVictim(), SPELL_ARTRUIS_ICY_VEINS))
+                    veins_Timer = urand(20000, 40000);
             }else veins_Timer -= diff;
 
-            if(shoot_Timer <= diff)
+            if (shoot_Timer <= diff)
             {
-                if(TryDoCast(me->getVictim(),RAND(SPELL_ARTRUIS_FROST_BOLT,SPELL_ARTRUIS_ICE_LANCE)))
+                if (TryDoCast(me->getVictim(), RAND(SPELL_ARTRUIS_FROST_BOLT, SPELL_ARTRUIS_ICE_LANCE)))
                     shoot_Timer = 2000;
             }else shoot_Timer -= diff;
 
@@ -1506,7 +1506,7 @@ class npc_tipsy_mcmanus : public CreatureScript
 
                 if (_event) // active
                 {
-                    if(_reactTimer <= diff)
+                    if (_reactTimer <= diff)
                     {
                         if (_choice) // used correct object
                         {
@@ -1607,7 +1607,7 @@ class npc_stormwatcher : public CreatureScript
 
             void Reset()
             {
-                uiCallLightning_Timer = urand (3000,5000);
+                uiCallLightning_Timer = urand (3000, 5000);
             }
 
             void SpellHit (Unit* /*caster*/, SpellEntry const* spell)
@@ -1627,7 +1627,7 @@ class npc_stormwatcher : public CreatureScript
                 if (uiCallLightning_Timer <= diff)
                 {
                     DoCastVictim(SPELL_CALL_LIGHTNING);
-                    uiCallLightning_Timer = urand (3000,5000);
+                    uiCallLightning_Timer = urand (3000, 5000);
                 }
                 else uiCallLightning_Timer -= diff;
 
@@ -1679,7 +1679,7 @@ class npc_rejek_first_blood : public CreatureScript
 
             void Reset()
             {
-                uiFlipAttack_Timer = urand (2000,6000);
+                uiFlipAttack_Timer = urand (2000, 6000);
                 uiCharge_Timer = 0;
             }
 
@@ -1687,27 +1687,27 @@ class npc_rejek_first_blood : public CreatureScript
             {
                 Frenzied = false;
 
-                if(me->GetEntry() == ENTRY_MISTWHISPER_ORACLE)
+                if (me->GetEntry() == ENTRY_MISTWHISPER_ORACLE)
                     DoCast(me, SPELL_ORACLE_LIGHTNING_CLOUD, true);
             }
 
             void SpellHit (Unit* caster, SpellEntry const* spell)
             {
-                if(spell->Id == SPELL_BLOOD_REJEKS_SWORD)
+                if (spell->Id == SPELL_BLOOD_REJEKS_SWORD)
                 {
-                    if(caster && caster->ToPlayer())
+                    if (caster && caster->ToPlayer())
                     {
-                        switch(me->GetEntry())
+                        switch (me->GetEntry())
                         {
                             case ENTRY_SAPPHIRE_HIVE_WASP:
-                                caster->ToPlayer()->KilledMonsterCredit(NPC_CREDIT_1,0);
+                                caster->ToPlayer()->KilledMonsterCredit(NPC_CREDIT_1, 0);
                                 break;
                             case ENTRY_HARDKNUCKLE_CHARGER:
-                                caster->ToPlayer()->KilledMonsterCredit(NPC_CREDIT_2,0);
+                                caster->ToPlayer()->KilledMonsterCredit(NPC_CREDIT_2, 0);
                                 break;
                             case ENTRY_MISTWHISPER_ORACLE:
                             case ENTRY_MISTWHISPER_WARRIOR:
-                                caster->ToPlayer()->KilledMonsterCredit(NPC_CREDIT_3,0);
+                                caster->ToPlayer()->KilledMonsterCredit(NPC_CREDIT_3, 0);
                                 break;
                         }
                     }
@@ -1716,21 +1716,21 @@ class npc_rejek_first_blood : public CreatureScript
 
             void UpdateAI(const uint32 diff)
             {
-                if(!UpdateVictim())
+                if (!UpdateVictim())
                     return;
 
-                if(me->GetEntry() == ENTRY_SAPPHIRE_HIVE_WASP)
+                if (me->GetEntry() == ENTRY_SAPPHIRE_HIVE_WASP)
                 {
-                    if(!Frenzied && HealthBelowPct(30))
+                    if (!Frenzied && HealthBelowPct(30))
                     {
                         DoCast(me, SPELL_WASP_STINGER_RAGE, true);
                         Frenzied = true;
                     }
                 }
 
-                if(me->GetEntry() == ENTRY_HARDKNUCKLE_CHARGER)
+                if (me->GetEntry() == ENTRY_HARDKNUCKLE_CHARGER)
                 {
-                    if(uiCharge_Timer <= diff)
+                    if (uiCharge_Timer <= diff)
                     {
                         DoCastVictim(SPELL_CHARGER_CHARGE);
                         uiCharge_Timer = 5000;
@@ -1738,12 +1738,12 @@ class npc_rejek_first_blood : public CreatureScript
                     else uiCharge_Timer -= diff;
                 }
 
-                if(me->GetEntry() == ENTRY_MISTWHISPER_WARRIOR)
+                if (me->GetEntry() == ENTRY_MISTWHISPER_WARRIOR)
                 {
-                    if(uiFlipAttack_Timer <= diff)
+                    if (uiFlipAttack_Timer <= diff)
                     {
                         DoCastVictim(SPELL_WARRIOR_FLIP_ATTACK);
-                        uiFlipAttack_Timer = urand (4000,7000);
+                        uiFlipAttack_Timer = urand (4000, 7000);
                     }
                     else uiFlipAttack_Timer -= diff;
                 }
@@ -1780,14 +1780,14 @@ public:
     {
         vehicle_haiphoonAI(Creature* creature) : VehicleAI(creature) { }
 
-        void SpellHitTarget(Unit* target,SpellEntry const* spell)
+        void SpellHitTarget(Unit* target, SpellEntry const* spell)
         {
-            if(target == me)
+            if (target == me)
                 return;
 
-            if(spell->Id == SPELL_DEVOUR_WIND)
+            if (spell->Id == SPELL_DEVOUR_WIND)
             {
-                if(Player* player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (Player* player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
                     player->KilledMonsterCredit(29009, 0);
                     me->UpdateEntry(NPC_HAIPHOON_AIR);
@@ -1796,9 +1796,9 @@ public:
                 }
             }
 
-            if(spell->Id == SPELL_DEVOUR_WATER)
+            if (spell->Id == SPELL_DEVOUR_WATER)
             {
-                if(Player* player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (Player* player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
                     player->KilledMonsterCredit(29008, 0);
                     me->UpdateEntry(NPC_HAIPHOON_WATER);
@@ -1996,7 +1996,7 @@ public:
         {
             if (Creature *pTipsy = go->FindNearestCreature(28566, 15.0f))
             {
-                switch(go->GetEntry())
+                switch (go->GetEntry())
                 {
                     case 190639: // Barrel of Papayas
                         pTipsy->AI()->DoAction(EVENT_PAPAYA_CLICK);

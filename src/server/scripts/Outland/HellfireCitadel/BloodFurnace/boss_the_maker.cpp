@@ -43,7 +43,7 @@ enum eEnums
     SAY_KILL_2                  = -1542013,
     SAY_DIE                     = -1542014,
 
-    SPELL_ACID_SPRAY            = 38153,                    // heroic 38973 ??? 38153
+    SPELL_ACID_SPRAY            = 38153,                   // heroic 38973 ??? 38153
     SPELL_EXPLODING_BREAKER     = 30925,
     SPELL_KNOCKDOWN             = 20276,
     SPELL_DOMINATION            = 25772                     // ???

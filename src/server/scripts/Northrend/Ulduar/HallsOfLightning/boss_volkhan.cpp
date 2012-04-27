@@ -48,10 +48,10 @@ enum eEnums
     SPELL_SHATTERING_STOMP_H                = 59529,
 
     //unclear how "directions" of spells must be. Last, summoning GO, what is it for? Script depend on:
-    SPELL_TEMPER                            = 52238,        //TARGET_SCRIPT boss->anvil
-    SPELL_TEMPER_DUMMY                      = 52654,        //TARGET_SCRIPT anvil->boss
+    SPELL_TEMPER                            = 52238,       //TARGET_SCRIPT boss->anvil
+    SPELL_TEMPER_DUMMY                      = 52654,       //TARGET_SCRIPT anvil->boss
 
-    //SPELL_TEMPER_VISUAL                     = 52661,        //summons GO
+    //SPELL_TEMPER_VISUAL                     = 52661,       //summons GO
 
     SPELL_SUMMON_MOLTEN_GOLEM               = 52405,
 
@@ -279,11 +279,11 @@ public:
             {
                 if (m_uiShatteringStomp_Timer <= uiDiff)
                 {
-                    DoScriptText(RAND(SAY_STOMP_1,SAY_STOMP_2), me);
+                    DoScriptText(RAND(SAY_STOMP_1, SAY_STOMP_2), me);
 
-                    DoCast(me, DUNGEON_MODE(SPELL_SHATTERING_STOMP_N,SPELL_SHATTERING_STOMP_H));
+                    DoCast(me, DUNGEON_MODE(SPELL_SHATTERING_STOMP_N, SPELL_SHATTERING_STOMP_H));
 
-                    if (Creature* temp = me->FindNearestCreature(NPC_BRITTLE_GOLEM,99))
+                    if (Creature* temp = me->FindNearestCreature(NPC_BRITTLE_GOLEM, 99))
                     {
                     DoScriptText(EMOTE_SHATTER, me);
                     m_bCanShatterGolem = true;
@@ -327,14 +327,14 @@ public:
                 {
                     me->GetMotionMaster()->Clear();
                     me->SetReactState(REACT_PASSIVE);
-                    me->GetMotionMaster()->MovePoint(5,fX,fY,fZ);
+                    me->GetMotionMaster()->MovePoint(5, fX, fY, fZ);
             }
 
                     DoScriptText(EMOTE_TO_ANVIL, me);
                 m_bMove=true;
                     }
 
-            if (me->IsWithinMeleeRange(pAnvil,5) && m_bMove)
+            if (me->IsWithinMeleeRange(pAnvil, 5) && m_bMove)
             {
                 me->GetMotionMaster()->Clear();
                             me->SetReactState(REACT_AGGRESSIVE);
@@ -351,7 +351,7 @@ public:
             if (me->GetMotionMaster()->GetCurrentMovementGeneratorType()!=POINT_MOTION_TYPE && m_bMove)
                 //if (m_uiCheckTimer<=uiDiff)
                 {
-                    me->GetMotionMaster()->MovePoint(5,fX,fY,fZ);
+                    me->GetMotionMaster()->MovePoint(5, fX, fY, fZ);
                     m_uiCheckTimer=1100;
                 }
                 //else

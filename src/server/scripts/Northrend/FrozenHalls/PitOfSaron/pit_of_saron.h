@@ -35,8 +35,8 @@ enum DataTypes
     // GUIDs
     DATA_RIMEFANG           = 3,
     DATA_KRICK              = 4,
-    DATA_JAINA_SYLVANAS_1   = 5,    // GUID of either Jaina or Sylvanas part 1, depending on team, as it's the same spawn.
-    DATA_JAINA_SYLVANAS_2   = 6,    // GUID of either Jaina or Sylvanas part 2, depending on team, as it's the same spawn.
+    DATA_JAINA_SYLVANAS_1   = 5,   // GUID of either Jaina or Sylvanas part 1, depending on team, as it's the same spawn.
+    DATA_JAINA_SYLVANAS_2   = 6,   // GUID of either Jaina or Sylvanas part 2, depending on team, as it's the same spawn.
     DATA_TYRANNUS_EVENT     = 7,
     DATA_TEAM_IN_INSTANCE   = 8,
 };

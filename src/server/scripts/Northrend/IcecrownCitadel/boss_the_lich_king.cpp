@@ -41,8 +41,8 @@ enum Texts
     SAY_LK_QUAKE                    = 5,
     SAY_LK_SUMMON_VALKYR            = 6,
     SAY_LK_HARVEST_SOUL             = 7,
-    SAY_LK_FROSTMOURNE_ESCAPE       = 8,    // not said on heroic
-    SAY_LK_FROSTMOURNE_KILL         = 9,    // not said on heroic
+    SAY_LK_FROSTMOURNE_ESCAPE       = 8,   // not said on heroic
+    SAY_LK_FROSTMOURNE_KILL         = 9,   // not said on heroic
     SAY_LK_KILL                     = 10,
     SAY_LK_BERSERK                  = 11,
     EMOTE_DEFILE_WARNING            = 12,
@@ -75,7 +75,7 @@ enum Texts
 enum Spells
 {
     // The Lich King
-    SPELL_PLAGUE_AVOIDANCE              = 72846,    // raging spirits also get it
+    SPELL_PLAGUE_AVOIDANCE              = 72846,   // raging spirits also get it
     SPELL_EMOTE_SIT_NO_SHEATH           = 73220,
     SPELL_BOSS_HITTIN_YA                = 73878,
     SPELL_EMOTE_SHOUT_NO_SHEATH         = 73213,
@@ -114,13 +114,13 @@ enum Spells
     SPELL_DEFILE_GROW                   = 72756,
     SPELL_SUMMON_VALKYR                 = 69037,
     SPELL_SUMMON_VALKYR_PERIODIC        = 74361,
-    SPELL_HARVEST_SOUL_VALKYR           = 68985,    // Val'kyr Shadowguard vehicle aura
+    SPELL_HARVEST_SOUL_VALKYR           = 68985,   // Val'kyr Shadowguard vehicle aura
     SPELL_SOUL_REAPER                   = 69409,
     SPELL_SOUL_REAPER_BUFF              = 69410,
     SPELL_WINGS_OF_THE_DAMNED           = 74352,
     SPELL_VALKYR_TARGET_SEARCH          = 69030,
-    SPELL_CHARGE                        = 74399,    // cast on selected target
-    SPELL_VALKYR_CARRY                  = 74445,    // removes unselectable flag
+    SPELL_CHARGE                        = 74399,   // cast on selected target
+    SPELL_VALKYR_CARRY                  = 74445,   // removes unselectable flag
     SPELL_LIFE_SIPHON                   = 73488,
     SPELL_LIFE_SIPHON_HEAL              = 73489,
     SPELL_EJECT_ALL_PASSENGERS          = 68576,
@@ -131,7 +131,7 @@ enum Spells
     SPELL_VILE_SPIRIT_DAMAGE_SEARCH     = 70502,
     SPELL_SPIRIT_BURST                  = 70503,
     SPELL_HARVEST_SOUL                  = 68980,
-    SPELL_HARVEST_SOULS                 = 73654,    // Heroic version, weird because it has all 4 difficulties just like above spell
+    SPELL_HARVEST_SOULS                 = 73654,   // Heroic version, weird because it has all 4 difficulties just like above spell
     SPELL_HARVEST_SOUL_VEHICLE          = 68984,
     SPELL_HARVEST_SOUL_VISUAL           = 71372,
     SPELL_HARVEST_SOUL_TELEPORT         = 72546,
@@ -145,15 +145,15 @@ enum Spells
     // Frostmourne
     SPELL_LIGHTS_FAVOR                  = 69382,
     SPELL_RESTORE_SOUL                  = 72595,
-    SPELL_RESTORE_SOULS                 = 73650,    // Heroic
-    SPELL_DARK_HUNGER                   = 69383,    // Passive proc healing
-    SPELL_DESTROY_SOUL                  = 74086,    // Used when Terenas Menethil dies
-    SPELL_SOUL_RIP                      = 69397,    // Deals increasing damage
+    SPELL_RESTORE_SOULS                 = 73650,   // Heroic
+    SPELL_DARK_HUNGER                   = 69383,   // Passive proc healing
+    SPELL_DESTROY_SOUL                  = 74086,   // Used when Terenas Menethil dies
+    SPELL_SOUL_RIP                      = 69397,   // Deals increasing damage
     SPELL_SOUL_RIP_DAMAGE               = 69398,
     SPELL_TERENAS_LOSES_INSIDE          = 72572,
-    SPELL_SUMMON_SPIRIT_BOMB_1          = 73581,    // (Heroic)
-    SPELL_SUMMON_SPIRIT_BOMB_2          = 74299,    // (Heroic)
-    SPELL_EXPLOSION                     = 73576,    // Spirit Bomb (Heroic)
+    SPELL_SUMMON_SPIRIT_BOMB_1          = 73581,   // (Heroic)
+    SPELL_SUMMON_SPIRIT_BOMB_2          = 74299,   // (Heroic)
+    SPELL_EXPLOSION                     = 73576,   // Spirit Bomb (Heroic)
 
     // Outro
     SPELL_FURY_OF_FROSTMOURNE           = 72350,
@@ -164,11 +164,11 @@ enum Spells
     SPELL_JUMP                          = 71809,
     SPELL_JUMP_TRIGGERED                = 71811,
     SPELL_JUMP_2                        = 72431,
-    SPELL_SUMMON_BROKEN_FROSTMOURNE     = 74081,    // visual
-    SPELL_SUMMON_BROKEN_FROSTMOURNE_2   = 72406,    // animation
-    SPELL_SUMMON_BROKEN_FROSTMOURNE_3   = 73017,    // real summon
-    SPELL_BROKEN_FROSTMOURNE            = 72398,    // frostmourne on ground
-    SPELL_BROKEN_FROSTMOURNE_KNOCK      = 72405,    // spawns visual
+    SPELL_SUMMON_BROKEN_FROSTMOURNE     = 74081,   // visual
+    SPELL_SUMMON_BROKEN_FROSTMOURNE_2   = 72406,   // animation
+    SPELL_SUMMON_BROKEN_FROSTMOURNE_3   = 73017,   // real summon
+    SPELL_BROKEN_FROSTMOURNE            = 72398,   // frostmourne on ground
+    SPELL_BROKEN_FROSTMOURNE_KNOCK      = 72405,   // spawns visual
     SPELL_SOUL_BARRAGE                  = 72305,
     SPELL_SUMMON_TERENAS                = 72420,
     SPELL_MASS_RESURRECTION             = 72429,
@@ -207,10 +207,10 @@ enum Events
     EVENT_SUMMON_DRUDGE_GHOUL       = 11,
     EVENT_INFEST                    = 12,
     EVENT_NECROTIC_PLAGUE           = 13,
-    EVENT_SHADOW_TRAP               = 14,   // heroic only
+    EVENT_SHADOW_TRAP               = 14,  // heroic only
     EVENT_SOUL_REAPER               = 15,
     EVENT_DEFILE                    = 16,
-    EVENT_HARVEST_SOUL              = 17,   // normal mode only
+    EVENT_HARVEST_SOUL              = 17,  // normal mode only
     EVENT_PAIN_AND_SUFFERING        = 18,
     EVENT_SUMMON_ICE_SPHERE         = 19,
     EVENT_SUMMON_RAGING_SPIRIT      = 20,
@@ -218,11 +218,11 @@ enum Events
     EVENT_SUMMON_VALKYR             = 22,
     EVENT_GRAB_PLAYER               = 23,
     EVENT_MOVE_TO_DROP_POS          = 24,
-    EVENT_LIFE_SIPHON               = 25,   // heroic only
+    EVENT_LIFE_SIPHON               = 25,  // heroic only
     EVENT_START_ATTACK              = 26,
     EVENT_QUAKE_2                   = 27,
     EVENT_VILE_SPIRITS              = 28,
-    EVENT_HARVEST_SOULS             = 29,   // heroic only
+    EVENT_HARVEST_SOULS             = 29,  // heroic only
     EVENT_WICKED_SPIRITS            = 30,
     EVENT_SOUL_RIP                  = 31,
     EVENT_DESTROY_SOUL              = 32,
@@ -279,7 +279,7 @@ enum Phases
     PHASE_TWO                   = 3,
     PHASE_THREE                 = 4,
     PHASE_TRANSITION            = 5,
-    PHASE_FROSTMOURNE           = 6,    // only set on heroic mode when all players are sent into frostmourne
+    PHASE_FROSTMOURNE           = 6,   // only set on heroic mode when all players are sent into frostmourne
     PHASE_OUTRO                 = 7,
 
     PHASE_MASK_INTRO            = 1 << PHASE_INTRO,
@@ -347,11 +347,11 @@ enum MiscData
     LIGHT_SOULSTORM             = 2508,
 
     MUSIC_FROZEN_THRONE         = 17457,
-    MUSIC_SPECIAL               = 17458,    // Summon Shambling Horror, Remorseless Winter, Quake, Summon Val'kyr Periodic, Harvest Soul, Vile Spirits
+    MUSIC_SPECIAL               = 17458,   // Summon Shambling Horror, Remorseless Winter, Quake, Summon Val'kyr Periodic, Harvest Soul, Vile Spirits
     MUSIC_FURY_OF_FROSTMOURNE   = 17459,
-    MUSIC_FINAL                 = 17460,    // Raise Dead, Light's Blessing
+    MUSIC_FINAL                 = 17460,   // Raise Dead, Light's Blessing
 
-    SOUND_PAIN                  = 17360,    // separate sound, not attached to any text
+    SOUND_PAIN                  = 17360,   // separate sound, not attached to any text
 
     EQUIP_ASHBRINGER_GLOWING    = 50442,
     EQUIP_BROKEN_FROSTMOURNE    = 50840,
@@ -1243,7 +1243,7 @@ class npc_tirion_fordring_tft : public CreatureScript
                 if (spell->Id == SPELL_ICE_LOCK)
                 {
                     me->SetFacing(3.085098f);
-                    me->AddAura(SPELL_ICE_LOCK,me);
+                    me->AddAura(SPELL_ICE_LOCK, me);
                 }
                 else if (spell->Id == SPELL_BROKEN_FROSTMOURNE_KNOCK)
                     SetEquipmentSlots(true);    // remove glow on ashbringer
@@ -1567,7 +1567,7 @@ class npc_valkyr_shadowguard : public CreatureScript
 
                                 triggers.sort(Trinity::ObjectDistanceOrderPred(me));
                                 DoCast(target, SPELL_VALKYR_CARRY);
-                                _dropPoint.Relocate(triggers.front()->GetPositionX(),triggers.front()->GetPositionY(),triggers.front()->GetPositionZ() + 15.0f);
+                                _dropPoint.Relocate(triggers.front()->GetPositionX(), triggers.front()->GetPositionY(), triggers.front()->GetPositionZ() + 15.0f);
                                 _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 1500);
                             }
                         }
@@ -2038,8 +2038,8 @@ class npc_broken_frostmourne : public CreatureScript
                     {
                         case EVENT_OUTRO_KNOCK_BACK:
                          //   DoCastAOE(SPELL_BROKEN_FROSTMOURNE_KNOCK);
-                            me->AddAura(SPELL_BROKEN_FROSTMOURNE_KNOCK,me);
-                            me->AddAura(SPELL_BROKEN_FROSTMOURNE,me);
+                            me->AddAura(SPELL_BROKEN_FROSTMOURNE_KNOCK, me);
+                            me->AddAura(SPELL_BROKEN_FROSTMOURNE, me);
                             break;
                         case EVENT_OUTRO_SUMMON_TERENAS:
                             DoCastAOE(SPELL_SUMMON_TERENAS);

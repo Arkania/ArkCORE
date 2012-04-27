@@ -224,7 +224,7 @@ public:
             if (!bIsFrenzy && HealthBelowPct(25) && !bIsExploded)
             {
                 DoScriptText(SAY_ENRAGE, me);
-                DoCast(me, DUNGEON_MODE(SPELL_FRENZY,SPELL_FRENZY_H), true);
+                DoCast(me, DUNGEON_MODE(SPELL_FRENZY, SPELL_FRENZY_H), true);
                 bIsFrenzy = true;
             }
 
@@ -275,9 +275,9 @@ public:
             {
                 if (uiWaterBoltVolleyTimer <= uiDiff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
-                        DoCast(me, DUNGEON_MODE(SPELL_WATER_BOLT_VOLLEY,SPELL_WATER_BOLT_VOLLEY_H));
+                        DoCast(me, DUNGEON_MODE(SPELL_WATER_BOLT_VOLLEY, SPELL_WATER_BOLT_VOLLEY_H));
                     uiWaterBoltVolleyTimer = urand(10000, 15000);
                     }
                 }
@@ -285,9 +285,9 @@ public:
 
                 if (uiWaterBlastTimer <= uiDiff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
-                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_WATER_BLAST,SPELL_WATER_BLAST_H));
+                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_WATER_BLAST, SPELL_WATER_BLAST_H));
                         uiWaterBlastTimer = urand(10000, 15000);
                     }
                 }
@@ -313,7 +313,7 @@ public:
             {
                 if (instance->GetData(DATA_WAVE_COUNT) == 6)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
@@ -321,7 +321,7 @@ public:
                 }
                 else if (instance->GetData(DATA_WAVE_COUNT) == 12)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_2ND_BOSS_EVENT, DONE);

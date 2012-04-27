@@ -25,7 +25,7 @@
 class instance_eye_of_eternity : public InstanceMapScript
 {
 public:
-    instance_eye_of_eternity() : InstanceMapScript("instance_eye_of_eternity",616) {}
+    instance_eye_of_eternity() : InstanceMapScript("instance_eye_of_eternity", 616) {}
 
     InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
@@ -108,7 +108,7 @@ public:
 
         void OnGameObjectCreate(GameObject *go)
         {
-            switch(go->GetEntry())
+            switch (go->GetEntry())
             {
                 case GO_NEXUS_RAID_PLATFORM:
                     platformGUID = go->GetGUID();

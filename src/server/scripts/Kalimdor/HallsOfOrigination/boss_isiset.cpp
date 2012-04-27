@@ -145,7 +145,7 @@ class boss_isiset : public CreatureScript
 
             void SummonedCreatureDespawn(Creature* summon)
             {
-                switch(summon->GetEntry())
+                switch (summon->GetEntry())
                 {
                     case 39720: // Astral Rain
                         AstralRain = false;

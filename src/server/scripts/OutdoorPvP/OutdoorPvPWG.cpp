@@ -46,7 +46,7 @@ uint32 guide_entry_fortress_alliance;
  int len;
 
  va_start(argptr, format);
- vsnprintf(temp_buffer,MAX_FMT_STRING, format, argptr);
+ vsnprintf(temp_buffer, MAX_FMT_STRING, format, argptr);
  va_end(argptr);
 
  len = strlen(temp_buffer);
@@ -136,7 +136,7 @@ bool OutdoorPvPWG::SetupOutdoorPvP ()
                 {
                     Position posHorde, posAlli;
                     Field *fields = result->Fetch();
-                    switch(fields[1].GetUInt32())
+                    switch (fields[1].GetUInt32())
                     {
                         case CRE_ENG_A:
                         case CRE_ENG_H:
@@ -225,11 +225,11 @@ bool OutdoorPvPWG::SetupOutdoorPvP ()
             // Select POI
             AreaPOIList areaPOIs;
             float minX = 9999, minY
-=9999,maxX=    -
+=9999, maxX=    -
 9999,    maxY
 =- 9999
 ;
-    for(uint32 i = 0;
+    for (uint32 i = 0;
 i    < sAreaPOIStore.GetNumRows(); ++i)
     {
         const AreaPOIEntry * poiInfo = sAreaPOIStore.LookupEntry(i);
@@ -248,7 +248,7 @@ i    < sAreaPOIStore.GetNumRows(); ++i)
     maxY += 20;
 
     // Coords: 4290.330078, 1790.359985 - 5558.379883, 4048.889893
-    result = WorldDatabase.PQuery("SELECT guid FROM gameobject,gameobject_template"
+    result = WorldDatabase.PQuery("SELECT guid FROM gameobject, gameobject_template"
             " WHERE gameobject.map=571"
             " AND gameobject.position_x>%f AND gameobject.position_y>%f"
             " AND gameobject.position_x<%f AND gameobject.position_y<%f"
@@ -614,7 +614,7 @@ void OutdoorPvPWG::ProcessEvent (WorldObject *objin, uint32 eventId)
     {
         state->damageState = DAMAGE_DESTROYED;
 
-        switch(state->type)
+        switch (state->type)
         {
             case BUILDING_WORKSHOP:
             {

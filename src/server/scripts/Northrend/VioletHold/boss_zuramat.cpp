@@ -107,7 +107,7 @@ public:
 
         void DoAction(int32 const action)
         {
-            switch(action)
+            switch (action)
             {
             case ACTION_VOID_DEAD:
                 bVoidWalkerKilled = true;
@@ -185,7 +185,7 @@ public:
             {
                 if (instance->GetData(DATA_WAVE_COUNT) == 6)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
@@ -193,14 +193,14 @@ public:
                 }
                 else if (instance->GetData(DATA_WAVE_COUNT) == 12)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_2ND_BOSS_EVENT, DONE);
                     instance->SetData(DATA_WAVE_COUNT, 13);
                 }
 
-                if(GetDifficulty() == DUNGEON_DIFFICULTY_HEROIC && !bVoidWalkerKilled)
+                if (GetDifficulty() == DUNGEON_DIFFICULTY_HEROIC && !bVoidWalkerKilled)
                     instance->DoCompleteAchievement(ACHIEVEMENTS_THE_VOID_DANCE);
             }
 
@@ -212,7 +212,7 @@ public:
             if (victim == me)
                 return;
 
-            DoScriptText(RAND(SAY_SLAY_1,SAY_SLAY_2,SAY_SLAY_3), me);
+            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2, SAY_SLAY_3), me);
         }
 
         void JustSummoned(Creature* summon)
@@ -239,8 +239,8 @@ public:
             m_pInstance = c->GetInstanceScript();
             me->setFaction(14);
 
-            if(m_pInstance)
-                if(Creature* Zuramat = Creature::GetCreature((*me),m_pInstance->GetData64(DATA_ZURAMAT)))
+            if (m_pInstance)
+                if (Creature* Zuramat = Creature::GetCreature((*me), m_pInstance->GetData64(DATA_ZURAMAT)))
                     Zuramat->AI()->JustSummoned(me);
         }
 
@@ -257,16 +257,16 @@ public:
 
         void Reset()
         {
-            if(Unit* target = SelectPlayerTargetInRange(100.0f))
+            if (Unit* target = SelectPlayerTargetInRange(100.0f))
                 me->AI()->AttackStart(target);
 
-            DoCastAOE(DUNGEON_MODE(SPELL_ZURAMAT_ADD_2,H_SPELL_ZURAMAT_ADD_2),true);
-            me->SetPhaseMask(17,true);
+            DoCastAOE(DUNGEON_MODE(SPELL_ZURAMAT_ADD_2, H_SPELL_ZURAMAT_ADD_2), true);
+            me->SetPhaseMask(17, true);
         }
 
         void JustDied(Unit* /*killer*/)
         {
-            if(Creature* Zuramat = Creature::GetCreature((*me),m_pInstance->GetData64(DATA_ZURAMAT)))
+            if (Creature* Zuramat = Creature::GetCreature((*me), m_pInstance->GetData64(DATA_ZURAMAT)))
                 Zuramat->AI()->DoAction(ACTION_VOID_DEAD);
         }
 

@@ -204,7 +204,7 @@ public:
             {
                 lSparkList.Summon(pSummoned);
 
-                pSummoned->CastSpell(pSummoned, DUNGEON_MODE(SPELL_SPARK_VISUAL_TRIGGER,H_SPELL_SPARK_VISUAL_TRIGGER), true);
+                pSummoned->CastSpell(pSummoned, DUNGEON_MODE(SPELL_SPARK_VISUAL_TRIGGER, H_SPELL_SPARK_VISUAL_TRIGGER), true);
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 if (target)
                 {
@@ -266,7 +266,7 @@ public:
                 if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, DUNGEON_MODE(SPELL_STATIC_OVERLOAD,H_SPELL_STATIC_OVERLOAD));
+                        DoCast(target, DUNGEON_MODE(SPELL_STATIC_OVERLOAD, H_SPELL_STATIC_OVERLOAD));
 
                 uiStaticOverloadTimer = urand(5*IN_MILLISECONDS, 6*IN_MILLISECONDS);
                 }
@@ -278,10 +278,10 @@ public:
             {
                 if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    if (Unit* pTemp = SelectTarget(SELECT_TARGET_RANDOM,1,100,true))
-                        DoCast(pTemp, DUNGEON_MODE(SPELL_BALL_LIGHTNING,H_SPELL_BALL_LIGHTNING));
+                    if (Unit* pTemp = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
+                        DoCast(pTemp, DUNGEON_MODE(SPELL_BALL_LIGHTNING, H_SPELL_BALL_LIGHTNING));
                     else
-                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_BALL_LIGHTNING,H_SPELL_BALL_LIGHTNING));
+                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_BALL_LIGHTNING, H_SPELL_BALL_LIGHTNING));
 
                 uiBallLightningTimer = urand(10*IN_MILLISECONDS, 11*IN_MILLISECONDS);
                 }
@@ -339,7 +339,7 @@ public:
             uiArcWeldTimer = 0;
             me->SetSpeed(MOVE_RUN, 0.7f);
             uiCheckTimer = 2*IN_MILLISECONDS;
-            DoCast(DUNGEON_MODE(SPELL_SPARK_VISUAL_TRIGGER,H_SPELL_SPARK_VISUAL_TRIGGER));
+            DoCast(DUNGEON_MODE(SPELL_SPARK_VISUAL_TRIGGER, H_SPELL_SPARK_VISUAL_TRIGGER));
         }
 
         void MovementInform(uint32 uiType, uint32 uiPointId)

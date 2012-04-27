@@ -115,7 +115,7 @@ public:
 
         void OnCreatureCreate(Creature* pCreature, bool /*add*/)
         {
-              switch(pCreature->GetEntry())
+              switch (pCreature->GetEntry())
             {
               case 17797: ThespiaGUID = pCreature->GetGUID(); break;
               case 17796: MekgineerGUID = pCreature->GetGUID(); break;
@@ -125,7 +125,7 @@ public:
 
         void OnGameObjectCreate(GameObject* pGo, bool /*add*/)
         {
-            switch(pGo->GetEntry())
+            switch (pGo->GetEntry())
             {
             case MAIN_CHAMBERS_DOOR: MainChambersDoor = pGo->GetGUID(); break;
             case ACCESS_PANEL_HYDRO: AccessPanelHydro = pGo->GetGUID(); break;
@@ -135,7 +135,7 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            switch(type)
+            switch (type)
             {
                 case TYPE_HYDROMANCER_THESPIA:
                     if (data == SPECIAL)
@@ -175,7 +175,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                 case TYPE_HYDROMANCER_THESPIA:
                     return m_auiEncounter[0];
@@ -191,7 +191,7 @@ public:
 
         uint64 GetData64(uint32 data)
         {
-            switch(data)
+            switch (data)
             {
                 case DATA_THESPIA:
                     return ThespiaGUID;

@@ -181,7 +181,7 @@ void WorldSession::HandleMoveWorldportAckOpcode ()
             GetPlayer()->UpdateZone(newzone, newarea);
 
     // honorless target
-    if(GetPlayer()->pvpInfo.inHostileArea)
+    if (GetPlayer()->pvpInfo.inHostileArea)
     GetPlayer()->CastSpell(GetPlayer(), 2479, true);
 
     // in friendly area

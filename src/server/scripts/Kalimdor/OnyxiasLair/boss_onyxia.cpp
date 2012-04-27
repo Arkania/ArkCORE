@@ -54,18 +54,18 @@ enum eSpells
     SPELL_FIREBALL              = 18392,
 
     //Not much choise about these. We have to make own defintion on the direction/start-end point
-    SPELL_BREATH_NORTH_TO_SOUTH = 17086,                    // 20x in "array"
-    SPELL_BREATH_SOUTH_TO_NORTH = 18351,                    // 11x in "array"
+    SPELL_BREATH_NORTH_TO_SOUTH = 17086,                   // 20x in "array"
+    SPELL_BREATH_SOUTH_TO_NORTH = 18351,                   // 11x in "array"
 
-    SPELL_BREATH_EAST_TO_WEST   = 18576,                    // 7x in "array"
-    SPELL_BREATH_WEST_TO_EAST   = 18609,                    // 7x in "array"
+    SPELL_BREATH_EAST_TO_WEST   = 18576,                   // 7x in "array"
+    SPELL_BREATH_WEST_TO_EAST   = 18609,                   // 7x in "array"
 
-    SPELL_BREATH_SE_TO_NW       = 18564,                    // 12x in "array"
-    SPELL_BREATH_NW_TO_SE       = 18584,                    // 12x in "array"
-    SPELL_BREATH_SW_TO_NE       = 18596,                    // 12x in "array"
-    SPELL_BREATH_NE_TO_SW       = 18617,                    // 12x in "array"
+    SPELL_BREATH_SE_TO_NW       = 18564,                   // 12x in "array"
+    SPELL_BREATH_NW_TO_SE       = 18584,                   // 12x in "array"
+    SPELL_BREATH_SW_TO_NE       = 18596,                   // 12x in "array"
+    SPELL_BREATH_NE_TO_SW       = 18617,                   // 12x in "array"
 
-    //SPELL_BREATH                = 21131,                  // 8x in "array", different initial cast than the other arrays
+    //SPELL_BREATH                = 21131,                 // 8x in "array", different initial cast than the other arrays
 
     // Phase 3 spells
     SPELL_BELLOWING_ROAR         = 18431,
@@ -85,14 +85,14 @@ struct sOnyxMove
 
 static sOnyxMove aMoveData[]=
 {
-    {0, 1, SPELL_BREATH_WEST_TO_EAST,   -33.5561f, -182.682f, -56.9457f}, //west
-    {1, 0, SPELL_BREATH_EAST_TO_WEST,   -31.4963f, -250.123f, -55.1278f}, //east
-    {2, 4, SPELL_BREATH_NW_TO_SE,         6.8951f, -180.246f, -55.896f}, //north-west
-    {3, 5, SPELL_BREATH_NE_TO_SW,        10.2191f, -247.912f, -55.896f}, //north-east
-    {4, 2, SPELL_BREATH_SE_TO_NW,       -63.5156f, -240.096f, -55.477f}, //south-east
-    {5, 3, SPELL_BREATH_SW_TO_NE,       -58.2509f, -189.020f, -55.790f}, //south-west
+    {0, 1, SPELL_BREATH_WEST_TO_EAST,  -33.5561f, -182.682f, -56.9457f}, //west
+    {1, 0, SPELL_BREATH_EAST_TO_WEST,  -31.4963f, -250.123f, -55.1278f}, //east
+    {2, 4, SPELL_BREATH_NW_TO_SE,        6.8951f, -180.246f, -55.896f}, //north-west
+    {3, 5, SPELL_BREATH_NE_TO_SW,       10.2191f, -247.912f, -55.896f}, //north-east
+    {4, 2, SPELL_BREATH_SE_TO_NW,      -63.5156f, -240.096f, -55.477f}, //south-east
+    {5, 3, SPELL_BREATH_SW_TO_NE,      -58.2509f, -189.020f, -55.790f}, //south-west
     {6, 7, SPELL_BREATH_SOUTH_TO_NORTH, -65.8444f, -213.809f, -55.2985f}, //south
-    {7, 6, SPELL_BREATH_NORTH_TO_SOUTH,  22.8763f, -217.152f, -55.0548f}, //north
+    {7, 6, SPELL_BREATH_NORTH_TO_SOUTH, 22.8763f, -217.152f, -55.0548f}, //north
 };
 
 const Position MiddleRoomLocation = {-23.6155f, -215.357f, -55.7344f, 0.0f};
@@ -183,7 +183,7 @@ public:
             {
                 m_instance->SetData(DATA_ONYXIA, NOT_STARTED);
                 m_instance->SetData(DATA_ONYXIA_PHASE, m_uiPhase);
-                m_instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT,  ACHIEV_TIMED_START_EVENT);
+                m_instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
             }
         }
 
@@ -195,7 +195,7 @@ public:
             if (m_instance)
             {
                 m_instance->SetData(DATA_ONYXIA, IN_PROGRESS);
-                m_instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT,  ACHIEV_TIMED_START_EVENT);
+                m_instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
             }
         }
 
@@ -359,7 +359,7 @@ public:
                         SetCombatMovement(false);
                         m_uiPhase = PHASE_BREATH;
                         me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
-                        me->ApplySpellImmune(0, IMMUNITY_EFFECT,SPELL_EFFECT_ATTACK_ME, true);
+                        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
                         me->GetMotionMaster()->MovePoint(10, Phase2Location);
                         return;
                     }
@@ -429,8 +429,8 @@ public:
                     me->SetFlying(false);
                     m_bIsMoving = false;
                     me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
-                    me->ApplySpellImmune(0, IMMUNITY_EFFECT,SPELL_EFFECT_ATTACK_ME, false);
-                    me->GetMotionMaster()->MovePoint(9,me->GetHomePosition());
+                    me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
+                    me->GetMotionMaster()->MovePoint(9, me->GetHomePosition());
                     return;
                 }
 

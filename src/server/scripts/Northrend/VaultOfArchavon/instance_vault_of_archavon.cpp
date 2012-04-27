@@ -97,7 +97,7 @@ class instance_archavon : public InstanceMapScript
 
             void SetData(uint32 type, uint32 data)
             {
-                switch(type)
+                switch (type)
                 {
                 case DATA_ARCHAVON:
                     m_auiEncounter[0] = data;
@@ -116,7 +116,7 @@ class instance_archavon : public InstanceMapScript
 
             uint32 GetData(uint32 type)
             {
-                switch(type)
+                switch (type)
                 {
                     case DATA_ARCHAVON:       return m_auiEncounter[0];
                     case DATA_EMALON:         return m_auiEncounter[1];

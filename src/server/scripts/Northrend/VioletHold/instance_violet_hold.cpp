@@ -319,7 +319,7 @@ public:
             switch (type)
             {
                 case DATA_1ST_BOSS_EVENT:
-                    if(m_auiEncounter[0] != DONE)
+                    if (m_auiEncounter[0] != DONE)
                     {
                     m_auiEncounter[0] = data;
                     if (data == DONE)
@@ -327,7 +327,7 @@ public:
                     }
                     break;
                 case DATA_2ND_BOSS_EVENT:
-                    if(m_auiEncounter[1] != DONE)
+                    if (m_auiEncounter[1] != DONE)
                     {
                     m_auiEncounter[1] = data;
                     if (data == DONE)

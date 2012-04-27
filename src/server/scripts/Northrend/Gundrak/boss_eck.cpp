@@ -28,7 +28,7 @@ enum Spells
     SPELL_ECK_BITE                                = 55813, //Eck bites down hard, inflicting 150% of his normal damage to an enemy.
     SPELL_ECK_SPIT                                = 55814, //Eck spits toxic bile at enemies in a cone in front of him, inflicting 2970 Nature damage and draining 220 mana every 1 sec for 3 sec.
     SPELL_ECK_SPRING_1                            = 55815, //Eck leaps at a distant target.  --> Drops aggro and charges a random player. Tank can simply taunt him back.
-    SPELL_ECK_SPRING_2                            = 55837,  //Eck leaps at a distant target.
+    SPELL_ECK_SPRING_2                            = 55837, //Eck leaps at a distant target.
     //ruins dweller spells
     SPELL_REGURGITATE                             = 55643,
     SPELL_SPRING                                  = 55652
@@ -116,18 +116,18 @@ public:
             if (uiBiteTimer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_ECK_BITE);
-                uiBiteTimer = urand(8*IN_MILLISECONDS,12*IN_MILLISECONDS);
+                uiBiteTimer = urand(8*IN_MILLISECONDS, 12*IN_MILLISECONDS);
             } else uiBiteTimer -= diff;
 
             if (uiSpitTimer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_ECK_SPIT);
-                uiSpitTimer = urand(11*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                uiSpitTimer = urand(11*IN_MILLISECONDS, 20*IN_MILLISECONDS);
             } else uiSpitTimer -= diff;
 
             if (uiSpringTimer <= diff)
             {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM,1);
+                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
                 if (target && target->GetTypeId() == TYPEID_PLAYER)
                 {
                     if (me->GetExactDist(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ()) < 35)

@@ -178,16 +178,16 @@ public:
 
         void Reset()
         {
-            DoCast(me,SPELL_RANGER_STEALTH);
+            DoCast(me, SPELL_RANGER_STEALTH);
         }
         void MoveInLineOfSight(Unit *who)
         {
-            if(!who || who->GetTypeId() != TYPEID_PLAYER)
+            if (!who || who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            if(who->ToPlayer()->GetTeamId() == TEAM_HORDE)
+            if (who->ToPlayer()->GetTeamId() == TEAM_HORDE)
             {
-                if(who->GetDistance2d(me) <= 5)
+                if (who->GetDistance2d(me) <= 5)
                     me->RemoveAurasDueToSpell(SPELL_RANGER_STEALTH);
             }else
             {
@@ -232,13 +232,13 @@ public:
 
             if (uiPounceTimer<=diff)
             {
-                if (Unit* player = SelectTarget(SELECT_TARGET_FARTHEST,1,100,true))
-                    DoCast(player,SPELL_POUNCE);
+                if (Unit* player = SelectTarget(SELECT_TARGET_FARTHEST, 1, 100, true))
+                    DoCast(player, SPELL_POUNCE);
                 uiPounceTimer=30000;
             } else uiPounceTimer-=diff;
 
             if (HealthBelowPct(40))
-                DoCast(me,SPELL_ENRAGE);
+                DoCast(me, SPELL_ENRAGE);
 
             DoMeleeAttackIfReady();
         }

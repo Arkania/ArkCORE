@@ -95,7 +95,7 @@ class instance_magtheridons_lair : public InstanceMapScript
 
             void OnCreatureCreate(Creature* pCreature, bool /*add*/)
             {
-                switch(pCreature->GetEntry())
+                switch (pCreature->GetEntry())
                 {
                 case 17257:
                     MagtheridonGUID = pCreature->GetGUID();
@@ -108,7 +108,7 @@ class instance_magtheridons_lair : public InstanceMapScript
 
             void OnGameObjectCreate(GameObject* pGo, bool /*add*/)
             {
-                switch(pGo->GetEntry())
+                switch (pGo->GetEntry())
                 {
                 case 181713:
                     pGo->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
@@ -130,7 +130,7 @@ class instance_magtheridons_lair : public InstanceMapScript
 
             uint64 GetData64(uint32 type)
             {
-                switch(type)
+                switch (type)
                 {
                 case DATA_MAGTHERIDON:
                     return MagtheridonGUID;
@@ -140,7 +140,7 @@ class instance_magtheridons_lair : public InstanceMapScript
 
             void SetData(uint32 type, uint32 data)
             {
-                switch(type)
+                switch (type)
                 {
                 case DATA_MAGTHERIDON_EVENT:
                     m_auiEncounter[0] = data;
@@ -150,7 +150,7 @@ class instance_magtheridons_lair : public InstanceMapScript
                        HandleGameObject(DoorGUID, true);
                     break;
                 case DATA_CHANNELER_EVENT:
-                    switch(data)
+                    switch (data)
                     {
                     case NOT_STARTED: // Reset all channelers once one is reset.
                         if (m_auiEncounter[1] != NOT_STARTED)

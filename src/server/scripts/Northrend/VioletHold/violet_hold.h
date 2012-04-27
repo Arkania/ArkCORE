@@ -89,7 +89,7 @@ enum Data64
 
 enum Bosses
 {
-    BOSS_NONE,              // 0 used as marker for not yet randomized
+    BOSS_NONE,             // 0 used as marker for not yet randomized
     BOSS_MORAGG,
     BOSS_EREKEM,
     BOSS_ICHORON,

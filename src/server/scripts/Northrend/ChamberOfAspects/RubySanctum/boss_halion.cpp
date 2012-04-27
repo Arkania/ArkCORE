@@ -76,10 +76,10 @@ enum Spells
     SPELL_CONSUMPTION_DAMAGE_AURA       = 74803,
 
     // Misc
-    SPELL_TWILIGHT_DIVISION             = 75063,    // Phase spell from phase 2 to phase 3
+    SPELL_TWILIGHT_DIVISION             = 75063,   // Phase spell from phase 2 to phase 3
     SPELL_LEAVE_TWILIGHT_REALM          = 74812,
-    SPELL_TWILIGHT_PHASING              = 74808,    // Phase spell from phase 1 to phase 2
-    SPELL_SUMMON_TWILIGHT_PORTAL        = 74809,    // Summons go 202794
+    SPELL_TWILIGHT_PHASING              = 74808,   // Phase spell from phase 1 to phase 2
+    SPELL_SUMMON_TWILIGHT_PORTAL        = 74809,   // Summons go 202794
     SPELL_TWILIGHT_MENDING              = 75509,
 
     // Living Inferno
@@ -165,7 +165,7 @@ enum GUIDs
     GUID_ORB_ROTATION_FOCUS = 0,
 };
 
-Position const HalionSpawnPos   = {3156.67f,  533.8108f, 72.98822f, 3.159046f};
+Position const HalionSpawnPos   = {3156.67f, 533.8108f, 72.98822f, 3.159046f};
 
 Position const ShadowOrbsSpawnPos[4] =
 {
@@ -193,16 +193,16 @@ struct CorporealityData
 CorporealityData const corporealityReference[11] =
 {
     {  0, 74836, 74831, 100},
-    { 10, 74835, 74830,  90},
-    { 20, 74834, 74829,  80},
-    { 30, 74833, 74828,  70},
-    { 40, 74832, 74827,  60},
-    { 50, 74826, 74826,  50},
-    { 60, 74827, 74832,  40},
-    { 70, 74828, 74833,  30},
-    { 80, 74829, 74834,  20},
-    { 90, 74830, 74835,  10},
-    {100, 74831, 74836,   0},
+    { 10, 74835, 74830, 90},
+    { 20, 74834, 74829, 80},
+    { 30, 74833, 74828, 70},
+    { 40, 74832, 74827, 60},
+    { 50, 74826, 74826, 50},
+    { 60, 74827, 74832, 40},
+    { 70, 74828, 74833, 30},
+    { 80, 74829, 74834, 20},
+    { 90, 74830, 74835, 10},
+    {100, 74831, 74836,  0},
 };
 
 class boss_halion : public CreatureScript

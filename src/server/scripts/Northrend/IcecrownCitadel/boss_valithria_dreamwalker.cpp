@@ -303,7 +303,7 @@ class boss_valithria_dreamwalker : public CreatureScript
             {
                 me->SetHealth(me->GetMaxHealth() / 2);
                 me->SetReactState(REACT_PASSIVE);
-                me->AddAura(SPELL_CORRUPTION_VALITHRIA,me);
+                me->AddAura(SPELL_CORRUPTION_VALITHRIA, me);
                 // immune to percent heals
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_OBS_MOD_HEALTH, true);
                 me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL_PCT, true);
@@ -354,18 +354,18 @@ class boss_valithria_dreamwalker : public CreatureScript
                     DoCast(me, SPELL_ACHIEVEMENT_CHECK);
                     DoCastAOE(SPELL_DREAMWALKERS_RAGE);
                     _events.ScheduleEvent(EVENT_DREAM_SLIP, 3500);
-                    if (Creature* lichKing = me->FindNearestCreature(NPC_THE_LICH_KING_VALITHRIA,300.0f))
+                    if (Creature* lichKing = me->FindNearestCreature(NPC_THE_LICH_KING_VALITHRIA, 300.0f))
                         lichKing->DisappearAndDie();
                     if (Creature* trigger = me->FindNearestCreature(NPC_GREEN_DRAGON_COMBAT_TRIGGER, 300.0f))
                         trigger->DisappearAndDie();
                     if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_10MAN_NORMAL)
-                        me->SummonGameObject(GO_DREAMWALKER_CACHE_10_N, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 ,7*DAY);
+                        me->SummonGameObject(GO_DREAMWALKER_CACHE_10_N, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 , 7*DAY);
                     if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_25MAN_NORMAL)
-                        me->SummonGameObject(GO_DREAMWALKER_CACHE_25_N, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 ,7*DAY);
+                        me->SummonGameObject(GO_DREAMWALKER_CACHE_25_N, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 , 7*DAY);
                     if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_10MAN_HEROIC)
-                        me->SummonGameObject(GO_DREAMWALKER_CACHE_10_H, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 ,7*DAY);
+                        me->SummonGameObject(GO_DREAMWALKER_CACHE_10_H, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 , 7*DAY);
                     if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_25MAN_HEROIC)
-                        me->SummonGameObject(GO_DREAMWALKER_CACHE_25_H, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 ,7*DAY);
+                        me->SummonGameObject(GO_DREAMWALKER_CACHE_25_H, 4221.009766f, 2484.389893f, 364.872009f, 6.20305f,  0, 0, 0, 0 , 7*DAY);
                     me->DespawnOrUnsummon(4000);
                 }
                 else if (!_over75PercentTalkDone && me->HealthAbovePctHealed(75, heal))
@@ -565,7 +565,7 @@ class npc_green_dragon_combat_trigger : public CreatureScript
             {
                 if (action == ACTION_DEATH)
                 {
-                    if(instance->GetBossState(DATA_VALITHRIA_DREAMWALKER) != DONE)
+                    if (instance->GetBossState(DATA_VALITHRIA_DREAMWALKER) != DONE)
                     {
                         instance->SetBossState(DATA_VALITHRIA_DREAMWALKER, FAIL);
                     me->m_Events.AddEvent(new ValithriaDespawner(me), me->m_Events.CalculateTime(5000));
@@ -810,9 +810,9 @@ class npc_risen_archmage : public CreatureScript
                             _events.ScheduleEvent(EVENT_COLUMN_OF_FROST, urand(15000, 25000));
                             break;
                         case EVENT_COLUMN_OF_FROST_DAMAGE:
-                            if(Creature* column = me->FindNearestCreature(NPC_COLUMN_OF_FROST, 300.0f))
+                            if (Creature* column = me->FindNearestCreature(NPC_COLUMN_OF_FROST, 300.0f))
                             {
-                                column->CastSpell(column,SPELL_COLUMN_OF_FROST_DAMAGE,false);
+                                column->CastSpell(column, SPELL_COLUMN_OF_FROST_DAMAGE, false);
                                 column->DespawnOrUnsummon();
                             }
                             break;
@@ -858,8 +858,8 @@ class npc_blazing_skeleton : public CreatureScript
 
             void UpdateAI(uint32 const diff)
             {
-                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER,300.0f))
-                    if(valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
+                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER, 300.0f))
+                    if (valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
                        me->DespawnOrUnsummon();
 
                 if (!UpdateVictim())
@@ -926,16 +926,16 @@ class npc_suppresser : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER,300.0f))
+                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER, 300.0f))
                 {
                     me->AI()->AttackStart(valithria);
-                    me->AddThreat(valithria,5000000000.0f);
+                    me->AddThreat(valithria, 5000000000.0f);
                 }
             }
 
             void UpdateAI(uint32 const diff)
             {
-                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER,300.0f))
+                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER, 300.0f))
                     if (valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
                         me->DespawnOrUnsummon();
 
@@ -998,8 +998,8 @@ class npc_blistering_zombie : public CreatureScript
 
             void UpdateAI(uint32 const /*diff*/)
             {
-                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER,300.0f))
-                    if(valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
+                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER, 300.0f))
+                    if (valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
                        me->DespawnOrUnsummon();
 
                 if (!UpdateVictim())
@@ -1042,8 +1042,8 @@ class npc_gluttonous_abomination : public CreatureScript
 
             void UpdateAI(uint32 const diff)
             {
-                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER,300.0f))
-                    if(valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
+                if (Creature* valithria = me->FindNearestCreature(NPC_VALITHRIA_DREAMWALKER, 300.0f))
+                    if (valithria->GetInstanceScript()->GetBossState(DATA_VALITHRIA_DREAMWALKER) != IN_PROGRESS)
                        me->DespawnOrUnsummon();
 
                 if (!UpdateVictim())

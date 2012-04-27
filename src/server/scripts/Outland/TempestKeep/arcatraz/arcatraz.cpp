@@ -154,7 +154,7 @@ class npc_millhouse_manastorm : public CreatureScript
                     {
                         if (Phase < 8)
                         {
-                            switch(Phase)
+                            switch (Phase)
                             {
                             case 1:
                                 DoScriptText(SAY_INTRO_1, me);
@@ -379,7 +379,7 @@ class npc_warden_mellichar : public CreatureScript
                     me->InterruptNonMeleeSpells(true);
                     me->RemoveAurasByType(SPELL_AURA_DUMMY);
 
-                    switch(Phase)
+                    switch (Phase)
                     {
                     case 2:
                         DoCast(me, SPELL_TARGET_ALPHA);
@@ -428,7 +428,7 @@ class npc_warden_mellichar : public CreatureScript
                         if (Phase != 7)
                             DoCast(me, SPELL_TARGET_OMEGA);
 
-                        switch(Phase)
+                        switch (Phase)
                         {
                         case 2:
                             switch (urand(0, 1))
@@ -479,7 +479,7 @@ class npc_warden_mellichar : public CreatureScript
                     }
                     if (CanProgress())
                     {
-                        switch(Phase)
+                        switch (Phase)
                         {
                         case 1:
                             DoScriptText(YELL_INTRO2, me);

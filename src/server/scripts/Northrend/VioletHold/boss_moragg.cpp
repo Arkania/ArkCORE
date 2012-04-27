@@ -66,8 +66,8 @@ public:
             uiOpticLinkTimer = 10000;
             uiCorrosiveSalivaTimer = 5000;
 
-            uiRaySuffer = DUNGEON_MODE(5000,3000);
-            uiRayPain = DUNGEON_MODE(6500,4500);
+            uiRaySuffer = DUNGEON_MODE(5000, 3000);
+            uiRayPain = DUNGEON_MODE(6500, 4500);
 
             if (instance)
             {
@@ -94,8 +94,8 @@ public:
                     instance->SetData(DATA_2ND_BOSS_EVENT, IN_PROGRESS);
             }
 
-            //DoCast(me, DUNGEON_MODE(SPELL_RAY_OF_SUFFERING,H_SPELL_RAY_OF_SUFFERING), true);
-            //DoCast(me, DUNGEON_MODE(SPELL_RAY_OF_PAIN,H_SPELL_RAY_OF_PAIN), true);
+            //DoCast(me, DUNGEON_MODE(SPELL_RAY_OF_SUFFERING, H_SPELL_RAY_OF_SUFFERING), true);
+            //DoCast(me, DUNGEON_MODE(SPELL_RAY_OF_PAIN, H_SPELL_RAY_OF_PAIN), true);
         }
 
         void AttackStart(Unit* who)
@@ -124,14 +124,14 @@ public:
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_RAY_OF_SUFFERING_TIGGER, true);
-                uiRaySuffer = DUNGEON_MODE(5000,3000);
+                uiRaySuffer = DUNGEON_MODE(5000, 3000);
             } else uiRaySuffer -= diff;
 
             if (uiRayPain <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_RAY_OF_PAIN_TIGGER, true);
-                uiRayPain = DUNGEON_MODE(6500,4500);
+                uiRayPain = DUNGEON_MODE(6500, 4500);
             } else uiRayPain -= diff;
 
             if (uiOpticLinkTimer <= diff)
@@ -143,7 +143,7 @@ public:
 
             if (uiCorrosiveSalivaTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCast(me->getVictim(), SPELL_CORROSIVE_SALIVA);
                 uiCorrosiveSalivaTimer = 10000;
@@ -158,7 +158,7 @@ public:
             {
                 if (instance->GetData(DATA_WAVE_COUNT) == 6)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
@@ -166,7 +166,7 @@ public:
                 }
                 else if (instance->GetData(DATA_WAVE_COUNT) == 12)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_2ND_BOSS_EVENT, DONE);

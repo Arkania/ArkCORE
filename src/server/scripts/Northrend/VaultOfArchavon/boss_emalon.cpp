@@ -25,12 +25,12 @@
 //Emalon spells
 enum Spells
 {
-    SPELL_OVERCHARGE            = 64218,    // Cast every 45 sec on a random Tempest Minion
+    SPELL_OVERCHARGE            = 64218,   // Cast every 45 sec on a random Tempest Minion
     SPELL_BERSERK               = 26662,
 
     SPELL_SHOCK                 = 64363,
     SPELL_OVERCHARGED           = 64217,
-    SPELL_OVERCHARGED_BLAST     = 64219,    // Cast when Overcharged reaches 10 stacks. Mob dies after that
+    SPELL_OVERCHARGED_BLAST     = 64219,   // Cast when Overcharged reaches 10 stacks. Mob dies after that
 };
 
 // cannot let SpellDifficulty handle it, no entries for these

@@ -148,14 +148,14 @@ class boss_eregos : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 /* TODO: MOVE TO SCRIPT
-                if(Creature* RubyDrake = me->FindNearestCreature(27756, 200, true))
-                    if(RubyDrake->HasAura(49464))
+                if (Creature* RubyDrake = me->FindNearestCreature(27756, 200, true))
+                    if (RubyDrake->HasAura(49464))
                         RubyVoid = false;
-                if(Creature* AmberDrake = me->FindNearestCreature(27755, 200, true))
-                    if(AmberDrake->HasAura(49460))
+                if (Creature* AmberDrake = me->FindNearestCreature(27755, 200, true))
+                    if (AmberDrake->HasAura(49460))
                         AmberVoid = false;
-                if(Creature* EmeraldDrake = me->FindNearestCreature(27692, 200, true))
-                    if(EmeraldDrake->HasAura(49346))
+                if (Creature* EmeraldDrake = me->FindNearestCreature(27692, 200, true))
+                    if (EmeraldDrake->HasAura(49346))
                         EmeraldVoid = false;
                         */
 
@@ -271,11 +271,11 @@ class boss_eregos : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 /*
-                if(EmeraldVoid == true)
+                if (EmeraldVoid == true)
                     instance->DoCompleteAchievement(2045);
-                if(RubyVoid == true)
+                if (RubyVoid == true)
                     instance->DoCompleteAchievement(2044);
-                if(AmberVoid == true)
+                if (AmberVoid == true)
                     instance->DoCompleteAchievement(2046);
                     */
 

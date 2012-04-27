@@ -86,7 +86,7 @@ public:
 
         void Reset()
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
             NonFight = false;
             StartEscort = false;
@@ -97,7 +97,7 @@ public:
 
         void WaypointReached(uint32 i)
         {
-            switch(i)
+            switch (i)
             {
                 case 20:
                     SetEscortPaused(true);
@@ -105,7 +105,7 @@ public:
                     DoCast(me, SPELL_LICH_KING_CAST);
                     m_pInstance->SetData(TYPE_LICH_KING, SPECIAL);
                     DoScriptText(SAY_LICH_KING_END_DUN, me);
-                    if(Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_pInstance->GetData64(DATA_ESCAPE_LIDER))))
+                    if (Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_pInstance->GetData64(DATA_ESCAPE_LIDER))))
                     {
                         pLider->CastSpell(pLider, SPELL_SILENCE, false);
                         pLider->SendMonsterMove(pLider->GetPositionX(), pLider->GetPositionY(), pLider->GetPositionZ() + 4, VICTIMSTATE_HIT, pLider->isInCombat(), 3000);
@@ -123,7 +123,7 @@ public:
             if (NonFight)
                 return;
 
-            if(m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS || who->GetTypeId() == TYPEID_PLAYER)
+            if (m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS || who->GetTypeId() == TYPEID_PLAYER)
                 return;
 
             npc_escortAI::AttackStart(who);
@@ -131,7 +131,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            if(!m_pInstance || !summoned)
+            if (!m_pInstance || !summoned)
                 return;
 
             summoned->SetPhaseMask(65535, true);
@@ -148,12 +148,12 @@ public:
 
         void CallGuard(uint32 GuardID)
         {
-            me->SummonCreature(GuardID,(me->GetPositionX()-5)+rand()%10, (me->GetPositionY()-5)+rand()%10, me->GetPositionZ(),4.17f,TEMPSUMMON_TIMED_OR_DEAD_DESPAWN,360000);
+            me->SummonCreature(GuardID, (me->GetPositionX()-5)+rand()%10, (me->GetPositionY()-5)+rand()%10, me->GetPositionZ(), 4.17f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 360000);
         }
 
         void Wall01()
         {
-            switch(Step)
+            switch (Step)
             {
                 case 0:
                     SetEscortPaused(true);
@@ -196,7 +196,7 @@ public:
 
         void Wall02()
         {
-            switch(Step)
+            switch (Step)
             {
                 case 0:
                     m_pInstance->SetData(DATA_SUMMONS, 3);
@@ -220,7 +220,7 @@ public:
 
         void Wall03()
         {
-            switch(Step)
+            switch (Step)
             {
                 case 0:
                     m_pInstance->SetData(DATA_SUMMONS, 3);
@@ -247,7 +247,7 @@ public:
 
         void Wall04()
         {
-            switch(Step)
+            switch (Step)
             {
                 case 0:
                     m_pInstance->SetData(DATA_SUMMONS, 3);
@@ -279,10 +279,10 @@ public:
 
         void UpdateEscortAI(const uint32 diff)
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
 
-            if(m_pInstance->GetData(TYPE_LICH_KING) != IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_LICH_KING) != IN_PROGRESS)
             {
                 if (!UpdateVictim())
                     return;
@@ -290,12 +290,12 @@ public:
                 DoMeleeAttackIfReady();
             }
 
-            if(me->isInCombat() && m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
+            if (me->isInCombat() && m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
             {
                 npc_escortAI::EnterEvadeMode();
             }
 
-            if(m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS && StartEscort != true)
+            if (m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS && StartEscort != true)
             {
                 StartEscort = true;
                 me->RemoveAurasDueToSpell(SPELL_ICE_PRISON);
@@ -326,33 +326,33 @@ public:
                 }
             }
 
-            if(m_pInstance->GetData(TYPE_ICE_WALL_01) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_ICE_WALL_01) == IN_PROGRESS)
             {
-                if(StepTimer < diff)
+                if (StepTimer < diff)
                     Wall01();
                 else
                     StepTimer -= diff;
             }
 
-            if(m_pInstance->GetData(TYPE_ICE_WALL_02) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_ICE_WALL_02) == IN_PROGRESS)
             {
-                if(StepTimer < diff)
+                if (StepTimer < diff)
                     Wall02();
                 else
                     StepTimer -= diff;
             }
 
-            if(m_pInstance->GetData(TYPE_ICE_WALL_03) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_ICE_WALL_03) == IN_PROGRESS)
             {
-                if(StepTimer < diff)
+                if (StepTimer < diff)
                     Wall03();
                 else
                     StepTimer -= diff;
             }
 
-            if(m_pInstance->GetData(TYPE_ICE_WALL_04) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_ICE_WALL_04) == IN_PROGRESS)
             {
-                if(StepTimer < diff)
+                if (StepTimer < diff)
                     Wall04();
                 else
                     StepTimer -= diff;
@@ -390,7 +390,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
 
             m_pInstance->SetData(DATA_SUMMONS, 0);
@@ -401,7 +401,7 @@ public:
             if (!who)
                 return;
 
-            if(Emerge == false)
+            if (Emerge == false)
                 return;
 
             ScriptedAI::AttackStart(who);
@@ -409,19 +409,19 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
 
-            if(m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
             {
-                if(Emerge != true)
+                if (Emerge != true)
                 {
-                    if(EmergeTimer < diff)
+                    if (EmergeTimer < diff)
                     {
                         //me->RemoveFlag(SPLINEFLAG_WALKING | MOVEMENTFLAG_WALKING, true);
                         Emerge = true;
                         m_uiLiderGUID = m_pInstance->GetData64(DATA_ESCAPE_LIDER);
-                        if(Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_uiLiderGUID)))
+                        if (Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_uiLiderGUID)))
                         {
                             DoResetThreat();
                             me->AI()->AttackStart(pLider);
@@ -471,7 +471,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
 
             m_pInstance->SetData(DATA_SUMMONS, 0);
@@ -482,7 +482,7 @@ public:
             if (!who)
                 return;
 
-            if(Emerge == false)
+            if (Emerge == false)
                 return;
 
             ScriptedAI::AttackStart(who);
@@ -490,18 +490,18 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
 
-            if(m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
             {
-                if(Emerge != true)
+                if (Emerge != true)
                 {
-                    if(EmergeTimer < diff)
+                    if (EmergeTimer < diff)
                     {
                         Emerge = true;
                         m_uiLiderGUID = m_pInstance->GetData64(DATA_ESCAPE_LIDER);
-                        if(Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_uiLiderGUID)))
+                        if (Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_uiLiderGUID)))
                         {
                             DoResetThreat();
                             me->AI()->AttackStart(pLider);
@@ -548,15 +548,15 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(!m_pInstance) return;
+            if (!m_pInstance) return;
 
-            if(m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
+            if (m_pInstance->GetData(TYPE_LICH_KING) == IN_PROGRESS)
             {
-                if(Walk != true)
+                if (Walk != true)
                 {
                     Walk = true;
                     m_uiLiderGUID = m_pInstance->GetData64(DATA_ESCAPE_LIDER);
-                    if(Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_uiLiderGUID)))
+                    if (Creature* pLider = ((Creature*)Unit::GetUnit((*me), m_uiLiderGUID)))
                     {
                         DoResetThreat();
                         me->AI()->AttackStart(pLider);
@@ -570,7 +570,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if(!m_pInstance)
+            if (!m_pInstance)
                 return;
 
             m_pInstance->SetData(DATA_SUMMONS, 0);

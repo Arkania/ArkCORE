@@ -4315,7 +4315,7 @@ void Spell::WriteAmmoToPacket (WorldPacket * data)
      {
      if (itemEntry->Class == ITEM_CLASS_WEAPON)
      {
-     switch(itemEntry->SubClass)
+     switch (itemEntry->SubClass)
      {
      case ITEM_SUBCLASS_WEAPON_THROWN:
      ammoDisplayID = itemEntry->DisplayId;
@@ -6771,7 +6771,7 @@ SpellCastResult Spell::CheckItems ()
                  return SPELL_FAILED_NO_AMMO;
 
                  // check ammo ws. weapon compatibility
-                 switch(pItem->GetProto()->SubClass)
+                 switch (pItem->GetProto()->SubClass)
                  {
                  case ITEM_SUBCLASS_WEAPON_BOW:
                  case ITEM_SUBCLASS_WEAPON_CROSSBOW:

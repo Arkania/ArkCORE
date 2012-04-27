@@ -109,23 +109,23 @@ public:
 
         void SummonWave()
         {
-        switch(uiWaveCounter)
+        switch (uiWaveCounter)
             {
-            case 0: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    me->SummonCreature(NPC_INFINITE_ASSAILANT, me->GetPositionX()-5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+            case 0: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    me->SummonCreature(NPC_INFINITE_ASSAILANT, me->GetPositionX()-5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                     break;
-            case 1: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()-5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+            case 1: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()-5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                     break;
-            case 2: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    me->SummonCreature(NPC_INFINITE_ASSAILANT, me->GetPositionX()-5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    me->SummonCreature(NPC_INFINITE_DESTROYER, me->GetPositionX()+5,me->GetPositionY()+5 ,me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+            case 2: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    me->SummonCreature(NPC_INFINITE_ASSAILANT, me->GetPositionX()-5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    me->SummonCreature(NPC_INFINITE_DESTROYER, me->GetPositionX()+5, me->GetPositionY()+5 , me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                     break;
-            case 3: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    me->SummonCreature(NPC_INFINITE_ASSAILANT, me->GetPositionX()-5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    me->SummonCreature(NPC_INFINITE_DESTROYER, me->GetPositionX()+5,me->GetPositionY()+5 ,me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+            case 3: me->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, me->GetPositionX()+5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    me->SummonCreature(NPC_INFINITE_ASSAILANT, me->GetPositionX()-5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    me->SummonCreature(NPC_INFINITE_DESTROYER, me->GetPositionX()+5, me->GetPositionY()+5 , me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                     break;
-            case 4: me->SummonCreature(NPC_INFINITE_TIMERENDER, me->GetPositionX()+5,me->GetPositionY(),me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+            case 4: me->SummonCreature(NPC_INFINITE_TIMERENDER, me->GetPositionX()+5, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
                     break;
             }
         }
@@ -134,7 +134,7 @@ public:
         {
             if (uiWaveTimer <= uiDiff)
             {
-                if(uiWaveCounter<=4)
+                if (uiWaveCounter<=4)
                 {
                     SummonWave();
                     uiWaveTimer = 15000;
@@ -146,7 +146,7 @@ public:
 
         void JustDied()
         {
-            if(Player* player = me->GetOwner()->ToPlayer())
+            if (Player* player = me->GetOwner()->ToPlayer())
             {
                 player->FailQuest(12470);
                 player->FailQuest(13343);
@@ -204,7 +204,7 @@ public:
         {
             me->RemoveAurasDueToSpell(SPELL_COMPELLED);
 
-            switch(me->GetEntry())
+            switch (me->GetEntry())
             {
             case ENTRY_JORDAN:
                 spell_Timer_1 = 10000;
@@ -225,20 +225,20 @@ public:
 
         void  JustDied(Unit *killer)
         {
-            if(killer)
+            if (killer)
             {
-                if(me->HasAuraEffect(SPELL_COMPELLED,0))
+                if (me->HasAuraEffect(SPELL_COMPELLED, 0))
                 {
                     Unit *ptarget = killer->GetCharmerOrOwnerOrSelf();
 
-                    if(ptarget->GetTypeId()== TYPEID_PLAYER)
+                    if (ptarget->GetTypeId()== TYPEID_PLAYER)
                     {
-                        switch(me->GetEntry())
+                        switch (me->GetEntry())
                         {
-                        case ENTRY_JORDAN: ptarget->CastSpell(ptarget,SPELL_DENOUNCEMENT_JORDAN_KILL_CREDIT,true);  break;
-                        case ENTRY_ZIERHUT: ptarget->CastSpell(ptarget,SPELL_DENOUNCEMENT_ZIERHUT_KILL_CREDIT,true); break;
-                        case ENTRY_GOODMAN: ptarget->CastSpell(ptarget,SPELL_DENOUNCEMENT_GOODMAN_KILL_CREDIT,true); break;
-                        case ENTRY_MERCER: ptarget->CastSpell(ptarget,SPELL_DENOUNCEMENT_MERCER_KILL_CREDIT,true);  break;
+                        case ENTRY_JORDAN: ptarget->CastSpell(ptarget, SPELL_DENOUNCEMENT_JORDAN_KILL_CREDIT, true);  break;
+                        case ENTRY_ZIERHUT: ptarget->CastSpell(ptarget, SPELL_DENOUNCEMENT_ZIERHUT_KILL_CREDIT, true); break;
+                        case ENTRY_GOODMAN: ptarget->CastSpell(ptarget, SPELL_DENOUNCEMENT_GOODMAN_KILL_CREDIT, true); break;
+                        case ENTRY_MERCER: ptarget->CastSpell(ptarget, SPELL_DENOUNCEMENT_MERCER_KILL_CREDIT, true);  break;
                         }
                     }
                 }
@@ -250,41 +250,41 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if(spell_Timer_1)
-            if(spell_Timer_1 <= diff)
+            if (spell_Timer_1)
+            if (spell_Timer_1 <= diff)
             {
-                switch(me->GetEntry())
+                switch (me->GetEntry())
                 {
                 case ENTRY_JORDAN:
-                    DoCast(me->getVictim(),SPELL_JODAN_WRATH);
+                    DoCast(me->getVictim(), SPELL_JODAN_WRATH);
                     spell_Timer_1 = 10000;
                     break;
                 case ENTRY_ZIERHUT:
-                    DoCast(me->getVictim(),SPELL_ZIERHUT_TORCHE);
+                    DoCast(me->getVictim(), SPELL_ZIERHUT_TORCHE);
                     spell_Timer_1 = 10000;
                     break;
                 case ENTRY_GOODMAN:
-                    DoCast(me->getVictim(),SPELL_GOODMAN_CRUSHARMOR);
+                    DoCast(me->getVictim(), SPELL_GOODMAN_CRUSHARMOR);
                     spell_Timer_1 = 10000;
                     break;
                 case ENTRY_MERCER:
-                    DoCast(me->getVictim(),SPELL_MERCER_SUMMON_WARHORSE);
+                    DoCast(me->getVictim(), SPELL_MERCER_SUMMON_WARHORSE);
                     spell_Timer_1 = 0;
                     break;
                 }
             }else spell_Timer_1 -= diff;
 
-            if(spell_Timer_2)
-            if(spell_Timer_2 <= diff)
+            if (spell_Timer_2)
+            if (spell_Timer_2 <= diff)
             {
-                switch(me->GetEntry())
+                switch (me->GetEntry())
                 {
                 case ENTRY_JORDAN:
-                    DoCast(me->getVictim(),SPELL_JODAN_CONSECRATION);
+                    DoCast(me->getVictim(), SPELL_JODAN_CONSECRATION);
                     spell_Timer_2 = 15000;
                     break;
                 case ENTRY_GOODMAN:
-                    DoCast(me->getVictim(),SPELL_GOODMAN_CRACK);
+                    DoCast(me->getVictim(), SPELL_GOODMAN_CRACK);
                     spell_Timer_2 = 15000;
                     break;
                 }
@@ -337,21 +337,21 @@ public:
         {
             isInUse = apply;
 
-            if(!apply)
+            if (!apply)
                 check_Timer = 30000;
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if(!me->IsVehicle())
+            if (!me->IsVehicle())
                 return;
 
-            if(isInUse)
+            if (isInUse)
             {
-                if(check_Timer < diff)
+                if (check_Timer < diff)
                 {
                     uint32 area = me->GetAreaId();
-                    switch(area)
+                    switch (area)
                     {
                     case AREA_VENOMSPITE:
                     case AREA_VENEGANCE_PASS:
@@ -359,7 +359,7 @@ public:
                     case AREA_DRAGONBLIGHT:
                         break;
                     default:
-                        me->DealDamage(me,me->GetHealth());
+                        me->DealDamage(me, me->GetHealth());
                         break;
                     }
 
@@ -367,12 +367,12 @@ public:
                 }else check_Timer -= diff;
             }else
             {
-                if(check_Timer < diff)
+                if (check_Timer < diff)
                 {
                     uint32 area = me->GetAreaId();
-                    if(area != AREA_VENOMSPITE)
+                    if (area != AREA_VENOMSPITE)
                     {
-                        me->DealDamage(me,me->GetHealth());
+                        me->DealDamage(me, me->GetHealth());
                     }
                     check_Timer = 5000;
                 }else check_Timer -= diff;
@@ -417,31 +417,31 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(part > 4 || me->isDead())
+            if (part > 4 || me->isDead())
                 return;
 
-            if(part_Timer <= diff)
+            if (part_Timer <= diff)
             {
-                switch(part)
+                switch (part)
                 {
                 case 1:
-                    DoCast(me,SPELL_SUMMON_ANUBAR_INVADER,true);
+                    DoCast(me, SPELL_SUMMON_ANUBAR_INVADER, true);
                     part++;
                     break;
                 case 2:
-                    DoCast(me,SPELL_SUMMON_ANUBAR_INVADER,true);
-                    DoCast(me,SPELL_SUMMON_ANUBAR_INVADER,true);
+                    DoCast(me, SPELL_SUMMON_ANUBAR_INVADER, true);
+                    DoCast(me, SPELL_SUMMON_ANUBAR_INVADER, true);
                     part++;
                     break;
                 case 3:
-                    DoCast(me,SPELL_SUMMON_ANUBAR_INVADER,true);
-                    DoCast(me,SPELL_SUMMON_ANUBAR_INVADER,true);
-                    DoCast(me,SPELL_SUMMON_ANUBAR_INVADER,true);
+                    DoCast(me, SPELL_SUMMON_ANUBAR_INVADER, true);
+                    DoCast(me, SPELL_SUMMON_ANUBAR_INVADER, true);
+                    DoCast(me, SPELL_SUMMON_ANUBAR_INVADER, true);
                     part++;
                     break;
                 case 4:
                     Unit* owner = me->GetCharmerOrOwnerOrSelf();
-                    if(owner && owner->GetTypeId() == TYPEID_PLAYER)
+                    if (owner && owner->GetTypeId() == TYPEID_PLAYER)
                         owner->ToPlayer()->CompleteQuest(ENTRY_QUEST_MIGHT_OF_HORDE);
                     part++;
                     break;
@@ -508,17 +508,17 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(Explote_Timer <= diff)
+            if (Explote_Timer <= diff)
             {
                 Unit* owner = me->GetCharmerOrOwnerOrSelf();
 
-                Creature* target = me->FindNearestCreature(27436,10,true);
-                if(target && owner->ToPlayer())
-                    owner->ToPlayer()->KilledMonsterCredit(27436,0);
+                Creature* target = me->FindNearestCreature(27436, 10, true);
+                if (target && owner->ToPlayer())
+                    owner->ToPlayer()->KilledMonsterCredit(27436, 0);
 
-                target = me->FindNearestCreature(27437,10,true);
-                if(target && owner->ToPlayer())
-                    owner->ToPlayer()->KilledMonsterCredit(27437,0);
+                target = me->FindNearestCreature(27437, 10, true);
+                if (target && owner->ToPlayer())
+                    owner->ToPlayer()->KilledMonsterCredit(27437, 0);
 
                 DoCast(SPELL_WMB_EXPLOSION);
                 Explote_Timer = 9999999;
@@ -681,8 +681,8 @@ public:
             if (me->GetEntry() != NPC_HIGH_ABBOT_LANDGREN_ESCORTEE_ENTRY)
                 return;
 
-            if(PlayerGUID)
-                if(Player* pPlayer = Unit::GetPlayer(*me,PlayerGUID))
+            if (PlayerGUID)
+                if (Player* pPlayer = Unit::GetPlayer(*me, PlayerGUID))
                 {
                     switch (i)
                     {
@@ -731,7 +731,7 @@ public:
 
             if (PlayerGUID)
             {
-                Player* AuraPlayer = Unit::GetPlayer(*me,PlayerGUID);
+                Player* AuraPlayer = Unit::GetPlayer(*me, PlayerGUID);
 
                 if (!AuraPlayer)
                 {
@@ -792,7 +792,7 @@ public:
 
                     if (AuraCheckTimer <= diff) {
                         if (AuraPlayer && AuraPlayer->GetQuestStatus(QUEST_A_FALL_FROM_GRACE) == QUEST_STATUS_INCOMPLETE && AuraPlayer->getQuestStatusMap()[QUEST_A_FALL_FROM_GRACE].m_creatureOrGOcount[0] == 1 && !AuraPlayer->HasAura(SPELL_SCARLET_RAVEN_PRIEST_IMAGE_MALE) && !AuraPlayer->HasAura(SPELL_SCARLET_RAVEN_PRIEST_IMAGE_FEMALE)) {
-                            switch(AuraPlayer->getGender())
+                            switch (AuraPlayer->getGender())
                             {
                             case GENDER_FEMALE:
                                 AuraPlayer->CastSpell(AuraPlayer, SPELL_SCARLET_RAVEN_PRIEST_IMAGE_FEMALE, false);
@@ -871,7 +871,7 @@ public:
 
     void OnLogin(Player*  pPlayer)
     {
-        if(pPlayer->GetQuestStatus(QUEST_A_FALL_FROM_GRACE) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(QUEST_A_FALL_FROM_GRACE) == QUEST_STATUS_INCOMPLETE)
             pPlayer->FailQuest(QUEST_A_FALL_FROM_GRACE);
     }
 };
@@ -914,13 +914,13 @@ public:
 
         void SpellHitTarget(Unit *target, const SpellEntry *spell)
         {
-            if(spell->Id == SPELL_DESTURCTION_TRIGGER)
+            if (spell->Id == SPELL_DESTURCTION_TRIGGER)
             {
-                if(Player* owner = Unit::GetPlayer(*me,guid_owner))
-                    owner->KilledMonsterCredit(ENTRY_PLAGUE_PULT_CREDIT,0);
-                if(target->ToCreature())
+                if (Player* owner = Unit::GetPlayer(*me, guid_owner))
+                    owner->KilledMonsterCredit(ENTRY_PLAGUE_PULT_CREDIT, 0);
+                if (target->ToCreature())
                 {
-                    target->DealDamage(target,target->GetHealth());
+                    target->DealDamage(target, target->GetHealth());
                     //target->ToCreature()->RemoveCorpse();
                 }
             }
@@ -928,19 +928,19 @@ public:
 
         void MoveInLineOfSight(Unit *who)
         {
-            if(guid_owner > 0)
+            if (guid_owner > 0)
                 return;
 
-            if(me->GetDistance2d(who) > 20)
+            if (me->GetDistance2d(who) > 20)
                 return;
 
-            if(who->GetTypeId() == TYPEID_UNIT)
+            if (who->GetTypeId() == TYPEID_UNIT)
             {
-                if(who->IsVehicle() && who->GetCharmer() && who->GetCharmer()->ToPlayer())
+                if (who->IsVehicle() && who->GetCharmer() && who->GetCharmer()->ToPlayer())
                     guid_owner = who->GetCharmer()->ToPlayer()->GetGUID();
             }
 
-            if(who->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 guid_owner = who->ToPlayer()->GetGUID();
             }
@@ -950,10 +950,10 @@ public:
 
         void MovementInform(uint32 type, uint32 id)
         {
-            if(type != POINT_MOTION_TYPE)
+            if (type != POINT_MOTION_TYPE)
                 return;
 
-            if(id != 1)
+            if (id != 1)
                 return;
 
             phase = 2;
@@ -962,30 +962,30 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(check_Timer <= diff)
+            if (check_Timer <= diff)
             {
-                switch(phase)
+                switch (phase)
                 {
                 case 0:
-                    if(Unit::GetPlayer(*me,guid_owner))
+                    if (Unit::GetPlayer(*me, guid_owner))
                     {
-                        Creature* pult = me->FindNearestCreature(ENTRY_SCOURGE_PLAGE_CATAPULT,50);
-                        if(pult)
+                        Creature* pult = me->FindNearestCreature(ENTRY_SCOURGE_PLAGE_CATAPULT, 50);
+                        if (pult)
                         {
                             guid_pult = pult->GetGUID();
-                            me->GetMotionMaster()->MovePoint(1,pult->GetPositionX(),pult->GetPositionY(),pult->GetPositionZ());
+                            me->GetMotionMaster()->MovePoint(1, pult->GetPositionX(), pult->GetPositionY(), pult->GetPositionZ());
                             phase = 1;
                         }
                     }
-                    else me->DealDamage(me,me->GetHealth());
+                    else me->DealDamage(me, me->GetHealth());
                     break;
                 case 1:
                     return;
                 case 2:
-                    if(Creature* pult = Creature::GetCreature(*me,guid_pult))
+                    if (Creature* pult = Creature::GetCreature(*me, guid_pult))
                     {
-                        me->CastSpell(pult,SPELL_DESTURCTION,true);
-                        me->CastSpell(me,SPELL_PLACE_SCOURGE_DISCOMBOBULATER,false);
+                        me->CastSpell(pult, SPELL_DESTURCTION, true);
+                        me->CastSpell(me, SPELL_PLACE_SCOURGE_DISCOMBOBULATER, false);
                         phase++;
                     }
                     break;
@@ -1029,28 +1029,28 @@ public:
         {
             isInUse = apply;
 
-            if(!apply)
+            if (!apply)
                 check_Timer = 30000;
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if(!me->IsVehicle())
+            if (!me->IsVehicle())
                 return;
 
-            if(isInUse)
+            if (isInUse)
             {
-                if(check_Timer < diff)
+                if (check_Timer < diff)
                 {
                     uint32 area = me->GetAreaId();
-                    switch(area)
+                    switch (area)
                     {
                     case AREA_CARRION_FIELDS:
                     case AREA_WINTERGARD_MAUSOLEUM:
                     case AREA_THORSONS_POINT:
                         break;
                     default:
-                        me->DealDamage(me,me->GetHealth());
+                        me->DealDamage(me, me->GetHealth());
                         break;
                     }
 
@@ -1058,12 +1058,12 @@ public:
                 }else check_Timer -= diff;
             }else
             {
-                if(check_Timer < diff)
+                if (check_Timer < diff)
                 {
                     uint32 area = me->GetAreaId();
-                    if(area != AREA_THORSONS_POINT)
+                    if (area != AREA_THORSONS_POINT)
                     {
-                        me->DealDamage(me,me->GetHealth());
+                        me->DealDamage(me, me->GetHealth());
                     }
                     check_Timer = 5000;
                 }else check_Timer -= diff;

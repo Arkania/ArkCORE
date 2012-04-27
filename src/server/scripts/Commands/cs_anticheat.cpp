@@ -255,7 +255,7 @@ public:
             return true;
         }
 
-        QueryResult resultDB = CharacterDatabase.Query("SELECT guid,average,total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY average ASC LIMIT 3;");
+        QueryResult resultDB = CharacterDatabase.Query("SELECT guid, average, total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY average ASC LIMIT 3;");
         if (!resultDB)
         {
             handler->PSendSysMessage("No players found.");
@@ -279,7 +279,7 @@ public:
             while (resultDB->NextRow());
         }
 
-        resultDB = CharacterDatabase.Query("SELECT guid,average,total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY total_reports DESC LIMIT 3;");
+        resultDB = CharacterDatabase.Query("SELECT guid, average, total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY total_reports DESC LIMIT 3;");
 
         // this should never happen
         if (!resultDB)

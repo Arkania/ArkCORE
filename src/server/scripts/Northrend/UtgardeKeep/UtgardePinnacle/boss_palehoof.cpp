@@ -172,7 +172,7 @@ public:
                 return;
 
             Map::PlayerList const &PlayerList = map->GetPlayers();
-            for(Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
+            for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
             {
                 if (Player* i_pl = i->getSource())
                     if (!i_pl->isGameMaster() && i_pl->isAlive() && me->GetDistance(i_pl) <= 100)
@@ -255,7 +255,7 @@ public:
                 uint8 next = urand(0, 3);
                 for (uint8 i = 0; i < 16; i++)
                 {
-                    if(!DoneAdds[i%4] && next == 0)
+                    if (!DoneAdds[i%4] && next == 0)
                         {
                             move = (Phase)(i % 4);
                             break;
@@ -718,7 +718,7 @@ public:
                 return;
 
             Map::PlayerList const &PlayerList = map->GetPlayers();
-            for(Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
+            for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
             {
                 if (Player* i_pl = i->getSource())
                     if (!i_pl->isGameMaster() && i_pl->isAlive() && me->GetDistance(i_pl) <= 100)
@@ -740,7 +740,7 @@ public:
                 if (currentPhase<5&&currentPhase >= 0)
                 {
                    Creature* pNext;
-                   switch(currentPhase)
+                   switch (currentPhase)
                    {
                         case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
                         case PHASE_RAVENOUS_FURLBORG: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG) : 0); break;
@@ -771,7 +771,7 @@ public:
                 return;
             Creature* pNext;
             me->SetSpeed(MOVE_FLIGHT , 3.0f);
-            switch(id)
+            switch (id)
             {
                 case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
                 case PHASE_RAVENOUS_FURLBORG: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG) : 0); break;

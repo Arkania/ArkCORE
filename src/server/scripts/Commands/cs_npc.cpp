@@ -235,7 +235,7 @@ public:
 
         /* FIXME: impossible without entry
          if (lowguid)
-         pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(),MAKE_GUID(lowguid,HIGHGUID_UNIT));
+         pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
          */
 
         // attempt check creature existence by DB data
@@ -591,7 +591,7 @@ public:
 
             /* FIXME: impossible without entry
              if (lowguid)
-             pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(),MAKE_GUID(lowguid,HIGHGUID_UNIT));
+             pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
              */
 
             // Attempting creature load from DB data
@@ -778,7 +778,7 @@ public:
 
             /* impossible without entry
              if (lowguid)
-             pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(),MAKE_GUID(lowguid,HIGHGUID_UNIT));
+             pCreature = ObjectAccessor::GetCreature(*handler->GetSession()->GetPlayer(), MAKE_GUID(lowguid, HIGHGUID_UNIT));
              */
 
             // attempt check creature existence by DB data
@@ -1244,7 +1244,7 @@ public:
         CreatureGroupMap[lowguid] = group_member;
         pCreature->SearchFormation();
 
-        WorldDatabase.PExecute("INSERT INTO creature_formations (leaderGUID, memberGUID, dist, angle, groupAI) VALUES ('%u','%u','%f', '%f', '%u')", leaderGUID, lowguid, group_member->follow_dist, group_member->follow_angle, group_member->groupAI);
+        WorldDatabase.PExecute("INSERT INTO creature_formations (leaderGUID, memberGUID, dist, angle, groupAI) VALUES ('%u', '%u', '%f', '%f', '%u')", leaderGUID, lowguid, group_member->follow_dist, group_member->follow_angle, group_member->groupAI);
 
         handler->PSendSysMessage("Creature %u added to formation with leader %u", lowguid, leaderGUID);
 
@@ -1322,7 +1322,7 @@ public:
          bool added = false;
          if (tmpItem)
          {
-         switch(SlotID)
+         switch (SlotID)
          {
          case 1:
          pCreature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY, ItemID);
@@ -1337,17 +1337,17 @@ public:
          added = true;
          break;
          default:
-         handler->PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST,SlotID);
+         handler->PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST, SlotID);
          added = false;
          break;
          }
 
          if (added)
-         handler->PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT,ItemID,tmpItem->Name1,SlotID);
+         handler->PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT, ItemID, tmpItem->Name1, SlotID);
          }
          else
          {
-         handler->PSendSysMessage(LANG_ITEM_NOT_FOUND,ItemID);
+         handler->PSendSysMessage(LANG_ITEM_NOT_FOUND, ItemID);
          return true;
          }
          */
@@ -1438,7 +1438,7 @@ public:
          return true;
          }
 
-         uint32 idname = sObjectMgr->AddCreatureSubName(pCreature->GetName(),args,pCreature->GetUInt32Value(UNIT_FIELD_DISPLAYID));
+         uint32 idname = sObjectMgr->AddCreatureSubName(pCreature->GetName(), args, pCreature->GetUInt32Value(UNIT_FIELD_DISPLAYID));
          pCreature->SetUInt32Value(OBJECT_FIELD_ENTRY, idname);
 
          pCreature->SaveToDB();

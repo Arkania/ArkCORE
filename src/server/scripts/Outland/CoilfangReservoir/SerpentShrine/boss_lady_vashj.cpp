@@ -990,7 +990,7 @@ public:
             {
                 uint32 identifier;
                 uint8 channel_identifier;
-                switch(targets.getGOTarget()->GetEntry())
+                switch (targets.getGOTarget()->GetEntry())
                 {
                     case 185052:
                         identifier = DATA_SHIELDGENERATOR1;

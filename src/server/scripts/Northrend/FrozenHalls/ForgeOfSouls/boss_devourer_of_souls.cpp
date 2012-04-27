@@ -62,9 +62,9 @@ enum Spells
     SPELL_MIRRORED_SOUL                           = 69051,
     SPELL_WELL_OF_SOULS                           = 68820,
     SPELL_UNLEASHED_SOULS                         = 68939,
-    SPELL_WAILING_SOULS_STARTING                  = 68912,  // Initial spell cast at begining of wailing souls phase
-    SPELL_WAILING_SOULS_BEAM                      = 68875,  // the beam visual
-    SPELL_WAILING_SOULS                           = 68873,  // the actual spell
+    SPELL_WAILING_SOULS_STARTING                  = 68912, // Initial spell cast at begining of wailing souls phase
+    SPELL_WAILING_SOULS_BEAM                      = 68875, // the beam visual
+    SPELL_WAILING_SOULS                           = 68873, // the actual spell
     H_SPELL_WAILING_SOULS                         = 70324,
 //    68871, 68873, 68875, 68876, 68899, 68912, 70324,
 // 68899 trigger 68871
@@ -120,7 +120,7 @@ struct outroPosition
     { { 0, 0 }, { 0.0f, 0.0f, 0.0f, 0.0f } }
 };
 
-Position const CrucibleSummonPos = {5672.294f,2520.686f, 713.4386f, 0.9599311f};
+Position const CrucibleSummonPos = {5672.294f, 2520.686f, 713.4386f, 0.9599311f};
 
 #define DATA_THREE_FACED        1
 
