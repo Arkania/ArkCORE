@@ -16,7 +16,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#ifndef SC_ACMGR_H
+#define SC_ACMGR_H
+
 #include <ace/Singleton.h>
+#include "Common.h"
+#include "SharedDefines.h"
+#include "ScriptPCH.h"
+#include "AnticheatData.h"
+#include "Chat.h"
+
+class Player;
+class AnticheatData;
 
 enum ReportTypes
 {
@@ -25,11 +36,23 @@ enum ReportTypes
     WALK_WATER_HACK_REPORT,
     JUMP_HACK_REPORT,
     TELEPORT_PLANE_HACK_REPORT,
+    CLIMB_HACK_REPORT,
 
-    MAX_REPORT_TYPES
+   // MAX_REPORT_TYPES
 };
 
-const std::string report_types[MAX_REPORT_TYPES] = {"speed_reports", "fly_reports", "waterwalk_reports", "jump_reports", "teleportplane_reports" };
+enum DetectionTypes
+{
+    SPEED_HACK_DETECTION            = 1,
+    FLY_HACK_DETECTION              = 2,
+    WALK_WATER_HACK_DETECTION       = 4,
+    JUMP_HACK_DETECTION             = 8,
+    TELEPORT_PLANE_HACK_DETECTION   = 16,
+    CLIMB_HACK_DETECTION            = 32
+};
+
+// GUIDLow is the key.
+typedef std::map<uint32, AnticheatData> AnticheatPlayersDataMap;
 
 class AnticheatMgr
 {
@@ -38,18 +61,41 @@ class AnticheatMgr
     ~AnticheatMgr();
 
     public:
+
         void StartHackDetection(Player* player, MovementInfo movementInfo, uint32 opcode);
-        void HandleHackDetectionTimer(Player* player, uint32 timeDiff);
-        void DisableAnticheatDetection(Player* player, bool teleport = false);
-        void DeletePlayerReport(Player* player);
+        void DeletePlayerReport(Player* player, bool login);
+        void DeletePlayerData(Player* player);
+        void CreatePlayerData(Player* player);
+        void SavePlayerData(Player* player);
+
+        void StartScripts();
+
+        void HandlePlayerLogin(Player* player);
+        void HandlePlayerLogout(Player* player);
+
+        uint32 GetTotalReports(uint32 lowGUID);
+        float GetAverage(uint32 lowGUID);
+        uint32 GetTypeReports(uint32 lowGUID, uint8 type);
+
+        void AnticheatGlobalCommand(ChatHandler* handler);
+        void AnticheatDeleteCommand(uint32 guid);
+
+        void ResetDailyReportStates();
     private:
         void SpeedHackDetection(Player* player, MovementInfo movementInfo);
         void FlyHackDetection(Player* player, MovementInfo movementInfo);
         void WalkOnWaterHackDetection(Player* player, MovementInfo movementInfo);
         void JumpHackDetection(Player* player, MovementInfo movementInfo,uint32 opcode);
         void TeleportPlaneHackDetection(Player* player, MovementInfo);
+        void ClimbHackDetection(Player* player,MovementInfo movementInfo,uint32 opcode);
 
         void BuildReport(Player* player,uint8 reportType);
+
+        bool MustCheckTempReports(uint8 type);
+
+        AnticheatPlayersDataMap m_Players;                        ///< Player data
 };
 
 #define sAnticheatMgr ACE_Singleton<AnticheatMgr, ACE_Null_Mutex>::instance()
+
+#endif

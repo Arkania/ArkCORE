@@ -7301,9 +7301,6 @@ void Spell::EffectCharge (SpellEffIndex /*effIndex*/)
     if (!target)
         return;
 
-    if (m_caster->ToPlayer())
-        sAnticheatMgr->DisableAnticheatDetection(m_caster->ToPlayer());
-
     float angle = target->GetRelativeAngle(m_caster);
     Position pos;
 
@@ -7321,9 +7318,6 @@ void Spell::EffectChargeDest (SpellEffIndex /*effIndex*/)
 {
     if (m_targets.HasDst())
     {
-        if (m_caster->ToPlayer())
-            sAnticheatMgr->DisableAnticheatDetection(m_caster->ToPlayer());
-
             float x, y, z;
             m_targets.m_dstPos.GetPosition(x, y, z);
             m_caster->GetMotionMaster()->MoveCharge(x, y, z);
@@ -7332,9 +7326,6 @@ void Spell::EffectChargeDest (SpellEffIndex /*effIndex*/)
 
 void Spell::EffectKnockBack (SpellEffIndex effIndex)
 {
-    if (m_caster->ToPlayer())
-        sAnticheatMgr->DisableAnticheatDetection(m_caster->ToPlayer());
-
         if (!unitTarget) return;
 
         // Instantly interrupt non melee spells being casted
