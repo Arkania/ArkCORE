@@ -579,7 +579,7 @@ void WorldSession::HandleCharCreateOpcode (WorldPacket & recv_data)
 , face
 ,   hairStyle ,
 hairColor   ,
-facialHair,outfitId    ;
+facialHair, outfitId    ;
     recv_data >> gender >> skin >> face;
     recv_data >> hairStyle >> hairColor >> facialHair >> outfitId;
 
@@ -632,7 +632,7 @@ facialHair,outfitId    ;
 
     ASSERT(pNewChar);
 
-    if (!pNewChar->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER), name, race_,class_, gender, skin, face, hairStyle, hairColor, facialHair, outfitId))
+    if (!pNewChar->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER), name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair, outfitId))
     {
         // Player not create (race/class problem?)
         pNewChar->CleanupsBeforeDelete();

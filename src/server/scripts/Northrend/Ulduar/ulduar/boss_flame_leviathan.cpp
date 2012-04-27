@@ -1320,7 +1320,6 @@ class achievement_unbroken : public AchievementCriteriaScript
         }
 };
 
-
 void AddSC_boss_flame_leviathan() {
     new boss_flame_leviathan();
     new boss_flame_leviathan_seat();
