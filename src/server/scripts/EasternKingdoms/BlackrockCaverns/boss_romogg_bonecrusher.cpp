@@ -99,7 +99,7 @@ public:
                      {
                      for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                      if (!i->getSource()->HasAura(SPELL_CHAINS_OF_WOE_AURA))
-                     me->CastSpell(i->getSource(),SPELL_CHAINS_OF_WOE_AURA,true);
+                     me->CastSpell(i->getSource(), SPELL_CHAINS_OF_WOE_AURA, true);
                      }*/
                 }
                 else

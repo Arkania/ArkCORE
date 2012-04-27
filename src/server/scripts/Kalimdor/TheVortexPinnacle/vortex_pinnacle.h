@@ -61,7 +61,7 @@ enum CreatureIds
     NPC_SLIPSTREAM              = 45455,
     // Various NPCs
 
-    NPC_GOLDEN_ORB              = 51157,  /*Heroic Mode*/
+    NPC_GOLDEN_ORB              = 51157, /*Heroic Mode*/
     NPC_ITESH                   = 49943,
 };
 

@@ -174,7 +174,7 @@ class boss_anraphet : public CreatureScript
 
                 while(uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_ALPHA_BEAMS:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
@@ -256,7 +256,7 @@ class boss_flame_warden : public CreatureScript
 
                 if (LavaTimer <= diff)
                 {
-                    if(Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(pTarget, SPELL_LAVA_ERUPTION);
                     LavaTimer = 5000+rand()%5000;
                 } else LavaTimer -= diff;
@@ -324,7 +324,7 @@ class boss_air_warden : public CreatureScript
 
                 if (WindTimer <= diff)
                 {
-                    if(Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(pTarget, SPELL_WIND_SHEAR);
                     WindTimer = 7500+rand()%7500;
                 } else WindTimer -= diff;
@@ -387,7 +387,7 @@ class boss_earth_warden : public CreatureScript
 
                 if (RockTimer <= diff)
                 {
-                    if(Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(pTarget, SPELL_WIND_SHEAR);
                     RockTimer = 20000+rand()%7500;
                 } else RockTimer -= diff;
@@ -455,7 +455,7 @@ class boss_water_warden : public CreatureScript
 
                 if (BubbleTimer <= diff)
                 {
-                    if(Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *pTarget = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(pTarget, SPELL_BUBBLE_BOUND);
                     BubbleTimer = 15000+rand()%7500;
                 } else BubbleTimer -= diff;

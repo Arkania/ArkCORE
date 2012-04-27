@@ -281,7 +281,7 @@ public:
 
             bool found = false;
             float x, y
-,z       ,
+, z       ,
         o;
         uint32 lowguid, id;
         uint16 mapid, phase;

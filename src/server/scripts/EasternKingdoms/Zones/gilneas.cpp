@@ -932,7 +932,7 @@ public:
             tQuestCredit = 2500;
             pGO->SetGoState(GO_STATE_ACTIVE);
             DoorTimer = DOOR_TIMER;
-            spawnKind = urand(1, 3); // 1,2=citizen, 3=citizen & worgen (66%,33%)
+            spawnKind = urand(1, 3); // 1, 2=citizen, 3=citizen & worgen (66%, 33%)
 
             angle = pGO->GetOrientation();
             x = pGO->GetPositionX() - cos(angle) * 2;
@@ -943,7 +943,7 @@ public:
 
             if (spawnKind < 3)
             {
-                if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN ,SUMMON1_TTL))
+                if (Creature* spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN , SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);

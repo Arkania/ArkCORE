@@ -312,7 +312,7 @@ class boss_deathbringer_saurfang : public CreatureScript
                 _JustDied();
                 DoCast(me, SPELL_ACHIEVEMENT, true);
                 Talk(SAY_DEATH);
-                instance->SetBossState(DATA_DEATHBRINGER_SAURFANG,DONE);
+                instance->SetBossState(DATA_DEATHBRINGER_SAURFANG, DONE);
 
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_MARK_OF_THE_FALLEN_CHAMPION);
                 if (Creature* creature = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SAURFANG_EVENT_NPC)))
@@ -364,12 +364,12 @@ class boss_deathbringer_saurfang : public CreatureScript
 
                 if (IsHeroic())
                 {
-                    summon->AddAura(SPELL_SCENT_OF_BLOOD_TRIGGERED,summon);
-                    SelectTargetList(playerList, RAID_MODE(10,25,10,25), SELECT_TARGET_RANDOM, 0, true);
+                    summon->AddAura(SPELL_SCENT_OF_BLOOD_TRIGGERED, summon);
+                    SelectTargetList(playerList, RAID_MODE(10, 25, 10, 25), SELECT_TARGET_RANDOM, 0, true);
                     for (std::list<Unit*>::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
                     {
                         Unit *pTemp = (*itr);
-                        pTemp->AddAura(SPELL_SCENT_OF_BLOOD,pTemp);
+                        pTemp->AddAura(SPELL_SCENT_OF_BLOOD, pTemp);
                     }
                 }
                 summon->AI()->DoCast(summon, SPELL_BLOOD_LINK_BEAST, true);
@@ -408,12 +408,12 @@ class boss_deathbringer_saurfang : public CreatureScript
                     case 72440:
                     case 73058: // blood nova targets
                     case 72378:
-                    case 72408: // rune of blood,triggerer
+                    case 72408: // rune of blood, triggerer
                         if (me->GetPower(POWER_ENERGY) != me->GetMaxPower(POWER_ENERGY))
                         {
                             if (_fallenChampionCastCount < 1)
                             {
-                                if(!IsHeroic())
+                                if (!IsHeroic())
                             target->CastCustomSpell(SPELL_BLOOD_LINK_DUMMY, SPELLVALUE_BASE_POINT0, 1, me, true);
                                 else target->CastCustomSpell(SPELL_BLOOD_LINK_DUMMY, SPELLVALUE_BASE_POINT0, 2, me, true);
                             }
@@ -1020,7 +1020,7 @@ class npc_blood_beast : public CreatureScript
 
             void IsSummonedBy(Unit* summoner)
             {
-                if(summoner)
+                if (summoner)
                    BloodLinkTimer = 2*IN_MILLISECONDS;
             }
 
@@ -1029,9 +1029,9 @@ class npc_blood_beast : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-                if(BloodLinkTimer <= diff && me->IsWithinDist(me->getVictim(),5.0f))
+                if (BloodLinkTimer <= diff && me->IsWithinDist(me->getVictim(), 5.0f))
                 {
-                    if(Unit* saurfang = me->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG,300.0f,true))
+                    if (Unit* saurfang = me->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG, 300.0f, true))
                         if (saurfang->GetPower(POWER_ENERGY) != saurfang->GetMaxPower(POWER_ENERGY))
                         {
                             me->CastCustomSpell(SPELL_BLOOD_LINK_DUMMY, SPELLVALUE_BASE_POINT0, 1, saurfang, true);
@@ -1238,7 +1238,7 @@ class spell_deathbringer_blood_nova : public SpellScriptLoader
             {
                 PreventHitDefaultEffect(effIndex);  // make this the default handler
                 if (GetCaster()->GetPower(POWER_ENERGY) != GetCaster()->GetMaxPower(POWER_ENERGY))
-                    if(Unit * saurfang = GetHitUnit()->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG,300.0f,true))
+                    if (Unit * saurfang = GetHitUnit()->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG, 300.0f, true))
                        GetHitUnit()->CastCustomSpell(SPELL_BLOOD_LINK_DUMMY, SPELLVALUE_BASE_POINT0, 1, saurfang, true);
             }
 
@@ -1367,8 +1367,8 @@ class spell_deathbringer_boiling_blood : public SpellScriptLoader
 
             void HandleEffectPeriodic(AuraEffect const* aurEff)
             {
-                if(Unit* target = GetTarget())
-                   if (Unit * saurfang = target->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG,300.0f,true))
+                if (Unit* target = GetTarget())
+                   if (Unit * saurfang = target->FindNearestCreature(NPC_DEATHBRINGER_SAURFANG, 300.0f, true))
                        target->CastCustomSpell(SPELL_BLOOD_LINK_DUMMY, SPELLVALUE_BASE_POINT0, 1, saurfang, true);
             }
 

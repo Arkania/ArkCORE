@@ -180,19 +180,19 @@ public:
             void KilledUnit(Unit* victim)
             {
                 if (victim->GetTypeId() == TYPEID_PLAYER)
-            DoScriptText(RAND(SAY_SLAY_1,SAY_SLAY_2), me);
+            DoScriptText(RAND(SAY_SLAY_1, SAY_SLAY_2), me);
         }
 
         void JustDied(Unit* /*killer*/)
         {
             uint64 temp;
-            float x,y,z,o;
-            me->GetPosition(x,y,z,o);
+            float x, y, z, o;
+            me->GetPosition(x, y, z, o);
             if (instance->GetData(DATA_TEAM_IN_INSTANCE) == ALLIANCE)
                 temp=NPC_JAINA_PART2;
             else
                 temp=NPC_SYLVANAS_PART2;
-            me->SummonCreature(temp,x+30,y+30,z,o,TEMPSUMMON_CORPSE_DESPAWN);
+            me->SummonCreature(temp, x+30, y+30, z, o, TEMPSUMMON_CORPSE_DESPAWN);
             DoScriptText(SAY_DEATH, me);
                 instance->SetBossState(DATA_TYRANNUS, DONE);
 
@@ -350,7 +350,7 @@ public:
 
                 while (uint32 eventId = _events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                         case EVENT_MOVE_NEXT:
                             if (_currentWaypoint >= 10 || _currentWaypoint == 0)

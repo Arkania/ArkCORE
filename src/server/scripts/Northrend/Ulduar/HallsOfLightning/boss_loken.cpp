@@ -109,10 +109,10 @@ public:
         void SpellHitTarget(Unit * target, const SpellEntry * spell)
         {
             if (spell->Id==SPELL_ARC_LIGHTNING && bHit)
-                if (rand()%100<DUNGEON_MODE(65,80))
+                if (rand()%100<DUNGEON_MODE(65, 80))
                 {
                     bHit=false;
-                    DoCast(target->GetNextRandomRaidMemberOrPet(10.0f),SPELL_ARC_LIGHTNING);
+                    DoCast(target->GetNextRandomRaidMemberOrPet(10.0f), SPELL_ARC_LIGHTNING);
                 }
         }
 
@@ -120,7 +120,7 @@ public:
         {
             DoScriptText(SAY_AGGRO, me);
 
-            if(m_pInstance)
+            if (m_pInstance)
             {
                 m_pInstance->SetData(TYPE_LOKEN, IN_PROGRESS);
                 m_pInstance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMELY_DEATH_START_EVENT);
@@ -137,7 +137,7 @@ public:
                         float fDist=0;
                         for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                             if (i->getSource() && i->getSource()->isAlive() && !i->getSource()->isGameMaster())
-                                me->DealDamage(i->getSource(),i->getSource()->GetMaxHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+                                me->DealDamage(i->getSource(), i->getSource()->GetMaxHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                     }
                 }
             }
@@ -197,7 +197,7 @@ public:
                     //breaks at movement, can we assume when it's time, this spell is casted and also must stop movement?
                     DoCast(me, SPELL_PULSING_SHOCKWAVE_AURA, true);
 
-                    DoCast(me, DUNGEON_MODE(SPELL_PULSING_SHOCKWAVE_N,SPELL_PULSING_SHOCKWAVE_H)); // need core support
+                    DoCast(me, DUNGEON_MODE(SPELL_PULSING_SHOCKWAVE_N, SPELL_PULSING_SHOCKWAVE_H)); // need core support
                     m_bIsAura = true;
                     m_uiResumePulsingShockwave_Timer = 0;
                 }
@@ -220,7 +220,7 @@ public:
             {
                 DoScriptText(RAND(SAY_NOVA_1, SAY_NOVA_2, SAY_NOVA_3), me);
                 DoScriptText(EMOTE_NOVA, me);
-                DoCast(me, DUNGEON_MODE(SPELL_LIGHTNING_NOVA_N,SPELL_LIGHTNING_NOVA_H));
+                DoCast(me, DUNGEON_MODE(SPELL_LIGHTNING_NOVA_N, SPELL_LIGHTNING_NOVA_H));
 
                 m_bIsAura = false;
                 m_uiResumePulsingShockwave_Timer = DUNGEON_MODE(5000, 4000); // Pause Pulsing Shockwave aura

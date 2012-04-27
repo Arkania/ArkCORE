@@ -365,8 +365,8 @@ public:
 // 45449 Arcane Prisoner Rescue
 enum eQuest11587Data
 {
-    SPELL_SUMMON_ARCANE_PRISONER_MALE = 45446,          // Summon Arcane Prisoner - Male
-    SPELL_SUMMON_ARCANE_PRISONER_FEMALE = 45448,          // Summon Arcane Prisoner - Female
+    SPELL_SUMMON_ARCANE_PRISONER_MALE = 45446,         // Summon Arcane Prisoner - Male
+    SPELL_SUMMON_ARCANE_PRISONER_FEMALE = 45448,         // Summon Arcane Prisoner - Female
     SPELL_ARCANE_PRISONER_KILL_CREDIT = 45456
 // Arcane Prisoner Kill Credit
 };

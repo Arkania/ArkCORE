@@ -117,7 +117,7 @@ class boss_lord_marrowgar : public CreatureScript
                 me->RemoveAurasDueToSpell(SPELL_BERSERK);
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
                 me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
-                events.ScheduleEvent(EVENT_CHECK_PLAYERS,2000);
+                events.ScheduleEvent(EVENT_CHECK_PLAYERS, 2000);
                 events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10000);
                 events.ScheduleEvent(EVENT_BONE_SPIKE_GRAVEYARD, urand(10000, 15000), EVENT_GROUP_SPECIAL);
                 events.ScheduleEvent(EVENT_COLDFLAME, 5000, EVENT_GROUP_SPECIAL);
@@ -167,7 +167,7 @@ class boss_lord_marrowgar : public CreatureScript
             void SpellHitTarget(Unit* target, SpellEntry const* spell)
             {
                 if (spell->Id == SPELL_BONE_SLICE)
-                    me->AddAura(SPELL_TANK_MARKER,target);
+                    me->AddAura(SPELL_TANK_MARKER, target);
             }
 
             void UpdateAI(uint32 const diff)
@@ -186,14 +186,14 @@ class boss_lord_marrowgar : public CreatureScript
                     {
                         case EVENT_CHECK_PLAYERS:
                             instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TANK_MARKER);
-                            events.ScheduleEvent(EVENT_CHECK_PLAYERS,2000);
+                            events.ScheduleEvent(EVENT_CHECK_PLAYERS, 2000);
                             break;
                         case EVENT_BONE_SPIKE_GRAVEYARD:
                             events.CancelEvent(EVENT_CHECK_PLAYERS);
                             if (IsHeroic() || !me->HasAura(SPELL_BONE_STORM))
                                 DoCast(me, SPELL_BONE_SPIKE_GRAVEYARD);
                             events.ScheduleEvent(EVENT_BONE_SPIKE_GRAVEYARD, urand(15000, 20000), EVENT_GROUP_SPECIAL);
-                            events.ScheduleEvent(EVENT_CHECK_PLAYERS,2000);
+                            events.ScheduleEvent(EVENT_CHECK_PLAYERS, 2000);
                             break;
                         case EVENT_COLDFLAME:
                             _coldflameLastPos.Relocate(me);
@@ -224,7 +224,7 @@ class boss_lord_marrowgar : public CreatureScript
                             // no break here
                         case EVENT_BONE_STORM_MOVE:
                         {
-                            if(me->GetMap()->IsHeroic())
+                            if (me->GetMap()->IsHeroic())
                                 events.ScheduleEvent(EVENT_BONE_STORM_MOVE, _boneStormDuration/5);
                             else events.ScheduleEvent(EVENT_BONE_STORM_MOVE, _boneStormDuration/4);
                             Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 1);
@@ -574,7 +574,7 @@ class spell_marrowgar_bone_spike_graveyard : public SpellScriptLoader
                         if (!target)
                             break;
 
-                        if(target->HasAura(SPELL_TANK_MARKER))
+                        if (target->HasAura(SPELL_TANK_MARKER))
                             target = marrowgarAI->SelectTarget(SELECT_TARGET_RANDOM, 1, 150.0f, true, -SPELL_IMPALED);
                         else
                         {

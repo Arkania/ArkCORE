@@ -97,10 +97,10 @@ public:
 
         void SetData(uint32 uiType, uint32 uiData)
         {
-            switch(uiType)
+            switch (uiType)
             {
             case TYPE_SARTHARION_EVENT:
-                if(m_auiEncounter[0] != DONE)
+                if (m_auiEncounter[0] != DONE)
                 m_auiEncounter[0] = uiData;
                 break;
             case TYPE_TENEBRON_PREKILLED:
@@ -117,13 +117,13 @@ public:
                 break;
             }
 
-            if(uiData == DONE)
+            if (uiData == DONE)
                 SaveToDB();
         }
 
         uint32 GetData(uint32 uiType)
         {
-            switch(uiType)
+            switch (uiType)
             {
             case TYPE_SARTHARION_EVENT:
                 return m_auiEncounter[0];
@@ -157,7 +157,7 @@ public:
         {
             std::ostringstream saveStream;
             saveStream << "O S ";
-            for(int i = 0; i < MAX_ENCOUNTER; ++i)
+            for (int i = 0; i < MAX_ENCOUNTER; ++i)
                 saveStream << m_auiEncounter[i] << " ";
 
             return saveStream.str();
@@ -171,9 +171,9 @@ public:
             std::string newdata = loadStream.str();
 
             uint32 buff;
-            if(dataHead1 == 'O' && dataHead2 == 'S')
+            if (dataHead1 == 'O' && dataHead2 == 'S')
             {
-                for(int i = 0; i < MAX_ENCOUNTER; ++i)
+                for (int i = 0; i < MAX_ENCOUNTER; ++i)
                 {
                     loadStream >> buff;
                     m_auiEncounter[i]= buff;
@@ -184,8 +184,8 @@ public:
             m_bShadronKilled = (m_auiEncounter[2] == DONE);
             m_bVesperonKilled = (m_auiEncounter[3] == DONE);
 
-            for(int i = 0; i < MAX_ENCOUNTER; ++i)
-                if(m_auiEncounter[i] != DONE)
+            for (int i = 0; i < MAX_ENCOUNTER; ++i)
+                if (m_auiEncounter[i] != DONE)
                     m_auiEncounter[i] = NOT_STARTED;
         }
     };

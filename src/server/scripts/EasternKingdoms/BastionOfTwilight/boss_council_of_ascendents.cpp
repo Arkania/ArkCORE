@@ -151,11 +151,11 @@ public:
 
         //void DoAction(uint32 action)
         //{
-        //    switch(action)
+        //    switch (action)
         //    {
         //        //case ACTION_IGNACIOUS_JUMP:
-        //        //    Unit * Target = SelectTarget(SELECT_TARGET_RANDOM,NULL,40.0f);
-        //        //    me->GetMotionMaster()->MoveJump(Target->GetPositionX(),Target->GetPositionY(),Target->GetPositionZ(),1.0f,0.9f);
+        //        //    Unit * Target = SelectTarget(SELECT_TARGET_RANDOM, NULL, 40.0f);
+        //        //    me->GetMotionMaster()->MoveJump(Target->GetPositionX(), Target->GetPositionY(), Target->GetPositionZ(), 1.0f, 0.9f);
         //        //case ACTION_IGNACIOUS_CHARGE:
         //            //Unit * Target = summons.
         //            //me->GetMotionMaster()->MoveCharge(

@@ -389,7 +389,7 @@ public:
                     if (BreathSide != NONE)
                         if (m_uiSpawnTriggerTimer <= diff)
                         {
-                            me->SummonCreature(CREATURE_TRIGGER,Location[m_LocCount]);
+                            me->SummonCreature(CREATURE_TRIGGER, Location[m_LocCount]);
                             m_uiSpawnTriggerTimer = 125;
                             m_LocCount++;
                             if (m_LocCount > m_End)
@@ -413,7 +413,7 @@ public:
                                 m_uiMovementTimer = 15000;
                                 break;
                             case 3:
-                                switch (urand(0,1))
+                                switch (urand(0, 1))
                                 {
                                     case 0:
                                         BreathSide = LEFT;
@@ -474,7 +474,7 @@ public:
 
                     if (m_uiCrushTimer <= diff)
                     {
-                            if(!me->IsNonMeleeSpellCasted(false))
+                            if (!me->IsNonMeleeSpellCasted(false))
                             {
                             DoCastVictim(DUNGEON_MODE(SPELL_CRUSH, H_SPELL_CRUSH));
                             m_uiCrushTimer = urand(8000, 12000);
@@ -483,7 +483,7 @@ public:
 
                     if (m_uiPoisonedSpearTimer <= diff)
                     {
-                            if(!me->IsNonMeleeSpellCasted(false))
+                            if (!me->IsNonMeleeSpellCasted(false))
                             {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                                 DoCast(target, DUNGEON_MODE(SPELL_POISONED_SPEAR, H_SPELL_POISONED_SPEAR));
@@ -496,7 +496,7 @@ public:
                     {
                     if (m_uiWhirlwindTimer <= diff)
                     {
-                        if(!me->IsNonMeleeSpellCasted(false))
+                        if (!me->IsNonMeleeSpellCasted(false))
                         {
                                 if (Unit *newTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                     m_uiWhirlGUID = newTarget->GetGUID();
@@ -515,13 +515,13 @@ public:
                             if (whirlTarget && whirlTarget->isAlive())
                             {
                                 me->GetMotionMaster()->Clear();
-                                me->GetMotionMaster()->MovePoint(0,whirlTarget->GetPositionX(),whirlTarget->GetPositionY(),whirlTarget->GetPositionZ());
+                                me->GetMotionMaster()->MovePoint(0, whirlTarget->GetPositionX(), whirlTarget->GetPositionY(), whirlTarget->GetPositionZ());
                             }
                             else if (Unit *newTarget = SelectTarget(SELECT_TARGET_RANDOM, 1)) //whirl target died
                             {
                                 me->GetMotionMaster()->Clear();
                                 m_uiWhirlGUID = newTarget->GetGUID();
-                                me->GetMotionMaster()->MovePoint(0,newTarget->GetPositionX(),newTarget->GetPositionY(),newTarget->GetPositionZ());
+                                me->GetMotionMaster()->MovePoint(0, newTarget->GetPositionX(), newTarget->GetPositionY(), newTarget->GetPositionZ());
                             }
                             else                                                            //only 1 target left
                             {

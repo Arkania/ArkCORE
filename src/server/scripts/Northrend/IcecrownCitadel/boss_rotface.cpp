@@ -71,7 +71,7 @@ enum Spells
 
 #define MUTATED_INFECTION RAID_MODE<int32>(69674, 71224, 73022, 73023)
 
-#define NUM_ZOMBIES RAID_MODE(10,25,10,25)
+#define NUM_ZOMBIES RAID_MODE(10, 25, 10, 25)
 
 enum Events
 {
@@ -110,7 +110,7 @@ class boss_rotface : public CreatureScript
                 events.ScheduleEvent(EVENT_SLIME_SPRAY, 20000);
                 events.ScheduleEvent(EVENT_HASTEN_INFECTIONS, 90000);
                 events.ScheduleEvent(EVENT_MUTATED_INFECTION, 14000);
-                if(IsHeroic())
+                if (IsHeroic())
                    events.ScheduleEvent(EVENT_VILE_GAS, urand(15000, 20000));
                 infectionStage = 0;
                 infectionCooldown = 14000;
@@ -136,7 +136,7 @@ class boss_rotface : public CreatureScript
             {
                 _JustDied();
                 Talk(SAY_DEATH);
-                instance->SetBossState(DATA_ROTFACE,DONE);
+                instance->SetBossState(DATA_ROTFACE, DONE);
                 instance->DoRemoveAurasDueToSpellOnPlayers(MUTATED_INFECTION);
                 if (Creature* professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
                     professor->AI()->DoAction(ACTION_ROTFACE_DEATH);
@@ -213,7 +213,7 @@ class boss_rotface : public CreatureScript
                                     minDist = -5.0f;
 
                                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, minDist, true))
-                                    DoCast(target, SPELL_VILE_GAS,true);
+                                    DoCast(target, SPELL_VILE_GAS, true);
                                 events.ScheduleEvent(EVENT_VILE_GAS, urand(15000, 20000));
                                 break;
                             }

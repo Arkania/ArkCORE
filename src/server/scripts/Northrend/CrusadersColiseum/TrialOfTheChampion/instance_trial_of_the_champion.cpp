@@ -126,7 +126,7 @@ public:
                     TeamInInstance = player->GetTeam();
             }
 
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                 // Gran Champions
                 case VEHICLE_MOKRA_SKILLCRUSHER_MOUNT:
@@ -220,7 +220,7 @@ public:
                     break;
                 case NPC_JAEREN_AN:
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(NPC_ARELAS_AN,ALLIANCE);
+                        creature->UpdateEntry(NPC_ARELAS_AN, ALLIANCE);
                     break;
                 case VEHICLE_ARGENT_WARHORSE:
                 case VEHICLE_ARGENT_BATTLEWORG:
@@ -238,7 +238,7 @@ public:
 
         void OnGameObjectCreate(GameObject* go)
         {
-            switch(go->GetEntry())
+            switch (go->GetEntry())
             {
                 case GO_MAIN_GATE:
                     uiMainGateGUID = go->GetGUID();
@@ -257,19 +257,19 @@ public:
     {
         Map::PlayerList const &PlList = pTemp->GetMap()->GetPlayers();
 
-        if(PlList.isEmpty())
+        if (PlList.isEmpty())
                 return;
 
         for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
         {
-            if(Player* player = i->getSource())
+            if (Player* player = i->getSource())
             {
-                if(player->isGameMaster())
+                if (player->isGameMaster())
                     continue;
 
-                if(player->isAlive())
+                if (player->isAlive())
                 {
-                    pTemp->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                    pTemp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
                     pTemp->SetReactState(REACT_AGGRESSIVE);
                     pTemp->SetInCombatWith(player);
                     player->SetInCombatWith(pTemp);
@@ -281,7 +281,7 @@ public:
 
         void SetData(uint32 uiType, uint32 uiData)
         {
-            switch(uiType)
+            switch (uiType)
             {
             case DATA_BLACK_KNIGHT:
                 uiBlackKnightEvent = uiData;
@@ -306,7 +306,7 @@ public:
                         if (Creature* pAnnouncer =  instance->GetCreature(uiAnnouncerGUID))
                         {
                             if (Creature* pAnnouncer =  instance->GetCreature(uiAnnouncerGUID))
-                            pBlackKnight->CastSpell(pAnnouncer,SPELL_DEATH_RESPITE,true);
+                            pBlackKnight->CastSpell(pAnnouncer, SPELL_DEATH_RESPITE, true);
                         }
                     }
                 }
@@ -320,7 +320,7 @@ public:
                         pBlackKnight->SetOrientation(4.714f);
 
         pBlackKnight->SetReactState(REACT_PASSIVE);
-            pBlackKnight->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+            pBlackKnight->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     }
                 }else if (uiData == IN_PROGRESS)
                 {
@@ -343,7 +343,7 @@ public:
                         if (Creature* pAnnouncer =  instance->GetCreature(uiAnnouncerGUID))
                         {
                             pAnnouncer->DisappearAndDie();
-                            if (Creature* pGhoul = pAnnouncer->SummonCreature(NPC_RISEN_JAEREN,pAnnouncer->GetPositionX(),pAnnouncer->GetPositionY(),pAnnouncer->GetPositionZ(),pAnnouncer->GetOrientation()))
+                            if (Creature* pGhoul = pAnnouncer->SummonCreature(NPC_RISEN_JAEREN, pAnnouncer->GetPositionX(), pAnnouncer->GetPositionY(), pAnnouncer->GetPositionZ(), pAnnouncer->GetOrientation()))
                             {
                                 pGhoul->setFaction(14);
                                 AggroAllPlayers(pGhoul);
@@ -375,9 +375,9 @@ public:
                             if (Creature* pAnnouncer =  instance->GetCreature(uiAnnouncerGUID))
                             {
                             DoScriptText(SAY_START_1, pAnnouncer);
-                                pAnnouncer->GetMotionMaster()->MovePoint(0,748.309f,619.487f,411.171f);
+                                pAnnouncer->GetMotionMaster()->MovePoint(0, 748.309f, 619.487f, 411.171f);
                                 pAnnouncer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                                pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_CHAMPIONS_LOOT_H : GO_CHAMPIONS_LOOT,746.59f,618.49f,411.09f,1.42f,0, 0, 0, 0,90000000);
+                                pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_CHAMPIONS_LOOT_H : GO_CHAMPIONS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                             }
                         }
                     }
@@ -388,9 +388,9 @@ public:
                     {
                         if (Creature* pBoss =  instance->GetCreature(uiArgentChampionGUID))
                         {
-                            pBoss->GetMotionMaster()->MovePoint(0,746.88f,618.74f,411.06f);
-                            pBoss->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
-                        pBoss->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE);
+                            pBoss->GetMotionMaster()->MovePoint(0, 746.88f, 618.74f, 411.06f);
+                            pBoss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        pBoss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             pBoss->SetReactState(REACT_AGGRESSIVE);
                         AggroAllPlayers(pBoss);
                     }
@@ -404,7 +404,7 @@ public:
                     m_auiEncounter[1] = uiData;
                 if (uiData == IN_PROGRESS)
                 {
-                    for(std::list<uint64>::const_iterator itr = VehicleList.begin(); itr != VehicleList.end(); ++itr)
+                    for (std::list<uint64>::const_iterator itr = VehicleList.begin(); itr != VehicleList.end(); ++itr)
                         if (Creature* summon = instance->GetCreature(*itr))
                             summon->RemoveFromWorld();
                 }else if (uiData == DONE)
@@ -414,8 +414,8 @@ public:
                      DoScriptText(SAY_START_1, pAnnouncer);
 
                         pAnnouncer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        pAnnouncer->GetMotionMaster()->MovePoint(0,740.755f, 636.509f, 411.575f);
-                        pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_EADRIC_LOOT_H : GO_EADRIC_LOOT,746.59f,618.49f,411.09f,1.42f,0, 0, 0, 0,90000000);
+                        pAnnouncer->GetMotionMaster()->MovePoint(0, 740.755f, 636.509f, 411.575f);
+                        pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_EADRIC_LOOT_H : GO_EADRIC_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                     }
                 }
                     break;
@@ -423,7 +423,7 @@ public:
                     m_auiEncounter[2] = uiData;
                 if (uiData == IN_PROGRESS)
                 {
-                    for(std::list<uint64>::const_iterator itr = VehicleList.begin(); itr != VehicleList.end(); ++itr)
+                    for (std::list<uint64>::const_iterator itr = VehicleList.begin(); itr != VehicleList.end(); ++itr)
                         if (Creature* summon = instance->GetCreature(*itr))
                             summon->RemoveFromWorld();
                 }else if (uiData == DONE)
@@ -432,8 +432,8 @@ public:
                     {
                      DoScriptText(SAY_START_1, pAnnouncer);
                         pAnnouncer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        pAnnouncer->GetMotionMaster()->MovePoint(0,740.755f, 636.509f, 411.575f);
-                        pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT,746.59f,618.49f,411.09f,1.42f,0, 0, 0, 0,90000000);
+                        pAnnouncer->GetMotionMaster()->MovePoint(0, 740.755f, 636.509f, 411.575f);
+                        pAnnouncer->SummonGameObject(instance->IsHeroic()? GO_PALETRESS_LOOT_H : GO_PALETRESS_LOOT, 746.59f, 618.49f, 411.09f, 1.42f, 0, 0, 0, 0, 90000000);
                     }
                 }
                     break;
@@ -445,7 +445,7 @@ public:
 
         uint32 GetData(uint32 uiData)
         {
-            switch(uiData)
+            switch (uiData)
             {
                 case BOSS_GRAND_CHAMPIONS:  return m_auiEncounter[0];
                 case BOSS_ARGENT_CHALLENGE_E: return m_auiEncounter[1];
@@ -464,7 +464,7 @@ public:
 
         uint64 GetData64(uint32 uiData)
         {
-            switch(uiData)
+            switch (uiData)
             {
                 case DATA_ANNOUNCER: return uiAnnouncerGUID;
                 case DATA_MAIN_GATE: return uiMainGateGUID;
@@ -480,7 +480,7 @@ public:
 
         void SetData64(uint32 uiType, uint64 uiData)
         {
-            switch(uiType)
+            switch (uiType)
             {
                 case DATA_GRAND_CHAMPION_1:
                     uiGrandChampion1GUID = uiData;

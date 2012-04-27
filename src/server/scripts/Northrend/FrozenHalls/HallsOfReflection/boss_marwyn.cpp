@@ -101,12 +101,12 @@ public:
         {
              m_uiLocNo = 14;
 
-             for(uint8 i = 0; i < 14; i++)
+             for (uint8 i = 0; i < 14; i++)
              {
-                switch(urand(0,3))
+                switch (urand(0, 3))
                 {
                    case 0:
-                       switch(urand(1, 3))
+                       switch (urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_1; break;
                          case 2: summon = NPC_DARK_3; break;
@@ -114,7 +114,7 @@ public:
                        }
                        break;
                    case 1:
-                       switch(urand(1, 3))
+                       switch (urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_2; break;
                          case 2: summon = NPC_DARK_3; break;
@@ -122,7 +122,7 @@ public:
                        }
                        break;
                    case 2:
-                       switch(urand(1, 3))
+                       switch (urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_2; break;
                          case 2: summon = NPC_DARK_5; break;
@@ -130,7 +130,7 @@ public:
                        }
                        break;
                    case 3:
-                       switch(urand(1, 3))
+                       switch (urand(1, 3))
                        {
                          case 1: summon = NPC_DARK_1; break;
                          case 2: summon = NPC_DARK_5; break;
@@ -141,7 +141,7 @@ public:
 
                  m_uiCheckSummon = 0;
 
-                 if(Creature* Summon = me->SummonCreature(summon, SpawnLoc[m_uiLocNo].x, SpawnLoc[m_uiLocNo].y, SpawnLoc[m_uiLocNo].z, SpawnLoc[m_uiLocNo].o, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000))
+                 if (Creature* Summon = me->SummonCreature(summon, SpawnLoc[m_uiLocNo].x, SpawnLoc[m_uiLocNo].y, SpawnLoc[m_uiLocNo].z, SpawnLoc[m_uiLocNo].o, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000))
                  {
                     m_uiSummonGUID[i] = Summon->GetGUID();
                     Summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -154,9 +154,9 @@ public:
 
         void CallFallSoldier()
         {
-             for(uint8 i = 0; i < 4; i++)
+             for (uint8 i = 0; i < 4; i++)
              {
-                if(Creature* Summon = m_pInstance->instance->GetCreature(m_uiSummonGUID[m_uiCheckSummon]))
+                if (Creature* Summon = m_pInstance->instance->GetCreature(m_uiSummonGUID[m_uiCheckSummon]))
                 {
                    Summon->setFaction(14);
                    Summon->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -169,7 +169,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-          if(m_pInstance)
+          if (m_pInstance)
           {
              m_pInstance->SetData(TYPE_MARWYN, DONE);
              m_pInstance->SetData(TYPE_PHASE, 3);
@@ -180,7 +180,7 @@ public:
 
         void KilledUnit(Unit* victim)
         {
-            switch(urand(0,1))
+            switch (urand(0, 1))
             {
                 case 0: DoScriptText(SAY_MARWYN_SLAY01, me); break;
                 case 1: DoScriptText(SAY_MARWYN_SLAY02, me); break;
@@ -206,26 +206,26 @@ public:
 
        void UpdateAI(const uint32 uiDiff)
         {
-            if(!m_pInstance) return;
+            if (!m_pInstance) return;
 
             if (m_pInstance->GetData(TYPE_FALRIC) == SPECIAL)
             {
-                if(!m_bIsCall)
+                if (!m_bIsCall)
                 {
                    m_bIsCall = true;
                    Summon();
                 }
             }
 
-            if(m_pInstance->GetData(TYPE_MARWYN) == SPECIAL)
+            if (m_pInstance->GetData(TYPE_MARWYN) == SPECIAL)
             {
-               if(m_uiSummonTimer < uiDiff)
+               if (m_uiSummonTimer < uiDiff)
                {
                        ++SummonCount;
-                       if(SummonCount == 1)
+                       if (SummonCount == 1)
                           DoScriptText(SAY_MARWYN_INTRO, me);
 
-                       if(SummonCount > 4)
+                       if (SummonCount > 4)
                        {
                             m_pInstance->SetData(TYPE_MARWYN, IN_PROGRESS);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -237,10 +237,10 @@ public:
                } else m_uiSummonTimer -= uiDiff;
             }
 
-            if(!UpdateVictim())
+            if (!UpdateVictim())
                 return;
 
-            if(m_uiObliterateTimer < uiDiff)
+            if (m_uiObliterateTimer < uiDiff)
             {
                 DoCast(me->getVictim(), Regular ? SPELL_OBLITERATE_N : SPELL_OBLITERATE_H);
                 m_uiObliterateTimer = urand(8000, 12000);
@@ -249,14 +249,14 @@ public:
             if (m_uiWellTimer < uiDiff)
             {
                 DoScriptText(SAY_MARWYN_SP02, me);
-                if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                    DoCast(target, SPELL_WELL_OF_CORRUPTION);
                 m_uiWellTimer= urand(25000, 30000);
             } else m_uiWellTimer -= uiDiff;
 
             if (m_uiSharedSufferingTimer < uiDiff)
             {
-                if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                    DoCast(target, Regular ? SPELL_SHARED_SUFFERING_N : SPELL_SHARED_SUFFERING_H);
                 m_uiSharedSufferingTimer = urand(15000, 20000);
             } else m_uiSharedSufferingTimer -= uiDiff;
@@ -264,12 +264,12 @@ public:
             if (m_uiFleshTimer < uiDiff)
             {
                 DoScriptText(SAY_MARWYN_SP01, me);
-                if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                     DoCast(target, Regular ? SPELL_CORRUPTED_FLESH_N : SPELL_CORRUPTED_FLESH_H);
                 m_uiFleshTimer = urand(10000, 16000);
             } else m_uiFleshTimer -= uiDiff;
 
-            if(m_uiBerserkTimer < uiDiff)
+            if (m_uiBerserkTimer < uiDiff)
             {
                 DoCast(me, SPELL_BERSERK);
                 m_uiBerserkTimer = 180000;

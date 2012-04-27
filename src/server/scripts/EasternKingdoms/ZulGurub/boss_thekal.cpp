@@ -47,7 +47,7 @@ enum eSpells
     SPELL_ENRAGE              = 23537,
     SPELL_SUMMONTIGERS        = 24183,
     SPELL_TIGER_FORM          = 24169,
-    SPELL_RESURRECT           = 24173,                    //We will not use this spell.
+    SPELL_RESURRECT           = 24173,                   //We will not use this spell.
 
 //Zealot Lor'Khan Spells
     SPELL_SHIELD              = 25020,

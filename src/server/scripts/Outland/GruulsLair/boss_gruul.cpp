@@ -50,16 +50,16 @@ enum eEnums
 
     SPELL_GROWTH                = 36300,
     SPELL_CAVE_IN               = 36240,
-    SPELL_GROUND_SLAM           = 33525,                    //AoE Ground Slam applying Ground Slam to everyone with a script effect (most likely the knock back, we can code it to a set knockback)
+    SPELL_GROUND_SLAM           = 33525,                   //AoE Ground Slam applying Ground Slam to everyone with a script effect (most likely the knock back, we can code it to a set knockback)
     SPELL_REVERBERATION         = 36297,
     SPELL_SHATTER               = 33654,
 
     SPELL_SHATTER_EFFECT        = 33671,
     SPELL_HURTFUL_STRIKE        = 33813,
-    SPELL_STONED                = 33652,                    //Spell is self cast by target
+    SPELL_STONED                = 33652,                   //Spell is self cast by target
 
     SPELL_MAGNETIC_PULL         = 28337,
-    SPELL_KNOCK_BACK            = 24199,                    //Knockback spell until correct implementation is made
+    SPELL_KNOCK_BACK            = 24199,                   //Knockback spell until correct implementation is made
 };
 
 class boss_gruul : public CreatureScript

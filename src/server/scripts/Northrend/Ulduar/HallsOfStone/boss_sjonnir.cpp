@@ -20,12 +20,12 @@
 #include "ScriptPCH.h"
 #include "halls_of_stone.h"
 
-#define SPELL_LIGHTING_RING                                 DUNGEON_MODE(51849,59861) //Periodic Trigger (interval 2s) spell = 50841/59849
-#define SPELL_LIGHTING_RING_1                               DUNGEON_MODE(50840,59848) //Periodic Trigger (interval 2s) spell = 50841/59849
-#define SPELL_STATIC_CHARGE                                 DUNGEON_MODE(50834,59846) //Periodic Trigger /interval 2s) spell = 50835/50847
-#define SPELL_CHAIN_LIGHTING                                DUNGEON_MODE(50830,59844)
-#define SPELL_LIGHTING_SHIELD                               DUNGEON_MODE(50831,59845)
-#define SPELL_TOXIC_VOLLEY                                  DUNGEON_MODE(50838,59853)
+#define SPELL_LIGHTING_RING                                 DUNGEON_MODE(51849, 59861) //Periodic Trigger (interval 2s) spell = 50841/59849
+#define SPELL_LIGHTING_RING_1                               DUNGEON_MODE(50840, 59848) //Periodic Trigger (interval 2s) spell = 50841/59849
+#define SPELL_STATIC_CHARGE                                 DUNGEON_MODE(50834, 59846) //Periodic Trigger /interval 2s) spell = 50835/50847
+#define SPELL_CHAIN_LIGHTING                                DUNGEON_MODE(50830, 59844)
+#define SPELL_LIGHTING_SHIELD                               DUNGEON_MODE(50831, 59845)
+#define SPELL_TOXIC_VOLLEY                                  DUNGEON_MODE(50838, 59853)
 #define SPELL_FRENZY                                        28747
 
 enum Yells
@@ -64,7 +64,7 @@ struct Locations
 static Locations PipeLocations[] =
 {
   {1295.44f, 734.07f, 200.3f}, //left
-  {1297.7f,  595.6f,  199.9f} //right
+  {1297.7f, 595.6f, 199.9f} //right
 };
 
 #define ACTION_OOZE_DEAD                                   1
@@ -284,7 +284,7 @@ public:
             DoScriptText(SAY_DEATH, me);
             lSummons.DespawnAll();
 
-            me->SummonCreature(NPC_BRANN,me->GetPositionX(),me->GetPositionY(),me->GetPositionZ());
+            me->SummonCreature(NPC_BRANN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
 
             if (pInstance)
                 pInstance->SetData(DATA_SJONNIR_EVENT, DONE);

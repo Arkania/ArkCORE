@@ -63,7 +63,7 @@ public:
                             _teamInInstance = player->GetTeam();
             }
 
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                     case NPC_GARFROST:
                         _garfrostGUID = creature->GetGUID();
@@ -164,8 +164,8 @@ public:
             {
             case GO_ICE_WALL:
                 uiIceWall = go->GetGUID();
-                if(GetBossState(DATA_GARFROST) == DONE && GetBossState(DATA_ICK) == DONE)
-                    HandleGameObject(NULL,true,go);
+                if (GetBossState(DATA_GARFROST) == DONE && GetBossState(DATA_ICK) == DONE)
+                    HandleGameObject(NULL, true, go);
                 break;
             }
         }
@@ -178,20 +178,20 @@ public:
                 switch (type)
                 {
             case DATA_ICK:
-                switch(state)
+                switch (state)
                 {
                 case DONE:
-                    if(GetBossState(DATA_GARFROST)==DONE)
-                        HandleGameObject(uiIceWall,true,NULL);
+                    if (GetBossState(DATA_GARFROST)==DONE)
+                        HandleGameObject(uiIceWall, true, NULL);
                 }
                 break;
                     case DATA_GARFROST:
 
-                        if(state == DONE)
+                        if (state == DONE)
                         {
                             {
-                             if(GetBossState(DATA_ICK)==DONE)
-                             HandleGameObject(uiIceWall,true,NULL);
+                             if (GetBossState(DATA_ICK)==DONE)
+                             HandleGameObject(uiIceWall, true, NULL);
                              }
                             if (Creature* summoner = instance->GetCreature(_garfrostGUID))
                             {
@@ -223,7 +223,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                     case DATA_TEAM_IN_INSTANCE:
                         return _teamInInstance;

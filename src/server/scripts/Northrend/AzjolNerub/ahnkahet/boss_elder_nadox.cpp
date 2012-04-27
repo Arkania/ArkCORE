@@ -164,8 +164,8 @@ public:
                             break;
                         case EVENT_SUMMON_SWARMER:
                 DoCast(me, SPELL_SUMMON_SWARMERS);
-                if (urand(1,3) == 3) // 33% chance of dialog
-                    DoScriptText(RAND(SAY_EGG_SAC_1,SAY_EGG_SAC_2), me);
+                if (urand(1, 3) == 3) // 33% chance of dialog
+                    DoScriptText(RAND(SAY_EGG_SAC_1, SAY_EGG_SAC_2), me);
                             _events.ScheduleEvent(EVENT_SUMMON_SWARMER, 10000);
                             break;
                         case EVENT_CHECK_ENRAGE:
@@ -182,7 +182,7 @@ public:
 
                 if (me->HealthBelowPct(100 - _healthAmountModifier * 25))
             {
-                me->MonsterTextEmote(EMOTE_HATCHES,me->GetGUID(),true);
+                me->MonsterTextEmote(EMOTE_HATCHES, me->GetGUID(), true);
                 DoCast(me, SPELL_SUMMON_SWARM_GUARD);
                     ++_healthAmountModifier;
                 }

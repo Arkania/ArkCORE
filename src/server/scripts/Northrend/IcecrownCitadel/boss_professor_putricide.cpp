@@ -41,7 +41,7 @@ enum ScriptTexts
     EMOTE_UNSTABLE_EXPERIMENT       = 5,
     SAY_PHASE_TRANSITION_HEROIC     = 6,
     SAY_TRANSFORM_1                 = 7,
-    SAY_TRANSFORM_2                 = 8,    // always used for phase2 change, DO NOT GROUP WITH SAY_TRANSFORM_1
+    SAY_TRANSFORM_2                 = 8,   // always used for phase2 change, DO NOT GROUP WITH SAY_TRANSFORM_1
     EMOTE_MALLEABLE_GOO             = 9,
     EMOTE_CHOKING_GAS_BOMB          = 10,
     SAY_KILL                        = 11,
@@ -65,10 +65,10 @@ enum Spells
     SPELL_SLIME_PUDDLE_TRIGGER          = 70341,
     SPELL_MALLEABLE_GOO                 = 70852,
     SPELL_UNSTABLE_EXPERIMENT           = 70351,
-    SPELL_TEAR_GAS                      = 71617,    // phase transition
+    SPELL_TEAR_GAS                      = 71617,   // phase transition
     SPELL_CREATE_CONCOCTION             = 71621,
     SPELL_GUZZLE_POTIONS                = 71893,
-    SPELL_OOZE_TANK_PROTECTION          = 71770,    // protects the tank
+    SPELL_OOZE_TANK_PROTECTION          = 71770,   // protects the tank
     SPELL_CHOKING_GAS_BOMB              = 71255,
     SPELL_OOZE_VARIABLE                 = 74118,
     SPELL_GAS_VARIABLE                  = 74119,
@@ -119,10 +119,10 @@ enum Events
     EVENT_ROTFACE_OOZE_FLOOD    = 5,
 
     // Professor Putricide
-    EVENT_BERSERK               = 6,    // all phases
-    EVENT_SLIME_PUDDLE          = 7,    // all phases
-    EVENT_UNSTABLE_EXPERIMENT   = 8,    // P1 && P2
-    EVENT_TEAR_GAS              = 9,    // phase transition not heroic
+    EVENT_BERSERK               = 6,   // all phases
+    EVENT_SLIME_PUDDLE          = 7,   // all phases
+    EVENT_UNSTABLE_EXPERIMENT   = 8,   // P1 && P2
+    EVENT_TEAR_GAS              = 9,   // phase transition not heroic
     EVENT_RESUME_ATTACK         = 10,
     EVENT_MALLEABLE_GOO         = 11,
     EVENT_CHOKING_GAS_BOMB      = 12,

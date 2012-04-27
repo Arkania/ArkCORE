@@ -44,8 +44,8 @@ enum Spells
     SPELL_TELEPORT              = 68988,
     SPELL_FEAR                  = 68950,
     SPELL_SOULSTORM             = 68872,
-    SPELL_SOULSTORM_CHANNEL     = 69008,    // pre-fight
-    SPELL_SOULSTORM_VISUAL      = 68870,    // pre-cast soulstorm
+    SPELL_SOULSTORM_CHANNEL     = 69008,   // pre-fight
+    SPELL_SOULSTORM_VISUAL      = 68870,   // pre-cast soulstorm
     SPELL_PURPLE_BANISH_VISUAL  = 68862     // Used by Soul Fragment (Aura)
 };
 
