@@ -139,12 +139,12 @@ enum MalygosSays
     SAY_END_P_ONE,
     SAY_AGGRO_P_TWO,
     SAY_ANTI_MAGIC_SHELL, // not sure when execute it
-    SAY_MAGIC_BLAST,  // not sure when execute it
+    SAY_MAGIC_BLAST, // not sure when execute it
     SAY_KILLED_PLAYER_P_TWO,
     SAY_END_P_TWO,
     SAY_INTRO_P_THREE,
     SAY_AGGRO_P_THREE,
-    SAY_SURGE_POWER,  // not sure when execute it
+    SAY_SURGE_POWER, // not sure when execute it
     SAY_BUFF_SPARK,
     SAY_KILLED_PLAYER_P_THREE,
     SAY_SPELL_CASTING_P_THREE,
@@ -153,7 +153,7 @@ enum MalygosSays
 
 #define MAX_HOVER_DISK_WAYPOINTS 18
 
-// Sniffed data (x, y,z)
+// Sniffed data (x, y, z)
 const Position HoverDiskWaypoints[MAX_HOVER_DISK_WAYPOINTS] =
 {
    {782.9821f, 1296.652f, 282.1114f, 0.0f},
@@ -178,7 +178,7 @@ const Position HoverDiskWaypoints[MAX_HOVER_DISK_WAYPOINTS] =
 
 #define GROUND_Z 268
 
-// Source: Sniffs (x, y,z)
+// Source: Sniffs (x, y, z)
 #define MALYGOS_MAX_WAYPOINTS 16
 const Position MalygosPhaseTwoWaypoints[MALYGOS_MAX_WAYPOINTS] =
 {
@@ -297,7 +297,7 @@ public:
             if (!instance)
                 return;
 
-            SetPhase(PHASE_THREE,true);
+            SetPhase(PHASE_THREE, true);
 
             // this despawns Hover Disks
             summons.DespawnAll();

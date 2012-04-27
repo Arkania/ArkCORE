@@ -388,14 +388,14 @@ public:
 
             /*int32 amount;
              // rank 1 - 4%
-             if(owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R1)) { amount = 5; };*/
+             if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R1)) { amount = 5; };*/
 
             /*// rank 2 - 8%
-             if(owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R2)) { amount = 9; };*/
+             if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R2)) { amount = 9; };*/
 
             // Finally return the Mana to our Caster
-            /*if(AuraEffect * aurEff = owner->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 214, 0))
-             caster->CastCustomSpell(caster,WARLOCK_IMPROVED_FELHUNTER_EFFECT,&amount,NULL,NULL,true,NULL,aurEff,caster->GetGUID());*/
+            /*if (AuraEffect * aurEff = owner->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 214, 0))
+             caster->CastCustomSpell(caster, WARLOCK_IMPROVED_FELHUNTER_EFFECT, &amount, NULL, NULL, true, NULL, aurEff, caster->GetGUID());*/
         }
 
         void Register ()

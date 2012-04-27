@@ -635,7 +635,7 @@ void WorldSession::HandleTextEmoteOpcode (WorldPacket & recv_data)
 
     uint32 emote_anim = em->textid;
 
-    switch(emote_anim)
+    switch (emote_anim)
     {
         case EMOTE_STATE_SLEEP:
         case EMOTE_STATE_SIT:

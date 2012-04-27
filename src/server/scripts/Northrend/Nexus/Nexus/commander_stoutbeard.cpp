@@ -89,9 +89,9 @@ public:
 
         void Reset()
         {
-            uiBattleShout_Timer = urand(200000,215000);
-            uiCharge_Timer = urand(15000,17500);
-            uiFrighteningShout_Timer = urand(10000,12500);
+            uiBattleShout_Timer = urand(200000, 215000);
+            uiCharge_Timer = urand(15000, 17500);
+            uiFrighteningShout_Timer = urand(10000, 12500);
             uiWhirlwind_Timer = 10000;
             uiWhirlwindAdd_Timer = 10500;
 
@@ -137,7 +137,7 @@ public:
             {
                 if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_CHARGE);
-                uiCharge_Timer = urand(10500,12000);
+                uiCharge_Timer = urand(10500, 12000);
             } else uiCharge_Timer -= uiDiff;
 
             if (uiBattleShout_Timer <= uiDiff)
@@ -149,7 +149,7 @@ public:
             if (uiFrighteningShout_Timer <= uiDiff)
             {
                 DoCastAOE(SPELL_FRIGHTENING_SHOUT);
-                uiFrighteningShout_Timer = urand(8000,10000);
+                uiFrighteningShout_Timer = urand(8000, 10000);
             } else uiFrighteningShout_Timer -= uiDiff;
 
             if (uiWhirlwind_Timer <= uiDiff && !IsWhirlwindTime)
@@ -162,7 +162,7 @@ public:
             if (uiWhirlwindAdd_Timer <= uiDiff && IsWhirlwindTime)
             {
                 DoCastAOE(SPELL_WHIRLWIND_ADD);
-                uiWhirlwind_Timer = urand(10000,12500);
+                uiWhirlwind_Timer = urand(10000, 12500);
                 IsWhirlwindTime = false;
             } else uiWhirlwindAdd_Timer -= uiDiff;
 
@@ -194,9 +194,9 @@ public:
 
         void Reset()
         {
-            uiFlashHeal_Timer = urand(9000,10500);
-            uiShadowWordDeath_Timer = urand(5500,8500);
-            uiPowerWordShield_Timer = urand(2000,4000);
+            uiFlashHeal_Timer = urand(9000, 10500);
+            uiShadowWordDeath_Timer = urand(5500, 8500);
+            uiPowerWordShield_Timer = urand(2000, 4000);
 
             me->CastSpell(me, SPELL_FROZEN_PRISON, true);
         }
@@ -216,13 +216,13 @@ public:
                 if (uiFlashHeal_Timer <= uiDiff)
                 {
                     DoCast(target, SPELL_FLASH_HEAL);
-                    uiFlashHeal_Timer = urand(7000,8000);
+                    uiFlashHeal_Timer = urand(7000, 8000);
                 } else uiFlashHeal_Timer -= uiDiff;
 
                 if (uiPowerWordShield_Timer <= uiDiff)
                 {
                     DoCast(target, SPELL_POWER_WORD_SHIELD);
-                    uiPowerWordShield_Timer = urand(9000,10000);
+                    uiPowerWordShield_Timer = urand(9000, 10000);
                 } else uiPowerWordShield_Timer -= uiDiff;
             }
 
@@ -230,7 +230,7 @@ public:
             {
                 if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     DoCast(target, SPELL_SHADOW_WORD_DEATH);
-                uiShadowWordDeath_Timer = urand(4500,5500);
+                uiShadowWordDeath_Timer = urand(4500, 5500);
             } else uiShadowWordDeath_Timer -= uiDiff;
 
             DoMeleeAttackIfReady();
@@ -263,9 +263,9 @@ public:
 
         void Reset()
         {
-            uiRapidShot_Timer = urand(12500,14000);
-            uiIncendiaryShot_Timer = urand(6500,8000);
-            uiShoot_Timer = urand(2500,3000);
+            uiRapidShot_Timer = urand(12500, 14000);
+            uiIncendiaryShot_Timer = urand(6500, 8000);
+            uiShoot_Timer = urand(2500, 3000);
 
             me->CastSpell(me, SPELL_FROZEN_PRISON, true);
         }
@@ -300,20 +300,20 @@ public:
             {
                 if (Unit *target = FindTarget())
                     DoCast(target, SPELL_INCENDIARY_SHOT);
-                uiIncendiaryShot_Timer = urand(6500,7500);
+                uiIncendiaryShot_Timer = urand(6500, 7500);
             } else uiIncendiaryShot_Timer -= uiDiff;
 
             if (uiShoot_Timer <= uiDiff)
             {
                 if (Unit *target = FindTarget())
                     DoCast(target, SPELL_SHOOT);
-                uiShoot_Timer = urand(2500,3000);
+                uiShoot_Timer = urand(2500, 3000);
             } else uiShoot_Timer -= uiDiff;
 
             if (uiRapidShot_Timer <= uiDiff)
             {
                 DoCastAOE(SPELL_RAPID_SHOT);
-                uiRapidShot_Timer = urand(12500,14000);
+                uiRapidShot_Timer = urand(12500, 14000);
             } else uiRapidShot_Timer -= uiDiff;
 
             DoMeleeAttackIfReady();
@@ -344,9 +344,9 @@ public:
 
         void Reset()
         {
-            uint32 uiBloolust_Timer = urand(5000,7500);
-            uint32 uiFrenzy_Timer = urand(2500,4000);
-            uint32 uiWarStomp_Timer = urand(6000,8000);
+            uint32 uiBloolust_Timer = urand(5000, 7500);
+            uint32 uiFrenzy_Timer = urand(2500, 4000);
+            uint32 uiWarStomp_Timer = urand(6000, 8000);
 
             me->CastSpell(me, SPELL_FROZEN_PRISON, true);
         }
@@ -375,7 +375,7 @@ public:
             {
                 if (Creature *target = SelectRandomFriendlyMissingBuff(SPELL_BLOODLUST)) //He should casts this only on allies, not on self...
                     DoCast(target, SPELL_BLOODLUST);
-                uiBloodlust_Timer = urand(12000,15000);
+                uiBloodlust_Timer = urand(12000, 15000);
             } else uiBloodlust_Timer -= uiDiff;
 
             if (uiFrenzy_Timer <= uiDiff)
@@ -387,7 +387,7 @@ public:
             if (uiWarStomp_Timer <= uiDiff)
             {
                 DoCast(me->getVictim(), SPELL_WAR_STOMP);
-                uiWarStomp_Timer = urand(7000,8500);
+                uiWarStomp_Timer = urand(7000, 8500);
             } else uiWarStomp_Timer -= uiDiff;
 
             DoMeleeAttackIfReady();

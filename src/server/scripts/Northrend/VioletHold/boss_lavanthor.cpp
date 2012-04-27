@@ -113,19 +113,19 @@ public:
 
             if (uiFlameBreathTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
             {
                 DoCast(me->getVictim(), SPELL_FLAME_BREATH);
-                uiFlameBreathTimer = urand(10000,15000);
+                uiFlameBreathTimer = urand(10000, 15000);
                 }
             } else uiFlameBreathTimer -= diff;
 
             if (uiLavaBurnTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                     DoCast(me->getVictim(), DUNGEON_MODE(SPELL_LAVA_BURN, H_SPELL_LAVA_BURN));
-                    uiLavaBurnTimer = urand(10000,20000);
+                    uiLavaBurnTimer = urand(10000, 20000);
                 }
             }
 
@@ -140,10 +140,10 @@ public:
 
             if (uiFireboltTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                     DoCast(me->getVictim(), DUNGEON_MODE(SPELL_FIREBOLT, H_SPELL_FIREBOLT));
-                    uiFireboltTimer = urand(5000,13000);
+                    uiFireboltTimer = urand(5000, 13000);
                 }
             } else uiFireboltTimer -= diff;
 
@@ -156,7 +156,7 @@ public:
             {
                 if (instance->GetData(DATA_WAVE_COUNT) == 6)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
@@ -164,7 +164,7 @@ public:
                 }
                 else if (instance->GetData(DATA_WAVE_COUNT) == 12)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_2ND_BOSS_EVENT, DONE);

@@ -212,7 +212,7 @@ public:
                 return;
 
             if (GetData(DATA_TROLLGORE_EVENT) == DONE && GetData(DATA_NOVOS_EVENT) == DONE && GetData(DATA_DRED_EVENT) == DONE)
-                if(Creature* pTharonJa = instance->GetCreature(uiTharonJa)){
+                if (Creature* pTharonJa = instance->GetCreature(uiTharonJa)){
                     pTharonJa->SetReactState(REACT_AGGRESSIVE);
                     pTharonJa->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
                 }

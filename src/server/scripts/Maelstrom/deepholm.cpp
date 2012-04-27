@@ -31,11 +31,11 @@ class npc_lodestone : public CreatureScript
 
         void JustDied(Unit* killer)
         {
-            if(Player* player = killer->ToPlayer())
+            if (Player* player = killer->ToPlayer())
             {
-                if(player->GetQuestStatus(27136) == QUEST_STATUS_INCOMPLETE)
+                if (player->GetQuestStatus(27136) == QUEST_STATUS_INCOMPLETE)
                 {
-                    if(Creature* totem = me->FindNearestCreature(45088, 20.0f, true))
+                    if (Creature* totem = me->FindNearestCreature(45088, 20.0f, true))
                     {
                         totem->CastSpell(totem, 84163, true);
                         player->KilledMonsterCredit(45091, 0);
@@ -77,7 +77,7 @@ class npc_slaincrewmember : public CreatureScript
         }
         void SetData(uint32 Id,  uint32 Value)
         {
-            switch(Id)
+            switch (Id)
             {
                 case 1: // Set the GUID of the player
                 {
@@ -89,17 +89,17 @@ class npc_slaincrewmember : public CreatureScript
         }
         void UpdateAI(uint32 const diff)
         {
-            if(!QuestInProgress)
+            if (!QuestInProgress)
                 return;
 
             Player* player = Unit::GetPlayer(*me, playerGUID);
 
-            if(!player)
+            if (!player)
                 return;
 
-            if(sayTimer <= diff)
+            if (sayTimer <= diff)
             {
-                switch(RAND(0, 1, 2, 3, 4))
+                switch (RAND(0, 1, 2, 3, 4))
                 {
                     case 0:
                         me->MonsterSay(CREW_SAY_1, LANG_UNIVERSAL, NULL);
@@ -157,12 +157,12 @@ public:
 
     bool OnGossipHello(Player* pPlayer, Creature* creature)
     {
-        if(creature->isInCombat() || pPlayer->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE)
+        if (creature->isInCombat() || pPlayer->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE)
         return false;
 
         char const* _message = "Follow me to the Earthcaller!";
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,_message,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
-        pPlayer->SEND_GOSSIP_MENU(68,creature->GetGUID());
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _message, GOSSIP_SENDER_MAIN , GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->SEND_GOSSIP_MENU(68, creature->GetGUID());
 
         return true;
     }
@@ -249,9 +249,9 @@ public:
         uint64 uiProcessDialog;
         Unit* SpeakPlayer;
 
-        void SpellHit(Unit* Caster,const SpellEntry* Spell)
+        void SpellHit(Unit* Caster, const SpellEntry* Spell)
         {
-            if(Spell->Id != SPELL_EARTHEN_RING_PROCLAMATION/* || Caster->ToPlayer()->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE*/) // The Quest if clause didn't work^^ don#t know why
+            if (Spell->Id != SPELL_EARTHEN_RING_PROCLAMATION/* || Caster->ToPlayer()->GetQuestStatus(QUEST_TAKE_HIM_TO_THE_EARTHCALLER) != QUEST_STATUS_INCOMPLETE*/) // The Quest if clause didn't work^^ don#t know why
                 return;
 
             Caster->ToPlayer()->Say("Boden the Imposing. I come on behalf of the Earthen Ring. We wish your kind no harm. We seek to repair the rift between our worlds. Why do you attack us?", LANG_UNIVERSAL);
@@ -264,30 +264,30 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(DialogNumber == NULL)
+            if (DialogNumber == NULL)
                 return;
 
             if (uiProcessDialog <= diff)
             {
-                switch(DialogNumber)
+                switch (DialogNumber)
                 {
                 case 1:
-                    me->MonsterYell("Hah! Did you mistake me for Diamant, $r? Or perhaps some other whimpering, complaint stone trogg who cares?",LANG_UNIVERSAL,0);
+                    me->MonsterYell("Hah! Did you mistake me for Diamant, $r? Or perhaps some other whimpering, complaint stone trogg who cares?", LANG_UNIVERSAL, 0);
                     uiProcessDialog = 4000;
                     break;
 
                 case 2:
-                    me->MonsterYell("If you seek peace, relinquish the World Pillar and leave Deepholm. This is our realm. Your only welcome here shall be found underneath my stone foot.",LANG_UNIVERSAL,0);
+                    me->MonsterYell("If you seek peace, relinquish the World Pillar and leave Deepholm. This is our realm. Your only welcome here shall be found underneath my stone foot.", LANG_UNIVERSAL, 0);
                     uiProcessDialog = 1200;
                     break;
 
                 case 3:
-                    if(SpeakPlayer)
-                    me->CastSpell(SpeakPlayer,SPELL_IMPOSING_CONFRONTATION_CREDIT,true);
+                    if (SpeakPlayer)
+                    me->CastSpell(SpeakPlayer, SPELL_IMPOSING_CONFRONTATION_CREDIT, true);
                     break;
                 }
 
-                if(DialogNumber != 3)
+                if (DialogNumber != 3)
                 {
                     DialogNumber++;
                 }else
@@ -349,20 +349,20 @@ public:
 
             if (uiExplode <= diff)
             {
-                DoCastAOE(SPELL_EXPLODE,true);
+                DoCastAOE(SPELL_EXPLODE, true);
 
                 // Checks weather a Deep Crystal is in Range
-                if(me->FindNearestCreature(NPC_DEEP_CELESTITE_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_CELESTITE_CRYSTAL,1);
+                if (me->FindNearestCreature(NPC_DEEP_CELESTITE_BUNNY, 7.0f, true))
+                        player->AddItem(ITEM_DEEP_CELESTITE_CRYSTAL, 1);
 
-                if(me->FindNearestCreature(NPC_DEEP_AMETHYST_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_AMETHYST_CRYSTAL,1);
+                if (me->FindNearestCreature(NPC_DEEP_AMETHYST_BUNNY, 7.0f, true))
+                        player->AddItem(ITEM_DEEP_AMETHYST_CRYSTAL, 1);
 
-                if(me->FindNearestCreature(NPC_DEEP_GRANAT_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_GRANAT_CRYSTAL,1);
+                if (me->FindNearestCreature(NPC_DEEP_GRANAT_BUNNY, 7.0f, true))
+                        player->AddItem(ITEM_DEEP_GRANAT_CRYSTAL, 1);
 
-                if(me->FindNearestCreature(NPC_DEEP_ALABASTER_BUNNY, 7.0f, true))
-                        player->AddItem(ITEM_DEEP_ALABASTER_CRYSTAL,1);
+                if (me->FindNearestCreature(NPC_DEEP_ALABASTER_BUNNY, 7.0f, true))
+                        player->AddItem(ITEM_DEEP_ALABASTER_CRYSTAL, 1);
 
                 me->DespawnOrUnsummon();
             } else uiExplode -= diff;
@@ -409,9 +409,9 @@ public:
                 return;
 
             for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
-                if(!(*iter)->HasAura(SPELL_BUFF_OF_THE_STONEFATHER))
+                if (!(*iter)->HasAura(SPELL_BUFF_OF_THE_STONEFATHER))
                 {
-                    (*iter)->CastSpell((*iter),SPELL_BUFF_OF_THE_STONEFATHER, true);
+                    (*iter)->CastSpell((*iter), SPELL_BUFF_OF_THE_STONEFATHER, true);
                     summoner->ToPlayer()->KilledMonsterCredit(NPC_STONEHEART_DEFENDER, 0);
                 }
         }

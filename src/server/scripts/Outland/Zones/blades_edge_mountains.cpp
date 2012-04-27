@@ -201,7 +201,7 @@ public:
             {
                 if (NihilSpeech_Timer <= diff)
                 {
-                    switch(NihilSpeech_Phase)
+                    switch (NihilSpeech_Phase)
                     {
                         case 0:
                             DoScriptText(SAY_NIHIL_1, me);
@@ -392,7 +392,7 @@ public:
     {
         if (pPlayer->GetQuestStatus(10821) == QUEST_STATUS_INCOMPLETE)
         {
-            switch(pGo->GetEntry())
+            switch (pGo->GetEntry())
             {
                 case LEGION_OBELISK_ONE:
                       obelisk_one = true;

@@ -42,10 +42,10 @@ enum eTypes
     NPC_LOKEN               = 28923,
 	NPC_VOLKHAN_ANVIL		= 28823,
 
-    GO_BJARNGRIM_DOOR       = 191416,                       //_doors10
-    GO_VOLKHAN_DOOR         = 191325,                       //_doors07
-    GO_IONAR_DOOR           = 191326,                       //_doors05
-    GO_LOKEN_DOOR           = 191324,                       //_doors02
+    GO_BJARNGRIM_DOOR       = 191416,                      //_doors10
+    GO_VOLKHAN_DOOR         = 191325,                      //_doors07
+    GO_IONAR_DOOR           = 191326,                      //_doors05
+    GO_LOKEN_DOOR           = 191324,                      //_doors02
     GO_LOKEN_THRONE         = 192654
 };
 

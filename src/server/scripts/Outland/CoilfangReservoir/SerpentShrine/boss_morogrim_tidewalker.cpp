@@ -165,7 +165,7 @@ public:
 
         void ApplyWateryGrave(Unit* pPlayer, uint8 i)
         {
-            switch(i)
+            switch (i)
             {
             case 0: pPlayer->CastSpell(pPlayer, SPELL_WATERY_GRAVE_1, true); break;
             case 1: pPlayer->CastSpell(pPlayer, SPELL_WATERY_GRAVE_2, true); break;

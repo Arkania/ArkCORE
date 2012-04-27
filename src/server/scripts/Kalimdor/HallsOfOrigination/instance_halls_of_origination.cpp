@@ -69,13 +69,13 @@ public:
             uiAnhuurBridgeGUID = 0;
             uint64 OriginationElevatorGUID = 0;
 
-            for(uint8 i=0; i<ENCOUNTERS; ++i)
+            for (uint8 i=0; i<ENCOUNTERS; ++i)
                 uiEncounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
-            for(uint8 i=0; i<ENCOUNTERS; ++i)
+            for (uint8 i=0; i<ENCOUNTERS; ++i)
             {
                 if (uiEncounter[i] == IN_PROGRESS)
                     return true;
@@ -86,7 +86,7 @@ public:
 
         void OnCreatureCreate(Creature* creature, bool)
         {
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                 case BOSS_TEMPLE_GUARDIAN_ANHUUR:
                     uiTempleGuardianAnhuur = creature->GetGUID();
@@ -132,7 +132,7 @@ public:
 
         uint64 GetData64(uint32 identifier)
         {
-            switch(identifier)
+            switch (identifier)
             {
                 case DATA_TEMPLE_GUARDIAN_ANHUUR:
                     return uiTempleGuardianAnhuur;
@@ -152,9 +152,9 @@ public:
             return 0;
         }
 
-        void SetData(uint32 type,uint32 data)
+        void SetData(uint32 type, uint32 data)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_TEMPLE_GUARDIAN_ANHUUR:
                     uiEncounter[0] = data;
@@ -185,7 +185,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_TEMPLE_GUARDIAN_ANHUUR:
                     return uiEncounter[0];
@@ -244,7 +244,7 @@ public:
                 uiEncounter[5] = data5;
                 uiEncounter[6] = data6;
 
-                for(uint8 i=0; i<ENCOUNTERS; ++i)
+                for (uint8 i=0; i<ENCOUNTERS; ++i)
                     if (uiEncounter[i] == IN_PROGRESS)
                         uiEncounter[i] = NOT_STARTED;
             }

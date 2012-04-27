@@ -55,8 +55,8 @@ class example_commandscript : public CommandScript
         {
             static ChatCommand HelloWorldCommandTable[] =
             {
-                { "hello",          SEC_PLAYER,         true,   &HandleHelloWorldCommand,        "", NULL },
-                { NULL,             0,                  false,  NULL,                            "", NULL }
+                { "hello",         SEC_PLAYER,        true,  &HandleHelloWorldCommand,       "", NULL },
+                { NULL,            0,                 false, NULL,                           "", NULL }
             };
             return HelloWorldCommandTable;
         }

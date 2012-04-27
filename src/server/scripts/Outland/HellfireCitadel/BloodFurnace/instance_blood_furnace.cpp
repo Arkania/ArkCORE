@@ -103,7 +103,7 @@ class instance_blood_furnace : public InstanceMapScript
                 if (!add)
                     return;
 
-                switch(pCreature->GetEntry())
+                switch (pCreature->GetEntry())
                 {
                      case 17381: The_MakerGUID = pCreature->GetGUID(); break;
                      case 17380: BroggokGUID = pCreature->GetGUID(); break;
@@ -149,7 +149,7 @@ class instance_blood_furnace : public InstanceMapScript
 
             uint64 GetData64(uint32 data)
             {
-                switch(data)
+                switch (data)
                 {
                      case DATA_THE_MAKER:            return The_MakerGUID;
                      case DATA_BROGGOK:              return BroggokGUID;
@@ -175,7 +175,7 @@ class instance_blood_furnace : public InstanceMapScript
 
             void SetData(uint32 /*type*/, uint32 data)
             {
-                 switch(data)
+                 switch (data)
                  {
                      case TYPE_THE_MAKER_EVENT:             m_auiEncounter[0] = data;     break;
                      case TYPE_BROGGOK_EVENT:               m_auiEncounter[1] = data;     break;
@@ -198,7 +198,7 @@ class instance_blood_furnace : public InstanceMapScript
 
             uint32 GetData(uint32 data)
             {
-                switch(data)
+                switch (data)
                 {
                     case TYPE_THE_MAKER_EVENT:             return m_auiEncounter[0];
                     case TYPE_BROGGOK_EVENT:               return m_auiEncounter[1];

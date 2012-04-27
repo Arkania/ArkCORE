@@ -140,12 +140,12 @@ class boss_ammunae : public CreatureScript
                 Trinity::AllCreaturesOfEntryInRange checker(me, entry, distance);
                 Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, pCreatureList, checker);
                 me->VisitNearbyObject(distance, searcher);
-                if(pCreatureList.empty())
+                if (pCreatureList.empty())
                     return;
 
                 std::list<Creature*>::iterator itr = pCreatureList.begin();
                 uint32 count = pCreatureList.size();
-                for(std::list<Creature*>::iterator iter = pCreatureList.begin(); iter != pCreatureList.end(); ++iter)
+                for (std::list<Creature*>::iterator iter = pCreatureList.begin(); iter != pCreatureList.end(); ++iter)
                 {
                     (*iter)->SummonCreature(NPC_BLOODPETAL_BLOSSOM, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
                     (*iter)->ForcedDespawn();
@@ -170,7 +170,7 @@ class boss_ammunae : public CreatureScript
 
                 while(uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_WITHER:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))

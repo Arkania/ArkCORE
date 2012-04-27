@@ -167,7 +167,7 @@ public:
 
             if (uiArcaneBarrageVolley_Timer < uiDiff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCast(me, SPELL_ARCANE_BARRAGE_VOLLEY);
                 uiArcaneBarrageVolley_Timer = urand(20000, 22000);
@@ -179,9 +179,9 @@ public:
             {
                 if (uiArcaneBuffet_Timer < uiDiff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
-                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_ARCANE_BUFFED,H_SPELL_ARCANE_BUFFED));
+                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_ARCANE_BUFFED, H_SPELL_ARCANE_BUFFED));
                         uiArcaneBuffet_Timer = urand(15000, 20000);
                     }
                 }
@@ -212,7 +212,7 @@ public:
             {
                 if (instance->GetData(DATA_WAVE_COUNT) == 6)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_1ST_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_1ST_BOSS_EVENT, DONE);
@@ -220,7 +220,7 @@ public:
                 }
                 else if (instance->GetData(DATA_WAVE_COUNT) == 12)
                 {
-                    if(IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
+                    if (IsHeroic() && instance->GetData(DATA_2ND_BOSS_EVENT) == DONE)
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                     instance->SetData(DATA_2ND_BOSS_EVENT, NOT_STARTED);

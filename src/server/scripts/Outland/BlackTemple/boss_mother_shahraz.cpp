@@ -204,7 +204,7 @@ public:
 
                 BeamTimer = 9000;
 
-                switch(CurrentBeam)
+                switch (CurrentBeam)
                 {
                     case 0:
                         DoCast(pTarget, SPELL_BEAM_SINISTER);

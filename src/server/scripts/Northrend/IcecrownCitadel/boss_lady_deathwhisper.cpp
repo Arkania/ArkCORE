@@ -466,7 +466,7 @@ class boss_lady_deathwhisper : public CreatureScript
                         case EVENT_P1_SUMMON_WAVE:
                             SummonWaveP1();
                             events.ScheduleEvent(EVENT_P1_SUMMON_WAVE, IsHeroic() ? 45000 : 60000, 0, PHASE_ONE);
-                            events.RescheduleEvent(EVENT_P1_EMPOWER_CULTIST,urand(5000, 15000));
+                            events.RescheduleEvent(EVENT_P1_EMPOWER_CULTIST, urand(5000, 15000));
                             break;
                         case EVENT_P1_SHADOW_BOLT:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -693,7 +693,7 @@ class npc_cult_fanatic : public CreatureScript
                     {
                         case EVENT_FANATIC_NECROTIC_STRIKE:
                             DoCastVictim(SPELL_NECROTIC_STRIKE);
-                            Events.ScheduleEvent(SPELL_NECROTIC_STRIKE, urand(7000,9000));
+                            Events.ScheduleEvent(SPELL_NECROTIC_STRIKE, urand(7000, 9000));
                             break;
                         case EVENT_FANATIC_SHADOW_CLEAVE:
                             DoCastVictim(SPELL_SHADOW_CLEAVE);

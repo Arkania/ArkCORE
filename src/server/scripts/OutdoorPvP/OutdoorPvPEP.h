@@ -57,7 +57,7 @@ enum EP_TaxiNodes
 
 enum EP_EastwallTowerWorldStates
 {
-    EP_EWT_A = 2354, EP_EWT_H = 2356, EP_EWT_N_A = 2359,          // ally conquested
+    EP_EWT_A = 2354, EP_EWT_H = 2356, EP_EWT_N_A = 2359,         // ally conquested
     EP_EWT_N_H = 2360, EP_EWT_N = 2361
 };
 
@@ -68,7 +68,7 @@ enum EP_NorthpassTowerWorldStates
 
 enum EP_PlagewoodTowerWorldStates
 {
-    EP_PWT_N_A = 2366, EP_PWT_N_H = 2353,          //2367 not present! use neutral!
+    EP_PWT_N_A = 2366, EP_PWT_N_H = 2353,         //2367 not present! use neutral!
     EP_PWT_A = 2370, EP_PWT_H = 2371, EP_PWT_N = 2353
 };
 
@@ -96,10 +96,10 @@ enum EP_GoSummons
 
 enum EP_Towers
 {
-    EP_EWT = 0,          // plaguelands 03
-    EP_NPT,          // plaguelands 01
-    EP_PWT,          // plaguelands 04
-    EP_CGT,          // plaguelands 02
+    EP_EWT = 0,         // plaguelands 03
+    EP_NPT,         // plaguelands 01
+    EP_PWT,         // plaguelands 04
+    EP_CGT,         // plaguelands 02
     EP_TOWER_NUM
 };
 

@@ -136,13 +136,13 @@ struct Yells
 
 enum YellId
 {
-    ATTACKED     = 0,                                       // Used when attacked and set in combat
-    BEGIN        = 1,                                       // Used when the event is begun
-    INCOMING     = 2,                                       // Used to warn the raid that another wave phase is coming
-    RALLY        = 3,                                       // Used to rally the raid and warn that the next wave has been summoned
-    FAILURE      = 4,                                       // Used when raid has failed (unsure where to place)
-    SUCCESS      = 5,                                       // Used when the raid has sucessfully defeated a wave phase
-    DEATH        = 6,                                       // Used on death
+    ATTACKED     = 0,                                      // Used when attacked and set in combat
+    BEGIN        = 1,                                      // Used when the event is begun
+    INCOMING     = 2,                                      // Used to warn the raid that another wave phase is coming
+    RALLY        = 3,                                      // Used to rally the raid and warn that the next wave has been summoned
+    FAILURE      = 4,                                      // Used when raid has failed (unsure where to place)
+    SUCCESS      = 5,                                      // Used when the raid has sucessfully defeated a wave phase
+    DEATH        = 6,                                      // Used on death
 };
 
 const Yells JainaQuotes[]=

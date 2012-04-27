@@ -51,7 +51,7 @@ const DoorData doorData[] = { { 181126, BOSS_ANUBREKHAN, DOOR_TYPE_ROOM,
         };
 
 const MinionData minionData[] = {
-//{16573,     BOSS_ANUBREKHAN},     there is no spawn point in db, so we do not add them here
+//{16573,    BOSS_ANUBREKHAN},    there is no spawn point in db, so we do not add them here
         { 16506, BOSS_FAERLINA }, { 16803, BOSS_RAZUVIOUS }, { 16063,
                 BOSS_HORSEMEN }, { 16064, BOSS_HORSEMEN }, { 16065,
                 BOSS_HORSEMEN }, { 30549, BOSS_HORSEMEN }, { 0, 0, } };

@@ -208,7 +208,7 @@ public:
             if (!pPlayer)
                 return;
 
-            switch(i)
+            switch (i)
             {
                 case 8:
                     pPlayer->AreaExploredOrEventHappens(10898);
@@ -468,7 +468,7 @@ public:
             if (!pPlayer)
                 return;
 
-            switch(i)
+            switch (i)
             {
             case 0:
                 {
@@ -544,7 +544,7 @@ public:
     bool OnGossipSelect(Player* pPlayer, GameObject* pGo, uint32 uiSender, uint32 uiAction)
     {
         pPlayer->PlayerTalkClass->ClearMenus();
-        switch(uiSender)
+        switch (uiSender)
         {
             case GOSSIP_SENDER_MAIN:    SendActionMenu(pPlayer, pGo, uiAction); break;
         }
@@ -567,7 +567,7 @@ public:
 
     void SendActionMenu(Player* pPlayer, GameObject* /*pGo*/, uint32 uiAction)
     {
-        switch(uiAction)
+        switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF + 1:
                   pPlayer->CastSpell(pPlayer, 40642, false);
@@ -668,7 +668,7 @@ public:
             if (!pPlayer)
                 return;
 
-            switch(i)
+            switch (i)
             {
                 case 3:
                     me->SummonCreature(NPC_CABAL_SKRIMISHER, -2795.99f, 5420.33f, -34.53f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);

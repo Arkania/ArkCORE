@@ -35,8 +35,8 @@
 
 enum eEnums
 {
-    SAY_AGGRO = -1000399,          //signed for 20021
-    SAY_SUMMONSHADE = -1000400,          //signed for 20021
+    SAY_AGGRO = -1000399,         //signed for 20021
+    SAY_SUMMONSHADE = -1000400,         //signed for 20021
 
     //Spells of Taerar
     SPELL_SLEEP = 24777, SPELL_NOXIOUSBREATH = 24818, SPELL_TAILSWEEP = 15847, SPELL_ARCANEBLAST = 24857, SPELL_BELLOWINGROAR = 22686,

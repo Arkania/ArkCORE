@@ -21,10 +21,10 @@
 
 enum Texts
 {
-    SAY_AGGRO                   = 0,    // Alexstrasza has chosen capable allies.... A pity that I must END YOU!
-    SAY_KILL                    = 1,    // You thought you stood a chance? - It's for the best.
-    SAY_ADDS                    = 2,    // Turn them to ash, minions!
-    SAY_DEATH                   = 3,    // HALION! I...
+    SAY_AGGRO                   = 0,   // Alexstrasza has chosen capable allies.... A pity that I must END YOU!
+    SAY_KILL                    = 1,   // You thought you stood a chance? - It's for the best.
+    SAY_ADDS                    = 2,   // Turn them to ash, minions!
+    SAY_DEATH                   = 3,   // HALION! I...
 };
 
 enum Spells
