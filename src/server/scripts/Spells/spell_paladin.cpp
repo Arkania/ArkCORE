@@ -589,6 +589,189 @@ public:
     }
 };
 
+// 20911 Blessing of Sanctuary
+// 25899 Greater Blessing of Sanctuary
+class spell_pal_blessing_of_sanctuary: public SpellScriptLoader
+{
+public:
+    spell_pal_blessing_of_sanctuary () :
+            SpellScriptLoader("spell_pal_blessing_of_sanctuary")
+    {
+    }
+
+    class spell_pal_blessing_of_sanctuary_AuraScript: public AuraScript
+    {
+        PrepareAuraScript(spell_pal_blessing_of_sanctuary_AuraScript)
+        bool Validate (SpellEntry const* /*entry*/)
+        {
+            if (!sSpellStore.LookupEntry(PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF))
+                return false;
+            return true;
+        }
+
+        void HandleEffectApply (AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            Unit* target = GetTarget();
+            if (Unit* pCaster = GetCaster())
+                pCaster->CastSpell(target, PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, true);
+        }
+
+        void HandleEffectRemove (AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            Unit* target = GetTarget();
+            target->RemoveAura(PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, GetCasterGUID());
+        }
+
+        void Register ()
+        {
+            AfterEffectApply += AuraEffectApplyFn(spell_pal_blessing_of_sanctuary_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+            AfterEffectRemove += AuraEffectRemoveFn(spell_pal_blessing_of_sanctuary_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+        }
+    };
+
+    AuraScript* GetAuraScript () const
+    {
+        return new spell_pal_blessing_of_sanctuary_AuraScript();
+    }
+};
+
+// 63521 Guarded by The Light
+class spell_pal_guarded_by_the_light: public SpellScriptLoader
+{
+public:
+    spell_pal_guarded_by_the_light () :
+            SpellScriptLoader("spell_pal_guarded_by_the_light")
+    {
+    }
+
+    class spell_pal_guarded_by_the_light_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pal_guarded_by_the_light_SpellScript)
+        bool Validate (SpellEntry const* /*spellEntry*/)
+        {
+            if (!sSpellStore.LookupEntry(PALADIN_SPELL_DIVINE_PLEA))
+                return false;
+            return true;
+        }
+
+        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
+        {
+            // Divine Plea
+            if (Aura* aura = GetCaster()->GetAura(PALADIN_SPELL_DIVINE_PLEA))
+                aura->RefreshDuration();
+        }
+
+        void Register ()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pal_guarded_by_the_light_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pal_guarded_by_the_light_SpellScript();
+    }
+};
+
+class spell_pal_judgement_of_command: public SpellScriptLoader
+{
+public:
+    spell_pal_judgement_of_command () :
+            SpellScriptLoader("spell_pal_judgement_of_command")
+    {
+    }
+
+    class spell_pal_judgement_of_command_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pal_judgement_of_command_SpellScript)
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* unitTarget = GetHitUnit())
+                if (SpellEntry const* spell_proto = sSpellStore.LookupEntry(GetEffectValue()))
+                    GetCaster()->CastSpell(unitTarget, spell_proto, true, NULL);
+        }
+
+        void Register ()
+        {
+            // add dummy effect spell handler to Judgement of Command
+            OnEffectHitTarget += SpellEffectFn(spell_pal_judgement_of_command_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pal_judgement_of_command_SpellScript();
+    }
+};
+
+class spell_pal_light_of_dawn: public SpellScriptLoader
+{
+public:
+    spell_pal_light_of_dawn () :
+            SpellScriptLoader("spell_pal_light_of_dawn")
+    {
+    }
+
+    class spell_pal_light_of_dawn_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pal_light_of_dawn_SpellScript)
+        ;
+
+        uint32 totalheal;
+
+        bool Load ()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            return true;
+        }
+
+        void ChangeHeal (SpellEffIndex /*effIndex*/)
+        {
+            Unit* caster = GetCaster();
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
+
+            if (target == caster)
+                return;
+
+            switch (caster->GetPower(POWER_HOLY_POWER))
+            {
+            case 0:          // 1 Holy Power
+            {
+                totalheal = GetHitHeal();
+                break;
+            }
+            case 1:          // 2 Holy Power
+            {
+                totalheal = GetHitHeal() * 2;
+                break;
+            }
+            case 2:          // 3 Holy Power
+            {
+                totalheal = GetHitHeal() * 3;
+                break;
+            }
+            }
+            SetHitHeal(totalheal);
+            caster->SetPower(POWER_HOLY_POWER, 0);
+        }
+
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_pal_light_of_dawn_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pal_light_of_dawn_SpellScript();
+    }
+};
+
 void AddSC_paladin_spell_scripts ()
 {
     new spell_pall_bless_of_the_king();
@@ -601,4 +784,8 @@ void AddSC_paladin_spell_scripts ()
     new spell_pal_selfless_healer();
     new spell_pal_shield_of_righteous();
     new spell_pal_judgements_of_the_wise();
+    new spell_pal_blessing_of_sanctuary();
+    new spell_pal_guarded_by_the_light();
+    new spell_pal_judgement_of_command();
+    new spell_pal_light_of_dawn();
 }
