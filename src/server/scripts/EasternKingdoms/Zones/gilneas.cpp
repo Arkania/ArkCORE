@@ -907,11 +907,11 @@ enum Merchant_square_door
 #define SUMMON1_TTL 300000
 #define DOOR_TIMER 30 * IN_MILLISECONDS
 
-class go_merchant_square_door: public GameObjectScript 
+class go_merchant_square_door: public GameObjectScript
 {
 public:
     uint64 aPlayerGuid;
-    
+
     go_merchant_square_door() : GameObjectScript("go_merchant_square_door") { aPlayerGuid = 0; }
 
     float x, y, z, wx, wy, angle, tQuestCredit;
@@ -924,7 +924,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* pGO)
     {
     	  aPlayerGuid = 0;
-    	  
+
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && pGO->GetGoState() == GO_STATE_READY)
         {
             aPlayerGuid = player->GetGUID();
@@ -966,18 +966,18 @@ public:
     {
     	  if (!pGO)
     	      return;
-    	         	      
+
         if (opened == 1)
         {
             if (tQuestCredit <= ((float) diff / 8))
             {
                 opened = 0;
-                
+
                 Player* aPlayer = sObjectAccessor->GetPlayer(*pGO, aPlayerGuid);
 
                 if (aPlayer)
                     aPlayer->KilledMonsterCredit(35830, 0);
-                
+
                 if (!aPlayer)
                     return;
 

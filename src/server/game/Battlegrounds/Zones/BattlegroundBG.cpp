@@ -209,7 +209,6 @@ void BattlegroundBG::AddPlayer (Player *plr)
 
 void BattlegroundBG::RemovePlayer (Player * /*plr*/, uint64 /*guid*/)
 {
-
 }
 
 void BattlegroundBG::HandleAreaTrigger (Player *Source, uint32 Trigger)
@@ -350,7 +349,7 @@ void BattlegroundBG::_SendNodeUpdate (uint8 node)
 void BattlegroundBG::_NodeOccupied (uint8 node, Team team)
 {
     if (!AddSpiritGuide(node, BG_BG_SpiritGuidePos[node][0], BG_BG_SpiritGuidePos[node][1], BG_BG_SpiritGuidePos[node][2], BG_BG_SpiritGuidePos[node][3], team))
-        sLog->outError("Failed to spawn spirit guide! point: %u, team: %u,", node, team);
+        sLog->outError("Failed to spawn spirit guide! point: %u, team: %u, ", node, team);
 
     uint8 capturedNodes = 0;
     for (uint8 i = 0; i < BG_BG_DYNAMIC_NODES_COUNT; ++i)

@@ -275,7 +275,6 @@ public:
 
                 if (Player * player = sObjectMgr->GetPlayerByLowGUID(guid))
                     handler->PSendSysMessage("Player: %s Average: %u Total Reports: %u", player->GetName(), average, total_reports);
-
             }
             while (resultDB->NextRow());
         }
@@ -302,7 +301,6 @@ public:
 
                 if (Player * player = sObjectMgr->GetPlayerByLowGUID(guid))
                     handler->PSendSysMessage("Player: %s Total Reports: %u Average: %u", player->GetName(), total_reports, average);
-
             }
             while (resultDB->NextRow());
         }

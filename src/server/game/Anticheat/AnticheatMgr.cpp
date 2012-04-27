@@ -40,7 +40,7 @@ void AnticheatMgr::BuildReport (Player* player, uint8 reportType)
     if (player->anticheatData.total_reports == 0)
     {
         player->anticheatData.creation_time = time(NULL);
-        CharacterDatabase.PExecute("INSERT IGNORE INTO players_reports_status (guid,creation_time) VALUES (%u,%u);", player->GetGUIDLow(), player->anticheatData.creation_time);
+        CharacterDatabase.PExecute("INSERT IGNORE INTO players_reports_status (guid, creation_time) VALUES (%u, %u);", player->GetGUIDLow(), player->anticheatData.creation_time);
     }
 
     std::string report_type = report_types[reportType];
@@ -107,7 +107,6 @@ void AnticheatMgr::WalkOnWaterHackDetection (Player* player, MovementInfo moveme
 
     sLog->outError("Walk on Water Player LowGuid %u", player->GetGUIDLow());
     BuildReport(player, WALK_WATER_HACK_REPORT);
-
 }
 
 void AnticheatMgr::FlyHackDetection (Player* player, MovementInfo movementInfo)
@@ -195,7 +194,7 @@ void AnticheatMgr::SpeedHackDetection (Player* player, MovementInfo movementInfo
     // this is the distance doable by the player in 1 sec, using the time done to move to this point.
     uint32 clientSpeedRate = distance2D * 1000 / timeDiff;
 
-    //sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u timeDiff %u ",movementInfo.j_xyspeed, movementInfo.j_zspeed,distance2D,clientSpeedRate,speedRate,timeDiff);
+    //sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u timeDiff %u ", movementInfo.j_xyspeed, movementInfo.j_zspeed, distance2D, clientSpeedRate, speedRate, timeDiff);
 
     // we did the (uint32) cast to accept a margin of tolerance
     if (clientSpeedRate > speedRate)

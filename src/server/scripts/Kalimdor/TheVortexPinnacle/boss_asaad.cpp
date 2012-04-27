@@ -59,7 +59,7 @@ public:
         void Reset()
         {
             ChainLightningTimer = 15000;
-            
+
             if (instance)
             {
                 instance->SetData(DATA_ASAAD, NOT_STARTED);
