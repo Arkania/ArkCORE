@@ -22,30 +22,38 @@
 #include "ScriptPCH.h"
 #include "baradin_hold.h"
 
-class boss_occuthar : public CreatureScript
+class boss_occuthar: public CreatureScript
 {
 public:
-    boss_occuthar() : CreatureScript("boss_occuthar") { }
-
-    CreatureAI* GetAI(Creature* creature) const
+    boss_occuthar () :
+            CreatureScript("boss_occuthar")
     {
-        return new boss_occutharAI (creature);
     }
 
-    struct boss_occutharAI : public ScriptedAI
+    CreatureAI* GetAI (Creature* creature) const
     {
-        boss_occutharAI(Creature* creature) : ScriptedAI(creature)
+        return new boss_occutharAI(creature);
+    }
+
+    struct boss_occutharAI: public ScriptedAI
+    {
+        boss_occutharAI (Creature* creature) :
+                ScriptedAI(creature)
         {
             pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        void Reset() {}
+        void Reset ()
+        {
+        }
 
-        void EnterCombat(Unit* /*pWho*/) {}
+        void EnterCombat (Unit* /*pWho*/)
+        {
+        }
 
-        void UpdateAI(const uint32 Diff)
+        void UpdateAI (const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
@@ -55,7 +63,7 @@ public:
     };
 };
 
-void AddSC_boss_occuthar()
+void AddSC_boss_occuthar ()
 {
     new boss_occuthar();
 }

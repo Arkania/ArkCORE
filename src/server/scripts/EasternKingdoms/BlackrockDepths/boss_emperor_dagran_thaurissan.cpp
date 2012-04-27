@@ -33,54 +33,66 @@
 
 #include "ScriptPCH.h"
 
-enum Yells {
+enum Yells
+{
     SAY_AGGRO = -1230001, SAY_SLAY = -1230002
 };
 
-enum Spells {
+enum Spells
+{
     SPELL_HANDOFTHAURISSAN = 17492, SPELL_AVATAROFFLAME = 15636
 };
 
-class boss_emperor_dagran_thaurissan: public CreatureScript {
+class boss_emperor_dagran_thaurissan: public CreatureScript
+{
 public:
-    boss_emperor_dagran_thaurissan() :
-            CreatureScript("boss_emperor_dagran_thaurissan") {
+    boss_emperor_dagran_thaurissan () :
+            CreatureScript("boss_emperor_dagran_thaurissan")
+    {
     }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI (Creature* pCreature) const
+    {
         return new boss_draganthaurissanAI(pCreature);
     }
 
-    struct boss_draganthaurissanAI: public ScriptedAI {
-        boss_draganthaurissanAI(Creature *c) :
-                ScriptedAI(c) {
+    struct boss_draganthaurissanAI: public ScriptedAI
+    {
+        boss_draganthaurissanAI (Creature *c) :
+                ScriptedAI(c)
+        {
         }
 
         uint32 HandOfThaurissan_Timer;
         uint32 AvatarOfFlame_Timer;
         //uint32 Counter;
 
-        void Reset() {
+        void Reset ()
+        {
             HandOfThaurissan_Timer = 4000;
             AvatarOfFlame_Timer = 25000;
             //Counter= 0;
         }
 
-        void EnterCombat(Unit * /*who*/) {
+        void EnterCombat (Unit * /*who*/)
+        {
             DoScriptText(SAY_AGGRO, me);
             me->CallForHelp(VISIBLE_RANGE);
         }
 
-        void KilledUnit(Unit* /*victim*/) {
+        void KilledUnit (Unit* /*victim*/)
+        {
             DoScriptText(SAY_SLAY, me);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI (const uint32 diff)
+        {
             //Return since we have no target
             if (!UpdateVictim())
                 return;
 
-            if (HandOfThaurissan_Timer <= diff) {
+            if (HandOfThaurissan_Timer <= diff)
+            {
                 if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_HANDOFTHAURISSAN);
 
@@ -95,14 +107,17 @@ public:
                 HandOfThaurissan_Timer = 5000;
                 //Counter = 0;
                 //}
-            } else
+            }
+            else
                 HandOfThaurissan_Timer -= diff;
 
             //AvatarOfFlame_Timer
-            if (AvatarOfFlame_Timer <= diff) {
+            if (AvatarOfFlame_Timer <= diff)
+            {
                 DoCast(me->getVictim(), SPELL_AVATAROFFLAME);
                 AvatarOfFlame_Timer = 18000;
-            } else
+            }
+            else
                 AvatarOfFlame_Timer -= diff;
 
             DoMeleeAttackIfReady();
@@ -110,6 +125,7 @@ public:
     };
 };
 
-void AddSC_boss_draganthaurissan() {
+void AddSC_boss_draganthaurissan ()
+{
     new boss_emperor_dagran_thaurissan();
 }

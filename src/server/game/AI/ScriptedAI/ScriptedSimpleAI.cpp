@@ -34,7 +34,8 @@
 #include "ScriptedSimpleAI.h"
 
 SimpleAI::SimpleAI(Creature *c) :
-        ScriptedAI(c) {
+        ScriptedAI(c)
+{
     //Clear all data
     Aggro_TextId[0] = 0;
     Aggro_TextId[1] = 0;
@@ -66,10 +67,12 @@ SimpleAI::SimpleAI(Creature *c) :
     EnterEvadeMode();
 }
 
-void SimpleAI::Reset() {
+void SimpleAI::Reset()
+{
 }
 
-void SimpleAI::EnterCombat(Unit *who) {
+void SimpleAI::EnterCombat(Unit *who)
+{
     //Reset cast timers
     if (Spell[0].First_Cast >= 0)
         Spell_Timer[0] = Spell[0].First_Cast;
@@ -123,7 +126,8 @@ void SimpleAI::EnterCombat(Unit *who) {
         DoPlaySoundToSet(me, Aggro_Sound[random_text]);
 }
 
-void SimpleAI::KilledUnit(Unit *victim) {
+void SimpleAI::KilledUnit(Unit *victim)
+{
     uint8 random_text = urand(0, 2);
 
     //Random yell
@@ -139,7 +143,8 @@ void SimpleAI::KilledUnit(Unit *victim) {
 
     Unit *pTarget = NULL;
 
-    switch (Kill_Target_Type) {
+    switch (Kill_Target_Type)
+    {
     case CAST_SELF:
         pTarget = me;
         break;
@@ -165,7 +170,8 @@ void SimpleAI::KilledUnit(Unit *victim) {
         DoCast(pTarget, Kill_Spell);
 }
 
-void SimpleAI::DamageTaken(Unit *killer, uint32 &damage) {
+void SimpleAI::DamageTaken(Unit *killer, uint32 &damage)
+{
     //Return if damage taken won't kill us
     if (me->GetHealth() > damage)
         return;
@@ -185,7 +191,8 @@ void SimpleAI::DamageTaken(Unit *killer, uint32 &damage) {
 
     Unit *pTarget = NULL;
 
-    switch (Death_Target_Type) {
+    switch (Death_Target_Type)
+    {
     case CAST_SELF:
         pTarget = me;
         break;
@@ -211,29 +218,32 @@ void SimpleAI::DamageTaken(Unit *killer, uint32 &damage) {
         DoCast(pTarget, Death_Spell);
 }
 
-void SimpleAI::UpdateAI(const uint32 diff) {
+void SimpleAI::UpdateAI(const uint32 diff)
+{
     //Return since we have no target
     if (!UpdateVictim())
         return;
 
     //Spells
-    for (uint32 i = 0; i < MAX_SIMPLEAI_SPELLS; ++i) {
+    for (uint32 i = 0; i < MAX_SIMPLEAI_SPELLS; ++i)
+    {
         //Spell not valid
         if (!Spell[i].Enabled || !Spell[i].Spell_Id)
             continue;
 
-        if (Spell_Timer[i] <= diff) {
+        if (Spell_Timer[i] <= diff)
+        {
             //Check if this is a percentage based
-            if (Spell[i].First_Cast < 0 && Spell[i].First_Cast > -100
-                    && HealthAbovePct(uint32(-Spell[i].First_Cast)))
+            if (Spell[i].First_Cast < 0 && Spell[i].First_Cast > -100 && HealthAbovePct(uint32(-Spell[i].First_Cast)))
                 continue;
 
             //Check Current spell
-            if (!(Spell[i].InterruptPreviousCast
-                    && me->IsNonMeleeSpellCasted(false))) {
+            if (!(Spell[i].InterruptPreviousCast && me->IsNonMeleeSpellCasted(false)))
+            {
                 Unit *pTarget = NULL;
 
-                switch (Spell[i].Cast_Target_Type) {
+                switch (Spell[i].Cast_Target_Type)
+                {
                 case CAST_SELF:
                     pTarget = me;
                     break;
@@ -252,7 +262,8 @@ void SimpleAI::UpdateAI(const uint32 diff) {
                 }
 
                 //Target is ok, cast a spell on it and then do our random yell
-                if (pTarget) {
+                if (pTarget)
+                {
                     if (me->IsNonMeleeSpellCasted(false))
                         me->InterruptNonMeleeSpells(false);
 
@@ -274,11 +285,11 @@ void SimpleAI::UpdateAI(const uint32 diff) {
 
             //Spell will cast agian when the cooldown is up
             if (Spell[i].CooldownRandomAddition)
-                Spell_Timer[i] = Spell[i].Cooldown
-                        + (rand() % Spell[i].CooldownRandomAddition);
+                Spell_Timer[i] = Spell[i].Cooldown + (rand() % Spell[i].CooldownRandomAddition);
             else
                 Spell_Timer[i] = Spell[i].Cooldown;
-        } else
+        }
+        else
             Spell_Timer[i] -= diff;
     }
 

@@ -30,7 +30,8 @@
 #include "DestinationHolderImp.h"
 #include "WorldPacket.h"
 
-void HomeMovementGenerator<Creature>::Initialize(Creature & owner) {
+void HomeMovementGenerator<Creature>::Initialize (Creature & owner)
+{
     float x, y, z;
     owner.GetHomePosition(x, y, z, ori);
     owner.RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -38,19 +39,21 @@ void HomeMovementGenerator<Creature>::Initialize(Creature & owner) {
     _setTargetLocation(owner);
 }
 
-void HomeMovementGenerator<Creature>::Finalize(Creature & owner) {
+void HomeMovementGenerator<Creature>::Finalize (Creature & owner)
+{
     owner.ClearUnitState(UNIT_STAT_EVADE);
 }
 
-void HomeMovementGenerator<Creature>::Reset(Creature &) {
+void HomeMovementGenerator<Creature>::Reset (Creature &)
+{
 }
 
-void HomeMovementGenerator<Creature>::_setTargetLocation(Creature & owner) {
+void HomeMovementGenerator<Creature>::_setTargetLocation (Creature & owner)
+{
     if (!&owner)
         return;
 
-    if (owner.HasUnitState(
-            UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_DISTRACTED))
+    if (owner.HasUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_DISTRACTED))
         return;
 
     float x, y, z;
@@ -63,16 +66,18 @@ void HomeMovementGenerator<Creature>::_setTargetLocation(Creature & owner) {
     owner.ClearUnitState(UNIT_STAT_ALL_STATE & ~UNIT_STAT_EVADE);
 }
 
-bool HomeMovementGenerator<Creature>::Update(Creature &owner,
-        const uint32& time_diff) {
+bool HomeMovementGenerator<Creature>::Update (Creature &owner, const uint32& time_diff)
+{
     CreatureTraveller traveller(owner);
     i_destinationHolder.UpdateTraveller(traveller, time_diff);
 
-    if (time_diff > i_travel_timer) {
+    if (time_diff > i_travel_timer)
+    {
         owner.AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
 
         // restore orientation of not moving creature at returning to home
-        if (owner.GetDefaultMovementType() == IDLE_MOTION_TYPE) {
+        if (owner.GetDefaultMovementType() == IDLE_MOTION_TYPE)
+        {
             //sLog->outDebug("Entering HomeMovement::GetDestination(z, y, z)");
             owner.SetOrientation(ori);
             WorldPacket packet;

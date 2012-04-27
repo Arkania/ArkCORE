@@ -35,22 +35,26 @@
 #include "RealmSocket.h"
 #include "AuthSocket.h"
 
-class RealmAcceptor: public ACE_Acceptor<RealmSocket, ACE_SOCK_Acceptor> {
+class RealmAcceptor: public ACE_Acceptor<RealmSocket, ACE_SOCK_Acceptor>
+{
 public:
-	RealmAcceptor(void) {
-	}
-	virtual ~RealmAcceptor(void) {
-	}
+    RealmAcceptor(void)
+    {
+    }
+    virtual ~RealmAcceptor(void)
+    {
+    }
 
 protected:
-	virtual int make_svc_handler(RealmSocket *&sh) {
-		if (sh == 0)
-			ACE_NEW_RETURN(sh, RealmSocket, -1);
+    virtual int make_svc_handler(RealmSocket *&sh)
+    {
+        if (sh == 0)
+            ACE_NEW_RETURN(sh, RealmSocket, -1);
 
-		sh->reactor(reactor());
-		sh->set_session(new AuthSocket(*sh));
-		return 0;
-	}
+        sh->reactor(reactor());
+        sh->set_session(new AuthSocket(*sh));
+        return 0;
+    }
 };
 
 #endif /* __REALMACCEPTOR_H__ */

@@ -24,15 +24,12 @@
 
 enum Creatures
 {
-    CREATURE_ARGALOTH = 47120,
-    CREATURE_OCCUTHAR = 52363, // will be in 4.2
+    CREATURE_ARGALOTH = 47120, CREATURE_OCCUTHAR = 52363,          // will be in 4.2
 };
 
 enum Data
 {
-    DATA_ARGALOTH,
-    DATA_OCCUTHAR,
-    MAX_ENCOUNTER
+    DATA_ARGALOTH, DATA_OCCUTHAR, MAX_ENCOUNTER
 };
 
 #endif

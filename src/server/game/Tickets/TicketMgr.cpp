@@ -32,45 +32,46 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
-TicketMgr::TicketMgr() {
-    m_GMticketid = 0; // this is initialized in LoadGMTickets() but it's best to be safe
+TicketMgr::TicketMgr ()
+{
+    m_GMticketid = 0;          // this is initialized in LoadGMTickets() but it's best to be safe
     m_GMSurveyID = 0;
     m_openTickets = 0;
     lastChange = time(NULL);
     status = true;
 }
 
-uint64 TicketMgr::GenerateGMTicketId() {
+uint64 TicketMgr::GenerateGMTicketId ()
+{
     return ++m_GMticketid;
 }
 
-void TicketMgr::LoadGMTickets() {
+void TicketMgr::LoadGMTickets ()
+{
     uint32 oldMSTime = getMSTime();
 
     if (!m_GMTicketList.empty())
-        for (GmTicketList::const_iterator itr = m_GMTicketList.begin();
-                itr != m_GMTicketList.end(); ++itr)
+        for (GmTicketList::const_iterator itr = m_GMTicketList.begin(); itr != m_GMTicketList.end(); ++itr)
             delete *itr;
 
     m_GMTicketList.clear();
     m_GMticketid = 0;
     m_openTickets = 0;
 
-    QueryResult result =
-            CharacterDatabase.Query(
-                    "SELECT guid, playerGuid, name, message, createtime, map, posX, posY, posZ, timestamp, closed, "
-                            "assignedto, comment, completed, escalated, viewed FROM gm_tickets");
+    QueryResult result = CharacterDatabase.Query("SELECT guid, playerGuid, name, message, createtime, map, posX, posY, posZ, timestamp, closed, "
+            "assignedto, comment, completed, escalated, viewed FROM gm_tickets");
 
-    if (!result) {
-        sLog->outString(
-                ">> Loaded 0 GM tickets. DB table `gm_tickets` is empty!");
+    if (!result)
+    {
+        sLog->outString(">> Loaded 0 GM tickets. DB table `gm_tickets` is empty!");
         sLog->outString();
         return;
     }
 
     uint32 count = 0;
 
-    do {
+    do
+    {
         Field *fields = result->Fetch();
         GM_Ticket *ticket = new GM_Ticket;
         ticket->guid = fields[0].GetUInt32();
@@ -95,39 +96,43 @@ void TicketMgr::LoadGMTickets() {
         ++count;
 
         m_GMTicketList.push_back(ticket);
-    } while (result->NextRow());
+    }
+    while (result->NextRow());
 
     result = CharacterDatabase.Query("SELECT MAX(guid) from gm_tickets");
 
-    if (result) {
+    if (result)
+    {
         Field *fields = result->Fetch();
         m_GMticketid = fields[0].GetUInt64();
     }
 
-    sLog->outString(">> Loaded %u GM tickets in %u ms", count,
-            GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u GM tickets in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
-void TicketMgr::LoadGMSurveys() {
+void TicketMgr::LoadGMSurveys ()
+{
     uint32 oldMSTime = getMSTime();
 
     // we don't actually load anything into memory here as there's no reason to
-    QueryResult result = CharacterDatabase.Query(
-            "SELECT MAX(surveyid) FROM gm_surveys");
-    if (result) {
+    QueryResult result = CharacterDatabase.Query("SELECT MAX(surveyid) FROM gm_surveys");
+    if (result)
+    {
         Field *fields = result->Fetch();
         m_GMSurveyID = fields[0].GetUInt32();
-    } else
+    }
+    else
         m_GMSurveyID = 0;
 
-    sLog->outString(">> Loaded GM Survey count from database in %u ms",
-            GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded GM Survey count from database in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
-void TicketMgr::AddOrUpdateGMTicket(GM_Ticket &ticket, bool create) {
-    if (create) {
+void TicketMgr::AddOrUpdateGMTicket (GM_Ticket &ticket, bool create)
+{
+    if (create)
+    {
         m_GMTicketList.push_back(&ticket);
         if (ticket.closed == 0)
             m_openTickets++;
@@ -136,14 +141,14 @@ void TicketMgr::AddOrUpdateGMTicket(GM_Ticket &ticket, bool create) {
     _AddOrUpdateGMTicket(ticket);
 }
 
-void TicketMgr::_AddOrUpdateGMTicket(GM_Ticket &ticket) {
+void TicketMgr::_AddOrUpdateGMTicket (GM_Ticket &ticket)
+{
     std::string msg(ticket.message), name(ticket.name), comment(ticket.comment);
     CharacterDatabase.EscapeString(msg);
     CharacterDatabase.EscapeString(name);
     CharacterDatabase.EscapeString(comment);
     std::ostringstream ss;
-    ss
-            << "REPLACE INTO gm_tickets (guid, playerGuid, name, message, createtime, map, posX, posY, posZ, timestamp, closed, assignedto, comment, completed, escalated, viewed) VALUES (";
+    ss << "REPLACE INTO gm_tickets (guid, playerGuid, name, message, createtime, map, posX, posY, posZ, timestamp, closed, assignedto, comment, completed, escalated, viewed) VALUES (";
     ss << ticket.guid << ", ";
     ss << ticket.playerGuid << ", '";
     ss << name << "', '";
@@ -166,15 +171,14 @@ void TicketMgr::_AddOrUpdateGMTicket(GM_Ticket &ticket) {
     CharacterDatabase.CommitTransaction(trans);
 }
 
-void TicketMgr::RemoveGMTicket(GM_Ticket *ticket, int64 source,
-        bool permanently) {
-    for (GmTicketList::iterator i = m_GMTicketList.begin();
-            i != m_GMTicketList.end(); ++i)
-        if ((*i)->guid == ticket->guid) {
-            if (permanently) {
-                CharacterDatabase.PExecute(
-                        "DELETE FROM gm_tickets WHERE guid = '%u'",
-                        ticket->guid);
+void TicketMgr::RemoveGMTicket (GM_Ticket *ticket, int64 source, bool permanently)
+{
+    for (GmTicketList::iterator i = m_GMTicketList.begin(); i != m_GMTicketList.end(); ++i)
+        if ((*i)->guid == ticket->guid)
+        {
+            if (permanently)
+            {
+                CharacterDatabase.PExecute("DELETE FROM gm_tickets WHERE guid = '%u'", ticket->guid);
                 i = m_GMTicketList.erase(i);
                 ticket = NULL;
                 return;
@@ -188,9 +192,9 @@ void TicketMgr::RemoveGMTicket(GM_Ticket *ticket, int64 source,
         }
 }
 
-void TicketMgr::RemoveGMTicket(uint64 ticketGuid, int64 source,
-        bool permanently) {
+void TicketMgr::RemoveGMTicket (uint64 ticketGuid, int64 source, bool permanently)
+{
     GM_Ticket *ticket = GetGMTicket(ticketGuid);
-    ASSERT(ticket); // hmm
+    ASSERT(ticket);          // hmm
     RemoveGMTicket(ticket, source, permanently);
 }

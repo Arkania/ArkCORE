@@ -31,17 +31,18 @@
 #include "Common.h"
 
 /// Start the server
-class Master {
+class Master
+{
 public:
-	Master();
-	~Master();
-	int Run();
+    Master ();
+    ~Master ();
+    int Run ();
 
 private:
-	bool _StartDB();
-	void _StopDB();
+    bool _StartDB ();
+    void _StopDB ();
 
-	void clearOnlineAccounts();
+    void clearOnlineAccounts ();
 };
 
 #define sMaster ACE_Singleton<Master, ACE_Null_Mutex>::instance()

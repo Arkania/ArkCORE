@@ -44,97 +44,113 @@
 
 #include <cmath>
 
-ObjectAccessor::ObjectAccessor() {
+ObjectAccessor::ObjectAccessor ()
+{
 }
 
-ObjectAccessor::~ObjectAccessor() {
+ObjectAccessor::~ObjectAccessor ()
+{
 }
 
-WorldObject* ObjectAccessor::GetWorldObject(WorldObject const& p, uint64 guid) {
-    switch(GUID_HIPART(guid))
+WorldObject* ObjectAccessor::GetWorldObject (WorldObject const& p, uint64 guid)
+{
+    switch (GUID_HIPART(guid))
     {
-        case HIGHGUID_PLAYER: return GetPlayer(p, guid);
-        case HIGHGUID_TRANSPORT:
-        case HIGHGUID_MO_TRANSPORT:
-        case HIGHGUID_GAMEOBJECT: return GetGameObject(p, guid);
-        case HIGHGUID_VEHICLE:
-        case HIGHGUID_UNIT: return GetCreature(p, guid);
-        case HIGHGUID_PET: return GetPet(p, guid);
-        case HIGHGUID_DYNAMICOBJECT: return GetDynamicObject(p, guid);
-        case HIGHGUID_CORPSE: return GetCorpse(p, guid);
-        default: return NULL;
+    case HIGHGUID_PLAYER:
+        return GetPlayer(p, guid);
+    case HIGHGUID_TRANSPORT:
+    case HIGHGUID_MO_TRANSPORT:
+    case HIGHGUID_GAMEOBJECT:
+        return GetGameObject(p, guid);
+    case HIGHGUID_VEHICLE:
+    case HIGHGUID_UNIT:
+        return GetCreature(p, guid);
+    case HIGHGUID_PET:
+        return GetPet(p, guid);
+    case HIGHGUID_DYNAMICOBJECT:
+        return GetDynamicObject(p, guid);
+    case HIGHGUID_CORPSE:
+        return GetCorpse(p, guid);
+    default:
+        return NULL;
     }
 }
 
-Object* ObjectAccessor::GetObjectByTypeMask(WorldObject const& p, uint64 guid,
-        uint32 typemask) {
-    switch(GUID_HIPART(guid))
+Object* ObjectAccessor::GetObjectByTypeMask (WorldObject const& p, uint64 guid, uint32 typemask)
+{
+    switch (GUID_HIPART(guid))
     {
-        case HIGHGUID_ITEM:
+    case HIGHGUID_ITEM:
         if (typemask & TYPEMASK_ITEM && p.GetTypeId() == TYPEID_PLAYER)
-        return ((Player const&)p).GetItemByGuid(guid);
+            return ((Player const&) p).GetItemByGuid(guid);
         break;
-        case HIGHGUID_PLAYER:
+    case HIGHGUID_PLAYER:
         if (typemask & TYPEMASK_PLAYER)
-        return GetPlayer(p, guid);
+            return GetPlayer(p, guid);
         break;
-        case HIGHGUID_TRANSPORT:
-        case HIGHGUID_MO_TRANSPORT:
-        case HIGHGUID_GAMEOBJECT:
+    case HIGHGUID_TRANSPORT:
+    case HIGHGUID_MO_TRANSPORT:
+    case HIGHGUID_GAMEOBJECT:
         if (typemask & TYPEMASK_GAMEOBJECT)
-        return GetGameObject(p, guid);
+            return GetGameObject(p, guid);
         break;
-        case HIGHGUID_UNIT:
-        case HIGHGUID_VEHICLE:
+    case HIGHGUID_UNIT:
+    case HIGHGUID_VEHICLE:
         if (typemask & TYPEMASK_UNIT)
-        return GetCreature(p, guid);
+            return GetCreature(p, guid);
         break;
-        case HIGHGUID_PET:
+    case HIGHGUID_PET:
         if (typemask & TYPEMASK_UNIT)
-        return GetPet(p, guid);
+            return GetPet(p, guid);
         break;
-        case HIGHGUID_DYNAMICOBJECT:
+    case HIGHGUID_DYNAMICOBJECT:
         if (typemask & TYPEMASK_DYNAMICOBJECT)
-        return GetDynamicObject(p, guid);
+            return GetDynamicObject(p, guid);
         break;
-        case HIGHGUID_CORPSE:
+    case HIGHGUID_CORPSE:
         break;
     }
 
     return NULL;
 }
 
-Corpse* ObjectAccessor::GetCorpse(WorldObject const& u, uint64 guid) {
+Corpse* ObjectAccessor::GetCorpse (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (Corpse*) NULL);
 }
 
-GameObject* ObjectAccessor::GetGameObject(WorldObject const& u, uint64 guid) {
+GameObject* ObjectAccessor::GetGameObject (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (GameObject*) NULL);
 }
 
-DynamicObject* ObjectAccessor::GetDynamicObject(WorldObject const& u,
-        uint64 guid) {
+DynamicObject* ObjectAccessor::GetDynamicObject (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (DynamicObject*) NULL);
 }
 
-Unit* ObjectAccessor::GetUnit(WorldObject const& u, uint64 guid) {
+Unit* ObjectAccessor::GetUnit (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (Unit*) NULL);
 }
 
-Creature* ObjectAccessor::GetCreature(WorldObject const& u, uint64 guid) {
+Creature* ObjectAccessor::GetCreature (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (Creature*) NULL);
 }
 
-Pet* ObjectAccessor::GetPet(WorldObject const& u, uint64 guid) {
+Pet* ObjectAccessor::GetPet (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (Pet*) NULL);
 }
 
-Player* ObjectAccessor::GetPlayer(WorldObject const& u, uint64 guid) {
+Player* ObjectAccessor::GetPlayer (WorldObject const& u, uint64 guid)
+{
     return GetObjectInMap(guid, u.GetMap(), (Player*) NULL);
 }
 
-Creature* ObjectAccessor::GetCreatureOrPetOrVehicle(WorldObject const& u,
-        uint64 guid) {
+Creature* ObjectAccessor::GetCreatureOrPetOrVehicle (WorldObject const& u, uint64 guid)
+{
     if (IS_PET_GUID(guid))
         return GetPet(u, guid);
 
@@ -144,39 +160,42 @@ Creature* ObjectAccessor::GetCreatureOrPetOrVehicle(WorldObject const& u,
     return NULL;
 }
 
-Pet* ObjectAccessor::FindPet(uint64 guid) {
+Pet* ObjectAccessor::FindPet (uint64 guid)
+{
     return GetObjectInWorld(guid, (Pet*) NULL);
 }
 
-Player* ObjectAccessor::FindPlayer(uint64 guid) {
+Player* ObjectAccessor::FindPlayer (uint64 guid)
+{
     return GetObjectInWorld(guid, (Player*) NULL);
 }
 
-Unit* ObjectAccessor::FindUnit(uint64 guid) {
+Unit* ObjectAccessor::FindUnit (uint64 guid)
+{
     return GetObjectInWorld(guid, (Unit*) NULL);
 }
 
-Player* ObjectAccessor::FindPlayerByName(const char* name) {
+Player* ObjectAccessor::FindPlayerByName (const char* name)
+{
     ACE_GUARD_RETURN(LockType, g, *HashMapHolder<Player>::GetLock(), NULL);
     HashMapHolder<Player>::MapType& m = HashMapHolder<Player>::GetContainer();
-    for (HashMapHolder<Player>::MapType::iterator iter = m.begin();
-            iter != m.end(); ++iter)
-        if (iter->second->IsInWorld()
-                && strcmp(name, iter->second->GetName()) == 0)
+    for (HashMapHolder<Player>::MapType::iterator iter = m.begin(); iter != m.end(); ++iter)
+        if (iter->second->IsInWorld() && strcmp(name, iter->second->GetName()) == 0)
             return iter->second;
 
     return NULL;
 }
 
-void ObjectAccessor::SaveAllPlayers() {
+void ObjectAccessor::SaveAllPlayers ()
+{
     ACE_GUARD(LockType, g, *HashMapHolder<Player>::GetLock());
     HashMapHolder<Player>::MapType& m = HashMapHolder<Player>::GetContainer();
-    for (HashMapHolder<Player>::MapType::iterator itr = m.begin();
-            itr != m.end(); ++itr)
+    for (HashMapHolder<Player>::MapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         itr->second->SaveToDB();
 }
 
-Corpse* ObjectAccessor::GetCorpseForPlayerGUID(uint64 guid) {
+Corpse* ObjectAccessor::GetCorpseForPlayerGUID (uint64 guid)
+{
     ACE_GUARD_RETURN(LockType, guard, i_corpseGuard, NULL);
 
     Player2CorpsesMapType::iterator iter = i_player2corpse.find(guid);
@@ -188,7 +207,7 @@ Corpse* ObjectAccessor::GetCorpseForPlayerGUID(uint64 guid) {
     return iter->second;
 }
 
-void ObjectAccessor::RemoveCorpse(Corpse* corpse)
+void ObjectAccessor::RemoveCorpse (Corpse* corpse)
 {
     ASSERT(corpse && corpse->GetType() != CORPSE_BONES);
 
@@ -213,7 +232,7 @@ void ObjectAccessor::RemoveCorpse(Corpse* corpse)
         ACE_GUARD(LockType, g, i_corpseGuard);
 
         Player2CorpsesMapType::iterator iter = i_player2corpse.find(corpse->GetOwnerGUID());
-        if (iter == i_player2corpse.end()) // TODO: Fix this
+        if (iter == i_player2corpse.end())          // TODO: Fix this
             return;
 
         CellPair cell_pair = Trinity::ComputeCellPair(corpse->GetPositionX(), corpse->GetPositionY());
@@ -227,7 +246,8 @@ void ObjectAccessor::RemoveCorpse(Corpse* corpse)
     }
 }
 
-void ObjectAccessor::AddCorpse(Corpse* corpse) {
+void ObjectAccessor::AddCorpse (Corpse* corpse)
+{
     ASSERT(corpse && corpse->GetType() != CORPSE_BONES);
 
     // Critical section
@@ -238,37 +258,38 @@ void ObjectAccessor::AddCorpse(Corpse* corpse) {
         i_player2corpse[corpse->GetOwnerGUID()] = corpse;
 
         // build mapid*cellid -> guid_set map
-        CellPair cell_pair = Trinity::ComputeCellPair(corpse->GetPositionX(),
-                corpse->GetPositionY());
-        uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP)
-                + cell_pair.x_coord;
+        CellPair cell_pair = Trinity::ComputeCellPair(corpse->GetPositionX(), corpse->GetPositionY());
+        uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
-        sObjectMgr->AddCorpseCellData(corpse->GetMapId(), cell_id,
-                GUID_LOPART(corpse->GetOwnerGUID()), corpse->GetInstanceId());
+        sObjectMgr->AddCorpseCellData(corpse->GetMapId(), cell_id, GUID_LOPART(corpse->GetOwnerGUID()), corpse->GetInstanceId());
     }
 }
 
-void ObjectAccessor::AddCorpsesToGrid(GridPair const& gridpair, GridType& grid,
-        Map* map) {
+void ObjectAccessor::AddCorpsesToGrid (GridPair const& gridpair, GridType& grid, Map* map)
+{
     ACE_GUARD(LockType, g, i_corpseGuard);
 
-    for (Player2CorpsesMapType::iterator iter = i_player2corpse.begin();
-            iter != i_player2corpse.end(); ++iter) {
-        if (iter->second->GetGrid() == gridpair) {
+    for (Player2CorpsesMapType::iterator iter = i_player2corpse.begin(); iter != i_player2corpse.end(); ++iter)
+    {
+        if (iter->second->GetGrid() == gridpair)
+        {
             // verify, if the corpse in our instance (add only corpses which are)
-            if (map->Instanceable()) {
+            if (map->Instanceable())
+            {
                 if (iter->second->GetInstanceId() == map->GetInstanceId())
                     grid.AddWorldObject(iter->second);
-            } else
+            }
+            else
                 grid.AddWorldObject(iter->second);
         }
     }
 }
 
-Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid,
-        bool /*insignia*/) {
+Corpse* ObjectAccessor::ConvertCorpseForPlayer (uint64 player_guid, bool /*insignia*/)
+{
     Corpse* corpse = GetCorpseForPlayerGUID(player_guid);
-    if (!corpse) {
+    if (!corpse)
+    {
         //in fact this function is called from several places
         //even when player doesn't have a corpse, not an error
         // TODO: really, now...
@@ -341,11 +362,12 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid,
      */
 }
 
-void ObjectAccessor::RemoveOldCorpses() {
+void ObjectAccessor::RemoveOldCorpses ()
+{
     time_t now = time(NULL);
     Player2CorpsesMapType::iterator next;
-    for (Player2CorpsesMapType::iterator itr = i_player2corpse.begin();
-            itr != i_player2corpse.end(); itr = next) {
+    for (Player2CorpsesMapType::iterator itr = i_player2corpse.begin(); itr != i_player2corpse.end(); itr = next)
+    {
         next = itr;
         ++next;
 
@@ -356,14 +378,16 @@ void ObjectAccessor::RemoveOldCorpses() {
     }
 }
 
-void ObjectAccessor::Update(uint32 /*diff*/) {
+void ObjectAccessor::Update (uint32 /*diff*/)
+{
     UpdateDataMapType update_players;
 
     // Critical section
     {
         ACE_GUARD(LockType, g, i_updateGuard);
 
-        while (!i_objects.empty()) {
+        while (!i_objects.empty())
+        {
             Object* obj = *i_objects.begin();
             ASSERT(obj && obj->IsInWorld());
             i_objects.erase(i_objects.begin());
@@ -371,18 +395,19 @@ void ObjectAccessor::Update(uint32 /*diff*/) {
         }
     }
 
-    WorldPacket packet; // here we allocate a std::vector with a size of 0x10000
-    for (UpdateDataMapType::iterator iter = update_players.begin();
-            iter != update_players.end(); ++iter) {
+    WorldPacket packet;          // here we allocate a std::vector with a size of 0x10000
+    for (UpdateDataMapType::iterator iter = update_players.begin(); iter != update_players.end(); ++iter)
+    {
         iter->second.BuildPacket(&packet);
         iter->first->GetSession()->SendPacket(&packet);
-        packet.clear(); // clean the string
+        packet.clear();          // clean the string
     }
 }
 
-void ObjectAccessor::UnloadAll() {
-    for (Player2CorpsesMapType::const_iterator itr = i_player2corpse.begin();
-            itr != i_player2corpse.end(); ++itr) {
+void ObjectAccessor::UnloadAll ()
+{
+    for (Player2CorpsesMapType::const_iterator itr = i_player2corpse.begin(); itr != i_player2corpse.end(); ++itr)
+    {
         itr->second->RemoveFromWorld();
         delete itr->second;
     }
@@ -402,15 +427,9 @@ template class HashMapHolder<DynamicObject> ;
 template class HashMapHolder<Creature> ;
 template class HashMapHolder<Corpse> ;
 
-template Player* ObjectAccessor::GetObjectInWorld<Player>(uint32 mapid, float x,
-        float y, uint64 guid, Player* /*fake*/);
-template Pet* ObjectAccessor::GetObjectInWorld<Pet>(uint32 mapid, float x,
-        float y, uint64 guid, Pet* /*fake*/);
-template Creature* ObjectAccessor::GetObjectInWorld<Creature>(uint32 mapid,
-        float x, float y, uint64 guid, Creature* /*fake*/);
-template Corpse* ObjectAccessor::GetObjectInWorld<Corpse>(uint32 mapid, float x,
-        float y, uint64 guid, Corpse* /*fake*/);
-template GameObject* ObjectAccessor::GetObjectInWorld<GameObject>(uint32 mapid,
-        float x, float y, uint64 guid, GameObject* /*fake*/);
-template DynamicObject* ObjectAccessor::GetObjectInWorld<DynamicObject>(
-        uint32 mapid, float x, float y, uint64 guid, DynamicObject* /*fake*/);
+template Player* ObjectAccessor::GetObjectInWorld<Player> (uint32 mapid, float x, float y, uint64 guid, Player* /*fake*/);
+template Pet* ObjectAccessor::GetObjectInWorld<Pet> (uint32 mapid, float x, float y, uint64 guid, Pet* /*fake*/);
+template Creature* ObjectAccessor::GetObjectInWorld<Creature> (uint32 mapid, float x, float y, uint64 guid, Creature* /*fake*/);
+template Corpse* ObjectAccessor::GetObjectInWorld<Corpse> (uint32 mapid, float x, float y, uint64 guid, Corpse* /*fake*/);
+template GameObject* ObjectAccessor::GetObjectInWorld<GameObject> (uint32 mapid, float x, float y, uint64 guid, GameObject* /*fake*/);
+template DynamicObject* ObjectAccessor::GetObjectInWorld<DynamicObject> (uint32 mapid, float x, float y, uint64 guid, DynamicObject* /*fake*/);

@@ -37,25 +37,25 @@ class WorldObject;
 
 enum District
 {
-    UPPER_DISTRICT = 1,
-    LOWER_DISTRICT = 1 << 1,
-    LEFT_DISTRICT  = 1 << 2,
-    RIGHT_DISTRICT = 1 << 3,
-    CENTER_DISTRICT = 1 << 4,
-    UPPER_LEFT_DISTRICT = (UPPER_DISTRICT | LEFT_DISTRICT),
-    UPPER_RIGHT_DISTRICT = (UPPER_DISTRICT | RIGHT_DISTRICT),
-    LOWER_LEFT_DISTRICT = (LOWER_DISTRICT | LEFT_DISTRICT),
-    LOWER_RIGHT_DISTRICT = (LOWER_DISTRICT | RIGHT_DISTRICT),
-    ALL_DISTRICT = (UPPER_DISTRICT | LOWER_DISTRICT | LEFT_DISTRICT | RIGHT_DISTRICT | CENTER_DISTRICT)
+    UPPER_DISTRICT = 1, LOWER_DISTRICT = 1 << 1, LEFT_DISTRICT = 1 << 2, RIGHT_DISTRICT = 1 << 3, CENTER_DISTRICT = 1 << 4, UPPER_LEFT_DISTRICT = (UPPER_DISTRICT | LEFT_DISTRICT), UPPER_RIGHT_DISTRICT = (UPPER_DISTRICT | RIGHT_DISTRICT), LOWER_LEFT_DISTRICT = (LOWER_DISTRICT | LEFT_DISTRICT), LOWER_RIGHT_DISTRICT = (LOWER_DISTRICT | RIGHT_DISTRICT), ALL_DISTRICT = (UPPER_DISTRICT | LOWER_DISTRICT | LEFT_DISTRICT | RIGHT_DISTRICT | CENTER_DISTRICT)
 };
 
 struct CellArea
 {
-    CellArea() : right_offset(0), left_offset(0), upper_offset(0), lower_offset(0) {}
-    CellArea(int right, int left, int upper, int lower) : right_offset(right), left_offset(left), upper_offset(upper), lower_offset(lower) {}
-    bool operator!() const { return !right_offset && !left_offset && !upper_offset && !lower_offset; }
+    CellArea () :
+            right_offset(0), left_offset(0), upper_offset(0), lower_offset(0)
+    {
+    }
+    CellArea (int right, int left, int upper, int lower) :
+            right_offset(right), left_offset(left), upper_offset(upper), lower_offset(lower)
+    {
+    }
+    bool operator! () const
+    {
+        return !right_offset && !left_offset && !upper_offset && !lower_offset;
+    }
 
-    void ResizeBorders(CellPair& begin_cell, CellPair& end_cell) const
+    void ResizeBorders (CellPair& begin_cell, CellPair& end_cell) const
     {
         begin_cell << left_offset;
         begin_cell -= lower_offset;
@@ -71,11 +71,17 @@ struct CellArea
 
 struct Cell
 {
-    Cell() { data.All = 0; }
-    Cell(const Cell &cell) { data.All = cell.data.All; }
-    explicit Cell(CellPair const& p);
+    Cell ()
+    {
+        data.All = 0;
+    }
+    Cell (const Cell &cell)
+    {
+        data.All = cell.data.All;
+    }
+    explicit Cell (CellPair const& p);
 
-    void operator|=(Cell &cell)
+    void operator|= (Cell &cell)
     {
         data.Part.reserved = 0;
         cell.data.Part.reserved = 0;
@@ -83,7 +89,7 @@ struct Cell
         Compute(x, y);
         cell.Compute(old_x, old_y);
 
-        if (std::abs(int(x-old_x)) > 1 || std::abs(int(y-old_y)) > 1)
+        if (std::abs(int(x - old_x)) > 1 || std::abs(int(y - old_y)) > 1)
         {
             data.Part.reserved = ALL_DISTRICT;
             cell.data.Part.reserved = ALL_DISTRICT;
@@ -112,69 +118,89 @@ struct Cell
         }
     }
 
-    void Compute(uint32 &x, uint32 &y) const
+    void Compute (uint32 &x, uint32 &y) const
     {
-        x = data.Part.grid_x*MAX_NUMBER_OF_CELLS + data.Part.cell_x;
-        y = data.Part.grid_y*MAX_NUMBER_OF_CELLS + data.Part.cell_y;
+        x = data.Part.grid_x * MAX_NUMBER_OF_CELLS + data.Part.cell_x;
+        y = data.Part.grid_y * MAX_NUMBER_OF_CELLS + data.Part.cell_y;
     }
 
-    bool DiffCell(const Cell &cell) const
+    bool DiffCell (const Cell &cell) const
     {
-        return(data.Part.cell_x != cell.data.Part.cell_x ||
-            data.Part.cell_y != cell.data.Part.cell_y);
+        return (data.Part.cell_x != cell.data.Part.cell_x || data.Part.cell_y != cell.data.Part.cell_y);
     }
 
-    bool DiffGrid(const Cell &cell) const
+    bool DiffGrid (const Cell &cell) const
     {
-        return(data.Part.grid_x != cell.data.Part.grid_x ||
-            data.Part.grid_y != cell.data.Part.grid_y);
+        return (data.Part.grid_x != cell.data.Part.grid_x || data.Part.grid_y != cell.data.Part.grid_y);
     }
 
-    uint32 CellX() const { return data.Part.cell_x; }
-    uint32 CellY() const { return data.Part.cell_y; }
-    uint32 GridX() const { return data.Part.grid_x; }
-    uint32 GridY() const { return data.Part.grid_y; }
-    bool NoCreate() const { return data.Part.nocreate; }
-    void SetNoCreate() { data.Part.nocreate = 1; }
-
-    CellPair cellPair() const
+    uint32 CellX () const
     {
-        return CellPair(
-            data.Part.grid_x*MAX_NUMBER_OF_CELLS+data.Part.cell_x,
-            data.Part.grid_y*MAX_NUMBER_OF_CELLS+data.Part.cell_y);
+        return data.Part.cell_x;
+    }
+    uint32 CellY () const
+    {
+        return data.Part.cell_y;
+    }
+    uint32 GridX () const
+    {
+        return data.Part.grid_x;
+    }
+    uint32 GridY () const
+    {
+        return data.Part.grid_y;
+    }
+    bool NoCreate () const
+    {
+        return data.Part.nocreate;
+    }
+    void SetNoCreate ()
+    {
+        data.Part.nocreate = 1;
     }
 
-    Cell& operator=(const Cell &cell)
+    CellPair cellPair () const
+    {
+        return CellPair(data.Part.grid_x * MAX_NUMBER_OF_CELLS + data.Part.cell_x, data.Part.grid_y * MAX_NUMBER_OF_CELLS + data.Part.cell_y);
+    }
+
+    Cell& operator= (const Cell &cell)
     {
         this->data.All = cell.data.All;
         return *this;
     }
 
-    bool operator == (const Cell &cell) const { return (data.All == cell.data.All); }
-    bool operator != (const Cell &cell) const { return !operator == (cell); }
+    bool operator == (const Cell &cell) const
+    {
+        return (data.All == cell.data.All);
+    }
+    bool operator != (const Cell &cell) const
+    {
+        return !operator ==(cell);
+    }
     union
     {
         struct
         {
-            unsigned grid_x : 6;
-            unsigned grid_y : 6;
-            unsigned cell_x : 6;
-            unsigned cell_y : 6;
-            unsigned nocreate : 1;
-            unsigned reserved : 7;
+            unsigned grid_x :6;
+            unsigned grid_y :6;
+            unsigned cell_x :6;
+            unsigned cell_y :6;
+            unsigned nocreate :1;
+            unsigned reserved :7;
         } Part;
         uint32 All;
     } data;
 
-    template<class T, class CONTAINER> void Visit(const CellPair&, TypeContainerVisitor<T, CONTAINER> &visitor, Map &) const;
-    template<class T, class CONTAINER> void Visit(const CellPair&, TypeContainerVisitor<T, CONTAINER> &visitor, Map &, const WorldObject&, float) const;
-    template<class T, class CONTAINER> void Visit(const CellPair&, TypeContainerVisitor<T, CONTAINER> &visitor, Map &, float, float, float) const;
+    template<class T, class CONTAINER> void Visit (const CellPair&, TypeContainerVisitor<T, CONTAINER> &visitor, Map &) const;
+    template<class T, class CONTAINER> void Visit (const CellPair&, TypeContainerVisitor<T, CONTAINER> &visitor, Map &, const WorldObject&, float) const;
+    template<class T, class CONTAINER> void Visit (const CellPair&, TypeContainerVisitor<T, CONTAINER> &visitor, Map &, float, float, float) const;
 
-    static CellArea CalculateCellArea(const WorldObject &obj, float radius);
-    static CellArea CalculateCellArea(float x, float y, float radius);
+    static CellArea CalculateCellArea (const WorldObject &obj, float radius);
+    static CellArea CalculateCellArea (float x, float y, float radius);
 
 private:
-    template<class T, class CONTAINER> void VisitCircle(TypeContainerVisitor<T, CONTAINER> &, Map &, const CellPair&, const CellPair&) const;
+    template<class T, class CONTAINER> void VisitCircle (TypeContainerVisitor<T, CONTAINER> &, Map &, const CellPair&, const CellPair&) const;
 };
 
 #endif

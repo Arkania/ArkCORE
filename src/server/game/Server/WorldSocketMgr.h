@@ -40,37 +40,38 @@ class ReactorRunnable;
 class ACE_Event_Handler;
 
 /// Manages all sockets connected to peers and network threads
-class WorldSocketMgr {
+class WorldSocketMgr
+{
 public:
-	friend class WorldSocket;
-	friend class ACE_Singleton<WorldSocketMgr, ACE_Thread_Mutex> ;
+    friend class WorldSocket;
+    friend class ACE_Singleton<WorldSocketMgr, ACE_Thread_Mutex> ;
 
-	/// Start network, listen at address:port .
-	int StartNetwork(ACE_UINT16 port, const char* address);
+    /// Start network, listen at address:port .
+    int StartNetwork (ACE_UINT16 port, const char* address);
 
-	/// Stops all network threads, It will wait for all running threads .
-	void StopNetwork();
+    /// Stops all network threads, It will wait for all running threads .
+    void StopNetwork ();
 
-	/// Wait untill all network threads have "joined" .
-	void Wait();
-
-private:
-	int OnSocketOpen(WorldSocket* sock);
-
-	int StartReactiveIO(ACE_UINT16 port, const char* address);
+    /// Wait untill all network threads have "joined" .
+    void Wait ();
 
 private:
-	WorldSocketMgr();
-	virtual ~WorldSocketMgr();
+    int OnSocketOpen (WorldSocket* sock);
 
-	ReactorRunnable* m_NetThreads;
-	size_t m_NetThreadsCount;
+    int StartReactiveIO (ACE_UINT16 port, const char* address);
 
-	int m_SockOutKBuff;
-	int m_SockOutUBuff;
-	bool m_UseNoDelay;
+private:
+    WorldSocketMgr ();
+    virtual ~WorldSocketMgr ();
 
-	ACE_Event_Handler* m_Acceptor;
+    ReactorRunnable* m_NetThreads;
+    size_t m_NetThreadsCount;
+
+    int m_SockOutKBuff;
+    int m_SockOutUBuff;
+    bool m_UseNoDelay;
+
+    ACE_Event_Handler* m_Acceptor;
 };
 
 #define sWorldSocketMgr ACE_Singleton<WorldSocketMgr, ACE_Thread_Mutex>::instance()

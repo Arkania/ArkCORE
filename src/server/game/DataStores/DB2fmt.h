@@ -18,6 +18,6 @@
 #ifndef ARKCORE_DB2SFRM_H
 #define ARKCORE_DB2SFRM_H
 
-const char Itemfmt[]="niiiiiii";
+const char Itemfmt[] = "niiiiiii";
 
 #endif

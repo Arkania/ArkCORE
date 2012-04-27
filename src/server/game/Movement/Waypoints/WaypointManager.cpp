@@ -26,14 +26,15 @@
 #include "WaypointManager.h"
 #include "MapManager.h"
 
-WaypointMgr::WaypointMgr() {
+WaypointMgr::WaypointMgr ()
+{
 }
 
-WaypointMgr::~WaypointMgr() {
-    for (WaypointPathContainer::iterator itr = _waypointStore.begin();
-            itr != _waypointStore.end(); ++itr) {
-        for (WaypointPath::const_iterator it = itr->second.begin();
-                it != itr->second.end(); ++it)
+WaypointMgr::~WaypointMgr ()
+{
+    for (WaypointPathContainer::iterator itr = _waypointStore.begin(); itr != _waypointStore.end(); ++itr)
+    {
+        for (WaypointPath::const_iterator it = itr->second.begin(); it != itr->second.end(); ++it)
             delete *it;
 
         itr->second.clear();
@@ -42,23 +43,23 @@ WaypointMgr::~WaypointMgr() {
     _waypointStore.clear();
 }
 
-void WaypointMgr::Load() {
+void WaypointMgr::Load ()
+{
     uint32 oldMSTime = getMSTime();
 
-    QueryResult result =
-            WorldDatabase.Query(
-                    "SELECT id, point, position_x, position_y, position_z, move_flag, delay, action, action_chance FROM waypoint_data ORDER BY id, point");
+    QueryResult result = WorldDatabase.Query("SELECT id, point, position_x, position_y, position_z, move_flag, delay, action, action_chance FROM waypoint_data ORDER BY id, point");
 
-    if (!result) {
-        sLog->outErrorDb(
-                ">> Loaded 0 waypoints. DB table `waypoint_data` is empty!");
+    if (!result)
+    {
+        sLog->outErrorDb(">> Loaded 0 waypoints. DB table `waypoint_data` is empty!");
         sLog->outString();
         return;
     }
 
     uint32 count = 0;
 
-    do {
+    do
+    {
         Field* fields = result->Fetch();
         WaypointData* wp = new WaypointData();
 
@@ -83,33 +84,32 @@ void WaypointMgr::Load() {
 
         path.push_back(wp);
         ++count;
-    } while (result->NextRow());
+    }
+    while (result->NextRow());
 
-    sLog->outString(">> Loaded %u waypoints in %u ms", count,
-            GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u waypoints in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
-void WaypointMgr::ReloadPath(uint32 id) {
+void WaypointMgr::ReloadPath (uint32 id)
+{
     WaypointPathContainer::iterator itr = _waypointStore.find(id);
-    if (itr != _waypointStore.end()) {
-        for (WaypointPath::const_iterator it = itr->second.begin();
-                it != itr->second.end(); ++it)
+    if (itr != _waypointStore.end())
+    {
+        for (WaypointPath::const_iterator it = itr->second.begin(); it != itr->second.end(); ++it)
             delete *it;
 
         _waypointStore.erase(itr);
     }
 
-    QueryResult result =
-            WorldDatabase.PQuery(
-                    "SELECT point, position_x, position_y, position_z, move_flag, delay, action, action_chance FROM waypoint_data WHERE id = %u ORDER BY point",
-                    id);
+    QueryResult result = WorldDatabase.PQuery("SELECT point, position_x, position_y, position_z, move_flag, delay, action, action_chance FROM waypoint_data WHERE id = %u ORDER BY point", id);
     if (!result)
         return;
 
     WaypointPath& path = _waypointStore[id];
 
-    do {
+    do
+    {
         Field* fields = result->Fetch();
         WaypointData *wp = new WaypointData();
 
@@ -130,5 +130,6 @@ void WaypointMgr::ReloadPath(uint32 id) {
         wp->event_chance = fields[7].GetUInt8();
 
         path.push_back(wp);
-    } while (result->NextRow());
+    }
+    while (result->NextRow());
 }

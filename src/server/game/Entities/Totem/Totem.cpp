@@ -31,40 +31,46 @@
 #include "ObjectMgr.h"
 #include "SpellMgr.h"
 
-Totem::Totem(SummonPropertiesEntry const *properties, Unit *owner) :
-        Minion(properties, owner) {
+Totem::Totem (SummonPropertiesEntry const *properties, Unit *owner) :
+        Minion(properties, owner)
+{
     m_unitTypeMask |= UNIT_MASK_TOTEM;
     m_duration = 0;
     m_type = TOTEM_PASSIVE;
 }
 
-void Totem::Update(uint32 time) {
-    if (!m_owner->isAlive() || !isAlive()) {
-        UnSummon(); // remove self
+void Totem::Update (uint32 time)
+{
+    if (!m_owner->isAlive() || !isAlive())
+    {
+        UnSummon();          // remove self
         return;
     }
 
-    if (m_duration <= time) {
-        UnSummon(); // remove self
+    if (m_duration <= time)
+    {
+        UnSummon();          // remove self
         return;
-    } else
+    }
+    else
         m_duration -= time;
 
     Creature::Update(time);
 }
 
-void Totem::InitStats(uint32 duration) {
+void Totem::InitStats (uint32 duration)
+{
     Minion::InitStats(duration);
 
     CreatureInfo const *cinfo = GetCreatureInfo();
-    if (m_owner->GetTypeId() == TYPEID_PLAYER && cinfo) {
-        uint32 display_id = sObjectMgr->ChooseDisplayId(
-                m_owner->ToPlayer()->GetTeam(), cinfo);
-        CreatureModelInfo const *minfo =
-                sObjectMgr->GetCreatureModelRandomGender(display_id);
+    if (m_owner->GetTypeId() == TYPEID_PLAYER && cinfo)
+    {
+        uint32 display_id = sObjectMgr->ChooseDisplayId(m_owner->ToPlayer()->GetTeam(), cinfo);
+        CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(display_id);
         if (minfo)
             display_id = minfo->modelid;
-        switch (m_owner->ToPlayer()->GetTeam()) {
+        switch (m_owner->ToPlayer()->GetTeam())
+        {
         case ALLIANCE:
             display_id = cinfo->Modelid1;
             break;
@@ -74,7 +80,8 @@ void Totem::InitStats(uint32 duration) {
             else
                 display_id = cinfo->Modelid1;
 
-            switch (((Player*) m_owner)->getRace()) {
+            switch (((Player*) m_owner)->getRace())
+            {
             case RACE_ORC:
                 if (cinfo->Modelid2)
                     display_id = cinfo->Modelid2;
@@ -99,7 +106,8 @@ void Totem::InitStats(uint32 duration) {
 
     // Get spell casted by totem
     SpellEntry const * totemSpell = sSpellStore.LookupEntry(GetSpell());
-    if (totemSpell) {
+    if (totemSpell)
+    {
         // If spell have cast time -> so its active totem
         if (GetSpellCastTime(totemSpell))
             m_type = TOTEM_ACTIVE;
@@ -113,20 +121,20 @@ void Totem::InitStats(uint32 duration) {
     SetLevel(m_owner->getLevel());
 }
 
-void Totem::InitSummon()
+void Totem::InitSummon ()
 {
     if (m_type == TOTEM_PASSIVE)
     {
         switch (GetSpell())
         {
-            case 33663: // Earth Elemental Totem
-            case 32982: // Fire Elemental Totem
-            case 50461: // Anti-Magic Zone
-                CastSpell(this, GetSpell(), true);
-                break;
-            default:
-                AddAura(GetSpell(), this);
-                break;
+        case 33663:          // Earth Elemental Totem
+        case 32982:          // Fire Elemental Totem
+        case 50461:          // Anti-Magic Zone
+            CastSpell(this, GetSpell(), true);
+            break;
+        default:
+            AddAura(GetSpell(), this);
+            break;
         }
     }
 
@@ -135,13 +143,16 @@ void Totem::InitSummon()
         CastSpell(this, GetSpell(1), true);
 }
 
-void Totem::UnSummon() {
+void Totem::UnSummon ()
+{
     CombatStop();
     RemoveAurasDueToSpell(GetSpell());
 
     // clear owner's totem slot
-    for (int i = SUMMON_SLOT_TOTEM; i < MAX_TOTEM_SLOT; ++i) {
-        if (m_owner->m_SummonSlot[i] == GetGUID()) {
+    for (int i = SUMMON_SLOT_TOTEM; i < MAX_TOTEM_SLOT; ++i)
+    {
+        if (m_owner->m_SummonSlot[i] == GetGUID())
+        {
             m_owner->m_SummonSlot[i] = 0;
             break;
         }
@@ -151,13 +162,15 @@ void Totem::UnSummon() {
 
     //remove aura all party members too
     Group *pGroup = NULL;
-    if (m_owner->GetTypeId() == TYPEID_PLAYER) {
+    if (m_owner->GetTypeId() == TYPEID_PLAYER)
+    {
         m_owner->ToPlayer()->SendAutoRepeatCancel(this);
         // Not only the player can summon the totem (scripted AI)
         pGroup = m_owner->ToPlayer()->GetGroup();
-        if (pGroup) {
-            for (GroupReference *itr = pGroup->GetFirstMember(); itr != NULL;
-                    itr = itr->next()) {
+        if (pGroup)
+        {
+            for (GroupReference *itr = pGroup->GetFirstMember(); itr != NULL; itr = itr->next())
+            {
                 Player* Target = itr->getSource();
                 if (Target && pGroup->SameSubGroup((Player*) m_owner, Target))
                     Target->RemoveAurasDueToSpell(GetSpell());
@@ -168,12 +181,13 @@ void Totem::UnSummon() {
     AddObjectToRemoveList();
 }
 
-bool Totem::IsImmunedToSpellEffect(SpellEntry const* spellInfo,
-        uint32 index) const {
+bool Totem::IsImmunedToSpellEffect (SpellEntry const* spellInfo, uint32 index) const
+{
     // TODO: possibly all negative auras immune?
     if (GetEntry() == 5925)
         return false;
-    switch (spellInfo->EffectApplyAuraName[index]) {
+    switch (spellInfo->EffectApplyAuraName[index])
+    {
     case SPELL_AURA_PERIODIC_DAMAGE:
     case SPELL_AURA_PERIODIC_LEECH:
     case SPELL_AURA_MOD_FEAR:

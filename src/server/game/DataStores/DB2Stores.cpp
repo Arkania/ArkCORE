@@ -35,12 +35,12 @@
 
 #include <map>
 
-DB2Storage <ItemEntry> sItemStore(Itemfmt);
+DB2Storage<ItemEntry> sItemStore(Itemfmt);
 typedef std::list<std::string> StoreProblemList1;
 
 uint32 DB2FileCount = 0;
 
-static bool LoadDB2_assert_print(uint32 fsize, uint32 rsize, const std::string& filename)
+static bool LoadDB2_assert_print (uint32 fsize, uint32 rsize, const std::string& filename)
 {
     sLog->outError("Size of '%s' setted by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
 
@@ -50,7 +50,10 @@ static bool LoadDB2_assert_print(uint32 fsize, uint32 rsize, const std::string& 
 
 struct LocalDB2Data
 {
-    LocalDB2Data(LocaleConstant loc) : defaultLocale(loc), availableDb2Locales(0xFFFFFFFF) {}
+    LocalDB2Data (LocaleConstant loc) :
+            defaultLocale(loc), availableDb2Locales(0xFFFFFFFF)
+    {
+    }
 
     LocaleConstant defaultLocale;
 
@@ -59,7 +62,7 @@ struct LocalDB2Data
 };
 
 template<class T>
-inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& errlist, DB2Storage<T>& storage, const std::string& db2_path, const std::string& filename)
+inline void LoadDB2 (uint32& availableDb2Locales, StoreProblemList1& errlist, DB2Storage<T>& storage, const std::string& db2_path, const std::string& filename)
 {
     // compatibility format and C++ structure sizes
     ASSERT(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDB2_assert_print(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));
@@ -86,7 +89,7 @@ inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& errlist, DB2
     }
 }
 
-void LoadDB2Stores(const std::string& dataPath)
+void LoadDB2Stores (const std::string& dataPath)
 {
     uint32 oldMSTime = getMSTime();
 
@@ -109,12 +112,12 @@ void LoadDB2Stores(const std::string& dataPath)
         for (std::list<std::string>::iterator i = bad_db2_files.begin(); i != bad_db2_files.end(); ++i)
             str += *i + "\n";
 
-        sLog->outError("\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FileCount, str.c_str());
+        sLog->outError("\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32) bad_db2_files.size(), DB2FileCount, str.c_str());
         exit(1);
     }
 
     // Check loaded DBC files proper version
-    if (!sItemStore.LookupEntry(68815))                     // last client known item added in 4.0.6a
+    if (!sItemStore.LookupEntry(68815))          // last client known item added in 4.0.6a
     {
         sLog->outString();
         sLog->outError("Please extract correct db2 files from client 4.0.6a 13623.");

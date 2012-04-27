@@ -28,47 +28,51 @@
 #include "ScriptPCH.h"
 #include "SpellAuraEffects.h"
 
-enum PriestSpells {
-    PRIEST_SPELL_PENANCE_R1 = 47540,
-    PRIEST_SPELL_PENANCE_R1_DAMAGE = 47758,
-    PRIEST_SPELL_PENANCE_R1_HEAL = 47757,
+enum PriestSpells
+{
+    PRIEST_SPELL_PENANCE_R1 = 47540, PRIEST_SPELL_PENANCE_R1_DAMAGE = 47758, PRIEST_SPELL_PENANCE_R1_HEAL = 47757,
 };
 
 // Guardian Spirit
-class spell_pri_guardian_spirit: public SpellScriptLoader {
+class spell_pri_guardian_spirit: public SpellScriptLoader
+{
 public:
-    spell_pri_guardian_spirit() :
-            SpellScriptLoader("spell_pri_guardian_spirit") {
+    spell_pri_guardian_spirit () :
+            SpellScriptLoader("spell_pri_guardian_spirit")
+    {
     }
 
-    class spell_pri_guardian_spirit_AuraScript: public AuraScript {
+    class spell_pri_guardian_spirit_AuraScript: public AuraScript
+    {
         PrepareAuraScript(spell_pri_guardian_spirit_AuraScript)
         ;
 
         uint32 healPct;
 
-        enum Spell {
+        enum Spell
+        {
             PRI_SPELL_GUARDIAN_SPIRIT_HEAL = 48153,
         };
 
-        bool Validate(SpellEntry const * /*spellEntry*/) {
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
             return sSpellStore.LookupEntry(PRI_SPELL_GUARDIAN_SPIRIT_HEAL);
         }
 
-        bool Load() {
-            healPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(),
-                    EFFECT_1);
+        bool Load ()
+        {
+            healPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_1);
             return true;
         }
 
-        void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount,
-                bool & canBeRecalculated) {
+        void CalculateAmount (AuraEffect const * /*aurEff*/, int32 & amount, bool & canBeRecalculated)
+        {
             // Set absorbtion amount to unlimited
             amount = -1;
         }
 
-        void Absorb(AuraEffect * aurEff, DamageInfo & dmgInfo,
-                uint32 & absorbAmount) {
+        void Absorb (AuraEffect * aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        {
             Unit * target = GetTarget();
             if (dmgInfo.GetDamage() < target->GetHealth())
                 return;
@@ -76,137 +80,152 @@ public:
             int32 healAmount = int32(target->CountPctFromMaxHealth(healPct));
             // remove the aura now, we don't want 40% healing bonus
             Remove(AURA_REMOVE_BY_ENEMY_SPELL);
-            target->CastCustomSpell(target, PRI_SPELL_GUARDIAN_SPIRIT_HEAL,
-                    &healAmount, NULL, NULL, true);
+            target->CastCustomSpell(target, PRI_SPELL_GUARDIAN_SPIRIT_HEAL, &healAmount, NULL, NULL, true);
             absorbAmount = dmgInfo.GetDamage();
         }
 
-        void Register() {
-            DoEffectCalcAmount +=
-                    AuraEffectCalcAmountFn(spell_pri_guardian_spirit_AuraScript::CalculateAmount, EFFECT_1, SPELL_AURA_SCHOOL_ABSORB);
-            OnEffectAbsorb +=
-                    AuraEffectAbsorbFn(spell_pri_guardian_spirit_AuraScript::Absorb, EFFECT_1);
+        void Register ()
+        {
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pri_guardian_spirit_AuraScript::CalculateAmount, EFFECT_1, SPELL_AURA_SCHOOL_ABSORB);
+            OnEffectAbsorb += AuraEffectAbsorbFn(spell_pri_guardian_spirit_AuraScript::Absorb, EFFECT_1);
         }
     };
 
-    AuraScript *GetAuraScript() const {
+    AuraScript *GetAuraScript () const
+    {
         return new spell_pri_guardian_spirit_AuraScript();
     }
 };
 
-class spell_pri_mana_burn: public SpellScriptLoader {
+class spell_pri_mana_burn: public SpellScriptLoader
+{
 public:
-    spell_pri_mana_burn() :
-            SpellScriptLoader("spell_pri_mana_burn") {
+    spell_pri_mana_burn () :
+            SpellScriptLoader("spell_pri_mana_burn")
+    {
     }
 
-    class spell_pri_mana_burn_SpellScript: public SpellScript {
+    class spell_pri_mana_burn_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_pri_mana_burn_SpellScript)
-        bool Validate(SpellEntry const * /*spellEntry*/) {
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
             return true;
         }
 
-        void HandleAfterHit() {
+        void HandleAfterHit ()
+        {
             Unit * unitTarget = GetHitUnit();
             if (!unitTarget)
                 return;
 
-            unitTarget->RemoveAurasWithMechanic(
-                    (1 << MECHANIC_FEAR) | (1 << MECHANIC_POLYMORPH));
+            unitTarget->RemoveAurasWithMechanic((1 << MECHANIC_FEAR) | (1 << MECHANIC_POLYMORPH));
         }
 
-        void Register() {
-            AfterHit +=
-                    SpellHitFn(spell_pri_mana_burn_SpellScript::HandleAfterHit);
+        void Register ()
+        {
+            AfterHit += SpellHitFn(spell_pri_mana_burn_SpellScript::HandleAfterHit);
         }
     };
 
-    SpellScript * GetSpellScript() const {
+    SpellScript * GetSpellScript () const
+    {
         return new spell_pri_mana_burn_SpellScript;
     }
 };
 
-class spell_pri_pain_and_suffering_proc: public SpellScriptLoader {
+class spell_pri_pain_and_suffering_proc: public SpellScriptLoader
+{
 public:
-    spell_pri_pain_and_suffering_proc() :
-            SpellScriptLoader("spell_pri_pain_and_suffering_proc") {
+    spell_pri_pain_and_suffering_proc () :
+            SpellScriptLoader("spell_pri_pain_and_suffering_proc")
+    {
     }
 
     // 47948 Pain and Suffering (proc)
-    class spell_pri_pain_and_suffering_proc_SpellScript: public SpellScript {
+    class spell_pri_pain_and_suffering_proc_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_pri_pain_and_suffering_proc_SpellScript)
-        void HandleEffectScriptEffect(SpellEffIndex /*effIndex*/) {
+        void HandleEffectScriptEffect (SpellEffIndex /*effIndex*/)
+        {
             // Refresh Shadow Word: Pain on target
             if (Unit *unitTarget = GetHitUnit())
                 if (AuraEffect* aur = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0, 0, GetCaster()->GetGUID()))
                     aur->GetBase()->RefreshDuration();
         }
 
-        void Register() {
-            OnEffect +=
-                    SpellEffectFn(spell_pri_pain_and_suffering_proc_SpellScript::HandleEffectScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_pri_pain_and_suffering_proc_SpellScript::HandleEffectScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
 
-    SpellScript *GetSpellScript() const {
+    SpellScript *GetSpellScript () const
+    {
         return new spell_pri_pain_and_suffering_proc_SpellScript;
     }
 };
 
-class spell_pri_mind_sear : public SpellScriptLoader
+class spell_pri_mind_sear: public SpellScriptLoader
 {
-    public:
-        spell_pri_mind_sear() : SpellScriptLoader("spell_pri_mind_sear") { }
-
-        class spell_pri_mind_sear_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_pri_mind_sear_SpellScript);
-
-            void FilterTargets(std::list<Unit*>& unitList)
-            {
-                unitList.remove_if (Trinity::ObjectGUIDCheck(GetCaster()->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)));
-            }
-
-            void Register()
-            {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_pri_mind_sear_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ENEMY_DST);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_pri_mind_sear_SpellScript();
-        }
-};
-
-class spell_pri_penance: public SpellScriptLoader {
 public:
-    spell_pri_penance() :
-            SpellScriptLoader("spell_pri_penance") {
+    spell_pri_mind_sear () :
+            SpellScriptLoader("spell_pri_mind_sear")
+    {
     }
 
-    class spell_pri_penance_SpellScript: public SpellScript {
+    class spell_pri_mind_sear_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pri_mind_sear_SpellScript)
+        ;
+
+        void FilterTargets (std::list<Unit*>& unitList)
+        {
+            unitList.remove_if(Trinity::ObjectGUIDCheck(GetCaster()->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)));
+        }
+
+        void Register ()
+        {
+            OnUnitTargetSelect += SpellUnitTargetFn(spell_pri_mind_sear_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ENEMY_DST);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pri_mind_sear_SpellScript();
+    }
+};
+
+class spell_pri_penance: public SpellScriptLoader
+{
+public:
+    spell_pri_penance () :
+            SpellScriptLoader("spell_pri_penance")
+    {
+    }
+
+    class spell_pri_penance_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_pri_penance_SpellScript)
-        bool Validate(SpellEntry const * spellEntry) {
+        bool Validate (SpellEntry const * spellEntry)
+        {
             if (!sSpellStore.LookupEntry(PRIEST_SPELL_PENANCE_R1))
                 return false;
             // can't use other spell than this penance due to spell_ranks dependency
-            if (sSpellMgr->GetFirstSpellInChain(PRIEST_SPELL_PENANCE_R1)
-                    != sSpellMgr->GetFirstSpellInChain(spellEntry->Id))
+            if (sSpellMgr->GetFirstSpellInChain(PRIEST_SPELL_PENANCE_R1) != sSpellMgr->GetFirstSpellInChain(spellEntry->Id))
                 return false;
 
             uint8 rank = sSpellMgr->GetSpellRank(spellEntry->Id);
-            if (!sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE,
-                    rank, true))
+            if (!sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE, rank, true))
                 return false;
-            if (!sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank,
-                    true))
+            if (!sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank, true))
                 return false;
 
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
             Unit *unitTarget = GetHitUnit();
             if (!unitTarget || !unitTarget->isAlive())
                 return;
@@ -216,92 +235,97 @@ public:
             uint8 rank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
 
             if (caster->IsFriendlyTo(unitTarget))
-                caster->CastSpell(
-                        unitTarget,
-                        sSpellMgr
-                                ->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank), false, 0);
-                        else
-                        caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE, rank), false, 0);
-                    }
+                caster->CastSpell(unitTarget, sSpellMgr
+                ->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank), false, 0);
+                else
+                caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE, rank), false, 0);
+            }
 
-                    void Register()
-                    {
-                        // add dummy effect spell handler to Penance
-                        OnEffect += SpellEffectFn(spell_pri_penance_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-                    }
-                };
+            void Register()
+            {
+                // add dummy effect spell handler to Penance
+                OnEffect += SpellEffectFn(spell_pri_penance_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
 
-                SpellScript *GetSpellScript() const
-                {
-                    return new spell_pri_penance_SpellScript;
-                }
-            };
+        SpellScript *GetSpellScript() const
+        {
+            return new spell_pri_penance_SpellScript;
+        }
+    };
 
 // Reflective Shield
-class spell_pri_reflective_shield_trigger: public SpellScriptLoader {
+class spell_pri_reflective_shield_trigger: public SpellScriptLoader
+{
 public:
-    spell_pri_reflective_shield_trigger() :
-            SpellScriptLoader("spell_pri_reflective_shield_trigger") {
+    spell_pri_reflective_shield_trigger () :
+            SpellScriptLoader("spell_pri_reflective_shield_trigger")
+    {
     }
 
-    class spell_pri_reflective_shield_trigger_AuraScript: public AuraScript {
+    class spell_pri_reflective_shield_trigger_AuraScript: public AuraScript
+    {
         PrepareAuraScript(spell_pri_reflective_shield_trigger_AuraScript)
         ;
 
-        enum Spells {
-            SPELL_PRI_REFLECTIVE_SHIELD_TRIGGERED = 33619,
-            SPELL_PRI_REFLECTIVE_SHIELD_R1 = 33201,
+        enum Spells
+        {
+            SPELL_PRI_REFLECTIVE_SHIELD_TRIGGERED = 33619, SPELL_PRI_REFLECTIVE_SHIELD_R1 = 33201,
         };
 
-        bool Validate(SpellEntry const * /*spellEntry*/) {
-            return sSpellStore.LookupEntry(
-                    SPELL_PRI_REFLECTIVE_SHIELD_TRIGGERED)
-                    && sSpellStore.LookupEntry(SPELL_PRI_REFLECTIVE_SHIELD_R1);
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
+            return sSpellStore.LookupEntry(SPELL_PRI_REFLECTIVE_SHIELD_TRIGGERED) && sSpellStore.LookupEntry(SPELL_PRI_REFLECTIVE_SHIELD_R1);
         }
 
-        void Trigger(AuraEffect * aurEff, DamageInfo & dmgInfo,
-                uint32 & absorbAmount) {
+        void Trigger (AuraEffect * aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        {
             Unit * target = GetTarget();
             if (dmgInfo.GetAttacker() == target)
                 return;
             Unit * caster = GetCaster();
             if (!caster)
                 return;
-            if (AuraEffect * talentAurEff = target->GetAuraEffectOfRankedSpell(SPELL_PRI_REFLECTIVE_SHIELD_R1, EFFECT_0)) {
-                int32 bp = CalculatePctN(absorbAmount,
-                        talentAurEff->GetAmount());
-                target->CastCustomSpell(dmgInfo.GetAttacker(),
-                        SPELL_PRI_REFLECTIVE_SHIELD_TRIGGERED, &bp, NULL, NULL,
-                        true, NULL, aurEff);
+            if (AuraEffect * talentAurEff = target->GetAuraEffectOfRankedSpell(SPELL_PRI_REFLECTIVE_SHIELD_R1, EFFECT_0))
+            {
+                int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
+                target->CastCustomSpell(dmgInfo.GetAttacker(), SPELL_PRI_REFLECTIVE_SHIELD_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
             }
         }
 
-        void Register() {
-            AfterEffectAbsorb +=
-                    AuraEffectAbsorbFn(spell_pri_reflective_shield_trigger_AuraScript::Trigger, EFFECT_0);
+        void Register ()
+        {
+            AfterEffectAbsorb += AuraEffectAbsorbFn(spell_pri_reflective_shield_trigger_AuraScript::Trigger, EFFECT_0);
         }
     };
 
-    AuraScript *GetAuraScript() const {
+    AuraScript *GetAuraScript () const
+    {
         return new spell_pri_reflective_shield_trigger_AuraScript();
     }
 };
 
-class spell_priest_flash_heal: public SpellScriptLoader {
+class spell_priest_flash_heal: public SpellScriptLoader
+{
 public:
-    spell_priest_flash_heal() :
-            SpellScriptLoader("spell_priest_flash_heal") {
+    spell_priest_flash_heal () :
+            SpellScriptLoader("spell_priest_flash_heal")
+    {
     }
 
-    class spell_priest_flash_heal_SpellScript: public SpellScript {
+    class spell_priest_flash_heal_SpellScript: public SpellScript
+    {
         PrepareSpellScript(spell_priest_flash_heal_SpellScript)
 
-        bool Validate(SpellEntry const * /*spellEntry*/) {
+        bool Validate (SpellEntry const * /*spellEntry*/)
+        {
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /*effIndex*/) {
-            if (Unit * caster = GetCaster()) {
+        void HandleDummy (SpellEffIndex /*effIndex*/)
+        {
+            if (Unit * caster = GetCaster())
+            {
                 if (caster->GetTypeId() != TYPEID_PLAYER)
                     return;
 
@@ -309,141 +333,155 @@ public:
             }
         }
 
-        void Register() {
-            OnEffect +=
-                    SpellEffectFn(spell_priest_flash_heal_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_HEAL);
+        void Register ()
+        {
+            OnEffect += SpellEffectFn(spell_priest_flash_heal_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_HEAL);
         }
     };
 
-    SpellScript* GetSpellScript() const {
+    SpellScript* GetSpellScript () const
+    {
         return new spell_priest_flash_heal_SpellScript();
     }
 };
 
 // Shadow Word: Death
 // Spell Id: 32379
-class spell_pri_shadow_word_death : public SpellScriptLoader
+class spell_pri_shadow_word_death: public SpellScriptLoader
 {
-    public:
-        spell_pri_shadow_word_death() : SpellScriptLoader("spell_pri_shadow_word_death") { }
+public:
+    spell_pri_shadow_word_death () :
+            SpellScriptLoader("spell_pri_shadow_word_death")
+    {
+    }
 
-        class spell_pri_shadow_word_death_SpellScript : public SpellScript
+    class spell_pri_shadow_word_death_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pri_shadow_word_death_SpellScript)
+        ;
+
+        void DamageCaster (SpellEffIndex effIndex)
         {
-            PrepareSpellScript(spell_pri_shadow_word_death_SpellScript);
-
-            void DamageCaster(SpellEffIndex effIndex)
+            if (Unit* caster = GetCaster())
             {
-                if(Unit* caster = GetCaster())
+                int32 back_damage = caster->SpellDamageBonus(GetHitUnit(), GetSpellInfo(), effIndex, uint32(GetHitDamage()), SPELL_DIRECT_DAMAGE);
+                if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 1))
+                    back_damage -= back_damage * (-aurEff->GetAmount() / 100);
+
+                if (back_damage < int32(GetHitUnit()->GetHealth()))
                 {
-                    int32 back_damage = caster->SpellDamageBonus(GetHitUnit(), GetSpellInfo(), effIndex, uint32(GetHitDamage()), SPELL_DIRECT_DAMAGE);
-                    if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 1))
-                        back_damage -= back_damage * (-aurEff->GetAmount() / 100);
-
-                    if (back_damage < int32(GetHitUnit()->GetHealth()))
+                    caster->CastCustomSpell(caster, 32409, &back_damage, NULL, NULL, true);
+                    if (GetHitUnit()->HealthBelowPct(25))
                     {
-                        caster->CastCustomSpell(caster, 32409, &back_damage, NULL, NULL, true);
-                        if(GetHitUnit()->HealthBelowPct(25))
-                        {
-                            SetHitDamage(int32(GetHitDamage() * 3)); // Deals 3 times more damage to targets below 25% health
+                        SetHitDamage(int32(GetHitDamage() * 3));          // Deals 3 times more damage to targets below 25% health
 
-                            if (caster->HasAura(55682) && !GetHitUnit()->HasAura(95652)) // Glyph of Shadow Word: Death
-                            {
-                                caster->AddAura(95652, GetHitUnit()); // Glyph of Shadow Word: Death - Marker
-                                if(caster->GetTypeId() == TYPEID_PLAYER)
-                                    caster->ToPlayer()->RemoveSpellCooldown(32379, true); // Shadow Word: Death
-                            }
+                        if (caster->HasAura(55682) && !GetHitUnit()->HasAura(95652))          // Glyph of Shadow Word: Death
+                        {
+                            caster->AddAura(95652, GetHitUnit());          // Glyph of Shadow Word: Death - Marker
+                            if (caster->GetTypeId() == TYPEID_PLAYER)
+                                caster->ToPlayer()->RemoveSpellCooldown(32379, true);          // Shadow Word: Death
                         }
                     }
                 }
             }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_pri_shadow_word_death_SpellScript::DamageCaster, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_pri_shadow_word_death_SpellScript;
         }
+
+        void Register ()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pri_shadow_word_death_SpellScript::DamageCaster, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pri_shadow_word_death_SpellScript;
+    }
 };
 
 // Mind Blast
 // Spell Id: 8092
-class spell_pri_mind_blast : public SpellScriptLoader
+class spell_pri_mind_blast: public SpellScriptLoader
 {
-    public:
-        spell_pri_mind_blast() : SpellScriptLoader("spell_pri_mind_blast") { }
+public:
+    spell_pri_mind_blast () :
+            SpellScriptLoader("spell_pri_mind_blast")
+    {
+    }
 
-        class spell_pri_mind_blast_SpellScript : public SpellScript
+    class spell_pri_mind_blast_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pri_mind_blast_SpellScript)
+        ;
+
+        void HandleDamage (SpellEffIndex /*effIndex*/)
         {
-            PrepareSpellScript(spell_pri_mind_blast_SpellScript);
-
-            void HandleDamage(SpellEffIndex /*effIndex*/)
+            if (Unit* caster = GetCaster())
             {
-                if(Unit* caster = GetCaster())
-                {
-                    if (AuraEffect * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 1)) // If we have Improved Mind Blast
-                        if (caster->GetShapeshiftForm() == FORM_SHADOW)
-                            if (roll_chance_i(aurEff->GetAmount()))
-                                caster->CastSpell(GetHitUnit(), 48301, true); // Cast Mind Trauma
+                if (AuraEffect * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 1))          // If we have Improved Mind Blast
+                    if (caster->GetShapeshiftForm() == FORM_SHADOW)
+                        if (roll_chance_i(aurEff->GetAmount()))
+                            caster->CastSpell(GetHitUnit(), 48301, true);          // Cast Mind Trauma
 
-                    // Remove Mind Melt
-                    caster->RemoveAurasDueToSpell(87160);
-                    caster->RemoveAurasDueToSpell(81292);
-                }
+                // Remove Mind Melt
+                caster->RemoveAurasDueToSpell(87160);
+                caster->RemoveAurasDueToSpell(81292);
             }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_pri_mind_blast_SpellScript::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_pri_mind_blast_SpellScript;
         }
+
+        void Register ()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pri_mind_blast_SpellScript::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pri_mind_blast_SpellScript;
+    }
 };
 
 // Power Word: Fortitude
 // Spell Id: 21562
-class spell_pri_power_word_fortitude : public SpellScriptLoader
+class spell_pri_power_word_fortitude: public SpellScriptLoader
 {
-    public:
-        spell_pri_power_word_fortitude() : SpellScriptLoader("spell_pri_power_word_fortitude") { }
+public:
+    spell_pri_power_word_fortitude () :
+            SpellScriptLoader("spell_pri_power_word_fortitude")
+    {
+    }
 
-        class spell_pri_power_word_fortitude_SpellScript : public SpellScript
+    class spell_pri_power_word_fortitude_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_pri_power_word_fortitude_SpellScript)
+        ;
+
+        void HandleDummy (SpellEffIndex /*effIndex*/)
         {
-            PrepareSpellScript(spell_pri_power_word_fortitude_SpellScript);
-
-            void HandleDummy(SpellEffIndex /*effIndex*/)
+            if (Unit* caster = GetCaster())
             {
-                if(Unit* caster = GetCaster())
-                {
-                    std::list<Unit*> PartyMembers;
-                    caster->GetPartyMembers(PartyMembers);
-                    if(PartyMembers.size() > 1)
-                        caster->CastSpell(GetHitUnit(), 79105, true); // Power Word : Fortitude (Raid)
-                    else
-                        caster->CastSpell(GetHitUnit(), 79104, true); // Power Word : Fortitude (Caster)
-                }
+                std::list<Unit*> PartyMembers;
+                caster->GetPartyMembers(PartyMembers);
+                if (PartyMembers.size() > 1)
+                    caster->CastSpell(GetHitUnit(), 79105, true);          // Power Word : Fortitude (Raid)
+                else
+                    caster->CastSpell(GetHitUnit(), 79104, true);          // Power Word : Fortitude (Caster)
             }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_pri_power_word_fortitude_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_pri_power_word_fortitude_SpellScript;
         }
+
+        void Register ()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pri_power_word_fortitude_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_pri_power_word_fortitude_SpellScript;
+    }
 };
 
-void AddSC_priest_spell_scripts() {
+void AddSC_priest_spell_scripts ()
+{
     new spell_pri_guardian_spirit();
     new spell_pri_mana_burn;
     new spell_pri_pain_and_suffering_proc;

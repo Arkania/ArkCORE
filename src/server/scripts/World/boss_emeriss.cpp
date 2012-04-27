@@ -33,25 +33,26 @@
 
 #include "ScriptPCH.h"
 
-enum eEnums {
-    SAY_AGGRO = -1000401, SAY_CASTCORRUPTION = -1000402, //signed for 6182
+enum eEnums
+{
+    SAY_AGGRO = -1000401, SAY_CASTCORRUPTION = -1000402,          //signed for 6182
 
-    SPELL_SLEEP = 24777,
-    SPELL_NOXIOUSBREATH = 24818,
-    SPELL_TAILSWEEP = 15847,
-    SPELL_VOLATILEINFECTION = 24928,
-    SPELL_CORRUPTIONOFEARTH = 24910
+    SPELL_SLEEP = 24777, SPELL_NOXIOUSBREATH = 24818, SPELL_TAILSWEEP = 15847, SPELL_VOLATILEINFECTION = 24928, SPELL_CORRUPTIONOFEARTH = 24910
 };
 
-class boss_emeriss: public CreatureScript {
+class boss_emeriss: public CreatureScript
+{
 public:
-    boss_emeriss() :
-            CreatureScript("boss_emeriss") {
+    boss_emeriss () :
+            CreatureScript("boss_emeriss")
+    {
     }
 
-    struct boss_emerissAI: public ScriptedAI {
-        boss_emerissAI(Creature *c) :
-                ScriptedAI(c) {
+    struct boss_emerissAI: public ScriptedAI
+    {
+        boss_emerissAI (Creature *c) :
+                ScriptedAI(c)
+        {
         }
 
         uint32 m_uiSleep_Timer;
@@ -60,7 +61,8 @@ public:
         uint32 m_uiVolatileInfection_Timer;
         uint32 m_uiCorruptionsCasted;
 
-        void Reset() {
+        void Reset ()
+        {
             m_uiSleep_Timer = 15000 + rand() % 5000;
             m_uiNoxiousBreath_Timer = 8000;
             m_uiTailSweep_Timer = 4000;
@@ -68,49 +70,60 @@ public:
             m_uiCorruptionsCasted = 0;
         }
 
-        void EnterCombat(Unit* /*pWho*/) {
+        void EnterCombat (Unit* /*pWho*/)
+        {
             DoScriptText(SAY_AGGRO, me);
         }
 
-        void UpdateAI(const uint32 uiDiff) {
+        void UpdateAI (const uint32 uiDiff)
+        {
             //Return since we have no target
             if (!UpdateVictim())
                 return;
 
             //Sleep_Timer
-            if (m_uiSleep_Timer <= uiDiff) {
+            if (m_uiSleep_Timer <= uiDiff)
+            {
                 if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                     DoCast(pTarget, SPELL_SLEEP);
 
                 m_uiSleep_Timer = 8000 + rand() % 8000;
-            } else
+            }
+            else
                 m_uiSleep_Timer -= uiDiff;
 
             //NoxiousBreath_Timer
-            if (m_uiNoxiousBreath_Timer <= uiDiff) {
+            if (m_uiNoxiousBreath_Timer <= uiDiff)
+            {
                 DoCast(me->getVictim(), SPELL_NOXIOUSBREATH);
                 m_uiNoxiousBreath_Timer = 14000 + rand() % 6000;
-            } else
+            }
+            else
                 m_uiNoxiousBreath_Timer -= uiDiff;
 
             //Tailsweep every 2 seconds
-            if (m_uiTailSweep_Timer <= uiDiff) {
+            if (m_uiTailSweep_Timer <= uiDiff)
+            {
                 DoCast(me, SPELL_TAILSWEEP);
                 m_uiTailSweep_Timer = 2000;
-            } else
+            }
+            else
                 m_uiTailSweep_Timer -= uiDiff;
 
             //VolatileInfection_Timer
-            if (m_uiVolatileInfection_Timer <= uiDiff) {
+            if (m_uiVolatileInfection_Timer <= uiDiff)
+            {
                 DoCast(me->getVictim(), SPELL_VOLATILEINFECTION);
                 m_uiVolatileInfection_Timer = 7000 + rand() % 5000;
-            } else
+            }
+            else
                 m_uiVolatileInfection_Timer -= uiDiff;
 
             //CorruptionofEarth_Timer
             //CorruptionofEarth at 75%, 50% and 25%
-            if (!HealthAbovePct(100 - 25 * m_uiCorruptionsCasted)) {
-                ++m_uiCorruptionsCasted; // prevent casting twice on same hp
+            if (!HealthAbovePct(100 - 25 * m_uiCorruptionsCasted))
+            {
+                ++m_uiCorruptionsCasted;          // prevent casting twice on same hp
                 DoScriptText(SAY_CASTCORRUPTION, me);
                 DoCast(me->getVictim(), SPELL_CORRUPTIONOFEARTH);
             }
@@ -119,11 +132,13 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const {
+    CreatureAI *GetAI (Creature *creature) const
+    {
         return new boss_emerissAI(creature);
     }
 };
 
-void AddSC_boss_emeriss() {
+void AddSC_boss_emeriss ()
+{
     new boss_emeriss;
 }

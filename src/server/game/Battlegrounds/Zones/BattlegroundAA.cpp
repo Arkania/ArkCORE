@@ -28,7 +28,8 @@
 #include "Language.h"
 #include "Player.h"
 
-BattlegroundAA::BattlegroundAA() {
+BattlegroundAA::BattlegroundAA ()
+{
     m_StartDelayTimes[BG_STARTING_EVENT_FIRST] = BG_START_DELAY_1M;
     m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
     m_StartDelayTimes[BG_STARTING_EVENT_THIRD] = BG_START_DELAY_15S;
@@ -40,20 +41,25 @@ BattlegroundAA::BattlegroundAA() {
     m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_HAS_BEGUN;
 }
 
-BattlegroundAA::~BattlegroundAA() {
+BattlegroundAA::~BattlegroundAA ()
+{
 }
 
-void BattlegroundAA::Update(uint32 diff) {
+void BattlegroundAA::Update (uint32 diff)
+{
     Battleground::Update(diff);
 }
 
-void BattlegroundAA::StartingEventCloseDoors() {
+void BattlegroundAA::StartingEventCloseDoors ()
+{
 }
 
-void BattlegroundAA::StartingEventOpenDoors() {
+void BattlegroundAA::StartingEventOpenDoors ()
+{
 }
 
-void BattlegroundAA::AddPlayer(Player *plr) {
+void BattlegroundAA::AddPlayer (Player *plr)
+{
     Battleground::AddPlayer(plr);
     //create score and add it to map, default values are set in constructor
     BattlegroundAAScore* sc = new BattlegroundAAScore;
@@ -61,17 +67,20 @@ void BattlegroundAA::AddPlayer(Player *plr) {
     m_PlayerScores[plr->GetGUID()] = sc;
 }
 
-void BattlegroundAA::RemovePlayer(Player * /*plr*/, uint64 /*guid*/) {
+void BattlegroundAA::RemovePlayer (Player * /*plr*/, uint64 /*guid*/)
+{
 }
 
-void BattlegroundAA::HandleKillPlayer(Player* player, Player* killer) {
+void BattlegroundAA::HandleKillPlayer (Player* player, Player* killer)
+{
     Battleground::HandleKillPlayer(player, killer);
 }
 
-void BattlegroundAA::HandleAreaTrigger(Player * /*Source*/,
-        uint32 /*Trigger*/) {
+void BattlegroundAA::HandleAreaTrigger (Player * /*Source*/, uint32 /*Trigger*/)
+{
 }
 
-bool BattlegroundAA::SetupBattleground() {
+bool BattlegroundAA::SetupBattleground ()
+{
     return true;
 }

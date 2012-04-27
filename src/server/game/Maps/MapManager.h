@@ -34,7 +34,8 @@
 class Transport;
 struct TransportCreatureProto;
 
-class MapManager {
+class MapManager
+{
     friend class ACE_Singleton<MapManager, ACE_Thread_Mutex> ;
     typedef UNORDERED_MAP<uint32, Map*> MapMapType;
     typedef std::vector<bool> InstanceIds;
@@ -42,7 +43,8 @@ class MapManager {
 public:
 
     Map* CreateMap(uint32, const WorldObject* obj, uint32 instanceId);
-    Map const* CreateBaseMap(uint32 id) const {return const_cast<MapManager*>(this)->_createBaseMap(id);}
+    Map const* CreateBaseMap(uint32 id) const
+    {   return const_cast<MapManager*>(this)->_createBaseMap(id);}
     Map* FindMap(uint32 mapid, uint32 instanceId = 0) const;
 
     uint16 GetAreaFlag(uint32 mapid, float x, float y, float z) const
@@ -153,8 +155,10 @@ public:
     void RegisterInstanceId(uint32 instanceId);
     void FreeInstanceId(uint32 instanceId);
 
-    uint32 GetNextInstanceId() {return _nextInstanceId;};
-    void SetNextInstanceId(uint32 nextInstanceId) {_nextInstanceId = nextInstanceId;};
+    uint32 GetNextInstanceId()
+    {   return _nextInstanceId;};
+    void SetNextInstanceId(uint32 nextInstanceId)
+    {   _nextInstanceId = nextInstanceId;};
 
 private:
     // debugging code, should be deleted some day

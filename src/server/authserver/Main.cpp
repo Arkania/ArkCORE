@@ -57,15 +57,18 @@ int m_ServiceStatus = -1;
 
 bool StartDB();
 
-bool stopEvent = false; ///< Setting it to true stops the server
+bool stopEvent = false;          ///< Setting it to true stops the server
 
-LoginDatabaseWorkerPool LoginDatabase; ///< Accessor to the realm server database
+LoginDatabaseWorkerPool LoginDatabase;          ///< Accessor to the realm server database
 
 /// Handle realmd's termination signals
-class RealmdSignalHandler: public Trinity::SignalHandler {
+class RealmdSignalHandler: public Trinity::SignalHandler
+{
 public:
-    virtual void HandleSignal(int SigNum) {
-        switch (SigNum) {
+    virtual void HandleSignal(int SigNum)
+    {
+        switch (SigNum)
+        {
         case SIGINT:
         case SIGTERM:
             stopEvent = true;
@@ -81,21 +84,22 @@ public:
 };
 
 /// Print out the usage string for this program on the console.
-void usage(const char *prog) {
-    sLog->outString(
-            "Usage: \n %s [<options>]\n"
-                    "    -c config_file           use config_file as configuration file\n\r"
+void usage(const char *prog)
+{
+    sLog->outString("Usage: \n %s [<options>]\n"
+            "    -c config_file           use config_file as configuration file\n\r"
 #ifdef _WIN32
             "    Running as service functions:\n\r"
             "    --service                run as service\n\r"
             "    -s install               install service\n\r"
             "    -s uninstall             uninstall service\n\r"
 #endif
-,			prog);
-        }
+,    prog);
+}
 
 /// Launch the realm server
-extern int main(int argc, char **argv) {
+extern int main(int argc, char **argv)
+{
     sLog->SetLogDB(false);
 
     ///- Command line parsing to get the configuration file name
@@ -257,7 +261,7 @@ extern int main(int argc, char **argv) {
 
             if (GetProcessAffinityMask(hProcess, &appAff, &sysAff))
             {
-                ULONG_PTR curAff = Aff & appAff; // remove non accessible processors
+                ULONG_PTR curAff = Aff & appAff;          // remove non accessible processors
 
                 if (!curAff)
                 sLog->outError("Processors marked in UseProcessors bitmask (hex) %x not accessible for realmd. Accessible processors bitmask (hex): %x", Aff, appAff);
@@ -332,31 +336,32 @@ extern int main(int argc, char **argv) {
 }
 
 /// Initialize connection to the database
-bool StartDB() {
+bool StartDB()
+{
     std::string dbstring = sConfig->GetStringDefault("LoginDatabaseInfo", "");
-    if (dbstring.empty()) {
+    if (dbstring.empty())
+    {
         sLog->outError("Database not specified");
         return false;
     }
 
-    uint8 worker_threads = sConfig->GetIntDefault("LoginDatabase.WorkerThreads",
-            1);
-    if (worker_threads < 1 || worker_threads > 32) {
-        sLog->outError(
-                "Improper value specified for LoginDatabase.WorkerThreads, defaulting to 1.");
+    uint8 worker_threads = sConfig->GetIntDefault("LoginDatabase.WorkerThreads", 1);
+    if (worker_threads < 1 || worker_threads > 32)
+    {
+        sLog->outError("Improper value specified for LoginDatabase.WorkerThreads, defaulting to 1.");
         worker_threads = 1;
     }
 
-    uint8 synch_threads = sConfig->GetIntDefault("LoginDatabase.SynchThreads",
-            1);
-    if (synch_threads < 1 || synch_threads > 32) {
-        sLog->outError(
-                "Improper value specified for LoginDatabase.SynchThreads, defaulting to 1.");
+    uint8 synch_threads = sConfig->GetIntDefault("LoginDatabase.SynchThreads", 1);
+    if (synch_threads < 1 || synch_threads > 32)
+    {
+        sLog->outError("Improper value specified for LoginDatabase.SynchThreads, defaulting to 1.");
         synch_threads = 1;
     }
 
     /// NOTE: While authserver is singlethreaded you should keep synch_threads == 1. Increasing it is just silly since only 1 will be used ever.
-    if (!LoginDatabase.Open(dbstring.c_str(), worker_threads, synch_threads)) {
+    if (!LoginDatabase.Open(dbstring.c_str(), worker_threads, synch_threads))
+    {
         sLog->outError("Cannot connect to database");
         return false;
     }

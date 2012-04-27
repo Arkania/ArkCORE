@@ -33,8 +33,8 @@
 
 #include <list>
 
-extern DB2Storage <ItemEntry> sItemStore;
+extern DB2Storage<ItemEntry> sItemStore;
 
-void LoadDB2Stores(const std::string& dataPath);
+void LoadDB2Stores (const std::string& dataPath);
 
 #endif

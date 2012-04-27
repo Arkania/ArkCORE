@@ -27,21 +27,21 @@
 #include "Database/DatabaseEnv.h"
 
 RealmList::RealmList() :
-        m_UpdateInterval(0), m_NextUpdateTime(time(NULL)) {
+        m_UpdateInterval(0), m_NextUpdateTime(time(NULL))
+{
 }
 
 // Load the realm list from the database
-void RealmList::Initialize(uint32 updateInterval) {
+void RealmList::Initialize(uint32 updateInterval)
+{
     m_UpdateInterval = updateInterval;
 
     // Get the content of the realmlist table in the database
     UpdateRealms(true);
 }
 
-void RealmList::UpdateRealm(uint32 ID, const std::string& name,
-        const std::string& address, uint32 port, uint8 icon, uint8 color,
-        uint8 timezone, AccountTypes allowedSecurityLevel, float popu,
-        uint32 build) {
+void RealmList::UpdateRealm(uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, uint8 color, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build)
+{
     // Create new if not exist or update existed
     Realm& realm = m_realms[name];
 
@@ -60,7 +60,8 @@ void RealmList::UpdateRealm(uint32 ID, const std::string& name,
     realm.gamebuild = build;
 }
 
-void RealmList::UpdateIfNeed() {
+void RealmList::UpdateIfNeed()
+{
     // maybe disabled or updated recently
     if (!m_UpdateInterval || m_NextUpdateTime > time(NULL))
         return;
@@ -74,16 +75,18 @@ void RealmList::UpdateIfNeed() {
     UpdateRealms();
 }
 
-void RealmList::UpdateRealms(bool init) {
+void RealmList::UpdateRealms(bool init)
+{
     sLog->outDetail("Updating Realm List...");
 
-    PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(
-            LOGIN_GET_REALMLIST);
+    PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_REALMLIST);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     // Circle through results and add them to the realm map
-    if (result) {
-        do {
+    if (result)
+    {
+        do
+        {
             Field *fields = result->Fetch();
             uint32 realmId = fields[0].GetUInt32();
             const std::string& name = fields[1].GetString();
@@ -96,20 +99,11 @@ void RealmList::UpdateRealms(bool init) {
             float pop = fields[8].GetFloat();
             uint32 build = fields[9].GetUInt32();
 
-            UpdateRealm(
-                    realmId,
-                    name,
-                    address,
-                    port,
-                    icon,
-                    color,
-                    timezone,
-                    (allowedSecurityLevel <= SEC_ADMINISTRATOR ?
-                            AccountTypes(allowedSecurityLevel) :
-                            SEC_ADMINISTRATOR), pop, build);
+            UpdateRealm(realmId, name, address, port, icon, color, timezone, (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR), pop, build);
 
             if (init)
                 sLog->outString("Added realm \"%s\".", fields[1].GetCString());
-        } while (result->NextRow());
+        }
+        while (result->NextRow());
     }
 }

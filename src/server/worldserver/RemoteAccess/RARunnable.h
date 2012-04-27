@@ -30,14 +30,15 @@
 
 #include <ace/Reactor.h>
 
-class RARunnable: public ACE_Based::Runnable {
+class RARunnable: public ACE_Based::Runnable
+{
 public:
-	RARunnable();
-	virtual ~RARunnable();
-	void run();
+    RARunnable ();
+    virtual ~RARunnable ();
+    void run ();
 
 private:
-	ACE_Reactor* m_Reactor;
+    ACE_Reactor* m_Reactor;
 };
 
 #endif /* _ARKCORE_RARUNNABLE_H_ */

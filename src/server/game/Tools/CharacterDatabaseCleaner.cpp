@@ -29,7 +29,8 @@
 #include "Database/DatabaseEnv.h"
 #include "DBCStores.h"
 
-void CharacterDatabaseCleaner::CleanDatabase() {
+void CharacterDatabaseCleaner::CleanDatabase ()
+{
     // config to disable
     if (!sWorld->getBoolConfig(CONFIG_CLEAN_CHARACTER_DB))
         return;
@@ -38,8 +39,7 @@ void CharacterDatabaseCleaner::CleanDatabase() {
 
     uint32 oldMSTime = getMSTime();
     // check flags which clean ups are necessary
-    QueryResult result = CharacterDatabase.Query(
-            "SELECT value FROM worldstates WHERE entry = 20004");
+    QueryResult result = CharacterDatabase.Query("SELECT value FROM worldstates WHERE entry = 20004");
     if (!result)
         return;
 
@@ -64,21 +64,19 @@ void CharacterDatabaseCleaner::CleanDatabase() {
     // NOTE: In order to have persistentFlags be set in worldstates for the next cleanup,
     // you need to define them at least once in worldstates.
     flags &= sWorld->getIntConfig(CONFIG_PERSISTENT_CHARACTER_CLEAN_FLAGS);
-    CharacterDatabase.DirectPExecute(
-            "UPDATE worldstates SET value = %u WHERE entry = 20004", flags);
+    CharacterDatabase.DirectPExecute("UPDATE worldstates SET value = %u WHERE entry = 20004", flags);
 
     sWorld->SetCleaningFlags(flags);
 
-    sLog->outString(">> Cleaned character database in %u ms",
-            GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Cleaned character database in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
-void CharacterDatabaseCleaner::CheckUnique(const char* column,
-        const char* table, bool(*check)(uint32)) {
-    QueryResult result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s",
-            column, table);
-    if (!result) {
+void CharacterDatabaseCleaner::CheckUnique (const char* column, const char* table, bool (*check) (uint32))
+{
+    QueryResult result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
+    if (!result)
+    {
         sLog->outString("Table %s is empty.", table);
         return;
     }
@@ -86,54 +84,66 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column,
     bool found = false;
     std::ostringstream ss;
 
-    do {
+    do
+    {
         Field *fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();
 
-        if (!check(id)) {
-            if (!found) {
+        if (!check(id))
+        {
+            if (!found)
+            {
                 ss << "DELETE FROM " << table << " WHERE " << column << " IN (";
                 found = true;
-            } else
+            }
+            else
                 ss << ", ";
 
             ss << id;
         }
-    } while (result->NextRow());
+    }
+    while (result->NextRow());
 
-    if (found) {
+    if (found)
+    {
         ss << ")";
         CharacterDatabase.Execute(ss.str().c_str());
     }
 }
 
-bool CharacterDatabaseCleaner::AchievementProgressCheck(uint32 criteria) {
+bool CharacterDatabaseCleaner::AchievementProgressCheck (uint32 criteria)
+{
     return sAchievementCriteriaStore.LookupEntry(criteria);
 }
 
-void CharacterDatabaseCleaner::CleanCharacterAchievementProgress() {
-    CheckUnique("criteria", "character_achievement_progress",
-            &AchievementProgressCheck);
+void CharacterDatabaseCleaner::CleanCharacterAchievementProgress ()
+{
+    CheckUnique("criteria", "character_achievement_progress", &AchievementProgressCheck);
 }
 
-bool CharacterDatabaseCleaner::SkillCheck(uint32 skill) {
+bool CharacterDatabaseCleaner::SkillCheck (uint32 skill)
+{
     return sSkillLineStore.LookupEntry(skill);
 }
 
-void CharacterDatabaseCleaner::CleanCharacterSkills() {
+void CharacterDatabaseCleaner::CleanCharacterSkills ()
+{
     CheckUnique("skill", "character_skills", &SkillCheck);
 }
 
-bool CharacterDatabaseCleaner::SpellCheck(uint32 spell_id) {
+bool CharacterDatabaseCleaner::SpellCheck (uint32 spell_id)
+{
     return sSpellStore.LookupEntry(spell_id) && !GetTalentSpellPos(spell_id);
 }
 
-void CharacterDatabaseCleaner::CleanCharacterSpell() {
+void CharacterDatabaseCleaner::CleanCharacterSpell ()
+{
     CheckUnique("spell", "character_spell", &SpellCheck);
 }
 
-bool CharacterDatabaseCleaner::TalentCheck(uint32 talent_id) {
+bool CharacterDatabaseCleaner::TalentCheck (uint32 talent_id)
+{
     TalentEntry const *talentInfo = sTalentStore.LookupEntry(talent_id);
     if (!talentInfo)
         return false;
@@ -141,13 +151,13 @@ bool CharacterDatabaseCleaner::TalentCheck(uint32 talent_id) {
     return sTalentTabStore.LookupEntry(talentInfo->TalentTab);
 }
 
-void CharacterDatabaseCleaner::CleanCharacterTalent() {
-    CharacterDatabase.DirectPExecute(
-            "DELETE FROM character_talent WHERE spec > %u", MAX_TALENT_SPECS);
+void CharacterDatabaseCleaner::CleanCharacterTalent ()
+{
+    CharacterDatabase.DirectPExecute("DELETE FROM character_talent WHERE spec > %u", MAX_TALENT_SPECS);
     CheckUnique("spell", "character_talent", &TalentCheck);
 }
 
-void CharacterDatabaseCleaner::CleanCharacterQuestStatus() {
-    CharacterDatabase.DirectExecute(
-            "DELETE FROM character_queststatus WHERE status = 0");
+void CharacterDatabaseCleaner::CleanCharacterQuestStatus ()
+{
+    CharacterDatabase.DirectExecute("DELETE FROM character_queststatus WHERE status = 0");
 }
