@@ -71,8 +71,8 @@ public:
 
         void Reset()
         {
-            uiRootTimer = urand(5*IN_MILLISECONDS,9*IN_MILLISECONDS);
-            uiBashTimer = urand(10*IN_MILLISECONDS,14*IN_MILLISECONDS);
+            uiRootTimer = urand(5*IN_MILLISECONDS, 9*IN_MILLISECONDS);
+            uiBashTimer = urand(10*IN_MILLISECONDS, 14*IN_MILLISECONDS);
             uiBoltTimer = urand(15*IN_MILLISECONDS, 20*IN_MILLISECONDS);
             uiMiniTimer = urand(12*IN_MILLISECONDS, 18*IN_MILLISECONDS);
             uiSpawnTimer = 5*IN_MILLISECONDS;
@@ -144,7 +144,7 @@ public:
 
             if (uiMiniTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                     DoCast(SPELL_MINI);
                     uiMiniTimer = urand(25*IN_MILLISECONDS, 30*IN_MILLISECONDS);
@@ -153,7 +153,7 @@ public:
 
             if (uiRootTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_ENTANGLING_ROOTS);
@@ -163,7 +163,7 @@ public:
 
             if (uiBashTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoCastVictim(SPELL_BASH);
                     uiBashTimer = urand(7*IN_MILLISECONDS, 12*IN_MILLISECONDS);
@@ -172,7 +172,7 @@ public:
 
             if (uiBoltTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_VENOM_BOLT_VOLLEY);

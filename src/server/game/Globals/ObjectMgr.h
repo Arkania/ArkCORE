@@ -1477,7 +1477,7 @@ private:
         CREATURE_TO_CREATURE,
         CREATURE_TO_GO,          // Creature is dependant on GO
         GO_TO_GO,
-        GO_TO_CREATURE,// GO is dependant on creature
+        GO_TO_CREATURE, // GO is dependant on creature
     };
 };
 

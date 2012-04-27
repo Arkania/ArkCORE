@@ -263,7 +263,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                         switch (data)
                         {
                             case IN_PROGRESS:
-                                if(GameObject* chest = instance->GetGameObject(CrusadersCacheGUID))
+                                if (GameObject* chest = instance->GetGameObject(CrusadersCacheGUID))
                                     chest->Delete();
                                 break;
                             case FAIL:

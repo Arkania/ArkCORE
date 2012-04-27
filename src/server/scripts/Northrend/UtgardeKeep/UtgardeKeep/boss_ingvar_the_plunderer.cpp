@@ -260,7 +260,7 @@ public:
                             return;
                         }
                         case EVENT_ENRAGE:
-                DoCast(me, DUNGEON_MODE(SPELL_ENRAGE,H_SPELL_ENRAGE));
+                DoCast(me, DUNGEON_MODE(SPELL_ENRAGE, H_SPELL_ENRAGE));
                             _events.ScheduleEvent(EVENT_ENRAGE, 10*IN_MILLISECONDS);
                             break;
                         case EVENT_SHADOW_AXE:
@@ -432,7 +432,7 @@ public:
                 return;
 
                 _reachedTarget = true;
-            DoCast(me, DUNGEON_MODE(SPELL_SHADOW_AXE_DAMAGE,H_SPELL_SHADOW_AXE_DAMAGE));
+            DoCast(me, DUNGEON_MODE(SPELL_SHADOW_AXE_DAMAGE, H_SPELL_SHADOW_AXE_DAMAGE));
         }
 
         void AttackStart(Unit* /*who*/) {}

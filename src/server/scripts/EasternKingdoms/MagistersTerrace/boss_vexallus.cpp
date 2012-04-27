@@ -47,14 +47,14 @@ enum eEnums
 
     //Vexallus spell info
     SPELL_CHAIN_LIGHTNING           = 44318,
-    SPELL_H_CHAIN_LIGHTNING         = 46380,                //heroic spell
+    SPELL_H_CHAIN_LIGHTNING         = 46380,               //heroic spell
     SPELL_OVERLOAD                  = 44353,
     SPELL_ARCANE_SHOCK              = 44319,
-    SPELL_H_ARCANE_SHOCK            = 46381,                //heroic spell
+    SPELL_H_ARCANE_SHOCK            = 46381,               //heroic spell
 
-    SPELL_SUMMON_PURE_ENERGY        = 44322,                //mod scale -10
-    H_SPELL_SUMMON_PURE_ENERGY1     = 46154,                //mod scale -5
-    H_SPELL_SUMMON_PURE_ENERGY2     = 46159,                //mod scale -5
+    SPELL_SUMMON_PURE_ENERGY        = 44322,               //mod scale -10
+    H_SPELL_SUMMON_PURE_ENERGY1     = 46154,               //mod scale -5
+    H_SPELL_SUMMON_PURE_ENERGY2     = 46159,               //mod scale -5
 
     //Creatures
     NPC_PURE_ENERGY                 = 24745,

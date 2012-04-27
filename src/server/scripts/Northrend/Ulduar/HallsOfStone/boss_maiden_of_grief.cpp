@@ -121,7 +121,7 @@ public:
             {
                 if (PartingSorrowTimer <= diff)
                 {
-                    if(!me->IsNonMeleeSpellCasted(false))
+                    if (!me->IsNonMeleeSpellCasted(false))
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_PARTING_SORROW);
@@ -133,33 +133,33 @@ public:
 
             if (StormOfGriefTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    DoCast(me->getVictim(), DUNGEON_MODE(SPELL_STORM_OF_GRIEF_N,SPELL_STORM_OF_GRIEF_H), true);
+                    DoCast(me->getVictim(), DUNGEON_MODE(SPELL_STORM_OF_GRIEF_N, SPELL_STORM_OF_GRIEF_H), true);
                 StormOfGriefTimer = 15000 + rand()%5000;
                 }
             } else StormOfGriefTimer -= diff;
 
             if (ShockOfSorrowTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 DoScriptText(SAY_STUN, me);
-                    DoCast(me, DUNGEON_MODE(SPELL_SHOCK_OF_SORROW_N,SPELL_SHOCK_OF_SORROW_H));
+                    DoCast(me, DUNGEON_MODE(SPELL_SHOCK_OF_SORROW_N, SPELL_SHOCK_OF_SORROW_H));
                 ShockOfSorrowTimer = 20000 + rand()%10000;
                 }
             } else ShockOfSorrowTimer -= diff;
 
             if (PillarOfWoeTimer <= diff)
             {
-                if(!me->IsNonMeleeSpellCasted(false))
+                if (!me->IsNonMeleeSpellCasted(false))
                 {
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
 
                 if (target)
-                        DoCast(target, DUNGEON_MODE(SPELL_PILLAR_OF_WOE_N,SPELL_PILLAR_OF_WOE_H));
+                        DoCast(target, DUNGEON_MODE(SPELL_PILLAR_OF_WOE_N, SPELL_PILLAR_OF_WOE_H));
                 else
-                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_PILLAR_OF_WOE_N,SPELL_PILLAR_OF_WOE_H));
+                        DoCast(me->getVictim(), DUNGEON_MODE(SPELL_PILLAR_OF_WOE_N, SPELL_PILLAR_OF_WOE_H));
 
                 PillarOfWoeTimer = 5000 + rand()%20000;
                 }

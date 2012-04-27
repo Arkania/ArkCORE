@@ -208,7 +208,7 @@ public:
                 return;
 
             Map::PlayerList const &PlayerList = map->GetPlayers();
-            for(Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
+            for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
             {
                 if (Player* i_pl = i->getSource())
                     if (!i_pl->isGameMaster() && i_pl->isAlive() && me->GetDistance(i_pl) <= 100)
@@ -413,7 +413,7 @@ public:
          {
             uint32 rnd = urand(0, 1);
 
-           switch(uiType)
+           switch (uiType)
            {
                case 1:
                {
@@ -519,7 +519,7 @@ public:
         {
             lSummonGUIDList.push_back(pSummoned->GetGUID());
 
-            switch(pSummoned->GetEntry())
+            switch (pSummoned->GetEntry())
             {
                 case CREATURE_DARK_RUNE_PROTECTOR:
                 case CREATURE_DARK_RUNE_STORMCALLER:
@@ -562,7 +562,7 @@ public:
                 if (!pInstance)
                     return;
 
-                switch(uiStep)
+                switch (uiStep)
                 {
                     case 1:
                             if (pInstance->GetData(DATA_BRANN_EVENT) != NOT_STARTED)
@@ -690,7 +690,7 @@ public:
                         me->SetReactState(REACT_DEFENSIVE);
                         DoScriptText(SAY_EVENT_END_01, me);
                         me->SetStandState(UNIT_STAND_STATE_STAND);
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_SKY_FLOOR),true);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_SKY_FLOOR), true);
                         if (Creature* pTemp = Unit::GetCreature(*me, uiControllerGUID))
                             pTemp->DealDamage(pTemp, pTemp->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                         bIsBattle = true;
@@ -700,7 +700,7 @@ public:
                     case 29:
                         DoScriptText(SAY_EVENT_END_02, me);
 
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_ABEDNEUM),true);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_ABEDNEUM), true);
                             pInstance->SetData(DATA_BRANN_EVENT, DONE);
                             DespawnSummon();
 
@@ -742,7 +742,7 @@ public:
                         JumpToNextStep(7500);
                         break;
                     case 36:
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_KADDRAK),true);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_KADDRAK), true);
                             if (Creature* pTemp = Unit::GetCreature(*me, pInstance->GetData64(DATA_KADDRAK)))
                                 DoScriptText(SAY_EVENT_END_09_KADD, pTemp);
                         JumpToNextStep(18500);
@@ -770,7 +770,7 @@ public:
                         JumpToNextStep(10500);
                         break;
                     case 42:
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_MARNAK),true);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_MARNAK), true);
                             if (Creature* pTemp = Unit::GetCreature(*me, pInstance->GetData64(DATA_MARNAK)))
                                 DoScriptText(SAY_EVENT_END_15_MARN, pTemp);
                             JumpToNextStep(6500);
@@ -804,10 +804,10 @@ public:
                         break;
                     case 49:
                     {
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_KADDRAK),false);
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_MARNAK),false);
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_ABEDNEUM),false);
-                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_SKY_FLOOR),false);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_KADDRAK), false);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_MARNAK), false);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_ABEDNEUM), false);
+                            pInstance->HandleGameObject(pInstance->GetData64(DATA_GO_SKY_FLOOR), false);
 
                         Player* player = GetPlayerForEscort();
                         if (player)

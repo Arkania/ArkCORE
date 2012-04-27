@@ -91,16 +91,16 @@ public:
 
         void OpenDoor(uint64 guid)
         {
-            if(!guid) return;
+            if (!guid) return;
             GameObject* go = instance->GetGameObject(guid);
-            if(go) go->SetGoState(GO_STATE_ACTIVE);
+            if (go) go->SetGoState(GO_STATE_ACTIVE);
         }
 
         void CloseDoor(uint64 guid)
         {
-            if(!guid) return;
+            if (!guid) return;
             GameObject* go = instance->GetGameObject(guid);
-            if(go) go->SetGoState(GO_STATE_READY);
+            if (go) go->SetGoState(GO_STATE_READY);
         }
 
         void OnCreatureCreate(Creature* creature)
@@ -112,7 +112,7 @@ public:
                         if (Player* player = players.begin()->getSource())
                             _teamInInstance = player->GetTeam();
                 }
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                 case NPC_FALRIC:
                        m_uiFalricGUID = creature->GetGUID();
@@ -172,7 +172,7 @@ public:
 
         void OnGameObjectCreate(GameObject* go)
         {
-            switch(go->GetEntry())
+            switch (go->GetEntry())
             {
                 case GO_IMPENETRABLE_DOOR: m_uiMainGateGUID = go->GetGUID(); break;
                 case GO_FROSTMOURNE: m_uiFrostmourneGUID = go->GetGUID(); break;
@@ -221,31 +221,31 @@ public:
 
         void SetData(uint32 uiType, uint32 uiData)
         {
-            switch(uiType)
+            switch (uiType)
             {
                 case TYPE_PHASE:                m_auiEncounter[uiType] = uiData; break;
                 case TYPE_EVENT:                m_auiEncounter[uiType] = uiData;
                                                 uiData = NOT_STARTED;
                     break;
                 case TYPE_FALRIC:               m_auiEncounter[uiType] = uiData;
-                    if(uiData == SPECIAL)
+                    if (uiData == SPECIAL)
                                                     CloseDoor(m_uiExitGateGUID);
                     break;
                 case TYPE_MARWYN:               m_auiEncounter[uiType] = uiData;
-                    if(uiData == DONE)
+                    if (uiData == DONE)
                     {
                                                    OpenDoor(m_uiMainGateGUID);
                                                    OpenDoor(m_uiExitGateGUID);
                     }
                     break;
                 case TYPE_FROST_GENERAL:        m_auiEncounter[uiType] = uiData;
-                                                if(uiData == DONE)
+                                                if (uiData == DONE)
                                                    OpenDoor(m_uiDoor2GUID);
                     break;
                 case TYPE_LICH_KING:            m_auiEncounter[uiType] = uiData;
-                                                if(uiData == IN_PROGRESS)
+                                                if (uiData == IN_PROGRESS)
                                                    OpenDoor(m_uiDoor3GUID);
-                                                if(uiData == DONE)
+                                                if (uiData == DONE)
                                                 {
                                                 if (m_auiLider == 1)
                                                 {
@@ -285,7 +285,7 @@ public:
 
             std::ostringstream saveStream;
 
-                for(uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
+                for (uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
                     saveStream << m_auiEncounter[i] << ' ';
 
                 strSaveData = saveStream.str();
@@ -302,7 +302,7 @@ public:
 
         uint32 GetData(uint32 uiType)
         {
-            switch(uiType)
+            switch (uiType)
             {
                 case TYPE_PHASE:                return m_auiEncounter[uiType];
                 case TYPE_EVENT:                return m_auiEncounter[uiType];
@@ -325,7 +325,7 @@ public:
 
         void SetData64(uint32 uiData, uint64 uiGuid)
         {
-            switch(uiData)
+            switch (uiData)
             {
                 case DATA_ESCAPE_LIDER:
                        m_uiLiderGUID = uiGuid;
@@ -335,7 +335,7 @@ public:
 
         uint64 GetData64(uint32 uiData)
         {
-            switch(uiData)
+            switch (uiData)
             {
                 case GO_IMPENETRABLE_DOOR: return m_uiMainGateGUID;
                 case GO_FROSTMOURNE:       return m_uiFrostmourneGUID;
@@ -368,7 +368,7 @@ public:
 
             std::istringstream loadStream(chrIn);
 
-            for(uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
+            for (uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
             {
                 loadStream >> m_auiEncounter[i];
 

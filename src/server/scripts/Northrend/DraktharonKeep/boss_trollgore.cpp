@@ -92,16 +92,16 @@ public:
         {
             uiConsumeTimer = 15*IN_MILLISECONDS;
             uiAuraCountTimer = 15500;
-            uiCrushTimer = urand(1*IN_MILLISECONDS,5*IN_MILLISECONDS);
-            uiInfectedWoundTimer = urand(6*IN_MILLISECONDS,10*IN_MILLISECONDS);
+            uiCrushTimer = urand(1*IN_MILLISECONDS, 5*IN_MILLISECONDS);
+            uiInfectedWoundTimer = urand(6*IN_MILLISECONDS, 10*IN_MILLISECONDS);
             uiExplodeCorpseTimer = 3*IN_MILLISECONDS;
-            uiSpawnTimer = urand(30*IN_MILLISECONDS,40*IN_MILLISECONDS);
+            uiSpawnTimer = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
 
             consumptionJunction = true;
 
             lSummons.DespawnAll();
 
-            me->RemoveAura(DUNGEON_MODE(SPELL_CONSUME_AURA,H_SPELL_CONSUME_AURA));
+            me->RemoveAura(DUNGEON_MODE(SPELL_CONSUME_AURA, H_SPELL_CONSUME_AURA));
 
             if (instance)
                 instance->SetData(DATA_TROLLGORE_EVENT, NOT_STARTED);

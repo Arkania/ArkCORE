@@ -52,7 +52,7 @@ public:
         void Reset()
         {
             ChillingBreathTimer = 15000;
-            
+
             if (instance)
             {
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
@@ -78,7 +78,7 @@ public:
             }
 
             Creature* Slipstream = me->SummonCreature(NPC_SLIPSTREAM, -1190.88f, 125.20f, 737.62f, 1.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
-            Slipstream->SetUInt32Value(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_GOSSIP);
+            Slipstream->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
             Map::PlayerList const &PlList = me->GetMap()->GetPlayers();
 
@@ -100,9 +100,9 @@ public:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, DUNGEON_MODE(SPELL_CIILLING_BREATH_N, SPELL_CIILLING_BREATH_H), true);
 
-                ChillingBreathTimer = urand(12*IN_MILLISECONDS,17*IN_MILLISECONDS);
-            } 
-            else 
+                ChillingBreathTimer = urand(12*IN_MILLISECONDS, 17*IN_MILLISECONDS);
+            }
+            else
                 ChillingBreathTimer -= diff;
 
             DoMeleeAttackIfReady();

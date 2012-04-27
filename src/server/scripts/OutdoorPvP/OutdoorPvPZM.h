@@ -45,7 +45,7 @@ const uint32 ZM_GRAVEYARD_ID = 969;
 enum OutdoorPvPZMSpells
 {
     // cast on the players of the controlling faction
-    ZM_CAPTURE_BUFF = 33779,          // twin spire blessing
+    ZM_CAPTURE_BUFF = 33779,         // twin spire blessing
     // spell that the field scout casts on the player to carry the flag
     ZM_BATTLE_STANDARD_A = 32430,
     // spell that the field scout casts on the player to carry the flag

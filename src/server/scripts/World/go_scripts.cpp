@@ -328,7 +328,7 @@ enum eEthereumPrison
 };
 
 const uint32 NpcPrisonEntry[] =
-{ 22810, 22811, 22812, 22813, 22814, 22815,          //good guys
+{ 22810, 22811, 22812, 22813, 22814, 22815,         //good guys
 20783, 20784, 20785, 20786, 20788, 20789, 20790          //bad guys
 };
 
@@ -510,7 +510,7 @@ public:
 
 enum eSouthfury
 {
-    NPC_RIZZLE = 23002, SPELL_BLACKJACK = 39865,          //stuns player
+    NPC_RIZZLE = 23002, SPELL_BLACKJACK = 39865,         //stuns player
     SPELL_SUMMON_RIZZLE = 39866
 };
 

@@ -508,12 +508,12 @@ public:
             player->PrepareQuestMenu(creature->GetGUID());
 
         //Trainer Menu
-        if( creature->isTrainer() )
+        if ( creature->isTrainer() )
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, GOSSIP_TEXT_TRAIN, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRAIN);
 
         //Vendor Menu
-        if( creature->isVendor() )
-            if(player->HasSpell(SPELL_MECHANO_HOG) || player->HasSpell(SPELL_MEKGINEERS_CHOPPER))
+        if ( creature->isVendor() )
+            if (player->HasSpell(SPELL_MECHANO_HOG) || player->HasSpell(SPELL_MEKGINEERS_CHOPPER))
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
@@ -523,7 +523,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(action)
+        switch (action)
         {
         case GOSSIP_ACTION_TRAIN:
             player->GetSession()->SendTrainerList(creature->GetGUID());
@@ -1017,7 +1017,7 @@ public:
         {
             if (spell->Id == SPELL_SALVAGE_CORPSE)
             {
-                if (!urand(0,2))
+                if (!urand(0, 2))
                 {
                     for (uint8 i = 0; i < 3; ++i)
                         if (Creature *temp = me->SummonCreature(ENTRY_AMBUSHER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60*IN_MILLISECONDS))
@@ -1087,7 +1087,7 @@ class npc_hyldsmeet_protodrake : public CreatureScript
 
 /*######
 ## Snowblind Follower
-## Quest: Gormok Wants His Snobolds (14090,14141)
+## Quest: Gormok Wants His Snobolds (14090, 14141)
 ######*/
 
 enum eSnowblindFollower
@@ -1125,24 +1125,24 @@ public:
         {
             if (spell->Id == SPELL_THROW_NET)
             {
-                if(!caster || !caster->ToPlayer())
+                if (!caster || !caster->ToPlayer())
                     return;
 
-                if(hitbynet)
+                if (hitbynet)
                     return;
 
                 hitbynet = true;
 
-                switch(urand(0,5))
+                switch (urand(0, 5))
                 {
-                case 0: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_1,LANG_UNIVERSAL,caster->GetGUID()); break;
-                case 1: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_2,LANG_UNIVERSAL,caster->GetGUID()); break;
-                case 2: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_3,LANG_UNIVERSAL,caster->GetGUID()); break;
-                case 3: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_4,LANG_UNIVERSAL,caster->GetGUID()); break;
-                case 4: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_5,LANG_UNIVERSAL,caster->GetGUID()); break;
-                case 5: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_6,LANG_UNIVERSAL,caster->GetGUID()); break;
+                case 0: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_1, LANG_UNIVERSAL, caster->GetGUID()); break;
+                case 1: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_2, LANG_UNIVERSAL, caster->GetGUID()); break;
+                case 2: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_3, LANG_UNIVERSAL, caster->GetGUID()); break;
+                case 3: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_4, LANG_UNIVERSAL, caster->GetGUID()); break;
+                case 4: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_5, LANG_UNIVERSAL, caster->GetGUID()); break;
+                case 5: me->MonsterSay(SAY_SNOWBLINDFOLLOWER_6, LANG_UNIVERSAL, caster->GetGUID()); break;
                 }
-                caster->ToPlayer()->KilledMonsterCredit(ENTRY_SNOWBLIND_CREDIT,0);
+                caster->ToPlayer()->KilledMonsterCredit(ENTRY_SNOWBLIND_CREDIT, 0);
                 me->DespawnOrUnsummon(3000);
             }
         }

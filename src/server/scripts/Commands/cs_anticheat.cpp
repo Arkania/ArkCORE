@@ -255,7 +255,7 @@ public:
             return true;
         }
 
-        QueryResult resultDB = CharacterDatabase.Query("SELECT guid,average,total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY average ASC LIMIT 3;");
+        QueryResult resultDB = CharacterDatabase.Query("SELECT guid, average, total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY average ASC LIMIT 3;");
         if (!resultDB)
         {
             handler->PSendSysMessage("No players found.");
@@ -275,12 +275,11 @@ public:
 
                 if (Player * player = sObjectMgr->GetPlayerByLowGUID(guid))
                     handler->PSendSysMessage("Player: %s Average: %u Total Reports: %u", player->GetName(), average, total_reports);
-
             }
             while (resultDB->NextRow());
         }
 
-        resultDB = CharacterDatabase.Query("SELECT guid,average,total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY total_reports DESC LIMIT 3;");
+        resultDB = CharacterDatabase.Query("SELECT guid, average, total_reports FROM players_reports_status WHERE total_reports != 0 ORDER BY total_reports DESC LIMIT 3;");
 
         // this should never happen
         if (!resultDB)
@@ -302,7 +301,6 @@ public:
 
                 if (Player * player = sObjectMgr->GetPlayerByLowGUID(guid))
                     handler->PSendSysMessage("Player: %s Total Reports: %u Average: %u", player->GetName(), total_reports, average);
-
             }
             while (resultDB->NextRow());
         }

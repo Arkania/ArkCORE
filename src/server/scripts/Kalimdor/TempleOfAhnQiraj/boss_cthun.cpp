@@ -909,7 +909,7 @@ public:
 
         void DoAction(const int32 param)
         {
-            switch(param)
+            switch (param)
             {
                 case ACTION_FLESH_TENTACLE_KILLED:
                 ++FleshTentaclesKilled;

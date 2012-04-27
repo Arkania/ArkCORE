@@ -406,7 +406,7 @@ class npc_arcane_beam : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
                 me->AddAura(51019, me);
                 me->SetDisplayId(11686);
-                if(target = me->SelectNearestTarget(30))
+                if (target = me->SelectNearestTarget(30))
                     me->AddThreat(target, (float)50000);
             }
         };

@@ -113,7 +113,7 @@ void AggroAllPlayers(Creature* pTemp)
 
                 if (creature)
                 {
-                    pTemp->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                    pTemp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
                     pTemp->SetReactState(REACT_AGGRESSIVE);
                     pTemp->SetInCombatWith(creature);
                     player->SetInCombatWith(pTemp);
@@ -198,46 +198,46 @@ public:
 
         void SetData(uint32 uiType, uint32 /*uiData*/)
         {
-            switch(uiType)
+            switch (uiType)
             {
                 case 1:
-                    AddWaypoint(0,746.45f,647.03f,411.57f);
-                    AddWaypoint(1,771.434f, 642.606f, 411.9f);
-                    AddWaypoint(2,779.807f, 617.535f, 411.716f);
-                    AddWaypoint(3,771.098f, 594.635f, 411.625f);
-                    AddWaypoint(4,746.887f, 583.425f, 411.668f);
-                    AddWaypoint(5,715.176f, 583.782f, 412.394f);
-                    AddWaypoint(6,720.719f, 591.141f, 411.737f);
+                    AddWaypoint(0, 746.45f, 647.03f, 411.57f);
+                    AddWaypoint(1, 771.434f, 642.606f, 411.9f);
+                    AddWaypoint(2, 779.807f, 617.535f, 411.716f);
+                    AddWaypoint(3, 771.098f, 594.635f, 411.625f);
+                    AddWaypoint(4, 746.887f, 583.425f, 411.668f);
+                    AddWaypoint(5, 715.176f, 583.782f, 412.394f);
+                    AddWaypoint(6, 720.719f, 591.141f, 411.737f);
                     uiWaypointPath = 1;
                     break;
                 case 2:
-                    AddWaypoint(0,746.45f,647.03f,411.57f);
-                    AddWaypoint(1,771.434f, 642.606f, 411.9f);
-                    AddWaypoint(2,779.807f, 617.535f, 411.716f);
-                    AddWaypoint(3,771.098f, 594.635f, 411.625f);
-                    AddWaypoint(4,746.887f, 583.425f, 411.668f);
-                    AddWaypoint(5,746.16f, 571.678f, 412.389f);
-                    AddWaypoint(6,746.887f, 583.425f, 411.668f);
+                    AddWaypoint(0, 746.45f, 647.03f, 411.57f);
+                    AddWaypoint(1, 771.434f, 642.606f, 411.9f);
+                    AddWaypoint(2, 779.807f, 617.535f, 411.716f);
+                    AddWaypoint(3, 771.098f, 594.635f, 411.625f);
+                    AddWaypoint(4, 746.887f, 583.425f, 411.668f);
+                    AddWaypoint(5, 746.16f, 571.678f, 412.389f);
+                    AddWaypoint(6, 746.887f, 583.425f, 411.668f);
                     uiWaypointPath = 2;
                     break;
                 case 3:
-                    AddWaypoint(0,746.45f,647.03f,411.57f);
-                    AddWaypoint(1,771.434f, 642.606f, 411.9f);
-                    AddWaypoint(2,779.807f, 617.535f, 411.716f);
-                    AddWaypoint(3,771.098f, 594.635f, 411.625f);
-                    AddWaypoint(4,777.759f, 584.577f, 412.393f);
-                    AddWaypoint(5,772.48f, 592.99f, 411.68f);
+                    AddWaypoint(0, 746.45f, 647.03f, 411.57f);
+                    AddWaypoint(1, 771.434f, 642.606f, 411.9f);
+                    AddWaypoint(2, 779.807f, 617.535f, 411.716f);
+                    AddWaypoint(3, 771.098f, 594.635f, 411.625f);
+                    AddWaypoint(4, 777.759f, 584.577f, 412.393f);
+                    AddWaypoint(5, 772.48f, 592.99f, 411.68f);
                     uiWaypointPath = 3;
                     break;
             }
 
             if (uiType <= 3)
-                Start(false,true,0,NULL);
+                Start(false, true, 0, NULL);
         }
 
         void WaypointReached(uint32 i)
         {
-            switch(i)
+            switch (i)
             {
                 case 2:
                     if ((pInstance && uiWaypointPath == 3) || uiWaypointPath == 2)
@@ -284,13 +284,13 @@ public:
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                     {
                         Player* player = itr->getSource();
-                        if (player && !player->isGameMaster() && me->IsInRange(player,8.0f,25.0f,false) && player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+                        if (player && !player->isGameMaster() && me->IsInRange(player, 8.0f, 25.0f, false) && player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
                         {
                             Creature* pVehicle = player->GetVehicleBase()->ToCreature();
                             if (pVehicle)
                             {
                                 DoResetThreat();
-                                me->AddThreat(pVehicle,1.0f);
+                                me->AddThreat(pVehicle, 1.0f);
                                 DoCast(pVehicle, SPELL_CHARGE);
                             }
                             break;
@@ -309,14 +309,14 @@ public:
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                         {
                             Player* player = itr->getSource();
-                        if (player && !player->isGameMaster() && me->IsInRange(player,10.0f,30.0f,false) && player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
+                        if (player && !player->isGameMaster() && me->IsInRange(player, 10.0f, 30.0f, false) && player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
                         {
                             Creature* pVehicle = player->GetVehicleBase()->ToCreature();
                             if (pVehicle)
                             {
                                 DoResetThreat();
-                                me->AddThreat(pVehicle,1.0f);
-                                DoCast(pVehicle,SPELL_SHIELD_BREAKER);
+                                me->AddThreat(pVehicle, 1.0f);
+                                DoCast(pVehicle, SPELL_SHIELD_BREAKER);
                             }
                                 break;
                         }
@@ -354,7 +354,7 @@ public:
             uiPhaseTimer = 0;
 
             me->SetReactState(REACT_PASSIVE);
-            me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
         }
 
         InstanceScript* pInstance;
@@ -490,7 +490,7 @@ public:
             uiPhaseTimer = 0;
 
             me->SetReactState(REACT_PASSIVE);
-            me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
         }
 
         InstanceScript* pInstance;
@@ -568,20 +568,20 @@ public:
 
             if (uiFireBallTimer <= uiDiff)
             {
-                DoCastVictim(DUNGEON_MODE(SPELL_FIREBALL,SPELL_FIREBALL_H));
+                DoCastVictim(DUNGEON_MODE(SPELL_FIREBALL, SPELL_FIREBALL_H));
                 uiFireBallTimer = 5000;
             } else uiFireBallTimer -= uiDiff;
 
             if (uiPolymorphTimer <= uiDiff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                DoCast(target, DUNGEON_MODE(SPELL_POLYMORPH,SPELL_POLYMORPH_H));
+                DoCast(target, DUNGEON_MODE(SPELL_POLYMORPH, SPELL_POLYMORPH_H));
                 uiPolymorphTimer = 8000;
             } else uiPolymorphTimer -= uiDiff;
 
             if (uiBlastWaveTimer <= uiDiff)
             {
-                DoCastAOE(DUNGEON_MODE(SPELL_BLAST_WAVE,SPELL_BLAST_WAVE_H),false);
+                DoCastAOE(DUNGEON_MODE(SPELL_BLAST_WAVE, SPELL_BLAST_WAVE_H), false);
                 uiBlastWaveTimer = 13000;
             } else uiBlastWaveTimer -= uiDiff;
 
@@ -589,7 +589,7 @@ public:
             {
                 me->InterruptNonMeleeSpells(true);
 
-                DoCast(me,SPELL_HASTE);
+                DoCast(me, SPELL_HASTE);
                 uiHasteTimer = 40000;
             } else uiHasteTimer -= uiDiff;
 
@@ -629,7 +629,7 @@ public:
             uiPhaseTimer = 0;
 
             me->SetReactState(REACT_PASSIVE);
-            me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
         }
 
         InstanceScript* pInstance;
@@ -707,7 +707,7 @@ public:
             if (uiChainLightningTimer <= uiDiff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target,DUNGEON_MODE(SPELL_CHAIN_LIGHTNING,SPELL_CHAIN_LIGHTNING_H));
+                    DoCast(target, DUNGEON_MODE(SPELL_CHAIN_LIGHTNING, SPELL_CHAIN_LIGHTNING_H));
 
                 uiChainLightningTimer = 16000;
             } else uiChainLightningTimer -= uiDiff;
@@ -719,9 +719,9 @@ public:
                 if (!bChance)
                 {
                     if (Unit* pFriend = DoSelectLowestHpFriendly(40))
-                        DoCast(pFriend,DUNGEON_MODE(SPELL_HEALING_WAVE,SPELL_HEALING_WAVE_H));
+                        DoCast(pFriend, DUNGEON_MODE(SPELL_HEALING_WAVE, SPELL_HEALING_WAVE_H));
                 } else
-                    DoCast(me,DUNGEON_MODE(SPELL_HEALING_WAVE,SPELL_HEALING_WAVE_H));
+                    DoCast(me, DUNGEON_MODE(SPELL_HEALING_WAVE, SPELL_HEALING_WAVE_H));
 
                 uiHealingWaveTimer = 12000;
             } else uiHealingWaveTimer -= uiDiff;
@@ -776,7 +776,7 @@ public:
             uiPhaseTimer = 0;
 
             me->SetReactState(REACT_PASSIVE);
-            me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
         }
 
         InstanceScript* pInstance;
@@ -864,18 +864,18 @@ public:
 
             if (uiLightningArrowsTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
-                    DoCast(target,SPELL_LIGHTNING_ARROWS);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(target, SPELL_LIGHTNING_ARROWS);
 
                 uiLightningArrowsTimer = 7000;
             } else uiLightningArrowsTimer -= uiDiff;
 
             if (uiShootTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST,0,30.0f))
+                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 30.0f))
                 {
                     uiTargetGUID = target->GetGUID();
-                    DoCast(target, DUNGEON_MODE(SPELL_SHOOT,SPELL_SHOOT_H));
+                    DoCast(target, DUNGEON_MODE(SPELL_SHOOT, SPELL_SHOOT_H));
                 }
                 uiShootTimer = 12000;
                 uiMultiShotTimer = 3000;
@@ -945,7 +945,7 @@ public:
             uiPhaseTimer = 0;
 
             me->SetReactState(REACT_PASSIVE);
-            me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE);
         }
 
         InstanceScript* pInstance;
@@ -1013,7 +1013,7 @@ public:
 
             if (uiEviscerateTimer <= uiDiff)
             {
-                DoCast(me->getVictim(),DUNGEON_MODE(SPELL_EVISCERATE,SPELL_EVISCERATE_H));
+                DoCast(me->getVictim(), DUNGEON_MODE(SPELL_EVISCERATE, SPELL_EVISCERATE_H));
                 uiEviscerateTimer = 8000;
             } else uiEviscerateTimer -= uiDiff;
 

@@ -634,7 +634,7 @@ void WorldSession::HandleBattlemasterJoinArena (WorldPacket & recv_data)
     uint32 arenaRating = 0;
     uint32 matchmakerRating = 0;
 
-    switch(arenaslot)
+    switch (arenaslot)
     {
         case 0:
         arenatype = ARENA_TYPE_2v2;

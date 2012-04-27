@@ -137,7 +137,7 @@ class boss_rajh : public CreatureScript
 
                 while(uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_SUN_STRIKE:
                             DoCast(me->getVictim(), SPELL_SUN_STRIKE);

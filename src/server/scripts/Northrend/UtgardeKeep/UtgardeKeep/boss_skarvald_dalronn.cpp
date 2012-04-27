@@ -130,21 +130,21 @@ public:
                 {
                     if (dalronn->isDead())
                     {
-                        DoScriptText(YELL_SKARVALD_DAL_DIED,me);
+                        DoScriptText(YELL_SKARVALD_DAL_DIED, me);
 
                         instance->SetData(DATA_SKARVALD_DALRONN_EVENT, DONE);
                     }
                     else
                     {
-                        DoScriptText(YELL_SKARVALD_SKA_DIEDFIRST,me);
+                        DoScriptText(YELL_SKARVALD_SKA_DIEDFIRST, me);
 
                         dalronn->ToCreature()->AddLootMode(1);
                         //me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         //DoCast(me, SPELL_SUMMON_SKARVALD_GHOST, true);
-                        Creature* temp = me->SummonCreature(MOB_SKARVALD_GHOST,me->GetPositionX(),me->GetPositionY(),me->GetPositionZ(),0,TEMPSUMMON_CORPSE_DESPAWN,5000);
+                        Creature* temp = me->SummonCreature(MOB_SKARVALD_GHOST, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 5000);
                         if (temp)
                         {
-                            temp->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+                            temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             temp->AI()->AttackStart(Killer);
                         }
                     }
@@ -290,22 +290,22 @@ public:
                 {
                     if (skarvald->isDead())
                     {
-                        DoScriptText(YELL_DALRONN_SKA_DIED,me);
+                        DoScriptText(YELL_DALRONN_SKA_DIED, me);
 
                         if (instance)
                             instance->SetData(DATA_SKARVALD_DALRONN_EVENT, DONE);
                     }
                     else
                     {
-                        DoScriptText(YELL_DALRONN_DAL_DIEDFIRST,me);
+                        DoScriptText(YELL_DALRONN_DAL_DIEDFIRST, me);
 
                         skarvald->ToCreature()->AddLootMode(1);
                         //me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         //DoCast(me, SPELL_SUMMON_DALRONN_GHOST, true);
-                        Creature* temp = me->SummonCreature(MOB_DALRONN_GHOST,me->GetPositionX(),me->GetPositionY(),me->GetPositionZ(),0,TEMPSUMMON_CORPSE_DESPAWN,5000);
+                        Creature* temp = me->SummonCreature(MOB_DALRONN_GHOST, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 5000);
                         if (temp)
                         {
-                            temp->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+                            temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             temp->AI()->AttackStart(Killer);
                         }
                     }

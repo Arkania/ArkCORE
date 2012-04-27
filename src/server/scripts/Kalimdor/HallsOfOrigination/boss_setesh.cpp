@@ -131,7 +131,7 @@ class boss_setesh : public CreatureScript
 
                 while(uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_CHAOS_BOLT:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
@@ -271,7 +271,7 @@ public:
         {
             if (SummonTimer <= diff)
             {
-                uint8 summon = urand(0,1);
+                uint8 summon = urand(0, 1);
                 Summon(summon);
                 SummonTimer = 15000;
             } else SummonTimer -= diff;

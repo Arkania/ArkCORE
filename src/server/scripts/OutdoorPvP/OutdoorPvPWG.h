@@ -61,7 +61,7 @@ const uint16 GameEventWintergraspDefender[2] =
 
 enum OutdoorPvP_WG_Sounds
 {
-    OutdoorPvP_WG_SOUND_KEEP_CLAIMED = 8192, OutdoorPvP_WG_SOUND_KEEP_CAPTURED_ALLIANCE = 8173, OutdoorPvP_WG_SOUND_KEEP_CAPTURED_HORDE = 8213, OutdoorPvP_WG_SOUND_KEEP_ASSAULTED_ALLIANCE = 8212, OutdoorPvP_WG_SOUND_KEEP_ASSAULTED_HORDE = 8174, OutdoorPvP_WG_SOUND_NEAR_VICTORY = 8456, OutdoorPvP_WG_SOUND_HORDE_WINS = 8454, OutdoorPvP_WG_SOUND_ALLIANCE_WINS = 8455, OutdoorPvP_WG_SOUND_WORKSHOP_Horde = 6205, OutdoorPvP_WG_SOUND_WORKSHOP_ALLIANCE = 6298, OutdoorPvP_WG_HORDE_CAPTAIN = 8333, OutdoorPvP_WG_ALLIANCE_CAPTAIN = 8232, OutdoorPvP_WG_SOUND_START_BATTLE = 3439,          //Standart BG Start sound
+    OutdoorPvP_WG_SOUND_KEEP_CLAIMED = 8192, OutdoorPvP_WG_SOUND_KEEP_CAPTURED_ALLIANCE = 8173, OutdoorPvP_WG_SOUND_KEEP_CAPTURED_HORDE = 8213, OutdoorPvP_WG_SOUND_KEEP_ASSAULTED_ALLIANCE = 8212, OutdoorPvP_WG_SOUND_KEEP_ASSAULTED_HORDE = 8174, OutdoorPvP_WG_SOUND_NEAR_VICTORY = 8456, OutdoorPvP_WG_SOUND_HORDE_WINS = 8454, OutdoorPvP_WG_SOUND_ALLIANCE_WINS = 8455, OutdoorPvP_WG_SOUND_WORKSHOP_Horde = 6205, OutdoorPvP_WG_SOUND_WORKSHOP_ALLIANCE = 6298, OutdoorPvP_WG_HORDE_CAPTAIN = 8333, OutdoorPvP_WG_ALLIANCE_CAPTAIN = 8232, OutdoorPvP_WG_SOUND_START_BATTLE = 3439,         //Standart BG Start sound
 };
 
 enum DataId
@@ -98,9 +98,9 @@ typedef uint32 TeamPair[2];
 
 enum OutdoorPvPWGQuest
 {
-    A_VICTORY_IN_WG = 13181, H_VICTORY_IN_WG = 13183, CRE_PVP_KILL = 31086,          //Quest Objective - Fixme: this should be handled by DB
-    CRE_PVP_KILL_V = 31093,          //Quest Objective - Fixme: this should be handled by DB.
-    TOWER_PVP_DESTROYED = 35074,          //Quest Objective - Toppling the Towers & Southern Sabotage
+    A_VICTORY_IN_WG = 13181, H_VICTORY_IN_WG = 13183, CRE_PVP_KILL = 31086,         //Quest Objective - Fixme: this should be handled by DB
+    CRE_PVP_KILL_V = 31093,         //Quest Objective - Fixme: this should be handled by DB.
+    TOWER_PVP_DESTROYED = 35074,         //Quest Objective - Toppling the Towers & Southern Sabotage
 };
 
 enum OutdoorPvPWGCreEntry
@@ -110,11 +110,11 @@ enum OutdoorPvPWGCreEntry
 
 const TeamPair OutdoorPvPWGCreEntryPair[] =
 {
-{ 32307, 32308 },          // Guards
-{ 30739, 30740 },          // Champions
-{ 32296, 32294 },          // Quartermaster
-{ 39173, 39172 },          // Ros'slai & Marshal Magruder
-{ 32615, 32626 },          // Warbringer & Brigadier General
+{ 32307, 32308 },         // Guards
+{ 30739, 30740 },         // Champions
+{ 32296, 32294 },         // Quartermaster
+{ 39173, 39172 },         // Ros'slai & Marshal Magruder
+{ 32615, 32626 },         // Warbringer & Brigadier General
 { 0, 0 }          // Do not delete Used in LoadTeamPair
 };
 

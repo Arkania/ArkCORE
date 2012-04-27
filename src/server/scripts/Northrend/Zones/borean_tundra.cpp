@@ -2663,7 +2663,7 @@ public:
 
             if (caster->GetTypeId() == TYPEID_PLAYER
                     && spell->Id == SPELL_EMERGENCY_TORCH) {
-                if (GameObject* go = me->FindNearestGameObject(GO_TEMP_CRASHED_FLYING_MACHINE,10.0f)) {
+                if (GameObject* go = me->FindNearestGameObject(GO_TEMP_CRASHED_FLYING_MACHINE, 10.0f)) {
                     switch (go->GetGUIDLow()) {
                     case EASTERN_WRECK_GUID:
                         caster->ToPlayer()->KilledMonsterCredit(

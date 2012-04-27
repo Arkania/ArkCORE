@@ -432,7 +432,7 @@ struct boss_jormungarAI : public ScriptedAI
             {
                 if (!otherWorm->isAlive())
                 {
-                    if(!m_uiNextBossCheck)
+                    if (!m_uiNextBossCheck)
                     instanceScript->SetData(TYPE_NORTHREND_BEASTS, SNAKES_DONE);
 
                     me->DespawnOrUnsummon();
@@ -475,7 +475,7 @@ struct boss_jormungarAI : public ScriptedAI
         if (IsHeroic() && !m_uiNextBossCheck)
              if (m_uiNextBossTimer <= uiDiff)
              {
-                if(!m_uiNextBossCheck)
+                if (!m_uiNextBossCheck)
                      instanceScript->SetData(TYPE_NORTHREND_BEASTS, SNAKES_DONE);
                 m_uiNextBossCheck = true;
              } else m_uiNextBossTimer -= uiDiff;

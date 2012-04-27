@@ -66,7 +66,7 @@ class instance_mechanar : public InstanceMapScript
 
             uint32 GetData(uint32 type)
             {
-                switch(type)
+                switch (type)
                 {
                 case DATA_NETHERMANCER_EVENT:   return m_auiEncounter[0];
                 }
@@ -81,7 +81,7 @@ class instance_mechanar : public InstanceMapScript
 
             void SetData(uint32 type, uint32 data)
             {
-                switch(type)
+                switch (type)
                 {
                 case DATA_NETHERMANCER_EVENT:   m_auiEncounter[0] = data;   break;
                 }

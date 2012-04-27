@@ -682,7 +682,7 @@ enum DughalQuests
 
  void WaypointReached(uint32 i)
  {
- switch(i)
+ switch (i)
  {
  case 0:me->Say(SAY_DUGHAL_FREE, LANG_UNIVERSAL, PlayerGUID); break;
  case 1:pInstance->SetData(DATA_DUGHAL, ENCOUNTER_STATE_OBJECTIVE_COMPLETED);break;
@@ -803,7 +803,7 @@ Player* pPlayerStart;
 
  void WaypointReached(uint32 i)
  {
- switch(i)
+ switch (i)
  {
  case 1:
  me->Say(SAY_WINDSOR_1, LANG_UNIVERSAL, PlayerGUID);
@@ -976,7 +976,7 @@ int wp = 0;
  void WaypointReached(uint32 i)
  {
  wp=i;
- switch(i)
+ switch (i)
  {
  case 0:
  me->setFaction(11);
@@ -1182,7 +1182,7 @@ int wp = 0;
 
  void WaypointReached(uint32 i)
  {
- switch(i)
+ switch (i)
  {
  case 0:me->Say(SAY_TOBIAS_FREE, LANG_UNIVERSAL, PlayerGUID); break;
  case 2:

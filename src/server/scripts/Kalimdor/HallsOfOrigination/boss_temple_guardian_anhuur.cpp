@@ -158,8 +158,8 @@ class boss_temple_guardian_anhuur : public CreatureScript
             {
                 DoTeleportTo(-640.527f, 334.855f, 78.345f, 1.54f);
                 me->SetOrientation(1.54f);
-                for(uint32 x = 0; x<21; ++x)
-                   me->SummonCreature(NPC_PIT_SNAKE,SpawnPosition[x],TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000);
+                for (uint32 x = 0; x<21; ++x)
+                   me->SummonCreature(NPC_PIT_SNAKE, SpawnPosition[x], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000);
 
                 DoCast(me, SPELL_SHIELD_OF_LIGHT);
                 DoCast(me, SPELL_REVERBERATING_HYMN);
@@ -169,10 +169,10 @@ class boss_temple_guardian_anhuur : public CreatureScript
                 Phase = PHASE_SHIELD;
                 me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_INTERRUPT, true);
 
-                if (Creature *light1 = me->SummonCreature(40183, -603.465f, 334.38f, 65.4f, 3.12f,TEMPSUMMON_CORPSE_DESPAWN, 1000))
+                if (Creature *light1 = me->SummonCreature(40183, -603.465f, 334.38f, 65.4f, 3.12f, TEMPSUMMON_CORPSE_DESPAWN, 1000))
                     light1->CastSpell(me, SPELL_BEAM_LEFT, false);
 
-                if (Creature *light2 = me->SummonCreature(40183, -678.132f, 334.212f, 64.9f, 0.24f,TEMPSUMMON_CORPSE_DESPAWN, 1000))
+                if (Creature *light2 = me->SummonCreature(40183, -678.132f, 334.212f, 64.9f, 0.24f, TEMPSUMMON_CORPSE_DESPAWN, 1000))
                     light2->CastSpell(me, SPELL_BEAM_RIGHT, false);
             }
 
@@ -195,7 +195,7 @@ class boss_temple_guardian_anhuur : public CreatureScript
 
             void SummonedCreatureDespawn(Creature* summon)
             {
-                switch(summon->GetEntry())
+                switch (summon->GetEntry())
                 {
                     case 40183:
                         FlameCount--;
@@ -240,7 +240,7 @@ class boss_temple_guardian_anhuur : public CreatureScript
                 {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, SPELL_DIVINE_RECKONING);
-                    DivineReckoningTimer = urand(15000,18000);
+                    DivineReckoningTimer = urand(15000, 18000);
                 } else DivineReckoningTimer -= diff;
 
                 if (SearingFlameTimer <= diff && Phase == PHASE_NORMAL)

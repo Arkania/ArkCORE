@@ -162,7 +162,7 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                     case EVENT_SHIELD:
                         DoCast(me, SPELL_TIDAL_SHIELD, true);

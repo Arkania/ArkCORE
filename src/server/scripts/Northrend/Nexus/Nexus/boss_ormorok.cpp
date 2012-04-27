@@ -136,7 +136,7 @@ public:
                 uiReflectCount--;
 
             if (uiReflectCount==0)
-                me->RemoveAura(SPELL_SPELL_REFLECTION,0,0,AURA_REMOVE_BY_EXPIRE);
+                me->RemoveAura(SPELL_SPELL_REFLECTION, 0, 0, AURA_REMOVE_BY_EXPIRE);
         }
 
         void UpdateAI(const uint32 diff)
@@ -172,7 +172,7 @@ public:
 
             if (uiTrampleTimer <= diff)
             {
-                DoCast(me, DUNGEON_MODE(SPELL_TRAMPLE,H_SPELL_TRAMPLE));
+                DoCast(me, DUNGEON_MODE(SPELL_TRAMPLE, H_SPELL_TRAMPLE));
                 uiTrampleTimer = 10*IN_MILLISECONDS;
             } else uiTrampleTimer -= diff;
 
@@ -187,7 +187,7 @@ public:
             if (breflect)
                 if (uiReflect<=diff)
                 {
-                    me->RemoveAura(SPELL_SPELL_REFLECTION,0,0,AURA_REMOVE_BY_EXPIRE);
+                    me->RemoveAura(SPELL_SPELL_REFLECTION, 0, 0, AURA_REMOVE_BY_EXPIRE);
                     uiReflect=14500;
                 } else uiReflect-=diff;
 
@@ -258,7 +258,7 @@ public:
 
             if (SpellCrystalSpikeDamageTimer <= diff)
             {
-            DoCast(me, DUNGEON_MODE(SPELL_CRYSTALL_SPIKE_DAMAGE,H_SPELL_CRYSTALL_SPIKE_DAMAGE));
+            DoCast(me, DUNGEON_MODE(SPELL_CRYSTALL_SPIKE_DAMAGE, H_SPELL_CRYSTALL_SPIKE_DAMAGE));
                 SpellCrystalSpikeDamageTimer = 10*IN_MILLISECONDS;
             } else SpellCrystalSpikeDamageTimer -= diff;
         }

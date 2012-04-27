@@ -61,7 +61,7 @@ class instance_ramparts : public InstanceMapScript
 
             void OnGameObjectCreate(GameObject* pGo, bool /*add*/)
             {
-                switch(pGo->GetEntry())
+                switch (pGo->GetEntry())
                 {
                     case 185168:
                         m_uiChestNGUID = pGo->GetGUID();
@@ -76,7 +76,7 @@ class instance_ramparts : public InstanceMapScript
             {
                 sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Instance Ramparts: SetData received for type %u with data %u", uiType, uiData);
 
-                switch(uiType)
+                switch (uiType)
                 {
                     case TYPE_VAZRUDEN:
                         if (uiData == DONE && m_auiEncounter[1] == DONE && !spawned)

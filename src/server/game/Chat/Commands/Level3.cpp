@@ -2349,7 +2349,7 @@ bool ChatHandler::HandleLookupMapCommand (const char *args)
      if (MapInfo->IsContinent())
      ss << GetArkCoreString(LANG_CONTINENT);
 
-     switch(MapInfo->map_type)
+     switch (MapInfo->map_type)
      {
      case MAP_INSTANCE:      ss << GetArkCoreString(LANG_INSTANCE);      break;
      case MAP_BATTLEGROUND:  ss << GetArkCoreString(LANG_BATTLEGROUND);  break;

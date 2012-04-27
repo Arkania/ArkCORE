@@ -14564,7 +14564,7 @@ void Player::ApplyEnchantment (Item *item, EnchantmentSlot slot, bool apply, boo
             default:
                 sLog->outError("Unknown item enchantment (id = %d) display type: %d", enchant_id, enchant_display_type);
                 break;
-            } /*switch(enchant_display_type)*/
+            } /*switch (enchant_display_type)*/
         } /*for*/
     }
 
@@ -17941,7 +17941,7 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
             break;
         }
 
-        /*switch(sWorld->getIntConfig(CONFIG_GM_ACCEPT_TICKETS))
+        /*switch (sWorld->getIntConfig(CONFIG_GM_ACCEPT_TICKETS))
          {
          default:
          case 0:                        break;           // disable

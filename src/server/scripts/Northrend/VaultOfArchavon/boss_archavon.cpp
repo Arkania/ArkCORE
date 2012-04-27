@@ -44,16 +44,16 @@
 enum Events
 {
     // Archavon
-    EVENT_ROCK_SHARDS       = 1,    // 15s cd
-    EVENT_CRUSHING_LEAP     = 2,    // 30s cd
-    EVENT_STOMP             = 3,    // 45s cd
+    EVENT_ROCK_SHARDS       = 1,   // 15s cd
+    EVENT_CRUSHING_LEAP     = 2,   // 30s cd
+    EVENT_STOMP             = 3,   // 45s cd
     EVENT_IMPALE            = 4,
-    EVENT_BERSERK           = 5,    // 300s cd
+    EVENT_BERSERK           = 5,   // 300s cd
 
     //mob
-    EVENT_ROCK_SHOWER       = 6,    // set = 20s cd, unkown cd
-    EVENT_SHIELD_CRUSH      = 7,    // set = 30s cd
-    EVENT_WHIRL             = 8,    // set= 10s cd
+    EVENT_ROCK_SHOWER       = 6,   // set = 20s cd, unkown cd
+    EVENT_SHIELD_CRUSH      = 7,   // set = 30s cd
+    EVENT_WHIRL             = 8,   // set= 10s cd
 };
 
 // predicate function to select player between given distances

@@ -46,10 +46,10 @@ class AnticheatMgr
         void SpeedHackDetection(Player* player, MovementInfo movementInfo);
         void FlyHackDetection(Player* player, MovementInfo movementInfo);
         void WalkOnWaterHackDetection(Player* player, MovementInfo movementInfo);
-        void JumpHackDetection(Player* player, MovementInfo movementInfo,uint32 opcode);
+        void JumpHackDetection(Player* player, MovementInfo movementInfo, uint32 opcode);
         void TeleportPlaneHackDetection(Player* player, MovementInfo);
 
-        void BuildReport(Player* player,uint8 reportType);
+        void BuildReport(Player* player, uint8 reportType);
 };
 
 #define sAnticheatMgr ACE_Singleton<AnticheatMgr, ACE_Null_Mutex>::instance()

@@ -54,7 +54,7 @@ void WorldSession::HandleLearnPreviewTalents (WorldPacket& recvPacket)
     if (spec != ((uint32)-1))
     {
         uint32 specID = 0;
-        for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
+        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
         {
             TalentTabEntry const * entry = sTalentTabStore.LookupEntry(i);
             if (entry)
@@ -98,15 +98,15 @@ void WorldSession::HandleLearnPreviewTalents (WorldPacket& recvPacket)
 
     bool inOtherBranch = false;
     uint32 pointInBranchSpec = 0;
-    for(PlayerTalentMap::iterator itr = _player->m_talents[_player->m_activeSpec]->begin(); itr != _player->m_talents[_player->m_activeSpec]->end(); itr++)
+    for (PlayerTalentMap::iterator itr = _player->m_talents[_player->m_activeSpec]->begin(); itr != _player->m_talents[_player->m_activeSpec]->end(); itr++)
     {
-        for(uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+        for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
         {
             const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
             if (thisTalent)
             {
                 int thisrank = -1;
-                for(int j = 0; j < 5; j++)
+                for (int j = 0; j < 5; j++)
                 if (thisTalent->RankID[j] == itr->first)
                 {
                     thisrank = j;
