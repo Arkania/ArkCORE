@@ -30,23 +30,17 @@ public:
     {
     }
 
-    void OnDuelEnd (Player* winner, Player* looser, DuelCompleteType type)
+    void OnDuelEnd (Player* winner, Player* loser, DuelCompleteType type)
     {
         // reset cooldowns (in order) Elwyn, Durotar, Tirisfal, Tendrasil, Dun Morogh, Gurubashi Arena, Exodar, Mulgore
-        //int32 ZONE_ONE = sWorld->getIntConfig(CONFIG_DUEL_RESET_ONE);
-        //int32 ZONE_TWO = sWorld->getIntConfig(CONFIG_DUEL_RESET_TWO);
         if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN))
         {
             if (winner->GetZoneId() == 12 || winner->GetZoneId() == 14 || winner->GetZoneId() == 85 || winner->GetZoneId() == 141 || winner->GetZoneId() == 1 || winner->GetZoneId() == 5287 || winner->GetZoneId() == 3524 || winner->GetZoneId() == 215)
             {
-                winner->RemoveArenaSpellCooldowns();
-                looser->RemoveArenaSpellCooldowns();
-                winner->SetHealth(winner->GetMaxHealth());
-                looser->SetHealth(looser->GetMaxHealth());
-                if (winner->getPowerType() == POWER_MANA)
-                    winner->SetPower(POWER_MANA, winner->GetMaxPower(POWER_MANA));
-                if (looser->getPowerType() == POWER_MANA)
-                    looser->SetPower(POWER_MANA, looser->GetMaxPower(POWER_MANA));
+                winner->ResetAllPowers();
+                winner->RemoveArenaSpellCooldowns(true);
+                loser->ResetAllPowers();
+                loser->RemoveArenaSpellCooldowns(true);
             }
         }
     }
