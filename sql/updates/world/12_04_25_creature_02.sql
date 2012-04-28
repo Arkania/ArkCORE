@@ -1,6 +1,6 @@
 ﻿##############################
 #        Grim Batol          #
-#       © by Saiifii         #
+#        by Saiifii          #
 ##############################
 
 SET @NPC_GUID_START := 15811500;
