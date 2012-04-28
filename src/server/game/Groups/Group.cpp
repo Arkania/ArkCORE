@@ -650,7 +650,7 @@ void Group::SendLooter (Creature *pCreature, Player *pLooter)
     BroadcastPacket(&data, false);
 }
 
-void Group::GroupLoot (Loot *loot, WorldObject* pLootedObject)
+void Group::GroupLoot(Loot *loot, WorldObject* pLootedObject)
 {
     std::vector<LootItem>::iterator i;
     ItemPrototype const *item;
@@ -661,7 +661,7 @@ void Group::GroupLoot (Loot *loot, WorldObject* pLootedObject)
         if (i->freeforall)
             continue;
 
-        item = ObjectMgr::GetItemPrototype(i->itemid);
+        item = sObjectMgr->GetItemPrototype(i->itemid);
         if (!item)
         {
             //sLog->outDebug("Group::GroupLoot: missing item prototype for item with id: %d", i->itemid);
@@ -693,7 +693,7 @@ void Group::GroupLoot (Loot *loot, WorldObject* pLootedObject)
                             // can't broadcast the pass now. need to wait until all rolling players are known.
                         }
                         else
-                        r->playerVote[member->GetGUID()] = NOT_EMITED_YET;
+                            r->playerVote[member->GetGUID()] = NOT_EMITED_YET;
                     }
                 }
             }
@@ -712,7 +712,7 @@ void Group::GroupLoot (Loot *loot, WorldObject* pLootedObject)
                 {
                     for (Roll::PlayerVote::const_iterator itr = r->playerVote.begin(); itr != r->playerVote.end(); ++itr)
                     {
-                        Player *p = sObjectMgr->GetPlayer(itr->first);
+                        Player *p = ObjectAccessor::FindPlayer(itr->first);
                         if (!p || !p->GetSession())
                             continue;
 
@@ -725,12 +725,12 @@ void Group::GroupLoot (Loot *loot, WorldObject* pLootedObject)
 
                 RollId.push_back(r);
 
-                if (Creature* creature = dynamic_cast<Creature *>(pLootedObject))
+                if (Creature* creature = pLootedObject->ToCreature())
                 {
                     creature->m_groupLootTimer = 60000;
                     creature->lootingGroupLowGUID = GetLowGUID();
                 }
-                else if (GameObject* go = dynamic_cast<GameObject *>(pLootedObject))
+                else if (GameObject* go = pLootedObject->ToGameObject())
                 {
                     go->m_groupLootTimer = 60000;
                     go->lootingGroupLowGUID = GetLowGUID();
@@ -744,7 +744,7 @@ void Group::GroupLoot (Loot *loot, WorldObject* pLootedObject)
     }
 }
 
-void Group::NeedBeforeGreed (Loot *loot, WorldObject* pLootedObject)
+void Group::NeedBeforeGreed(Loot *loot, WorldObject* pLootedObject)
 {
     ItemPrototype const *item;
     uint8 itemSlot = 0;
@@ -753,7 +753,7 @@ void Group::NeedBeforeGreed (Loot *loot, WorldObject* pLootedObject)
         if (i->freeforall)
             continue;
 
-        item = ObjectMgr::GetItemPrototype(i->itemid);
+        item = sObjectMgr->GetItemPrototype(i->itemid);
 
         //roll for over-threshold item if it's one-player loot
         if (item->Quality >= uint32(m_lootThreshold))
@@ -763,26 +763,22 @@ void Group::NeedBeforeGreed (Loot *loot, WorldObject* pLootedObject)
 
             for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next())
             {
-                Player *playerToRoll = itr->getSource();
+                Player* playerToRoll = itr->getSource();
                 if (!playerToRoll || !playerToRoll->GetSession())
                     continue;
 
                 bool allowedForPlayer = i->AllowedForPlayer(playerToRoll);
-                if (playerToRoll->CanUseItem(item) == EQUIP_ERR_OK && allowedForPlayer)
+                if (allowedForPlayer && playerToRoll->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
                 {
-                    if (playerToRoll->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
+                    r->totalPlayersRolling++;
+                    if (playerToRoll->GetPassOnGroupLoot())
                     {
-                        r->totalPlayersRolling++;
-
-                        if (playerToRoll->GetPassOnGroupLoot())
-                        {
-                            r->playerVote[playerToRoll->GetGUID()] = PASS;
-                            r->totalPass++;
-                            // can't broadcast the pass now. need to wait until all rolling players are known.
-                        }
-                        else
-                        r->playerVote[playerToRoll->GetGUID()] = NOT_EMITED_YET;
+                        r->playerVote[playerToRoll->GetGUID()] = PASS;
+                        r->totalPass++;
+                        // can't broadcast the pass now. need to wait until all rolling players are known.
                     }
+                    else
+                        r->playerVote[playerToRoll->GetGUID()] = NOT_EMITED_YET;
                 }
             }
 
@@ -798,28 +794,30 @@ void Group::NeedBeforeGreed (Loot *loot, WorldObject* pLootedObject)
 
                 loot->items[itemSlot].is_blocked = true;
 
-                // If there is any "auto pass", broadcast the pass now.
-                if (r->totalPass)
+                //Broadcast Pass and Send Rollstart
+                for (Roll::PlayerVote::const_iterator itr = r->playerVote.begin(); itr != r->playerVote.end(); ++itr)
                 {
-                    for (Roll::PlayerVote::const_iterator itr = r->playerVote.begin(); itr != r->playerVote.end(); ++itr)
-                    {
-                        Player *p = sObjectMgr->GetPlayer(itr->first);
-                        if (!p || !p->GetSession())
-                            continue;
+                    Player* p = ObjectAccessor::FindPlayer(itr->first);
+                    if (!p || !p->GetSession())
+                        continue;
 
-                        if (itr->second == PASS)
-                            SendLootRoll(newitemGUID, p->GetGUID(), 128, ROLL_PASS, *r);
-                    }
+                    if (itr->second == PASS)
+                        SendLootRoll(newitemGUID, p->GetGUID(), 128, ROLL_PASS, *r);
+                    else
+                        SendLootStartRoll(60000, pLootedObject->GetMapId(), *r);
                 }
-
-                SendLootStartRoll(60000, pLootedObject->GetMapId(), *r);
 
                 RollId.push_back(r);
 
-                if (Creature* creature = dynamic_cast<Creature *>(pLootedObject))
+                if (Creature* creature = pLootedObject->ToCreature())
                 {
                     creature->m_groupLootTimer = 60000;
                     creature->lootingGroupLowGUID = GetLowGUID();
+                }
+                else if (GameObject* go = pLootedObject->ToGameObject())
+                {
+                    go->m_groupLootTimer = 60000;
+                    go->lootingGroupLowGUID = GetLowGUID();
                 }
             }
             else
