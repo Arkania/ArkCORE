@@ -1188,10 +1188,10 @@ void ScriptMgr::OnPlayerDuelStart (Player *player1, Player *player2)
     ->OnDuelStart(player1, player2);
 }
 
-void ScriptMgr::OnPlayerDuelEnd (Player *winner, Player *looser, DuelCompleteType type)
+void ScriptMgr::OnPlayerDuelEnd (Player *winner, Player *loser, DuelCompleteType type)
 {
     FOREACH_SCRIPT(PlayerScript)
-    ->OnDuelEnd(winner, looser, type);
+    ->OnDuelEnd(winner, loser, type);
 }
 
 void ScriptMgr::OnPlayerChat (Player* player, uint32 type, uint32 lang, std::string msg)
