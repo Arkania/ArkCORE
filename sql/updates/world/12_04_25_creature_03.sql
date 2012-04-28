@@ -1,6 +1,6 @@
 ##############################
 #     The Vortex Pinnale     #
-#       © by Saiifii         #
+#       by Saiifii           #
 ##############################
 
 SET @NPC_GUID_START := 15812100;
