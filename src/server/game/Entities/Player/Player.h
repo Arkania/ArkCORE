@@ -1950,7 +1950,6 @@ public:
         time_t t = time(NULL);
         return uint32(itr != m_spellCooldowns.end() && itr->second.end > t ? itr->second.end - t : 0);
     }
-    bool ReduceSpellCooldown(uint32 spell_id, uint32 seconds);
     void AddSpellAndCategoryCooldowns(SpellEntry const* spellInfo, uint32 itemId, Spell* spell = NULL, bool infinityCooldown = false);
     void AddSpellCooldown(uint32 spell_id, uint32 itemid, time_t end_time);
     void SendCooldownEvent(SpellEntry const *spellInfo, uint32 itemId = 0, Spell* spell = NULL);
@@ -1958,6 +1957,7 @@ public:
     void RemoveSpellCooldown(uint32 spell_id, bool update = false);
     void RemoveSpellCategoryCooldown(uint32 cat, bool update = false);
     void SendClearCooldown(uint32 spell_id, Unit* target);
+    void UpdateSpellCooldown(uint32 spell_id, int32 amount);
 
     void RemoveCategoryCooldown(uint32 cat);
     void RemoveArenaSpellCooldowns(bool removeActivePetCooldowns = false);
