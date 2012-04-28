@@ -942,7 +942,7 @@ public:
     }
 
     // Called when a duel ends
-    virtual void OnDuelEnd (Player* /*winner*/, Player* /*looser*/, DuelCompleteType /*type*/)
+    virtual void OnDuelEnd (Player* /*winner*/, Player* /*loser*/, DuelCompleteType /*type*/)
     {
     }
 
@@ -1301,7 +1301,7 @@ public:
     void OnPlayerReputationChange (Player *player, uint32 factionID, int32& standing, bool incremental);
     void OnPlayerDuelRequest (Player* target, Player* challenger);
     void OnPlayerDuelStart (Player* player1, Player* player2);
-    void OnPlayerDuelEnd (Player* winner, Player* looser, DuelCompleteType type);
+    void OnPlayerDuelEnd (Player* winner, Player* loser, DuelCompleteType type);
     void OnPlayerChat (Player* player, uint32 type, uint32 lang, std::string msg);
     void OnPlayerChat (Player* player, uint32 type, uint32 lang, std::string msg, Player* receiver);
     void OnPlayerChat (Player* player, uint32 type, uint32 lang, std::string msg, Group* group);
