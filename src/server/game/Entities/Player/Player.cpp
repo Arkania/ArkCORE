@@ -21554,28 +21554,6 @@ void Player::UpdatePvP (bool state, bool override)
     }
 }
 
-bool Player::ReduceSpellCooldown (uint32 spell_id, uint32 seconds)
-{
-    if (HasSpellCooldown(spell_id))
-    {
-        uint32 newCooldownDelay = GetSpellCooldownDelay(spell_id);
-        if (newCooldownDelay < seconds / 1000 + 1)
-            newCooldownDelay = 0;
-        else
-            newCooldownDelay -= seconds / 1000;
-
-        this->AddSpellCooldown(spell_id, 0, uint32(time(NULL) + newCooldownDelay));
-        WorldPacket data(SMSG_MODIFY_COOLDOWN, 4 + 8 + 4);
-        data << uint32(spell_id);          // Spell ID
-        data << uint64(GetGUID());          // Player GUID
-        data << int32(-seconds);          // Cooldown mod in milliseconds
-        sLog->outBasic("Seconds: %i", int32(-seconds));
-        GetSession()->SendPacket(&data);
-        return true;
-    }
-    return false;
-}
-
 void Player::AddSpellAndCategoryCooldowns (SpellEntry const* spellInfo, uint32 itemId, Spell* spell, bool infinityCooldown)
 {
     // init cooldown values
@@ -25320,6 +25298,28 @@ void Player::SendClearCooldown (uint32 spell_id, Unit* target)
     data << uint32(spell_id);
     data << uint64(target->GetGUID());
     SendDirectMessage(&data);
+}
+
+void Player::UpdateSpellCooldown (uint32 spell_id, int32 amount)
+{
+    uint32 curCooldown = GetSpellCooldownDelay(spell_id);
+    if (amount < 0)
+    {
+        if (curCooldown <= (curCooldown + amount))
+            curCooldown = 0;
+        else
+            curCooldown -= amount;
+    }
+    else // if (amount > 0) 
+        curCooldown += amount;
+    
+    AddSpellCooldown(spell_id, 0, uint32(time(NULL) + curCooldown));
+    
+    WorldPacket data(SMSG_MODIFY_COOLDOWN, 4+8+4);
+    data << uint32(spell_id);               // Spell ID
+    data << uint64(GetGUID());              // Player GUID
+    data << int32(amount * 1000);           // Cooldown mod in milliseconds
+    GetSession()->SendPacket(&data);   
 }
 
 void Player::ResetMap ()
