@@ -828,14 +828,14 @@ void Group::NeedBeforeGreed(Loot *loot, WorldObject* pLootedObject)
     }
 }
 
-void Group::MasterLoot (Loot* /*loot*/, WorldObject* pLootedObject)
+void Group::MasterLoot(Loot* /*loot*/, WorldObject* pLootedObject)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Group::MasterLoot (SMSG_LOOT_MASTER_LIST, 330)");
 
     uint32 real_count = 0;
 
     WorldPacket data(SMSG_LOOT_MASTER_LIST, 330);
-    data << (uint8) GetMembersCount();
+    data << (uint8)GetMembersCount();
 
     for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next())
     {
@@ -856,7 +856,7 @@ void Group::MasterLoot (Loot* /*loot*/, WorldObject* pLootedObject)
     {
         Player *looter = itr->getSource();
         if (looter->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
-        looter->GetSession()->SendPacket(&data);
+            looter->GetSession()->SendPacket(&data);
     }
 }
 
