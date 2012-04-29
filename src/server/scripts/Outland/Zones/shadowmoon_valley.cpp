@@ -684,21 +684,24 @@ public:
 
 enum eKarynaku
 {
-    QUEST_ALLY_OF_NETHER    = 10870,
-
-    TAXI_PATH_ID            = 649
+    QUEST_ALLY_OF_NETHER      = 10870,
+    QUEST_ZULUHED_THE_WACKED  = 10866,
+ 
+    NPC_ZULUHED_THE_WACKED    = 11980,
+    TAXI_PATH_ID              = 649
 };
-
+ 
 class npc_karynaku : public CreatureScript
 {
 public:
     npc_karynaku() : CreatureScript("npc_karynaku") { }
-
-    bool OnQuestAccept(Player* pPlayer, Creature* /*pCreature*/, Quest const* quest)
+ 
+    bool OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* quest)
     {
         if (quest->GetQuestId() == QUEST_ALLY_OF_NETHER)
             pPlayer->ActivateTaxiPathTo(TAXI_PATH_ID);        //pPlayer->ActivateTaxiPathTo(649);
-
+        if (quest->GetQuestId() == QUEST_ZULUHED_THE_WACKED)
+            pCreature->SummonCreature(NPC_ZULUHED_THE_WACKED, -4204.94f, 316.397f, 122.508f, 1.309f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
         return true;
     }
 };
