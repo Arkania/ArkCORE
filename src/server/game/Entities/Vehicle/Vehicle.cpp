@@ -488,7 +488,7 @@ VehicleSeatEntry const* Vehicle::GetSeatForPassenger (Unit* passenger)
 {
     SeatMap::iterator itr;
     for (itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
-        if (itr->second.passenger = passenger)
+        if (itr->second.passenger == passenger)
             return itr->second.seatInfo;
 
     return NULL;
