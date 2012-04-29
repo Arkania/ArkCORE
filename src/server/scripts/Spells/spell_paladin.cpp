@@ -39,7 +39,7 @@ enum PaladinSpells
     SPELL_DIVINE_PURPOSE_PROC = 90174,
 };
 
-//spell id=20217
+// Blessing of Kings
 class spell_pall_bless_of_the_king: public SpellScriptLoader
 {
 public:
@@ -81,6 +81,7 @@ public:
         return new spell_pall_bless_of_the_king_SpellScript;
     }
 };
+
 // 31850 - Ardent Defender
 class spell_pal_ardent_defender: public SpellScriptLoader
 {
@@ -157,6 +158,7 @@ public:
     }
 };
 
+// blesssing of faith
 class spell_pal_blessing_of_faith: public SpellScriptLoader
 {
 public:
@@ -221,6 +223,7 @@ public:
     }
 };
 
+// holy shock
 class spell_pal_holy_shock: public SpellScriptLoader
 {
 public:
@@ -295,6 +298,7 @@ public:
     }
 };
 
+// Judgements of the Bold
 class spell_pal_judgements_of_the_bold: public SpellScriptLoader
 {
 public:
@@ -330,6 +334,7 @@ public:
     }
 };
 
+// cleanse
 class spell_pal_cleanse: public SpellScriptLoader
 {
 public:
@@ -368,6 +373,7 @@ public:
     }
 };
 
+// Word of Glory
 class spell_pal_word_of_glory: public SpellScriptLoader
 {
 public:
@@ -449,6 +455,7 @@ public:
     }
 };
 
+// Selfless Healer
 class spell_pal_selfless_healer: public SpellScriptLoader
 {
 public:
@@ -554,6 +561,7 @@ public:
     }
 };
 
+// Judgements of the Wise
 class spell_pal_judgements_of_the_wise: public SpellScriptLoader
 {
 public:
@@ -589,121 +597,7 @@ public:
     }
 };
 
-// 20911 Blessing of Sanctuary
-// 25899 Greater Blessing of Sanctuary
-class spell_pal_blessing_of_sanctuary: public SpellScriptLoader
-{
-public:
-    spell_pal_blessing_of_sanctuary () :
-            SpellScriptLoader("spell_pal_blessing_of_sanctuary")
-    {
-    }
-
-    class spell_pal_blessing_of_sanctuary_AuraScript: public AuraScript
-    {
-        PrepareAuraScript(spell_pal_blessing_of_sanctuary_AuraScript)
-        bool Validate (SpellEntry const* /*entry*/)
-        {
-            if (!sSpellStore.LookupEntry(PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF))
-                return false;
-            return true;
-        }
-
-        void HandleEffectApply (AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-            if (Unit* pCaster = GetCaster())
-                pCaster->CastSpell(target, PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, true);
-        }
-
-        void HandleEffectRemove (AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-            target->RemoveAura(PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, GetCasterGUID());
-        }
-
-        void Register ()
-        {
-            AfterEffectApply += AuraEffectApplyFn(spell_pal_blessing_of_sanctuary_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-            AfterEffectRemove += AuraEffectRemoveFn(spell_pal_blessing_of_sanctuary_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-        }
-    };
-
-    AuraScript* GetAuraScript () const
-    {
-        return new spell_pal_blessing_of_sanctuary_AuraScript();
-    }
-};
-
-// 63521 Guarded by The Light
-class spell_pal_guarded_by_the_light: public SpellScriptLoader
-{
-public:
-    spell_pal_guarded_by_the_light () :
-            SpellScriptLoader("spell_pal_guarded_by_the_light")
-    {
-    }
-
-    class spell_pal_guarded_by_the_light_SpellScript: public SpellScript
-    {
-        PrepareSpellScript(spell_pal_guarded_by_the_light_SpellScript)
-        bool Validate (SpellEntry const* /*spellEntry*/)
-        {
-            if (!sSpellStore.LookupEntry(PALADIN_SPELL_DIVINE_PLEA))
-                return false;
-            return true;
-        }
-
-        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
-        {
-            // Divine Plea
-            if (Aura* aura = GetCaster()->GetAura(PALADIN_SPELL_DIVINE_PLEA))
-                aura->RefreshDuration();
-        }
-
-        void Register ()
-        {
-            OnEffectHitTarget += SpellEffectFn(spell_pal_guarded_by_the_light_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
-        }
-    };
-
-    SpellScript* GetSpellScript () const
-    {
-        return new spell_pal_guarded_by_the_light_SpellScript();
-    }
-};
-
-class spell_pal_judgement_of_command: public SpellScriptLoader
-{
-public:
-    spell_pal_judgement_of_command () :
-            SpellScriptLoader("spell_pal_judgement_of_command")
-    {
-    }
-
-    class spell_pal_judgement_of_command_SpellScript: public SpellScript
-    {
-        PrepareSpellScript(spell_pal_judgement_of_command_SpellScript)
-        void HandleDummy (SpellEffIndex /*effIndex*/)
-        {
-            if (Unit* unitTarget = GetHitUnit())
-                if (SpellEntry const* spell_proto = sSpellStore.LookupEntry(GetEffectValue()))
-                    GetCaster()->CastSpell(unitTarget, spell_proto, true, NULL);
-        }
-
-        void Register ()
-        {
-            // add dummy effect spell handler to Judgement of Command
-            OnEffectHitTarget += SpellEffectFn(spell_pal_judgement_of_command_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-        }
-    };
-
-    SpellScript* GetSpellScript () const
-    {
-        return new spell_pal_judgement_of_command_SpellScript();
-    }
-};
-
+// Light of Dawn
 class spell_pal_light_of_dawn: public SpellScriptLoader
 {
 public:
@@ -784,8 +678,5 @@ void AddSC_paladin_spell_scripts ()
     new spell_pal_selfless_healer();
     new spell_pal_shield_of_righteous();
     new spell_pal_judgements_of_the_wise();
-    new spell_pal_blessing_of_sanctuary();
-    new spell_pal_guarded_by_the_light();
-    new spell_pal_judgement_of_command();
     new spell_pal_light_of_dawn();
 }
