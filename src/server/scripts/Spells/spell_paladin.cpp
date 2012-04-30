@@ -40,46 +40,49 @@ enum PaladinSpells
 };
 
 // Blessing of Kings
-class spell_pall_bless_of_the_king: public SpellScriptLoader
+class spell_pall_bless_of_the_king : public SpellScriptLoader
 {
-public:
-    spell_pall_bless_of_the_king () :
-            SpellScriptLoader("spell_pall_bless_of_the_king")
-    {
-    }
+    public:
+        spell_pall_bless_of_the_king() : SpellScriptLoader("spell_pall_bless_of_the_king") { }
 
-    class spell_pall_bless_of_the_king_SpellScript: public SpellScript
-    {
-        PrepareSpellScript(spell_pall_bless_of_the_king_SpellScript)
-        ;
-
-        void HandleDummy (SpellEffIndex /*effIndex*/)
+        class spell_pall_bless_of_the_king_SpellScript : public SpellScript
         {
-            if (Unit* caster = GetCaster())
+            PrepareSpellScript(spell_pall_bless_of_the_king_SpellScript);
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (caster->GetTypeId() != TYPEID_PLAYER)
-                    return;
+                if (Unit* caster = GetCaster())
+                {
+                    if (caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
 
-                std::list<Unit*> PartyMembers;
-                caster->GetPartyMembers(PartyMembers);
+                    std::list<Unit*> PartyMembers;
+                    caster->GetPartyMembers(PartyMembers);
+                    uint32 player = 0;
+                    bool cont=false;
+                    for (std::list <Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr)
+                    {
+                        ++player;
+                        if (cont == false && player > 1) cont = true;
+                    }
 
-                if (PartyMembers.size() > 1)
-                    caster->CastSpell(GetHitUnit(), 79063, true);          // Blessing of Kings (Raid)
-                else
-                    caster->CastSpell(GetHitUnit(), 79062, true);          // Blessing of Kings (Caster)
+                    if (cont==true)
+                        caster->CastSpell(GetHitUnit(), 79063, true);// Blessing of Kings (Raid)
+                    else
+                        caster->CastSpell(GetHitUnit(), 79062, true); // Blessing of Kings (Caster)
+                }
             }
-        }
 
-        void Register ()
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pall_bless_of_the_king_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
         {
-            OnEffectHitTarget += SpellEffectFn(spell_pall_bless_of_the_king_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            return new spell_pall_bless_of_the_king_SpellScript;
         }
-    };
-
-    SpellScript* GetSpellScript () const
-    {
-        return new spell_pall_bless_of_the_king_SpellScript;
-    }
 };
 
 // 31850 - Ardent Defender
