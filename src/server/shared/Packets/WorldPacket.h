@@ -27,7 +27,6 @@
 
 #include "Common.h"
 #include "ByteBuffer.h"
-#include "Opcodes.h"
 
 class WorldPacket: public ByteBuffer {
 public:
