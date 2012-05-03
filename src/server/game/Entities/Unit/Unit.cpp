@@ -6122,6 +6122,15 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             triggered_spell_id = 54181;
             break;
         }
+         // Impending Doom
+         if (dummySpell->SpellIconID == 195)
+         {
+             if (Unit* caster = triggeredByAura->GetCaster())
+             {
+                 caster->ToPlayer()->UpdateSpellCooldown(47241, -(dummySpell->EffectBasePoints[1]));
+             }
+             return true;
+         }
         switch (dummySpell->Id)
         {
         // Siphon Life
