@@ -17,6 +17,9 @@
  */
 
 #include <ace/Singleton.h>
+#include "Player.h"
+
+
 
 enum ReportTypes
 {
@@ -25,11 +28,11 @@ enum ReportTypes
     WALK_WATER_HACK_REPORT,
     JUMP_HACK_REPORT,
     TELEPORT_PLANE_HACK_REPORT,
-
-    MAX_REPORT_TYPES
+    MAX_REPORT_TYPES = 5
 };
 
-const std::string report_types[MAX_REPORT_TYPES] = {"speed_reports", "fly_reports", "waterwalk_reports", "jump_reports", "teleportplane_reports" };
+//don't use std::string here. Always use C-Strings for an array !
+const char* report_types[] = {"speed_reports","fly_reports","waterwalk_reports","jump_reports","teleportplane_reports"};
 
 class AnticheatMgr
 {
