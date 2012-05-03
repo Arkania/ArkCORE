@@ -125,7 +125,7 @@ enum BG_BG_Objectives
 const float BG_BG_NodePositions[BG_BG_DYNAMIC_NODES_COUNT][4] =
 {
 { 1057.7800f, 1278.260010f, 3.192400f, 1.864820f },          // Lighthouse
-{ 980.1835f, 947.8692f, 13.998f, 5.9015f },          // Waterwork
+{ 980.1835f, 947.8692f, 12.868f, 5.9015f },          // Waterwork
 { 1251.010f, 958.3939f, 5.680f, 2.7698f }          // mine
 };
 
