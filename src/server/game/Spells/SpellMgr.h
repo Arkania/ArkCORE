@@ -861,7 +861,7 @@ class SpellMgr
     SpellMgr ();
     ~SpellMgr ();
 
-    // Accessors (const or static functions)
+    // Assessors (const or static functions)
 public:
 
     bool IsAffectedByMod (SpellEntry const *spellInfo, SpellModifier *mod) const;
@@ -984,9 +984,6 @@ public:
             return &itr->second;
         return NULL;
     }
-
-    // Actionbar override spell
-    ActionBarSpellOverride const* GetActionBarSpellOverride (uint32 overrideSpell) const;
 
     // Spell bonus data
     SpellBonusEntry const* GetSpellBonusData (uint32 spellId) const
@@ -1206,7 +1203,7 @@ public:
     static float CalculateSpellEffectValueMultiplier (SpellEntry const * spellEntry, uint8 effIndex, Unit * caster, Spell * spell = NULL);
     static float CalculateSpellEffectDamageMultiplier (SpellEntry const * spellEntry, uint8 effIndex, Unit * caster, Spell * spell = NULL);
 
-    // Spell correctess for client using
+    // Spell correctness for client using
     static bool IsSpellValid (SpellEntry const * spellInfo, Player* pl = NULL, bool msg = true);
 
     SkillLineAbilityMapBounds GetSkillLineAbilityMapBounds (uint32 spell_id) const
@@ -1316,6 +1313,9 @@ public:
     {
         return this->mSpellsReqSpell;
     }
+
+    // Actionbar override spell
+    ActionBarSpellOverride const* GetActionBarSpellOverride (uint32 overrideSpell) const;
 
     uint32 GetSpellRequired (uint32 spell_id) const
     {
