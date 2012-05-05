@@ -24,7 +24,6 @@ UPDATE `quest_template` SET `RequestItemsText`="Do you have my supplies, $N?" WH
 UPDATE `quest_template` SET `RequestItemsText`="Bloody Forsaken! Not even the ocean wants them." WHERE `entry`=14412;
 UPDATE `quest_template` SET `RequestItemsText`="How did it go, $N?" WHERE `entry`=24472;
 UPDATE `quest_template` SET `RequestItemsText`="Were any of the passengers still alive?" WHERE `entry`=24468;
-UPDATE `quest_template` SET `RequestItemsText`="How did it go, $N?" WHERE `entry`=24472;
 
 -- OfferRewardText.
 UPDATE `quest_template` SET `OfferRewardText`="$N.  I've heard much about you.$B$BI understand you were crucial in my family's survival during the outbreak in Gilneas City." WHERE `entry`=14465;
