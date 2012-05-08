@@ -37,6 +37,48 @@ enum WarlockSpells
     WARLOCK_FELHUNTER_SHADOWBITE_R1 = 54049
 };
 
+// 77799 Fel Flame
+class spell_warl_fel_flame: public SpellScriptLoader {
+public:
+    spell_warl_fel_flame() : SpellScriptLoader("spell_warl_fel_flame") {}
+
+    class spell_warl_fel_flame_SpellScript: public SpellScript {
+        PrepareSpellScript(spell_warl_fel_flame_SpellScript)
+
+        void HandleOnHit() 
+        {
+            Unit* unitTarget = GetHitUnit();
+            Unit* caster = GetCaster();
+
+            // Immolate
+            if (Aura* aur = unitTarget->GetOwnedAura(348, caster->GetGUID()))
+            {
+                if (aur->GetDuration() + 6000 > 15000)
+                    aur->SetDuration(15000);
+                else
+                    aur->SetDuration(aur->GetDuration() + 6000);
+            }
+
+            //Unstable Affliction
+            if (Aura* aur = unitTarget->GetOwnedAura(30108, caster->GetGUID()))
+            {
+                if (aur->GetDuration() + 6000 > 15000)
+                    aur->SetDuration(15000);
+                else
+                    aur->SetDuration(aur->GetDuration() + 6000);
+            }
+        }
+
+        void Register() {
+            OnHit += SpellHitFn(spell_warl_fel_flame_SpellScript::HandleOnHit);
+        }
+    };
+
+    SpellScript* GetSpellScript() const {
+        return new spell_warl_fel_flame_SpellScript();
+    }
+};
+
 // 47193 Demonic Empowerment
 class spell_warl_demonic_empowerment: public SpellScriptLoader
 {
@@ -410,7 +452,8 @@ public:
         return new spell_warl_shadow_bite_SpellScript();
     }
 };
-//DrainLife fix: thnks to rebase. fixed by wlasser
+
+// DrainLife 
 class spell_warl_drain_life: public SpellScriptLoader
 {
 public:
@@ -453,4 +496,5 @@ void AddSC_warlock_spell_scripts ()
     new spell_warl_seed_of_corruption();
     new spell_warl_shadow_bite();
     new spell_warl_drain_life();
+    new spell_warl_fel_flame();
 }
