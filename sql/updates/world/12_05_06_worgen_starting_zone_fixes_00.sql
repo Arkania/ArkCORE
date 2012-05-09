@@ -25,7 +25,7 @@ UPDATE `quest_template` SET `OfferRewardText`="These simple leaves grow by Elune
 UPDATE `quest_template` SET `CompletedText`="" WHERE `entry` IN (24484, 24501, 24616, 24627, 24628);
 
 -- RewSpellCast -> RewSpellHiddenCast.
-UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=71042 WHERE `entry`=24627;
+-- UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=71042 WHERE `entry`=24627;
 
 -- Moonleaf is a quest item.
 UPDATE `gameobject_loot_template` SET ChanceOrQuestChance="-100" WHERE `item`=50017;

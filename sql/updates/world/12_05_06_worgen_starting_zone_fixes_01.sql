@@ -45,10 +45,10 @@ UPDATE `quest_template` SET `CompletedText`="" WHERE `entry` IN (24593, 24592, 2
 UPDATE `quest_template` SET `Details`="Are you ready to set sail, $N?  Your people have been granted shelter in the lands of the kaldorei.$B$BDo not worry, $R.  Your people will get a chance to fight for Gilneas again.  This time, with the full strength of the Alliance." WHERE `entry`=14434;
 
 -- RewSpellCast -> RewSpellHiddenCast.
-UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=72829 WHERE `entry`=24593;
-UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=81040 WHERE `entry`=24681;
-UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=95840 WHERE `entry`=26706;
-UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=78107 WHERE `entry`=14434;
+-- UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=72829 WHERE `entry`=24593;
+-- UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=81040 WHERE `entry`=24681;
+-- UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=95840 WHERE `entry`=26706;
+-- UPDATE `quest_template` SET `RewSpellCast`=0, `RewSpellHiddenCast`=78107 WHERE `entry`=14434;
 
 -- Teleport players to next quest when turning in The Battle for Gilneas City.
 UPDATE quest_template SET CompleteScript=24904 WHERE entry=24904;
