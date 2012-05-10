@@ -55,6 +55,7 @@
 #include "LFGMgr.h"
 #include "GameObjectAI.h"
 #include "Group.h"
+#include "Guild.h"
 
 void WorldSession::HandleRepopRequestOpcode (WorldPacket & recv_data)
 {
@@ -1237,9 +1238,8 @@ void WorldSession::HandleInspectOpcode (WorldPacket& recv_data)
         return;
 
     uint32 talent_points = 0x29;
-    uint32 guid_size = plr->GetPackGUID().wpos();
-    WorldPacket data(SMSG_INSPECT_TALENT, guid_size + 4 + talent_points, true);
-    data.append(plr->GetPackGUID());
+    WorldPacket data(SMSG_INSPECT_TALENT, 8 + 4 + talent_points, true);
+    data << plr->GetGUID();
 
     if (sWorld->getBoolConfig(CONFIG_TALENTS_INSPECTING) || _player->isGameMaster())
     {
@@ -1253,6 +1253,16 @@ void WorldSession::HandleInspectOpcode (WorldPacket& recv_data)
     }
 
     plr->BuildEnchantmentsInfoData(&data);
+    if (uint32 guildId = plr->GetGuildId())
+    {
+        if (Guild* pGuild = sObjectMgr->GetGuildById(guildId))
+        {
+            data << uint64(pGuild->GetId());            // not sure
+            data << uint32(pGuild->GetLevel());         // guild level
+            data << uint64(plr->GetGUID());             // not sure
+            data << uint32(pGuild->GetMembersCount());  // number of members
+        }
+    }   
     SendPacket(&data);
 }
 
