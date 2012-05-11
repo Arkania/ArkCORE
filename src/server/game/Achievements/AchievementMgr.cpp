@@ -1565,6 +1565,8 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
 
 static const uint32 achievIdByClass[MAX_CLASSES] =
 { 0, 459, 465, 462, 458, 464, 461, 467, 460, 463, 0, 466 };
+static const uint32 achievIdByClass85[MAX_CLASSES] =
+{ 0, 5007, 5001, 5004, 5008, 5002, 5005, 4998, 5006, 5003, 0, 5000 };
 static const uint32 achievIdByRace[MAX_RACES] =
 { 0, 1408, 1410, 1407, 1409, 1413, 1411, 1404, 1412, 0, 1405, 1406 };
 
@@ -1596,6 +1598,11 @@ bool AchievementMgr::IsCompletedCriteria(AchievementCriteriaEntry const* achieve
         // skip wrong class achievements
         for (int i = 1; i < MAX_CLASSES; ++i)
             if (achievIdByClass[i] == achievement->ID && i != GetPlayer()->getClass())
+                return false;
+
+        // Skip wrong class achievements (level 85)
+        for (int i = 1; i < MAX_CLASSES; ++i)
+            if (achievIdByClass85[i] == achievement->ID && i != GetPlayer()->getClass())
                 return false;
 
         // skip wrong race achievements
