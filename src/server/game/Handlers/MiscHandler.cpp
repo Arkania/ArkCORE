@@ -1262,7 +1262,7 @@ void WorldSession::HandleInspectOpcode (WorldPacket& recv_data)
             data << uint64(plr->GetGUID());             // not sure
             data << uint32(pGuild->GetMembersCount());  // number of members
         }
-    }   
+    }
     SendPacket(&data);
 }
 
