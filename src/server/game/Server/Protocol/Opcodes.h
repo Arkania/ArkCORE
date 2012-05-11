@@ -351,7 +351,7 @@ enum Opcodes
     SMSG_ATTACKSTOP                                  = 0x06DCC, // 4.0.6a 13623
     SMSG_ATTACKSWING_NOTINRANGE                      = 0x036C4, // 4.0.6a 13623
     SMSG_ATTACKSWING_BADFACING                       = 0x067A8, // 4.0.6a 13623
-    SMSG_INSTANCE_LOCK_WARNING_QUERY                 = 0x0B574, //
+    SMSG_INSTANCE_LOCK_WARNING_QUERY                 = 0x07488, // 4.0.6a 13623
     SMSG_ATTACKSWING_DEADTARGET                      = 0x0A7C4, // 4.0.6a 13623
     SMSG_ATTACKSWING_CANT_ATTACK                     = 0x06188, // 4.0.6a 13623
     SMSG_ATTACKERSTATEUPDATE                         = 0x0BBC0, // 4.0.6a 13623
@@ -1075,7 +1075,7 @@ enum Opcodes
     SMSG_SEND_UNLEARN_SPELLS                         = 0x0BDE8, // 4.0.6a 13623
     SMSG_PROPOSE_LEVEL_GRANT                         = 0x0B476, //
     CMSG_ACCEPT_LEVEL_GRANT                          = 0x0B5CC, // 4.0.6a 13623
-    SMSG_REFER_A_FRIEND_FAILURE                      = 0x07F7C, // 4.0.6a 13623
+    SMSG_REFER_A_FRIEND_FAILURE                      = 0x0A28C, // 4.0.6a 13623
     SMSG_SPLINE_MOVE_SET_FLYING                      = 0x05D54, //
     SMSG_SPLINE_MOVE_UNSET_FLYING                    = 0x0257D, // 4.0.6a 13623
     SMSG_SUMMON_CANCEL                               = 0x070A8, // 4.0.6a 13623
@@ -1152,7 +1152,7 @@ enum Opcodes
     CMSG_QUERY_INSPECT_ACHIEVEMENTS                  = 0x069A0, // 4.0.6a 13623 old 28EC
     SMSG_RESPOND_INSPECT_ACHIEVEMENTS                = 0x101DA, //
     CMSG_DISMISS_CONTROLLED_VEHICLE                  = 0x0E3C0, // 4.0.6a 13623
-    CMSG_COMPLETE_ACHIEVEMENT_CHEAT                  = 0x101DC, //
+    //CMSG_TRACKED_ACHIEVEMENT_UPDATE                  = 0x0310D, // 4.0.6a 13623
     SMSG_QUESTUPDATE_ADD_PVP_KILL                    = 0x078E0, // 4.0.6a 13623
     CMSG_SET_CRITERIA_CHEAT                          = 0x101DD, //
     SMSG_CALENDAR_UPDATE_INVITE_LIST3                = 0x0A2A0, // 4.0.6a 13623
@@ -1268,7 +1268,7 @@ enum Opcodes
     CMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x03FA8, // 4.0.6a 13623
     SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x05557, // 4.0.6a 13623
     CMSG_CHAR_RACE_CHANGE                            = 0x06EA4, // 4.0.6a 13623
-    SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x02A84, // 4.0.6a 13623
+    SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x0F6E4, // 4.0.6a 13623
     SMSG_UNKNOWN_1276                                = 0x1023A, // 4.0.6a 13623
     SMSG_LOOT_SLOT_CHANGED                           = 0x031EC, // 4.0.6a 13623
     CMSG_READY_FOR_ACCOUNT_DATA_TIMES                = 0x07DA8, // 4.0.6a 13623
@@ -1318,9 +1318,12 @@ enum Opcodes
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
     CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
+    CMSG_REQUEST_GUILD_PARTY_STATE                   = 0x02219, // 4.0.6a 13623    
     CMSG_CLEAR_RAID_MARKER                           = 0x02218, // 4.0.6a 13623
     SMSG_SEND_GUILD_ACHIEVEMENT_MEMBERS              = 0x0414E, // 4.0.6a 13623
     CMSG_GET_GUILD_ACHIEVEMENT_MEMBERS               = 0x02509, // 4.0.6a 13623
+    SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
+    SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
     SMSG_SEND_ERROR_MESSAGE                          = 0x0480C, // 4.0.6a 13623 this has its own enum u8+u32+u32 special
     SMSG_TALENT_ERROR                                = 0x068A4, // 4.0.6a 13623
     SMSG_SERVER_MESSAGE_BOX                          = 0x0080C, // Server msgbox-like 4.0.6a 13623
@@ -1330,8 +1333,8 @@ enum Opcodes
     CMSG_COMPLETED_ARTIFACTS                         = 0x00A13, // 4.0.6a 13623
     SMSG_COMPLETED_ARTIFACTS                         = 0x0044E, // 4.0.6a 13623 structure: uint32 (count) loop: uint32(id), uint32(date), uint32(number of times completed) :endloop
     SMSG_ARTIFACT_COMPLETED                          = 0x0491C, // 4.0.6a 13623
-    SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
-    SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
+    SMSG_REFORGE_OPEN_FROM_GOSSIP                    = 0x00C5C, // 4.0.6a 13623
+    SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623  
     //SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B7  // last unknown opcode + 1.
 };

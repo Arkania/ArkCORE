@@ -95,9 +95,12 @@ void LFGScripts::OnRemoveMember (Group* group, uint64 guid, RemoveMethod& method
     sLFGMgr->ClearState(guid);
     if (Player * plr = sObjectMgr->GetPlayer(guid))
     {
+        // Add deserter flag
+        if (sLFGMgr->GetState(guid) != LFG_STATE_FINISHED_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
+            plr->CastSpell(plr, LFG_SPELL_DUNGEON_DESERTER, true);
+        if (sLFGMgr->GetState(guid) == LFG_TYPE_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)        
+            plr->RemoveAura(LFG_SPELL_LUCK_OF_THE_DRAW);// Remove Luck of the Draw aura.   
         /*
-         if (method == GROUP_REMOVEMETHOD_LEAVE)
-         // Add deserter flag
          else if (group->isLfgKickActive())
          // Update internal kick cooldown of kicked
          */

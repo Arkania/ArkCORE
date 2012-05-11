@@ -18981,7 +18981,7 @@ void Player::SendRaidInfo ()
 {
     uint32 counter = 0;
 
-    WorldPacket data(SMSG_RAID_INSTANCE_INFO, 4);
+    WorldPacket data(SMSG_RAID_INSTANCE_INFO);
 
     size_t p_counter = data.wpos();
     data << uint32(counter);          // placeholder
@@ -18995,12 +18995,14 @@ void Player::SendRaidInfo ()
             if (itr->second.perm)
             {
                 InstanceSave *save = itr->second.save;
-                data << uint32(save->GetMapId());          // map id
-                data << uint32(save->GetDifficulty());          // difficulty
-                data << uint64(save->GetInstanceId());          // instance id
-                data << uint8(1);          // expired = 0
-                data << uint8(0);          // extended = 1
-                data << uint32(save->GetResetTime() - now);          // reset time
+                data << uint32(save->GetMapId());           // map id
+                data << uint32(save->GetInstanceId());      // instance id
+                data << uint32(save->GetResetTime() - now); // reset time
+                data << uint64(save->GetDifficulty());      // difficulty
+                data << uint8(1);                           // expired = 0
+                data << uint8(0);                           // extended = 1
+                data << uint32(0);                          // unk
+                data << uint32(0);                          // unk
                 ++counter;
             }
         }
@@ -25310,16 +25312,16 @@ void Player::UpdateSpellCooldown (uint32 spell_id, int32 amount)
         else
             curCooldown -= amount;
     }
-    else // if (amount > 0) 
+    else // if (amount > 0)
         curCooldown += amount;
-    
+
     AddSpellCooldown(spell_id, 0, uint32(time(NULL) + curCooldown));
-    
+
     WorldPacket data(SMSG_MODIFY_COOLDOWN, 4+8+4);
     data << uint32(spell_id);               // Spell ID
     data << uint64(GetGUID());              // Player GUID
     data << int32(amount * 1000);           // Cooldown mod in milliseconds
-    GetSession()->SendPacket(&data);   
+    GetSession()->SendPacket(&data);
 }
 
 void Player::ResetMap ()
