@@ -33,6 +33,50 @@ enum HunterSpells
     HUNTER_SPELL_READINESS = 23989, HUNTER_SPELL_BESTIAL_WRATH = 19574, HUNTER_PET_SPELL_LAST_STAND_TRIGGERED = 53479, HUNTER_PET_HEART_OF_THE_PHOENIX = 55709, HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED = 54114, HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF = 55711, HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED = 54045, HUNTER_SPELL_INVIGORATION_TRIGGERED = 53398, HUNTER_SPELL_MASTERS_CALL_TRIGGERED = 62305, HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED = 53220
 };
 
+class spell_hun_kill_command: public SpellScriptLoader
+{
+public:
+    spell_hun_kill_command () :
+        SpellScriptLoader("spell_hun_kill_command")
+    {
+    }
+
+    class spell_hun_kill_command_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_hun_kill_command_SpellScript)
+
+        SpellCastResult CheckCast ()
+        {
+            Pet* pet = GetCaster()->ToPlayer()->GetPet();
+
+            if (!pet || pet->isDead())
+                return SPELL_FAILED_NO_PET;
+
+            if (!pet->IsWithinMeleeRange(pet->getVictim()))
+                return SPELL_FAILED_OUT_OF_RANGE;
+
+            return SPELL_CAST_OK;
+        }
+
+        void HandleScriptEffect (SpellEffIndex /*effIndex*/)
+        {
+            Pet* pet = GetCaster()->ToPlayer()->GetPet();
+            pet->CastCustomSpell(pet->getVictim(), (uint32) GetEffectValue(), 0, NULL, NULL, true, NULL, NULL, pet->GetGUID());
+        }
+
+        void Register ()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_hun_kill_command_SpellScript::CheckCast);
+            OnEffect += SpellEffectFn(spell_hun_kill_command_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript () const
+    {
+        return new spell_hun_kill_command_SpellScript();
+    }
+};
+
 class spell_hun_focus_fire: public SpellScriptLoader
 {
 public:
@@ -530,4 +574,5 @@ void AddSC_hunter_spell_scripts ()
     new spell_hun_pet_carrion_feeder();
     new spell_hun_steady_shot();
     new spell_hun_focus_fire();
+    new spell_hun_kill_command();
 }
