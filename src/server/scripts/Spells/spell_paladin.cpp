@@ -30,59 +30,19 @@
 
 enum PaladinSpells
 {
-    PALADIN_SPELL_DIVINE_PLEA = 54428, PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF = 67480,
+    PALADIN_SPELL_DIVINE_PLEA                    = 54428,
+    PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF     = 67480,
 
-    PALADIN_SPELL_HOLY_SHOCK_R1 = 20473, PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE = 25912, PALADIN_SPELL_HOLY_SHOCK_R1_HEALING = 25914,
+    PALADIN_SPELL_HOLY_SHOCK_R1                  = 20473,
+    PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE           = 25912,
+    PALADIN_SPELL_HOLY_SHOCK_R1_HEALING          = 25914,
 
-    SPELL_BLESSING_OF_LOWER_CITY_DRUID = 37878, SPELL_BLESSING_OF_LOWER_CITY_PALADIN = 37879, SPELL_BLESSING_OF_LOWER_CITY_PRIEST = 37880, SPELL_BLESSING_OF_LOWER_CITY_SHAMAN = 37881,
+    SPELL_BLESSING_OF_LOWER_CITY_DRUID           = 37878,
+    SPELL_BLESSING_OF_LOWER_CITY_PALADIN         = 37879,
+    SPELL_BLESSING_OF_LOWER_CITY_PRIEST          = 37880,
+    SPELL_BLESSING_OF_LOWER_CITY_SHAMAN          = 37881,
 
-    SPELL_DIVINE_PURPOSE_PROC = 90174,
-};
-
-// Blessing of Kings
-class spell_pall_bless_of_the_king : public SpellScriptLoader
-{
-    public:
-        spell_pall_bless_of_the_king() : SpellScriptLoader("spell_pall_bless_of_the_king") { }
-
-        class spell_pall_bless_of_the_king_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_pall_bless_of_the_king_SpellScript);
-
-            void HandleDummy(SpellEffIndex /*effIndex*/)
-            {
-                if (Unit* caster = GetCaster())
-                {
-                    if (caster->GetTypeId() != TYPEID_PLAYER)
-                        return;
-
-                    std::list<Unit*> PartyMembers;
-                    caster->GetPartyMembers(PartyMembers);
-                    uint32 player = 0;
-                    bool cont=false;
-                    for (std::list <Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr)
-                    {
-                        ++player;
-                        if (cont == false && player > 1) cont = true;
-                    }
-
-                    if (cont==true)
-                        caster->CastSpell(GetHitUnit(), 79063, true);// Blessing of Kings (Raid)
-                    else
-                        caster->CastSpell(GetHitUnit(), 79062, true); // Blessing of Kings (Caster)
-                }
-            }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_pall_bless_of_the_king_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_pall_bless_of_the_king_SpellScript;
-        }
+    SPELL_DIVINE_PURPOSE_PROC                    = 90174,
 };
 
 // 31850 - Ardent Defender
@@ -671,7 +631,6 @@ public:
 
 void AddSC_paladin_spell_scripts ()
 {
-    new spell_pall_bless_of_the_king();
     new spell_pal_ardent_defender();
     new spell_pal_blessing_of_faith();
     new spell_pal_holy_shock();
