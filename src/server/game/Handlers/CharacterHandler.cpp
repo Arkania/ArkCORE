@@ -1863,7 +1863,7 @@ void WorldSession::HandleCharFactionOrRaceChange (WorldPacket& recv_data)
             }
 
             std::string questsStr = quests.str();
-            questsStr = questsStr.substr(0,   questsStr.length() - 1);
+            questsStr = questsStr.substr(0,   questsStr.length() - 3);
 
             if (!questsStr.empty())
                 trans->PAppend("DELETE FROM `character_queststatus_rewarded` WHERE guid='%u' AND quest IN (%s)",   lowGuid,   questsStr.c_str());
