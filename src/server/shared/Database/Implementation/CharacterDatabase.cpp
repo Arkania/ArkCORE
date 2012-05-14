@@ -764,7 +764,7 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             "INSERT INTO arena_team (arenaTeamId, name, captainGuid, type, rating, backgroundColor, emblemStyle, emblemColor, borderStyle, borderColor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_SET_ARENA_TEAM_MEMBER,
-            "INSERT INTO arena_team_member (arenaTeamId, guid) VALUES (?, ?)",
+            "INSERT INTO arena_team_member (arenaTeamId, guid, personalRating) VALUES (?, ?, ?)",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_DEL_ARENA_TEAM,
             "DELETE FROM arena_team where arenaTeamId = ?", CONNECTION_ASYNC);
@@ -791,7 +791,7 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(
             CHAR_UPDATE_CHARACTER_ARENA_STATS,
-            "REPLACE INTO character_arena_stats (guid, slot, matchMakerRating) VALUES (?, ?, ?)",
+            "REPLACE INTO character_arena_stats (guid, slot, personalRating, matchMakerRating) VALUES (?, ?, ?, ?)",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(
             CHAR_LOAD_PLAYER_ARENA_TEAMS,
