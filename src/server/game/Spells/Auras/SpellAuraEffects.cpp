@@ -4194,10 +4194,24 @@ void AuraEffect::HandleAuraMounted (AuraApplication const *aurApp, uint8 mode, b
     Unit *target = aurApp->GetTarget();
     uint32 spellId = (uint32) GetAmount();
     Player *plr = target->ToPlayer();
+    
+    switch (GetId())
+    {
+        case 55164: // Spectral Gryphon
+            spellId = 86460;
+            break;
+        case 64731: // Sea Turtle
+            spellId = 83159;
+            break;
+        default:
+            break;
+    }    
+    
     if (plr && spellId < 2)
     {
         return;
     }
+    
     if (apply)
     {
         uint32 creatureEntry = GetMiscValue();
