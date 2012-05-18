@@ -17,6 +17,8 @@
  */
 
 #include <ace/Singleton.h>
+#include <string>
+#include "../Entities/Player/Player.h"
 
 enum ReportTypes
 {
