@@ -146,12 +146,8 @@ public:
             {
                 case TYPE_BJARNGRIM:
                     if (uiData == DONE)
-                {
                         if (GameObject* pDoor = instance->GetGameObject(m_uiBjarngrimDoorGUID))
                             pDoor->SetGoState(GO_STATE_ACTIVE);
-                    GameObject* pGo = instance->GetGameObject(m_uiBjarngrimDoorGUID);
-                    pGo->SetGoState(GO_STATE_ACTIVE);
-                }
                     m_auiEncounter[0] = uiData;
                     break;
                 case TYPE_VOLKHAN:
