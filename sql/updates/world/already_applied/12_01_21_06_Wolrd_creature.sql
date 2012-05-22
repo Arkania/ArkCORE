@@ -1,3 +1,0 @@
--- DB/FIX EXPLOIT: Fix min respawtime to rare boss (read note)
--- I know this is not Blizzlike but I was thinking about this exploit, some new rares have only 3 min respaw so better to give 12H until we now all correct times.
-UPDATE `creature` SET `spawntimesecs`='43200' WHERE `id` IN ('2754','5797','5798','5799','5800','8923','14445','32517','32517','32517','32517','32517','32517','32517','32517','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','32630','35189','35189','35189','38453','38453','38453','50009','50056','50061','50063','50089');

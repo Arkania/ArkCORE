@@ -1,1 +1,0 @@
-UPDATE creature_template SET ScriptName='npc_gs_9x_multi_bot' WHERE entry=42598;

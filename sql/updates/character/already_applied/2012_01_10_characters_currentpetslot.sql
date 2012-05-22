@@ -1,1 +1,0 @@
-ALTER TABLE `characters` CHANGE `currentPetSlot` `currentPetSlot` INT(11) NULL;

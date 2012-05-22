@@ -1,1 +1,0 @@
-INSERT INTO `spell_pet_auras` (`spell`, `aura`) VALUES (34460, 75447);

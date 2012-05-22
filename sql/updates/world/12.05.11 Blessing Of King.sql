@@ -1,1 +1,0 @@
-DELETE FROM `spell_script_names` WHERE `spell_id` IN (20217, -20217);

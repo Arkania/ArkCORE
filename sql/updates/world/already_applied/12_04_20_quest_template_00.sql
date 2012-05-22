@@ -1,3 +1,0 @@
--- Fix for quest A Rejuvenating Touch (14283, for Worgen Druids). Data for quest text taken from http://www.wowpedia.org/Quest:A_Rejuvenating_Touch (this quest was changed in 4.0.6 to require Rejuvenation instead of Healing Touch.
-
-UPDATE `quest_template` SET `Objectives`="Speak to Celestine of the Harvest and learn Rejuvenation. Practice using Rejuvenation on a Wounded Guard.", `ObjectiveText1`="Pratice Rejuvenation", `ReqCreatureOrGOId1`=47091, `ReqCreatureOrGOCount1`=1, `ReqSpellCast1`=774, `RequiredSpell`=774 WHERE `entry`=14283;
