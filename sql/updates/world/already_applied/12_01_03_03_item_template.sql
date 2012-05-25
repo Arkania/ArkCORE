@@ -1,0 +1,1 @@
+UPDATE `item_template` SET `spellid_2` = '98718' WHERE `item_template`.`entry` =67151;
