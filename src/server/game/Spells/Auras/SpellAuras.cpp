@@ -1228,10 +1228,17 @@ void Aura::HandleAuraSpecificMods (AuraApplication const* aurApp, Unit* caster, 
                 }
             }
             // Sanctfied Wrath Cataclysm proc
-            if (GetId() == 31884)
-                if (caster->HasAura(53375) || caster->HasAura(53376) || caster->HasAura(90286))
+            if (GetId() == 31884){
+                if (caster->HasAura(53375) || caster->HasAura(53376) || caster->HasAura(90286)){
                     caster->CastSpell(caster, 57318, true);
-            break;
+                    }
+                }
+                if(GetId() == 85416)    // Grand Crusader                     
+                {  
+                    // Reset cooldown on Avanger Shield  
+                    caster->ToPlayer()->RemoveSpellCooldown(31935, true);  
+                }
+                break;
         case SPELLFAMILY_DEATHKNIGHT:
             if (!caster)
                 break;
