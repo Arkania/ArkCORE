@@ -1,29 +1,29 @@
 /*
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
- * Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+*
+* Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+* Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
+* Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 /*
- * Scripts for spells with SPELLFAMILY_WARLOCK and SPELLFAMILY_GENERIC spells used by warlock players.
- * Ordered alphabetically using scriptname.
- * Scriptnames of files in this file should be prefixed with "spell_warl_".
- */
+* Scripts for spells with SPELLFAMILY_WARLOCK and SPELLFAMILY_GENERIC spells used by warlock players.
+* Ordered alphabetically using scriptname.
+* Scriptnames of files in this file should be prefixed with "spell_warl_".
+*/
 
 #include "ScriptPCH.h"
 #include "Spell.h"
@@ -32,9 +32,51 @@
 enum WarlockSpells
 {
     WARLOCK_DEMONIC_EMPOWERMENT_SUCCUBUS = 54435, WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER = 54443, WARLOCK_DEMONIC_EMPOWERMENT_FELGUARD = 54508, WARLOCK_DEMONIC_EMPOWERMENT_FELHUNTER = 54509, WARLOCK_DEMONIC_EMPOWERMENT_IMP = 54444, WARLOCK_DARK_INTENT_EFFECT = 85767,
-    //WARLOCK_IMPROVED_HEALTHSTONE_R1         = 18692,
-    //WARLOCK_IMPROVED_HEALTHSTONE_R2         = 18693,
-    WARLOCK_FELHUNTER_SHADOWBITE_R1 = 54049
+    //WARLOCK_IMPROVED_HEALTHSTONE_R1 = 18692,
+    //WARLOCK_IMPROVED_HEALTHSTONE_R2 = 18693,
+    WARLOCK_FELHUNTER_SHADOWBITE_R1 = 54049,
+    WARLOCK_DEMONIC_PACT_SPELL = 53646
+};
+
+// 47236 - Demonic Pact
+class spell_warl_demonic_pact: public SpellScriptLoader {
+public:
+    spell_warl_demonic_pact() : SpellScriptLoader("spell_warl_demonic_pact") {}
+
+    class spell_warl_demonic_pact_AuraScript: public AuraScript
+    {
+        PrepareAuraScript(spell_warl_demonic_pact_AuraScript);
+
+        bool Validate(SpellEntry const * /*spellEntry*/)
+        {
+            if (!sSpellStore.LookupEntry(WARLOCK_DEMONIC_PACT_SPELL))
+                return false;
+
+            return true;
+        }
+
+        void HandleEffectApply(AuraEffect const * aurEff, AuraEffectHandleModes /*mode*/)
+        {
+            Unit* target = GetTarget();
+
+            if (target->ToPlayer())
+                return;
+
+            if (Unit *caster = aurEff->GetBase()->GetCaster()->GetOwner())
+                if (caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3220, 0))
+                    if (target->isPet())
+                        target->CastSpell(target, WARLOCK_DEMONIC_PACT_SPELL, true, NULL, aurEff);
+        }
+
+        void Register()
+        {
+            OnEffectApply += AuraEffectApplyFn(spell_warl_demonic_pact_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+        }
+    };
+
+    AuraScript *GetAuraScript() const {
+        return new spell_warl_demonic_pact_AuraScript();
+    }
 };
 
 // 77799 Fel Flame
@@ -45,7 +87,7 @@ public:
     class spell_warl_fel_flame_SpellScript: public SpellScript {
         PrepareSpellScript(spell_warl_fel_flame_SpellScript)
 
-        void HandleOnHit() 
+        void HandleOnHit()
         {
             Unit* unitTarget = GetHitUnit();
             Unit* caster = GetCaster();
@@ -224,48 +266,52 @@ public:
 
 uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellScript::iTypes[8][3] =
 {
-{ 5512, 19004, 19005 },          // Minor Healthstone
-{ 5511, 19006, 19007 },          // Lesser Healthstone
-{ 5509, 19008, 19009 },          // Healthstone
-{ 5510, 19010, 19011 },          // Greater Healthstone
-{ 9421, 19012, 19013 },          // Major Healthstone
-{ 22103, 22104, 22105 },          // Master Healthstone
-{ 36889, 36890, 36891 },          // Demonic Healthstone
-{ 36892, 36893, 36894 }          // Fel Healthstone
+{ 5512, 19004, 19005 }, // Minor Healthstone
+{ 5511, 19006, 19007 }, // Lesser Healthstone
+{ 5509, 19008, 19009 }, // Healthstone
+{ 5510, 19010, 19011 }, // Greater Healthstone
+{ 9421, 19012, 19013 }, // Major Healthstone
+{ 22103, 22104, 22105 }, // Master Healthstone
+{ 36889, 36890, 36891 }, // Demonic Healthstone
+{ 36892, 36893, 36894 } // Fel Healthstone
 };
 
-class spell_warl_drain_soul: public SpellScriptLoader
-{
-public:
-    spell_warl_drain_soul () :
-            SpellScriptLoader("spell_warl_drain_soul")
-    {
-    }          //1120
+// 1120 Drain Soul
+ class spell_warl_drain_soul: public SpellScriptLoader {
+ public:
+    spell_warl_drain_soul() :
+            SpellScriptLoader("spell_warl_drain_soul") {}
 
-    class spell_warl_drain_soul_AuraScript: public AuraScript
-    {
+    class spell_warl_drain_soul_AuraScript: public AuraScript {
         PrepareAuraScript(spell_warl_drain_soul_AuraScript)
 
-        void OnPeriodic (AuraEffect const* aurEff)
+        void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
-        }
+            // Pandemic
+            if (AuraEffect* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 4554, 1))
+            {
+                SpellEntry const* spellproto = aurEff->GetSpellProto();
+                if (GetTarget()->HealthBelowPct(25))
+                    if (roll_chance_i(spellproto->EffectBasePoints[0]))
+                        if (AuraEffect* aur = GetTarget()->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_WARLOCK, 0, 0x100, 0, GetCaster()->GetGUID()))
+                           aur->GetBase()->RefreshDuration();
+            }
+         }
 
-        void OnRemove (AuraEffect const * aurEff, AuraEffectHandleModes /*mode*/)
+        void OnRemove(AuraEffect const * aurEff, AuraEffectHandleModes /*mode*/)
         {
             if (Unit* caster = aurEff->GetBase()->GetCaster())
                 if (!GetTarget()->isAlive())
                     caster->CastSpell(caster, 79264, true);
         }
 
-        void Register ()
-        {
+        void Register() {
             OnEffectRemove += AuraEffectRemoveFn(spell_warl_drain_soul_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE, AURA_EFFECT_HANDLE_REAL);
             OnEffectPeriodic += AuraEffectPeriodicFn(spell_warl_drain_soul_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE);
         }
     };
 
-    AuraScript* GetAuraScript () const
-    {
+    AuraScript* GetAuraScript() const {
         return new spell_warl_drain_soul_AuraScript();
     }
 };
@@ -429,15 +475,15 @@ public:
             };
 
             /*int32 amount;
-             // rank 1 - 4%
-             if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R1)) { amount = 5; };*/
+// rank 1 - 4%
+if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R1)) { amount = 5; };*/
 
             /*// rank 2 - 8%
-             if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R2)) { amount = 9; };*/
+if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R2)) { amount = 9; };*/
 
             // Finally return the Mana to our Caster
             /*if (AuraEffect * aurEff = owner->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 214, 0))
-             caster->CastCustomSpell(caster, WARLOCK_IMPROVED_FELHUNTER_EFFECT, &amount, NULL, NULL, true, NULL, aurEff, caster->GetGUID());*/
+caster->CastCustomSpell(caster, WARLOCK_IMPROVED_FELHUNTER_EFFECT, &amount, NULL, NULL, true, NULL, aurEff, caster->GetGUID());*/
         }
 
         void Register ()
@@ -453,7 +499,7 @@ public:
     }
 };
 
-// DrainLife 
+// DrainLife
 class spell_warl_drain_life: public SpellScriptLoader
 {
 public:
@@ -467,7 +513,7 @@ public:
         ;
         void OnPeriodic (AuraEffect const* /*aurEff*/)
         {
-            int32 bp = 2;          // Normal, restore 2% of health
+            int32 bp = 2; // Normal, restore 2% of health
             // Check for Death's Embrace
             if (AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
                 if (GetCaster()->HealthBelowPct(25))
@@ -488,6 +534,7 @@ public:
 void AddSC_warlock_spell_scripts ()
 {
     new spell_warl_demonic_empowerment();
+    new spell_warl_demonic_pact();
     new spell_warl_everlasting_affliction();
     new spell_warl_create_healthstone();
     new spell_warl_drain_soul();
@@ -496,5 +543,4 @@ void AddSC_warlock_spell_scripts ()
     new spell_warl_seed_of_corruption();
     new spell_warl_shadow_bite();
     new spell_warl_drain_life();
-    new spell_warl_fel_flame();
 }
