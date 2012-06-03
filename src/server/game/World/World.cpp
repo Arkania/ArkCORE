@@ -1242,6 +1242,10 @@ void World::LoadConfigSettings (bool reload)
     // Area DuelReset
     m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN] = sConfig->GetBoolDefault("DuelResetCooldown", false);
 
+    // Looking For Group
+    m_bool_configs[CONFIG_LFG_CAST_DESERTER] = sConfig->GetBoolDefault("LookingForGroup.CastDeserter", true);
+    m_bool_configs[CONFIG_LFG_CAST_COOLDOWN] = sConfig->GetBoolDefault("LookingForGroup.CastCooldown", true);
+
     sScriptMgr->OnConfigLoad(reload);
 }
 
