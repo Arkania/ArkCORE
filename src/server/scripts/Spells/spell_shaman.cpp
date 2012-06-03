@@ -253,10 +253,10 @@ public:
         void HandleEffectPeriodic (AuraEffect const * aurEff)
         {
             Unit* target = GetTarget();
-            if (Unit *caster = aurEff->GetBase()->GetCaster())
+            if (Unit *caster = aurEff->GetBase()->GetCaster()->GetOwner())
                 if (AuraEffect* aur = caster->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, 2289, 0))
                     if (roll_chance_i(aur->GetBaseAmount()))
-                        target->CastSpell(target, SHAMAN_TOTEM_SPELL_EARTHEN_POWER, true, NULL, aurEff);
+                        target->CastSpell(caster, SHAMAN_TOTEM_SPELL_EARTHEN_POWER, true, NULL, aurEff);
         }
 
         void HandleEffectApply (AuraEffect const * aurEff, AuraEffectHandleModes /*mode*/)
