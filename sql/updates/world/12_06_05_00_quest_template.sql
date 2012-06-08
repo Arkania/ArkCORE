@@ -44,16 +44,16 @@ UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13087'; --
 UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13088'; -- Northern Cooking
 UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13089'; -- Northern Cooking
 UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13090'; -- Northern Cooking
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13100'; -- Infused Mushroom Meatloaf
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13101'; -- Convention at the Legerdemain
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13102'; -- Sewer Stew
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13103'; -- Cheese for Glowergold
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13107'; -- Mustard Dogs!
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13112'; -- Infused Mushroom Meatloaf
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13113'; -- Convention at the Legerdemain
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13114'; -- Sewer Stew
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13115'; -- Cheese for Glowergold
-UPDATE `quest_template` SET `RequiredSkillValue`='425' WHERE `entry`='13116'; -- Mustard Dogs!
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13100'; -- Infused Mushroom Meatloaf
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13101'; -- Convention at the Legerdemain
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13102'; -- Sewer Stew
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13103'; -- Cheese for Glowergold
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13107'; -- Mustard Dogs!
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13112'; -- Infused Mushroom Meatloaf
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13113'; -- Convention at the Legerdemain
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13114'; -- Sewer Stew
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13115'; -- Cheese for Glowergold
+UPDATE `quest_template` SET `RequiredSkillValue`='350' WHERE `entry`='13116'; -- Mustard Dogs!
 UPDATE `quest_template` SET `RequiredSkillValue`='375' WHERE `entry`='13148'; -- Necklace Repair
 UPDATE `quest_template` SET `RequiredSkillValue`='225' WHERE `entry`='13825'; -- Clamlette Surprise
 UPDATE `quest_template` SET `RequiredSkillValue`='225' WHERE `entry`='13826'; -- Nat Pagle, Angler Extreme
