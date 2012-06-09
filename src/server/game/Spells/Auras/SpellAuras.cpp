@@ -1736,6 +1736,7 @@ void Aura::HandleAuraSpecificMods (AuraApplication const* aurApp, Unit* caster, 
     case SPELLFAMILY_DEATHKNIGHT:
         if (GetSpellSpecific(GetSpellProto()) == SPELL_SPECIFIC_PRESENCE)
         {
+            caster->SetPower(POWER_RUNIC_POWER, 0);
             AuraEffect *bloodPresenceAura = 0;          // healing by damage done
             AuraEffect *frostPresenceAura = 0;          // increased health
             AuraEffect *unholyPresenceAura = 0;          // increased movement speed, faster rune recovery
