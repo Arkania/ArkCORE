@@ -45,7 +45,7 @@ public:
     class spell_warl_fel_flame_SpellScript: public SpellScript {
         PrepareSpellScript(spell_warl_fel_flame_SpellScript)
 
-        void HandleOnHit() 
+        void HandleOnHit()
         {
             Unit* unitTarget = GetHitUnit();
             Unit* caster = GetCaster();
@@ -453,7 +453,7 @@ public:
     }
 };
 
-// DrainLife 
+// DrainLife
 class spell_warl_drain_life: public SpellScriptLoader
 {
 public:
