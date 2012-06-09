@@ -108,7 +108,7 @@ public:
             case GO_GONG:
                 uiGongGUID = pGo->GetGUID();
                 if (m_auiEncounter[0] == DONE)
-                    pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                    pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                 break;
             default:
                 break;
@@ -123,7 +123,7 @@ public:
                 case 9:
                 case 14:
                     if (GameObject* pGo = instance->GetGameObject(uiGongGUID))
-                        pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                        pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     break;
                 case 1:
                 case 10:
@@ -133,7 +133,7 @@ public:
                     if (!pGo)
                         return;
 
-                    pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                    pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
                     uint32 uiCreature = 0;
                     uint8 uiSummonTimes = 0;
