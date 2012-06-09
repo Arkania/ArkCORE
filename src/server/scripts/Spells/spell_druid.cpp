@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2011-2012 ArkCORE <http://www.arkania.net/>
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -347,7 +347,7 @@ class spell_druid_wild_mushroom : public SpellScriptLoader
                 {
                     PreventHitDefaultEffect(effIndex);
                     const SpellEntry* spell = GetSpellInfo();
-                    
+
                     std::list<Creature*> list;
                     player->GetCreatureListWithEntryInGrid(list, DRUID_NPC_WILD_MUSHROOM, 500.0f);
                     for (std::list<Creature*>::iterator i = list.begin(); i != list.end(); ++i)

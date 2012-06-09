@@ -686,16 +686,16 @@ enum eKarynaku
 {
     QUEST_ALLY_OF_NETHER      = 10870,
     QUEST_ZULUHED_THE_WACKED  = 10866,
- 
+
     NPC_ZULUHED_THE_WACKED    = 11980,
     TAXI_PATH_ID              = 649
 };
- 
+
 class npc_karynaku : public CreatureScript
 {
 public:
     npc_karynaku() : CreatureScript("npc_karynaku") { }
- 
+
     bool OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* quest)
     {
         if (quest->GetQuestId() == QUEST_ALLY_OF_NETHER)
