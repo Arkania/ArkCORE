@@ -32,7 +32,6 @@
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
 
-
 /*
 Script for quest Feeding the Hungry and the Hopeless (26271)
 */
@@ -42,7 +41,6 @@ enum eHobo
     QUEST_FEEDING_THE_HUNGRY    = 26271,
     STEW                        = 42617,
     SPELL_FULL_BELLY            = 79451,
-
 };
 
 class npc_hungry_hobo : public CreatureScript
@@ -314,7 +312,6 @@ class npc_OldHouse : public CreatureScript
         }
     };
 };
-
 
 void AddSC_westfall() {
 	new npc_hungry_hobo();

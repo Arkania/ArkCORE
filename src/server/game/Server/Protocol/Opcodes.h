@@ -1318,7 +1318,7 @@ enum Opcodes
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
     CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
-    CMSG_REQUEST_GUILD_PARTY_STATE                   = 0x02219, // 4.0.6a 13623    
+    CMSG_REQUEST_GUILD_PARTY_STATE                   = 0x02219, // 4.0.6a 13623
     CMSG_CLEAR_RAID_MARKER                           = 0x02218, // 4.0.6a 13623
     SMSG_SEND_GUILD_ACHIEVEMENT_MEMBERS              = 0x0414E, // 4.0.6a 13623
     CMSG_GET_GUILD_ACHIEVEMENT_MEMBERS               = 0x02509, // 4.0.6a 13623
@@ -1334,7 +1334,7 @@ enum Opcodes
     SMSG_COMPLETED_ARTIFACTS                         = 0x0044E, // 4.0.6a 13623 structure: uint32 (count) loop: uint32(id), uint32(date), uint32(number of times completed) :endloop
     SMSG_ARTIFACT_COMPLETED                          = 0x0491C, // 4.0.6a 13623
     SMSG_REFORGE_OPEN_FROM_GOSSIP                    = 0x00C5C, // 4.0.6a 13623
-    SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623  
+    SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623
     //SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B7  // last unknown opcode + 1.
 };
