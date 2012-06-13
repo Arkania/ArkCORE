@@ -5877,6 +5877,14 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
                 CastSpell(pVictim, 31589, false);
             break;
         }
+        case 79683: // Arcane Missiles!
+        {
+            // Do not let arcane missiles missile remove the activation aura
+            if (procSpell->Id == 7268)
+                return false;
+
+            break;
+        }
             // Glyph of Polymorph
         case 56375:
         {
@@ -9228,6 +9236,14 @@ bool Unit::HandleProcTriggerSpell (Unit *pVictim, uint32 damage, AuraEffect* tri
     case 50419:
     {
         if (!roll_chance_i(triggerAmount))
+            return false;
+        break;
+    }
+
+    // Hot Streak / Arcane Missiles!
+    case 79684:
+    {
+        if (HasAura(44445))
             return false;
         break;
     }

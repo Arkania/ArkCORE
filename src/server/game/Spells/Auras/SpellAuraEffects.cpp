@@ -6917,21 +6917,7 @@ void AuraEffect::HandleAuraDummy (AuraApplication const *aurApp, uint8 mode, boo
             break;
         switch (GetId())
         {
-        //Arcane Missiles.
-        case 79683:
-        {
-            if (apply)
-                caster->CastSpell(caster, 79808, true, NULL, NULL, GetCasterGUID());
-            break;
         }
-        case 5143:
-        {
-            caster->RemoveAurasDueToSpell(79808);
-            break;
-        }
-            break;
-        }
-        break;
     }
     case SPELLFAMILY_PRIEST:
         break;
