@@ -8321,20 +8321,26 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
     case SPELLFAMILY_GENERIC:
         switch (dummySpell->Id)
         {
-        // Pursuit of Justice
-        //case 26022:
-        //case 26023: {
-        //	*handled = true;
-        // Hack, we need the new spell dbcs implemented in
-        // order to add the missing spell 32733 wich i suppose,
-        // is the cooldown marker used by blizz to share the cd
-        // of Pursuit of justice and Blessed life proc.
-        //if (!HasAura(31828) && !HasAura(31829) && (GetAllSpellMechanicMask(procSpell) && ((1 << MECHANIC_ROOT) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR)))) {
-        //	CastSpell(pVictim, 89024, true);
-        //	return true;
-        //}
-        //break;
-        //}
+                // Pursuit of Justice
+                case 26022:
+                case 26023:
+                {
+                    *handled = true;
+
+                    if (!procSpell)
+                        return false;
+
+                    // Need stun, root, or fear mechanic
+                    if (!(GetAllSpellMechanicMask(procSpell) & ((1 << MECHANIC_SILENCE) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR))))
+                        return false;
+
+                    if (!(HasAura(32733))) // Pursuit of Justice and Blessed Life cooldown marker
+                    {
+                        CastSpell(this,89024,true);
+                        CastSpell(this,32733,true);
+                    }
+                    break;
+                }
         // Bone Shield cooldown
         case 49222:
         {
