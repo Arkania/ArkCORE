@@ -30,16 +30,28 @@
 
 enum ShamanSpells
 {
-    SHAMAN_SPELL_GLYPH_OF_MANA_TIDE = 55441, SHAMAN_SPELL_MANA_TIDE_TOTEM = 39609, SHAMAN_SPELL_FIRE_NOVA = 1535, SHAMAN_SPELL_FIRE_NOVA_TRIGGERED = 8349, SHAMAN_SPELL_EARTH_SHOCK = 8042, SHAMAN_SPELL_FULMINATION = 88766, SHAMAN_SPELL_FULMINATION_TRIGGERED = 88767, SHAMAN_SPELL_FULMINATION_INFO = 95774, SHAMAN_SPELL_LIGHTNING_SHIELD_PROC = 26364,
+    SHAMAN_SPELL_GLYPH_OF_MANA_TIDE 		= 55441, 
+	SHAMAN_SPELL_MANA_TIDE_TOTEM 			= 16191, 
+	SHAMAN_SPELL_FIRE_NOVA 					= 1535, 
+	SHAMAN_SPELL_FIRE_NOVA_TRIGGERED 		= 8349, 
+	SHAMAN_SPELL_EARTH_SHOCK 				= 8042, 
+	SHAMAN_SPELL_FULMINATION 				= 88766, 
+	SHAMAN_SPELL_FULMINATION_TRIGGERED 		= 88767, 
+	SHAMAN_SPELL_FULMINATION_INFO 			= 95774, 
+	SHAMAN_SPELL_LIGHTNING_SHIELD_PROC 		= 26364,
 
     //For Earthen Power
-    SHAMAN_TOTEM_SPELL_EARTHBIND_TOTEM = 6474,         //Spell casted by totem
-    SHAMAN_TOTEM_SPELL_EARTHEN_POWER = 59566,         //Spell witch remove snare effect
-    SHAMAN_TOTEM_SPELL_EARTHS_GRASP = 51485, SHAMAN_TOTEM_SPELL_EARTHGRAB = 64695,
+    SHAMAN_TOTEM_SPELL_EARTHBIND_TOTEM 		= 6474,         //Spell casted by totem
+    SHAMAN_TOTEM_SPELL_EARTHEN_POWER 		= 59566,         //Spell witch remove snare effect
+    SHAMAN_TOTEM_SPELL_EARTHS_GRASP 		= 51485, 
+	SHAMAN_TOTEM_SPELL_EARTHGRAB 			= 64695,
 
-    SHAMAN_TOTEM_SPELL_TOTEMIC_WRATH = 77746, SHAMAN_TOTEM_SPELL_TOTEMIC_WRATH_AURA = 77747, SHAMAN_SPELL_UNLEASH_ELEMENTS = 73680,
+    SHAMAN_TOTEM_SPELL_TOTEMIC_WRATH 		= 77746, 
+	SHAMAN_TOTEM_SPELL_TOTEMIC_WRATH_AURA 	= 77747, 
+	SHAMAN_SPELL_UNLEASH_ELEMENTS 			= 73680,
 
-    SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN = 77505, SHAMAN_SPELL_SEARING_FLAMES = 77661,
+    SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN 		= 77505, 
+	SHAMAN_SPELL_SEARING_FLAMES 			= 77661,
 };
 
 // Searing Bolt - 3606
@@ -543,9 +555,48 @@ public:
         return new spell_sha_healing_rain_AuraScript();
     }
 };
+
+// 16191 - Mana Tide
+class spell_sha_mana_tide : public SpellScriptLoader
+{
+    public:
+        spell_sha_mana_tide() : SpellScriptLoader("spell_sha_mana_tide") { }
+
+        class spell_sha_mana_tide_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_sha_mana_tide_AuraScript);
+
+            bool Validate(SpellEntry const* /*spellEntry*/)
+            {
+                if (!sSpellStore.LookupEntry(SHAMAN_SPELL_MANA_TIDE_TOTEM))
+                    return false;
+                return true;
+            }
+
+            void CalculateAmount(AuraEffect const* /*aurEff*/, int32 &amount, bool & /*canBeRecalculated*/)
+            {
+                // 400% of caster's spirit
+                // Caster is totem, we need owner
+                if (Unit* owner = GetCaster()->GetOwner())
+                    amount = int32(owner->GetStat(STAT_SPIRIT) * 4.0f);
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_sha_mana_tide_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_STAT);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_sha_mana_tide_AuraScript();
+        }
+};
+
 void AddSC_shaman_spell_scripts ()
 {
     new spell_sha_astral_shift();
+	new spell_sha_mana_tide();
     new spell_sha_fire_nova();
     new spell_sha_earthbind_totem();
     new spell_sha_unleash_elements();
