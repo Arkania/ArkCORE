@@ -33,6 +33,26 @@
 
 class Item;
 
+enum sGuildNews
+{
+    GUILD_NEWS_GUILD_ACHIEVENT_EARNED = 1,
+    GUILD_NEWS_MEMBER_ACHIEVEMENT_EARNED,
+    GUILD_NEWS_EPIC_ITEM_LOOTED,
+    GUILD_NEWS_EPIC_ITEM_CRAFTED,
+    GUILD_NEWS_EPIC_ITEM_PURCHASED,
+    GUILD_NEWS_GUILD_LEVEL_REACHED,
+};
+
+struct GuildNews
+{
+    uint32 m_type;
+    uint64 m_timestamp;
+    uint32 m_value1;
+    uint32 m_value2;
+    uint64 m_source_guid;
+    uint32 m_flags;
+};
+
 enum GuildMisc
 {
     GUILD_BANK_MAX_TABS                 = 8,                    // send by client for money log also
@@ -755,6 +775,7 @@ private:
     typedef UNORDERED_MAP<uint32, Member*> Members;
     typedef std::vector<RankInfo> Ranks;
     typedef std::vector<BankTab*> BankTabs;
+	typedef std::list<GuildNews> GuildNewsList;
 
 public:
     static void SendCommandResult(WorldSession* session, GuildCommandType type, GuildCommandError errCode, const std::string& param = "");
@@ -858,13 +879,20 @@ public:
     // Guild advancement
     uint8 GetLevel() { return m_level; }
     uint64 GetCurrentXP() { return m_xp; }
+    uint64 GetTodayXP() { return m_today_xp; }
+    uint64 GetXPCap() { return m_xp_cap; }
     uint64 GetNextLevelXP() { return m_nextLevelXP; }
     uint64 GetGuildMoney() { return m_bankMoney; }
     uint64 SetGuildMoney(uint64 add) { return m_bankMoney += add; }
 
     void GainXP(uint64 xp);
     void LevelUp();
-
+    void ResetTodayXP() { m_today_xp = 0; }
+    void GenerateXPCap();
+    void AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags = 0);
+    //GuildAchievementMgr& GetAchievementMgr() { return _achievementMgr; }
+    //GuildAchievementMgr const& GetAchievementMgr() const { return _achievementMgr; }
+	
 protected:
     uint32 m_id;
     std::string m_name;
@@ -876,6 +904,8 @@ protected:
     uint8 m_level;
     uint64 m_xp;
     uint64 m_nextLevelXP;
+    uint64 m_today_xp;
+    uint64 m_xp_cap;
 
     EmblemInfo m_emblemInfo;
     uint32 m_accountsNumber;
@@ -885,16 +915,19 @@ protected:
     Members m_members;
     BankTabs m_bankTabs;
 
+    GuildNewsList m_guild_news;
+
     uint32 m_lastXPSave;
 
     // These are actually ordered lists. The first element is the oldest entry.
     LogHolder* m_eventLog;
     LogHolder* m_bankEventLog[GUILD_BANK_MAX_TABS + 1];
+	//GuildAchievementMgr _achievementMgr;
 
 private:
     inline uint8 _GetRanksSize() const { return uint8(m_ranks.size()); }
-    inline const RankInfo *GetRankInfo(uint8 rankId) const { return rankId < _GetRanksSize() ? &m_ranks[rankId] : NULL; }
-    inline RankInfo *GetRankInfo(uint8 rankId) { return rankId < _GetRanksSize() ? &m_ranks[rankId] : NULL; }
+    inline const RankInfo* GetRankInfo(uint8 rankId) const { return rankId < _GetRanksSize() ? &m_ranks[rankId] : NULL; }
+    inline RankInfo* GetRankInfo(uint8 rankId) { return rankId < _GetRanksSize() ? &m_ranks[rankId] : NULL; }
     inline bool _HasRankRight(Player* player, uint32 right) const { return (_GetRankRights(player->GetRank()) & right) != GR_RIGHT_EMPTY; }
     inline uint8 _GetLowestRankId() const { return uint8(m_ranks.size() - 1); }
 

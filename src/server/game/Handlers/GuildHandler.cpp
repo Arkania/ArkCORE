@@ -250,18 +250,18 @@ void WorldSession::HandleGuildMOTDOpcode (WorldPacket& recvPacket)
         pGuild->HandleSetMOTD(this, motd);
 }
 
-void WorldSession::HandleGuildExperienceOpcode (WorldPacket& recvPacket)
+void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint64>();
 
-    if (Guild * pGuild = sObjectMgr->GetGuildById(_player->GetGuildId()))
+    if (Guild * guild = sObjectMgr->GetGuildById(_player->GetGuildId()))
     {
-        WorldPacket data(SMSG_GUILD_XP_UPDATE, 8 * 5);
-        data << uint64(0x37);          // max daily xp
-        data << uint64(pGuild->GetNextLevelXP());          // next level XP
-        data << uint64(0x37);          // weekly xp
-        data << uint64(pGuild->GetCurrentXP());          // Curr exp
-        data << uint64(0);          // Today exp (unsupported)
+        WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
+        data << uint64(guild->GetXPCap());                                  // max daily xp
+        data << uint64(guild->GetNextLevelXP() - guild->GetCurrentXP());    // next level XP
+        data << uint64(guild->GetXPCap());                                  // weekly xp
+        data << uint64(guild->GetCurrentXP());                              // Curr exp
+        data << uint64(guild->GetTodayXP());                                // Today exp
         SendPacket(&data);
     }
 }
