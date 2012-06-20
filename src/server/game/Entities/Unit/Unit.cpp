@@ -6122,15 +6122,15 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             triggered_spell_id = 54181;
             break;
         }
-         // Impending Doom
-         if (dummySpell->SpellIconID == 195)
-         {
-             if (Unit* caster = triggeredByAura->GetCaster())
-             {
-                 caster->ToPlayer()->UpdateSpellCooldown(47241, -(dummySpell->EffectBasePoints[1]));
-             }
-             return true;
-         }
+        // Impending Doom
+        if (dummySpell->SpellIconID == 195)
+        {
+            if (Unit* caster = triggeredByAura->GetCaster())
+            {
+                caster->ToPlayer()->UpdateSpellCooldown(47241, -(dummySpell->EffectBasePoints[1]));
+            }
+            return true;
+        }
         switch (dummySpell->Id)
         {
         // Siphon Life
@@ -7522,7 +7522,7 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             {
                 if (ToPlayer()->HasSpellCooldown(16166))
                 {
-                    ToPlayer()->UpdateSpellCooldown(16166, -1); // Remove 1 sec
+                    ToPlayer()->UpdateSpellCooldown(16166, -1);          // Remove 1 sec
                     return true;
                 }
             }
@@ -7851,15 +7851,15 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             return true;
         }
         // Tidal Waves
-        if (dummySpell->SpellIconID == 3057)
+        case 51562:
+        case 51563:
+        case 51564:
         {
-            if (!procSpell)
-                return false;
-
-            int32 bp0 = -(dummySpell->EffectBasePoints[0]);
-            int32 bp1 = dummySpell->EffectBasePoints[0];
-            CastCustomSpell(this, 53390, &bp0, &bp1, NULL, true, 0, 0, GetGUID());
-            return true;
+            CustomSpellValues values;
+            values.AddSpellMod(SPELLVALUE_BASE_POINT0, -(dummySpell->EffectBasePoints[0]));
+            values.AddSpellMod(SPELLVALUE_BASE_POINT1, dummySpell->EffectBasePoints[0]);
+            CastCustomSpell(53390, values, this);
+            break;
         }
         // Telluric Currents
         if (dummySpell->SpellIconID == 320)
@@ -8321,27 +8321,27 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
     case SPELLFAMILY_GENERIC:
         switch (dummySpell->Id)
         {
-                // Pursuit of Justice
-                case 26022:
-                case 26023:
-                {
-                    *handled = true;
+        // Pursuit of Justice
+        case 26022:
+        case 26023:
+        {
+            *handled = true;
 
-                    if (!procSpell)
-                        return false;
+            if (!procSpell)
+                return false;
 
-                    // Need stun, root, or fear mechanic
-                    if (!(GetAllSpellMechanicMask(procSpell) & ((1 << MECHANIC_SILENCE) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR))))
-                        return false;
+            // Need stun, root, or fear mechanic
+            if (!(GetAllSpellMechanicMask(procSpell) & ((1 << MECHANIC_SILENCE) | (1 << MECHANIC_STUN) | (1 << MECHANIC_FEAR))))
+                return false;
 
-                    if (!(HasAura(32733))) // Pursuit of Justice and Blessed Life cooldown marker
-                    {
-                        CastSpell(this,89024,true);
-                        CastSpell(this,32733,true);
-                    }
-                    break;
-                }
-        // Bone Shield cooldown
+            if (!(HasAura(32733)))          // Pursuit of Justice and Blessed Life cooldown marker
+            {
+                CastSpell(this, 89024, true);
+                CastSpell(this, 32733, true);
+            }
+            break;
+        }
+            // Bone Shield cooldown
         case 49222:
         {
             *handled = true;
