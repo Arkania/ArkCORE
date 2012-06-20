@@ -272,8 +272,6 @@ void Vehicle::InstallAccessory (uint32 entry, int8 seatId, bool minion)
             accessory->AddUnitTypeMask(UNIT_MASK_ACCESSORY);
 
         accessory->EnterVehicle(this, seatId);
-        // This is not good, we have to send update twice
-        accessory->SendMovementFlagUpdate();
 
         if (GetBase()->GetTypeId() == TYPEID_UNIT)
             sScriptMgr->OnInstallAccessory(this, accessory);
@@ -339,6 +337,7 @@ bool Vehicle::AddPassenger (Unit *unit, int8 seatId, bool byAura)
     unit->m_movementInfo.t_pos.m_orientation = 0;
     unit->m_movementInfo.t_time = 0;          // 1 for player
     unit->m_movementInfo.t_seat = seat->first;
+	unit->m_movementInfo.t_guid = me->GetGUID();
 
     if (me->GetTypeId() == TYPEID_UNIT && unit->GetTypeId() == TYPEID_PLAYER && seat->first == 0 && seat->second.seatInfo->m_flags & VEHICLE_SEAT_FLAG_CAN_CONTROL)
     {
