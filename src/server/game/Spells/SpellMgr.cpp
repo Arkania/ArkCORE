@@ -3869,6 +3869,7 @@ void SpellMgr::LoadSpellCustomAttr ()
             spellInfo->procChance = 40;
             count++;
             break;
+            // Masterys
         case 77515:          // Mastery: Dreadblade
             spellInfo->EffectBasePoints[0] = 20;
             count++;
@@ -3909,6 +3910,17 @@ void SpellMgr::LoadSpellCustomAttr ()
         case 77489:          // Mastery: Echo of Light
             spellInfo->StackAmount = 1;          // should be inf
             count++;
+            break;
+            //Other spells
+        case 79638:          // Enhanced Strength
+        case 76547:          // Mana Adept
+        case 77226:          // Deep Healing
+        case 76613:          // Frostburn
+            spellInfo->EffectApplyAuraName[0] = SPELL_AURA_ADD_PCT_MODIFIER;
+            spellInfo->EffectMiscValue[0] = 0;
+            break;
+        case 93072:          // Bring our Boys back
+            spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_NEARBY_ENTRY;
             break;
         case 51514:          // Hex
         case 118:          // Polymorph
@@ -4044,6 +4056,8 @@ void SpellMgr::LoadSpellCustomAttr ()
             break;
         case 26029:          // dark glare
         case 37433:          // spout
+            spellInfo->Effect[0] = 0;          // remove damage effect, only anim is needed
+            break;
         case 43140:
         case 43215:          // flame breath
         case 70461:          // Coldflame Trap
@@ -4248,9 +4262,13 @@ void SpellMgr::LoadSpellCustomAttr ()
         case 39805:          // Lightning Overload
         case 64823:          // Item - Druid T8 Balance 4P Bonus
         case 44401:
-        case 90174:          // Divine Purpose
+            // Need this otherwise we'll be having multiple chance rolls for judgement.
+        case 85117:          // Divine Purpose (Rank 1)
+        case 86172:          // Divine Purpose (Rank 2)
+            spellInfo->AttributesEx3 = 0;
+            break;
+        case 90174:          // Divine Purpose Proc
             spellInfo->procCharges = 1;
-            count++;
             break;
         case 53390:          // Tidal Wave
             spellInfo->procCharges = 2;
@@ -4566,6 +4584,15 @@ void SpellMgr::LoadSpellCustomAttr ()
         case 74434:          // Soulburn
             spellInfo->procCharges = 1;
             count++;
+            break;
+        case 30541:          // Blaze (needs conditions entry)
+            spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_TARGET_ENEMY;
+            spellInfo->EffectImplicitTargetB[0] = 0;
+            break;
+        case 31447:          // Mark of Kaz'rogal (needs target selection script)
+        case 31298:          // Sleep (needs target selection script)
+            spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
+            spellInfo->EffectImplicitTargetB[0] = 0;
             break;
         case 81008:          //Quake - Crystalspawn Giant
         case 92631:          //Quake - Crystalspawn Giant

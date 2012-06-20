@@ -6712,12 +6712,6 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
     {
         switch (dummySpell->Id)
         {
-        // Glyph of Backstab
-        case 56800:
-        {
-            triggered_spell_id = 63975;
-            break;
-        }
             // Deadly Throw Interrupt
         case 32748:
         {
@@ -6726,6 +6720,38 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
                 return false;
 
             triggered_spell_id = 32747;
+            break;
+        }
+        case 56807:          // Glyph of hemorrhage
+        {
+            basepoints0 = int32(0.40f * damage);
+            triggered_spell_id = 89775;
+            break;
+        }
+            // Venomeous wounds rank 1 & 2
+        case 79133:
+        case 79134:
+        {
+            if (effIndex != 0)
+                return false;
+
+            bool poisoned = false;
+            Unit::AuraApplicationMap const& auras = target->GetAppliedAuras();
+
+            for (Unit::AuraApplicationMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
+            {
+                if (itr->second->GetBase()->GetSpellProto()->Dispel == DISPEL_POISON)
+                {
+                    poisoned = true;
+                    break;
+                }
+            }
+            if (!poisoned)
+                return false;
+
+            basepoints0 = triggerAmount;
+            this->CastCustomSpell(this, 51637, &basepoints0, NULL, NULL, true);
+            triggered_spell_id = 79136;
             break;
         }
         case 51698:          // Honor Among Thieves
@@ -8532,6 +8558,35 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
         }
         break;
     }
+        case SPELLFAMILY_ROGUE:
+            switch(dummySpell->Id)
+            {
+                // Gouge
+                case 1776:
+                    *handled = true;
+                    // Check so gouge spell effect [1] (SPELL_EFFECT_SCHOOL_DAMAGE) cannot cancel stun effect
+                    if(procSpell && procSpell->Id == 1776)
+                        return false;
+                    return true;
+                break;
+            }
+            break;
+        case SPELLFAMILY_WARRIOR:
+        {
+            switch (dummySpell->Id)
+            {
+                // Item - Warrior T10 Protection 4P Bonus
+                case 70844:
+                {
+                    int32 basepoints0 = CalculatePctN(GetMaxHealth(), SpellMgr::CalculateSpellEffectAmount(dummySpell, 1));
+                    CastCustomSpell(this, 70845, &basepoints0, NULL, NULL, true);
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }	
     }
     return false;
 }
