@@ -3089,3 +3089,8 @@ void Guild::SaveXP ()
         CharacterDatabase.Execute(stmt);
     }
 }
+
+void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags)
+{
+    // TODO: this needs implementing.
+}
