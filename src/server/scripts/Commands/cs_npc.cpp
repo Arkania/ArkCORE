@@ -266,6 +266,7 @@ public:
 
         // update movement type
         WorldDatabase.PExecute("UPDATE creature SET MovementType = '%u' WHERE guid = '%u'", WAYPOINT_MOTION_TYPE, lowguid);
+		sLog->outSQLDev("UPDATE creature SET MovementType = '%u' WHERE guid = '%u'", WAYPOINT_MOTION_TYPE, lowguid);
         if (pCreature && pCreature->GetWaypointPath())
         {
             pCreature->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
@@ -476,6 +477,7 @@ public:
 
         // and DB
         WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", factionId, factionId, pCreature->GetEntry());
+		sLog->outSQLDev("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", factionId, factionId, pCreature->GetEntry());
 
         return true;
     }
@@ -500,6 +502,7 @@ public:
         pCreature->SetUInt32Value(UNIT_NPC_FLAGS, npcFlags);
 
         WorldDatabase.PExecute("UPDATE creature_template SET npcflag = '%u' WHERE entry = '%u'", npcFlags, pCreature->GetEntry());
+		sLog->outSQLDev("UPDATE creature_template SET npcflag = '%u' WHERE entry = '%u'", npcFlags, pCreature->GetEntry());
 
         handler->SendSysMessage(LANG_VALUE_SAVED_REJOIN);
 
@@ -648,6 +651,7 @@ public:
         }
 
         WorldDatabase.PExecute("UPDATE creature SET position_x = '%f', position_y = '%f', position_z = '%f', orientation = '%f' WHERE guid = '%u'", x, y, z, o, lowguid);
+		sLog->outSQLDev("UPDATE creature SET position_x = '%f', position_y = '%f', position_z = '%f', orientation = '%f' WHERE guid = '%u'", x, y, z, o, lowguid);
         handler->PSendSysMessage(LANG_COMMAND_CREATUREMOVED);
         return true;
     }
@@ -662,6 +666,8 @@ public:
         {
             handler->SendSysMessage(LANG_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
+			WorldDatabase.PExecute("REPLACE INTO `creature_addon` (`guid`, `bytes2`, `emote`) VALUES ('%u', 4097, '%u')", target->GetDBTableGUIDLow(), emote);
+			sLog->outSQLDev("REPLACE INTO `creature_addon` (`guid`, `bytes2`, `emote`) VALUES ('%u', 4097, '%u')", target->GetDBTableGUIDLow(), emote);
             return false;
         }
 
@@ -670,6 +676,8 @@ public:
                 WorldDatabase.PQuery("UPDATE creature_transport SET emote=%u WHERE transport_entry=%u AND guid=%u", emote, target->GetTransport()->GetEntry(), target->GetGUIDTransport());
 
         target->SetUInt32Value(UNIT_NPC_EMOTESTATE, emote);
+		WorldDatabase.PExecute("REPLACE INTO `creature_addon` (`guid`, `bytes2`, `emote`) VALUES ('%u', 4097, '%u')", target->GetDBTableGUIDLow(), emote);
+		sLog->outSQLDev("REPLACE INTO `creature_addon` (`guid`, `bytes2`, `emote`) VALUES ('%u', 4097, '%u')", target->GetDBTableGUIDLow(), emote);
 
         return true;
     }
@@ -911,6 +919,7 @@ public:
         }
 
         WorldDatabase.PExecute("UPDATE creature SET spawndist=%f, MovementType=%i WHERE guid=%u", option, mtype, u_guidlow);
+		sLog->outSQLDev("UPDATE creature SET spawndist=%f, MovementType=%i WHERE guid=%u", option, mtype, u_guidlow);
         handler->PSendSysMessage(LANG_COMMAND_SPAWNDIST, option);
         return true;
     }
@@ -944,6 +953,7 @@ public:
             return false;
 
         WorldDatabase.PExecute("UPDATE creature SET spawntimesecs=%i WHERE guid=%u", i_stime, u_guidlow);
+		sLog->outSQLDev("UPDATE creature SET spawntimesecs=%i WHERE guid=%u", i_stime, u_guidlow);
         pCreature->SetRespawnDelay((uint32) i_stime);
         handler->PSendSysMessage(LANG_COMMAND_SPAWNTIME, i_stime);
 
