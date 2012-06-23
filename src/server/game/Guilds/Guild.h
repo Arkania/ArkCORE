@@ -819,6 +819,8 @@ public:
     bool HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool repair = false);
     void HandleMemberLogout(WorldSession* session);
     void HandleDisband(WorldSession* session);
+	
+	void SetGuildNews(WorldPacket &data);
 
     void UpdateMemberData(Player* plr, uint8 dataid, uint32 value);
     void OnPlayerStatusChange(Player* plr, uint32 flag, bool state);
