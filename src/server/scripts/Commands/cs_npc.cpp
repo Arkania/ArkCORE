@@ -400,6 +400,7 @@ public:
 
         handler->SendSysMessage(LANG_COMMAND_DELCREATMESSAGE);
         sLog->outSQLDev("DELETE FROM creature WHERE guid = %u;", unit->GetGUIDLow());
+		sLog->outSQLDev("DELETE FROM creature_addon WHERE guid = %u;", unit->GetGUIDLow());
 
         return true;
     }
