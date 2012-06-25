@@ -21,7 +21,6 @@
  */
 
 #include "gamePCH.h"
-#include "AnticheatMgr.h"
 #include "Common.h"
 #include "Object.h"
 #include "Language.h"
@@ -644,19 +643,6 @@ Player::Player (WorldSession *session) :
 #pragma warning(default:4355)
 #endif
 
-    anticheatData.disableACCheck = false;
-    anticheatData.disableACCheckTimer = 0;
-    GetPosition(&anticheatData.lastMovementInfo.pos);
-    anticheatData.lastOpcode = 0;
-
-    anticheatData.total_reports = 0;
-
-    for (uint8 i = 0; i < 5; i++)
-        anticheatData.type_reports[i] = 0;
-
-    anticheatData.average = 0;
-    anticheatData.creation_time = 0;
-
     m_speakTime = 0;
     m_speakCount = 0;
 
@@ -892,8 +878,6 @@ Player::Player (WorldSession *session) :
     m_globalCooldowns.clear();
 
     m_ConditionErrorMsgId = 0;
-
-    sAnticheatMgr->DeletePlayerReport(this);
 
     SetPendingBind(NULL, 0);
 }
@@ -1146,8 +1130,6 @@ Player::Player (WorldSession &session) :
 
 Player::~Player ()
 {
-    sAnticheatMgr->DeletePlayerReport(this);
-
     // it must be unloaded already in PlayerLogout and accessed only for logged in player
     //m_social = NULL;
 
@@ -1807,8 +1789,6 @@ void Player::Update (uint32 p_time)
     if (!IsInWorld())
         return;
 
-    sAnticheatMgr->HandleHackDetectionTimer(this, p_time);
-
     // undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= time(NULL))
     {
@@ -2413,10 +2393,7 @@ void Player::TeleportOutOfMap (Map *oldMap)
 }
 
 bool Player::TeleportTo (uint32 mapid, float x, float y, float z, float orientation, uint32 options)
-
 {
-    sAnticheatMgr->DisableAnticheatDetection(this, true);
-
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
         sLog->outError("TeleportTo: invalid map (%d) or invalid coordinates (X: %f, Y: %f, Z: %f, O: %f) given when teleporting player (GUID: %u, name: %s, map: %d, X: %f, Y: %f, Z: %f, O: %f).", mapid, x, y, z, orientation, GetGUIDLow(), GetName(), GetMapId(), GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());

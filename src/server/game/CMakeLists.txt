@@ -17,7 +17,6 @@ if( USE_COREPCH )
 endif()
 
 file(GLOB_RECURSE sources_Accounts Accounts/*.cpp Accounts/*.h)
-file(GLOB_RECURSE sources_Anticheat Anticheat/*.cpp Anticheat/*.h)
 file(GLOB_RECURSE sources_Achievements Achievements/*.cpp Achievements/*.h)
 file(GLOB_RECURSE sources_Addons Addons/*.cpp Addons/*.h)
 file(GLOB_RECURSE sources_AI AI/*.cpp AI/*.h)
@@ -99,7 +98,6 @@ source_group(Tools FILES ${sources_Tools})
 source_group(Tickets FILES ${sources_Tickets})
 source_group(Weather FILES ${sources_Weather})
 source_group(World FILES ${sources_World})
-source_group(Anticheat FILES ${sources_Anticheat})
 
 # Create game-libary
 
@@ -113,7 +111,6 @@ set(game_STAT_SRCS
   ${game_STAT_SRCS}
   PrecompiledHeaders/gamePCH.h
   ${sources_Accounts}
-  ${sources_Anticheat}
   ${sources_Achievements}
   ${sources_Addons}
   ${sources_AI}
@@ -178,7 +175,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/shared/Utilities
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/Accounts
-  ${CMAKE_CURRENT_SOURCE_DIR}/Anticheat
   ${CMAKE_CURRENT_SOURCE_DIR}/Achievements
   ${CMAKE_CURRENT_SOURCE_DIR}/Addons
   ${CMAKE_CURRENT_SOURCE_DIR}/AI
