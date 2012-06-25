@@ -1,4 +1,4 @@
-TrinityCore uses (parts of or in whole) the following opensource software :
+ArkCORE uses (parts of or in whole) the following opensource software based from TrinityCore :
 
 ACE (ADAPTIVE Communication Environment)
   http://www.cs.wustl.edu/~schmidt/ACE.html
