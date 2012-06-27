@@ -35,6 +35,8 @@ endif()
 
 add_subdirectory(g3dlite)
 
+add_subdirectory(genrev)
+
 if(SERVERS)
   add_subdirectory(gsoap)
 endif()

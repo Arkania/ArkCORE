@@ -12,10 +12,24 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-add_subdirectory(genrev)
-add_subdirectory(server)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  add_definitions(-fno-delete-null-pointer-checks)
+endif()
 
-if(TOOLS)
-  add_subdirectory(tools)
-endif(TOOLS)
-
+if( SERVERS )
+  set(sources_Debugging
+    ${CMAKE_SOURCE_DIR}/src/shared/Debugging/WheatyExceptionReport.cpp
+    ${CMAKE_SOURCE_DIR}/src/shared/Debugging/WheatyExceptionReport.h
+  )
+  add_subdirectory(shared)
+  add_subdirectory(game)
+  add_subdirectory(logic)
+  add_subdirectory(collision)
+  add_subdirectory(authserver)
+  add_subdirectory(scripts)
+  add_subdirectory(worldserver)
+else()
+  if( TOOLS )
+    add_subdirectory(collision)
+  endif()
+endif()
