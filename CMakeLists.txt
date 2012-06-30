@@ -72,8 +72,3 @@ add_subdirectory(dep)
 
 # add core sources
 add_subdirectory(src)
-
-# add tools if is selected
-if(TOOLS)
-  add_subdirectory(tools)
-endif(TOOLS)
