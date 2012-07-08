@@ -2009,9 +2009,9 @@ public:
     void UpdateArea(uint32 newArea);
 
     // TerrainSwap handling
-    void Player::UpdateTerrain();
-    void Player::SwapTerrain(uint16 phase, uint16 map);
-    void Player::SendSwapTerrain(uint16 phase, uint16 map);
+    void UpdateTerrain();
+    void SwapTerrain(uint16 phase, uint16 map);
+    void SendSwapTerrain(uint16 phase, uint16 map);
 
     void UpdateZoneDependentAuras(uint32 zone_id);          // zones
     void UpdateAreaDependentAuras(uint32 area_id);// subzones
