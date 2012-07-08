@@ -31,11 +31,16 @@
 
 enum WarlockSpells
 {
-    WARLOCK_DEMONIC_EMPOWERMENT_SUCCUBUS = 54435, WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER = 54443, WARLOCK_DEMONIC_EMPOWERMENT_FELGUARD = 54508, WARLOCK_DEMONIC_EMPOWERMENT_FELHUNTER = 54509, WARLOCK_DEMONIC_EMPOWERMENT_IMP = 54444, WARLOCK_DARK_INTENT_EFFECT = 85767,
-    //WARLOCK_IMPROVED_HEALTHSTONE_R1 = 18692,
-    //WARLOCK_IMPROVED_HEALTHSTONE_R2 = 18693,
-    WARLOCK_FELHUNTER_SHADOWBITE_R1 = 54049,
-    WARLOCK_DEMONIC_PACT_SPELL = 53646
+    WARLOCK_DEMONIC_EMPOWERMENT_SUCCUBUS   = 54435,
+    WARLOCK_DEMONIC_EMPOWERMENT_VOIDWALKER = 54443,
+    WARLOCK_DEMONIC_EMPOWERMENT_FELGUARD   = 54508,
+    WARLOCK_DEMONIC_EMPOWERMENT_FELHUNTER  = 54509,
+    WARLOCK_DEMONIC_EMPOWERMENT_IMP        = 54444,
+    WARLOCK_DARK_INTENT_EFFECT             = 85767,
+    //WARLOCK_IMPROVED_HEALTHSTONE_R1      = 18692,
+    //WARLOCK_IMPROVED_HEALTHSTONE_R2      = 18693,
+    WARLOCK_FELHUNTER_SHADOWBITE_R1        = 54049,
+    WARLOCK_DEMONIC_PACT_SPELL             = 53646
 };
 
 // 47236 - Demonic Pact
@@ -475,15 +480,15 @@ public:
             };
 
             /*int32 amount;
-// rank 1 - 4%
-if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R1)) { amount = 5; };*/
+            // rank 1 - 4%
+            if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R1)) { amount = 5; };*/
 
             /*// rank 2 - 8%
-if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R2)) { amount = 9; };*/
+            if (owner->HasAura(WARLOCK_IMPROVED_FELHUNTER_R2)) { amount = 9; };*/
 
             // Finally return the Mana to our Caster
             /*if (AuraEffect * aurEff = owner->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 214, 0))
-caster->CastCustomSpell(caster, WARLOCK_IMPROVED_FELHUNTER_EFFECT, &amount, NULL, NULL, true, NULL, aurEff, caster->GetGUID());*/
+            caster->CastCustomSpell(caster, WARLOCK_IMPROVED_FELHUNTER_EFFECT, &amount, NULL, NULL, true, NULL, aurEff, caster->GetGUID());*/
         }
 
         void Register ()

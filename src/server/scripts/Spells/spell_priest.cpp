@@ -535,5 +535,5 @@ void AddSC_priest_spell_scripts ()
     new spell_pri_shadow_word_death();
     new spell_pri_mind_blast();
     new spell_pri_power_word_fortitude();
-	new spell_pri_power_word_shield();
+    new spell_pri_power_word_shield();
 }
