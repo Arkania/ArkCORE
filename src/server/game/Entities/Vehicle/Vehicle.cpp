@@ -137,7 +137,7 @@ void Vehicle::Install ()
 
 void Vehicle::InstallAllAccessories (uint32 entry)
 {
-    VehicleAccessoryList const* mVehicleList = sObjectMgr->GetVehicleAccessoryList(entry);
+    VehicleAccessoryList const* mVehicleList = sObjectMgr->GetVehicleAccessoryList(this);
     if (!mVehicleList)
         return;
 

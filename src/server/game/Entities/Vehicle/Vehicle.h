@@ -135,6 +135,7 @@ public:
         return m_vehicleInfo;
     }
 
+    uint32 const& GetCreatureEntry() const { return m_creatureEntry; }
     bool HasEmptySeat (int8 seatId) const;
     Unit *GetPassenger (int8 seatId) const;
     int8 GetNextEmptySeat (int8 seatId, bool next, bool byAura = false) const;
