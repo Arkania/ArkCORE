@@ -882,8 +882,7 @@ Player::Player (WorldSession *session) :
     SetPendingBind(NULL, 0);
 }
 
-Player::Player (WorldSession &session) :
-        Unit(), m_achievementMgr(this), m_reputationMgr(this)
+Player::Player (WorldSession &session) : Unit(), m_achievementMgr(this), m_reputationMgr(this)
 {
 #ifdef _MSC_VER
 #pragma warning(default:4355)
@@ -4714,7 +4713,7 @@ bool Player::resetTalents (bool no_cost)
         return false;
     }
 
-    uint32 cost = 0;
+    uint64 cost = 0;
 
     if (!no_cost && !sWorld->getBoolConfig(CONFIG_NO_RESET_TALENT_COST))
     {
@@ -5815,7 +5814,7 @@ uint32 Player::DurabilityRepair (uint16 pos, bool cost, float discountMod, bool 
             }
 
             uint32 dmultiplier = dcost->multiplier[ItemSubClassToDurabilityMultiplierId(ditemProto->Class, ditemProto->SubClass)];
-            uint32 costs = uint32(LostDurability * dmultiplier * double(dQualitymodEntry->quality_mod));
+            uint64 costs = uint32(LostDurability * dmultiplier * double(dQualitymodEntry->quality_mod));
 
             costs = uint32(costs * discountMod * sWorld->getRate(RATE_REPAIRCOST));
 
@@ -7928,6 +7927,18 @@ void Player::UpdateZone (uint32 newZone, uint32 newArea)
         SetGroupUpdateFlag(GROUP_UPDATE_FLAG_ZONE);
 
     UpdateZoneDependentAuras(newZone);
+}
+
+void Player::UpdateTerrain()
+{
+}
+
+void Player::SwapTerrain(uint16 phase, uint16 map)
+{
+};
+
+void Player::SendSwapTerrain(uint16 phase, uint16 map)
+{
 }
 
 //If players are too far way of duel flag... then player loose the duel
@@ -14957,7 +14968,7 @@ void Player::OnGossipSelect (WorldObject* pSource, uint32 gossipListId, uint32 m
 
     GossipMenuItemData pMenuData = gossipmenu.GetItemData(gossipListId);
 
-    uint32 cost = gossipmenu.GetItem(gossipListId).m_gBoxMoney;
+    uint64 cost = gossipmenu.GetItem(gossipListId).m_gBoxMoney;
     if (!HasEnoughMoney(cost))
     {
         SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, 0, 0, 0);
@@ -21390,7 +21401,7 @@ bool Player::BuyItemFromVendorSlot (uint64 vendorguid, uint32 vendorslot, uint32
         }
     }
 
-    uint32 price = crItem->IsGoldRequired(pProto) ? pProto->BuyPrice * count : 0;
+    uint64 price = crItem->IsGoldRequired(pProto) ? pProto->BuyPrice * count : 0;
 
     // reputation discount
     if (price)
@@ -25359,9 +25370,7 @@ void Player::_SaveTalentBranchSpecs (SQLTransaction& trans)
 {
     trans->PAppend("DELETE FROM character_branchspec WHERE guid='%u'", GetGUIDLow());
     for (uint8 spec = 0; spec < m_specsCount; ++spec)
-    {
         trans->PAppend("INSERT INTO character_branchspec VALUES('%u', '%u', '%u')", GetGUIDLow(), spec, GetTalentBranchSpec(spec));
-    }
 }
 
 void Player::_LoadTalentBranchSpecs (PreparedQueryResult result)
