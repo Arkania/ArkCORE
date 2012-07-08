@@ -1749,34 +1749,6 @@ void WorldSession::HandleReadyForAccountDataTimes (WorldPacket& /*recv_data*/)
     SendAccountDataTimes(GLOBAL_CACHE_MASK);
 }
 
-void WorldSession::SendSetPhaseShift (uint32 PhaseShift, uint32 MapID)
-{
-    if (!_player)
-        return;
-
-    WorldPacket data(SMSG_SET_PHASE_SHIFT, 4);
-    data << uint64(_player->GetGUID());
-    data << uint32(0);          // Count of bytes - Array1 - Unused
-    data << uint32(0);          // Count of bytes - Array2 - TerrainSwap, unused.
-
-    data << uint32(2);          // Count of bytes - Array3 - Phases
-    data << uint16(PhaseShift);
-
-    if (MapID)
-    {
-        data << uint32(2);          // Count of bytes - Array4 - TerrainSwap
-        data << uint16(MapID);
-    }
-    else
-        data << uint32(0);
-
-    if (!PhaseShift)
-        data << uint32(0x08);
-    else
-        data << uint32(0);          // Flags (seem to be from Phase.dbc, not really sure)
-    SendPacket(&data);
-}
-
 void WorldSession::HandleHearthAndResurrect (WorldPacket& /*recv_data*/)
 {
     if (_player->isInFlight())
