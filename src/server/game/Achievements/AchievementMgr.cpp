@@ -33,6 +33,7 @@
 #include "GameEventMgr.h"
 #include "GridNotifiersImpl.h"
 #include "Guild.h"
+#include "GuildMgr.h"
 #include "Language.h"
 #include "Player.h"
 #include "SpellMgr.h"
@@ -651,7 +652,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement)
     sLog->outDebug(LOG_FILTER_ACHIEVEMENTSYS, "AchievementMgr::SendAchievementEarned(%u)", achievement->ID);
 #endif
 
-    if (Guild * guild = sObjectMgr->GetGuildById(GetPlayer()->GetGuildId()))
+    if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
     {
         Trinity::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
         Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> say_do(say_builder);

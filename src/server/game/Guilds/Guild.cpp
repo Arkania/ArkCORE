@@ -25,6 +25,7 @@
 #include "gamePCH.h"
 #include "DatabaseEnv.h"
 #include "Guild.h"
+#include "GuildMgr.h"
 #include "ScriptMgr.h"
 #include "Chat.h"
 #include "Config.h"
@@ -1145,14 +1146,14 @@ uint64 Guild::GetTodayXPLimit()
 bool Guild::Create (Player* pLeader, const std::string& name)
 {
     // Check if guild with such name already exists
-    if (sObjectMgr->GetGuildByName(name))
+    if (sGuildMgr->GetGuildByName(name))
         return false;
 
     WorldSession* pLeaderSession = pLeader->GetSession();
     if (!pLeaderSession)
         return false;
 
-    m_id = sObjectMgr->GenerateGuildId();
+    m_id = sGuildMgr->GenerateGuildId();
     m_leaderGuid = pLeader->GetGUID();
     m_name = name;
     m_info = "";
@@ -1257,7 +1258,7 @@ void Guild::Disband ()
     trans->Append(stmt);
 
     CharacterDatabase.CommitTransaction(trans);
-    sObjectMgr->RemoveGuild(m_id);
+    sGuildMgr->RemoveGuild(m_id);
 }
 
 void Guild::UpdateMemberData (Player* plr, uint8 dataid, uint32 value)

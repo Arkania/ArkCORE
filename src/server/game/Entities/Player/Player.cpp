@@ -54,6 +54,7 @@
 #include "Formulas.h"
 #include "Group.h"
 #include "Guild.h"
+#include "GuildMgr.h"
 #include "Pet.h"
 #include "Util.h"
 #include "Transport.h"
@@ -2317,7 +2318,7 @@ bool Player::ToggleAFK ()
     // afk player not allowed in battleground
     if (state && InBattleground() && !InArena())
         LeaveBattleground();
-    if (Guild* pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+    if (Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId()))
         pGuild->OnPlayerStatusChange(this, GUILD_MEMBER_FLAG_AFK, state);
 
     return state;
@@ -2329,7 +2330,7 @@ bool Player::ToggleDND ()
 
     bool state = HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DND);
 
-    if (Guild* pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+    if (Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId()))
         pGuild->OnPlayerStatusChange(this, GUILD_MEMBER_FLAG_DND, state);
     return state;
 }
@@ -3357,7 +3358,7 @@ void Player::GiveLevel (uint8 level)
     if (level == getLevel())
         return;
 
-    if (Guild * pGuild = sObjectMgr->GetGuildById(this->GetGuildId()))
+    if (Guild* pGuild = sGuildMgr->GetGuildById(this->GetGuildId()))
         pGuild->UpdateMemberData(this, GUILD_MEMBER_DATA_LEVEL, level);
 
     sScriptMgr->OnPlayerLevelChanged(this, level);
@@ -5108,7 +5109,7 @@ void Player::DeleteFromDB (uint64 playerguid, uint32 accountId, bool updateRealm
     sObjectAccessor->ConvertCorpseForPlayer(playerguid);
 
     if (uint32 guildId = GetGuildIdFromDB(playerguid))
-        if (Guild * pGuild = sObjectMgr->GetGuildById(guildId))
+        if (Guild* pGuild = sGuildMgr->GetGuildById(guildId))
             pGuild->DeleteMember(guid);
 
     // remove from arena teams
@@ -5821,7 +5822,7 @@ uint32 Player::DurabilityRepair (uint16 pos, bool cost, float discountMod, bool 
                     return TotalCost;
                 }
 
-                Guild *pGuild = sObjectMgr->GetGuildById(GetGuildId());
+                Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId());
                 if (!pGuild)
                     return TotalCost;
 
@@ -7795,7 +7796,7 @@ void Player::UpdateZone (uint32 newZone, uint32 newArea)
 {
     if (m_zoneUpdateId != newZone)
     {
-        if (Guild * pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+        if (Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId()))
             pGuild->UpdateMemberData(this, GUILD_MEMBER_DATA_ZONEID, newZone);
 
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
@@ -15716,7 +15717,7 @@ void Player::RewardQuest (Quest const *pQuest, uint32 reward, Object* questGiver
 
     // If the player has a guild, it should gain 1/4 of his experience.
     // Despite of him being at max level or not.
-    if (Guild * pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+    if (Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId()))
         pGuild->GainXP(XP / 4);
 
     // Give player extra money if GetRewOrReqMoney > 0 and get ReqMoney if negative
@@ -22218,7 +22219,7 @@ void Player::ModifyMoney (int32 d)
 
             SetGuildMoneyModifier(1);
 
-            if (Guild * pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+            if (Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId()))
             {
                 if (pGuild)
                 {
@@ -25639,13 +25640,15 @@ void Player::SetReputation (uint32 factionentry, uint32 value)
 {
     GetReputationMgr().SetReputation(sFactionStore.LookupEntry(factionentry), value);
 }
+
 uint32 Player::GetReputation (uint32 factionentry)
 {
     return GetReputationMgr().GetReputation(sFactionStore.LookupEntry(factionentry));
 }
+
 std::string Player::GetGuildName ()
 {
-    return sObjectMgr->GetGuildById(GetGuildId())->GetName();
+    return sGuildMgr->GetGuildById(GetGuildId())->GetName();
 }
 
 void Player::SendDuelCountdown (uint32 counter)

@@ -58,7 +58,6 @@ extern SQLStorage sItemStorage;
 extern SQLStorage sInstanceTemplate;
 
 class Group;
-class Guild;
 class ArenaTeam;
 class Item;
 
@@ -502,14 +501,6 @@ typedef std::multimap<uint32, GossipMenuItems> GossipMenuItemsMap;
 typedef std::pair<GossipMenuItemsMap::const_iterator, GossipMenuItemsMap::const_iterator> GossipMenuItemsMapBounds;
 typedef std::pair<GossipMenuItemsMap::iterator, GossipMenuItemsMap::iterator> GossipMenuItemsMapBoundsNonConst;
 
-struct GuildRewardsEntry
-{
-    uint32 item;
-    uint32 price;
-    uint32 achievement;
-    uint32 standing;
-};
-
 struct QuestPOIPoint
 {
     int32 x;
@@ -625,8 +616,6 @@ public:
 
     typedef std::set<Group *> GroupSet;
 
-    typedef std::vector <Guild *> GuildMap;
-
     typedef UNORDERED_MAP<uint32, ArenaTeam*> ArenaTeamMap;
 
     typedef UNORDERED_MAP<uint32, Quest*> QuestMap;
@@ -647,8 +636,6 @@ public:
 
     typedef std::map<uint32, uint32> CharacterConversionMap;
 
-    typedef std::vector<GuildRewardsEntry*> GuildRewardsVector;
-
     Player* GetPlayer(const char* name) const
     {   return sObjectAccessor->FindPlayerByName(name);}
     Player* GetPlayer(uint64 guid) const
@@ -667,13 +654,6 @@ public:
     {   mGroupSet.insert(group);}
     void RemoveGroup(Group* group)
     {   mGroupSet.erase(group);}
-
-    Guild* GetGuildByLeader(uint64 const&guid) const;
-    Guild* GetGuildById(uint32 guildId) const;
-    Guild* GetGuildByName(const std::string& guildname) const;
-    std::string GetGuildNameById(uint32 guildId) const;
-    void AddGuild(Guild* pGuild);
-    void RemoveGuild(uint32 guildId);
 
     ArenaTeam* GetArenaTeamById(uint32 arenateamid) const;
     ArenaTeam* GetArenaTeamByName(const std::string& arenateamname) const;
@@ -755,9 +735,6 @@ public:
     }
     QuestMap const& GetQuestTemplates() const
     {   return mQuestTemplates;}
-
-    GuildRewardsVector const& GetGuildRewards()
-    {   return mGuildRewards;}
 
     uint32 GetQuestForAreaTrigger(uint32 Trigger_ID) const
     {
@@ -891,8 +868,6 @@ public:
         return NULL;
     }
 
-    void LoadGuilds();
-    void LoadGuildRewards();
     void LoadArenaTeams();
     void LoadGroups();
     void LoadQuests();
@@ -1044,7 +1019,6 @@ public:
     uint32 GenerateArenaTeamId();
     uint32 GenerateAuctionID();
     uint64 GenerateEquipmentSetGuid();
-    uint32 GenerateGuildId();
     uint32 GenerateMailID();
     uint32 GeneratePetNumber();
 
@@ -1324,7 +1298,6 @@ protected:
     uint32 m_arenaTeamId;
     uint32 m_auctionid;
     uint64 m_equipmentSetGuid;
-    uint32 m_guildId;
     uint32 m_ItemTextId;
     uint32 m_mailid;
     uint32 m_hiPetNumber;
@@ -1350,9 +1323,7 @@ protected:
     typedef std::set<uint32> GameObjectForQuestSet;
 
     GroupSet mGroupSet;
-    GuildMap mGuildMap;
     ArenaTeamMap mArenaTeamMap;
-    GuildRewardsVector mGuildRewards;
 
     QuestAreaTriggerMap mQuestAreaTriggerMap;
     QuestStartAreaTriggerMap mQuestStartAreaTriggerMap;

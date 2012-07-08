@@ -66,7 +66,7 @@
 #include "Language.h"
 #include "CreatureGroups.h"
 #include "Transport.h"
-
+#include "GuildMgr.h"
 #include "ScriptMgr.h"
 #include "AddonMgr.h"
 #include "LFGMgr.h"
@@ -1567,10 +1567,11 @@ void World::SetInitialWorldSettings ()
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
-    sObjectMgr->LoadGuilds();
+    sLog->outString("Loading Guilds...");
+    sGuildMgr->LoadGuilds();
 
     sLog->outString("Loading Guild Rewards...");
-    sObjectMgr->LoadGuildRewards();
+    sGuildMgr->LoadGuildRewards();
 
     sLog->outString("Loading ArenaTeams...");
     sObjectMgr->LoadArenaTeams();
