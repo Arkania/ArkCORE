@@ -2317,7 +2317,7 @@ bool Player::ToggleAFK ()
     // afk player not allowed in battleground
     if (state && InBattleground() && !InArena())
         LeaveBattleground();
-    if (Guild * pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+    if (Guild* pGuild = sObjectMgr->GetGuildById(GetGuildId()))
         pGuild->OnPlayerStatusChange(this, GUILD_MEMBER_FLAG_AFK, state);
 
     return state;
@@ -2329,7 +2329,7 @@ bool Player::ToggleDND ()
 
     bool state = HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DND);
 
-    if (Guild * pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+    if (Guild* pGuild = sObjectMgr->GetGuildById(GetGuildId()))
         pGuild->OnPlayerStatusChange(this, GUILD_MEMBER_FLAG_DND, state);
     return state;
 }
@@ -4792,14 +4792,6 @@ bool Player::resetTalents (bool no_cost)
         m_resetTalentsCost = cost;
         m_resetTalentsTime = time(NULL);
     }
-
-    /* when prev line will dropped use next line
-     if (Pet* pet = GetPet())
-     {
-     if (pet->getPetType() == HUNTER_PET && !pet->GetCreatureInfo()->isTameable(CanTameExoticPets()))
-     RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
-     }
-     */
 
     return true;
 }

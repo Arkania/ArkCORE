@@ -112,21 +112,13 @@ void WorldSession::SendUpdateTrade (bool trader_data /*= true*/)
     data << uint32(TRADE_SLOT_COUNT);          // slot count
     data << uint64(view_trade->GetMoney());          // trade money
     data << uint32(0);
-    // old structure. meaning of new structure fields has to be researched
-    /*data << uint8(trader_data);                             // 1 means traders data, 0 means own
-     data << uint32(0);                                      // added in 2.4.0, this value must be equal to value from TRADE_STATUS_OPEN_WINDOW status packet (different value for different players to block multiple trades?)
-     data << uint32(TRADE_SLOT_COUNT);                       // trade slots count/number?, = next field in most cases
-     data << uint32(TRADE_SLOT_COUNT);                       // trade slots count/number?, = prev field in most cases
-     data << uint32(view_trade->GetMoney());                 // trader gold
-     data << uint32(view_trade->GetSpell());                 // spell casted on lowest slot item*/
 
     for (uint8 i = 0; i < TRADE_SLOT_COUNT; ++i)
     {
         uint32 id = 0;
         if (Item* item = view_trade->GetItem(TradeSlots(i)))
-        {
             id = item->GetProto()->ItemId;
-        }
+
         data << uint32(0);
         data << uint64(0);
         data << uint32(0);
