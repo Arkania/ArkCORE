@@ -2762,7 +2762,7 @@ void ObjectMgr::LoadVehicleTemplateAccessories()
             continue;
         }
 
-        m_VehicleTemplateAccessoryMap[uiEntry].push_back(VehicleAccessory(uiAccessory, uiSeat, bMinion, uiSummonType, uiSummonTimer));
+        m_VehicleTemplateAccessoryMap[uiEntry].push_back(VehicleAccessory(uiAccessory, uiSeat, bMinion));
 
         ++count;
     }
