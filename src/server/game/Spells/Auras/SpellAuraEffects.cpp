@@ -3289,7 +3289,6 @@ void AuraEffect::HandlePhase (AuraApplication const *aurApp, uint8 mode, bool ap
             newPhase = 0xFFFFFFFF;
 
         player->SetPhaseMask(newPhase, false);
-        player->GetSession()->SendSetPhaseShift(newPhase);
     }
     else
     {
