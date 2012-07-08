@@ -264,7 +264,7 @@ public:
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->GetMotionMaster()->Clear();
                 me->GetMotionMaster()->MoveChase(me->getVictim());
-                if (pValiona->IsAlive()):
+                if (pValiona->isAlive())
                     pValiona->GetAI()->DoAction(ACTION_VALIONA_SHOULD_FLY_AWAY);
 
                 pValiona = NULL;
