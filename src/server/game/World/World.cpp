@@ -1474,6 +1474,9 @@ void World::SetInitialWorldSettings ()
     sLog->outString("Loading Vehicle Template Accessories...");
     sObjectMgr->LoadVehicleTemplateAccessories();                // must be after LoadCreatureTemplates() and LoadNPCSpellClickSpells()
 
+    sLog->outString("Loading Vehicle Accessories...");
+    sObjectMgr->LoadVehicleAccessories();                       // must be after LoadCreatureTemplates() and LoadNPCSpellClickSpells()
+ 
     sLog->outString("Loading Dungeon boss data...");
     sObjectMgr->LoadInstanceEncounters();
 
