@@ -1,7 +1,7 @@
 -- character guild updates
-
 -- Dumping structure for table characters.guild
-
+ 
+DROP TABLE IF EXISTS `guild`;
 CREATE TABLE `guild` (
   `guildid` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(24) NOT NULL DEFAULT '',
@@ -18,12 +18,13 @@ CREATE TABLE `guild` (
   `totalXP` bigint(20) unsigned NOT NULL DEFAULT '0',
   `todayXP` bigint(20) unsigned NOT NULL DEFAULT '0',
   `XPCap` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `level` int(10) unsigned NOT NULL, 
+  `xp` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `level` int(10) unsigned NOT NULL,
   PRIMARY KEY (`guildid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
-
+ 
 -- Dumping structure for table characters.guild_bank_eventlog
-
+ 
 DROP TABLE IF EXISTS `guild_bank_eventlog`;
 CREATE TABLE IF NOT EXISTS `guild_bank_eventlog` (
   `guildid` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Guild Identificator',
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `guild_bank_eventlog` (
   KEY `Idx_PlayerGuid` (`PlayerGuid`),
   KEY `Idx_LogGuid` (`LogGuid`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
+ 
 -- Dumping structure for table characters.guild_bank_item
 
 DROP TABLE IF EXISTS `guild_bank_item`;
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `guild_bank_item` (
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 -- Dumping structure for table characters.guild_bank_right
-
+ 
 DROP TABLE IF EXISTS `guild_bank_right`;
 CREATE TABLE IF NOT EXISTS `guild_bank_right` (
   `guildid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
@@ -68,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `guild_bank_right` (
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 -- Dumping structure for table characters.guild_bank_tab
-
+ 
 DROP TABLE IF EXISTS `guild_bank_tab`;
 CREATE TABLE IF NOT EXISTS `guild_bank_tab` (
   `guildid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `guild_bank_tab` (
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 -- Dumping structure for table characters.guild_eventlog
-
+ 
 DROP TABLE IF EXISTS `guild_eventlog`;
 CREATE TABLE IF NOT EXISTS `guild_eventlog` (
   `guildid` INT(10) UNSIGNED NOT NULL COMMENT 'Guild Identificator',
@@ -96,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `guild_eventlog` (
   KEY `Idx_PlayerGuid2` (`PlayerGuid2`),
   KEY `Idx_LogGuid` (`LogGuid`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Guild Eventlog';
-
+ 
 -- Dumping structure for table characters.guild_member
 
 DROP TABLE IF EXISTS `guild_member`;
@@ -120,11 +121,15 @@ CREATE TABLE IF NOT EXISTS `guild_member` (
   `BankRemSlotsTab4` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   `BankResetTimeTab5` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   `BankRemSlotsTab5` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  `BankResetTimeTab6` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  `BankRemSlotsTab6` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  `BankResetTimeTab7` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+  `BankRemSlotsTab7` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   UNIQUE KEY `guid_key` (`guid`),
   KEY `guildid_key` (`guildid`),
   KEY `guildid_rank_key` (`guildid`,`rank`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Guild System';
-
+ 
 -- Dumping structure for table characters.guild_rank
 
 DROP TABLE IF EXISTS `guild_rank`;
