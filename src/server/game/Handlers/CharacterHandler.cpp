@@ -41,7 +41,6 @@
 #include "Log.h"
 #include "Opcodes.h"
 #include "Player.h"
-#include "ClassPlayer.h"
 #include "PlayerDump.h"
 #include "SharedDefines.h"
 #include "SocialMgr.h"
