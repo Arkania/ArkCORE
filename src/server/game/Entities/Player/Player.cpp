@@ -6479,7 +6479,8 @@ bool Player::UpdateCraftSkill (uint32 spellid)
                     learnSpell(discoveredSpell, false);
             }
 
-            uint32 craft_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_CRAFTING);
+            uint32 SkillGainPoints = _spell_idx->second->characterPoints[0];
+            uint32 craft_skill_gain = SkillGainPoints * sWorld->getIntConfig(CONFIG_SKILL_GAIN_CRAFTING);
 
             return UpdateSkillPro(_spell_idx->second->skillId, SkillGainChance(SkillValue, _spell_idx->second->max_value, (_spell_idx->second->max_value + _spell_idx->second->min_value) / 2, _spell_idx->second->min_value), craft_skill_gain);
         }
@@ -25981,6 +25982,9 @@ void Player::RemoveOrAddMasterySpells ()
 
         if (HasAura(76857))
             RemoveAurasDueToSpell(76857);
+            
+        if (HasAura(77486))
+            RemoveAurasDueToSpell(77486);
     }
     else if (HasAuraType(SPELL_AURA_MASTERY))
     {
@@ -26019,5 +26023,9 @@ void Player::RemoveOrAddMasterySpells ()
         if (GetTalentBranchSpec(GetActiveSpec()) == BS_WARRIOR_PROTECTION)
             if (!HasAura(76857))
                 AddAura(76857, this);
+                
+        if (GetTalentBranchSpec(GetActiveSpec()) == BS_PRIEST_SHADOW)
+            if (!HasAura(77486))
+                AddAura(77486, this);
     }
 }

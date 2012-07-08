@@ -29,7 +29,17 @@
 
 enum MageSpells
 {
-    SPELL_MAGE_COLD_SNAP = 11958, SPELL_MAGE_SQUIRREL_FORM = 32813, SPELL_MAGE_GIRAFFE_FORM = 32816, SPELL_MAGE_SERPENT_FORM = 32817, SPELL_MAGE_DRAGONHAWK_FORM = 32818, SPELL_MAGE_WORGEN_FORM = 32819, SPELL_MAGE_SHEEP_FORM = 32820, SPELL_MAGE_GLYPH_OF_ETERNAL_WATER = 70937, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT = 70908, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY = 70907, SPELL_MAGE_GLYPH_OF_BLAST_WAVE = 62126
+	SPELL_MAGE_COLD_SNAP                        = 11958,
+	SPELL_MAGE_SQUIRREL_FORM                    = 32813,
+	SPELL_MAGE_GIRAFFE_FORM                     = 32816,
+	SPELL_MAGE_SERPENT_FORM                     = 32817,
+	SPELL_MAGE_DRAGONHAWK_FORM                  = 32818,
+	SPELL_MAGE_WORGEN_FORM                      = 32819,
+	SPELL_MAGE_SHEEP_FORM                       = 32820,
+	SPELL_MAGE_GLYPH_OF_ETERNAL_WATER           = 70937,
+	SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT = 70908,
+	SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY = 70907,
+	SPELL_MAGE_GLYPH_OF_BLAST_WAVE              = 62126
 };
 
 class spell_mage_cold_snap: public SpellScriptLoader
@@ -255,7 +265,7 @@ void AddSC_mage_spell_scripts ()
 {
     new spell_mage_cold_snap;
     new spell_mage_incanters_absorbtion_manashield();
-    new spell_mage_polymorph_cast_visual;          //d
+    new spell_mage_polymorph_cast_visual;
     new spell_mage_blast_wave;
     new spell_mage_summon_water_elemental;
 }

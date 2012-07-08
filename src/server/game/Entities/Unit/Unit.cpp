@@ -5824,6 +5824,15 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             counter->SetAmount(25);
             return true;
         }
+        // Permafrost
+        if (dummySpell->SpellIconID == 143)
+
+            if (!procSpell)
+                return false;
+           
+            basepoints0 = damage * triggerAmount / 100;
+            triggered_spell_id = 91394;
+            break;
         // Burnout
         if (dummySpell->SpellIconID == 2998)
         {
@@ -6290,6 +6299,14 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
                 return false;
             triggered_spell_id = 64136;
             target = this;
+            break;
+        }
+        // Sin and Punishment
+        if (dummySpell->SpellIconID == 1869)
+        {
+            if (procSpell && (procEx & PROC_EX_CRITICAL_HIT))
+                ToPlayer()->UpdateSpellCooldown(34433, -triggerAmount);
+
             break;
         }
         switch (dummySpell->Id)
@@ -8492,6 +8509,21 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
             this->CastCustomSpell(this, 67545, &bp0, NULL, NULL, true, NULL, triggeredByAura->GetEffect(0), this->GetGUID());
             return true;
         }
+        }
+        break;
+    }
+    case SPELLFAMILY_PRIEST:
+    {
+        // Masochism
+        if(dummySpell->SpellIconID == 2211)
+        {
+            *handled = true;
+            if(!(damage >= CountPctFromMaxHealth(10)))
+                return false;
+
+            int32 bp0 = SpellMgr::CalculateSpellEffectAmount(dummySpell, 0);
+            this->CastCustomSpell(this, 89007, &bp0, NULL, NULL, true, NULL, triggeredByAura->GetEffect(0), this->GetGUID());
+            return true;
         }
         break;
     }
@@ -11843,6 +11875,12 @@ bool Unit::isSpellCrit (Unit *pVictim, SpellEntry const *spellProto, SpellSchool
                 if (spellProto->SpellFamilyFlags[0] & 0x100 && spellProto->SpellIconID == 816)
                     if (AuraEffect const* aurEff = GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 816, 0))
                         if (pVictim->HealthBelowPct(25))
+                            crit_chance += aurEff->GetAmount();
+                break;
+            case SPELLFAMILY_PRIEST:
+                // Mind Spike
+                if (spellProto->SpellFamilyFlags[0] & 0x2000 && spellProto->SpellIconID == 95)
+                    if (AuraEffect const* aurEff = pVictim->GetAuraEffect(87178, 0, GetGUID()))
                             crit_chance += aurEff->GetAmount();
                 break;
             case SPELLFAMILY_MAGE:

@@ -529,7 +529,7 @@ enum SpecialSurprise {
     SAY_EXEC_PROG_5 = -1609032,
     SAY_EXEC_PROG_6 = -1609033,
     SAY_EXEC_PROG_7 = -1609034,
-    SAY_EXEC_PROG_8 = -1609080, // Cataclysm: Goblin
+    SAY_EXEC_PROG_8 = -1609180, // Cataclysm: Goblin
     SAY_EXEC_NAME_1 = -1609035,
     SAY_EXEC_NAME_2 = -1609036,
     SAY_EXEC_RECOG_1 = -1609037,
@@ -547,8 +547,8 @@ enum SpecialSurprise {
     SAY_EXEC_NOREM_7 = -1609049,
     SAY_EXEC_NOREM_8 = -1609050,
     SAY_EXEC_NOREM_9 = -1609051,
-    SAY_EXEC_NOREM_10 = -1609081, // Cataclysm: Goblin
-    SAY_EXEC_NOREM_11 = -1609085, // Cataclysm: Worgen
+    SAY_EXEC_NOREM_10 = -1609181, // Cataclysm: Goblin
+    SAY_EXEC_NOREM_11 = -1609182, // Cataclysm: Worgen
     SAY_EXEC_THINK_1 = -1609052,
     SAY_EXEC_THINK_2 = -1609053,
     SAY_EXEC_THINK_3 = -1609054,
@@ -559,13 +559,13 @@ enum SpecialSurprise {
     SAY_EXEC_THINK_8 = -1609059,
     SAY_EXEC_THINK_9 = -1609060,
     SAY_EXEC_THINK_10 = -1609061,
-    SAY_EXEC_THINK_11 = -1609082, // Cataclysm: Goblin
-    SAY_EXEC_THINK_12 = -1609086, // Cataclysm: Worgen
+    SAY_EXEC_THINK_11 = -1609183, // Cataclysm: Goblin
+    SAY_EXEC_THINK_12 = -1609184, // Cataclysm: Worgen
     SAY_EXEC_LISTEN_1 = -1609062,
     SAY_EXEC_LISTEN_2 = -1609063,
     SAY_EXEC_LISTEN_3 = -1609064,
     SAY_EXEC_LISTEN_4 = -1609065,
-    SAY_EXEC_LISTEN_5 = -1609083, // Cataclysm: Goblin
+    SAY_EXEC_LISTEN_5 = -1609185, // Cataclysm: Goblin
     SAY_PLAGUEFIST = -1609066,
     SAY_EXEC_TIME_1 = -1609067,
     SAY_EXEC_TIME_2 = -1609068,
@@ -577,7 +577,7 @@ enum SpecialSurprise {
     SAY_EXEC_TIME_8 = -1609074,
     SAY_EXEC_TIME_9 = -1609075,
     SAY_EXEC_TIME_10 = -1609076,
-    SAY_EXEC_TIME_11 = -1609084, // Cataclysm: Goblin
+    SAY_EXEC_TIME_11 = -1609186, // Cataclysm: Goblin
     SAY_EXEC_TIME_12 = -1609087,
     SAY_EXEC_WAITING = -1609077,
     EMOTE_DIES = -1609078,
