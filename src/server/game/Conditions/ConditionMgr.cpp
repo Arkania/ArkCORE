@@ -563,7 +563,7 @@ void ConditionMgr::LoadConditions (bool isReload)
             }
             case CONDITION_SOURCE_TYPE_SMART_EVENT:
             {
-                std::pair<int32, uint32> key = std::make_pair(cond->mSourceId, cond->mSourceEntry);
+                std::pair<int32, uint32> key = std::make_pair(cond->mSourceEntry, cond->mSourceId);
                 m_SmartEventConditions[key][cond->mSourceGroup].push_back(cond);
                 bIsDone = true;
                 ++count;
