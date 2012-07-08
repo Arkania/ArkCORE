@@ -338,8 +338,8 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     // 0: uint32, 1: string, 2: uint32, 3: string, 4: string, 5: uint64, 6-10: uint32, 11: uint64
     PREPARE_STATEMENT(
             CHAR_ADD_GUILD,
-            "INSERT INTO guild (guildid, name, leaderguid, info, motd, createdate, EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor, BankMoney, xp, level) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC);
+            "INSERT INTO guild (guildid, name, leaderguid, info, motd, createdate, EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor, BankMoney, xp, m_today_xp, m_xp_cap, level) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            CONNECTION_ASYNC)
     PREPARE_STATEMENT(CHAR_DEL_GUILD, "DELETE FROM guild WHERE guildid = ?",
             CONNECTION_ASYNC);
     // 0: uint32
@@ -591,14 +591,6 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CHAR_RESET_GUILD_RANK_BANK_TIME5,
             "UPDATE guild_member SET BankResetTimeTab5 = 0 WHERE guildid = ? AND rank = ?",
             CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILDS,
-            //          0          1       2             3              4              5              6
-            "SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
-            //   7                  8       9       10            11           12                  13  14
-            "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level "
-            "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC",
-            CONNECTION_SYNCH);
     //                                              0        1    2      3       4
     PREPARE_STATEMENT(
             CHAR_LOAD_GUILD_RANKS,
