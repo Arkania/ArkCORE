@@ -795,6 +795,9 @@ void Spell::SpellDamageSchoolDmg (SpellEffIndex effIndex)
 
                 if (back_damage < int32(unitTarget->GetHealth()))
                     m_caster->CastCustomSpell(m_caster, 32409, &back_damage, 0, 0, true);
+                
+                if (unitTarget->HealthBelowPct(25))
+                    damage = damage * 3;
             }
             break;
         }
