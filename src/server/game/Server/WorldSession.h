@@ -207,7 +207,6 @@ public:
     void SendPetNameInvalid (uint32 error, const std::string& name, DeclinedName *declinedName);
     void SendPartyResult (PartyOperation operation, const std::string& member, PartyResult res, uint32 val = 0);
     void SendAreaTriggerMessage (const char* Text, ...) ATTR_PRINTF(2, 3);
-    void SendSetPhaseShift (uint32 phaseShift, uint32 MapID = 0);
     void SendQueryTimeResponse ();
 
     void SendAuthResponse (uint8 code, bool shortForm, uint32 queuePos = 0);
@@ -598,13 +597,14 @@ public:
     void HandleGuildExperienceOpcode (WorldPacket& recvPacket);
     void HandleGuildMaxExperienceOpcode (WorldPacket& recvPacket);
     void HandleGuildRewardsOpcode (WorldPacket& recvPacket);
-    void HandleGuildSetNoteOpcode (WorldPacket& recvPacket);
-    void HandleGuildRankOpcode (WorldPacket& recvPacket);
-    void HandleGuildAddRankOpcode (WorldPacket& recvPacket);
-    void HandleGuildDelRankOpcode (WorldPacket& recvPacket);
-    void HandleGuildSwitchRankOpcode (WorldPacket& recvPacket);
-    void HandleGuildChangeInfoTextOpcode (WorldPacket& recvPacket);
-    void HandleSaveGuildEmblemOpcode (WorldPacket& recvPacket);
+    void HandleGuildSetNoteOpcode(WorldPacket& recvPacket);
+    void HandleGuildRankOpcode(WorldPacket& recvPacket);
+    void HandleGuildRanksOpcode(WorldPacket& recvPacket);
+    void HandleGuildAddRankOpcode(WorldPacket& recvPacket);
+    void HandleGuildDelRankOpcode(WorldPacket& recvPacket);
+    void HandleGuildSwitchRankOpcode(WorldPacket& recvPacket);
+    void HandleGuildChangeInfoTextOpcode(WorldPacket& recvPacket);
+    void HandleSaveGuildEmblemOpcode(WorldPacket& recvPacket);
 
     void HandleTaxiNodeStatusQueryOpcode (WorldPacket& recvPacket);
     void HandleTaxiQueryAvailableNodes (WorldPacket& recvPacket);
@@ -888,6 +888,8 @@ public:
     void HandleGuildBankBuyTab (WorldPacket& recv_data);
     void HandleQueryGuildBankTabText (WorldPacket& recv_data);
     void HandleSetGuildBankTabText (WorldPacket& recv_data);
+    void HandleGuildQueryNews(WorldPacket& recv_data);
+    void HandleGuildQueryTradeSkill(WorldPacket& recv_data);
 
     // Calendar
     void HandleCalendarGetCalendar (WorldPacket& recv_data);

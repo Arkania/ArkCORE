@@ -153,7 +153,13 @@ enum GuildCommandError
     ERR_GUILD_WITHDRAW_LIMIT        = 0x19,
     ERR_GUILD_NOT_ENOUGH_MONEY      = 0x1A,
     ERR_GUILD_BANK_FULL             = 0x1C,
-    ERR_GUILD_ITEM_NOT_FOUND        = 0x1D
+    ERR_GUILD_ITEM_NOT_FOUND        = 0x1D,
+    ERR_GUILD_TOO_MUCH_MONEY        = 0x1F,
+    ERR_GUILD_BANK_WRONG_TAB        = 0x20,
+    ERR_RANK_REQUIRES_AUTHENTICATOR = 0x22,
+    ERR_GUILD_BANK_VOUCHER_FAILED   = 0x23,
+    ERR_GUILD_TRIAL_ACCOUNT         = 0x24,
+    ERR_GUILD_UNDELETABLE_DUE_TO_LEVEL = 0x25,
 };
 
 enum GuildEvents
@@ -248,32 +254,14 @@ public:
 
     void LoadFromDB(Field* fields);
     void SaveToDB(uint32 guildId) const;
-    void ReadPacket(WorldPacket& recv)
-    {
-        recv >> m_style >> m_color >> m_borderStyle >> m_borderColor >> m_backgroundColor;
-    }
+    void ReadPacket(WorldPacket& recv) { recv >> m_style >> m_color >> m_borderStyle >> m_borderColor >> m_backgroundColor; }
     void WritePacket(WorldPacket& data) const;
 
-    uint32 GetStyle() const
-    {
-        return m_style;
-    }
-    uint32 GetColor() const
-    {
-        return m_color;
-    }
-    uint32 GetBorderStyle() const
-    {
-        return m_borderStyle;
-    }
-    uint32 GetBorderColor() const
-    {
-        return m_borderColor;
-    }
-    uint32 GetBackgroundColor() const
-    {
-        return m_backgroundColor;
-    }
+    uint32 GetStyle() const { return m_style; }
+    uint32 GetColor() const { return m_color; }
+    uint32 GetBorderStyle() const { return m_borderStyle; }
+    uint32 GetBorderColor() const { return m_borderColor; }
+    uint32 GetBackgroundColor() const { return m_backgroundColor; }
 
 private:
     uint32 m_style;
@@ -289,14 +277,11 @@ struct GuildBankRightsAndSlots
     GuildBankRightsAndSlots() : rights(0), slots(0) {}
     GuildBankRightsAndSlots(uint8 _rights, uint32 _slots) : rights(_rights), slots(_slots) {}
 
-    inline bool IsEqual(const GuildBankRightsAndSlots& rhs) const
-    {
-        return rights == rhs.rights && slots == rhs.slots;
-    }
+    inline bool IsEqual(const GuildBankRightsAndSlots& rhs) const { return rights == rhs.rights && slots == rhs.slots; }
     void SetGuildMasterValues()
     {
         rights = GUILD_BANK_RIGHT_FULL;
-        slots = GUILD_WITHDRAW_SLOT_UNLIMITED;
+        slots = uint32(GUILD_WITHDRAW_SLOT_UNLIMITED);
     }
 
     uint8 rights;
@@ -322,7 +307,7 @@ private:
         struct Profession
         {
             uint32 skillID;
-            uint32 title;
+            uint32 rank;
             uint32 level;
         };
 
@@ -335,17 +320,15 @@ private:
 
         void SetPublicNote(const std::string& publicNote);
         void SetOfficerNote(const std::string& officerNote);
-        void SetZoneID(uint32 id)
+        void SetZoneID(uint32 id) { m_zoneId = id; }
+        void SetAchievementPoints(uint32 val) { m_achievementPoints = val; }
+        void SetLevel(uint8 var) { m_level = var; }
+
+        void SetProfession(uint32 num, uint32 level, uint32 skill, uint32 rank)
         {
-            m_zoneId = id;
-        }
-        void SetAchievementPoints(uint32 val)
-        {
-            m_achievementPoints = val;
-        }
-        void SetLevel(uint8 var)
-        {
-            m_level = var;
+            professions[num].level = level;
+            professions[num].skillID = skill;
+            professions[num].rank = rank;
         }
 
         void AddFlag(uint8 var)
@@ -408,10 +391,8 @@ private:
         {
             return m_zoneId;
         }
-        uint32 GetAchievementPoints()
-        {
-            return m_achievementPoints;
-        }
+        uint32 GetAchievementPoints() { return m_achievementPoints; }
+        Profession professions[2];
 
         bool IsOnline()
         {
@@ -466,8 +447,9 @@ private:
 
         RemainingValue m_bankRemaining[GUILD_BANK_MAX_TABS + 1];
         uint32 m_achievementPoints;
-        Profession professions[2];
     };
+
+    typedef UNORDERED_MAP<uint32, GuildNews*> sGuildNews;
 
     // Base class for event entries
     class LogEntry
@@ -578,7 +560,7 @@ private:
         RankInfo(uint32 guildId) : m_guildId(guildId), m_rankId(GUILD_RANK_NONE), m_rights(GR_RIGHT_EMPTY), m_bankMoneyPerDay(0) {}
         RankInfo(uint32 guildId, uint8 rankId, const std::string& name, uint32 rights, uint32 money) : m_guildId(guildId), m_rankId(rankId), m_name(name), m_rights(rights), m_bankMoneyPerDay(money) {}
 
-        bool LoadFromDB(Field* fields);
+        void LoadFromDB(Field* fields);
         void SaveToDB(SQLTransaction& trans) const;
         void WritePacket(WorldPacket& data) const;
 
@@ -793,13 +775,11 @@ public:
     const std::string& GetName() const { return m_name; }
     const std::string& GetMOTD() const { return m_motd; }
     const std::string& GetInfo() const { return m_info; }
-    void SwitchRank(uint32 oldRank, uint32 newRank);
     uint32 GetMembersCount() const { return m_members.size(); }
 
-    ///- Why aren't these in Worldsession?
     // Handle client commands
-    void HandleRoster(WorldSession *session = NULL); // NULL = broadcast
-    void HandleQuery(WorldSession *session);
+    void HandleRoster(WorldSession* session = NULL); // NULL = broadcast
+    void HandleQuery(WorldSession* session);
     void HandleSetMOTD(WorldSession* session, const std::string& motd);
     void HandleSetInfo(WorldSession* session, const std::string& info);
     void HandleSetEmblem(WorldSession* session, const EmblemInfo& emblemInfo);
@@ -819,12 +799,15 @@ public:
     bool HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool repair = false);
     void HandleMemberLogout(WorldSession* session);
     void HandleDisband(WorldSession* session);
-	
-	void SetGuildNews(WorldPacket &data);
+    
+    void SetGuildNews(WorldPacket &data);
 
     void UpdateMemberData(Player* plr, uint8 dataid, uint32 value);
     void OnPlayerStatusChange(Player* plr, uint32 flag, bool state);
     void SendUpdateRoster(WorldSession* session = NULL);
+
+    // Guild experience system
+    uint64 GetTodayXPLimit();
 
     // Send info to client
     void SendInfo(WorldSession* session) const;
@@ -840,10 +823,11 @@ public:
 
     // Load from DB
     bool LoadFromDB(Field* fields);
-    bool LoadRankFromDB(Field* fields);
+    void LoadGuildNewsFromDB(Field* fields);
+    void LoadRankFromDB(Field* fields);
     bool LoadMemberFromDB(Field* fields);
     bool LoadEventLogFromDB(Field* fields);
-    bool LoadBankRightFromDB(Field* fields);
+    void LoadBankRightFromDB(Field* fields);
     bool LoadBankTabFromDB(Field* fields);
     bool LoadBankEventLogFromDB(Field* fields);
     bool LoadBankItemFromDB(Field* fields);
@@ -858,9 +842,9 @@ public:
     void BroadcastWorker(Do& _do, Player* except = NULL)
     {
         for (Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        if (Player *player = itr->second->FindPlayer())
-        if (player != except)
-        _do(player);
+            if (Player *player = itr->second->FindPlayer())
+                if (player != except)
+                    _do(player);
     }
 
     // Members
@@ -868,8 +852,8 @@ public:
     bool AddMember(const uint64& guid, uint8 rankId = GUILD_RANK_NONE);
     void DeleteMember(const uint64& guid, bool isDisbanding = false, bool isKicked = false);
     bool ChangeMemberRank(const uint64& guid, uint8 newRank);
-    RankInfo & GetRankInfo(uint32 rankId)
-    {   return m_ranks[rankId];}
+    RankInfo & GetRankInfo(uint32 rankId) {return m_ranks[rankId]; }
+    Members GetMembers() { return m_members; }
 
     // Bank
     void SwapItems(Player* player, uint8 tabId, uint8 slotId, uint8 destTabId, uint8 destSlotId, uint32 splitedAmount);
