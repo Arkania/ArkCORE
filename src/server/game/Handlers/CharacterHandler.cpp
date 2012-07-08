@@ -586,44 +586,6 @@ void WorldSession::HandleCharCreateOpcode (WorldPacket & recv_data)
     }
 
     Player* pNewChar = NULL;
-    switch (class_)
-    {
-    case CLASS_WARRIOR:
-        pNewChar = new WarriorPlayer(this);
-        break;
-    case CLASS_PALADIN:
-        pNewChar = new PaladinPlayer(this);
-        break;
-    case CLASS_HUNTER:
-        pNewChar = new HunterPlayer(this);
-        break;
-    case CLASS_ROGUE:
-        pNewChar = new RoguePlayer(this);
-        break;
-    case CLASS_PRIEST:
-        pNewChar = new PriestPlayer(this);
-        break;
-    case CLASS_DEATH_KNIGHT:
-        pNewChar = new DKPlayer(this);
-        break;
-    case CLASS_SHAMAN:
-        pNewChar = new ShamanPlayer(this);
-        break;
-    case CLASS_MAGE:
-        pNewChar = new MagePlayer(this);
-        break;
-    case CLASS_WARLOCK:
-        pNewChar = new WarlockPlayer(this);
-        break;
-    case CLASS_DRUID:
-        pNewChar = new DruidPlayer(this);
-        break;
-    default:
-        printf("\nClass %u doesn't exist.\n",   class_);
-        ASSERT(false);
-        break;
-    }
-
     ASSERT(pNewChar);
 
     if (!pNewChar->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER),   name,   race_,   class_,   gender,   skin,   face,   hairStyle,   hairColor,   facialHair,   outfitId))

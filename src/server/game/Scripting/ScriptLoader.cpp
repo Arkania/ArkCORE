@@ -669,7 +669,6 @@ void AddSC_DuelReset();
 void AddScripts ()
 {
     AddExampleScripts();
-    AddPlayerScripts();
     AddSpellScripts();
     AddSC_SmartSCripts();
     AddCommandScripts();
@@ -693,11 +692,6 @@ void AddExampleScripts ()
     AddSC_example_gossip_codebox();
     AddSC_example_misc();
     AddSC_example_commandscript();
-}
-
-void AddPlayerScripts ()
-{
-    AddSC_player_mage_scripts();
 }
 
 void AddSpellScripts ()

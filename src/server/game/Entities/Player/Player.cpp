@@ -17294,6 +17294,7 @@ Player* Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder, WorldSession* se
 
     uint8 pClass = fields[4].GetUInt8();
 
+    Player* player = NULL;
     if (player && player)
         if (player->_LoadFromDB(guid, holder, result))
             return player;
