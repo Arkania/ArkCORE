@@ -47,4 +47,8 @@ void WorldDatabaseConnection::DoPrepareStatements() {
             WORLD_LOAD_SMARTAI_WP,
             "SELECT entry, pointid, position_x, position_y, position_z FROM waypoints ORDER BY entry, pointid",
             CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            WORLD_SEL_LOCALES_CREATURE_TEXT,
+            "SELECT entry, groupid, id, text_loc1, text_loc2, text_loc3, text_loc4, text_loc5, text_loc6, text_loc7, text_loc8 FROM locales_creature_text",
+            CONNECTION_SYNCH);
 }
