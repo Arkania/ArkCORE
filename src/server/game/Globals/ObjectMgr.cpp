@@ -1693,15 +1693,7 @@ bool ObjectMgr::MoveCreData (uint32 guid, uint32 mapId, Position pos)
         // We use spawn coords to spawn
         if (!map->Instanceable() && map->IsLoaded(data.posX, data.posY))
         {
-            CreatureInfo const *ci = ObjectMgr::GetCreatureTemplate(data.id);
-            if (!ci)
-                return 0;
-
-            Creature* creature = NULL;
-            if (ci->ScriptID)
-                creature = sScriptMgr->GetCreatureScriptedClass(ci->ScriptID);
-            if (creature == NULL)
-                creature = new Creature();
+            Creature* creature = new Creature;
 
             if (!creature->LoadFromDB(guid, map))
             {
@@ -1756,15 +1748,7 @@ uint32 ObjectMgr::AddCreData (uint32 entry, uint32 /*team*/, uint32 mapId, float
         // We use spawn coords to spawn
         if (!map->Instanceable() && !map->IsRemovalGrid(x, y))
         {
-            CreatureInfo const *ci = ObjectMgr::GetCreatureTemplate(entry);
-            if (!ci)
-                return 0;
-
-            Creature* creature = NULL;
-            if (ci->ScriptID)
-                creature = sScriptMgr->GetCreatureScriptedClass(ci->ScriptID);
-            if (creature == NULL)
-                creature = new Creature();
+            Creature* creature = new Creature;
 
             if (!creature->LoadFromDB(guid, map))
             {

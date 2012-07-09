@@ -17268,42 +17268,8 @@ float Player::GetFloatValueFromArray (Tokens const& data, uint16 index)
     return result;
 }
 
-Player* Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder, WorldSession* session)
-{
-    ////                                                     0     1        2     3     4        5      6    7      8     9           10              11
-    //QueryResult *result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
-    // 12          13          14          15   16           17        18        19         20         21          22           23                 24
-    //"position_x, position_y, position_z, map, orientation, taximask, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
-    // 25                 26       27       28       29       30         31           32             33        34    35      36                 37         38
-    //"resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
-    // 39           40                41                 42                    43          44          45              46           47               48              49
-    //"arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
-    // 50      51      52      53      54      55      56      57      58      59      60       61           62         63          64             65              66
-    //"health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, "
-    // 67           68          69              70
-    //"knownTitles, actionBars, currentPetSlot, petSlotUsed FROM characters WHERE guid = '%u'", guid);
-    PreparedQueryResult result = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADFROM);
-
-    if (!result)
-    {
-        sLog->outError("Player (GUID: %u) not found in table `characters`, can't load. ", guid);
-        return false;
-    }
-
-    Field* fields = result->Fetch();
-
-    uint8 pClass = fields[4].GetUInt8();
-
-    Player* player = NULL;
-    if (player && player)
-        if (player->_LoadFromDB(guid, holder, result))
-            return player;
-
-    return NULL;
-}
-
 // We send the result to not waste time to do it again
-bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryResult & result)
+bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
 {
     //TODO : drop ammoid & stable_slots
 
@@ -17320,13 +17286,24 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     // 67           68          69              70
     //"knownTitles, actionBars, currentPetSlot, petSlotUsed FROM characters WHERE guid = '%u'", guid);
 
+    PreparedQueryResult result = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADFROM);
+    if (!result)
+    {
+        sLog->outError("Player (GUID: %u) not found in table `characters`, can't load. ", guid);
+        return false;
+    }
+
     Field* fields = result->Fetch();
 
-    //uint32 dbAccountId = fields[1].GetUInt32();
+    uint32 dbAccountId = fields[1].GetUInt32();
 
     // check if the character's account in the db and the logged in account match.
     // player should be able to load/delete character only with correct account!
-    /* TODO: restore check */
+    if (dbAccountId != GetSession()->GetAccountId())
+    {
+        sLog->outError("Player (GUID: %u) loading from wrong account (is: %u, should be: %u)", guid, GetSession()->GetAccountId(), dbAccountId);
+        return false;
+    }
 
     if (holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADBANNED))
     {
