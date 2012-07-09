@@ -1186,8 +1186,6 @@ bool Player::Create (uint32 guidlow, const std::string& name, uint8 race, uint8 
 
     Object::_Create(guidlow, 0, HIGHGUID_PLAYER);
 
-    ASSERT(getClass() == class_);
-
     m_name = name;
 
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(race, class_);
@@ -17357,10 +17355,6 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     SetUInt32Value(PLAYER_BYTES_3, (fields[49].GetUInt16() & 0xFFFE) | fields[5].GetUInt8());
     SetUInt32Value(PLAYER_FLAGS, fields[11].GetUInt32());
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[48].GetUInt32());
-
-    //SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
-
-    //SetUInt32Value(PLAYER_AMMO_ID, fields[63].GetUInt32());
 
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
     SetByteValue(PLAYER_FIELD_BYTES, 2, fields[68].GetUInt8());
