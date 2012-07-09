@@ -512,7 +512,7 @@ void ObjectMgr::RemoveArenaTeam (uint32 Id)
     mArenaTeamMap.erase(Id);
 }
 
-void ObjectMgr::AddLocaleString (std::string& s, LocaleConstant locale, StringVector& data)
+void ObjectMgr::AddLocaleString(std::string const& s, LocaleConstant locale, StringVector& data)
 {
     if (!s.empty())
     {
