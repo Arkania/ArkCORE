@@ -1104,7 +1104,7 @@ public:
     {
         return 1 << (getRace() - 1);
     }
-    virtual uint8 getClass () const
+    uint8 getClass () const
     {
         return GetByteValue(UNIT_FIELD_BYTES_0, 1);
     }

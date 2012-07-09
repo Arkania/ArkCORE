@@ -1051,8 +1051,6 @@ public:
 
     static bool BuildEnumData (QueryResult result, WorldPacket * p_data);
 
-    virtual uint8 getClass () const = 0;
-
     void SetInWater (bool apply);
 
     bool IsInWater () const
@@ -1664,8 +1662,7 @@ public:
     /***                   LOAD SYSTEM                     ***/
     /*********************************************************/
 
-    static Player* LoadFromDB (uint32 guid, SQLQueryHolder * holder, WorldSession * session);
-    bool _LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryResult & result);
+    bool LoadFromDB(uint32 guid, SQLQueryHolder* holder);
     bool isBeingLoaded () const
     {
         return GetSession()->PlayerLoading();

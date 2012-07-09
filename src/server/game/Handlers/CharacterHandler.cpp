@@ -585,9 +585,7 @@ void WorldSession::HandleCharCreateOpcode (WorldPacket & recv_data)
         sLog->outDebug(LOG_FILTER_NETWORKIO,   "Character creation %s (account %u) has unhandled tail data: [%u]",   name.c_str(),   GetAccountId(),   unk);
     }
 
-    Player* pNewChar = NULL;
-    ASSERT(pNewChar);
-
+    Player* pNewChar = new Player(this);
     if (!pNewChar->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER),   name,   race_,   class_,   gender,   skin,   face,   hairStyle,   hairColor,   facialHair,   outfitId))
     {
         // Player not create (race/class problem?)
@@ -787,10 +785,11 @@ void WorldSession::HandlePlayerLogin (LoginQueryHolder * holder)
 {
     uint64 playerGuid = holder->GetGuid();
 
-    // "GetAccountId() == db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)
-    Player* pCurrChar = Player::LoadFromDB(GUID_LOPART(playerGuid),   holder,   this);
+    Player* pCurrChar = new Player(this);
+    // for send server info and strings (config)
+    ChatHandler chH = ChatHandler(pCurrChar);
 
-    if (!pCurrChar)
+    if (!pCurrChar->LoadFromDB(GUID_LOPART(playerGuid), holder))
     {
         KickPlayer();          // disconnect client,   player no set to session and it will not deleted or saved at kick
         delete pCurrChar;          // delete it manually
@@ -798,9 +797,6 @@ void WorldSession::HandlePlayerLogin (LoginQueryHolder * holder)
         m_playerLoading = false;
         return;
     }
-
-    // for send server info and strings (config)
-    ChatHandler chH = ChatHandler(pCurrChar);
 
     pCurrChar->GetMotionMaster()->Initialize();
 
