@@ -17271,7 +17271,7 @@ float Player::GetFloatValueFromArray (Tokens const& data, uint16 index)
 // We send the result to not waste time to do it again
 bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
 {
-    //TODO : drop ammoid & stable_slots
+    //TODO : drop ammoid
 
     ////                                                     0     1        2     3     4        5      6    7      8     9           10              11
     //QueryResult *result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
