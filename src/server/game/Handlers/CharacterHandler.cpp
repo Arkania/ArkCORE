@@ -585,7 +585,7 @@ void WorldSession::HandleCharCreateOpcode (WorldPacket & recv_data)
         sLog->outDebug(LOG_FILTER_NETWORKIO,   "Character creation %s (account %u) has unhandled tail data: [%u]",   name.c_str(),   GetAccountId(),   unk);
     }
 
-    Player* pNewChar = new Player(this);
+    Player* pNewChar = NULL;
 
     if (!pNewChar->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER),   name,   race_,   class_,   gender,   skin,   face,   hairStyle,   hairColor,   facialHair,   outfitId))
     {
