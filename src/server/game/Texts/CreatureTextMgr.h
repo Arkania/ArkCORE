@@ -25,6 +25,8 @@
 #define ARKCORE_CREATURE_TEXT_MGR_H
 
 #include "Creature.h"
+#include "GridNotifiers.h"
+#include "ObjectAccessor.h"
 #include "SharedDefines.h"
 
 struct CreatureTextEntry
