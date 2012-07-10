@@ -1352,6 +1352,7 @@ void Guild::OnPlayerStatusChange (Player* plr, uint32 flag, bool state)
         else
             pMember->RemFlag(flag);
     }
+    HandleRoster();
 }
 
 // HANDLE CLIENT COMMANDS

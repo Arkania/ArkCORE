@@ -123,8 +123,7 @@ void WorldSession::HandleGuildRemoveOpcode (WorldPacket& recvPacket)
 // Cata Status: Done
 void WorldSession::HandleGuildAcceptOpcode (WorldPacket& recvPacket)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_ACCEPT");
-    recvPacket.read_skip<uint64>();
+    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_ACCEPT");
 
     // Player cannot be in guild
     if (!GetPlayer()->GetGuildId())
@@ -153,12 +152,16 @@ void WorldSession::HandleGuildInfoOpcode (WorldPacket& /*recvPacket*/)
 }
 
 // CATA Status: Done
-void WorldSession::HandleGuildRosterOpcode (WorldPacket& /*recvPacket*/)
+void WorldSession::HandleGuildRosterOpcode (WorldPacket& recvPacket)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_ROSTER");
+    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_ROSTER");
 
-    if (Guild* pGuild = _GetPlayerGuild(this))
-        pGuild->HandleRoster(this);
+    uint64 guildGUID, playerGUID;
+
+    recvPacket >> guildGUID >> playerGUID;
+
+    if (Guild* guild = _GetPlayerGuild(this))
+        guild->HandleRoster(this);
 }
 
 // Cata Status: Done
@@ -274,7 +277,7 @@ void WorldSession::HandleGuildMaxExperienceOpcode (WorldPacket& recvPacket)
     if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
     {
         WorldPacket data(SMSG_GUILD_MAX_DAILY_XP, 8);
-        data << uint64(67800000);          // Constant value for now
+        data << uint64(guild->GetXPCap());
         SendPacket(&data);
     }
 }
