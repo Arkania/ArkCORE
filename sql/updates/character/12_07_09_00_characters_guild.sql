@@ -6,9 +6,7 @@ ALTER TABLE `guild`
 	ADD COLUMN `todayXP` BIGINT(20) UNSIGNED   NOT NULL DEFAULT 0 AFTER `totalXP`, 
 	ADD COLUMN `XPCap` BIGINT(20) UNSIGNED   NOT NULL DEFAULT 0 AFTER `todayXP`, 
 	CHANGE `xp` `xp` BIGINT(20) UNSIGNED   NOT NULL DEFAULT 0 AFTER `XPCap`, 
-	CHANGE `level` `level` INT(10) UNSIGNED   NOT NULL AFTER `xp`, 
-	DROP COLUMN `m_today_xp`, 
-	DROP COLUMN `m_xp_cap`;
+	CHANGE `level` `level` INT(10) UNSIGNED   NOT NULL AFTER `xp`;
 
 
 -- guild_member
