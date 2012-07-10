@@ -3761,12 +3761,11 @@ void AuraEffect::HandleAuraTransform (AuraApplication const *aurApp, uint8 mode,
                     if (target->GetTypeId() == TYPEID_PLAYER)
                         team = target->ToPlayer()->GetTeam();
 
-                    uint32 display_id = sObjectMgr->ChooseDisplayId(team, ci);
-                    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(display_id);
-                    if (minfo)
-                        display_id = minfo->modelid;
+                    uint32 displayID = sObjectMgr->ChooseDisplayId(team, ci);
 
-                    target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, display_id);
+                    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(displayID);
+
+                    target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, displayID);
                 }
             }
         }
@@ -4227,17 +4226,15 @@ void AuraEffect::HandleAuraMounted (AuraApplication const *aurApp, uint8 mode, b
         if (target->GetTypeId() == TYPEID_PLAYER)
             team = target->ToPlayer()->GetTeam();
 
-        uint32 display_id = sObjectMgr->ChooseDisplayId(team, ci);
-        CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(display_id);
-        if (minfo)
-            display_id = minfo->modelid;
+        uint32 displayID = sObjectMgr->ChooseDisplayId(team,ci);
+        CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(displayID);
 
         //some spell has one aura of mount and one of vehicle
         for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             if (GetSpellProto()->Effect[i] == SPELL_EFFECT_SUMMON && GetSpellProto()->EffectMiscValue[i] == GetMiscValue())
-                display_id = 0;
+                displayID = 0;
 
-        target->Mount(display_id, ci->VehicleId, GetMiscValue());
+        target->Mount(displayID, ci->VehicleId, GetMiscValue());
 
         if (plr)
             plr->CastSpell(plr, spellId, true);
@@ -6872,12 +6869,10 @@ void AuraEffect::HandleAuraDummy (AuraApplication const *aurApp, uint8 mode, boo
                     if (target->GetTypeId() == TYPEID_PLAYER)
                         team = target->ToPlayer()->GetTeam();
 
-                    uint32 display_id = sObjectMgr->ChooseDisplayId(team, creatureInfo);
-                    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(display_id);
-                    if (minfo)
-                        display_id = minfo->modelid;
+                    uint32 displayID = sObjectMgr->ChooseDisplayId(team, creatureInfo);
+                    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(displayID);
 
-                    target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, display_id);
+                    target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, displayID);
                 }
             }
             break;
