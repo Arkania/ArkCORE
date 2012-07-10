@@ -52,13 +52,35 @@ extern SQLStorage sCreatureDataAddonStorage;
 extern SQLStorage sCreatureInfoAddonStorage;
 extern SQLStorage sEquipmentStorage;
 extern SQLStorage sGOStorage;
-extern SQLStorage sPageTextStore;
 extern SQLStorage sItemStorage;
 extern SQLStorage sInstanceTemplate;
 
 class Group;
 class ArenaTeam;
 class Item;
+
+// GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
+#if defined(__GNUC__)
+#pragma pack(1)
+#else
+#pragma pack(push,1)
+#endif
+
+struct PageText
+{
+    std::string Text;
+    uint16 NextPage;
+};
+
+// GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
+#if defined(__GNUC__)
+#pragma pack()
+#else
+#pragma pack(pop)
+#endif
+
+// Faster (insert/find) than UNORDERED_MAP in this case
+typedef std::map<uint32, PageText> PageTextContainer;
 
 struct GameTele
 {
@@ -981,6 +1003,7 @@ public:
     void LoadGameObjectForQuests();
 
     void LoadPageTexts();
+    PageText const* GetPageText(uint32 pageEntry);
 
     void LoadPlayerInfo();
     void LoadPetLevelInfo();
@@ -1384,6 +1407,8 @@ protected:
     LocalForIndex m_LocalForIndex;
 
     LocaleConstant DBCLocaleIndex;
+
+    PageTextContainer PageTextStore;
 
 private:
     void LoadScripts(ScriptsType type);

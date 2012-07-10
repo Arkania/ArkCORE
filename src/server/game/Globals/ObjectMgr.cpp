@@ -2443,7 +2443,7 @@ void ObjectMgr::LoadItemPrototypes ()
         if (proto->Bonding >= MAX_BIND_TYPE)
             sLog->outErrorDb("Item (Entry: %u) has wrong Bonding value (%u)", i, proto->Bonding);
 
-        if (proto->PageText && !sPageTextStore.LookupEntry<PageText>(proto->PageText))
+        if (proto->PageText && !GetPageText(proto->PageText))
             sLog->outErrorDb("Item (Entry: %u) has non existing first page (Id:%u)", i, proto->PageText);
 
         if (proto->LockID && !sLockStore.LookupEntry(proto->LockID))
@@ -5130,45 +5130,56 @@ void ObjectMgr::LoadGossipScripts ()
 
 void ObjectMgr::LoadPageTexts ()
 {
-    sPageTextStore.Free();          // for reload case
+    uint32 oldMSTime = getMSTime();
 
-    sPageTextStore.Load();
-    sLog->outString(">> Loaded %u page texts", sPageTextStore.RecordCount);
-    sLog->outString();
+    QueryResult result = WorldDatabase.Query("SELECT entry, text, next_page FROM page_text");
 
-    for (uint32 i = 1; i < sPageTextStore.MaxEntry; ++i)
+    if (!result)
     {
-        // check data correctness
-        PageText const* page = sPageTextStore.LookupEntry<PageText>(i);
-        if (!page)
-            continue;
+        sLog->outString(">> Loaded 0 page texts. DB table `page_text` is empty!");
+        sLog->outString();
+        return;
+    }
 
-        if (page->Next_Page && !sPageTextStore.LookupEntry<PageText>(page->Next_Page))
-        {
-            sLog->outErrorDb("Page text (Id: %u) has not existing next page (Id:%u)", i, page->Next_Page);
-            continue;
-        }
+    uint32 count = 0;
+    do
+    {
+        Field* fields = result->Fetch();
 
-        // detect circular reference
-        std::set<uint32> checkedPages;
-        for (PageText const* pageItr = page; pageItr; pageItr = sPageTextStore.LookupEntry<PageText>(pageItr->Next_Page))
+        const char* text = fields[1].GetCString();
+
+        PageText pageText;
+
+        pageText.Text     = fields[1].GetString();
+        pageText.NextPage = fields[2].GetInt16();
+
+        PageTextStore[fields[0].GetUInt32()] = pageText;
+
+        ++count;
+    }
+    while (result->NextRow());
+
+    for (PageTextContainer::const_iterator itr = PageTextStore.begin(); itr != PageTextStore.end(); ++itr)
+    {
+        if (itr->second.NextPage)
         {
-            if (!pageItr->Next_Page)
-                break;
-            checkedPages.insert(pageItr->Page_ID);
-            if (checkedPages.find(pageItr->Next_Page) != checkedPages.end())
-            {
-                std::ostringstream ss;
-                ss << "The text page(s) ";
-                for (std::set<uint32>::iterator itr = checkedPages.begin(); itr != checkedPages.end(); ++itr)
-                    ss << *itr << " ";
-                ss << "create(s) a circular reference, which can cause the server to freeze. Changing Next_Page of page " << pageItr->Page_ID << " to 0";
-                sLog->outErrorDb("%s", ss.str().c_str());
-                const_cast<PageText*>(pageItr)->Next_Page = 0;
-                break;
-            }
+            PageTextContainer::const_iterator itr2 = PageTextStore.find(itr->second.NextPage);
+            if (itr2 == PageTextStore.end())
+                sLog->outErrorDb("Page text (Id: %u) has not existing next page (Id: %u)", itr->first, itr->second.NextPage);
         }
     }
+
+    sLog->outString(">> Loaded %u page texts in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
+}
+
+PageText const* ObjectMgr::GetPageText(uint32 pageEntry)
+{
+    PageTextContainer::const_iterator itr = PageTextStore.find(pageEntry);
+    if (itr != PageTextStore.end())
+        return &(itr->second);
+
+    return NULL;
 }
 
 void ObjectMgr::LoadPageTextLocales ()
@@ -6636,7 +6647,7 @@ void ObjectMgr::LoadGameobjectInfo ()
 
             if (goInfo->goober.pageId)          // pageId
             {
-                if (!sPageTextStore.LookupEntry<PageText>(goInfo->goober.pageId))
+                if (!GetPageText(goInfo->goober.pageId))
                     sLog->outErrorDb("Gameobject (Entry: %u GoType: %u) have data7=%u but PageText (Entry %u) not exist.", id, goInfo->type, goInfo->goober.pageId, goInfo->goober.pageId);
             }
             CheckGONoDamageImmuneId(goInfo, goInfo->goober.noDamageImmune, 11);
@@ -6820,7 +6831,7 @@ void ObjectMgr::LoadCorpses ()
     PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_LOAD_CORPSES));
     if (!result)
     {
-        sLog->outString(">> Loaded 0 corpses. DB table `pet_name_generation` is empty.");
+        sLog->outString(">> Loaded 0 corpses. DB table `corpse` is empty.");
         sLog->outString();
         return;
     }

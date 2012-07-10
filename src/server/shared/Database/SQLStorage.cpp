@@ -40,7 +40,6 @@ const char ItemPrototypesrcfmt[] =
         "iiiisiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiifiiiiiifiiiiiifiiiiiifiiiiiifiiiisiiiiiiiiiiiiiiiiiiiiiiiiifiiisiiiii";
 const char ItemPrototypedstfmt[] =
         "iiiisiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiifiiiiiifiiiiiifiiiiiifiiiiiifiiiisiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiii";
-const char PageTextfmt[] = "isii";
 const char InstanceTemplatesrcfmt[] = "iiffffsb";
 const char InstanceTemplatedstfmt[] = "iiffffib";
 
@@ -56,7 +55,6 @@ SQLStorage sGOStorage(GameObjectInfosrcfmt, GameObjectInfodstfmt, "entry",
         "gameobject_template");
 SQLStorage sItemStorage(ItemPrototypesrcfmt, ItemPrototypedstfmt, "entry",
         "item_template");
-SQLStorage sPageTextStore(PageTextfmt, "entry", "page_text");
 SQLStorage sInstanceTemplate(InstanceTemplatesrcfmt, InstanceTemplatedstfmt,
         "map", "instance_template");
 
