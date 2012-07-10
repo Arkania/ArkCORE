@@ -40,8 +40,6 @@ const char ItemPrototypesrcfmt[] =
         "iiiisiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiifiiiiiifiiiiiifiiiiiifiiiiiifiiiisiiiiiiiiiiiiiiiiiiiiiiiiifiiisiiiii";
 const char ItemPrototypedstfmt[] =
         "iiiisiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiifiiifiiiiiifiiiiiifiiiiiifiiiiiifiiiisiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiiii";
-const char InstanceTemplatesrcfmt[] = "iiffffsb";
-const char InstanceTemplatedstfmt[] = "iiffffib";
 
 SQLStorage sCreatureStorage(CreatureInfosrcfmt, CreatureInfodstfmt, "entry",
         "creature_template");
@@ -55,8 +53,6 @@ SQLStorage sGOStorage(GameObjectInfosrcfmt, GameObjectInfodstfmt, "entry",
         "gameobject_template");
 SQLStorage sItemStorage(ItemPrototypesrcfmt, ItemPrototypedstfmt, "entry",
         "item_template");
-SQLStorage sInstanceTemplate(InstanceTemplatesrcfmt, InstanceTemplatedstfmt,
-        "map", "instance_template");
 
 void SQLStorage::Free() {
     uint32 offset = 0;

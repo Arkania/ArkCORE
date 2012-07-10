@@ -167,7 +167,7 @@ void WorldSession::HandleMoveWorldportAckOpcode ()
                         }
                     }
                 }
-                allowMount = mInstance->allowMount;
+                allowMount = mInstance->AllowMount;
             }
 
             // mount allow check

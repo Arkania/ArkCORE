@@ -7392,7 +7392,7 @@ void Player::RewardOnKill (Unit *victim, float rate)
             uint32 dungeonLevel = GetChampioningFactionDungeonLevel();
             if (dungeonLevel)
             {
-                InstanceTemplate const *instance = sObjectMgr->GetInstanceTemplate(map->GetId());
+                InstanceTemplate const* instance = sObjectMgr->GetInstanceTemplate(map->GetId());
                 if (instance)
                 {
                     AccessRequirement const *pAccessRequirement = sObjectMgr->GetAccessRequirement(map->GetId(), ((InstanceMap*) map)->GetDifficulty());
@@ -7803,7 +7803,7 @@ void Player::UpdateZone (uint32 newZone, uint32 newArea)
         // zone changed, check mount
         bool allowMount = false;
         if (InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetMapId()))
-            allowMount = mInstance->allowMount;
+            allowMount = mInstance->AllowMount;
         else if (MapEntry const* mEntry = sMapStore.LookupEntry(GetMapId()))
             allowMount = !mEntry->IsDungeon() || mEntry->IsBattlegroundOrArena();
 
