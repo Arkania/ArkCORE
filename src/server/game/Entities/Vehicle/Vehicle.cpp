@@ -32,8 +32,7 @@
 #include "CreatureAI.h"
 #include "ZoneScript.h"
 
-Vehicle::Vehicle (Unit *unit, VehicleEntry const *vehInfo) :
-        me(unit), m_vehicleInfo(vehInfo), m_usableSeatNum(0), m_bonusHP(0)
+Vehicle::Vehicle (Unit *unit, VehicleEntry const *vehInfo) : me(unit), m_vehicleInfo(vehInfo), m_usableSeatNum(0), m_bonusHP(0)
 {
     for (uint32 i = 0; i < MAX_VEHICLE_SEATS; ++i)
     {
@@ -441,17 +440,16 @@ void Vehicle::RelocatePassengers (float x, float y, float z, float ang)
     for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
         if (Unit *passenger = itr->second.passenger)
         {
-            if (!passenger)
-                return;
-            if (this->GetBase()->IsOnVehicle(passenger))
-            {
+            ASSERT(passenger->IsInWorld());
+            ASSERT(me->GetMap());
+
                 float px = x + passenger->m_movementInfo.t_pos.m_positionX;
                 float py = y + passenger->m_movementInfo.t_pos.m_positionY;
                 float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
                 float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
+
                 passenger->SetPosition(px, py, pz, po);
             }
-        }
 }
 
 void Vehicle::Dismiss ()
