@@ -1450,10 +1450,26 @@ void Guild::HandleRoster (WorldSession* session /*= NULL*/)
 
     SendGuildRankInfo(session);
 
-   // This is to make client refresh the list
-   //SendUpdateRoster(session);
+    // This is to make client refresh the list
+    SendUpdateRoster(session);
 
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_ROSTER)");
+}
+
+void Guild::SendGuildRankInfo (WorldSession* session)
+{
+    WorldPacket data7(SMSG_GUILD_RANK);
+    data7 << uint32(_GetRanksSize());
+    for (uint32 i = 0; i < _GetRanksSize(); i++)
+    {
+        data7 << uint32(i) << uint32(i); // unk
+        m_ranks[i].WritePacket(data7);
+    }
+
+    if (session)
+        session->SendPacket(&data7);
+    else
+        BroadcastPacket(&data7);
 }
 
 void Guild::SetGuildNews(WorldPacket &data)
@@ -1483,22 +1499,6 @@ void Guild::SetGuildNews(WorldPacket &data)
  
     for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint32(0);
-}
-
-void Guild::SendGuildRankInfo (WorldSession* session)
-{
-    WorldPacket data7(SMSG_GUILD_RANK);
-    data7 << uint32(_GetRanksSize());
-    for (uint32 i = 0; i < _GetRanksSize(); i++)
-    {
-        data7 << uint32(i) << uint32(i); // unk
-        m_ranks[i].WritePacket(data7);
-    }
-
-    if (session)
-        session->SendPacket(&data7);
-    else
-        BroadcastPacket(&data7);
 }
 
 void Guild::HandleQuery (WorldSession *session)
