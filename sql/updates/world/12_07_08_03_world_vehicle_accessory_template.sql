@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `vehicle_accessory` (
   `description` text NOT NULL,
   `summontype` tinyint(3) unsigned NOT NULL DEFAULT '6' COMMENT 'see enum TempSummonType',
   `summontimer` int(10) unsigned NOT NULL DEFAULT '30000' COMMENT 'timer, only relevant for certain summontypes',
-  PRIMARY KEY (`entry`,`seat_id`)
+  PRIMARY KEY (`guid`,`seat_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='CTDB Vehicle Accessory System.';
 
 --
