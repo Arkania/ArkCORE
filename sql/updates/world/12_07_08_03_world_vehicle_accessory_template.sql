@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `vehicle_accessory` (
 -- Contenu de la table `vehicle_template_accessory`
 --
 
-INSERT INTO `vehicle_accessory` (`entry`, `accessory_entry`, `seat_id`, `minion`, `description`, `summontype`, `summontimer`) VALUES
+INSERT INTO `vehicle_accessory` (`guid`, `accessory_entry`, `seat_id`, `minion`, `description`, `summontype`, `summontimer`) VALUES
 (28782, 28768, 0, 0, 'Acherus Deathcharger', 6, 30000),
 (28312, 28319, 7, 1, 'Wintergrasp Siege Engine', 6, 30000),
 (32627, 32629, 7, 1, 'Wintergrasp Siege Engine', 6, 30000),
