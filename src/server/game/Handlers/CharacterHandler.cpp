@@ -865,7 +865,7 @@ void WorldSession::HandlePlayerLogin (LoginQueryHolder * holder)
         }
     }
 
-    //QueryResult *result = CharacterDatabase.PQuery("SELECT guildid,   rank FROM guild_member WHERE guid = '%u'",   pCurrChar->GetGUIDLow());
+    //QueryResult *result = CharacterDatabase.PQuery("SELECT guildid, rank FROM guild_member WHERE guid = '%u'",   pCurrChar->GetGUIDLow());
     if (PreparedQueryResult resultGuild = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADGUILD))
     {
         Field* fields = resultGuild->Fetch();

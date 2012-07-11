@@ -2413,10 +2413,10 @@ bool ChatHandler::HandleGuildCreateCommand (const char *args)
 
     // if not guild name only (in "") then player name
     Player* target;
-    if (!extractPlayerTarget(*args != '"' ? (char*) args : NULL, &target))
+    if (!extractPlayerTarget(*args != '"' ? (char*)args : NULL, &target))
         return false;
 
-    char* tailStr = *args != '"' ? strtok(NULL, "") : (char*) args;
+    char* tailStr = *args != '"' ? strtok(NULL, "") : (char*)args;
     if (!tailStr)
         return false;
 
@@ -2432,7 +2432,7 @@ bool ChatHandler::HandleGuildCreateCommand (const char *args)
         return true;
     }
 
-    Guild *guild = new Guild;
+    Guild* guild = new Guild;
     if (!guild->Create(target, guildname))
     {
         delete guild;
@@ -2479,7 +2479,7 @@ bool ChatHandler::HandleGuildUninviteCommand (const char *args)
     if (!extractPlayerTarget((char*) args, &target, &target_guid))
         return false;
 
-    uint32 glId = target ? target->GetGuildId() : Player::GetGuildIdFromDB(target_guid);
+    uint32 glId = target ? target->GetGuildId() : Player::GetGuildIdFromGuid(target_guid);
 
     if (!glId)
         return false;
@@ -2506,7 +2506,7 @@ bool ChatHandler::HandleGuildRankCommand (const char *args)
     if (!extractPlayerTarget(nameStr, &target, &target_guid, &target_name))
         return false;
 
-    uint32 glId = target ? target->GetGuildId() : Player::GetGuildIdFromDB(target_guid);
+    uint32 glId = target ? target->GetGuildId() : Player::GetGuildIdFromGuid(target_guid);
     if (!glId)
         return false;
 

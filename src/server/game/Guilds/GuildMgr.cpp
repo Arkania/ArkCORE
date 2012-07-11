@@ -67,6 +67,17 @@ Guild* GuildMgr::GetGuildById (uint32 guildId) const
     return NULL;
 }
 
+Guild* GuildMgr::GetGuildByGuid(uint64 guid) const
+{
+    // Full guids are only used when receiving/sending data to client
+    // everywhere else guild id is used
+    if (IS_GUILD(guid))
+        if (uint32 guildId = GUID_LOPART(guid))
+            return GetGuildById(guildId);
+
+    return NULL;
+}
+
 Guild* GuildMgr::GetGuildByName (const std::string& guildName) const
 {
     std::string search = guildName;
@@ -106,7 +117,7 @@ void GuildMgr::LoadGuilds()
         uint32 oldMSTime = getMSTime();
 
         //                                                       0        1       2             3              4              5              6              7                 8         9          10             11     12     13      14         15	
-        QueryResult result = CharacterDatabase.Query("SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, g.xp, g.level, g.todayXP, g.XPCap 'COUNT(gbt.guildid)' FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC");
+        QueryResult result = CharacterDatabase.Query("SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, g.xp, g.level, g.todayXP, g.XPCap COUNT(gbt.guildid) FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC");
 
         if (!result)
         {
@@ -189,7 +200,7 @@ void GuildMgr::LoadGuilds()
         CharacterDatabase.DirectExecute("DELETE gm FROM guild_member gm LEFT JOIN guild g ON gm.guildId = g.guildId WHERE g.guildId IS NULL");
 
         //          0        1        2        3        4        5        6        7        8        9        10        11        12        13        14        15        16        17        18        19        20        21        22        23        24        25        26        27        28
-        QueryResult result = CharacterDatabase.Query("SELECT gm.guildid, gm.guid, gm.rank, gm.pnote, gm.offnote, gm.BankResetTimeMoney, gm.BankRemMoney, gm.BankResetTimeTab0, gm.BankRemSlotsTab0, gm.BankResetTimeTab1, gm.BankRemSlotsTab1, gm.BankResetTimeTab2, gm.BankRemSlotsTab2, gm.BankResetTimeTab3, gm.BankRemSlotsTab3, gm.BankResetTimeTab4, gm.BankRemSlotsTab4, gm.BankResetTimeTab5, gm.BankRemSlotsTab5, gm.BankResetTimeTab6, gm.BankRemSlotsTab6, gm.BankResetTimeTab7, gm.BankRemSlotsTab7, gm.achievementPoints, c.name, c.level, c.class, c.zone, c.account, c.logout_time FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC");
+        QueryResult result = CharacterDatabase.Query("SELECT gm.guildid, gm.guid, gm.rank, gm.pnote, gm.offnote, gm.BankResetTimeMoney, gm.BankRemMoney, gm.BankResetTimeTab0, gm.BankRemSlotsTab0, gm.BankResetTimeTab1, gm.BankRemSlotsTab1, gm.BankResetTimeTab2, gm.BankRemSlotsTab2, gm.BankResetTimeTab3, gm.BankRemSlotsTab3, gm.BankResetTimeTab4, gm.BankRemSlotsTab4, gm.BankResetTimeTab5, gm.BankRemSlotsTab5, gm.BankResetTimeTab6, gm.BankRemSlotsTab6, gm.BankResetTimeTab7, gm.BankRemSlotsTab7, c.name, c.level, c.class, c.zone, c.account, c.logout_time FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC");
 
         if (!result)
         {

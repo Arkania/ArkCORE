@@ -707,6 +707,7 @@ Player::Player (WorldSession *session) :
     duel = NULL;
 
     m_GuildIdInvited = 0;
+    m_guildId = 0;
     m_ArenaTeamIdInvited = 0;
 
     m_atLoginFlags = AT_LOGIN_NONE;
@@ -1237,7 +1238,6 @@ bool Player::Create (uint32 guidlow, const std::string& name, uint8 race, uint8 
     SetByteValue(PLAYER_BYTES_3, 0, gender);
     SetByteValue(PLAYER_BYTES_3, 3, 0);          // BattlefieldArenaFaction (0 or 1)
 
-    SetInGuild(0);
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
     SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
@@ -5105,7 +5105,7 @@ void Player::DeleteFromDB (uint64 playerguid, uint32 accountId, bool updateRealm
     // bones will be deleted by corpse/bones deleting thread shortly
     sObjectAccessor->ConvertCorpseForPlayer(playerguid);
 
-    if (uint32 guildId = GetGuildIdFromDB(playerguid))
+    if (uint32 guildId = GetGuildIdFromGuid(playerguid))
         if (Guild* pGuild = sGuildMgr->GetGuildById(guildId))
             pGuild->DeleteMember(guid);
 
@@ -5811,13 +5811,13 @@ uint32 Player::DurabilityRepair (uint16 pos, bool cost, float discountMod, bool 
 
             if (guildBank)
             {
-                if (GetGuildId() == 0)
+                if (m_guildId == 0)
                 {
                     sLog->outStaticDebug("You are not member of a guild");
                     return TotalCost;
                 }
 
-                Guild* pGuild = sGuildMgr->GetGuildById(GetGuildId());
+                Guild* pGuild = sGuildMgr->GetGuildById(m_guildId);
                 if (!pGuild)
                     return TotalCost;
 
@@ -7700,14 +7700,14 @@ bool Player::RewardHonor (Unit *uVictim, uint32 groupsize, int32 honor, bool pvp
     return true;
 }
 
-uint32 Player::GetGuildIdFromDB (uint64 guid)
+uint32 Player::GetGuildIdFromGuid(uint64 guid)
 {
-    QueryResult result = CharacterDatabase.PQuery("SELECT guildid FROM guild_member WHERE guid='%u'", GUID_LOPART(guid));
-    if (!result)
-        return 0;
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_GUILD_ID);
+    stmt->setUInt64(0, guid);
+    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
+        return (*result)[0].GetUInt32();
 
-    uint32 id = result->Fetch()[0].GetUInt32();
-    return id;
+    return 0;
 }
 
 uint8 Player::GetRankFromDB (uint64 guid)
@@ -17279,8 +17279,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     //"arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
     // 50      51      52      53      54      55      56      57      58      59      60       61           62         63          64             65              66
     //"health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, "
-    // 67           68          69              70
-    //"knownTitles, actionBars, currentPetSlot, petSlotUsed FROM characters WHERE guid = '%u'", guid);
+    // 67           68          69              70              71
+    //"knownTitles, actionBars, currentPetSlot, petSlotUsed, guildId FROM characters WHERE guid = '%u'", guid);
 
     PreparedQueryResult result = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADFROM);
     if (!result)
@@ -17898,6 +17898,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     //if (extraflags & PLAYER_EXTRA_WORGEN_FORM)
     //    setInWorgenForm(IN_WORGEN_FORM);
 
+    m_guildId = fields[71].GetUInt32();
     _LoadDeclinedNames(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADDECLINEDNAMES));
 
     m_achievementMgr.LoadFromDB(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADACHIEVEMENTS), holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADCRITERIAPROGRESS));
@@ -25579,7 +25580,7 @@ uint32 Player::GetReputation (uint32 factionentry)
 
 std::string Player::GetGuildName ()
 {
-    return sGuildMgr->GetGuildById(GetGuildId())->GetName();
+    return sGuildMgr->GetGuildById(m_guildId)->GetName();
 }
 
 void Player::SendDuelCountdown (uint32 counter)
@@ -25839,22 +25840,6 @@ void Player::SendClearFocus (Unit* target)
     WorldPacket data(SMSG_BREAK_TARGET, target->GetPackGUID().size());
     data.append(target->GetPackGUID());
     GetSession()->SendPacket(&data);
-}
-
-void Player::SetInGuild (uint32 GuildId)
-{
-    //printf("DEBUG: set in guild %u, %lX", GuildId, MAKE_NEW_GUID(GuildId, 0, HIGHGUID_GUILD));
-    m_guildId = GuildId;
-    if (GuildId != 0)
-    {
-        SetUInt64Value(OBJECT_FIELD_DATA, MAKE_NEW_GUID(GuildId, 0, HIGHGUID_GUILD));
-        SetUInt32Value(OBJECT_FIELD_TYPE, GetUInt32Value(OBJECT_FIELD_TYPE) | TYPEMASK_IN_GUILD);
-    }
-    else
-    {
-        SetUInt64Value(OBJECT_FIELD_DATA, 0);
-        SetUInt32Value(OBJECT_FIELD_TYPE, GetUInt32Value(OBJECT_FIELD_TYPE) & ~TYPEMASK_IN_GUILD);
-    }
 }
 
 void Player::BroadcastMessage (const char* Format, ...)

@@ -47,6 +47,7 @@ public:
 
     Guild* GetGuildByLeader(uint64 const& guid) const;
     Guild* GetGuildById(uint32 guildId) const;
+    Guild* GetGuildByGuid(uint64 guid) const;
     Guild* GetGuildByName(const std::string& guildName) const;
     std::string GetGuildNameById(uint32 guildId) const;
     GuildRewardsVector const& GetGuildRewards() { return GuildRewards; }

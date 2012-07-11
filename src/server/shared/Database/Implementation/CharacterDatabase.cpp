@@ -343,6 +343,9 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(CHAR_DEL_GUILD, "DELETE FROM guild WHERE guildid = ?",
             CONNECTION_ASYNC);
     // 0: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_ID, "UPDATE characters SET guildId = ? WHERE guid = ?", CONNECTION_ASYNC)
+    PREPARE_STATEMENT(CHAR_GET_GUILD_ID, "SELECT guildId FROM characters WHERE guid = ?", CONNECTION_SYNCH)
+    // 0: uint32
     // 0: uint32, 1: uint32, 2: uint8, 4: string, 5: string
     PREPARE_STATEMENT(
             CHAR_ADD_GUILD_MEMBER,
@@ -599,20 +602,6 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(
             CHAR_LOAD_CHAR_DATA_FOR_GUILD,
             "SELECT name, level, class, zone, account FROM characters WHERE guid = ?",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_MEMBERS,
-            //          0        1        2     3      4        5                   6
-            "SELECT guildid, gm.guid, rank, pnote, offnote, BankResetTimeMoney, BankRemMoney, "
-            //   7                  8                 9                  10                11                 12
-            "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
-            //   13                 14                15                 16                17                 18
-            "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
-            //   19                 20                21                 22
-            "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
-            //   23      24       25       26      27         28
-            "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
-            "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC",
             CONNECTION_SYNCH);
     PREPARE_STATEMENT(
             CHAR_LOAD_GUILD_BANK_RIGHTS,
