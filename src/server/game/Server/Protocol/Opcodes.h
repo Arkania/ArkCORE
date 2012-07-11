@@ -148,12 +148,12 @@ enum Opcodes
     SMSG_GUILD_UPDATE_ROSTER                         = 0x0085E, // 4.0.6a 13623
     SMSG_GUILD_RANKS_UPDATE                          = 0x0004C, // 4.0.6a 13623
     SMSG_GUILD_REWARDS_LIST                          = 0x00C4C, // 4.0.6a 13623
+    SMSG_GUILD_MAX_DAILY_XP                          = 0x0441C, // 4.0.6a 13623
     CMSG_GUILD_QUERY_TRADESKILL                      = 0x02329, // 4.0.6a 13623
     SMSG_GUILD_TRADESKILL_UPDATE                     = 0x0454E, // 4.0.6a 13623
-    SMSG_GUILD_MAX_DAILY_XP                          = 0x0441C, // 4.0.6a 13623
-    SMSG_GUILD_NEWS_UPDATE                           = 0x0485E, // 4.0.6a 13623
     CMSG_GUILD_QUERY_NEWS                            = 0x03529, // 4.0.6a 13623
     CMSG_GUILD_REQUEST_NEWS                          = 0x03129, // 4.0.6a 13623
+    SMSG_GUILD_NEWS_UPDATE                           = 0x0485E, // 4.0.6a 13623
     SMSG_GUILD_XP_UPDATE                             = 0x0440E, // 4.0.6a 13623
     SMSG_GUILD_UPDATE_PARTY_STATE                    = 0x0450C, // 4.0.6a 13623
     CMSG_GUILD_UPDATE_PARTY_STATE                    = 0x02219, // 4.0.6a 13623
