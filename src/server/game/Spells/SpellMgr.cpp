@@ -3999,12 +3999,12 @@ void SpellMgr::LoadSpellCustomAttr ()
             break;
             // Holy Radiance
         case 86452:
-            spellInfo->EffectRadiusIndex[0] = 20;
+            spellInfo->EffectRadiusIndex[0] = 9;
             count++;
             break; 
             // Holy Nova
         case 15237:
-            spellInfo->EffectRadiusIndex[0] = 8;
+            spellInfo->EffectRadiusIndex[0] = 13;
             count++;
             break; 
         case 8494:          // Mana Shield (rank 2)
