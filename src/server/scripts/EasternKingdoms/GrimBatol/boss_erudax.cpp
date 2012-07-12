@@ -19,15 +19,6 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* ToDo:
-- Damage of Shadow Gale needs to be fixed
-- Shadow Gale is not displayed right
-- Shadow Gale debuff has to be displayed
-- Correct the Spell of the Twilight Hatchlings in SAI Script (Their damage is too high)
-- Implement a better GetRandomEgg() method
-- implement script text for summoning in the script
-*/
-
 #include "ScriptPCH.h"
 #include "grim_batol.h"
 
@@ -43,41 +34,41 @@ enum ScriptTexts
 enum Spells
 {
     // Erudax
-    SPELL_ENFEEBLING_BLOW				= 75789,
-    SPELL_SHADOW_GALE_VISUAL			= 75664,
+    SPELL_ENFEEBLING_BLOW               = 75789,
+    SPELL_SHADOW_GALE_VISUAL            = 75664,
 
     // (litte hole at the caster, it is a pre visual aura of shadow gale)
-    SPELL_SHADOW_GALE_SPEED_TRIGGER		= 75675,
-    SPELL_SHADOW_GALE_DEBUFF			= 75694,
+    SPELL_SHADOW_GALE_SPEED_TRIGGER     = 75675,
+    SPELL_SHADOW_GALE_DEBUFF            = 75694,
 
     // Spawns 1 (NH - 40600) or 2 (HC - 48844) Faceless
-    SPELL_SPAWN_FACELESS				= 75704,
-    SPELL_TWILIGHT_PORTAL_VISUAL		= 95716,
+    SPELL_SPAWN_FACELESS                = 75704,
+    SPELL_TWILIGHT_PORTAL_VISUAL        = 95716,
 
     // In this Script is is casted by the Faceless itself
-    SPELL_SHIELD_OF_NIGHTMARE			= 75809,
+    SPELL_SHIELD_OF_NIGHTMARE           = 75809,
 
-    SPELL_BINDING_SHADOWS				= 79466, // Wowhead is wrong
+    SPELL_BINDING_SHADOWS               = 79466, // Wowhead is wrong
 
     // Faceless
-    SPELL_UMBRAL_MENDING				= 79467, // Wowhead is wrong
-    SPELL_TWILIGHT_CORRUPTION_DOT		= 93613,
-    SPELL_TWILIGHT_CORRUPTION_VISUAL	= 75755, //91049,
+    SPELL_UMBRAL_MENDING                = 79467, // Wowhead is wrong
+    SPELL_TWILIGHT_CORRUPTION_DOT       = 93613,
+    SPELL_TWILIGHT_CORRUPTION_VISUAL    = 75755, //91049,
 
     // Alexstraszas Eggs
-    SPELL_SUMMON_TWILIGHT_HATCHLINGS = 91058,
+    SPELL_SUMMON_TWILIGHT_HATCHLINGS    = 91058,
 };
 
 enum Events
 {
-    EVENT_ENFEEBLING_BLOW					= 1,
-    EVENT_SHADOW_GALE						= 2,
-    EVENT_SUMMON_FACELESS					= 3,
-    EVENT_REMOVE_TWILIGHT_PORTAL			= 4,
-    EVENT_CAST_SHIELD_OF_NIGHTMARE_DELAY	= 5,
-    EVENT_BINDING_SHADOWS					= 6,
+    EVENT_ENFEEBLING_BLOW                  = 1,
+    EVENT_SHADOW_GALE                      = 2,
+    EVENT_SUMMON_FACELESS                  = 3,
+    EVENT_REMOVE_TWILIGHT_PORTAL           = 4,
+    EVENT_CAST_SHIELD_OF_NIGHTMARE_DELAY   = 5,
+    EVENT_BINDING_SHADOWS                  = 6,
 
-    EVENT_TRIGGER_GALE_CHECK_PLAYERS		= 7,
+    EVENT_TRIGGER_GALE_CHECK_PLAYERS       = 7,
 };
 
 enum Points
