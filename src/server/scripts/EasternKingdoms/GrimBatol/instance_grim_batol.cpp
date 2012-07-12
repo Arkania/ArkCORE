@@ -24,13 +24,6 @@
 
 #define ENCOUNTERS 4
 
-/* Boss Encounters
-General Umbriss
-Forgemaster Throngus
-Drahga Shadowburner
-Erudax
-*/
-
 class instance_grim_batol : public InstanceMapScript
 {
 public:

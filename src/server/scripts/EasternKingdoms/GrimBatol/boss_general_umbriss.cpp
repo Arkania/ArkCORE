@@ -19,17 +19,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 2011- Dreadii Developement (c)
-* Base by TrueBlood
-*Script complete : 50%
-*Todo:
-*
-*-add more SQL support
-*-make spell timings more blizzlike
-*-bound script to instance script
-*
-*/
-
 #include "ScriptPCH.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"

@@ -19,11 +19,6 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**********
-* Script Coded by Naios
-* Script Complete 60% (or less)
-**********/
-
 #include "ScriptPCH.h"
 #include "grim_batol.h"
 
@@ -36,46 +31,46 @@
 enum Spells
 {
     // Misc
-    SPELL_MIGHTY_STOMP = 74984,
-    SPELL_PICK_WEAPON = 75000, // He switches his weapon (DBM Announce)
+    SPELL_MIGHTY_STOMP          = 74984,
+    SPELL_PICK_WEAPON           = 75000, // He switches his weapon (DBM Announce)
 
     // Shield Phase
-    SPELL_PERSONAL_PHALANX = 74908,
-    SPELL_FLAMING_SHIELD = 90819, // Wowhead is wrong
+    SPELL_PERSONAL_PHALANX      = 74908,
+    SPELL_FLAMING_SHIELD        = 90819, // Wowhead is wrong
 
-    SPELL_FLAMING_ARROW = 45101, // Casted by the Archers
-    SPELL_FLAMING_ARROW_VISUAL = 74944,
+    SPELL_FLAMING_ARROW         = 45101, // Casted by the Archers
+    SPELL_FLAMING_ARROW_VISUAL  = 74944,
 
     // Swords Phase
-    SPELL_DUAL_BLADES_BUFF = 74981,
-    SPELL_TRASH_BUFF = 47480,
-    SPELL_DISORIENTING_ROAR = 74976,
-    SPELL_BURNING_FLAMES = 90764,
+    SPELL_DUAL_BLADES_BUFF      = 74981,
+    SPELL_TRASH_BUFF            = 47480,
+    SPELL_DISORIENTING_ROAR     = 74976,
+    SPELL_BURNING_FLAMES        = 90764,
 
     // Mace Phase
-    SPELL_ENCUMBERED = 75007,
-    SPELL_IMPALING_SLAM = 75056,
-    SPELL_LAVA_PATCH = 90754,
-    SPELL_LAVA_PATCH_VISUAL = 90752,
+    SPELL_ENCUMBERED            = 75007,
+    SPELL_IMPALING_SLAM         = 75056,
+    SPELL_LAVA_PATCH            = 90754,
+    SPELL_LAVA_PATCH_VISUAL     = 90752,
 };
 
 enum Events
 {
     // General
-    EVENT_PICK_WEAPON = 1,
-    EVENT_STOMP = 2,
+    EVENT_PICK_WEAPON           = 1,
+    EVENT_STOMP                 = 2,
 
     // Shield Phase
-    EVENT_PERSONAL_PHALANX = 3,
+    EVENT_PERSONAL_PHALANX      = 3,
 
     // Swords Phase
-    EVENT_DISORIENTING_ROAR = 4,
+    EVENT_DISORIENTING_ROAR     = 4,
 
     // Mace Phase
-    EVENT_IMPALING_SLAM = 5,
+    EVENT_IMPALING_SLAM         = 5,
 
     // Twilight Archer
-    EVENT_ARCHER_SHOOT = 6,
+    EVENT_ARCHER_SHOOT          = 6,
 };
 
 enum Weapon
