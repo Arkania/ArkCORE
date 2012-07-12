@@ -17327,8 +17327,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     SetUInt32Value(UNIT_FIELD_LEVEL, fields[6].GetUInt8());
     SetUInt32Value(PLAYER_XP, fields[7].GetUInt32());
 
-    _LoadIntoDataField(fields[64].GetCString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
-    _LoadIntoDataField(fields[67].GetCString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2);
+    _LoadIntoDataField(fields[63].GetCString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
+    _LoadIntoDataField(fields[65].GetCString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2);
 
     SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, DEFAULT_WORLD_OBJECT_SIZE);
     SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
@@ -17385,18 +17385,18 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     uint32 transGUID = uint32(fields[30].GetUInt64());          // field type is uint64 but lowguid is saved
     Relocate(fields[12].GetFloat(), fields[13].GetFloat(), fields[14].GetFloat(), fields[16].GetFloat());
     uint32 mapId = fields[15].GetUInt32();
-    uint32 instanceId = fields[61].GetUInt32();
+    uint32 instanceId = fields[60].GetUInt32();
 
-    uint32 dungeonDiff = fields[38].GetUInt8() & 0x0F;
+    uint32 dungeonDiff = fields[37].GetUInt8() & 0x0F;
     if (dungeonDiff >= MAX_DUNGEON_DIFFICULTY)
         dungeonDiff = DUNGEON_DIFFICULTY_NORMAL;
-    uint32 raidDiff = (fields[38].GetUInt8() >> 4) & 0x0F;
+    uint32 raidDiff = (fields[37].GetUInt8() >> 4) & 0x0F;
     if (raidDiff >= MAX_RAID_DIFFICULTY)
         raidDiff = RAID_DIFFICULTY_10MAN_NORMAL;
     SetDungeonDifficulty(Difficulty(dungeonDiff));          // may be changed in _LoadGroup
     SetRaidDifficulty(Difficulty(raidDiff));          // may be changed in _LoadGroup
 
-    std::string taxi_nodes = fields[37].GetString();
+    std::string taxi_nodes = fields[36].GetString();
 
 #define RelocateToHomebind(){ mapId = m_homebindMapId; instanceId = 0; Relocate(m_homebindX, m_homebindY, m_homebindZ); }
 
@@ -17405,7 +17405,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     _LoadArenaTeamInfo(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADARENAINFO));
     _LoadArenaStatsInfo(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADARENASTATS));
 
-    uint32 arena_currency = fields[39].GetUInt32();
+    uint32 arena_currency = fields[38].GetUInt32();
     if (arena_currency > sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS))
         arena_currency = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS);
 
@@ -17425,15 +17425,15 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
             SetArenaTeamInfoField(arena_slot, ArenaTeamInfoType(j), 0);
     }
 
-    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[45].GetUInt32());
-    SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[46].GetUInt16());
-    SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[47].GetUInt16());
+    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[44].GetUInt32());
+    SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[45].GetUInt16());
+    SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[46].GetUInt16());
 
     _LoadBoundInstances(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadInstanceTimeRestrictions(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES));
     _LoadBGData(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADBGDATA));
 
-    MapEntry const * mapEntry = sMapStore.LookupEntry(mapId);
+    MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
     if (!mapEntry || !IsPositionValid())
     {
         sLog->outError("Player (guidlow %d) have invalid coordinates (MapId: %u X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
