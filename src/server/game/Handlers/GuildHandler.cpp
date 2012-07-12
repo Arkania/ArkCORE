@@ -123,6 +123,7 @@ void WorldSession::HandleGuildRemoveOpcode (WorldPacket& recvPacket)
 void WorldSession::HandleGuildAcceptOpcode (WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_ACCEPT");
+    recvPacket.read_skip<uint64>();
 
     // Player cannot be in guild
     if (!GetPlayer()->GetGuildId())
