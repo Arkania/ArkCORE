@@ -33,11 +33,6 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(CHAR_ADD_QUEST_POOL_SAVE,
             "INSERT INTO pool_quest_save (pool_id, quest_id) VALUES (?, ?)",
             CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_DEL_OLD_GUILD_EVENT_LOGS,
-            "DELETE FROM guild_eventlog WHERE LogGuid > ?", CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_DEL_OLD_GUILD_BANK_EVENT_LOGS,
-            "DELETE FROM guild_bank_eventlog WHERE LogGuid > ?",
-            CONNECTION_ASYNC);
     PREPARE_STATEMENT(
             CHAR_DEL_NONEXISTENT_GUILD_BANK_ITEM,
             "DELETE FROM guild_bank_item WHERE guildid = ? AND TabId = ? AND SlotId = ?",
@@ -474,6 +469,9 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(CHAR_SET_GUILD_SAVE_XP,
             "UPDATE guild SET totalXP = ?, todayXP = ?, XPCap = ?, level = ? WHERE guildid = ?",
             CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_NEWS, "SELECT type, date, value1, value2, source_guid, flags FROM guild_news WHERE guildid = ? ORDER BY date DESC", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_NEWS, "INSERT INTO guild_news (guildid, type, date, value1, value2, source_guid, flags) VALUES (?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
+
     // 1: uint64, 2, 3: uint32
     // 0-5: uint32
     PREPARE_STATEMENT(
@@ -594,63 +592,10 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CHAR_RESET_GUILD_RANK_BANK_TIME5,
             "UPDATE guild_member SET BankResetTimeTab5 = 0 WHERE guildid = ? AND rank = ?",
             CONNECTION_ASYNC);
-    //                                              0        1    2      3       4
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_RANKS,
-            "SELECT guildid, rid, rname, rights, BankMoneyPerDay FROM guild_rank ORDER BY guildid ASC, rid ASC",
-            CONNECTION_SYNCH);
     PREPARE_STATEMENT(
             CHAR_LOAD_CHAR_DATA_FOR_GUILD,
             "SELECT name, level, class, zone, account FROM characters WHERE guid = ?",
             CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_RIGHTS,
-            //          0        1      2    3        4
-            "SELECT guildid, TabId, rid, gbright, SlotPerDay FROM guild_bank_right ORDER BY guildid ASC, TabId ASC",
-            CONNECTION_SYNCH);
-    //                                                  0        1      2        3        4
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_TABS,
-            "SELECT guildid, TabId, TabName, TabIcon, TabText FROM guild_bank_tab ORDER BY guildid ASC, TabId ASC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_EVENTLOGS,
-            //          0        1        2          3            4            5        6
-            "SELECT guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp FROM guild_eventlog ORDER BY TimeStamp DESC, LogGuid DESC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_EVENTLOGS,
-            //          0        1      2        3          4           5            6               7          8
-            "SELECT guildid, TabId, LogGuid, EventType, PlayerGuid, ItemOrMoney, ItemStackCount, DestTabId, TimeStamp FROM guild_bank_eventlog ORDER BY TimeStamp DESC, LogGuid DESC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_ITEMS,
-            //          0            1                2      3         4        5      6             7                 8           9           10
-            "SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, playedTime, text, "
-            //   11       12     13      14         15
-            "guildid, TabId, SlotId, item_guid, itemEntry FROM guild_bank_item gbi INNER JOIN item_instance ii ON gbi.item_guid = ii.guid",
-            CONNECTION_SYNCH);
-
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_RANKS,
-            "DELETE FROM guild_rank WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_MEMBERS,
-            "DELETE FROM guild_member WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_BANK_TABS,
-            "DELETE FROM guild_bank_tab WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_BANK_RIGHTS,
-            "DELETE FROM guild_bank_right WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_BANK_ITEMS,
-            "DELETE FROM guild_bank_item WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
 
     // Chat channel handling
     PREPARE_STATEMENT(
@@ -797,10 +742,6 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CHAR_DEL_OLD_CORPSES,
             "DELETE FROM corpse WHERE corpseType = 0 OR time < (UNIX_TIMESTAMP(NOW()) - ?)",
             CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_RESET_NONEXISTENT_INSTANCE_FOR_CORPSES,
-            "UPDATE corpse SET instanceId = 0 WHERE instanceId > 0 AND instanceId NOT IN (SELECT id FROM instance)",
-            CONNECTION_SYNCH);
 
     // Creature respawn
     PREPARE_STATEMENT(CHAR_DEL_CREATURE_RESPAWN,
@@ -813,10 +754,6 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(
             CHAR_GET_MAX_CREATURE_RESPAWNS,
             "SELECT MAX(respawnTime), instanceId FROM creature_respawn WHERE instanceId > 0 GROUP BY instanceId",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_DEL_NONEXISTENT_INSTANCE_CREATURE_RESPAWNS,
-            "DELETE FROM creature_respawn WHERE instanceId > 0 AND instanceId NOT IN (SELECT instanceId FROM instance)",
             CONNECTION_SYNCH);
 
     // Gameobject respawn
