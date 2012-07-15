@@ -63,7 +63,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 -- NPC talk text insert
 SET @ENTRY := 45438;
 DELETE FROM `creature_text` WHERE `entry`=@ENTRY;
-INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`content_default`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
 (@ENTRY,0,0, 'You\'re the one my aunt sent? A test, no doubt. I\'ll kill you quickly and prove myself to her once again.',14,0,100,0,0,0, 'on Aggro Text'),
 (@ENTRY,1,0, 'Stompers, defend your Chieftan!',14,0,100,0,0,0, 'on Summon Text'),
 (@ENTRY,2,0, 'Reavers, at my side!',14,0,100,0,0,0, 'at HP Text'),
