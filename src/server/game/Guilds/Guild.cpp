@@ -639,12 +639,6 @@ void Guild::Member::SaveToDB (SQLTransaction& trans) const
     stmt->setUInt8(2, m_rankId);
     stmt->setString(3, m_publicNote);
     stmt->setString(4, m_officerNote);
-    stmt->setUInt32(5, professions[0].level);
-    stmt->setUInt32(6, professions[0].skillID);
-    stmt->setUInt32(7, professions[0].rank);
-    stmt->setUInt32(8, professions[1].level);
-    stmt->setUInt32(9, professions[1].skillID);
-    stmt->setUInt32(10, professions[1].rank);
     CharacterDatabase.ExecuteOrAppend(trans, stmt);
 }
 
@@ -683,9 +677,6 @@ bool Guild::Member::LoadFromDB(Field* fields)
              fields[26].GetUInt16(),
              fields[27].GetUInt32());
     m_logoutTime    = fields[28].GetUInt32();
-
-    SetProfession(0, fields[29].GetUInt32(), fields[30].GetUInt32(), fields[31].GetUInt32());
-    SetProfession(1, fields[32].GetUInt32(), fields[33].GetUInt32(), fields[34].GetUInt32());
 
     if (!CheckStats())
         return false;

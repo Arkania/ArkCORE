@@ -95,7 +95,7 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             "resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
             "arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
             "health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, "
-            "knownTitles, actionBars, currentPetSlot, petSlotUsed, guildId FROM characters WHERE guid = ?",
+            "knownTitles, actionBars, currentPetSlot, petSlotUsed FROM characters WHERE guid = ?",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_LOAD_PLAYER_GROUP,
             "SELECT guid FROM group_member WHERE memberGuid = ?",
@@ -338,9 +338,6 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(CHAR_DEL_GUILD, "DELETE FROM guild WHERE guildid = ?",
             CONNECTION_ASYNC);
     // 0: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_ID, "UPDATE characters SET guildId = ? WHERE guid = ?", CONNECTION_ASYNC)
-    PREPARE_STATEMENT(CHAR_GET_GUILD_ID, "SELECT guildId FROM characters WHERE guid = ?", CONNECTION_SYNCH)
-    // 0: uint32
     // 0: uint32, 1: uint32, 2: uint8, 4: string, 5: string
     PREPARE_STATEMENT(
             CHAR_ADD_GUILD_MEMBER,
@@ -467,7 +464,7 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CONNECTION_ASYNC);
     // 0: uint32, 1: uint8, 2: uint32
     PREPARE_STATEMENT(CHAR_SET_GUILD_SAVE_XP,
-            "UPDATE guild SET totalXP = ?, todayXP = ?, XPCap = ?, level = ? WHERE guildid = ?",
+            "UPDATE guild SET xp = ?, todayXP = ?, XPCap = ?, level = ? WHERE guildid = ?",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_LOAD_GUILD_NEWS, "SELECT type, date, value1, value2, source_guid, flags FROM guild_news WHERE guildid = ? ORDER BY date DESC", CONNECTION_SYNCH);
     PREPARE_STATEMENT(CHAR_ADD_GUILD_NEWS, "INSERT INTO guild_news (guildid, type, date, value1, value2, source_guid, flags) VALUES (?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
