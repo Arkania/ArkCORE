@@ -520,13 +520,6 @@ CREATE TABLE `character_branchspec` (
 -- ----------------------------
 -- Records of character_branchspec
 -- ----------------------------
-INSERT INTO `character_branchspec` VALUES ('1', '0', '0');
-INSERT INTO `character_branchspec` VALUES ('2', '0', '0');
-INSERT INTO `character_branchspec` VALUES ('3', '0', '0');
-INSERT INTO `character_branchspec` VALUES ('4', '0', '0');
-INSERT INTO `character_branchspec` VALUES ('5', '0', '0');
-INSERT INTO `character_branchspec` VALUES ('6', '0', '0');
-INSERT INTO `character_branchspec` VALUES ('7', '0', '0');
 
 -- ----------------------------
 -- Table structure for `character_cp_weekcap`
@@ -673,7 +666,6 @@ CREATE TABLE `character_homebind` (
 -- ----------------------------
 -- Records of character_homebind
 -- ----------------------------
-INSERT INTO `character_homebind` VALUES ('2', '0', '12', '-8914.57', '-133.909', '80.5378');
 
 -- ----------------------------
 -- Table structure for `character_instance`
