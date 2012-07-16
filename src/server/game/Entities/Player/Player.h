@@ -2042,22 +2042,19 @@ public:
     {   RemoveFromGroup(GetGroup(), GetGUID(), method);}
     void SendUpdateToOutOfRangeGroupMembers();
 
-    void SetInGuild(uint32 GuildId) 
-    {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_GUILD_ID);
-        stmt->setUInt32(0, GuildId);
-        stmt->setUInt64(1, GetGUID());
-        CharacterDatabase.Execute(stmt);
-        m_guildId = GuildId;
-    }
-    uint32 GetGuildId() { return m_guildId; }
-    static uint32 GetGuildIdFromGuid(uint64 guid);
-
-    void SetRank(uint8 rankId) { SetUInt32Value(PLAYER_GUILDRANK, rankId);}
-    uint8 GetRank() { return uint8(GetUInt32Value(PLAYER_GUILDRANK));}
-    void SetGuildIdInvited(uint32 GuildId) { m_GuildIdInvited = GuildId;}
+    void SetInGuild(uint32 GuildId);
+    void SetRank(uint8 rankId)
+    {   SetUInt32Value(PLAYER_GUILDRANK, rankId);}
+    uint8 GetRank()
+    {   return uint8(GetUInt32Value(PLAYER_GUILDRANK));}
+    void SetGuildIdInvited(uint32 GuildId)
+    {   m_GuildIdInvited = GuildId;}
+    uint32 GetGuildId()
+    {   return m_guildId;}
+    static uint32 GetGuildIdFromDB(uint64 guid);
     static uint8 GetRankFromDB(uint64 guid);
-    int GetGuildIdInvited() { return m_GuildIdInvited;}
+    int GetGuildIdInvited()
+    {   return m_GuildIdInvited;}
     static void RemovePetitionsAndSigns(uint64 guid, uint32 type);
 
     // Arena Team
@@ -3127,8 +3124,6 @@ protected:
 
     uint32 m_restTime;
 
-    uint32 m_guildId;
-
     uint32 m_WeaponProficiency;
     uint32 m_ArmorProficiency;
     bool m_canParry;
@@ -3153,6 +3148,7 @@ protected:
 
     // Social
     PlayerSocial *m_social;
+    uint32 m_guildId;
 
     // Groups
     GroupReference m_group;

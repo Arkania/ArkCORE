@@ -67,7 +67,8 @@ void WorldSession::HandleGuildQueryOpcode (WorldPacket& recvPacket)
     recvPacket >> guildId;
     recvPacket >> player;
     // Use received guild id to access guild method (not player's guild id)
-    if (Guild* pGuild = sGuildMgr->GetGuildByGuid(guildId))
+    uint32 lowGuildId = GUID_LOPART(guildId);
+    if (Guild* pGuild = sGuildMgr->GetGuildById(lowGuildId))
         pGuild->HandleQuery(this);
     else
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
@@ -123,7 +124,6 @@ void WorldSession::HandleGuildRemoveOpcode (WorldPacket& recvPacket)
 void WorldSession::HandleGuildAcceptOpcode (WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_ACCEPT");
-    recvPacket.read_skip<uint64>();
 
     // Player cannot be in guild
     if (!GetPlayer()->GetGuildId())
@@ -155,6 +155,10 @@ void WorldSession::HandleGuildInfoOpcode (WorldPacket& /*recvPacket*/)
 void WorldSession::HandleGuildRosterOpcode (WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_ROSTER");
+
+    uint64 guildGUID, playerGUID;
+
+    recvPacket >> guildGUID >> playerGUID;
 
     if (Guild* guild = _GetPlayerGuild(this))
         guild->HandleRoster(this);
