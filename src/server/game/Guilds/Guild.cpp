@@ -2160,8 +2160,8 @@ bool Guild::LoadFromDB (Field* fields)
     /*
      //          0          1       2             3              4              5              6
      "SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
-     //   7                  8       9       10            11           12                  13  14
-     "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level "
+     //   7                  8       9       10            11        12      13      14          15        16
+     "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, g.xp, g.level, g.todayXP, g.XPCap, COUNT(gbt.guildid) "
      "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC", CONNECTION_SYNCH);
      */
     m_id = fields[0].GetUInt32();
@@ -2172,19 +2172,18 @@ bool Guild::LoadFromDB (Field* fields)
     m_motd = fields[9].GetString();
     m_createdDate = fields[10].GetUInt32();          //64 bits?
     m_bankMoney = fields[11].GetUInt64();
+    m_xp = fields[12].GetUInt64();
+    m_level = fields[13].GetUInt32();
+    m_today_xp = fields[14].GetUInt64();
+    m_xp_cap = fields[15].GetUInt64();
 
-    uint8 purchasedTabs = uint8(fields[12].GetUInt32());
+    uint8 purchasedTabs = uint8(fields[16].GetUInt32());
     if (purchasedTabs > GUILD_BANK_MAX_TABS)
         purchasedTabs = GUILD_BANK_MAX_TABS;
 
     m_bankTabs.resize(purchasedTabs);
     for (uint8 i = 0; i < purchasedTabs; ++i)
         m_bankTabs[i] = new BankTab(m_id, i);
-
-    m_xp = fields[13].GetUInt64();
-    m_level = fields[14].GetUInt32();
-    m_today_xp = fields[15].GetUInt64();
-    m_xp_cap = fields[16].GetUInt64();
 
     if (m_level == 0)
         m_level = 1;
