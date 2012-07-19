@@ -1792,20 +1792,11 @@ void Aura::HandleAuraSpecificMods (AuraApplication const* aurApp, Unit* caster, 
                 }
                 // Unholy Presence bonus
                 if (presence == 48265)
-                {
-                    if (unholyPresenceAura)
-                    {
-                        // Not listed as any effect, only base points set
-                        int32 basePoints0 = SpellMgr::CalculateSpellEffectAmount(unholyPresenceAura->GetSpellProto(), 1);
-                        target->CastCustomSpell(target, 63622, &basePoints0, &basePoints0, &basePoints0, true, 0, unholyPresenceAura);
-                        target->CastCustomSpell(target, 65095, &basePoints0, NULL, NULL, true, 0, unholyPresenceAura);
-                    }
-                    target->CastSpell(target, 49772, true);
-                }
+					target->CastSpell(target, 63622, true);
                 else if (unholyPresenceAura)
                 {
                     int32 basePoints0 = unholyPresenceAura->GetAmount();
-                    target->CastCustomSpell(target, 49772, &basePoints0, NULL, NULL, true, 0, unholyPresenceAura);
+                    target->CastCustomSpell(target, 63622, &basePoints0, NULL, NULL, true, 0, unholyPresenceAura);
                 }
             }
             else
@@ -1816,14 +1807,7 @@ void Aura::HandleAuraSpecificMods (AuraApplication const* aurApp, Unit* caster, 
                 if (presence == 48263 || frostPresenceAura)
                     target->RemoveAurasDueToSpell(61261);
                 if (presence == 48265 || unholyPresenceAura)
-                {
-                    if (presence == 48265 && unholyPresenceAura)
-                    {
-                        target->RemoveAurasDueToSpell(63622);
-                        target->RemoveAurasDueToSpell(65095);
-                    }
-                    target->RemoveAurasDueToSpell(49772);
-                }
+					target->RemoveAurasDueToSpell(63622);
             }
         }
         break;
