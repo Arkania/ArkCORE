@@ -1,4 +1,4 @@
-# Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -11,6 +11,7 @@
 # NOTE: Do not use glob here, it would include files we don't want
 set(ace_STAT_SRCS
   PrecompiledHeaders/WinAcePCH.cpp
+  Abstract_Timer_Queue.cpp
   ACE.cpp
   ACE_crc32.cpp
   ACE_crc_ccitt.cpp
@@ -53,7 +54,7 @@ set(ace_STAT_SRCS
   Connection_Recycling_Strategy.cpp
   Containers.cpp
   Copy_Disabled.cpp
-  Countdown_Time.cpp
+  Countdown_Time_T.cpp
   Date_Time.cpp
   DEV.cpp
   DEV_Addr.cpp
@@ -92,6 +93,7 @@ set(ace_STAT_SRCS
   gethrtime.cpp
   Handle_Ops.cpp
   Handle_Set.cpp
+  Event_Handler_Handle_Timeout_Upcall.cpp
   Hashable.cpp
   High_Res_Timer.cpp
   ICMP_Socket.cpp
@@ -291,6 +293,9 @@ set(ace_STAT_SRCS
   Throughput_Stats.cpp
   Time_Value.cpp
   Timeprobe.cpp
+  Time_Policy.cpp
+  Time_Policy_T.cpp
+  Timer_Queue_Iterator.cpp
   TLI.cpp
   TLI_Acceptor.cpp
   TLI_Connector.cpp
@@ -331,6 +336,16 @@ set_source_files_properties(Atomic_Op_Sparc.c Rtems_init.c PROPERTIES LANGUAGE C
 add_definitions(-DACE_BUILD_DLL)
 
 add_library(ace SHARED ${ace_STAT_SRCS})
+
+if( WIN32 )
+    if (MSYS OR MINGW)
+        find_library(WS2_32_LIBRARY ws2_32)
+        target_link_libraries(ace ${WS2_32_LIBRARY})
+        #MESSAGE(STATUS "Link Flags for ACE: ${CMAKE_SHARED_LINKER_FLAGS}")
+        #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lws2_32")
+        #MESSAGE(STATUS "Link Flags for ACE after: ${CMAKE_SHARED_LINKER_FLAGS}")
+    endif()
+endif()
 
 add_native_precompiled_header(ace ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/WinAcePCH)
 
