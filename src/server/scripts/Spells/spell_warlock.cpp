@@ -407,7 +407,13 @@ public:
     {
     }
 
-    class spell_warl_seed_of_corruption_SpellScript: public SpellScript
+    /* Produces the following error:
+		TSCR: Spell `27243` Effect `Index: EFFECT_0 Target: 16` of script `spell_warl_seed_of_corruption` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+		TSCR: Spell `32863` Effect `Index: EFFECT_0 Target: 16` of script `spell_warl_seed_of_corruption` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+		TSCR: Spell `35193` Effect `Index: EFFECT_0 Target: 16` of script `spell_warl_seed_of_corruption` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+		TSCR: Spell `36123` Effect `Index: EFFECT_0 Target: 16` of script `spell_warl_seed_of_corruption` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+	
+	class spell_warl_seed_of_corruption_SpellScript: public SpellScript
     {
         PrepareSpellScript(spell_warl_seed_of_corruption_SpellScript)
         ;
@@ -426,7 +432,7 @@ public:
     SpellScript *GetSpellScript () const
     {
         return new spell_warl_seed_of_corruption_SpellScript();
-    }
+    } */
 };
 
 // 54049 Shadow Bite
@@ -545,7 +551,7 @@ void AddSC_warlock_spell_scripts ()
     new spell_warl_drain_soul();
     new spell_warlock_dark_intent();
     new spell_warl_immolate();
-    new spell_warl_seed_of_corruption();
+    /* new spell_warl_seed_of_corruption(); */
     new spell_warl_shadow_bite();
     new spell_warl_drain_life();
 }
