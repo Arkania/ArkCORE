@@ -39,6 +39,8 @@ enum DeathKnightSpells
 	DK_SPELL_IMPROVED_BLOOD_PRESENCE_TRIGGERED  = 63611,
 	DK_SPELL_UNHOLY_PRESENCE                    = 48265,
 	DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED = 63622,
+	DK_SPELL_FROST_PRESENCE                    	= 48266,
+	DK_SPELL_IMPROVED_FROST_PRESENCE_TRIGGERED	= 63621,
 };
 
 class spell_dk_necrotic_strike: public SpellScriptLoader
@@ -554,6 +556,54 @@ public:
     }
 };
 
+//63621 Improved Frost Presence
+class spell_dk_improved_frost_presence : public SpellScriptLoader
+{
+public:
+        spell_dk_improved_frost_presence() : SpellScriptLoader("spell_dk_improved_frost_presence") { }
+ 
+        class spell_dk_improved_frost_presence_AuraScript : public AuraScript
+        {
+                PrepareAuraScript(spell_dk_improved_frost_presence_AuraScript)
+                bool Validate(SpellEntry const* /*entry*/)
+                {
+                        if (!sSpellStore.LookupEntry(DK_SPELL_FROST_PRESENCE))
+                                return false;
+                        if (!sSpellStore.LookupEntry(DK_SPELL_IMPROVED_FROST_PRESENCE_TRIGGERED))
+                                return false;
+                          return true;
+                }
+ 
+                void HandleEffectApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+                {
+                        Unit* target = GetTarget();
+                        if (!target->HasAura(DK_SPELL_FROST_PRESENCE) && !target->HasAura(DK_SPELL_IMPROVED_FROST_PRESENCE_TRIGGERED))
+                        {
+                                int32 basePoints1 = aurEff->GetAmount();
+                                target->CastCustomSpell(target, 63621, NULL, &basePoints1, NULL, true, 0, aurEff);
+                        }
+                }
+ 
+                void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+                {
+                        Unit* target = GetTarget();
+                        if (!target->HasAura(DK_SPELL_FROST_PRESENCE))
+                                target->RemoveAura(DK_SPELL_IMPROVED_FROST_PRESENCE_TRIGGERED);
+                }
+ 
+                void Register()
+                {
+                        AfterEffectApply += AuraEffectApplyFn(spell_dk_improved_frost_presence_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+                        AfterEffectRemove += AuraEffectRemoveFn(spell_dk_improved_frost_presence_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+                }
+        };
+ 
+        AuraScript* GetAuraScript() const
+        {
+                return new spell_dk_improved_frost_presence_AuraScript();
+        }
+};
+
 // Festering Strike
 // Spell Id: 85948
 class spell_dk_festering_strike: public SpellScriptLoader
@@ -645,6 +695,7 @@ void AddSC_deathknight_spell_scripts ()
     new spell_dk_blood_boil();
     new spell_dk_improved_blood_presence();
     new spell_dk_improved_unholy_presence();
+	new spell_dk_improved_frost_presence();
     new spell_dk_festering_strike();
     new spell_dk_chains_of_ice();
 }
