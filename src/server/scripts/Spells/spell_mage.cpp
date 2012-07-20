@@ -188,10 +188,13 @@ public:
     {
     }
 
-    class spell_mage_blast_wave_SpellScript: public SpellScript
+    /* Produces the following error:
+		TSCR: Spell `11113` Effect `Index: EFFECT_2 Name: 98` of script `spell_mage_blast_wave` did not match dbc effect data - handler bound to hook `OnEffectHitTarget` of SpellScript won't be executed
+	
+	class spell_mage_blast_wave_SpellScript: public SpellScript
     {
         PrepareSpellScript(spell_mage_blast_wave_SpellScript)
-        bool Validate (SpellEntry const* /*spellEntry*/)
+        bool Validate (SpellEntry const* spellEntry)
         {
             if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
                 return false;
@@ -213,7 +216,7 @@ public:
     SpellScript* GetSpellScript () const
     {
         return new spell_mage_blast_wave_SpellScript();
-    }
+    } */
 };
 
 class spell_mage_summon_water_elemental: public SpellScriptLoader
@@ -224,10 +227,13 @@ public:
     {
     }
 
-    class spell_mage_summon_water_elemental_SpellScript: public SpellScript
+    /* Produces the following error:
+		TSCR: Spell `31687` Effect `Index: EFFECT_0 Name: 3` of script `spell_mage_summon_water_elemental` did not match dbc effect data - handler bound to hook `OnEffectHit` of SpellScript won't be executed
+	
+	class spell_mage_summon_water_elemental_SpellScript: public SpellScript
     {
         PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript)
-        bool Validate (SpellEntry const* /*spellEntry*/)
+        bool Validate (SpellEntry const* spellEntry)
         {
             if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
                 return false;
@@ -238,7 +244,7 @@ public:
             return true;
         }
 
-        void HandleDummy (SpellEffIndex /*effIndex*/)
+        void HandleDummy (SpellEffIndex effIndex)
         {
             Unit* caster = GetCaster();
             // Glyph of Eternal Water
@@ -258,7 +264,7 @@ public:
     SpellScript* GetSpellScript () const
     {
         return new spell_mage_summon_water_elemental_SpellScript();
-    }
+    } */
 };
 
 void AddSC_mage_spell_scripts ()
@@ -266,6 +272,6 @@ void AddSC_mage_spell_scripts ()
     new spell_mage_cold_snap;
     new spell_mage_incanters_absorbtion_manashield();
     new spell_mage_polymorph_cast_visual;
-    new spell_mage_blast_wave;
-    new spell_mage_summon_water_elemental;
+    /* new spell_mage_blast_wave; */
+    /* new spell_mage_summon_water_elemental; */
 }
