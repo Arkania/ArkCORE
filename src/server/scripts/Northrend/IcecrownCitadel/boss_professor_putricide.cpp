@@ -764,7 +764,10 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
 {
     public:
         spell_putricide_ooze_channel() : SpellScriptLoader("spell_putricide_ooze_channel") { }
-
+		/* Produces the following error:
+			TSCR: Spell `72838` Effect `Index: EFFECT_0 Target: 15` of script `spell_putricide_ooze_channel` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+			TSCR: Spell `72838` Effect `Index: EFFECT_1 Target: 15` of script `spell_putricide_ooze_channel` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+			TSCR: Spell `72838` Effect `Index: EFFECT_2 Target: 15` of script `spell_putricide_ooze_channel` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
         class spell_putricide_ooze_channel_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_putricide_ooze_channel_SpellScript);
@@ -815,11 +818,11 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
 
             Unit* _target;
         };
-
+		
         SpellScript* GetSpellScript() const
         {
             return new spell_putricide_ooze_channel_SpellScript();
-        }
+        }*/
 };
 
 class ExactDistanceCheck
@@ -842,7 +845,11 @@ class spell_putricide_slime_puddle : public SpellScriptLoader
     public:
         spell_putricide_slime_puddle() : SpellScriptLoader("spell_putricide_slime_puddle") { }
 
-        class spell_putricide_slime_puddle_SpellScript : public SpellScript
+        /* Produces the following error:
+			TSCR: Spell `70343` Effect `Index: EFFECT_0 Target: 16` of script `spell_putricide_slime_puddle` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+			TSCR: Spell `70343` Effect `Index: EFFECT_1 Target: 8` of script `spell_putricide_slime_puddle` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
+		
+		class spell_putricide_slime_puddle_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_putricide_slime_puddle_SpellScript);
 
@@ -861,7 +868,7 @@ class spell_putricide_slime_puddle : public SpellScriptLoader
         SpellScript* GetSpellScript() const
         {
             return new spell_putricide_slime_puddle_SpellScript();
-        }
+        } */
 };
 
 // this is here only because on retail you dont actually enter HEROIC mode for ICC
@@ -1486,8 +1493,8 @@ void AddSC_boss_professor_putricide()
     new boss_professor_putricide();
     new npc_volatile_ooze();
     new spell_putricide_gaseous_bloat();
-    new spell_putricide_ooze_channel();
-    new spell_putricide_slime_puddle();
+    /* new spell_putricide_ooze_channel(); */
+    /* new spell_putricide_slime_puddle(); */
     new spell_putricide_slime_puddle_aura();
     new spell_putricide_unstable_experiment();
     new spell_putricide_ooze_summon();
