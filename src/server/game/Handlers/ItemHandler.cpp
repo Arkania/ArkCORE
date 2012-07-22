@@ -630,7 +630,7 @@ void WorldSession::HandleBuybackItem (WorldPacket & recv_data)
     Item *pItem = _player->GetItemFromBuyBackSlot(slot);
     if (pItem)
     {
-        uint64 price = _player->GetUInt32Value(PLAYER_FIELD_BUYBACK_PRICE_1 + slot - BUYBACK_SLOT_START);
+        uint32 price = _player->GetUInt32Value(PLAYER_FIELD_BUYBACK_PRICE_1 + slot - BUYBACK_SLOT_START);
         if (!_player->HasEnoughMoney(price))
         {
             _player->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, pCreature, pItem->GetEntry(), 0);
@@ -930,7 +930,7 @@ void WorldSession::HandleBuyBankSlotOpcode (WorldPacket& recvPacket)
         return;
     }
 
-    uint64 price = slotEntry->price;
+    uint32 price = slotEntry->price;
 
     if (!_player->HasEnoughMoney(price))
     {

@@ -456,7 +456,9 @@ public:
         // Check
         // Remember: "show" must also be the name of a column!
         if ((show != "delay") && (show != "action") && (show != "action_chance") && (show != "move_flag") && (show != "del") && (show != "move") && (show != "wpadd"))
+        {
             return false;
+        }
 
         // Next arg is: <PATHID> <WPNUM> <ARGUMENT>
         char* arg_str = NULL;

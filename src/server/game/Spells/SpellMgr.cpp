@@ -4001,12 +4001,12 @@ void SpellMgr::LoadSpellCustomAttr ()
         case 86452:
             spellInfo->EffectRadiusIndex[0] = 9;
             count++;
-            break; 
-            // Holy Nova
+            break;
+			// Holy Nova
         case 15237:
-            spellInfo->EffectRadiusIndex[0] = 13;
-            count++;
-            break; 
+            spellInfo->EffectRadiusIndex[0] = 13;	
+             count++;	
+             break; 
         case 8494:          // Mana Shield (rank 2)
             // because of bug in dbc
             spellInfo->procChance = 0;

@@ -230,9 +230,14 @@ struct CreatureMover
 
 struct InstanceTemplate
 {
-    uint32 Parent;
-    uint32 ScriptId;
-    bool AllowMount;
+    uint32 map;
+    uint32 parent;
+    float startLocX;
+    float startLocY;
+    float startLocZ;
+    float startLocO;
+    uint32 script_id;
+    bool allowMount;
 };
 
 enum LevelRequirementVsMode

@@ -568,6 +568,12 @@ public:
     {
         return NULL;
     }
+
+    // Called when a new Creature will eb created
+    virtual Creature * GetCreatureScriptedClass () const
+    {
+        return NULL;
+    }
 };
 
 class GameObjectScript: public ScriptObject, public UpdatableScript<GameObject>
@@ -1195,6 +1201,7 @@ public:
     bool OnQuestReward (Player* player, Creature* creature, Quest const* quest, uint32 opt);
     uint32 GetDialogStatus (Player* player, Creature* creature);
     CreatureAI* GetCreatureAI (Creature* creature);
+    Creature* GetCreatureScriptedClass (uint32 scriptID);
     void OnCreatureUpdate (Creature* creature, uint32 diff);
 
 public:

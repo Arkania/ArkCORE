@@ -27,15 +27,6 @@
 
 #include "Guild.h"
 
-struct GuildRewardsEntry
-{
-    uint32 item;
-    uint32 price;
-    uint32 achievement;
-    uint32 standing;
-};
-typedef std::vector<GuildRewardsEntry> GuildRewardsVector;
-
 class GuildMgr
 {
     friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex> ;
@@ -49,7 +40,6 @@ public:
     Guild* GetGuildById(uint32 guildId) const;
     Guild* GetGuildByName(const std::string& guildName) const;
     std::string GetGuildNameById(uint32 guildId) const;
-    GuildRewardsVector const& GetGuildRewards() { return GuildRewards; }
 
     void LoadGuilds();
     void AddGuild(Guild* guild);
@@ -58,12 +48,10 @@ public:
     uint32 GenerateGuildId();
     void SetNextGuildId(uint32 Id)
     {   NextGuildId = Id;}
-    
-    void LoadGuildRewards();
+
 protected:
     uint32 NextGuildId;
     GuildContainer GuildStore;
-    GuildRewardsVector  GuildRewards;
 };
 
 #define sGuildMgr ACE_Singleton<GuildMgr, ACE_Null_Mutex>::instance()

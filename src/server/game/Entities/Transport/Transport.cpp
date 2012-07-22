@@ -305,6 +305,7 @@ bool Transport::Create (uint32 guidlow, uint32 entry, uint32 mapid, float x, flo
     SetFloatValue(OBJECT_FIELD_SCALE_X, goinfo->size);
 
     SetUInt32Value(GAMEOBJECT_FACTION, goinfo->faction);
+    //SetUInt32Value(GAMEOBJECT_FLAGS, goinfo->flags);
     SetUInt32Value(GAMEOBJECT_FLAGS, MAKE_PAIR32(0x28, 0x64));
     SetUInt32Value(GAMEOBJECT_LEVEL, m_period);
     SetEntry(goinfo->id);
@@ -438,6 +439,10 @@ bool Transport::GenerateWaypoints (uint32 pathid, std::set<uint32> &mapids)
         keyFrames[i].tTo *= 1000;
     }
 
+    //    for (int i = 0; i < keyFrames.size(); ++i) {
+    //        sLog->outString("%f, %f, %f, %f, %f, %f, %f", keyFrames[i].x, keyFrames[i].y, keyFrames[i].distUntilStop, keyFrames[i].distSinceStop, keyFrames[i].distFromPrev, keyFrames[i].tFrom, keyFrames[i].tTo);
+    //    }
+
     // Now we're completely set up; we can move along the length of each waypoint at 100 ms intervals
     // speed = max(30, t) (remember x = 0.5s^2, and when accelerating, a = 1 unit/s^2
     int t = 0;
@@ -526,12 +531,21 @@ bool Transport::GenerateWaypoints (uint32 pathid, std::set<uint32> &mapids)
         }
 
         WayPoint pos(keyFrames[i + 1].node->mapid, keyFrames[i + 1].node->x, keyFrames[i + 1].node->y, keyFrames[i + 1].node->z, teleport, 0, keyFrames[i + 1].node->arrivalEventID, keyFrames[i + 1].node->departureEventID);
+        //        sLog->outString("T: %d, x: %f, y: %f, z: %f, t:%d", t, pos.x, pos.y, pos.z, teleport);
+        /*
+         if (keyFrames[i+1].delay > 5)
+         pos.delayed = true;
+         */
+        //if (teleport)
         m_WayPoints[t] = pos;
 
         t += keyFrames[i + 1].node->delay * 1000;
+        //        sLog->outString("------");
     }
 
     uint32 timer = t;
+
+    //    sLog->outDetail("    Generated %lu waypoints, total time %u.", (unsigned long)m_WayPoints.size(), timer);
 
     m_curr = m_WayPoints.begin();
     m_next = GetNextWayPoint();
@@ -632,9 +646,13 @@ void Transport::Update (uint32 p_diff)
 
         // first check help in case client-server transport coordinates de-synchronization
         if (m_curr->second.mapid != GetMapId() || m_curr->second.teleport)
+        {
             TeleportTransport(m_curr->second.mapid, m_curr->second.x, m_curr->second.y, m_curr->second.z);
+        }
         else
+        {
             Relocate(m_curr->second.x, m_curr->second.y, m_curr->second.z, GetAngle(m_next->second.x, m_next->second.y) + float(M_PI));
+        }
 
         sScriptMgr->OnRelocate(this, m_curr->first, m_curr->second.mapid, m_curr->second.x, m_curr->second.y, m_curr->second.z);
 

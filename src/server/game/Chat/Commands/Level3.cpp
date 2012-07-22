@@ -37,7 +37,6 @@
 #include "Chat.h"
 #include "Log.h"
 #include "Guild.h"
-#include "GuildMgr.h"
 #include "ObjectAccessor.h"
 #include "MapManager.h"
 #include "Language.h"
@@ -2413,10 +2412,10 @@ bool ChatHandler::HandleGuildCreateCommand (const char *args)
 
     // if not guild name only (in "") then player name
     Player* target;
-    if (!extractPlayerTarget(*args != '"' ? (char*)args : NULL, &target))
+    if (!extractPlayerTarget(*args != '"' ? (char*) args : NULL, &target))
         return false;
 
-    char* tailStr = *args != '"' ? strtok(NULL, "") : (char*)args;
+    char* tailStr = *args != '"' ? strtok(NULL, "") : (char*) args;
     if (!tailStr)
         return false;
 
@@ -2432,7 +2431,7 @@ bool ChatHandler::HandleGuildCreateCommand (const char *args)
         return true;
     }
 
-    Guild* guild = new Guild;
+    Guild *guild = new Guild;
     if (!guild->Create(target, guildname))
     {
         delete guild;
@@ -2441,7 +2440,7 @@ bool ChatHandler::HandleGuildCreateCommand (const char *args)
         return false;
     }
 
-    sGuildMgr->AddGuild(guild);
+    sObjectMgr->AddGuild(guild);
     return true;
 }
 
@@ -2464,7 +2463,7 @@ bool ChatHandler::HandleGuildInviteCommand (const char *args)
         return false;
 
     std::string glName = guildStr;
-    Guild* targetGuild = sGuildMgr->GetGuildByName(glName);
+    Guild* targetGuild = sObjectMgr->GetGuildByName(glName);
     if (!targetGuild)
         return false;
 
@@ -2484,7 +2483,7 @@ bool ChatHandler::HandleGuildUninviteCommand (const char *args)
     if (!glId)
         return false;
 
-    Guild* targetGuild = sGuildMgr->GetGuildById(glId);
+    Guild* targetGuild = sObjectMgr->GetGuildById(glId);
     if (!targetGuild)
         return false;
 
@@ -2510,7 +2509,7 @@ bool ChatHandler::HandleGuildRankCommand (const char *args)
     if (!glId)
         return false;
 
-    Guild* targetGuild = sGuildMgr->GetGuildById(glId);
+    Guild* targetGuild = sObjectMgr->GetGuildById(glId);
     if (!targetGuild)
         return false;
 
@@ -2529,7 +2528,7 @@ bool ChatHandler::HandleGuildDeleteCommand (const char *args)
 
     std::string gld = guildStr;
 
-    Guild* targetGuild = sGuildMgr->GetGuildByName(gld);
+    Guild* targetGuild = sObjectMgr->GetGuildByName(gld);
     if (!targetGuild)
         return false;
 

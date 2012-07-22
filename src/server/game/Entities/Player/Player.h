@@ -341,14 +341,6 @@ struct Areas
     float y2;
 };
 
-struct TerrainSwap
-{
-    uint32 map;
-    uint32 ts_map;
-    uint32 ts_phase;
-};
-typedef UNORDERED_MAP<uint32, TerrainSwap> TerrainSwapMap;
-
 #define MAX_RUNES       6
 
 enum RuneCooldowns
@@ -929,7 +921,7 @@ public:
         return m_spellCastItem != 0;
     }
 
-    uint64 GetMoney () const
+    uint32 GetMoney () const
     {
         return m_money;
     }
@@ -1050,6 +1042,8 @@ public:
     void Update (uint32 time);
 
     static bool BuildEnumData (QueryResult result, WorldPacket * p_data);
+
+    virtual uint8 getClass () const = 0;
 
     void SetInWater (bool apply);
 
@@ -1662,7 +1656,8 @@ public:
     /***                   LOAD SYSTEM                     ***/
     /*********************************************************/
 
-    bool LoadFromDB(uint32 guid, SQLQueryHolder* holder);
+    static Player* LoadFromDB (uint32 guid, SQLQueryHolder * holder, WorldSession * session);
+    bool _LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryResult & result);
     bool isBeingLoaded () const
     {
         return GetSession()->PlayerLoading();
@@ -1711,19 +1706,25 @@ public:
         m_weaponChangeTimer = time;
     }
 
-    uint64 GetMoney() const { return GetUInt64Value(PLAYER_FIELD_COINAGE); }
-    void ModifyMoney(int32 d);
-    bool HasEnoughMoney(uint64 amount) const { return (GetMoney() >= amount); }
-    bool HasEnoughMoney(int32 amount) const
+    uint32 GetMoney () const
+    {
+        return GetUInt32Value(PLAYER_FIELD_COINAGE);
+    }
+    void ModifyMoney (int32 d);
+    bool HasEnoughMoney (uint32 amount) const
+    {
+        return (GetMoney() >= amount);
+    }
+    bool HasEnoughMoney (int32 amount) const
     {
         if (amount > 0)
-            return (GetMoney() >= (uint32) amount);
+            return (GetMoney() >= uint32(amount));
         return true;
     }
 
-    void SetMoney(uint32 value)
+    void SetMoney (uint32 value)
     {
-        SetUInt32Value (PLAYER_FIELD_COINAGE, value);
+        SetUInt32Value(PLAYER_FIELD_COINAGE, value);
         MoneyChanged(value);
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_GOLD_VALUE_OWNED);
     }
@@ -2004,11 +2005,6 @@ public:
     void UpdatePvP(bool state, bool override=false);
     void UpdateZone(uint32 newZone, uint32 newArea);
     void UpdateArea(uint32 newArea);
-
-    // TerrainSwap handling
-    void UpdateTerrain();
-    void SwapTerrain(uint16 phase, uint16 map);
-    void SendSwapTerrain(uint16 phase, uint16 map);
 
     void UpdateZoneDependentAuras(uint32 zone_id);          // zones
     void UpdateAreaDependentAuras(uint32 area_id);// subzones
@@ -3175,7 +3171,6 @@ protected:
     bool canSeeAlways(WorldObject const* obj) const;
 
     bool isAlwaysDetectableFor(WorldObject const* seer) const;
-
 private:
     // internal common parts for CanStore/StoreItem functions
     uint8 _CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemPrototype const *pProto, uint32& count, bool swap, Item *pSrcItem) const;
@@ -3248,9 +3243,6 @@ private:
     InstanceTimeMap _instanceResetTimes;
     InstanceSave* _pendingBind;
     uint32 _pendingBindTimer;
-
-    //TerrainSwap
-    TerrainSwapMap _TerrainSwap;
 };
 
 class Player_bot: public Player

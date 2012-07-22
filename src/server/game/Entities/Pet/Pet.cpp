@@ -1654,7 +1654,7 @@ bool Pet::resetTalents (bool no_cost)
         return false;
     }
 
-    uint64 cost = 0;
+    uint32 cost = 0;
 
     if (!no_cost)
     {

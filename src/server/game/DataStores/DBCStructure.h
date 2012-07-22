@@ -594,9 +594,9 @@ struct AreaTriggerEntry
 
 struct PhaseEntry
 {
-    uint32 ID;                  // 0
-    DBCString Name;             // 1
-    uint32 Type;                // 2
+    uint32 ID;          // 0
+    DBCString Name;          // 1
+    uint32 phaseShift;          // 2
 };
 
 struct ArmorLocationEntry

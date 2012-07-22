@@ -1295,7 +1295,7 @@ void Unit::CalculateMeleeDamage (Unit *pVictim, uint32 damage, CalcDamageInfo *d
     MeleeDamageBonus(damageInfo->target, &damage, damageInfo->attackType);
 
     // Calculate armor reduction
-    if (IsDamageReducedByArmor((SpellSchoolMask)(damageInfo->damageSchoolMask)))
+    if (IsDamageReducedByArmor((SpellSchoolMask) (damageInfo->damageSchoolMask)))
     {
         damageInfo->damage = CalcArmorReducedDamage(damageInfo->target, damage, NULL, damageInfo->attackType);
         damageInfo->cleanDamage += damage - damageInfo->damage;
@@ -2993,7 +2993,7 @@ void Unit::_UpdateAutoRepeatSpell ()
     m_AutoRepeatFirstCast = false;
 
     //castroutine
-    if (isAttackReady (RANGED_ATTACK))
+    if (isAttackReady(RANGED_ATTACK))
     {
         // Check if able to cast
         if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->CheckCast(true) != SPELL_CAST_OK)
@@ -3039,7 +3039,7 @@ void Unit::SetCurrentCastedSpell (Spell * pSpell)
                 InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
             m_AutoRepeatFirstCast = true;
         }
-        AddUnitState (UNIT_STAT_CASTING);
+        AddUnitState(UNIT_STAT_CASTING);
     }
         break;
 
@@ -3052,7 +3052,7 @@ void Unit::SetCurrentCastedSpell (Spell * pSpell)
         // it also does break autorepeat if not Auto Shot
         if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL] && m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Id != 75)
             InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
-        AddUnitState (UNIT_STAT_CASTING);
+        AddUnitState(UNIT_STAT_CASTING);
     }
         break;
 
@@ -3224,7 +3224,7 @@ bool Unit::SetWalk (bool enable)
         return false;
 
     if (enable)
-        AddUnitMovementFlag (MOVEMENTFLAG_WALKING);
+        AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
     else
         RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
 
@@ -3237,7 +3237,7 @@ bool Unit::SetLevitate (bool enable)
         return false;
 
     if (enable)
-        AddUnitMovementFlag (MOVEMENTFLAG_WALKING);
+        AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
     else
         RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
 
@@ -5826,14 +5826,13 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
         }
         // Permafrost
         if (dummySpell->SpellIconID == 143)
-        {
+
             if (!procSpell)
                 return false;
-
+           
             basepoints0 = damage * triggerAmount / 100;
             triggered_spell_id = 91394;
             break;
-        }
         // Burnout
         if (dummySpell->SpellIconID == 2998)
         {
@@ -6729,7 +6728,7 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
     {
         switch (dummySpell->Id)
         {
-        // Deadly Throw Interrupt
+            // Deadly Throw Interrupt
         case 32748:
         {
             // Prevent cast Deadly Throw Interrupt on self from last effect (apply dummy) of Deadly Throw
@@ -8401,7 +8400,6 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
             RemoveAuraFromStack(71564);
             *handled = true;
             break;
-            // Ball of Flames Proc
         case 71756:
         case 72782:
         case 72783:
@@ -8409,26 +8407,6 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
             RemoveAuraFromStack(dummySpell->Id);
             *handled = true;
             break;
-            // Gaseous Bloat
-        case 70672:
-        case 72455:
-        case 72832:
-        case 72833:
-        {
-            *handled = true;
-            uint32 stack = triggeredByAura->GetStackAmount();
-            int32 const mod = (GetMap()->GetSpawnMode() & 1) ? 1500 : 1250;
-            int32 dmg = 0;
-            for (uint8 i = 1; i < stack; ++i)
-                dmg += mod * stack;
-            if (Unit* caster = triggeredByAura->GetCaster())
-            {
-                caster->CastCustomSpell(70701, SPELLVALUE_BASE_POINT0, dmg);
-                if (Creature* creature = caster->ToCreature())
-                    creature->DespawnOrUnsummon(1);
-            }
-            break;
-        }
             // Discerning Eye of the Beast
         case 59915:
         {
@@ -8444,8 +8422,8 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
             *handled = true;
             break;
         }
-            break;
         }
+        break;
     case SPELLFAMILY_PALADIN:
     {
         // Judgements of the Just
@@ -8537,10 +8515,10 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
     case SPELLFAMILY_PRIEST:
     {
         // Masochism
-        if (dummySpell->SpellIconID == 2211)
+        if(dummySpell->SpellIconID == 2211)
         {
             *handled = true;
-            if (!(damage >= CountPctFromMaxHealth(10)))
+            if(!(damage >= CountPctFromMaxHealth(10)))
                 return false;
 
             int32 bp0 = SpellMgr::CalculateSpellEffectAmount(dummySpell, 0);
@@ -8611,35 +8589,35 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
         }
         break;
     }
-    case SPELLFAMILY_ROGUE:
-        switch (dummySpell->Id)
-        {
-        // Gouge
-        case 1776:
-            *handled = true;
-            // Check so gouge spell effect [1] (SPELL_EFFECT_SCHOOL_DAMAGE) cannot cancel stun effect
-            if (procSpell && procSpell->Id == 1776)
-                return false;
-            return true;
+        case SPELLFAMILY_ROGUE:
+            switch(dummySpell->Id)
+            {
+                // Gouge
+                case 1776:
+                    *handled = true;
+                    // Check so gouge spell effect [1] (SPELL_EFFECT_SCHOOL_DAMAGE) cannot cancel stun effect
+                    if(procSpell && procSpell->Id == 1776)
+                        return false;
+                    return true;
+                break;
+            }
             break;
-        }
-        break;
-    case SPELLFAMILY_WARRIOR:
-    {
-        switch (dummySpell->Id)
+        case SPELLFAMILY_WARRIOR:
         {
-        // Item - Warrior T10 Protection 4P Bonus
-        case 70844:
-        {
-            int32 basepoints0 = CalculatePctN(GetMaxHealth(), SpellMgr::CalculateSpellEffectAmount(dummySpell, 1));
-            CastCustomSpell(this, 70845, &basepoints0, NULL, NULL, true);
+            switch (dummySpell->Id)
+            {
+                // Item - Warrior T10 Protection 4P Bonus
+                case 70844:
+                {
+                    int32 basepoints0 = CalculatePctN(GetMaxHealth(), SpellMgr::CalculateSpellEffectAmount(dummySpell, 1));
+                    CastCustomSpell(this, 70845, &basepoints0, NULL, NULL, true);
+                    break;
+                }
+                default:
+                    break;
+            }
             break;
-        }
-        default:
-            break;
-        }
-        break;
-    }
+        }	
     }
     return false;
 }
@@ -10405,7 +10383,7 @@ bool Unit::Attack (Unit *victim, bool meleeAttack)
 
     // delay offhand weapon attack to next attack time
     if (haveOffhandWeapon())
-        resetAttackTimer (OFF_ATTACK);
+        resetAttackTimer(OFF_ATTACK);
 
     if (meleeAttack)
         SendMeleeAttackStart(victim);
@@ -10472,7 +10450,7 @@ void Unit::CombatStopWithPets (bool includingCast)
 
 bool Unit::isAttackingPlayer () const
 {
-    if (HasUnitState (UNIT_STAT_ATTACK_PLAYER))
+    if (HasUnitState(UNIT_STAT_ATTACK_PLAYER))
         return true;
 
     for (ControlList::const_iterator itr = m_Controlled.begin(); itr != m_Controlled.end(); ++itr)
@@ -11603,7 +11581,7 @@ uint32 Unit::SpellDamageBonus (Unit *pVictim, SpellEntry const *spellProto, uint
     int32 TakenAdvertisedBenefit = SpellBaseDamageBonusForVictim(GetSpellSchoolMask(spellProto), pVictim);
     // Pets just add their bonus damage to their spell damage
     // note that their spell damage is just gain of their own auras
-    if (HasUnitTypeMask (UNIT_MASK_GUARDIAN))
+    if (HasUnitTypeMask(UNIT_MASK_GUARDIAN))
         if (!(GetSpellSchoolMask(spellProto) & SPELL_SCHOOL_MASK_NORMAL))          // Do not add Spellpower to melee abilities
             DoneAdvertisedBenefit += ((Guardian*) this)->GetBonusDamage();
         else if (((Guardian*) this)->GetBonusDamage())          // Instead add a fixed amount of AP
@@ -11903,7 +11881,7 @@ bool Unit::isSpellCrit (Unit *pVictim, SpellEntry const *spellProto, SpellSchool
                 // Mind Spike
                 if (spellProto->SpellFamilyFlags[0] & 0x2000 && spellProto->SpellIconID == 95)
                     if (AuraEffect const* aurEff = pVictim->GetAuraEffect(87178, 0, GetGUID()))
-                        crit_chance += aurEff->GetAmount();
+                            crit_chance += aurEff->GetAmount();
                 break;
             case SPELLFAMILY_MAGE:
                 // Glyph of Fire Blast
@@ -12896,7 +12874,7 @@ float Unit::GetWeaponProcChance () const
 {
     // normalized proc chance for weapon attack speed
     // (odd formula...)
-    if (isAttackReady (BASE_ATTACK))
+    if (isAttackReady(BASE_ATTACK))
         return (GetAttackTime(BASE_ATTACK) * 1.8f / 1000.0f);
     else if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
         return (GetAttackTime(OFF_ATTACK) * 1.6f / 1000.0f);
@@ -13119,7 +13097,7 @@ void Unit::ClearInCombat ()
         if (creature->GetCreatureInfo() && creature->GetCreatureInfo()->unit_flags & UNIT_FLAG_OOC_NOT_ATTACKABLE)
             SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);          //re-apply Out of Combat Non Attackable flag if we leave combat, can be overriden in scripts in EnterEvadeMode()
 
-        ClearUnitState (UNIT_STAT_ATTACK_PLAYER);
+        ClearUnitState(UNIT_STAT_ATTACK_PLAYER);
         if (HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_TAPPED))
             SetUInt32Value(UNIT_DYNAMIC_FLAGS, ((Creature*) this)->GetCreatureInfo()->dynamicflags);
     }
@@ -13942,7 +13920,7 @@ Unit* Creature::SelectVictim ()
         return NULL;
 
     // search nearby enemy before enter evade mode
-    if (HasReactState (REACT_AGGRESSIVE))
+    if (HasReactState(REACT_AGGRESSIVE))
     {
         target = SelectNearestTargetInAttackDistance();
         if (target && _IsTargetAcceptable(target))
@@ -14408,13 +14386,13 @@ bool Unit::HandleStatModifier (UnitMods unitMod, UnitModifierType modifierType, 
         break;
 
     case UNIT_MOD_DAMAGE_MAINHAND:
-        UpdateDamagePhysical (BASE_ATTACK);
+        UpdateDamagePhysical(BASE_ATTACK);
         break;
     case UNIT_MOD_DAMAGE_OFFHAND:
-        UpdateDamagePhysical (OFF_ATTACK);
+        UpdateDamagePhysical(OFF_ATTACK);
         break;
     case UNIT_MOD_DAMAGE_RANGED:
-        UpdateDamagePhysical (RANGED_ATTACK);
+        UpdateDamagePhysical(RANGED_ATTACK);
         break;
 
     default:
@@ -15673,7 +15651,7 @@ void Unit::SendPetAIReaction (uint64 guid)
 
 void Unit::StopMoving ()
 {
-    ClearUnitState (UNIT_STAT_MOVING);
+    ClearUnitState(UNIT_STAT_MOVING);
 
     // send explicit stop packet
     // rely on vmaps here because for example stormwind is in air
@@ -16070,7 +16048,7 @@ void Unit::SetContestedPvP (Player *attackedPlayer)
     }
     if (!HasUnitState(UNIT_STAT_ATTACK_PLAYER))
     {
-        AddUnitState (UNIT_STAT_ATTACK_PLAYER);
+        AddUnitState(UNIT_STAT_ATTACK_PLAYER);
         // call MoveInLineOfSight for nearby contested guards
         UpdateObjectVisibility();
     }
@@ -16712,7 +16690,7 @@ void Unit::SetControlled (bool apply, UnitState state)
                 SetConfused(false);
             break;
         case UNIT_STAT_FLEEING:
-            if (HasAuraType (SPELL_AURA_MOD_FEAR))
+            if (HasAuraType(SPELL_AURA_MOD_FEAR))
                 return;
             else
                 SetFeared(false);
@@ -16723,16 +16701,16 @@ void Unit::SetControlled (bool apply, UnitState state)
 
         ClearUnitState(state);
 
-        if (HasUnitState (UNIT_STAT_STUNNED))
+        if (HasUnitState(UNIT_STAT_STUNNED))
             SetStunned(true);
         else
         {
-            if (HasUnitState (UNIT_STAT_ROOT))
+            if (HasUnitState(UNIT_STAT_ROOT))
                 SetRooted(true);
 
-            if (HasUnitState (UNIT_STAT_CONFUSED))
+            if (HasUnitState(UNIT_STAT_CONFUSED))
                 SetConfused(true);
-            else if (HasUnitState (UNIT_STAT_FLEEING))
+            else if (HasUnitState(UNIT_STAT_FLEEING))
                 SetFeared(true);
         }
     }
@@ -16972,7 +16950,7 @@ bool Unit::SetCharmedBy (Unit* charmer, CharmType type, AuraApplication const * 
             charmer->ToPlayer()->VehicleSpellInitialize();
             break;
         case CHARM_TYPE_POSSESS:
-            AddUnitState (UNIT_STAT_POSSESSED);
+            AddUnitState(UNIT_STAT_POSSESSED);
             SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
             charmer->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             charmer->ToPlayer()->SetClientControl(this, 1);
@@ -17022,7 +17000,7 @@ void Unit::RemoveCharmedBy (Unit *charmer)
     }
 
     CharmType type;
-    if (HasUnitState (UNIT_STAT_POSSESSED))
+    if (HasUnitState(UNIT_STAT_POSSESSED))
         type = CHARM_TYPE_POSSESS;
     else if (charmer->IsOnVehicle(this))
         type = CHARM_TYPE_VEHICLE;
@@ -17040,7 +17018,7 @@ void Unit::RemoveCharmedBy (Unit *charmer)
 
     if (type == CHARM_TYPE_POSSESS)
     {
-        ClearUnitState (UNIT_STAT_POSSESSED);
+        ClearUnitState(UNIT_STAT_POSSESSED);
         RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
     }
 

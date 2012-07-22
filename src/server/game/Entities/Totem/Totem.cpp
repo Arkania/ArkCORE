@@ -65,32 +65,34 @@ void Totem::InitStats (uint32 duration)
     CreatureInfo const *cinfo = GetCreatureInfo();
     if (m_owner->GetTypeId() == TYPEID_PLAYER && cinfo)
     {
-        uint32 displayID = sObjectMgr->ChooseDisplayId(m_owner->ToPlayer()->GetTeam(), cinfo);
-        CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(displayID);
+        uint32 display_id = sObjectMgr->ChooseDisplayId(m_owner->ToPlayer()->GetTeam(), cinfo);
+        CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(display_id);
+        if (minfo)
+            display_id = minfo->modelid;
         switch (m_owner->ToPlayer()->GetTeam())
         {
         case ALLIANCE:
-            displayID = cinfo->Modelid1;
+            display_id = cinfo->Modelid1;
             break;
         case HORDE:
             if (cinfo->Modelid3)
-                displayID = cinfo->Modelid3;
+                display_id = cinfo->Modelid3;
             else
-                displayID = cinfo->Modelid1;
+                display_id = cinfo->Modelid1;
 
             switch (((Player*) m_owner)->getRace())
             {
             case RACE_ORC:
                 if (cinfo->Modelid2)
-                    displayID = cinfo->Modelid2;
+                    display_id = cinfo->Modelid2;
                 else
-                    displayID = cinfo->Modelid1;
+                    display_id = cinfo->Modelid1;
                 break;
             case RACE_TROLL:
                 if (cinfo->Modelid4)
-                    displayID = cinfo->Modelid4;
+                    display_id = cinfo->Modelid4;
                 else
-                    displayID = cinfo->Modelid1;
+                    display_id = cinfo->Modelid1;
                 break;
             default:
                 break;
@@ -99,7 +101,7 @@ void Totem::InitStats (uint32 duration)
         default:
             break;
         }
-        SetDisplayId(displayID);
+        SetDisplayId(display_id);
     }
 
     // Get spell casted by totem

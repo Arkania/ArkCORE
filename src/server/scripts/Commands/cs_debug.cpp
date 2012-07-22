@@ -51,12 +51,14 @@ public:
 
     ChatCommand* GetCommands () const
     {
-        static ChatCommand debugPlayCommandTable[] ={
+        static ChatCommand debugPlayCommandTable[] =
+        {
         { "cinematic", SEC_MODERATOR, false, &HandleDebugPlayCinematicCommand, "", NULL },
         { "movie", SEC_MODERATOR, false, &HandleDebugPlayMovieCommand, "", NULL },
         { "sound", SEC_MODERATOR, false, &HandleDebugPlaySoundCommand, "", NULL },
         { NULL, 0, false, NULL, "", NULL } };
-        static ChatCommand debugSendCommandTable[] = {
+        static ChatCommand debugSendCommandTable[] =
+        {
         { "buyerror", SEC_ADMINISTRATOR, false, &HandleDebugSendBuyErrorCommand, "", NULL },
         { "channelnotify", SEC_ADMINISTRATOR, false, &HandleDebugSendChannelNotifyCommand, "", NULL },
         { "chatmmessage", SEC_ADMINISTRATOR, false, &HandleDebugSendChatMsgCommand, "", NULL },
@@ -905,17 +907,8 @@ public:
         if (!*args)
             return false;
 
-        Player* target = handler->getSelectedPlayer();
-        if (!target)
-        {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        uint32 phase = atoi(args);
-        uint32 mapid = atoi(args);
-        target->SwapTerrain(phase, mapid);
+        uint32 PhaseShift = atoi(args);
+        handler->GetSession()->SendSetPhaseShift(PhaseShift);
         return true;
     }
 

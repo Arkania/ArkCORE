@@ -92,7 +92,6 @@ const char LFGDungeonEntryfmt[] = "nxiiiiiiixixxixix";
 const char LockEntryfmt[] = "niiiiiiiiiiiiiiiiiiiiiiiixxxxxxxx";
 const char MailTemplateEntryfmt[] = "nxs";
 const char MapEntryfmt[] = "nxixxxsixxixiffxiixx";
-const char PhaseEntryfmt[] = "nsi";
 const char MapDifficultyEntryfmt[] = "diisiix";
 const char MovieEntryfmt[] = "nxxx";
 const char MountCapabilityfmt[] = "niixxiii";
@@ -192,4 +191,5 @@ const char WMOAreaTableEntryfmt[] = "niiixxxxxiixxxx";
 const char WorldMapAreaEntryfmt[] = "xinxffffixxx";
 const char WorldMapOverlayEntryfmt[] = "nxiiiixxxxxxxxx";
 const char WorldSafeLocsEntryfmt[] = "nifffx";
+const char PhaseEntryfmt[] = "nsi";          //testing
 #endif

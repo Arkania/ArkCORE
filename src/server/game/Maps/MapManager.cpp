@@ -208,8 +208,8 @@ bool MapManager::CanPlayerEnter (uint32 mapid, Player* player, bool loginCheck)
                 if (corpseMap == mapid)
                     break;
 
-                InstanceTemplate const* instance = sObjectMgr->GetInstanceTemplate(corpseMap);
-                corpseMap = instance ? instance->Parent : 0;
+                InstanceTemplate const* instance = ObjectMgr::GetInstanceTemplate(corpseMap);
+                corpseMap = instance ? instance->parent : 0;
             }
             while (corpseMap);
 

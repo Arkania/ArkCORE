@@ -306,16 +306,18 @@ bool Creature::InitEntry (uint32 Entry, uint32 /*team*/, const CreatureData *dat
         return false;
     }
 
-    uint32 displayID = sObjectMgr->ChooseDisplayId(0, GetCreatureInfo(), data);
-    CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(displayID);
+    uint32 display_id = sObjectMgr->ChooseDisplayId(0, GetCreatureInfo(), data);
+    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(display_id);
     if (!minfo)          // Cancel load if no model defined
     {
         sLog->outErrorDb("Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
         return false;
     }
 
-    SetDisplayId(displayID);
-    SetNativeDisplayId(displayID);
+    display_id = minfo->modelid;          // it can be different (for another gender)
+
+    SetDisplayId(display_id);
+    SetNativeDisplayId(display_id);
     SetByteValue(UNIT_FIELD_BYTES_0, 2, minfo->gender);
 
     // Load creature equipment
@@ -788,12 +790,13 @@ bool Creature::Create (uint32 guidlow, Map *map, uint32 phaseMask, uint32 Entry,
     }
 
     LoadCreaturesAddon();
-    uint32 displayID = 0;
-    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(displayID = GetNativeDisplayId());
+    CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(GetNativeDisplayId());
     if (minfo && !isTotem())          // Cancel load if no model defined or if totem
     {
-        SetDisplayId(displayID);
-        SetNativeDisplayId(displayID);
+        uint32 display_id = minfo->modelid;          // it can be different (for another gender)
+
+        SetDisplayId(display_id);
+        SetNativeDisplayId(display_id);
         SetByteValue(UNIT_FIELD_BYTES_0, 2, minfo->gender);
     }
 
@@ -1645,12 +1648,13 @@ void Creature::Respawn (bool force)
         else
             setDeathState(JUST_ALIVED);
 
-        uint32 displayID = 0;
-        CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(displayID = GetNativeDisplayId());
+        CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(GetNativeDisplayId());
         if (minfo)          // Cancel load if no model defined
         {
-            SetDisplayId(displayID);
-            SetNativeDisplayId(displayID);
+            uint32 display_id = minfo->modelid;          // it can be different (for another gender)
+
+            SetDisplayId(display_id);
+            SetNativeDisplayId(display_id);
             SetByteValue(UNIT_FIELD_BYTES_0, 2, minfo->gender);
         }
 

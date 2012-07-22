@@ -50,39 +50,17 @@
 extern SQLStorage sCreatureStorage;
 extern SQLStorage sCreatureDataAddonStorage;
 extern SQLStorage sCreatureInfoAddonStorage;
+extern SQLStorage sCreatureModelStorage;
 extern SQLStorage sEquipmentStorage;
 extern SQLStorage sGOStorage;
+extern SQLStorage sPageTextStore;
 extern SQLStorage sItemStorage;
+extern SQLStorage sInstanceTemplate;
 
 class Group;
+class Guild;
 class ArenaTeam;
 class Item;
-
-// GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
-#if defined(__GNUC__)
-#pragma pack(1)
-#else
-#pragma pack(push,1)
-#endif
-
-struct PageText
-{
-    std::string Text;
-    uint16 NextPage;
-};
-
-// GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
-#if defined(__GNUC__)
-#pragma pack()
-#else
-#pragma pack(pop)
-#endif
-
-// Benchmarked: Faster than UNORDERED_MAP (insert/find)
-typedef std::map<uint32, PageText> PageTextContainer;
-
-// Benchmarked: Faster than std::map (insert/find)
-typedef UNORDERED_MAP<uint16, InstanceTemplate> InstanceTemplateContainer;
 
 struct GameTele
 {
@@ -524,6 +502,14 @@ typedef std::multimap<uint32, GossipMenuItems> GossipMenuItemsMap;
 typedef std::pair<GossipMenuItemsMap::const_iterator, GossipMenuItemsMap::const_iterator> GossipMenuItemsMapBounds;
 typedef std::pair<GossipMenuItemsMap::iterator, GossipMenuItemsMap::iterator> GossipMenuItemsMapBoundsNonConst;
 
+struct GuildRewardsEntry
+{
+    uint32 item;
+    uint32 price;
+    uint32 achievement;
+    uint32 standing;
+};
+
 struct QuestPOIPoint
 {
     int32 x;
@@ -639,6 +625,8 @@ public:
 
     typedef std::set<Group *> GroupSet;
 
+    typedef std::vector <Guild *> GuildMap;
+
     typedef UNORDERED_MAP<uint32, ArenaTeam*> ArenaTeamMap;
 
     typedef UNORDERED_MAP<uint32, Quest*> QuestMap;
@@ -659,6 +647,8 @@ public:
 
     typedef std::map<uint32, uint32> CharacterConversionMap;
 
+    typedef std::vector<GuildRewardsEntry*> GuildRewardsVector;
+
     Player* GetPlayer(const char* name) const
     {   return sObjectAccessor->FindPlayerByName(name);}
     Player* GetPlayer(uint64 guid) const
@@ -678,6 +668,13 @@ public:
     void RemoveGroup(Group* group)
     {   mGroupSet.erase(group);}
 
+    Guild* GetGuildByLeader(uint64 const&guid) const;
+    Guild* GetGuildById(uint32 guildId) const;
+    Guild* GetGuildByName(const std::string& guildname) const;
+    std::string GetGuildNameById(uint32 guildId) const;
+    void AddGuild(Guild* pGuild);
+    void RemoveGuild(uint32 guildId);
+
     ArenaTeam* GetArenaTeamById(uint32 arenateamid) const;
     ArenaTeam* GetArenaTeamByName(const std::string& arenateamname) const;
     ArenaTeam* GetArenaTeamByCaptain(uint64 const& guid) const;
@@ -690,8 +687,8 @@ public:
 
     static CreatureInfo const *GetCreatureTemplate(uint32 id)
     {   return sCreatureStorage.LookupEntry<CreatureInfo>(id);}
-    CreatureModelInfo const* GetCreatureModelInfo(uint32 modelId);
-    CreatureModelInfo const* GetCreatureModelRandomGender(uint32 &displayID);
+    CreatureModelInfo const *GetCreatureModelInfo(uint32 modelid);
+    CreatureModelInfo const* GetCreatureModelRandomGender(uint32 display_id);
     uint32 ChooseDisplayId(uint32 team, const CreatureInfo *cinfo, const CreatureData *data = NULL);
     static void ChooseCreatureFlags(const CreatureInfo *cinfo, uint32& npcflag, uint32& unit_flags, uint32& dynamicflags, const CreatureData *data = NULL);
     EquipmentInfo const *GetEquipmentInfo(uint32 entry);
@@ -717,7 +714,10 @@ public:
         return NULL;
     }
 
-    InstanceTemplate const* GetInstanceTemplate(uint32 mapID);
+    static InstanceTemplate const* GetInstanceTemplate(uint32 map)
+    {
+        return sInstanceTemplate.LookupEntry<InstanceTemplate>(map);
+    }
 
     PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint8 level) const;
 
@@ -755,6 +755,9 @@ public:
     }
     QuestMap const& GetQuestTemplates() const
     {   return mQuestTemplates;}
+
+    GuildRewardsVector const& GetGuildRewards()
+    {   return mGuildRewards;}
 
     uint32 GetQuestForAreaTrigger(uint32 Trigger_ID) const
     {
@@ -864,19 +867,10 @@ public:
         return NULL;
     }
 
-    VehicleAccessoryList const* GetVehicleAccessoryList(Vehicle* veh) const
+    VehicleAccessoryList const* GetVehicleAccessoryList(uint32 uiEntry) const
     {
-        if (Creature* cre = veh->GetBase()->ToCreature())
-        {
-            // Give preference to GUID-based accessories
-            VehicleAccessoryMap::const_iterator itr = m_VehicleAccessoryMap.find(cre->GetDBTableGUIDLow());
-            if (itr != m_VehicleAccessoryMap.end())
-                return &itr->second;
-        }
-
-        // Otherwise return entry-based
-        VehicleAccessoryMap::const_iterator itr = m_VehicleTemplateAccessoryMap.find(veh->GetCreatureEntry());
-        if (itr != m_VehicleTemplateAccessoryMap.end())
+        VehicleAccessoryMap::const_iterator itr = m_VehicleAccessoryMap.find(uiEntry);
+        if (itr != m_VehicleAccessoryMap.end())
         return &itr->second;
         return NULL;
     }
@@ -897,6 +891,8 @@ public:
         return NULL;
     }
 
+    void LoadGuilds();
+    void LoadGuildRewards();
     void LoadArenaTeams();
     void LoadGroups();
     void LoadQuests();
@@ -987,7 +983,6 @@ public:
     void LoadInstanceTemplate();
     void LoadInstanceEncounters();
     void LoadMailLevelRewards();
-    void LoadVehicleTemplateAccessories();
     void LoadVehicleAccessories();
     void LoadVehicleScaling();
 
@@ -1002,7 +997,6 @@ public:
     void LoadGameObjectForQuests();
 
     void LoadPageTexts();
-    PageText const* GetPageText(uint32 pageEntry);
 
     void LoadPlayerInfo();
     void LoadPetLevelInfo();
@@ -1050,6 +1044,7 @@ public:
     uint32 GenerateArenaTeamId();
     uint32 GenerateAuctionID();
     uint64 GenerateEquipmentSetGuid();
+    uint32 GenerateGuildId();
     uint32 GenerateMailID();
     uint32 GeneratePetNumber();
 
@@ -1306,11 +1301,11 @@ public:
     // for wintergrasp only
     GraveYardMap mGraveYardMap;
 
-    static void AddLocaleString(const std::string& s, LocaleConstant locale, StringVector& data);
-    static inline void GetLocaleString(const StringVector& data, int loc_idx, std::string& value)
+    void AddLocaleString(std::string& s, LocaleConstant locale, StringVector& data);
+    inline void GetLocaleString(const StringVector& data, int loc_idx, std::string& value) const
     {
         if (data.size() > size_t(loc_idx) && !data[loc_idx].empty())
-            value = data[loc_idx];
+        value = data[loc_idx];
     }
 
     CharacterConversionMap factionchange_achievements;
@@ -1329,6 +1324,7 @@ protected:
     uint32 m_arenaTeamId;
     uint32 m_auctionid;
     uint64 m_equipmentSetGuid;
+    uint32 m_guildId;
     uint32 m_ItemTextId;
     uint32 m_mailid;
     uint32 m_hiPetNumber;
@@ -1354,7 +1350,9 @@ protected:
     typedef std::set<uint32> GameObjectForQuestSet;
 
     GroupSet mGroupSet;
+    GuildMap mGuildMap;
     ArenaTeamMap mArenaTeamMap;
+    GuildRewardsVector mGuildRewards;
 
     QuestAreaTriggerMap mQuestAreaTriggerMap;
     QuestStartAreaTriggerMap mQuestStartAreaTriggerMap;
@@ -1398,7 +1396,6 @@ protected:
 
     ItemRequiredTargetMap m_ItemRequiredTarget;
 
-    VehicleAccessoryMap m_VehicleTemplateAccessoryMap;
     VehicleAccessoryMap m_VehicleAccessoryMap;
     VehicleScalingMap m_VehicleScalingMap;
 
@@ -1406,9 +1403,6 @@ protected:
     LocalForIndex m_LocalForIndex;
 
     LocaleConstant DBCLocaleIndex;
-
-    PageTextContainer PageTextStore;
-    InstanceTemplateContainer InstanceTemplateStore;
 
 private:
     void LoadScripts(ScriptsType type);
@@ -1452,7 +1446,6 @@ private:
 
     MapObjectGuids mMapObjectGuids;
     CreatureDataMap mCreatureDataMap;
-    CreatureModelContainer CreatureModelStore;
     LinkedRespawnMap mLinkedRespawnMap;
     CreatureLocaleMap mCreatureLocaleMap;
     GameObjectDataMap mGameObjectDataMap;

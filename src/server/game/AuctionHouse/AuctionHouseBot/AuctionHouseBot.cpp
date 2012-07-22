@@ -714,6 +714,17 @@ void AuctionHouseBot::addNewAuctionBuyerBotBid (Player *AHBplayer, AHBConfig *co
         }
         }
 
+        // check some special items, and do recalculating to their prices
+        switch (prototype->Class)
+        {
+        // ammo
+        case 6:
+            bidMax = 0;
+            break;
+        default:
+            break;
+        }
+
         if (bidMax == 0)
         {
             // quality check failed to get bidmax, let's get out of here

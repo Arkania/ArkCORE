@@ -144,7 +144,6 @@ DBCStorage<LockEntry> sLockStore(LockEntryfmt);
 
 DBCStorage<MailTemplateEntry> sMailTemplateStore(MailTemplateEntryfmt);
 DBCStorage<MapEntry> sMapStore(MapEntryfmt);
-DBCStorage<PhaseEntry> sPhaseStore(PhaseEntryfmt);
 
 // DBC used only for initialization sMapDifficultyMap at startup.
 DBCStorage<MapDifficultyEntry> sMapDifficultyStore(MapDifficultyEntryfmt);          // only for loading
@@ -411,7 +410,6 @@ void LoadDBCStores (const std::string& dataPath)
     LoadDBC(availableDbcLocales, bad_dbc_files, sLockStore, dbcPath, "Lock.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sMailTemplateStore, dbcPath, "MailTemplate.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sMapStore, dbcPath, "Map.dbc");
-    LoadDBC(availableDbcLocales, bad_dbc_files, sPhaseStore, dbcPath, "Phase.dbc");
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sMapDifficultyStore, dbcPath, "MapDifficulty.dbc");
     // fill data

@@ -32,7 +32,7 @@
 #include "UpdateMask.h"
 #include "World.h"
 #include "Group.h"
-#include "GuildMgr.h"
+#include "Guild.h"
 #include "ArenaTeam.h"
 #include "Transport.h"
 #include "Language.h"
@@ -355,6 +355,7 @@ ObjectMgr::ObjectMgr ()
     m_ItemTextId = 1;
     m_mailid = 1;
     m_equipmentSetGuid = 1;
+    m_guildId = 1;
     m_arenaTeamId = 1;
     m_auctionid = 1;
 }
@@ -379,8 +380,15 @@ ObjectMgr::~ObjectMgr ()
     for (GroupSet::iterator itr = mGroupSet.begin(); itr != mGroupSet.end(); ++itr)
         delete *itr;
 
+    for (GuildMap::iterator itr = mGuildMap.begin(); itr != mGuildMap.end(); ++itr)
+        if (*itr)
+            delete *itr;
+
     for (ArenaTeamMap::iterator itr = mArenaTeamMap.begin(); itr != mArenaTeamMap.end(); ++itr)
         delete itr->second;
+
+    for (GuildRewardsVector::iterator itr = mGuildRewards.begin(); itr != mGuildRewards.end(); ++itr)
+        delete (*itr);
 
     for (CacheVendorItemMap::iterator itr = m_mCacheVendorItemMap.begin(); itr != m_mCacheVendorItemMap.end(); ++itr)
         itr->second.Clear();
@@ -395,6 +403,70 @@ Group * ObjectMgr::GetGroupByGUID (uint32 guid) const
             return *itr;
 
     return NULL;
+}
+
+// Guild collection
+Guild* ObjectMgr::GetGuildById (uint32 guildId) const
+{
+    if (guildId == 0)
+        return NULL;
+
+    // Make sure given index exists in collection
+    if (guildId < uint32(mGuildMap.size()))
+        return mGuildMap[guildId];
+    return NULL;
+}
+
+Guild* ObjectMgr::GetGuildByName (const std::string& guildname) const
+{
+    std::string search = guildname;
+    std::transform(search.begin(), search.end(), search.begin(), ::toupper);
+    for (GuildMap::const_iterator itr = mGuildMap.begin(); itr != mGuildMap.end(); ++itr)
+    {
+        if (*itr)
+        {
+            std::string gname = (*itr)->GetName();
+            std::transform(gname.begin(), gname.end(), gname.begin(), ::toupper);
+            if (search == gname)
+                return *itr;
+        }
+    }
+    return NULL;
+}
+
+std::string ObjectMgr::GetGuildNameById (uint32 guildId) const
+{
+    if (Guild* pGuild = GetGuildById(guildId))
+        return pGuild->GetName();
+    return "";
+}
+
+Guild* ObjectMgr::GetGuildByLeader (const uint64 &guid) const
+{
+    for (GuildMap::const_iterator itr = mGuildMap.begin(); itr != mGuildMap.end(); ++itr)
+        if ((*itr) && (*itr)->GetLeaderGUID() == guid)
+            return *itr;
+
+    return NULL;
+}
+
+void ObjectMgr::AddGuild (Guild* pGuild)
+{
+    uint32 guildId = pGuild->GetId();
+    // Allocate space if necessary
+    if (guildId >= uint32(mGuildMap.size()))
+        // Reserve a bit more space than necessary.
+        // 16 is intentional and it will allow creation of next 16 guilds happen
+        // without reallocation.
+        mGuildMap.resize(guildId + 16);
+    mGuildMap[guildId] = pGuild;
+}
+
+void ObjectMgr::RemoveGuild (uint32 guildId)
+{
+    // Make sure given index exists
+    if (guildId < uint32(mGuildMap.size()))
+        mGuildMap[guildId] = NULL;
 }
 
 // Arena teams collection
@@ -440,7 +512,7 @@ void ObjectMgr::RemoveArenaTeam (uint32 Id)
     mArenaTeamMap.erase(Id);
 }
 
-void ObjectMgr::AddLocaleString(std::string const& s, LocaleConstant locale, StringVector& data)
+void ObjectMgr::AddLocaleString (std::string& s, LocaleConstant locale, StringVector& data)
 {
     if (!s.empty())
     {
@@ -697,8 +769,8 @@ void ObjectMgr::CheckCreatureTemplate (CreatureInfo const* cInfo)
         else if (!displayScaleEntry)
             displayScaleEntry = displayEntry;
 
-        CreatureModelInfo const* modelInfo = GetCreatureModelInfo(cInfo->Modelid1);
-        if (!modelInfo)
+        CreatureModelInfo const* minfo = sCreatureModelStorage.LookupEntry<CreatureModelInfo>(cInfo->Modelid1);
+        if (!minfo)
             sLog->outErrorDb("No model data exist for `Modelid1` = %u listed by creature (Entry: %u).", cInfo->Modelid1, cInfo->Entry);
     }
 
@@ -713,8 +785,8 @@ void ObjectMgr::CheckCreatureTemplate (CreatureInfo const* cInfo)
         else if (!displayScaleEntry)
             displayScaleEntry = displayEntry;
 
-        CreatureModelInfo const* modelInfo = GetCreatureModelInfo(cInfo->Modelid2);;
-        if (!modelInfo)
+        CreatureModelInfo const* minfo = sCreatureModelStorage.LookupEntry<CreatureModelInfo>(cInfo->Modelid2);
+        if (!minfo)
             sLog->outErrorDb("No model data exist for `Modelid2` = %u listed by creature (Entry: %u).", cInfo->Modelid2, cInfo->Entry);
     }
 
@@ -729,8 +801,8 @@ void ObjectMgr::CheckCreatureTemplate (CreatureInfo const* cInfo)
         else if (!displayScaleEntry)
             displayScaleEntry = displayEntry;
 
-        CreatureModelInfo const* modelInfo = GetCreatureModelInfo(cInfo->Modelid3);
-        if (!modelInfo)
+        CreatureModelInfo const* minfo = sCreatureModelStorage.LookupEntry<CreatureModelInfo>(cInfo->Modelid3);
+        if (!minfo)
             sLog->outErrorDb("No model data exist for `Modelid3` = %u listed by creature (Entry: %u).", cInfo->Modelid3, cInfo->Entry);
     }
 
@@ -745,8 +817,8 @@ void ObjectMgr::CheckCreatureTemplate (CreatureInfo const* cInfo)
         else if (!displayScaleEntry)
             displayScaleEntry = displayEntry;
 
-        CreatureModelInfo const* modelInfo = GetCreatureModelInfo(cInfo->Modelid4);;
-        if (!modelInfo)
+        CreatureModelInfo const* minfo = sCreatureModelStorage.LookupEntry<CreatureModelInfo>(cInfo->Modelid4);
+        if (!minfo)
             sLog->outErrorDb("No model data exist for `Modelid4` = %u listed by creature (Entry: %u).", cInfo->Modelid4, cInfo->Entry);
     }
 
@@ -1072,13 +1144,9 @@ void ObjectMgr::LoadEquipmentTemplates ()
     sLog->outString();
 }
 
-CreatureModelInfo const* ObjectMgr::GetCreatureModelInfo (uint32 modelId)
+CreatureModelInfo const* ObjectMgr::GetCreatureModelInfo (uint32 modelid)
 {
-    CreatureModelContainer::const_iterator itr = CreatureModelStore.find(modelId);
-    if (itr != CreatureModelStore.end())
-        return &(itr->second);
-
-    return NULL;
+    return sCreatureModelStorage.LookupEntry<CreatureModelInfo>(modelid);
 }
 
 uint32 ObjectMgr::ChooseDisplayId (uint32 /*team*/, const CreatureInfo *cinfo, const CreatureData *data /*= NULL*/)
@@ -1115,9 +1183,9 @@ void ObjectMgr::ChooseCreatureFlags (const CreatureInfo *cinfo, uint32& npcflag,
     }
 }
 
-CreatureModelInfo const* ObjectMgr::GetCreatureModelRandomGender(uint32 &displayID)
+CreatureModelInfo const* ObjectMgr::GetCreatureModelRandomGender (uint32 display_id)
 {
-    CreatureModelInfo const* minfo = GetCreatureModelInfo(displayID);
+    CreatureModelInfo const *minfo = GetCreatureModelInfo(display_id);
     if (!minfo)
         return NULL;
 
@@ -1126,74 +1194,60 @@ CreatureModelInfo const* ObjectMgr::GetCreatureModelRandomGender(uint32 &display
     {
         CreatureModelInfo const *minfo_tmp = GetCreatureModelInfo(minfo->modelid_other_gender);
         if (!minfo_tmp)
-            sLog->outErrorDb("Model (Entry: %u) has modelid_other_gender %u not found in table `creature_model_info`. ", displayID, minfo->modelid_other_gender);
-        else
         {
-            // Model ID changed
-            displayID = minfo->modelid_other_gender;
-            return minfo_tmp;
+            sLog->outErrorDb("Model (Entry: %u) has modelid_other_gender %u not found in table `creature_model_info`. ", minfo->modelid, minfo->modelid_other_gender);
+            return minfo;          // not fatal, just use the previous one
         }
+        else
+            return minfo_tmp;
     }
-
-    return minfo;
+    else
+        return minfo;
 }
 
 void ObjectMgr::LoadCreatureModelInfo ()
 {
-    uint32 oldMSTime = getMSTime();
+    sCreatureModelStorage.Load();
 
-    QueryResult result = WorldDatabase.Query("SELECT modelid, bounding_radius, combat_reach, gender, modelid_other_gender FROM creature_model_info");
-
-    if (!result)
+    // post processing
+    for (uint32 i = 1; i < sCreatureModelStorage.MaxEntry; ++i)
     {
-        sLog->outString(">> Loaded 0 creature model definitions. DB table `creature_model_info` is empty.");
-        sLog->outString();
-        return;
-    }
+        CreatureModelInfo const *minfo = sCreatureModelStorage.LookupEntry<CreatureModelInfo>(i);
+        if (!minfo)
+            continue;
 
-    uint32 count = 0;
+        if (!sCreatureDisplayInfoStore.LookupEntry(minfo->modelid))
+            sLog->outErrorDb("Table `creature_model_info` has model for not existed display id (%u).", minfo->modelid);
 
-    do
-    {
-        Field *fields = result->Fetch();
-
-        uint32 modelId = fields[0].GetUInt32();
-
-        CreatureModelInfo modelInfo;
-
-        modelInfo.bounding_radius      = fields[1].GetFloat();
-        modelInfo.combat_reach         = fields[2].GetFloat();
-        modelInfo.gender               = fields[3].GetUInt8();
-        modelInfo.modelid_other_gender = fields[4].GetUInt32();
-
-        // Checks
-
-        if (!sCreatureDisplayInfoStore.LookupEntry(modelId))
-            sLog->outErrorDb("Table `creature_model_info` has model for not existed display id (%u).", modelId);
-
-        if (modelInfo.gender > GENDER_NONE)
+        if (minfo->gender > GENDER_NONE)
         {
-            sLog->outErrorDb("Table `creature_model_info` has wrong gender (%u) for display id (%u).", uint32(modelInfo.gender), modelId);
-            modelInfo.gender = GENDER_MALE;
+            sLog->outErrorDb("Table `creature_model_info` has wrong gender (%u) for display id (%u).", uint32(minfo->gender), minfo->modelid);
+            const_cast<CreatureModelInfo*>(minfo)->gender = GENDER_MALE;
         }
 
-        if (modelInfo.modelid_other_gender && !sCreatureDisplayInfoStore.LookupEntry(modelInfo.modelid_other_gender))
+        if (minfo->modelid_other_gender && !sCreatureDisplayInfoStore.LookupEntry(minfo->modelid_other_gender))
         {
-            sLog->outErrorDb("Table `creature_model_info` has not existed alt.gender model (%u) for existed display id (%u).", modelInfo.modelid_other_gender, modelId);
-            modelInfo.modelid_other_gender = 0;
+            sLog->outErrorDb("Table `creature_model_info` has not existed alt.gender model (%u) for existed display id (%u).", minfo->modelid_other_gender, minfo->modelid);
+            const_cast<CreatureModelInfo*>(minfo)->modelid_other_gender = 0;
         }
-
-        if (modelInfo.combat_reach < 0.1f)
-            modelInfo.combat_reach = DEFAULT_COMBAT_REACH;
-
-        CreatureModelStore[modelId] = modelInfo;
-
-        ++count;
     }
-    while (result->NextRow());
 
-    sLog->outString(">> Loaded %u creature model based info in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u creature model based info", sCreatureModelStorage.RecordCount);
     sLog->outString();
+
+    // check if combat_reach is valid
+    for (uint32 i = 1; i < sCreatureModelStorage.MaxEntry; ++i)
+    {
+        CreatureModelInfo const* mInfo = sCreatureModelStorage.LookupEntry<CreatureModelInfo>(i);
+        if (!mInfo)
+            continue;
+
+        if (mInfo->combat_reach < 0.1f)
+        {
+            //sLog->outErrorDb("Creature model (Entry: %u) has invalid combat reach (%f), setting it to 0.5", mInfo->modelid, mInfo->combat_reach);
+            const_cast<CreatureModelInfo*>(mInfo)->combat_reach = DEFAULT_COMBAT_REACH;
+        }
+    }
 }
 
 void ObjectMgr::LoadLinkedRespawn ()
@@ -1711,7 +1765,15 @@ bool ObjectMgr::MoveCreData (uint32 guid, uint32 mapId, Position pos)
         // We use spawn coords to spawn
         if (!map->Instanceable() && map->IsLoaded(data.posX, data.posY))
         {
-            Creature* creature = new Creature;
+            CreatureInfo const *ci = ObjectMgr::GetCreatureTemplate(data.id);
+            if (!ci)
+                return 0;
+
+            Creature* creature = NULL;
+            if (ci->ScriptID)
+                creature = sScriptMgr->GetCreatureScriptedClass(ci->ScriptID);
+            if (creature == NULL)
+                creature = new Creature();
 
             if (!creature->LoadFromDB(guid, map))
             {
@@ -1766,7 +1828,15 @@ uint32 ObjectMgr::AddCreData (uint32 entry, uint32 /*team*/, uint32 mapId, float
         // We use spawn coords to spawn
         if (!map->Instanceable() && !map->IsRemovalGrid(x, y))
         {
-            Creature* creature = new Creature;
+            CreatureInfo const *ci = ObjectMgr::GetCreatureTemplate(entry);
+            if (!ci)
+                return 0;
+
+            Creature* creature = NULL;
+            if (ci->ScriptID)
+                creature = sScriptMgr->GetCreatureScriptedClass(ci->ScriptID);
+            if (creature == NULL)
+                creature = new Creature();
 
             if (!creature->LoadFromDB(guid, map))
             {
@@ -2443,7 +2513,7 @@ void ObjectMgr::LoadItemPrototypes ()
         if (proto->Bonding >= MAX_BIND_TYPE)
             sLog->outErrorDb("Item (Entry: %u) has wrong Bonding value (%u)", i, proto->Bonding);
 
-        if (proto->PageText && !GetPageText(proto->PageText))
+        if (proto->PageText && !sPageTextStore.LookupEntry<PageText>(proto->PageText))
             sLog->outErrorDb("Item (Entry: %u) has non existing first page (Id:%u)", i, proto->PageText);
 
         if (proto->LockID && !sLockStore.LookupEntry(proto->LockID))
@@ -2718,74 +2788,18 @@ void ObjectMgr::LoadItemSetNames ()
     sLog->outString(">> Loaded %u item set names", count);
 }
 
-void ObjectMgr::LoadVehicleTemplateAccessories()
-{
-    uint32 oldMSTime = getMSTime();
-
-    m_VehicleTemplateAccessoryMap.clear();                           // needed for reload case
-
-    uint32 count = 0;
-
-    QueryResult result = WorldDatabase.Query("SELECT `entry`,`accessory_entry`,`seat_id`,`minion`,`summontype`,`summontimer` FROM `vehicle_template_accessory`");
-
-    if (!result)
-    {
-        sLog->outErrorDb(">> Loaded 0 vehicle template accessories. DB table `vehicle_template_accessory` is empty.");
-        sLog->outString();
-        return;
-    }
-
-    do
-    {
-        Field *fields = result->Fetch();
-
-        uint32 uiEntry      = fields[0].GetUInt32();
-        uint32 uiAccessory  = fields[1].GetUInt32();
-        int8   uiSeat       = int8(fields[2].GetInt16());
-        bool   bMinion      = fields[3].GetBool();
-        uint8  uiSummonType = fields[4].GetUInt8();
-        uint32 uiSummonTimer= fields[5].GetUInt32();
-
-        if (!sCreatureStorage.LookupEntry<CreatureInfo>(uiEntry))
-        {
-            sLog->outErrorDb("Table `vehicle_template_accessory`: creature template entry %u does not exist.", uiEntry);
-            continue;
-        }
-
-        if (!sCreatureStorage.LookupEntry<CreatureInfo>(uiAccessory))
-        {
-            sLog->outErrorDb("Table `vehicle_template_accessory`: Accessory %u does not exist.", uiAccessory);
-            continue;
-        }
-
-        if (mSpellClickInfoMap.find(uiEntry) == mSpellClickInfoMap.end())
-        {
-            sLog->outErrorDb("Table `vehicle_template_accessory`: creature template entry %u has no data in npc_spellclick_spells", uiEntry);
-            continue;
-        }
-
-        m_VehicleTemplateAccessoryMap[uiEntry].push_back(VehicleAccessory(uiAccessory, uiSeat, bMinion));
-
-        ++count;
-    }
-    while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Vehicle Template Accessories in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-}
-
 void ObjectMgr::LoadVehicleAccessories ()
 {
     m_VehicleAccessoryMap.clear();          // needed for reload case
 
     uint32 count = 0;
 
-    QueryResult result = WorldDatabase.Query("SELECT `guid`,`accessory_entry`,`seat_id`,`minion` FROM `vehicle_accessory`");
+    QueryResult result = WorldDatabase.Query("SELECT `entry`, `accessory_entry`, `seat_id`, `minion` FROM `vehicle_accessory`");
 
     if (!result)
     {
         sLog->outString();
-        sLog->outErrorDb(">> Loaded 0 vehicle accessories. DB table `vehicle_accessory` is empty.");
+        sLog->outErrorDb(">> Loaded 0 LoadVehicleAccessor. DB table `vehicle_accessory` is empty.");
         return;
     }
 
@@ -2793,10 +2807,16 @@ void ObjectMgr::LoadVehicleAccessories ()
     {
         Field *fields = result->Fetch();
 
-        uint32 uiGUID       = fields[0].GetUInt32();
-        uint32 uiAccessory  = fields[1].GetUInt32();
-        int8   uiSeat       = int8(fields[2].GetInt16());
-        bool   bMinion      = fields[3].GetBool();
+        uint32 uiEntry = fields[0].GetUInt32();
+        uint32 uiAccessory = fields[1].GetUInt32();
+        int8 uiSeat = int8(fields[2].GetInt16());
+        bool bMinion = fields[3].GetBool();
+
+        if (!sCreatureStorage.LookupEntry<CreatureInfo>(uiEntry))
+        {
+            sLog->outErrorDb("Table `vehicle_accessory`: creature template entry %u does not exist.", uiEntry);
+            continue;
+        }
 
         if (!sCreatureStorage.LookupEntry<CreatureInfo>(uiAccessory))
         {
@@ -2804,7 +2824,7 @@ void ObjectMgr::LoadVehicleAccessories ()
             continue;
         }
 
-        m_VehicleAccessoryMap[uiGUID].push_back(VehicleAccessory(uiAccessory, uiSeat, bMinion));
+        m_VehicleAccessoryMap[uiEntry].push_back(VehicleAccessory(uiAccessory, uiSeat, bMinion));
 
         ++count;
     }
@@ -3685,6 +3705,282 @@ void ObjectMgr::BuildPlayerLevelInfo (uint8 race, uint8 _class, uint8 level, Pla
             break;
         }
     }
+}
+
+void ObjectMgr::LoadGuilds ()
+{
+    PreparedStatement* stmt = NULL;
+    PreparedQueryResult result;
+
+    sLog->outString("Loading Guilds...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILDS);
+    result = CharacterDatabase.Query(stmt);
+    if (!result)
+    {
+        sLog->outString(">> Loaded 0 guild definitions");
+        sLog->outString();
+        return;
+    }
+    mGuildMap.resize(m_guildId, NULL);          // Reserve space and initialize storage for loading guilds
+    // 1. Load all guilds
+    uint64 rowCount = result->GetRowCount();
+    do
+    {
+        Field* fields = result->Fetch();
+        Guild* pNewGuild = new Guild();
+        if (!pNewGuild->LoadFromDB(fields))
+        {
+            delete pNewGuild;
+            continue;
+        }
+        AddGuild(pNewGuild);
+    }
+    while (result->NextRow());
+    sLog->outString();
+    sLog->outString(">> Loaded " UI64FMTD " guilds definitions", rowCount);
+    sLog->outString();
+
+    // 2. Load all guild ranks
+    sLog->outString("Loading guild ranks...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_RANKS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadRankFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Loaded " UI64FMTD " ranks for all the guilds", rowCount);
+    sLog->outString();
+
+    // 3. Load all guild members
+    sLog->outString("Loading guild members...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_MEMBERS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadMemberFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Loaded " UI64FMTD " members from all the guilds", rowCount);
+    sLog->outString();
+
+    // 4. Load all guild bank tab rights
+    sLog->outString("Loading bank tab rights...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_BANK_RIGHTS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadBankRightFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Loaded " UI64FMTD " bank tab rights for all the guilds", rowCount);
+    sLog->outString();
+
+    // 5. Load all event logs
+    sLog->outString("Loading guild event logs...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_EVENTLOGS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadEventLogFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Loaded " UI64FMTD " event logs for all the guilds", rowCount);
+    sLog->outString();
+
+    // 6. Load all bank event logs
+    sLog->outString("Loading guild bank event logs...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_BANK_EVENTLOGS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadBankEventLogFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Loaded " UI64FMTD " bank event logs for all the guilds", rowCount);
+    sLog->outString();
+
+    // 7. Load all guild bank tabs
+    sLog->outString("Loading guild bank tabs...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_BANK_TABS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadBankTabFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Loaded " UI64FMTD " bank tabs for all the guilds", rowCount);
+    sLog->outString();
+
+    // 8. Fill all guild bank tabs
+    sLog->outString("Filling bank tabs with items...");
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GUILD_BANK_ITEMS);
+    result = CharacterDatabase.Query(stmt);
+    if (result)
+    {
+        rowCount = result->GetRowCount();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guildId = fields[11].GetUInt32();
+            if (Guild* pGuild = GetGuildById(guildId))
+                pGuild->LoadBankItemFromDB(fields);
+        }
+        while (result->NextRow());
+    }
+    else
+    {
+        rowCount = 0;
+    }
+    sLog->outString(">> Filled bank tabs with " UI64FMTD " items for all the guilds", rowCount);
+    sLog->outString();
+
+    // 9. Validate loaded guild data
+    uint32 totalGuilds = 0;
+    std::set<Guild*> rm;          // temporary storage to avoid modifying GuildStore with RemoveGuild() while iterating
+    sLog->outString("Validating data of loaded guilds...");
+    for (GuildMap::iterator itr = mGuildMap.begin(); itr != mGuildMap.end(); ++itr)
+    {
+        Guild* pGuild = *itr;
+        if (pGuild)
+        {
+            if (!pGuild->Validate())
+                rm.insert(pGuild);
+            else
+                ++totalGuilds;
+        }
+    }
+    for (std::set<Guild*>::iterator itr = rm.begin(); itr != rm.end(); ++itr)
+    {
+        Guild* pGuild = *itr;
+        RemoveGuild(pGuild->GetId());
+        delete pGuild;
+    }
+    // Cleanup
+    // Delete orphan guild ranks
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_CLEAN_GUILD_RANKS);
+    CharacterDatabase.Execute(stmt);
+    // Delete orphan guild members
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_CLEAN_GUILD_MEMBERS);
+    CharacterDatabase.Execute(stmt);
+    // Delete orphan guild bank rights
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_CLEAN_GUILD_BANK_RIGHTS);
+    CharacterDatabase.Execute(stmt);
+    // Delete orphan guild bank tabs
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_CLEAN_GUILD_BANK_TABS);
+    CharacterDatabase.Execute(stmt);
+    // Delete orphan guild bank items
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_CLEAN_GUILD_BANK_ITEMS);
+    CharacterDatabase.Execute(stmt);
+
+    // Delete unused LogGuid records in guild_eventlog and guild_bank_eventlog table.
+    // You can comment these lines if you don't plan to change CONFIG_GUILD_EVENT_LOG_COUNT and CONFIG_GUILD_BANK_EVENT_LOG_COUNT
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_GUILD_EVENT_LOGS);
+    stmt->setUInt32(0, sWorld->getIntConfig(CONFIG_GUILD_EVENT_LOG_COUNT));
+    CharacterDatabase.Execute(stmt);
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_GUILD_BANK_EVENT_LOGS);
+    stmt->setUInt32(0, sWorld->getIntConfig(CONFIG_GUILD_BANK_EVENT_LOG_COUNT));
+    CharacterDatabase.Execute(stmt);
+
+    sLog->outString();
+    sLog->outString(">> Successfully loaded %u guilds", totalGuilds);
+}
+
+void ObjectMgr::LoadGuildRewards ()
+{
+    QueryResult result = WorldDatabase.Query("SELECT item_entry, price, achievement, standing FROM guild_rewards");
+
+    if (!result)
+    {
+        sLog->outString();
+        sLog->outString(">> Loaded 0 guild reward definitions");
+    }
+
+    uint32 count = 0;
+    do
+    {
+        Field *fields = result->Fetch();
+
+        GuildRewardsEntry* ptr = new GuildRewardsEntry;
+        ptr->item = fields[0].GetUInt32();
+        ptr->price = fields[1].GetUInt32();
+        ptr->achievement = fields[2].GetUInt32();
+        ptr->standing = fields[3].GetUInt32();
+        mGuildRewards.push_back(ptr);
+
+        ++count;
+    }
+    while (result->NextRow());
+
+    sLog->outString();
+    sLog->outString(">> Loaded %u guild reward definitions.");
 }
 
 void ObjectMgr::LoadArenaTeams ()
@@ -5130,56 +5426,45 @@ void ObjectMgr::LoadGossipScripts ()
 
 void ObjectMgr::LoadPageTexts ()
 {
-    uint32 oldMSTime = getMSTime();
+    sPageTextStore.Free();          // for reload case
 
-    QueryResult result = WorldDatabase.Query("SELECT entry, text, next_page FROM page_text");
+    sPageTextStore.Load();
+    sLog->outString(">> Loaded %u page texts", sPageTextStore.RecordCount);
+    sLog->outString();
 
-    if (!result)
+    for (uint32 i = 1; i < sPageTextStore.MaxEntry; ++i)
     {
-        sLog->outString(">> Loaded 0 page texts. DB table `page_text` is empty!");
-        sLog->outString();
-        return;
-    }
+        // check data correctness
+        PageText const* page = sPageTextStore.LookupEntry<PageText>(i);
+        if (!page)
+            continue;
 
-    uint32 count = 0;
-    do
-    {
-        Field* fields = result->Fetch();
-
-        const char* text = fields[1].GetCString();
-
-        PageText pageText;
-
-        pageText.Text     = fields[1].GetString();
-        pageText.NextPage = fields[2].GetInt16();
-
-        PageTextStore[fields[0].GetUInt32()] = pageText;
-
-        ++count;
-    }
-    while (result->NextRow());
-
-    for (PageTextContainer::const_iterator itr = PageTextStore.begin(); itr != PageTextStore.end(); ++itr)
-    {
-        if (itr->second.NextPage)
+        if (page->Next_Page && !sPageTextStore.LookupEntry<PageText>(page->Next_Page))
         {
-            PageTextContainer::const_iterator itr2 = PageTextStore.find(itr->second.NextPage);
-            if (itr2 == PageTextStore.end())
-                sLog->outErrorDb("Page text (Id: %u) has not existing next page (Id: %u)", itr->first, itr->second.NextPage);
+            sLog->outErrorDb("Page text (Id: %u) has not existing next page (Id:%u)", i, page->Next_Page);
+            continue;
+        }
+
+        // detect circular reference
+        std::set<uint32> checkedPages;
+        for (PageText const* pageItr = page; pageItr; pageItr = sPageTextStore.LookupEntry<PageText>(pageItr->Next_Page))
+        {
+            if (!pageItr->Next_Page)
+                break;
+            checkedPages.insert(pageItr->Page_ID);
+            if (checkedPages.find(pageItr->Next_Page) != checkedPages.end())
+            {
+                std::ostringstream ss;
+                ss << "The text page(s) ";
+                for (std::set<uint32>::iterator itr = checkedPages.begin(); itr != checkedPages.end(); ++itr)
+                    ss << *itr << " ";
+                ss << "create(s) a circular reference, which can cause the server to freeze. Changing Next_Page of page " << pageItr->Page_ID << " to 0";
+                sLog->outErrorDb("%s", ss.str().c_str());
+                const_cast<PageText*>(pageItr)->Next_Page = 0;
+                break;
+            }
         }
     }
-
-    sLog->outString(">> Loaded %u page texts in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-}
-
-PageText const* ObjectMgr::GetPageText(uint32 pageEntry)
-{
-    PageTextContainer::const_iterator itr = PageTextStore.find(pageEntry);
-    if (itr != PageTextStore.end())
-        return &(itr->second);
-
-    return NULL;
 }
 
 void ObjectMgr::LoadPageTextLocales ()
@@ -5222,53 +5507,27 @@ struct SQLInstanceLoader: public SQLStorageLoaderBase<SQLInstanceLoader>
 
 void ObjectMgr::LoadInstanceTemplate ()
 {
-    uint32 oldMSTime = getMSTime();
+    SQLInstanceLoader loader;
+    loader.Load(sInstanceTemplate);
 
-    QueryResult result = WorldDatabase.Query("SELECT map, parent, script, allowMount FROM instance_template");
-
-    if (!result)
+    for (uint32 i = 0; i < sInstanceTemplate.MaxEntry; i++)
     {
-        sLog->outString(">> Loaded 0 instance templates. DB table `page_text` is empty!");
-        sLog->outString();
-        return;
-    }
-
-    uint32 count = 0;
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint16 mapID = fields[0].GetUInt16();
-
-        if (!MapManager::IsValidMAP(mapID, true))
-        {
-            sLog->outErrorDb("ObjectMgr::LoadInstanceTemplate: bad mapid %d for template!", mapID);
+        InstanceTemplate* temp = const_cast<InstanceTemplate*>(ObjectMgr::GetInstanceTemplate(i));
+        if (!temp)
             continue;
+
+        if (!MapManager::IsValidMAP(temp->map, true))
+            sLog->outErrorDb("ObjectMgr::LoadInstanceTemplate: bad mapid %d for template!", temp->map);
+
+        if (!MapManager::IsValidMapCoord(temp->parent, temp->startLocX, temp->startLocY, temp->startLocZ, temp->startLocO))
+        {
+            sLog->outErrorDb("ObjectMgr::LoadInstanceTemplate: bad parent entrance coordinates for map id %d template!", temp->map);
+            temp->parent = 0;          // will have wrong continent 0 parent, at least existed
         }
-
-        InstanceTemplate instanceTemplate;
-
-        instanceTemplate.AllowMount = fields[3].GetBool();
-        instanceTemplate.Parent = fields[1].GetUInt16();
-        instanceTemplate.ScriptId = sObjectMgr->GetScriptId(fields[2].GetCString());
-
-        InstanceTemplateStore[mapID] = instanceTemplate;
-
-        ++count;
     }
-    while (result->NextRow());
 
-    sLog->outString(">> Loaded %u instance templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u Instance Template definitions", sInstanceTemplate.RecordCount);
     sLog->outString();
-}
-
-InstanceTemplate const* ObjectMgr::GetInstanceTemplate(uint32 mapID)
-{
-    InstanceTemplateContainer::const_iterator itr = InstanceTemplateStore.find(uint16(mapID));
-    if (itr != InstanceTemplateStore.end())
-        return &(itr->second);
-
-    return NULL;
 }
 
 void ObjectMgr::LoadInstanceEncounters ()
@@ -5853,8 +6112,9 @@ uint32 ObjectMgr::GetTaxiMountDisplayId (uint32 id, uint32 team, bool allowed_al
         }
     }
 
-    // minfo is not actually used but the mount_id was updated
     CreatureModelInfo const *minfo = sObjectMgr->GetCreatureModelRandomGender(mount_id);
+    if (minfo)
+        mount_id = minfo->modelid;
 
     return mount_id;
 }
@@ -6277,12 +6537,12 @@ AreaTrigger const* ObjectMgr::GetGoBackTrigger (uint32 Map) const
 
     if (mapEntry->IsDungeon())
     {
-        const InstanceTemplate *iTemplate = sObjectMgr->GetInstanceTemplate(Map);
+        const InstanceTemplate *iTemplate = ObjectMgr::GetInstanceTemplate(Map);
 
         if (!iTemplate)
             return NULL;
 
-        parentId = iTemplate->Parent;
+        parentId = iTemplate->parent;
         useParentDbValue = true;
     }
 
@@ -6364,7 +6624,7 @@ void ObjectMgr::SetHighestGuids ()
 
     result = CharacterDatabase.Query("SELECT MAX(guildid) FROM guild");
     if (result)
-        sGuildMgr->SetNextGuildId((*result)[0].GetUInt32()+1);
+        m_guildId = (*result)[0].GetUInt32() + 1;
 
     result = CharacterDatabase.Query("SELECT MAX(guid) FROM groups");
     if (result)
@@ -6399,6 +6659,16 @@ uint64 ObjectMgr::GenerateEquipmentSetGuid ()
         World::StopNow(ERROR_EXIT_CODE);
     }
     return m_equipmentSetGuid++;
+}
+
+uint32 ObjectMgr::GenerateGuildId ()
+{
+    if (m_guildId >= 0xFFFFFFFE)
+    {
+        sLog->outError("Guild ids overflow!! Can't continue, shutting down server. ");
+        World::StopNow(ERROR_EXIT_CODE);
+    }
+    return m_guildId++;
 }
 
 uint32 ObjectMgr::GenerateMailID ()
@@ -6673,7 +6943,7 @@ void ObjectMgr::LoadGameobjectInfo ()
 
             if (goInfo->goober.pageId)          // pageId
             {
-                if (!GetPageText(goInfo->goober.pageId))
+                if (!sPageTextStore.LookupEntry<PageText>(goInfo->goober.pageId))
                     sLog->outErrorDb("Gameobject (Entry: %u GoType: %u) have data7=%u but PageText (Entry %u) not exist.", id, goInfo->type, goInfo->goober.pageId, goInfo->goober.pageId);
             }
             CheckGONoDamageImmuneId(goInfo, goInfo->goober.noDamageImmune, 11);
@@ -6857,7 +7127,7 @@ void ObjectMgr::LoadCorpses ()
     PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_LOAD_CORPSES));
     if (!result)
     {
-        sLog->outString(">> Loaded 0 corpses. DB table `corpse` is empty.");
+        sLog->outString(">> Loaded 0 corpses. DB table `pet_name_generation` is empty.");
         sLog->outString();
         return;
     }

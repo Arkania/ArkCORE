@@ -414,12 +414,12 @@ void WorldSession::HandlePageTextQueryOpcode (WorldPacket & recv_data)
 
     while (pageID)
     {
-        PageText const* pageText = sObjectMgr->GetPageText(pageID);
+        PageText const *pPage = sPageTextStore.LookupEntry<PageText>(pageID);
         // guess size
         WorldPacket data(SMSG_PAGE_TEXT_QUERY_RESPONSE, 50);
         data << pageID;
 
-        if (!pageText)
+        if (!pPage)
         {
             data << "Item page missing.";
             data << uint32(0);
@@ -427,7 +427,7 @@ void WorldSession::HandlePageTextQueryOpcode (WorldPacket & recv_data)
         }
         else
         {
-            std::string Text = pageText->Text;
+            std::string Text = pPage->Text;
 
             int loc_idx = GetSessionDbLocaleIndex();
             if (loc_idx >= 0)
@@ -435,8 +435,8 @@ void WorldSession::HandlePageTextQueryOpcode (WorldPacket & recv_data)
                     sObjectMgr->GetLocaleString(pl->Text, loc_idx, Text);
 
             data << Text;
-            data << uint32(pageText->NextPage);
-            pageID = pageText->NextPage;
+            data << uint32(pPage->Next_Page);
+            pageID = pPage->Next_Page;
         }
         SendPacket(&data);
 

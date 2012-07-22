@@ -35,7 +35,6 @@
 #include "GridNotifiersImpl.h"
 #include "Group.h"
 #include "Guild.h"
-#include "GuildMgr.h"
 #include "Language.h"
 #include "Log.h"
 #include "Opcodes.h"
@@ -434,7 +433,7 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
     {
         if (GetPlayer()->GetGuildId())
         {
-            if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+            if (Guild * guild = sObjectMgr->GetGuildById(GetPlayer()->GetGuildId()))
             {
                 sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
@@ -448,7 +447,7 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
     {
         if (GetPlayer()->GetGuildId())
         {
-            if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+            if (Guild * guild = sObjectMgr->GetGuildById(GetPlayer()->GetGuildId()))
             {
                 sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 

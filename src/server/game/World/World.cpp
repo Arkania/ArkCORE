@@ -66,7 +66,7 @@
 #include "Language.h"
 #include "CreatureGroups.h"
 #include "Transport.h"
-#include "GuildMgr.h"
+
 #include "ScriptMgr.h"
 #include "AddonMgr.h"
 #include "LFGMgr.h"
@@ -1465,20 +1465,14 @@ void World::SetInitialWorldSettings ()
     sLog->outString("Loading Game Event Data...");          // must be after loading pools fully
     sGameEventMgr->LoadFromDB();
 
+    sLog->outString("Loading Dungeon boss data...");
+    sObjectMgr->LoadInstanceEncounters();
+
     sLog->outString("Loading LFG rewards...");
     sLFGMgr->LoadRewards();
 
-    sLog->outString("Loading UNIT_NPC_FLAG_SPELLCLICK Data..."); // must be after LoadQuests
+    sLog->outString("Loading UNIT_NPC_FLAG_SPELLCLICK Data...");
     sObjectMgr->LoadNPCSpellClickSpells();
-
-    sLog->outString("Loading Vehicle Template Accessories...");
-    sObjectMgr->LoadVehicleTemplateAccessories();                // must be after LoadCreatureTemplates() and LoadNPCSpellClickSpells()
-
-    sLog->outString("Loading Vehicle Accessories...");
-    sObjectMgr->LoadVehicleAccessories();                       // must be after LoadCreatureTemplates() and LoadNPCSpellClickSpells()
- 
-    sLog->outString("Loading Dungeon boss data...");
-    sObjectMgr->LoadInstanceEncounters();
 
     sLog->outString("Loading SpellArea Data...");          // must be after quest load
     sSpellMgr->LoadSpellAreas();
@@ -1573,11 +1567,10 @@ void World::SetInitialWorldSettings ()
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
-    sLog->outString("Loading Guilds...");
-    sGuildMgr->LoadGuilds();
+    sObjectMgr->LoadGuilds();
 
     sLog->outString("Loading Guild Rewards...");
-    sGuildMgr->LoadGuildRewards();
+    sObjectMgr->LoadGuildRewards();
 
     sLog->outString("Loading ArenaTeams...");
     sObjectMgr->LoadArenaTeams();
@@ -1673,9 +1666,6 @@ void World::SetInitialWorldSettings ()
 
     sLog->outString("Loading Creature Texts...");
     sCreatureTextMgr->LoadCreatureTexts();
-
-    sLog->outString("Loading Creature Text Locales...");
-    sCreatureTextMgr->LoadCreatureTextLocales();
 
     sLog->outString("Initializing Scripts...");
     sScriptMgr->Initialize();

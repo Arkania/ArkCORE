@@ -28,7 +28,6 @@
 #include "CellImpl.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
-#include "CreatureTextMgr.h"
 #include "icecrown_citadel.h"
 
 enum Texts

@@ -29,7 +29,6 @@
 #include "World.h"
 #include "SpellMgr.h"
 #include "Vehicle.h"
-#include "CreatureTextMgr.h"
 
 //Disable CreatureAI when charmed
 void CreatureAI::OnCharmed(bool /*apply*/)

@@ -27,6 +27,7 @@
 
 #include "UnitAI.h"
 #include "Common.h"
+#include "CreatureTextMgr.h"
 
 class WorldObject;
 class Unit;

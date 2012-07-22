@@ -80,7 +80,9 @@ Vehicle::~Vehicle ()
     for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
     {
         if (itr->second.passenger)
+        {
             itr->second.passenger->ExitVehicle();
+        }
     }
 }
 
@@ -134,7 +136,7 @@ void Vehicle::Install ()
 
 void Vehicle::InstallAllAccessories (uint32 entry)
 {
-    VehicleAccessoryList const* mVehicleList = sObjectMgr->GetVehicleAccessoryList(this);
+    VehicleAccessoryList const* mVehicleList = sObjectMgr->GetVehicleAccessoryList(entry);
     if (!mVehicleList)
         return;
 
@@ -438,8 +440,8 @@ void Vehicle::RelocatePassengers (float x, float y, float z, float ang)
     for (SeatMap::const_iterator itr = m_Seats.begin(); itr != m_Seats.end(); ++itr)
         if (Unit *passenger = itr->second.passenger)
         {
-        	ASSERT(passenger->IsInWorld());
-        	ASSERT(me->GetMap());
+			ASSERT(passenger->IsInWorld());
+         ASSERT(me->GetMap());
             
             float px = x + passenger->m_movementInfo.t_pos.m_positionX;
             float py = y + passenger->m_movementInfo.t_pos.m_positionY;

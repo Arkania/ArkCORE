@@ -5774,7 +5774,7 @@ SpellCastResult Spell::CheckCast (bool strict)
             if (sMapStore.LookupEntry(m_caster->GetMapId())->IsDungeon())
             {
                 Map const* pMap = m_caster->GetMap();
-                InstanceTemplate const* instance = sObjectMgr->GetInstanceTemplate(pMap->GetId());
+                InstanceTemplate const* instance = ObjectMgr::GetInstanceTemplate(pMap->GetId());
                 if (!instance)
                     return SPELL_FAILED_TARGET_NOT_IN_INSTANCE;
                 if (!target->Satisfy(sObjectMgr
@@ -5955,9 +5955,9 @@ SpellCastResult Spell::CheckCast (bool strict)
 
             // Ignore map check if spell have AreaId. AreaId already checked and this prevent special mount spells
             bool AllowMount = !m_caster->GetMap()->IsDungeon() || m_caster->GetMap()->IsBattlegroundOrArena();
-            InstanceTemplate const *it = sObjectMgr->GetInstanceTemplate(m_caster->GetMapId());
+            InstanceTemplate const *it = ObjectMgr::GetInstanceTemplate(m_caster->GetMapId());
             if (it)
-                AllowMount = it->AllowMount;
+                AllowMount = it->allowMount;
             if (m_caster->GetTypeId() == TYPEID_PLAYER && !AllowMount && !m_IsTriggeredSpell && !m_spellInfo->AreaGroupId)
                 return SPELL_FAILED_NO_MOUNTS_ALLOWED;
 

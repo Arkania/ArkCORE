@@ -33,6 +33,11 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(CHAR_ADD_QUEST_POOL_SAVE,
             "INSERT INTO pool_quest_save (pool_id, quest_id) VALUES (?, ?)",
             CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_OLD_GUILD_EVENT_LOGS,
+            "DELETE FROM guild_eventlog WHERE LogGuid > ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_OLD_GUILD_BANK_EVENT_LOGS,
+            "DELETE FROM guild_bank_eventlog WHERE LogGuid > ?",
+            CONNECTION_ASYNC);
     PREPARE_STATEMENT(
             CHAR_DEL_NONEXISTENT_GUILD_BANK_ITEM,
             "DELETE FROM guild_bank_item WHERE guildid = ? AND TabId = ? AND SlotId = ?",
@@ -92,9 +97,9 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CHAR_LOAD_PLAYER,
             "SELECT guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
             "position_x, position_y, position_z, map, orientation, taximask, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
-            "resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
+            "resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
             "arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
-            "health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, "
+            "health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, "
             "knownTitles, actionBars, currentPetSlot, petSlotUsed FROM characters WHERE guid = ?",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_LOAD_PLAYER_GROUP,
@@ -333,8 +338,8 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     // 0: uint32, 1: string, 2: uint32, 3: string, 4: string, 5: uint64, 6-10: uint32, 11: uint64
     PREPARE_STATEMENT(
             CHAR_ADD_GUILD,
-            "INSERT INTO guild (guildid, name, leaderguid, info, motd, createdate, EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor, BankMoney, todayXP, XPCap, xp, level) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC)
+            "INSERT INTO guild (guildid, name, leaderguid, info, motd, createdate, EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor, BankMoney, xp, level) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            CONNECTION_ASYNC);
     PREPARE_STATEMENT(CHAR_DEL_GUILD, "DELETE FROM guild WHERE guildid = ?",
             CONNECTION_ASYNC);
     // 0: uint32
@@ -463,12 +468,9 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             "UPDATE guild_rank SET rights = ? WHERE rid = ? AND guildid = ?",
             CONNECTION_ASYNC);
     // 0: uint32, 1: uint8, 2: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_SAVE_XP,
-            "UPDATE guild SET xp = ?, todayXP = ?, XPCap = ?, level = ? WHERE guildid = ?",
+    PREPARE_STATEMENT(CHAR_GUILD_SAVE_XP,
+            "UPDATE guild SET xp = ?, level = ? WHERE guildid = ?",
             CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_LOAD_GUILD_NEWS, "SELECT type, date, value1, value2, source_guid, flags FROM guild_news WHERE guildid = ? ORDER BY date DESC", CONNECTION_SYNCH);
-    PREPARE_STATEMENT(CHAR_ADD_GUILD_NEWS, "INSERT INTO guild_news (guildid, type, date, value1, value2, source_guid, flags) VALUES (?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
-
     // 1: uint64, 2, 3: uint32
     // 0-5: uint32
     PREPARE_STATEMENT(
@@ -590,9 +592,84 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             "UPDATE guild_member SET BankResetTimeTab5 = 0 WHERE guildid = ? AND rank = ?",
             CONNECTION_ASYNC);
     PREPARE_STATEMENT(
+            CHAR_LOAD_GUILDS,
+            //          0          1       2             3              4              5              6
+            "SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
+            //   7                  8       9       10            11           12                  13  14
+            "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level "
+            "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC",
+            CONNECTION_SYNCH);
+    //                                              0        1    2      3       4
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_RANKS,
+            "SELECT guildid, rid, rname, rights, BankMoneyPerDay FROM guild_rank ORDER BY guildid ASC, rid ASC",
+            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
             CHAR_LOAD_CHAR_DATA_FOR_GUILD,
             "SELECT name, level, class, zone, account FROM characters WHERE guid = ?",
             CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_MEMBERS,
+            //          0        1        2     3      4        5                   6
+            "SELECT guildid, gm.guid, rank, pnote, offnote, BankResetTimeMoney, BankRemMoney, "
+            //   7                  8                 9                  10                11                 12
+            "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
+            //   13                 14                15                 16                17                 18
+            "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
+            //   19                 20                21                 22
+            "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
+            //   23      24       25       26      27         28
+            "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
+            "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC",
+            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_BANK_RIGHTS,
+            //          0        1      2    3        4
+            "SELECT guildid, TabId, rid, gbright, SlotPerDay FROM guild_bank_right ORDER BY guildid ASC, TabId ASC",
+            CONNECTION_SYNCH);
+    //                                                  0        1      2        3        4
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_BANK_TABS,
+            "SELECT guildid, TabId, TabName, TabIcon, TabText FROM guild_bank_tab ORDER BY guildid ASC, TabId ASC",
+            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_EVENTLOGS,
+            //          0        1        2          3            4            5        6
+            "SELECT guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp FROM guild_eventlog ORDER BY TimeStamp DESC, LogGuid DESC",
+            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_BANK_EVENTLOGS,
+            //          0        1      2        3          4           5            6               7          8
+            "SELECT guildid, TabId, LogGuid, EventType, PlayerGuid, ItemOrMoney, ItemStackCount, DestTabId, TimeStamp FROM guild_bank_eventlog ORDER BY TimeStamp DESC, LogGuid DESC",
+            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            CHAR_LOAD_GUILD_BANK_ITEMS,
+            //          0            1                2      3         4        5      6             7                 8           9           10
+            "SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, playedTime, text, "
+            //   11       12     13      14         15
+            "guildid, TabId, SlotId, item_guid, itemEntry FROM guild_bank_item gbi INNER JOIN item_instance ii ON gbi.item_guid = ii.guid",
+            CONNECTION_SYNCH);
+
+    PREPARE_STATEMENT(
+            CHAR_CLEAN_GUILD_RANKS,
+            "DELETE FROM guild_rank WHERE guildId NOT IN (SELECT guildid FROM guild)",
+            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(
+            CHAR_CLEAN_GUILD_MEMBERS,
+            "DELETE FROM guild_member WHERE guildId NOT IN (SELECT guildid FROM guild)",
+            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(
+            CHAR_CLEAN_GUILD_BANK_TABS,
+            "DELETE FROM guild_bank_tab WHERE guildId NOT IN (SELECT guildid FROM guild)",
+            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(
+            CHAR_CLEAN_GUILD_BANK_RIGHTS,
+            "DELETE FROM guild_bank_right WHERE guildId NOT IN (SELECT guildid FROM guild)",
+            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(
+            CHAR_CLEAN_GUILD_BANK_ITEMS,
+            "DELETE FROM guild_bank_item WHERE guildId NOT IN (SELECT guildid FROM guild)",
+            CONNECTION_ASYNC);
 
     // Chat channel handling
     PREPARE_STATEMENT(
@@ -739,6 +816,10 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
             CHAR_DEL_OLD_CORPSES,
             "DELETE FROM corpse WHERE corpseType = 0 OR time < (UNIX_TIMESTAMP(NOW()) - ?)",
             CONNECTION_ASYNC);
+    PREPARE_STATEMENT(
+            CHAR_RESET_NONEXISTENT_INSTANCE_FOR_CORPSES,
+            "UPDATE corpse SET instanceId = 0 WHERE instanceId > 0 AND instanceId NOT IN (SELECT id FROM instance)",
+            CONNECTION_SYNCH);
 
     // Creature respawn
     PREPARE_STATEMENT(CHAR_DEL_CREATURE_RESPAWN,
@@ -751,6 +832,10 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
     PREPARE_STATEMENT(
             CHAR_GET_MAX_CREATURE_RESPAWNS,
             "SELECT MAX(respawnTime), instanceId FROM creature_respawn WHERE instanceId > 0 GROUP BY instanceId",
+            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(
+            CHAR_DEL_NONEXISTENT_INSTANCE_CREATURE_RESPAWNS,
+            "DELETE FROM creature_respawn WHERE instanceId > 0 AND instanceId NOT IN (SELECT instanceId FROM instance)",
             CONNECTION_SYNCH);
 
     // Gameobject respawn

@@ -56,7 +56,6 @@
 #include "GameObjectAI.h"
 #include "Group.h"
 #include "Guild.h"
-#include "GuildMgr.h"
 
 void WorldSession::HandleRepopRequestOpcode (WorldPacket & recv_data)
 {
@@ -313,7 +312,7 @@ void WorldSession::HandleWhoOpcode (WorldPacket & recv_data)
         if (!(wplayer_name.empty() || wpname.find(wplayer_name) != std::wstring::npos))
         continue;
 
-        std::string gname = sGuildMgr->GetGuildNameById(itr->second->GetGuildId());
+        std::string gname = sObjectMgr->GetGuildNameById(itr->second->GetGuildId());
         std::wstring wgname;
         if (!Utf8toWStr(gname, wgname))
         continue;
@@ -1260,7 +1259,7 @@ void WorldSession::HandleInspectOpcode (WorldPacket& recv_data)
     plr->BuildEnchantmentsInfoData(&data);
     if (uint32 guildId = plr->GetGuildId())
     {
-        if (Guild* pGuild = sGuildMgr->GetGuildById(guildId))
+        if (Guild* pGuild = sObjectMgr->GetGuildById(guildId))
         {
             data << uint64(pGuild->GetId());            // not sure
             data << uint32(pGuild->GetLevel());         // guild level
@@ -1748,6 +1747,34 @@ void WorldSession::HandleReadyForAccountDataTimes (WorldPacket& /*recv_data*/)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_READY_FOR_ACCOUNT_DATA_TIMES");
 
     SendAccountDataTimes(GLOBAL_CACHE_MASK);
+}
+
+void WorldSession::SendSetPhaseShift (uint32 PhaseShift, uint32 MapID)
+{
+    if (!_player)
+        return;
+
+    WorldPacket data(SMSG_SET_PHASE_SHIFT, 4);
+    data << uint64(_player->GetGUID());
+    data << uint32(0);          // Count of bytes - Array1 - Unused
+    data << uint32(0);          // Count of bytes - Array2 - TerrainSwap, unused.
+
+    data << uint32(2);          // Count of bytes - Array3 - Phases
+    data << uint16(PhaseShift);
+
+    if (MapID)
+    {
+        data << uint32(2);          // Count of bytes - Array4 - TerrainSwap
+        data << uint16(MapID);
+    }
+    else
+        data << uint32(0);
+
+    if (!PhaseShift)
+        data << uint32(0x08);
+    else
+        data << uint32(0);          // Flags (seem to be from Phase.dbc, not really sure)
+    SendPacket(&data);
 }
 
 void WorldSession::HandleHearthAndResurrect (WorldPacket& /*recv_data*/)

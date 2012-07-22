@@ -30,7 +30,6 @@
 #include "Log.h"
 #include "Opcodes.h"
 #include "Guild.h"
-#include "GuildMgr.h"
 #include "ArenaTeam.h"
 #include "GossipDef.h"
 #include "SocialMgr.h"
@@ -100,9 +99,9 @@ void WorldSession::HandlePetitionBuyOpcode (WorldPacket & recv_data)
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
     uint32 charterid = GUILD_CHARTER;
-    uint64 cost = GUILD_CHARTER_COST;
+    uint32 cost = GUILD_CHARTER_COST;
 
-    if (sGuildMgr->GetGuildByName(name))
+    if (sObjectMgr->GetGuildByName(name))
     {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, name);
         return;
@@ -296,7 +295,7 @@ void WorldSession::HandlePetitionRenameOpcode (WorldPacket & recv_data)
     if (!item)
         return;
 
-    if (sGuildMgr->GetGuildByName(newname))
+    if (sObjectMgr->GetGuildByName(newname))
     {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, newname);
         return;
@@ -545,7 +544,7 @@ void WorldSession::HandleTurnInPetitionOpcode (WorldPacket & recv_data)
         return;
     }
 
-    if (sGuildMgr->GetGuildByName(name))
+    if (sObjectMgr->GetGuildByName(name))
     {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, name);
         return;
@@ -567,7 +566,7 @@ void WorldSession::HandleTurnInPetitionOpcode (WorldPacket & recv_data)
     }
 
     // register guild and add guildmaster
-    sGuildMgr->AddGuild(guild);
+    sObjectMgr->AddGuild(guild);
 
     // add members
     for (uint8 i = 0; i < signs; ++i)
