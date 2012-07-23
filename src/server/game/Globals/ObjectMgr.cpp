@@ -1217,7 +1217,7 @@ void ObjectMgr::LoadCreatureModelInfo ()
             continue;
 
         if (!sCreatureDisplayInfoStore.LookupEntry(minfo->modelid))
-            sLog->outErrorDb("Table `creature_model_info` has model for not existed display id (%u).", minfo->modelid);
+            sLog->outErrorDb("Table `creature_model_info` has model for nonexistent display id (%u).", minfo->modelid);
 
         if (minfo->gender > GENDER_NONE)
         {
@@ -1227,7 +1227,7 @@ void ObjectMgr::LoadCreatureModelInfo ()
 
         if (minfo->modelid_other_gender && !sCreatureDisplayInfoStore.LookupEntry(minfo->modelid_other_gender))
         {
-            sLog->outErrorDb("Table `creature_model_info` has not existed alt.gender model (%u) for existed display id (%u).", minfo->modelid_other_gender, minfo->modelid);
+            sLog->outErrorDb("Table `creature_model_info` has nonexistent alt.gender model (%u) for existing display id (%u).", minfo->modelid_other_gender, minfo->modelid);
             const_cast<CreatureModelInfo*>(minfo)->modelid_other_gender = 0;
         }
     }
