@@ -1596,7 +1596,6 @@ public:
     {
         return GetUInt64Value(UNIT_FIELD_SUMMONEDBY);
     }
-    void SetOwnerGUID(uint64 owner);
     uint64 GetCreatorGUID () const
     {
         return GetUInt64Value(UNIT_FIELD_CREATEDBY);
