@@ -2640,7 +2640,7 @@ Arena.ArenaSeason.InProgress = 1
 #        Description: Start rating for new arena teams.
 #        Default:     1500
 
-Arena.ArenaStartRating = 1500
+Arena.ArenaStartRating = 0
 
 #
 #    Arena.ArenaStartPersonalRating
