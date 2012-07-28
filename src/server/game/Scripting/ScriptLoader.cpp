@@ -133,7 +133,6 @@ void AddSC_boss_chimaeron();
 void AddSC_instance_blackwing_descent();
 void AddSC_deadmines();//Deadmines
 void AddSC_instance_deadmines();
-void AddSC_boss_mr_smite();
 void AddSC_boss_glubtok();
 void AddSC_gnomeregan();//Gnomeregan
 void AddSC_instance_gnomeregan();
@@ -816,7 +815,6 @@ void AddEasternKingdomsScripts ()
     AddSC_instance_blackwing_descent();
     AddSC_deadmines();//Deadmines
     AddSC_instance_deadmines();
-    AddSC_boss_mr_smite();
     AddSC_boss_glubtok();
     AddSC_gnomeregan();//Gnomeregan
     AddSC_instance_gnomeregan();

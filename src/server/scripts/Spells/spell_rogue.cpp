@@ -39,10 +39,7 @@ enum RogueSpells
 class spell_rog_cheat_death: public SpellScriptLoader
 {
 public:
-    spell_rog_cheat_death () :
-            SpellScriptLoader("spell_rog_cheat_death")
-    {
-    }
+    spell_rog_cheat_death () : SpellScriptLoader("spell_rog_cheat_death") { }
 
     class spell_rog_cheat_death_AuraScript: public AuraScript
     {
@@ -113,10 +110,7 @@ public:
 class spell_rog_nerves_of_steel: public SpellScriptLoader
 {
 public:
-    spell_rog_nerves_of_steel () :
-            SpellScriptLoader("spell_rog_nerves_of_steel")
-    {
-    }
+    spell_rog_nerves_of_steel () : SpellScriptLoader("spell_rog_nerves_of_steel") { }
 
     class spell_rog_nerves_of_steel_AuraScript: public AuraScript
     {
@@ -160,10 +154,7 @@ public:
 class spell_rog_preparation: public SpellScriptLoader
 {
 public:
-    spell_rog_preparation () :
-            SpellScriptLoader("spell_rog_preparation")
-    {
-    }
+    spell_rog_preparation () : SpellScriptLoader("spell_rog_preparation") { }
 
     class spell_rog_preparation_SpellScript: public SpellScript
     {
@@ -227,10 +218,7 @@ public:
 class spell_rog_prey_on_the_weak: public SpellScriptLoader
 {
 public:
-    spell_rog_prey_on_the_weak () :
-            SpellScriptLoader("spell_rog_prey_on_the_weak")
-    {
-    }
+    spell_rog_prey_on_the_weak () : SpellScriptLoader("spell_rog_prey_on_the_weak") { }
 
     class spell_rog_prey_on_the_weak_AuraScript: public AuraScript
     {
@@ -273,10 +261,7 @@ public:
 class spell_rog_shiv: public SpellScriptLoader
 {
 public:
-    spell_rog_shiv () :
-            SpellScriptLoader("spell_rog_shiv")
-    {
-    }
+    spell_rog_shiv () : SpellScriptLoader("spell_rog_shiv") { }
 
     class spell_rog_shiv_SpellScript: public SpellScript
     {
@@ -314,10 +299,7 @@ public:
 class spell_rog_deadly_poison: public SpellScriptLoader
 {
 public:
-    spell_rog_deadly_poison () :
-            SpellScriptLoader("spell_rog_deadly_poison")
-    {
-    }
+    spell_rog_deadly_poison () : SpellScriptLoader("spell_rog_deadly_poison") { }
 
     class spell_rog_deadly_poison_SpellScript: public SpellScript
     {

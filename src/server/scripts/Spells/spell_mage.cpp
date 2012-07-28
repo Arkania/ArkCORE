@@ -45,10 +45,7 @@ enum MageSpells
 class spell_mage_cold_snap: public SpellScriptLoader
 {
 public:
-    spell_mage_cold_snap () :
-            SpellScriptLoader("spell_mage_cold_snap")
-    {
-    }
+    spell_mage_cold_snap () : SpellScriptLoader("spell_mage_cold_snap") { }
 
     class spell_mage_cold_snap_SpellScript: public SpellScript
     {
@@ -91,10 +88,7 @@ public:
 class spell_mage_polymorph_cast_visual: public SpellScriptLoader
 {
 public:
-    spell_mage_polymorph_cast_visual () :
-            SpellScriptLoader("spell_mage_polymorph_visual")
-    {
-    }
+    spell_mage_polymorph_cast_visual () : SpellScriptLoader("spell_mage_polymorph_visual") { }
 
     class spell_mage_polymorph_cast_visual_SpellScript: public SpellScript
     {
@@ -137,10 +131,7 @@ const uint32 spell_mage_polymorph_cast_visual::spell_mage_polymorph_cast_visual_
 class spell_mage_incanters_absorbtion_manashield: public SpellScriptLoader
 {
 public:
-    spell_mage_incanters_absorbtion_manashield () :
-            SpellScriptLoader("spell_mage_incanters_absorbtion_manashield")
-    {
-    }
+    spell_mage_incanters_absorbtion_manashield () : SpellScriptLoader("spell_mage_incanters_absorbtion_manashield") { }
 
     class spell_mage_incanters_absorbtion_manashield_AuraScript: public AuraScript
     {
@@ -183,10 +174,7 @@ public:
 class spell_mage_blast_wave: public SpellScriptLoader
 {
 public:
-    spell_mage_blast_wave () :
-            SpellScriptLoader("spell_mage_blast_wave")
-    {
-    }
+    spell_mage_blast_wave () : SpellScriptLoader("spell_mage_blast_wave") { }
 
     /* Produces the following error:
 		TSCR: Spell `11113` Effect `Index: EFFECT_2 Name: 98` of script `spell_mage_blast_wave` did not match dbc effect data - handler bound to hook `OnEffectHitTarget` of SpellScript won't be executed
@@ -222,10 +210,7 @@ public:
 class spell_mage_summon_water_elemental: public SpellScriptLoader
 {
 public:
-    spell_mage_summon_water_elemental () :
-            SpellScriptLoader("spell_mage_summon_water_elemental")
-    {
-    }
+    spell_mage_summon_water_elemental () : SpellScriptLoader("spell_mage_summon_water_elemental") { }
 
     /* Produces the following error:
 		TSCR: Spell `31687` Effect `Index: EFFECT_0 Name: 3` of script `spell_mage_summon_water_elemental` did not match dbc effect data - handler bound to hook `OnEffectHit` of SpellScript won't be executed

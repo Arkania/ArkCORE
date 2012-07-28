@@ -58,10 +58,7 @@ enum ShamanSpells
 class spell_sha_searing_bolt: public SpellScriptLoader
 {
 public:
-    spell_sha_searing_bolt () :
-            SpellScriptLoader("spell_sha_searing_bolt")
-    {
-    }
+    spell_sha_searing_bolt () : SpellScriptLoader("spell_sha_searing_bolt") { }
 
     class spell_sha_searing_bolt_SpellScript: public SpellScript
     {
@@ -106,10 +103,7 @@ public:
 class spell_sha_earthquake: public SpellScriptLoader
 {
 public:
-    spell_sha_earthquake () :
-            SpellScriptLoader("spell_sha_earthquake")
-    {
-    }
+    spell_sha_earthquake () : SpellScriptLoader("spell_sha_earthquake") { }
 
     class spell_sha_earthquake_SpellScript: public SpellScript
     {
@@ -148,10 +142,7 @@ public:
 class spell_sha_astral_shift: public SpellScriptLoader
 {
 public:
-    spell_sha_astral_shift () :
-            SpellScriptLoader("spell_sha_astral_shift")
-    {
-    }
+    spell_sha_astral_shift () : SpellScriptLoader("spell_sha_astral_shift") { }
 
     class spell_sha_astral_shift_AuraScript: public AuraScript
     {
@@ -190,10 +181,7 @@ public:
 class spell_sha_fire_nova: public SpellScriptLoader
 {
 public:
-    spell_sha_fire_nova () :
-            SpellScriptLoader("spell_sha_fire_nova")
-    {
-    }
+    spell_sha_fire_nova () : SpellScriptLoader("spell_sha_fire_nova") { }
 
     class spell_sha_fire_nova_SpellScript: public SpellScript
     {
@@ -239,10 +227,7 @@ public:
 class spell_sha_earthbind_totem: public SpellScriptLoader
 {
 public:
-    spell_sha_earthbind_totem () :
-            SpellScriptLoader("spell_sha_earthbind_totem")
-    {
-    }
+    spell_sha_earthbind_totem () : SpellScriptLoader("spell_sha_earthbind_totem") { }
 
     class spell_sha_earthbind_totem_AuraScript: public AuraScript
     {
@@ -297,10 +282,7 @@ public:
 class spell_sha_unleash_elements: public SpellScriptLoader
 {
 public:
-    spell_sha_unleash_elements () :
-            SpellScriptLoader("spell_sha_unleash_elements")
-    {
-    }
+    spell_sha_unleash_elements () : SpellScriptLoader("spell_sha_unleash_elements") { }
 
     class spell_sha_unleash_elements_SpellScript: public SpellScript
     {
@@ -387,10 +369,7 @@ public:
 class spell_sha_totemic_wrath: public SpellScriptLoader
 {
 public:
-    spell_sha_totemic_wrath () :
-            SpellScriptLoader("spell_sha_totemic_wrath")
-    {
-    }
+    spell_sha_totemic_wrath () : SpellScriptLoader("spell_sha_totemic_wrath") { }
 
     class spell_sha_totemic_wrath_AuraScript: public AuraScript
     {
@@ -437,10 +416,7 @@ public:
 class spell_sha_fulmination: public SpellScriptLoader
 {
 public:
-    spell_sha_fulmination () :
-            SpellScriptLoader("spell_sha_fulmination")
-    {
-    }
+    spell_sha_fulmination () : SpellScriptLoader("spell_sha_fulmination") { }
 
     class spell_sha_fulminationSpellScript: public SpellScript
     {
@@ -512,10 +488,7 @@ public:
 class spell_sha_healing_rain: public SpellScriptLoader
 {
 public:
-    spell_sha_healing_rain () :
-            SpellScriptLoader("spell_sha_healing_rain")
-    {
-    }
+    spell_sha_healing_rain () : SpellScriptLoader("spell_sha_healing_rain") { }
 
     class spell_sha_healing_rain_AuraScript: public AuraScript
     {
@@ -596,7 +569,7 @@ class spell_sha_mana_tide : public SpellScriptLoader
 void AddSC_shaman_spell_scripts ()
 {
     new spell_sha_astral_shift();
-	new spell_sha_mana_tide();
+    new spell_sha_mana_tide();
     new spell_sha_fire_nova();
     new spell_sha_earthbind_totem();
     new spell_sha_unleash_elements();

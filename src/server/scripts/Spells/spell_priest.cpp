@@ -44,10 +44,7 @@ enum PriestSpells
 class spell_pri_guardian_spirit: public SpellScriptLoader
 {
 public:
-    spell_pri_guardian_spirit () :
-            SpellScriptLoader("spell_pri_guardian_spirit")
-    {
-    }
+    spell_pri_guardian_spirit () : SpellScriptLoader("spell_pri_guardian_spirit") { }
 
     class spell_pri_guardian_spirit_AuraScript: public AuraScript
     {
@@ -107,10 +104,7 @@ public:
 class spell_pri_mana_burn: public SpellScriptLoader
 {
 public:
-    spell_pri_mana_burn () :
-            SpellScriptLoader("spell_pri_mana_burn")
-    {
-    }
+    spell_pri_mana_burn () : SpellScriptLoader("spell_pri_mana_burn") { }
 
     class spell_pri_mana_burn_SpellScript: public SpellScript
     {
@@ -144,10 +138,7 @@ public:
 class spell_pri_pain_and_suffering_proc: public SpellScriptLoader
 {
 public:
-    spell_pri_pain_and_suffering_proc () :
-            SpellScriptLoader("spell_pri_pain_and_suffering_proc")
-    {
-    }
+    spell_pri_pain_and_suffering_proc () : SpellScriptLoader("spell_pri_pain_and_suffering_proc") { }
 
     // 47948 Pain and Suffering (proc)
     class spell_pri_pain_and_suffering_proc_SpellScript: public SpellScript
@@ -176,10 +167,7 @@ public:
 class spell_pri_mind_sear: public SpellScriptLoader
 {
 public:
-    spell_pri_mind_sear () :
-            SpellScriptLoader("spell_pri_mind_sear")
-    {
-    }
+    spell_pri_mind_sear () : SpellScriptLoader("spell_pri_mind_sear") { }
 
     class spell_pri_mind_sear_SpellScript: public SpellScript
     {
@@ -206,10 +194,7 @@ public:
 class spell_pri_penance: public SpellScriptLoader
 {
 public:
-    spell_pri_penance () :
-            SpellScriptLoader("spell_pri_penance")
-    {
-    }
+    spell_pri_penance () : SpellScriptLoader("spell_pri_penance") { }
 
     class spell_pri_penance_SpellScript: public SpellScript
     {
@@ -265,10 +250,7 @@ public:
 class spell_pri_reflective_shield_trigger: public SpellScriptLoader
 {
 public:
-    spell_pri_reflective_shield_trigger () :
-            SpellScriptLoader("spell_pri_reflective_shield_trigger")
-    {
-    }
+    spell_pri_reflective_shield_trigger () : SpellScriptLoader("spell_pri_reflective_shield_trigger") { }
 
     class spell_pri_reflective_shield_trigger_AuraScript: public AuraScript
     {
@@ -315,10 +297,7 @@ public:
 class spell_priest_flash_heal: public SpellScriptLoader
 {
 public:
-    spell_priest_flash_heal () :
-            SpellScriptLoader("spell_priest_flash_heal")
-    {
-    }
+    spell_priest_flash_heal () : SpellScriptLoader("spell_priest_flash_heal") { }
 
     class spell_priest_flash_heal_SpellScript: public SpellScript
     {
@@ -357,10 +336,7 @@ public:
 class spell_pri_shadow_word_death: public SpellScriptLoader
 {
 public:
-    spell_pri_shadow_word_death () :
-            SpellScriptLoader("spell_pri_shadow_word_death")
-    {
-    }
+    spell_pri_shadow_word_death () : SpellScriptLoader("spell_pri_shadow_word_death") { }
 
     class spell_pri_shadow_word_death_SpellScript: public SpellScript
     {
@@ -410,10 +386,7 @@ public:
 class spell_pri_mind_blast: public SpellScriptLoader
 {
 public:
-    spell_pri_mind_blast () :
-            SpellScriptLoader("spell_pri_mind_blast")
-    {
-    }
+    spell_pri_mind_blast () : SpellScriptLoader("spell_pri_mind_blast") { }
 
     class spell_pri_mind_blast_SpellScript: public SpellScript
     {
@@ -452,10 +425,7 @@ public:
 class spell_pri_power_word_fortitude: public SpellScriptLoader
 {
 public:
-    spell_pri_power_word_fortitude () :
-            SpellScriptLoader("spell_pri_power_word_fortitude")
-    {
-    }
+    spell_pri_power_word_fortitude () : SpellScriptLoader("spell_pri_power_word_fortitude") { }
 
     class spell_pri_power_word_fortitude_SpellScript: public SpellScript
     {

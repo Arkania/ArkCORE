@@ -43,11 +43,10 @@ enum HunterSpells
 };
 
 // 13165 - Aspect of the Hawk
-class spell_hun_aspect_of_the_hawk: public SpellScriptLoader {
+class spell_hun_aspect_of_the_hawk: public SpellScriptLoader 
+{
 public:
-  spell_hun_aspect_of_the_hawk() :
-      SpellScriptLoader("spell_hun_aspect_of_the_hawk") {
-  }
+  spell_hun_aspect_of_the_hawk() : SpellScriptLoader("spell_hun_aspect_of_the_hawk") { }
 
   class spell_hun_aspect_of_the_hawk_AuraScript: public AuraScript {
     PrepareAuraScript(spell_hun_aspect_of_the_hawk_AuraScript)
@@ -117,10 +116,7 @@ public:
 class spell_hun_focus_fire: public SpellScriptLoader
 {
 public:
-    spell_hun_focus_fire () :
-            SpellScriptLoader("spell_hun_focus_fire")
-    {
-    }
+    spell_hun_focus_fire () : SpellScriptLoader("spell_hun_focus_fire") { }
 
     class spell_hun_focus_fire_SpellScript: public SpellScript
     {
@@ -172,10 +168,7 @@ public:
 class spell_hun_invigoration: public SpellScriptLoader
 {
 public:
-    spell_hun_invigoration () :
-            SpellScriptLoader("spell_hun_invigoration")
-    {
-    }
+    spell_hun_invigoration () : SpellScriptLoader("spell_hun_invigoration") { }
 
     class spell_hun_invigoration_SpellScript: public SpellScript
     {
@@ -210,10 +203,7 @@ public:
 class spell_hun_last_stand_pet: public SpellScriptLoader
 {
 public:
-    spell_hun_last_stand_pet () :
-            SpellScriptLoader("spell_hun_last_stand_pet")
-    {
-    }
+    spell_hun_last_stand_pet () : SpellScriptLoader("spell_hun_last_stand_pet") { }
 
     class spell_hun_last_stand_pet_SpellScript: public SpellScript
     {
@@ -248,10 +238,7 @@ public:
 class spell_hun_masters_call: public SpellScriptLoader
 {
 public:
-    spell_hun_masters_call () :
-            SpellScriptLoader("spell_hun_masters_call")
-    {
-    }
+    spell_hun_masters_call () :  SpellScriptLoader("spell_hun_masters_call") { }
 
     class spell_hun_masters_call_SpellScript: public SpellScript
     {
@@ -299,10 +286,7 @@ public:
 class spell_hun_readiness: public SpellScriptLoader
 {
 public:
-    spell_hun_readiness () :
-            SpellScriptLoader("spell_hun_readiness")
-    {
-    }
+    spell_hun_readiness () : SpellScriptLoader("spell_hun_readiness") { }
 
     class spell_hun_readiness_SpellScript: public SpellScript
     {
@@ -344,10 +328,7 @@ public:
 class spell_hun_scatter_shot: public SpellScriptLoader
 {
 public:
-    spell_hun_scatter_shot () :
-            SpellScriptLoader("spell_hun_scatter_shot")
-    {
-    }
+    spell_hun_scatter_shot () : SpellScriptLoader("spell_hun_scatter_shot") { }
 
     class spell_hun_scatter_shot_SpellScript: public SpellScript
     {
@@ -379,16 +360,14 @@ public:
 // 53302, 53303, 53304 Sniper Training
 enum eSniperTrainingSpells
 {
-    SPELL_SNIPER_TRAINING_R1 = 53302, SPELL_SNIPER_TRAINING_BUFF_R1 = 64418,
+	SPELL_SNIPER_TRAINING_R1      = 53302, 
+	SPELL_SNIPER_TRAINING_BUFF_R1 = 64418,
 };
 
 class spell_hun_sniper_training: public SpellScriptLoader
 {
 public:
-    spell_hun_sniper_training () :
-            SpellScriptLoader("spell_hun_sniper_training")
-    {
-    }
+    spell_hun_sniper_training () : SpellScriptLoader("spell_hun_sniper_training") { }
 
     class spell_hun_sniper_training_AuraScript: public AuraScript
     {
@@ -450,10 +429,7 @@ public:
 class spell_hun_pet_heart_of_the_phoenix: public SpellScriptLoader
 {
 public:
-    spell_hun_pet_heart_of_the_phoenix () :
-            SpellScriptLoader("spell_hun_pet_heart_of_the_phoenix")
-    {
-    }
+    spell_hun_pet_heart_of_the_phoenix () : SpellScriptLoader("spell_hun_pet_heart_of_the_phoenix") { }
 
     class spell_hun_pet_heart_of_the_phoenix_SpellScript: public SpellScript
     {
@@ -500,10 +476,7 @@ public:
 class spell_hun_pet_carrion_feeder: public SpellScriptLoader
 {
 public:
-    spell_hun_pet_carrion_feeder () :
-            SpellScriptLoader("spell_hun_pet_carrion_feeder")
-    {
-    }
+    spell_hun_pet_carrion_feeder () : SpellScriptLoader("spell_hun_pet_carrion_feeder") { }
 
     class spell_hun_pet_carrion_feeder_SpellScript: public SpellScript
     {
@@ -547,10 +520,7 @@ public:
 class spell_hun_steady_shot: public SpellScriptLoader
 {
 public:
-    spell_hun_steady_shot () :
-            SpellScriptLoader("spell_hun_steady_shot")
-    {
-    }
+    spell_hun_steady_shot () : SpellScriptLoader("spell_hun_steady_shot") { }
 
     class spell_hun_steady_shot_SpellScript: public SpellScript
     {

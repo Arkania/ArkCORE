@@ -39,17 +39,14 @@ enum DeathKnightSpells
 	DK_SPELL_IMPROVED_BLOOD_PRESENCE_TRIGGERED  = 63611,
 	DK_SPELL_UNHOLY_PRESENCE                    = 48265,
 	DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED = 63622,
-	DK_SPELL_FROST_PRESENCE                    	= 48266,
-	DK_SPELL_IMPROVED_FROST_PRESENCE_TRIGGERED	= 63621,
+	DK_SPELL_FROST_PRESENCE                     = 48266,
+	DK_SPELL_IMPROVED_FROST_PRESENCE_TRIGGERED  = 63621,
 };
 
 class spell_dk_necrotic_strike: public SpellScriptLoader
 {
 public:
-    spell_dk_necrotic_strike () :
-            SpellScriptLoader("spell_dk_necrotic_strike")
-    {
-    }
+    spell_dk_necrotic_strike () : SpellScriptLoader("spell_dk_necrotic_strike") { }
 
     class spell_dk_necrotic_strike_SpellScript: public SpellScript
     {
@@ -101,10 +98,7 @@ public:
 class spell_dk_anti_magic_shell_raid: public SpellScriptLoader
 {
 public:
-    spell_dk_anti_magic_shell_raid () :
-            SpellScriptLoader("spell_dk_anti_magic_shell_raid")
-    {
-    }
+    spell_dk_anti_magic_shell_raid () : SpellScriptLoader("spell_dk_anti_magic_shell_raid") { }
 
     class spell_dk_anti_magic_shell_raid_AuraScript: public AuraScript
     {
@@ -147,10 +141,7 @@ public:
 class spell_dk_anti_magic_shell_self: public SpellScriptLoader
 {
 public:
-    spell_dk_anti_magic_shell_self () :
-            SpellScriptLoader("spell_dk_anti_magic_shell_self")
-    {
-    }
+    spell_dk_anti_magic_shell_self () : SpellScriptLoader("spell_dk_anti_magic_shell_self") { }
 
     class spell_dk_anti_magic_shell_self_AuraScript: public AuraScript
     {
@@ -214,10 +205,7 @@ public:
 class spell_dk_anti_magic_zone: public SpellScriptLoader
 {
 public:
-    spell_dk_anti_magic_zone () :
-            SpellScriptLoader("spell_dk_anti_magic_zone")
-    {
-    }
+    spell_dk_anti_magic_zone () : SpellScriptLoader("spell_dk_anti_magic_zone") { }
 
     class spell_dk_anti_magic_zone_AuraScript: public AuraScript
     {
@@ -269,10 +257,7 @@ public:
 class spell_dk_death_gate: public SpellScriptLoader
 {
 public:
-    spell_dk_death_gate () :
-            SpellScriptLoader("spell_dk_death_gate")
-    {
-    }
+    spell_dk_death_gate () : SpellScriptLoader("spell_dk_death_gate") { }
 
     class spell_dk_death_gate_SpellScript: public SpellScript
     {
@@ -314,10 +299,7 @@ public:
 class spell_dk_death_pact: public SpellScriptLoader
 {
 public:
-    spell_dk_death_pact () :
-            SpellScriptLoader("spell_dk_death_pact")
-    {
-    }
+    spell_dk_death_pact () : SpellScriptLoader("spell_dk_death_pact") { }
 
     class spell_dk_death_pact_SpellScript: public SpellScript
     {
@@ -364,10 +346,7 @@ public:
 class spell_dk_scourge_strike: public SpellScriptLoader
 {
 public:
-    spell_dk_scourge_strike () :
-            SpellScriptLoader("spell_dk_scourge_strike")
-    {
-    }
+    spell_dk_scourge_strike () : SpellScriptLoader("spell_dk_scourge_strike") { }
 
     class spell_dk_scourge_strike_SpellScript: public SpellScript
     {
@@ -407,10 +386,7 @@ public:
 class spell_dk_blood_boil: public SpellScriptLoader
 {
 public:
-    spell_dk_blood_boil () :
-            SpellScriptLoader("spell_dk_blood_boil")
-    {
-    }
+    spell_dk_blood_boil () : SpellScriptLoader("spell_dk_blood_boil") { }
 
     class spell_dk_blood_boil_SpellScript: public SpellScript
     {
@@ -457,10 +433,7 @@ public:
 class spell_dk_improved_blood_presence: public SpellScriptLoader
 {
 public:
-    spell_dk_improved_blood_presence () :
-            SpellScriptLoader("spell_dk_improved_blood_presence")
-    {
-    }
+    spell_dk_improved_blood_presence () : SpellScriptLoader("spell_dk_improved_blood_presence") { }
 
     class spell_dk_improved_blood_presence_AuraScript: public AuraScript
     {
@@ -508,10 +481,7 @@ public:
 class spell_dk_improved_unholy_presence: public SpellScriptLoader
 {
 public:
-    spell_dk_improved_unholy_presence () :
-            SpellScriptLoader("spell_dk_improved_unholy_presence")
-    {
-    }
+    spell_dk_improved_unholy_presence () : SpellScriptLoader("spell_dk_improved_unholy_presence") { }
 
     class spell_dk_improved_unholy_presence_AuraScript: public AuraScript
     {
@@ -609,10 +579,7 @@ public:
 class spell_dk_festering_strike: public SpellScriptLoader
 {
 public:
-    spell_dk_festering_strike () :
-            SpellScriptLoader("spell_dk_festering_strike")
-    {
-    }
+    spell_dk_festering_strike () : SpellScriptLoader("spell_dk_festering_strike") { }
 
     class spell_dk_festering_strike_SpellScript: public SpellScript
     {
@@ -650,10 +617,7 @@ public:
 class spell_dk_chains_of_ice: public SpellScriptLoader
 {
 public:
-    spell_dk_chains_of_ice () :
-            SpellScriptLoader("spell_dk_chains_of_ice")
-    {
-    }
+    spell_dk_chains_of_ice () : SpellScriptLoader("spell_dk_chains_of_ice") { }
 
     class spell_dk_chains_of_ice_SpellScript: public SpellScript
     {

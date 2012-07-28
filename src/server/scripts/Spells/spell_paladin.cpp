@@ -49,10 +49,7 @@ enum PaladinSpells
 class spell_pal_ardent_defender: public SpellScriptLoader
 {
 public:
-    spell_pal_ardent_defender () :
-            SpellScriptLoader("spell_pal_ardent_defender")
-    {
-    }
+    spell_pal_ardent_defender () : SpellScriptLoader("spell_pal_ardent_defender") { }
 
     class spell_pal_ardent_defender_AuraScript: public AuraScript
     {
@@ -125,10 +122,7 @@ public:
 class spell_pal_blessing_of_faith: public SpellScriptLoader
 {
 public:
-    spell_pal_blessing_of_faith () :
-            SpellScriptLoader("spell_pal_blessing_of_faith")
-    {
-    }
+    spell_pal_blessing_of_faith () : SpellScriptLoader("spell_pal_blessing_of_faith") { }
 
     class spell_pal_blessing_of_faith_SpellScript: public SpellScript
     {
@@ -190,10 +184,7 @@ public:
 class spell_pal_holy_shock: public SpellScriptLoader
 {
 public:
-    spell_pal_holy_shock () :
-            SpellScriptLoader("spell_pal_holy_shock")
-    {
-    }
+    spell_pal_holy_shock () : SpellScriptLoader("spell_pal_holy_shock") { }
 
     class spell_pal_holy_shock_SpellScript: public SpellScript
     {
@@ -265,10 +256,7 @@ public:
 class spell_pal_judgements_of_the_bold: public SpellScriptLoader
 {
 public:
-    spell_pal_judgements_of_the_bold () :
-            SpellScriptLoader("spell_pal_judgements_of_the_bold")
-    {
-    }
+    spell_pal_judgements_of_the_bold () : SpellScriptLoader("spell_pal_judgements_of_the_bold") { }
 
     class spell_pal_judgements_of_the_bold_AuraScript: public AuraScript
     {
@@ -301,10 +289,7 @@ public:
 class spell_pal_cleanse: public SpellScriptLoader
 {
 public:
-    spell_pal_cleanse () :
-            SpellScriptLoader("spell_pal_cleanse")
-    {
-    }
+    spell_pal_cleanse () : SpellScriptLoader("spell_pal_cleanse") { }
 
     class spell_pal_cleanse_SpellScript: public SpellScript
     {
@@ -340,10 +325,7 @@ public:
 class spell_pal_word_of_glory: public SpellScriptLoader
 {
 public:
-    spell_pal_word_of_glory () :
-            SpellScriptLoader("spell_pal_word_of_glory")
-    {
-    }
+    spell_pal_word_of_glory () : SpellScriptLoader("spell_pal_word_of_glory") { }
 
     class spell_pal_word_of_glory_heal_SpellScript: public SpellScript
     {
@@ -422,10 +404,7 @@ public:
 class spell_pal_selfless_healer: public SpellScriptLoader
 {
 public:
-    spell_pal_selfless_healer () :
-            SpellScriptLoader("spell_pal_selfless_healer")
-    {
-    }
+    spell_pal_selfless_healer () : SpellScriptLoader("spell_pal_selfless_healer") { }
 
     class spell_pal_selfless_healer_AuraScript: public AuraScript
     {
@@ -482,10 +461,7 @@ public:
 class spell_pal_shield_of_righteous: public SpellScriptLoader
 {
 public:
-    spell_pal_shield_of_righteous () :
-            SpellScriptLoader("spell_pal_shield_of_righteous")
-    {
-    }
+    spell_pal_shield_of_righteous () : SpellScriptLoader("spell_pal_shield_of_righteous") { }
 
     class spell_pal_shield_of_righteous_SpellScript: public SpellScript
     {
@@ -528,10 +504,7 @@ public:
 class spell_pal_judgements_of_the_wise: public SpellScriptLoader
 {
 public:
-    spell_pal_judgements_of_the_wise () :
-            SpellScriptLoader("spell_pal_judgements_of_the_wise")
-    {
-    }
+    spell_pal_judgements_of_the_wise () : SpellScriptLoader("spell_pal_judgements_of_the_wise") { }
 
     class spell_pal_judgements_of_the_wise_AuraScript: public AuraScript
     {
@@ -564,10 +537,7 @@ public:
 class spell_pal_light_of_dawn: public SpellScriptLoader
 {
 public:
-    spell_pal_light_of_dawn () :
-            SpellScriptLoader("spell_pal_light_of_dawn")
-    {
-    }
+    spell_pal_light_of_dawn () : SpellScriptLoader("spell_pal_light_of_dawn") { }
 
     class spell_pal_light_of_dawn_SpellScript: public SpellScript
     {
