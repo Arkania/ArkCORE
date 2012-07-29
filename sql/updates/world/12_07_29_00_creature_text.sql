@@ -1,9 +1,3 @@
-/*
-* Rewrite by Oracraft for Arkania
-* Copyright (C) 2011-2012 ProjectStudioMirage <http://www.studio-mirage.fr/>
-* Copyright (C) 2011-2012 https://github.com/Asardial
-*/
- 
 DELETE FROM creature_text WHERE entry = 44819;
 INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `content_default`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES
 (44819, 0, 0, 'I. AM. UNLEASHED!', 1, 0, 0, 0, 0, 20231, 'VO_TV_Siamat_Intro01'),

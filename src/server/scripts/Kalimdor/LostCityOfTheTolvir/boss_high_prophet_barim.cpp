@@ -25,67 +25,75 @@
 #include"SpellScript.h"
 #include"SpellAuraEffects.h"
 
-enum ScriptTexts {
-    SAY_AGGRO = 0,
-    SAY_KILL_1 = 1,
+enum ScriptTexts 
+{
+    SAY_AGGRO      = 0,
+    SAY_KILL_1     = 1,
     SAY_REPENTANCE = 2,
-    SAY_KILL_2 = 3,
-    SAY_DEATH = 4,
+    SAY_KILL_2     = 3,
+    SAY_DEATH      = 4,
 };
 
-enum Spells {
-    SPELL_FIFTY_LASHING = 82506,
-    SPELL_PLAGUE_OF_AGES = 82622,
-    H_SPELL_PLAGUEOF_AGES = 89997,
-    SPELL_REPENTANCE = 81947,
+enum Spells 
+{
+    SPELL_FIFTY_LASHING     = 82506,
+    SPELL_PLAGUE_OF_AGES    = 82622,
+    H_SPELL_PLAGUEOF_AGES   = 89997,
+    SPELL_REPENTANCE        = 81947,
     SPELL_REPENTANCE_IMMUNE = 82320,
-    SPELL_BLAZE_OF_HEAVENS = 95248, /* Blaze of Heavens ability */
-    SPELL_SOUL_SEVER = 82255, /* Harbinger of Darkness ability */
-    SPELL_HEAVENS_FURY = 81939,
-    H_SPELL_HEAVENS_FURY = 90040,
-    SPELL_HALLOWED_GROUND = 88814,
+    SPELL_BLAZE_OF_HEAVENS  = 95248, /* Blaze of Heavens ability */
+    SPELL_SOUL_SEVER        = 82255, /* Harbinger of Darkness ability */
+    SPELL_HEAVENS_FURY      = 81939,
+    H_SPELL_HEAVENS_FURY    = 90040,
+    SPELL_HALLOWED_GROUND   = 88814,
     H_SPELL_HALLOWED_GROUND = 90010,
 };
 
-enum Events {
-    EVENT_FIFTY_LASHING = 0,
-    EVENT_PLAGUE_OF_AGES = 1,
-    EVENT_REPENTANCE = 2,
+enum Events 
+{
+    EVENT_FIFTY_LASHING    = 0,
+    EVENT_PLAGUE_OF_AGES   = 1,
+    EVENT_REPENTANCE       = 2,
     EVENT_BLAZE_OF_HEAVENS = 3,
-    EVENT_SOUL_SEVER = 4,
-    EVENT_HEAVENS_FURY = 5,
-    EVENT_HALLOWED_GROUND = 6,
-    EVENT_PHASE_1 = 7,
+    EVENT_SOUL_SEVER       = 4,
+    EVENT_HEAVENS_FURY     = 5,
+    EVENT_HALLOWED_GROUND  = 6,
+    EVENT_PHASE_1          = 7,
 };
 
-enum SummonIds {
-    NPC_BLAZE_OF_HEAVENS = 48906, NPC_HARBINGER_OF_DARKNESS = 43927,
+enum SummonIds 
+{
+	NPC_BLAZE_OF_HEAVENS      = 48906, 
+	NPC_HARBINGER_OF_DARKNESS = 43927,
 };
 
-enum ProphetPhases {
-    PHASE_1 = 1, /* Light Phase */
-    PHASE_2 = 2,
-/* Darkness Phase */
+enum ProphetPhases 
+{
+    PHASE_1 = 1,  /* Light Phase */
+    PHASE_2 = 2,  /* Darkness Phase */
 };
 
-const Position SummonLocations[2] = {
+const Position SummonLocations[2] = 
+{
 /* Blaze of Heavens */
 { -11015.45f, -1288.05f, -10.22f, 4.82f },
 /* Harbinger of Darkness */
-{ -11015.45f, -1288.05f, -10.22f, 4.82f }, };
+{ -11015.45f, -1288.05f, -10.22f, 4.82f }, 
+};
 
-class boss_high_prophet_barim: public CreatureScript {
+class boss_high_prophet_barim: public CreatureScript 
+{
 public:
-    boss_high_prophet_barim() :
-            CreatureScript("boss_high_prophet_barim") {
-    }
+    boss_high_prophet_barim() : CreatureScript("boss_high_prophet_barim") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new boss_high_prophet_barimAI(pCreature);
     }
-    struct boss_high_prophet_barimAI: public ScriptedAI {
-        boss_high_prophet_barimAI(Creature* pCreature) :
-                ScriptedAI(pCreature), Summons(me) {
+    struct boss_high_prophet_barimAI: public ScriptedAI 
+	{
+        boss_high_prophet_barimAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me) 
+				{
             pInstance = pCreature->GetInstanceScript();
         }
 
@@ -100,26 +108,27 @@ public:
             Summons.DespawnAll();
             uiPhase = PHASE_1;
 
-            if (pInstance
-                    && (pInstance->GetData(DATA_HIGH_PROPHET_BARIM_EVENT)
-                            != DONE && !check_in))
+            if (pInstance && (pInstance->GetData(DATA_HIGH_PROPHET_BARIM_EVENT) != DONE && !check_in))
                 pInstance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, NOT_STARTED);
 
             check_in = false;
         }
 
-        void JustDied(Unit* /*Kill*/) {
+        void JustDied(Unit* /*Kill*/) 
+		{
             DoScriptText(SAY_DEATH, me);
             Summons.DespawnAll();
             if (pInstance)
                 pInstance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, DONE);
         }
 
-        void KilledUnit(Unit* /*Killed*/) {
+        void KilledUnit(Unit* /*Killed*/) 
+		{
             DoScriptText(RAND(SAY_KILL_1, SAY_KILL_2), me);
         }
 
-        void EnterCombat(Unit* /*Ent*/) {
+        void EnterCombat(Unit* /*Ent*/) 
+		{
             DoScriptText(SAY_AGGRO, me);
             DoZoneInCombat();
 
@@ -127,30 +136,30 @@ public:
                 pInstance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, IN_PROGRESS);
         }
 
-        void EnterPhase1() {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(me->getVictim(), SPELL_HEAVENS_FURY);
+        void EnterPhase1() 
+		{
+            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0)) DoCast(me->getVictim(), SPELL_HEAVENS_FURY);
             events.ScheduleEvent(EVENT_HEAVENS_FURY, 4000);
 
-            Creature* BlazeOfHeavens = me->SummonCreature(NPC_BLAZE_OF_HEAVENS,
-                    SummonLocations[0], TEMPSUMMON_CORPSE_DESPAWN);
+            Creature* BlazeOfHeavens = me->SummonCreature(NPC_BLAZE_OF_HEAVENS, SummonLocations[0], TEMPSUMMON_CORPSE_DESPAWN);
             BlazeOfHeavens->AddThreat(me->getVictim(), 0.0f);
             DoZoneInCombat(BlazeOfHeavens);
         }
 
-        void EnterPhase2() {
+        void EnterPhase2() 
+		{
             DoCast(me, SPELL_HALLOWED_GROUND);
             events.ScheduleEvent(EVENT_HALLOWED_GROUND, 4000);
 
             DoScriptText(SAY_REPENTANCE, me);
             DoCast(me, SPELL_REPENTANCE_IMMUNE);
-            Creature* Harbinger = me->SummonCreature(NPC_HARBINGER_OF_DARKNESS,
-                    SummonLocations[1], TEMPSUMMON_CORPSE_DESPAWN);
+            Creature* Harbinger = me->SummonCreature(NPC_HARBINGER_OF_DARKNESS, SummonLocations[1], TEMPSUMMON_CORPSE_DESPAWN);
             Harbinger->AddThreat(me->getVictim(), 0.0f);
             DoZoneInCombat(Harbinger);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             /* No target to kill */
             if (!UpdateVictim())
                 return;
@@ -159,15 +168,18 @@ public:
 
             events.Update(diff);
 
-            if (uiPhase == PHASE_1 && !HealthAbovePct(50)) {
+            if (uiPhase == PHASE_1 && !HealthAbovePct(50)) 
+			{
                 uiPhase = PHASE_2;
                 EnterPhase2();
             }
 
             uiPhase = PHASE_1;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 EnterPhase1();
 
             case EVENT_FIFTY_LASHING:
@@ -175,8 +187,7 @@ public:
                 events.ScheduleEvent(EVENT_FIFTY_LASHING, 4000);
                 return;
             case EVENT_PLAGUE_OF_AGES:
-                if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_PLAGUE_OF_AGES);
+                if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0)) DoCast(target, SPELL_PLAGUE_OF_AGES);
                 events.ScheduleEvent(EVENT_PLAGUE_OF_AGES, 6000);
                 return;
             default:
@@ -188,20 +199,19 @@ public:
     };
 };
 
-class npc_blaze_of_heavens: public CreatureScript {
+class npc_blaze_of_heavens: public CreatureScript 
+{
 public:
-    npc_blaze_of_heavens() :
-            CreatureScript("npc_blaze_of_heavens") {
-    }
+    npc_blaze_of_heavens() : CreatureScript("npc_blaze_of_heavens") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_blaze_of_heavensAI(pCreature);
     }
 
-    struct npc_blaze_of_heavensAI: public ScriptedAI {
-        npc_blaze_of_heavensAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_blaze_of_heavensAI: public ScriptedAI 
+	{
+        npc_blaze_of_heavensAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
@@ -209,11 +219,13 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_BLAZE_OF_HEAVENS, 1000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -222,7 +234,8 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
                 switch (eventId) {
                 case EVENT_BLAZE_OF_HEAVENS:
                     DoCast(me, SPELL_BLAZE_OF_HEAVENS);
@@ -236,32 +249,34 @@ public:
     };
 };
 
-class npc_harbinger_of_darkness: public CreatureScript {
+class npc_harbinger_of_darkness: public CreatureScript 
+{
 public:
-    npc_harbinger_of_darkness() :
-            CreatureScript("npc_harbinger_of_darkness") {
-    }
+    npc_harbinger_of_darkness() : CreatureScript("npc_harbinger_of_darkness") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_harbinger_of_darknessAI(pCreature);
     }
 
-    struct npc_harbinger_of_darknessAI: public ScriptedAI {
-        npc_harbinger_of_darknessAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_harbinger_of_darknessAI: public ScriptedAI 
+	{
+        npc_harbinger_of_darknessAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_SOUL_SEVER, 1000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -270,8 +285,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_SOUL_SEVER:
                     DoCast(me->getVictim(), SPELL_SOUL_SEVER);
                     events.RescheduleEvent(EVENT_SOUL_SEVER, 2000);
@@ -284,7 +301,8 @@ public:
     };
 };
 
-void AddSC_boss_high_prophet_barim() {
+void AddSC_boss_high_prophet_barim() 
+{
     new boss_high_prophet_barim();
     new npc_blaze_of_heavens();
     new npc_harbinger_of_darkness();

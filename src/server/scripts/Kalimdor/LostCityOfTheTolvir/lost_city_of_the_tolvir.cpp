@@ -20,101 +20,103 @@
 #include"ScriptPCH.h"
 #include"lost_city_of_the_tolvir.h"
 
-enum Spells {
+enum Spells 
+{
     // Blaze of Heavens
-    SPELL_BLAZE = 48906,
+    SPELL_BLAZE                 = 48906,
 
     // Harbinger of Death
-    SPELL_SOUL_SEVER = 82255,
-    SPELL_WAIL_DARKNESS = 82533,
-    H_SPELL_WAIL_DARKNESS = 90038,
+    SPELL_SOUL_SEVER            = 82255,
+    SPELL_WAIL_DARKNESS         = 82533,
+    H_SPELL_WAIL_DARKNESS       = 90038,
 
     // Minion of Siamat
-    SPELL_CHAIN_LIGHTNING = 44704,
-    H_SPELL_CHAIN_LIGHTNING = 90027,
+    SPELL_CHAIN_LIGHTNING       = 44704,
+    H_SPELL_CHAIN_LIGHTNING     = 90027,
 
     // Neferset Darkcaster
-    SPELL_HEX = 82760,
-    SPELL_METEOR = 84032,
-    H_SPELL_METEOR = 90023,
-    SPELL_SHADOW_BOLT = 82765,
-    H_SPELL_SHADOW_BOLT = 90036,
+    SPELL_HEX                   = 82760,
+    SPELL_METEOR                = 84032,
+    H_SPELL_METEOR              = 90023,
+    SPELL_SHADOW_BOLT           = 82765,
+    H_SPELL_SHADOW_BOLT         = 90036,
 
     // Neferset Plaguebringer
-    SPELL_DISEASE_BREATH = 73976,
-    H_SPELL_DISEASE_BREATH = 90005,
-    SPELL_INFECTIOUS_PLAGUE = 82768,
+    SPELL_DISEASE_BREATH        = 73976,
+    H_SPELL_DISEASE_BREATH      = 90005,
+    SPELL_INFECTIOUS_PLAGUE     = 82768,
 
     // Neferset Theurgist
-    SPELL_MIXTURE = 82759,
-    SPELL_RITUAL_BLOODLETTING = 82753,
+    SPELL_MIXTURE               = 82759,
+    SPELL_RITUAL_BLOODLETTING   = 82753,
     H_SPELL_RITUAL_BLOODLETTING = 89993,
-    SPELL_VICIOUS_LEECHES = 82757,
+    SPELL_VICIOUS_LEECHES       = 82757,
 
     // Neferset Torturer
-    SPELL_BRANDED_TONGUE = 82744,
-    H_SPELL_BRANDED_TONGUE = 90037,
-    SPELL_SERUM_TORMENT = 82750,
-    H_SPELL_SERUM_TORMENT = 89994,
+    SPELL_BRANDED_TONGUE        = 82744,
+    H_SPELL_BRANDED_TONGUE      = 90037,
+    SPELL_SERUM_TORMENT         = 82750,
+    H_SPELL_SERUM_TORMENT       = 89994,
 
     // Oathsworn Axemaster
-    SPELL_SKULL_CRUSH = 44922,
-    SPELL_SLAM = 82763,
+    SPELL_SKULL_CRUSH           = 44922,
+    SPELL_SLAM                  = 82763,
 
     // Oathsworn Captain
-    SPELL_SKULL_CRACK = 82670,
+    SPELL_SKULL_CRACK           = 82670,
 
     // Oathsworn Myrmidon
-    SPELL_BLADED_SHIELD = 82671,
-    H_SPELL_BLADED_SHIELD = 95184,
-    SPELL_RESISTANCE = 82673,
+    SPELL_BLADED_SHIELD         = 82671,
+    H_SPELL_BLADED_SHIELD       = 95184,
+    SPELL_RESISTANCE            = 82673,
 
     // Oathsworn Pathfinder
-    SPELL_CALL_FALCON = 82792,
-    SPELL_SHOOT = 83877,
-    SPELL_WING_CLIP = 82764,
+    SPELL_CALL_FALCON           = 82792,
+    SPELL_SHOOT                 = 83877,
+    SPELL_WING_CLIP             = 82764,
 
     // Oathsworn Scorpid Keeper
-    SPELL_BLINK = 84123,
-    SPELL_CALL_SCORPID = 84126,
-    SPELL_EVASION = 84122,
+    SPELL_BLINK                 = 84123,
+    SPELL_CALL_SCORPID          = 84126,
+    SPELL_EVASION               = 84122,
 
     // Oathsworn Skinner
-    SPELL_FAN_KNIVES = 82789,
-    H_SPELL_FAN_KNIVES = 90034,
-    SPELL_SPINAL_PIERCE = 84031,
+    SPELL_FAN_KNIVES            = 82789,
+    H_SPELL_FAN_KNIVES          = 90034,
+    SPELL_SPINAL_PIERCE         = 84031,
 
     // Oathsworn Tamer
-    SPELL_FERAL_LINK = 84230,
+    SPELL_FERAL_LINK            = 84230,
 
     // Wanderer
-    SPELL_CALL_CROCO = 82791,
-    SPELL_FORKED_SHOT = 82794,
-    H_SPELL_FORKED_SHOT = 89992,
+    SPELL_CALL_CROCO            = 82791,
+    SPELL_FORKED_SHOT           = 82794,
+    H_SPELL_FORKED_SHOT         = 89992,
 
     // Pygmy Brute
-    SPELL_IMPALE = 83783,
-    H_SPELL_IMPALE = 89990,
-    SPELL_SHOCKWAVE = 83785,
-    H_SPELL_SHOCKWAVE = 90024,
+    SPELL_IMPALE                = 83783,
+    H_SPELL_IMPALE              = 89990,
+    SPELL_SHOCKWAVE             = 83785,
+    H_SPELL_SHOCKWAVE           = 90024,
 
     // Pygmy Fire Breather
-    SPELL_DRAGON_BREATH = 83776,
-    H_SPELL_DRAGON_BREATH = 90026,
-    SPELL_FIRE_BLAST = 83778,
-    H_SPELL_FIREBLAST = 90025,
+    SPELL_DRAGON_BREATH         = 83776,
+    H_SPELL_DRAGON_BREATH       = 90026,
+    SPELL_FIRE_BLAST            = 83778,
+    H_SPELL_FIREBLAST           = 90025,
 
     // Pygmy Scout
-    SPELL_TOXIC_DART = 83780,
-    H_SPELL_TOXIC_DART = 89991,
+    SPELL_TOXIC_DART            = 83780,
+    H_SPELL_TOXIC_DART          = 89991,
 
     // Servent of Siamat
-    SPELL_LIGHTNING_NOVA = 84544,
-    H_SPELL_LIGHTNING_NOVA = 90015,
-    SPELL_THUNDER_CRASH = 84521,
+    SPELL_LIGHTNING_NOVA        = 84544,
+    H_SPELL_LIGHTNING_NOVA      = 90015,
+    SPELL_THUNDER_CRASH         = 84521,
 };
 
-enum eEvents {
+enum eEvents 
+{
     EVENT_NONE,
     EVENT_BLAZE,
     EVENT_SOUL_SEVER,
@@ -155,20 +157,19 @@ enum eEvents {
     EVENT_THUNDER_CRASH,
 };
 
-class npc_neferset_darkcaster: public CreatureScript {
+class npc_neferset_darkcaster: public CreatureScript 
+{
 public:
-    npc_neferset_darkcaster() :
-            CreatureScript("npc_neferset_darkcaster") {
-    }
+    npc_neferset_darkcaster() : CreatureScript("npc_neferset_darkcaster") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_neferset_darkcasterAI(pCreature);
     }
 
-    struct npc_neferset_darkcasterAI: public ScriptedAI {
-        npc_neferset_darkcasterAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_neferset_darkcasterAI: public ScriptedAI 
+	{
+        npc_neferset_darkcasterAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
@@ -176,13 +177,15 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_HEX, 8000);
             events.ScheduleEvent(EVENT_METEOR, 5000);
             events.ScheduleEvent(EVENT_SHADOW_BOLT, 6000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -191,8 +194,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_HEX:
                     if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                         DoCast(pTarget, SPELL_HEX);
@@ -216,33 +221,35 @@ public:
     };
 };
 
-class npc_neferset_plaguebringer: public CreatureScript {
+class npc_neferset_plaguebringer: public CreatureScript 
+{
 public:
-    npc_neferset_plaguebringer() :
-            CreatureScript("npc_neferset_plaguebringer") {
-    }
+    npc_neferset_plaguebringer() : CreatureScript("npc_neferset_plaguebringer") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_neferset_plaguebringerAI(pCreature);
     }
 
-    struct npc_neferset_plaguebringerAI: public ScriptedAI {
-        npc_neferset_plaguebringerAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_neferset_plaguebringerAI: public ScriptedAI 
+	{
+        npc_neferset_plaguebringerAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_DISEASE_BREATH, 5000);
             events.ScheduleEvent(EVENT_INFECTIOUS_PLAGUE, 7000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -251,8 +258,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_DISEASE_BREATH:
                     DoCast(me->getVictim(), SPELL_DISEASE_BREATH);
                     events.RescheduleEvent(EVENT_DISEASE_BREATH, 5000);
@@ -270,34 +279,36 @@ public:
     };
 };
 
-class npc_neferset_theurgist: public CreatureScript {
+class npc_neferset_theurgist: public CreatureScript 
+{
 public:
-    npc_neferset_theurgist() :
-            CreatureScript("npc_neferset_theurgist") {
-    }
+    npc_neferset_theurgist() : CreatureScript("npc_neferset_theurgist") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_neferset_theurgistAI(pCreature);
     }
 
-    struct npc_neferset_theurgistAI: public ScriptedAI {
-        npc_neferset_theurgistAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_neferset_theurgistAI: public ScriptedAI 
+	{
+        npc_neferset_theurgistAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_MIXTURE, 10000);
             events.ScheduleEvent(EVENT_RITUAL_BLOODLETTING, 4000);
             events.ScheduleEvent(EVENT_VICIOUS_LEECHES, 7000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -306,8 +317,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_MIXTURE:
                     if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                         DoCast(pTarget, SPELL_MIXTURE);
@@ -330,33 +343,35 @@ public:
     };
 };
 
-class npc_neferset_torturer: public CreatureScript {
+class npc_neferset_torturer: public CreatureScript 
+{
 public:
-    npc_neferset_torturer() :
-            CreatureScript("npc_neferset_torturer") {
-    }
+    npc_neferset_torturer() : CreatureScript("npc_neferset_torturer") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_neferset_torturerAI(pCreature);
     }
 
-    struct npc_neferset_torturerAI: public ScriptedAI {
-        npc_neferset_torturerAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_neferset_torturerAI: public ScriptedAI 
+	{
+        npc_neferset_torturerAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_BRANDED_TONGUE, 5000);
             events.ScheduleEvent(EVENT_SERUM_TORMENT, 4000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -365,11 +380,13 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_BRANDED_TONGUE:
-                    if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                        DoCast(pTarget, SPELL_BRANDED_TONGUE);
+                    if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0)) 
+					DoCast(pTarget, SPELL_BRANDED_TONGUE);
                     events.RescheduleEvent(EVENT_BRANDED_TONGUE, 3000);
                     return;
                 case EVENT_SERUM_TORMENT:
@@ -384,33 +401,35 @@ public:
     };
 };
 
-class npc_oathsworn_axemaster: public CreatureScript {
+class npc_oathsworn_axemaster: public CreatureScript 
+{
 public:
-    npc_oathsworn_axemaster() :
-            CreatureScript("npc_oathsworn_axemaster") {
-    }
+    npc_oathsworn_axemaster() : CreatureScript("npc_oathsworn_axemaster") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_oathsworn_axemasterAI(pCreature);
     }
 
-    struct npc_oathsworn_axemasterAI: public ScriptedAI {
-        npc_oathsworn_axemasterAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_oathsworn_axemasterAI: public ScriptedAI 
+	{
+        npc_oathsworn_axemasterAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_SKULL_CRUSH, 5000);
             events.ScheduleEvent(EVENT_SLAM, 3000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -419,8 +438,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_SKULL_CRUSH:
                     DoCast(me->getVictim(), SPELL_SKULL_CRUSH);
                     events.RescheduleEvent(EVENT_SKULL_CRUSH, 3000);
@@ -437,32 +458,34 @@ public:
     };
 };
 
-class npc_oathsworn_captain: public CreatureScript {
+class npc_oathsworn_captain: public CreatureScript 
+{
 public:
-    npc_oathsworn_captain() :
-            CreatureScript("npc_oathsworn_captain") {
-    }
+    npc_oathsworn_captain() : CreatureScript("npc_oathsworn_captain") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_oathsworn_captainAI(pCreature);
     }
 
-    struct npc_oathsworn_captainAI: public ScriptedAI {
-        npc_oathsworn_captainAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_oathsworn_captainAI: public ScriptedAI 
+	{
+        npc_oathsworn_captainAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_SKULL_CRACK, 3000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -471,8 +494,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_SKULL_CRACK:
                     DoCast(me->getVictim(), SPELL_SKULL_CRACK);
                     events.RescheduleEvent(EVENT_SKULL_CRACK, 3000);
@@ -485,20 +510,19 @@ public:
     };
 };
 
-class npc_oathsworn_myrmidon: public CreatureScript {
+class npc_oathsworn_myrmidon: public CreatureScript 
+{
 public:
-    npc_oathsworn_myrmidon() :
-            CreatureScript("npc_oathsworn_myrmidon") {
-    }
+    npc_oathsworn_myrmidon() : CreatureScript("npc_oathsworn_myrmidon") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_oathsworn_myrmidonAI(pCreature);
     }
 
-    struct npc_oathsworn_myrmidonAI: public ScriptedAI {
-        npc_oathsworn_myrmidonAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_oathsworn_myrmidonAI: public ScriptedAI 
+	{
+        npc_oathsworn_myrmidonAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
@@ -506,12 +530,14 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_BLADED_SHIELD, 5000);
             events.ScheduleEvent(EVENT_RESISTANCE, 11000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -520,8 +546,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_BLADED_SHIELD:
                     DoCast(me->getVictim(), SPELL_BLADED_SHIELD);
                     events.RescheduleEvent(EVENT_BLADED_SHIELD, 5000);
@@ -538,20 +566,19 @@ public:
     };
 };
 
-class npc_oathsworn_pathfinder: public CreatureScript {
+class npc_oathsworn_pathfinder: public CreatureScript 
+{
 public:
-    npc_oathsworn_pathfinder() :
-            CreatureScript("npc_oathsworn_pathfinder") {
-    }
+    npc_oathsworn_pathfinder() : CreatureScript("npc_oathsworn_pathfinder") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_oathsworn_pathfinderAI(pCreature);
     }
 
-    struct npc_oathsworn_pathfinderAI: public ScriptedAI {
-        npc_oathsworn_pathfinderAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_oathsworn_pathfinderAI: public ScriptedAI 
+	{
+        npc_oathsworn_pathfinderAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
@@ -559,13 +586,15 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_CALL_FALCON, 8000);
             events.ScheduleEvent(EVENT_SHOOT, 2000);
             events.ScheduleEvent(EVENT_WING_CLIP, 4000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -574,8 +603,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_CALL_FALCON:
                     DoCast(me->getVictim(), SPELL_CALL_FALCON);
                     events.RescheduleEvent(EVENT_CALL_FALCON, 8000);
@@ -597,33 +628,35 @@ public:
     };
 };
 
-class npc_oathsworn_scorpid_keeper: public CreatureScript {
+class npc_oathsworn_scorpid_keeper: public CreatureScript 
+{
 public:
-    npc_oathsworn_scorpid_keeper() :
-            CreatureScript("npc_oathsworn_scorpid_keeper") {
-    }
+    npc_oathsworn_scorpid_keeper() : CreatureScript("npc_oathsworn_scorpid_keeper") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_oathsworn_scorpid_keeperAI(pCreature);
     }
 
-    struct npc_oathsworn_scorpid_keeperAI: public ScriptedAI {
-        npc_oathsworn_scorpid_keeperAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_oathsworn_scorpid_keeperAI: public ScriptedAI 
+	{
+        npc_oathsworn_scorpid_keeperAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_CALL_SCORPID, 8000);
             events.ScheduleEvent(EVENT_EVASION, 4000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -632,8 +665,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_CALL_SCORPID:
                     DoCast(me->getVictim(), SPELL_CALL_SCORPID);
                     events.RescheduleEvent(EVENT_CALL_SCORPID, 8000);
@@ -650,33 +685,35 @@ public:
     };
 };
 
-class npc_oathsworn_skinner: public CreatureScript {
+class npc_oathsworn_skinner: public CreatureScript 
+{
 public:
-    npc_oathsworn_skinner() :
-            CreatureScript("npc_oathsworn_skinner") {
-    }
+    npc_oathsworn_skinner() : CreatureScript("npc_oathsworn_skinner") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_oathsworn_skinnerAI(pCreature);
     }
 
-    struct npc_oathsworn_skinnerAI: public ScriptedAI {
-        npc_oathsworn_skinnerAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_oathsworn_skinnerAI: public ScriptedAI 
+	{
+        npc_oathsworn_skinnerAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_FAN_KNIVES, 5000);
             events.ScheduleEvent(EVENT_SPINAL_PIERCE, 7000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -685,8 +722,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_FAN_KNIVES:
                     DoCast(me->getVictim(), SPELL_FAN_KNIVES);
                     events.RescheduleEvent(EVENT_FAN_KNIVES, 3000);
@@ -703,33 +742,37 @@ public:
     };
 };
 
-class npc_pygmy_brute: public CreatureScript {
+class npc_pygmy_brute: public CreatureScript 
+{
 public:
-    npc_pygmy_brute() :
-            CreatureScript("npc_pygmy_brute") {
+    npc_pygmy_brute() : CreatureScript("npc_pygmy_brute") 
+	{
     }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_pygmy_bruteAI(pCreature);
     }
 
-    struct npc_pygmy_bruteAI: public ScriptedAI {
-        npc_pygmy_bruteAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_pygmy_bruteAI: public ScriptedAI 
+	{
+        npc_pygmy_bruteAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_IMPALE, 1000);
             events.ScheduleEvent(EVENT_SHOCKWAVE, 5000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -738,8 +781,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_IMPALE:
                     DoCast(me->getVictim(), SPELL_IMPALE);
                     events.RescheduleEvent(EVENT_IMPALE, 1000);
@@ -756,33 +801,35 @@ public:
     };
 };
 
-class npc_pygmy_firebreather: public CreatureScript {
+class npc_pygmy_firebreather: public CreatureScript 
+{
 public:
-    npc_pygmy_firebreather() :
-            CreatureScript("npc_pygmy_firebreather") {
-    }
+    npc_pygmy_firebreather() : CreatureScript("npc_pygmy_firebreather") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_pygmy_firebreatherAI(pCreature);
     }
 
-    struct npc_pygmy_firebreatherAI: public ScriptedAI {
-        npc_pygmy_firebreatherAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_pygmy_firebreatherAI: public ScriptedAI 
+	{
+        npc_pygmy_firebreatherAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_DRAGON_BREATH, 3000);
             events.ScheduleEvent(EVENT_FIRE_BLAST, 4000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -791,8 +838,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_SKULL_CRACK:
                     DoCast(me->getVictim(), SPELL_SKULL_CRACK);
                     events.RescheduleEvent(SPELL_DRAGON_BREATH, 3000);
@@ -810,32 +859,34 @@ public:
     };
 };
 
-class npc_pygmy_scout: public CreatureScript {
+class npc_pygmy_scout: public CreatureScript 
+{
 public:
-    npc_pygmy_scout() :
-            CreatureScript("npc_pygmy_scout") {
-    }
+    npc_pygmy_scout() : CreatureScript("npc_pygmy_scout") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new npc_pygmy_scoutAI(pCreature);
     }
 
-    struct npc_pygmy_scoutAI: public ScriptedAI {
-        npc_pygmy_scoutAI(Creature* c) :
-                ScriptedAI(c) {
-        }
+    struct npc_pygmy_scoutAI: public ScriptedAI 
+	{
+        npc_pygmy_scoutAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/) {
+        void EnterCombat(Unit* /*who*/) 
+		{
             events.ScheduleEvent(EVENT_TOXIC_DART, 1000);
         }
 
-        void UpdateAI(const uint32 diff) {
+        void UpdateAI(const uint32 diff) 
+		{
             if (!UpdateVictim())
                 return;
 
@@ -844,8 +895,10 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
-                switch (eventId) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
+                switch (eventId) 
+				{
                 case EVENT_TOXIC_DART:
                     DoCast(me->getVictim(), SPELL_TOXIC_DART);
                     events.RescheduleEvent(EVENT_TOXIC_DART, 1000);
@@ -858,7 +911,8 @@ public:
     };
 };
 
-void AddSC_lost_city_of_the_tolvir() {
+void AddSC_lost_city_of_the_tolvir() 
+{
     new npc_neferset_darkcaster();
     new npc_neferset_plaguebringer();
     new npc_neferset_theurgist();
