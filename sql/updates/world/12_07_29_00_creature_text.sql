@@ -4,6 +4,7 @@
 * Copyright (C) 2011-2012 https://github.com/Asardial
 */
  
+DELETE FROM creature_text WHERE entry = 44819;
 INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `content_default`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES
 (44819, 0, 0, 'I. AM. UNLEASHED!', 1, 0, 0, 0, 0, 20231, 'VO_TV_Siamat_Intro01'),
 (44819, 1, 0, 'Winds of the south, rise and come to your masters aid!', 1, 0, 0, 0, 0, 20227, 'VO_TV_Siamat_Engage01'),
