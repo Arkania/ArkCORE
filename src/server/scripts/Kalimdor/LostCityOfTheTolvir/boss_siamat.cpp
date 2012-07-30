@@ -1,10 +1,20 @@
 /*
- *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
- *
- * Copyright (C) 2011-2012 ProjectStudioMirage <http://www.studio-mirage.fr/>
- *
- * Copyright (C) 2011-2012 https://github.com/Asardial
+* Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+*
+* Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "ScriptPCH.h"
@@ -21,86 +31,86 @@
 
 enum Texts
 {
-    SAY_INTRO = 0,
-    SAY_AGGRO = 1,
-    SAY_EVENT_1 = 2,
-    SAY_EVENT_2 = 2,
-    SAY_EVENT_3 = 2,
-    SAY_KILL = 3,
-    SAY_DEATH = 4,
+    SAY_INTRO    = 0,
+    SAY_AGGRO    = 1,
+    SAY_EVENT_1  = 2,
+    SAY_EVENT_2  = 2,
+    SAY_EVENT_3  = 2,
+    SAY_KILL     = 3,
+    SAY_DEATH    = 4,
 };
 
 enum Spells
 {
     // Siamat
-    SPELL_DEFLECTING_WINDS = 84589, // Initial shield
-    SPELL_STORM_BOLT_CASTING = 73564,
-    SPELL_STORM_BOLT_RANDOM = 91853,
-    H_SPELL_STORM_BOLT_RANDOM =95180 ,
-    SPELL_ABSORB_STORMS = 83151, // AOE
-    SPELL_CLOUD_BURST_SUMMON = 83790,
-    SPELL_WAILING_WINDS = 90031,
+    SPELL_DEFLECTING_WINDS     = 84589, // Initial shield
+    SPELL_STORM_BOLT_CASTING   = 73564,
+    SPELL_STORM_BOLT_RANDOM    = 91853,
+    H_SPELL_STORM_BOLT_RANDOM  = 95180,
+    SPELL_ABSORB_STORMS        = 83151, // AOE
+    SPELL_CLOUD_BURST_SUMMON   = 83790,
+    SPELL_WAILING_WINDS        = 90031,
 
     // Minion Of Siamat
-    SPELL_DEPLETION = 84550, // Aura
-    SPELL_TEMPEST_STORM = 83446,
-    H_SPELL_TEMPEST_STORM = 90030,
-    SPELL_TEMPEST_STORM_FORM =83170, // Form Tempest
-    SPELL_TEMPEST_STORM_AURA = 83406, // Aura Tempest
-    SPELL_TEMPEST_STORM_ROOT = 84616, // Pre summon Tempest
+    SPELL_DEPLETION            = 84550, // Aura
+    SPELL_TEMPEST_STORM        = 83446,
+    H_SPELL_TEMPEST_STORM      = 90030,
+    SPELL_TEMPEST_STORM_FORM   = 83170, // Form Tempest
+    SPELL_TEMPEST_STORM_AURA   = 83406, // Aura Tempest
+    SPELL_TEMPEST_STORM_ROOT   = 84616, // Pre summon Tempest
     SPELL_TEMPEST_STORM_SUMMON = 83414,
-    SPELL_CHAIN_LIGHTNING = 83455,
-    H_SPELL_CHAIN_LIGHTNING = 90027,
+    SPELL_CHAIN_LIGHTNING      = 83455,
+    H_SPELL_CHAIN_LIGHTNING    = 90027,
 
     // Servant Of Siamat
-    SPELL_THUNDER_CRASH = 84522,
-    H_SPELL_THUNDER_CRASH = 90016,
-    SPELL_LIGHTNING_NOVA = 84544,
-    H_SPELL_LIGHTNING_NOVA = 90015,
-    SPELL_LIGHTNING_CHARGE = 91872,
+    SPELL_THUNDER_CRASH        = 84522,
+    H_SPELL_THUNDER_CRASH      = 90016,
+    SPELL_LIGHTNING_NOVA       = 84544,
+    H_SPELL_LIGHTNING_NOVA     = 90015,
+    SPELL_LIGHTNING_CHARGE     = 91872,
 
     // Cloud
-    SPELL_CLOUD_BURST_VISUAL = 83048, // Aura Cloud
-    SPELL_CLOUD_BURST = 83051,
-    H_SPELL_CLOUD_BURST = 90032,
+    SPELL_CLOUD_BURST_VISUAL   = 83048, // Aura Cloud
+    SPELL_CLOUD_BURST          = 83051,
+    H_SPELL_CLOUD_BURST        = 90032,
 };
 
 enum Events
 {
     // Siamat Event
-    EVENT_DEFLECTING_WINDS = 1,
-    EVENT_STORM_BOLT_RANDOM = 2,
-    EVENT_REMOVE_DEFLECTIVE_WINGS = 4,
-    EVENT_SUMMON_NPC_SERVANT_OF_SIAMAT = 5,
-    EVENT_SUMMON_NPC_MINION_OF_SIAMAT = 6,
+    EVENT_DEFLECTING_WINDS                  = 1,
+    EVENT_STORM_BOLT_RANDOM                 = 2,
+    EVENT_REMOVE_DEFLECTIVE_WINGS           = 4,
+    EVENT_SUMMON_NPC_SERVANT_OF_SIAMAT      = 5,
+    EVENT_SUMMON_NPC_MINION_OF_SIAMAT       = 6,
     EVENT_SUMMON_NPC_MINION_OF_SIAMAT_STORM = 7,
-    EVENT_WAILING_WINDS = 8,
-    EVENT_ABSORB_STORMS = 9,
+    EVENT_WAILING_WINDS                     = 8,
+    EVENT_ABSORB_STORMS                     = 9,
 
     // Servant Of Siamat Event
-    EVENT_THUNDER_CRASH = 10,
-    EVENT_LIGHTNING_NOVA = 11,
-    EVENT_LIGHTNING_CHARGE = 12,
-    EVENT_SERVANT_DEATH = 13,
+    EVENT_THUNDER_CRASH                     = 10,
+    EVENT_LIGHTNING_NOVA                    = 11,
+    EVENT_LIGHTNING_CHARGE                  = 12,
+    EVENT_SERVANT_DEATH                     = 13,
 
     // Cloud Event
-    EVENT_CLOUD_BURST_SUMMON = 14,
-    EVENT_CLOUD_BURST = 15,
-    EVENT_CLOUD_BURST_VISUAL = 16,
-    EVENT_DESPAWN_CLOUD_BURST = 17,
+    EVENT_CLOUD_BURST_SUMMON                = 14,
+    EVENT_CLOUD_BURST                       = 15,
+    EVENT_CLOUD_BURST_VISUAL                = 16,
+    EVENT_DESPAWN_CLOUD_BURST               = 17,
     
     // Minion Of Siamat Event
-    EVENT_TEMPEST_STORM = 18,
-    EVENT_TEMPEST_STORM_SUMMON = 19,
-    EVENT_DEPLETION = 20,
-    EVENT_DESPAWN_STORMS = 21,
+    EVENT_TEMPEST_STORM                     = 18,
+    EVENT_TEMPEST_STORM_SUMMON              = 19,
+    EVENT_DEPLETION                         = 20,
+    EVENT_DESPAWN_STORMS                    = 21,
 
 };
 
 enum Timers
 {
     TIME_BETWEEN_SERVANT_RESPAWN = 45000,
-    TIME_BETWEEN_MINION_RESPAWN = 25000,
+    TIME_BETWEEN_MINION_RESPAWN  = 25000,
 };
 
 Position const SummonPositions[6] =
@@ -119,7 +129,7 @@ Position const SummonPositions[6] =
 class boss_siamat : public CreatureScript
 {
     public:
-        boss_siamat() : CreatureScript("boss_siamat") {}
+        boss_siamat() : CreatureScript("boss_siamat") { }
 
         CreatureAI* GetAI(Creature* pCreature) const
         {
@@ -298,7 +308,7 @@ class boss_siamat : public CreatureScript
 class npc_minion_of_siamat : public CreatureScript
 {
     public:
-        npc_minion_of_siamat() : CreatureScript("npc_minion_of_siamat") {}
+        npc_minion_of_siamat() : CreatureScript("npc_minion_of_siamat") { }
 
         CreatureAI* GetAI(Creature* pCreature) const
         {
@@ -363,7 +373,7 @@ class npc_minion_of_siamat : public CreatureScript
 class npc_servant_of_siamat : public CreatureScript
 {
     public:
-        npc_servant_of_siamat() : CreatureScript("npc_servant_of_siamat") {}
+        npc_servant_of_siamat() : CreatureScript("npc_servant_of_siamat") { }
 
         CreatureAI* GetAI(Creature* pCreature) const
         {
@@ -444,7 +454,7 @@ class npc_servant_of_siamat : public CreatureScript
 class npc_cloud_burst : public CreatureScript
 {
     public:
-        npc_cloud_burst() : CreatureScript("npc_cloud_burst") {}
+        npc_cloud_burst() : CreatureScript("npc_cloud_burst") { }
 
         CreatureAI* GetAI(Creature* pCreature) const
         {
