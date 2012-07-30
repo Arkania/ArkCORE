@@ -25277,15 +25277,7 @@ void Player::SendClearCooldown (uint32 spell_id, Unit* target)
 void Player::UpdateSpellCooldown (uint32 spell_id, int32 amount)
 {
     uint32 curCooldown = GetSpellCooldownDelay(spell_id);
-    if (amount < 0)
-    {
-        if (curCooldown <= (curCooldown + amount))
-            curCooldown = 0;
-        else
-            curCooldown -= amount;
-    }
-    else // if (amount > 0)
-        curCooldown += amount;
+    curCooldown = (curCooldown + amount) > 0 ? curCooldown + amount : 0;
 
     AddSpellCooldown(spell_id, 0, uint32(time(NULL) + curCooldown));
 
