@@ -16,3 +16,6 @@ UPDATE `gameobject_template` SET `data1` = 203014 WHERE `entry` = 203014;
 UPDATE `gameobject_template` SET `data1` = 204280 WHERE `entry` = 204280;
 UPDATE `gameobject_template` SET `data1` = 204388 WHERE `entry` = 204388;
 UPDATE `gameobject_template` SET `data1` = 205246 WHERE `entry` = 205246;
+
+-- Table 'gameobject_loot_template' entry 0 item 0: item entry not listed in `item_template` - skipped
+DELETE FROM `gameobject_loot_template` WHERE (`entry` = 0);
