@@ -42,33 +42,6 @@ enum HunterSpells
     HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED    = 53220
 };
 
-// 13165 - Aspect of the Hawk
-class spell_hun_aspect_of_the_hawk: public SpellScriptLoader 
-{
-public:
-  spell_hun_aspect_of_the_hawk() : SpellScriptLoader("spell_hun_aspect_of_the_hawk") { }
-
-  class spell_hun_aspect_of_the_hawk_AuraScript: public AuraScript {
-    PrepareAuraScript(spell_hun_aspect_of_the_hawk_AuraScript)
-    ;
-
-    void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount,  bool & /*canBeRecalculated*/) 
-    {
-      // En 4.0.6a Aspect of the Hawk provee 2000 AP en level 85 
-      // por tanto 2000 / 85 = 23.52 AP x Level 
-      amount = 23.52f * GetCaster()->getLevel();
-    }
-
-    void Register() {
-      DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_hun_aspect_of_the_hawk_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_RANGED_ATTACK_POWER);
-    }
-  };
-
-  AuraScript *GetAuraScript() const {
-    return new spell_hun_aspect_of_the_hawk_AuraScript();
-  }
-};
-
 class spell_hun_kill_command: public SpellScriptLoader
 {
 public:
@@ -582,5 +555,4 @@ void AddSC_hunter_spell_scripts ()
     new spell_hun_steady_shot();
     new spell_hun_focus_fire();
     new spell_hun_kill_command();
-    new spell_hun_aspect_of_the_hawk();
 }
