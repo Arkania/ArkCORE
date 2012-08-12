@@ -657,6 +657,10 @@ SpellSpecific GetSpellSpecific (SpellEntry const * spellInfo)
     }
     case SPELLFAMILY_WARLOCK:
     {
+    //Warlock (Bane of Doom | Bane of Agony | Bane of Havoc)
+    if (spellInfo->Id==603 || spellInfo->Id==980 || spellInfo->Id==80240 )
+      return SPELL_SPECIFIC_BANE;
+
         // only warlock curses have this
         if (spellInfo->Dispel == DISPEL_CURSE)
             return SPELL_SPECIFIC_CURSE;
@@ -757,6 +761,7 @@ bool IsSingleFromSpellSpecificPerCaster (SpellSpecific spellSpec1, SpellSpecific
     case SPELL_SPECIFIC_AURA:
     case SPELL_SPECIFIC_STING:
     case SPELL_SPECIFIC_CURSE:
+    case SPELL_SPECIFIC_BANE:
     case SPELL_SPECIFIC_ASPECT:
     case SPELL_SPECIFIC_JUDGEMENT:
     case SPELL_SPECIFIC_WARLOCK_CORRUPTION:
