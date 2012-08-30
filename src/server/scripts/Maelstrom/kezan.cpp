@@ -70,8 +70,11 @@ class npc_defiant_troll : public CreatureScript
                 work = true;
         }
 
-        void SpellHit(Unit* caster, const SpellEntry* spell)
+       void SpellHit(Unit* caster, const SpellEntry* spell)
         {
+            // Remove Aura from Player
+            caster->RemoveAurasDueToSpell(SPELL_LIGHTNING_VISUAL);
+ 
             if (spell->Id == SPELL_LIGHTNING_VISUAL && caster->GetTypeId() == TYPEID_PLAYER
                 && caster->ToPlayer()->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && work == false)
             {
