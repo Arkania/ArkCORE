@@ -114,7 +114,43 @@ public:
     };
 };
 
+
+/*
+* Copyright (C) 2011-2012 Molios - spell_vizier_ertan_lurking_tempest_summon
+*/
+ 
+class spell_vizier_ertan_lurking_tempest_summon : public SpellScriptLoader
+{
+    public:
+        spell_vizier_ertan_lurking_tempest_summon() : SpellScriptLoader("spell_vizier_ertan_lurking_tempest_summon") { }
+ 
+        class spell_vizier_ertan_lurking_tempest_summon_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_vizier_ertan_lurking_tempest_summon_SpellScript);
+ 
+            void ChangeSummonPos(SpellEffIndex /*effIndex*/)
+            {   
+                WorldLocation* summonPos = GetTargetDest();
+                Position offset = {0.0f, 0.0f, 0.0f, 0.0f+urand(0, 6)};
+                Position offset2 = {0.0f, 30.0f, 0.0f, 0.0f+urand(0, 6)};
+                summonPos->RelocateOffset(offset);  // Reprendre 0 les coordonées du boss
+                summonPos->RelocateOffset(offset2);  // Spawn les Mobs +30 de rayon
+            }
+ 
+            void Register()
+            {
+                OnEffect += SpellEffectFn(spell_vizier_ertan_lurking_tempest_summon_SpellScript::ChangeSummonPos, EFFECT_0, SPELL_EFFECT_SUMMON);
+            }
+        };
+ 
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_vizier_ertan_lurking_tempest_summon_SpellScript();
+        }
+};
+
 void AddSC_boss_grand_vizier_ertan()
 {
     new boss_grand_vizier_ertan();
+	new spell_vizier_ertan_lurking_tempest_summon();
 }
