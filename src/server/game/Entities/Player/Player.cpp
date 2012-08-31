@@ -22057,6 +22057,9 @@ inline void BeforeVisibilityDestroy<Creature> (Creature* t, Player* p)
 
 void Player::UpdateVisibilityOf (WorldObject* target)
 {
+    if (!target)
+        return;
+
     if (HaveAtClient(target))
     {
         if (!canSeeOrDetect(target, false, true))

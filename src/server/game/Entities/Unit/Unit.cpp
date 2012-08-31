@@ -6809,6 +6809,41 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
     }
     case SPELLFAMILY_HUNTER:
     {
+        case 2225:
+        // Serpent Spread
+        {
+            // Proc only on multi-shot
+            if (!target || procSpell->Id != 2643)
+                return false;
+
+            switch (triggerAmount)
+            {
+            case 30:
+            {
+                // Serpent sting 6s duration
+                triggered_spell_id = 88453;
+                break;
+            }
+            case 60:
+            {
+                // Serpent sting 9s duration
+                triggered_spell_id = 88466;
+                break;
+            }
+                break;
+            }
+            break;
+        }
+        case 3524:
+        // Marked for Death
+        {
+            if (!roll_chance_i(triggerAmount))
+                return false;
+
+            triggered_spell_id = 88691;
+            target = pVictim;
+            break;
+        }
         // Crouching Tiger, Hidden Chimera
         if (dummySpell->SpellIconID == 4752)
         {
@@ -8902,24 +8937,14 @@ bool Unit::HandleProcTriggerSpell (Unit *pVictim, uint32 damage, AuraEffect* tri
                 basepoints0 += pVictim->GetRemainingDotDamage(GetGUID(), trigger_spell_id);
                 break;
             }
-            if (auraSpellInfo->SpellIconID == 2225)          // Serpent Spread 1, 2
+            // Item - Hunter T9 4P Bonus
+            if (auraSpellInfo->Id == 67151)
             {
-                if (!(auraSpellInfo->procFlags == 0x1140))
-                    return false;
-
-                switch (auraSpellInfo->Id)
-                {
-                case 87934:
-                    trigger_spell_id = 88453;
-                    break;
-                case 87935:
-                    trigger_spell_id = 88466;
-                    break;
-                default:
-                    return false;
-                }
+                trigger_spell_id = 68130;
+                target = this;
                 break;
             }
+            break;
             if (auraSpellInfo->Id == 82661)          // Aspect of the Fox: Focus bonus
             {
                 uint32 basepoints = 0;

@@ -3866,6 +3866,7 @@ void SpellMgr::LoadSpellCustomAttr ()
 
         switch (i)
         {
+            // CATACLYSM SPELLS CHANGES	
         case 53592:          // Touched by The Light
             spellInfo->EffectMiscValue[2] = 2;
             count++;
