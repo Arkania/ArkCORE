@@ -8511,21 +8511,6 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
         }
         break;
     }
-    case SPELLFAMILY_PRIEST:
-    {
-        // Masochism
-        if(dummySpell->SpellIconID == 2211)
-        {
-            *handled = true;
-            if(!(damage >= CountPctFromMaxHealth(10)))
-                return false;
-
-            int32 bp0 = SpellMgr::CalculateSpellEffectAmount(dummySpell, 0);
-            this->CastCustomSpell(this, 89007, &bp0, NULL, NULL, true, NULL, triggeredByAura->GetEffect(0), this->GetGUID());
-            return true;
-        }
-        break;
-    }
     case SPELLFAMILY_DEATHKNIGHT:
     {
         // Blood of the North

@@ -6912,15 +6912,17 @@ void AuraEffect::HandleAuraDummy (AuraApplication const *aurApp, uint8 mode, boo
         break;
     }
     case SPELLFAMILY_MAGE:
-    {
-        if (!(mode & AURA_EFFECT_HANDLE_REAL))
-            break;
-        switch (GetId())
         {
+            //if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                //break;
+            break;
         }
-    }
     case SPELLFAMILY_PRIEST:
-        break;
+        {
+            // if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                // break;
+            break;
+        }
     case SPELLFAMILY_DRUID:
     {
         if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK))
