@@ -468,6 +468,8 @@ private:
         uint32 m_achievementPoints;
         Profession professions[2];
     };
+	
+	typedef UNORDERED_MAP<uint32, GuildNews*> sGuildNews;
 
     // Base class for event entries
     class LogEntry
@@ -840,6 +842,7 @@ public:
 
     // Load from DB
     bool LoadFromDB(Field* fields);
+	void LoadGuildNewsFromDB(Field* fields);
     bool LoadRankFromDB(Field* fields);
     bool LoadMemberFromDB(Field* fields);
     bool LoadEventLogFromDB(Field* fields);

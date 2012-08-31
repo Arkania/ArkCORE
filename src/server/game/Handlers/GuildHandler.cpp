@@ -719,3 +719,16 @@ void WorldSession::HandleSetGuildBankTabText (WorldPacket &recv_data)
     if (Guild* pGuild = _GetPlayerGuild(this))
         pGuild->SetBankTabText(tabId, text);
 }
+
+void WorldSession::HandleGuildQueryNews(WorldPacket &recv_data)
+{
+    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_QUERY_NEWS");
+
+    // Sending guild news
+    if (Guild* pGuild = _GetPlayerGuild(this))
+    {
+        WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 4);
+        pGuild->SetGuildNews(data);
+        SendPacket(&data);
+    }
+}
