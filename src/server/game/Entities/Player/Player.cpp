@@ -25214,6 +25214,9 @@ void Player::_SaveEquipmentSets (SQLTransaction& trans)
 
 void Player::_SaveBGData (SQLTransaction& trans)
 {
+    if (!MapManager::IsValidMapCoord(m_bgData.joinPos.GetMapId(), m_bgData.joinPos.GetPositionX(), m_bgData.joinPos.GetPositionY(), m_bgData.joinPos.GetPositionZ()))
+        return;
+		
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_BGDATA);
     stmt->setUInt32(0, GetGUIDLow());
     trans->Append(stmt);
