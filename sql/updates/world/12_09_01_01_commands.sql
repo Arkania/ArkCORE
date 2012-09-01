@@ -1,0 +1,12 @@
+INSERT INTO `command` VALUES ('conquest',2,'Syntax: .conquest $subcommand\nType .conquest to see the list of possible subcommands or .help conquest $subcommand to see info on subcommands');
+INSERT INTO `command` VALUES ('valor',2,'Syntax: .valor $subcommand\nType .valor to see the list of possible subcommands or .help valor $subcommand to see info on subcommands');
+INSERT INTO `command` VALUES ('justice',2,'Syntax: .justice $subcommand\nType .justice to see the list of possible subcommands or .help justice $subcommand to see info on subcommands');
+INSERT INTO `command` VALUES ('conquest add',4,'Syntax: .conquest add $amount\n\nAdd a certain amount of conquest (gained today) to the selected player.');
+INSERT INTO `command` VALUES ('valor add',4,'Syntax: .valor add $amount\n\nAdd a certain amount of valor (gained today) to the selected player.');
+INSERT INTO `command` VALUES ('justice add',4,'Syntax: .justice add $amount\n\nAdd a certain amount of justice (gained today) to the selected player.');
+INSERT INTO `command` VALUES ('modify conquest',4,'Syntax: .modify conquest $amount\n\nModify conquest points of the player that you selected.');
+INSERT INTO `command` VALUES ('modify valor',4,'Syntax: .modify valor $amount\n\nModify valor points of the player that you selected.');
+INSERT INTO `command` VALUES ('modify justice',4,'Syntax: .modify justice $amount\n\nModify justice points of the player that you selected.');
+INSERT INTO `command` VALUES ('reset conquest',4,'Syntax: .reset conquest [Playername]\n  Reset all conquest data of the selected player.');
+INSERT INTO `command` VALUES ('reset valor',4,'Syntax: .reset valor [Playername]\n  Reset all valor data of the selected player.');
+INSERT INTO `command` VALUES ('reset justice',4,'Syntax: .reset justice [Playername]\n  Reset all justice data of the selected player.');

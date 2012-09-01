@@ -63,7 +63,7 @@ void AddSC_reload_commandscript ();
 void AddSC_titles_commandscript ();
 void AddSC_wp_commandscript ();
 void AddSC_gobject_commandscript ();
-void AddSC_honor_commandscript ();
+void AddSC_currency_commandscript();
 void AddSC_quest_commandscript ();
 void AddSC_reload_commandscript ();
 void AddSC_credits_commandscript ();
@@ -733,7 +733,7 @@ void AddCommandScripts ()
     AddSC_titles_commandscript();
     AddSC_wp_commandscript();
     AddSC_gobject_commandscript();
-    AddSC_honor_commandscript();
+    AddSC_currency_commandscript();
     AddSC_quest_commandscript();
     AddSC_reload_commandscript();
 }

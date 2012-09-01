@@ -1528,6 +1528,7 @@ public:
     void ResetWeeklyQuestStatus ();
 
     void ResetCurrencyWeekCap ();
+	void ResetCurrencyDatas(uint32 id);
     void UpdateMaxWeekRating (ConquestPointsSources source, uint8 slot);
 
     uint16 FindQuestSlot (uint32 quest_id) const;
@@ -2314,6 +2315,18 @@ public:
     /*********************************************************/
     void UpdateHonorFields();
     bool RewardHonor(Unit *pVictim, uint32 groupsize, int32 honor = -1, bool pvptoken = false);
+    void AddHonorPoints(int32 count);
+    void ModifyHonorPoints(int32 count);
+    void ResetHonorPoints();
+    void AddConquestPoints(int32 count);
+    void ModifyConquestPoints(int32 count);
+    void ResetConquestPoints();
+    void AddValorPoints(int32 count);
+    void ModifyValorPoints(int32 count);
+    void ResetValorPoints();
+    void AddJusticePoints(int32 count);
+    void ModifyJusticePoints(int32 count);
+    void ResetJusticePoints();
     uint32 GetMaxPersonalArenaRatingRequirement(uint32 minarenaslot);
 
     //End of PvP System
