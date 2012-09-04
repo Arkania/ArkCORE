@@ -728,6 +728,7 @@ LogDB.Chat = 0
 
 ChatLogFile = "Chat.log"
 
+#
 #    ChatLogTimestamp
 #        Description: Append timestamp to the chat log file name.
 #                     Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext
@@ -766,7 +767,6 @@ ChatLogs.SysChan = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-
 ChatLogs.Party = 0
 
 #
@@ -774,7 +774,6 @@ ChatLogs.Party = 0
 #        Description: Log raid chat.
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
-
 
 ChatLogs.Raid = 0
 
@@ -2092,7 +2091,6 @@ Rate.XP.Explore = 1
 #    Rate.XP.Explore.Premium
 #        XP rates Premium modifier
 #        Default: 1
-#
 
 Rate.XP.Kill.Premium    = 1
 Rate.XP.Quest.Premium   = 1
@@ -3029,6 +3027,7 @@ LevelReq.Auction = 1
 
 LevelReq.Mail = 1
 
+#
 #   PlayersAccessToGMIsland
 #   Description: Prevent access for players to gm island
 #	Default: 0 - Disable
@@ -3182,181 +3181,181 @@ OutdoorPvP.Wintergrasp.Antifarm.Def = 15
 
 ###################################################################################################
 
-# 		AuctionHouseBot.DEBUG 
-# 			Description: Desenables (1) or disables (0) Debug output
-#			Default: 0
+#       AuctionHouseBot.DEBUG 
+#           Description: Desenables (1) or disables (0) Debug output
+#           Default: 0
 
 AuctionHouseBot.DEBUG = 0
 
-# 		AuctionHouseBot.EnableSeller 
-#			Description: enables (1) or disables (0) the Seller
-#			Default: 0
+#       AuctionHouseBot.EnableSeller 
+#           Description: enables (1) or disables (0) the Seller
+#           Default: 0
 
 AuctionHouseBot.EnableSeller = 0
 
-# 		AuctionHouseBot.EnableBuyer 
-#			Description: enables (1) or disables (0) the Buyer
-#			Default: 0
+#       AuctionHouseBot.EnableBuyer 
+#           Description: enables (1) or disables (0) the Buyer
+#           Default: 0
 
 AuctionHouseBot.EnableBuyer = 0
 
-# 		AuctionHouseBot.UseBuyPriceForSeller 
-#			Description: Use SellPrice (0) or BuyPrice (1) for #determining prices
-#			Default: 0
+#       AuctionHouseBot.UseBuyPriceForSeller 
+#           Description: Use SellPrice (0) or BuyPrice (1) for #determining prices
+#           Default: 0
 
 AuctionHouseBot.UseBuyPriceForSeller = 0
 
-# 		AuctionHouseBot.UseBuyPriceForBuyer 
-#			Description: Use SellPrice (0) or BuyPrice (1) for #determining prices
-#			Default: 0
+#       AuctionHouseBot.UseBuyPriceForBuyer 
+#           Description: Use SellPrice (0) or BuyPrice (1) for #determining prices
+#           Default: 0
 
 AuctionHouseBot.UseBuyPriceForBuyer = 0
 
-# 		AuctionHouseBot.Account 
-# 			Description: is the account number (in realmd->account table) of 
-#				 the player you want to run as the auction bot. Note: a value of 0 will #disable the bot.
-# 			Default: 0
+#       AuctionHouseBot.Account 
+#           Description: is the account number (in realmd->account table) of 
+#           	 the player you want to run as the auction bot. Note: a value of 0 will #disable the bot.
+#           Default: 0
 
 AuctionHouseBot.Account = 0
 
-# 		AuctionHouseBot.GUID
-#			Description: is the GUID (in characters->characters table) of the 
-#				 player you want to run as the auction bot. Note: a value of 0 will disable #the bot.
-#			Default: 0
+#       AuctionHouseBot.GUID
+#           Description: is the GUID (in characters->characters table) of the 
+#           	 player you want to run as the auction bot. Note: a value of 0 will disable #the bot.
+#           Default: 0
 
 AuctionHouseBot.GUID = 0
 
-# 		AuctionHouseBot.ItemsPerCycle
-#			Description: determines how many items are added each time #AHBot is run (once per minute, by default)
-#			Default: 200
+#       AuctionHouseBot.ItemsPerCycle
+#           Description: determines how many items are added each time #AHBot is run (once per minute, by default)
+#           Default: 200
 
 AuctionHouseBot.ItemsPerCycle = 200
 
-# 		AuctionHouseBot.VendorItems 
-#			Description: is a boolean value (0 or 1) that indicates #whether to include Vendor only items
-#			Default: 0
+#       AuctionHouseBot.VendorItems 
+#           Description: is a boolean value (0 or 1) that indicates #whether to include Vendor only items
+#           Default: 0
 
 AuctionHouseBot.VendorItems = 0
 
-# 		AuctionHouseBot.VendorTradeGoods 
-#			Description: is a boolean value (0 or 1) that indicates #whether to include Vendor only Trade Goods
-#			Default: 0
+#       AuctionHouseBot.VendorTradeGoods 
+#           Description: is a boolean value (0 or 1) that indicates #whether to include Vendor only Trade Goods
+#           Default: 0
 
 AuctionHouseBot.VendorTradeGoods = 0
 
-# 		AuctionHouseBot.LootItems  
-#			Description: is a boolean value (0 or 1) that indicates #whether to include Loot/Fish/Skin/etc. only items
-#			Default: 1
+#       AuctionHouseBot.LootItems  
+#           Description: is a boolean value (0 or 1) that indicates #whether to include Loot/Fish/Skin/etc. only items
+#           Default: 1
 
 AuctionHouseBot.LootItems = 1
 
-# 		AuctionHouseBot.LootTradeGoods  
-#			Description: is a boolean value (0 or 1) that indicates #whether to include Loot/Fish/Skin/etc. only Trade Goods
-#			Default: 1
+#       AuctionHouseBot.LootTradeGoods  
+#           Description: is a boolean value (0 or 1) that indicates #whether to include Loot/Fish/Skin/etc. only Trade Goods
+#           Default: 1
 
 AuctionHouseBot.LootTradeGoods = 1
 
-# 		AuctionHouseBot.OtherItems  
-#			Description: is a boolean value (0 or 1) that indicates #whether to include Other items not covered by the first 2
-#			Default: 0
+#       AuctionHouseBot.OtherItems  
+#           Description: is a boolean value (0 or 1) that indicates #whether to include Other items not covered by the first 2
+#           Default: 0
 
 AuctionHouseBot.OtherItems = 0
 
-#		AuctionHouseBot.OtherTradeGoods  
-#			Description: is a boolean value (0 or 1) that indicates whether to include Other Trade Goods not covered by the first 2
-#			Default: 0
+#       AuctionHouseBot.OtherTradeGoods  
+#           Description: is a boolean value (0 or 1) that indicates whether to include Other Trade Goods not covered by the first 2
+#           Default: 0
 
 AuctionHouseBot.OtherTradeGoods = 0
 
-# 		AuctionHouseBot.No_Bind 
-#			Description: is a boolean value (0 or 1) that indicates whether #to include items with a bonding of 0
-#			Default: 1
+#       AuctionHouseBot.No_Bind 
+#           Description: is a boolean value (0 or 1) that indicates whether #to include items with a bonding of 0
+#           Default: 1
 
 AuctionHouseBot.No_Bind = 1
 
-# 		AuctionHouseBot.Bind_When_Picked_Up 
-#			Description: is a boolean value (0 or 1) that #indicates whether to include items with a bonding of 1
-#			Default: 0
+#       AuctionHouseBot.Bind_When_Picked_Up 
+#           Description: is a boolean value (0 or 1) that #indicates whether to include items with a bonding of 1
+#           Default: 0
 
 AuctionHouseBot.Bind_When_Picked_Up = 0
 
-# 		AuctionHouseBot.Bind_When_Equipped 
-# 			Description: is a boolean value (0 or 1) that #indicates whether to include items with a bonding of 2
-#			Default: 1
+#       AuctionHouseBot.Bind_When_Equipped 
+#           Description: is a boolean value (0 or 1) that #indicates whether to include items with a bonding of 2
+#           Default: 1
 
 AuctionHouseBot.Bind_When_Equipped = 1
 
-# 		AuctionHouseBot.Bind_When_Use
-#			Description: is a boolean value (0 or 1) that indicates #whether to include items with a bonding of 3
-#			Default: 1
+#       AuctionHouseBot.Bind_When_Use
+#           Description: is a boolean value (0 or 1) that indicates #whether to include items with a bonding of 3
+#           Default: 1
 
 AuctionHouseBot.Bind_When_Use = 1
 
-# 		AuctionHouseBot.Bind_Quest_Item
-#			Description: is a boolean value (0 or 1) that indicates #whether to include items with a bonding of 4
-# 			Default: 1
+#       AuctionHouseBot.Bind_Quest_Item
+#           Description: is a boolean value (0 or 1) that indicates #whether to include items with a bonding of 4
+#           Default: 1
 
 AuctionHouseBot.Bind_Quest_Item = 0
 
-# 		AuctionHouseBot.DisableBeta_PTR_Unused 
-#			Description: is a boolean value (0 or 1) that will #Disable certain items that are usually unavailable to Players
-#			Default: 0
+#       AuctionHouseBot.DisableBeta_PTR_Unused 
+#           Description: is a boolean value (0 or 1) that will #Disable certain items that are usually unavailable to Players
+#           Default: 0
 
 AuctionHouseBot.DisableBeta_PTR_Unused = 0
 
-# 		AuctionHouseBot.DisablePermEnchant 
-#			Description: is a boolean value (0 or 1) that will #Disable Items with a Permanent Enchantment
-#			Default: 0
+#       AuctionHouseBot.DisablePermEnchant 
+#           Description: is a boolean value (0 or 1) that will #Disable Items with a Permanent Enchantment
+#           Default: 0
 
 AuctionHouseBot.DisablePermEnchant = 0
 
-# 		AuctionHouseBot.DisableConjured 
-#			Description: is a boolean value (0 or 1) that will #Disable Conjured Items
-#			Default: 0
+#       AuctionHouseBot.DisableConjured 
+#           Description: is a boolean value (0 or 1) that will #Disable Conjured Items
+#           Default: 0
 
 AuctionHouseBot.DisableConjured = 0
 
-# 		AuctionHouseBot.DisableGems 
-#			Description: is a boolean value (0 or 1) that will Disable #Gems
-#			Default: 0
+#       AuctionHouseBot.DisableGems 
+#           Description: is a boolean value (0 or 1) that will Disable #Gems
+#           Default: 0
 
 AuctionHouseBot.DisableGems = 0
 
-# 		AuctionHouseBot.DisableMoney 
-#			Description: is a boolean value (0 or 1) that will Disable #Items that are used as money
-#			Default: 0
+#       AuctionHouseBot.DisableMoney 
+#           Description: is a boolean value (0 or 1) that will Disable #Items that are used as money
+#           Default: 0
 
 AuctionHouseBot.DisableMoney = 0
 
-# 		AuctionHouseBot.DisableMoneyLoot 
-#			Description: is a boolean value (0 or 1) that will #Disable Items that have Money as a loot
-			Default: 0
-			
+#       AuctionHouseBot.DisableMoneyLoot 
+#           Description: is a boolean value (0 or 1) that will #Disable Items that have Money as a loot
+           Default: 0
+
 AuctionHouseBot.DisableMoneyLoot = 0
 
-# 		AuctionHouseBot.DisableLootable
-#			Description: is a boolean value (0 or 1) that will #Disable Items that have other items as loot
-#			Default: 0
-			
+#       AuctionHouseBot.DisableLootable
+#           Description: is a boolean value (0 or 1) that will #Disable Items that have other items as loot
+#           Default: 0
+
 AuctionHouseBot.DisableLootable = 0
 
-# 		AuctionHouseBot.DisableKeys 
-#			Description: is a boolean value (0 or 1) that will Disable #Items that are keys
-#			Default: 0
+#       AuctionHouseBot.DisableKeys 
+#           Description: is a boolean value (0 or 1) that will Disable #Items that are keys
+#           Default: 0
 
 AuctionHouseBot.DisableKeys = 0
 
-# 		AuctionHouseBot.DisableDuration
-#			Description: is a boolean value (0 or 1) that will #Disable Items with a duration
-#			Default: 0
-			
+#       AuctionHouseBot.DisableDuration
+#           Description: is a boolean value (0 or 1) that will #Disable Items with a duration
+#           Default: 0
+           
 AuctionHouseBot.DisableDuration = 0
 
-# 		AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel 
-#			Description: is a boolean value (0 or 1) #that will Disable items that are BOP or 
-						 Quest Item with a Required level that #is less than the Item Level
-#			Default: 0
-						 
+#       AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel 
+#           Description: is a boolean value (0 or 1) #that will Disable items that are BOP or 
+                       Quest Item with a Required level that #is less than the Item Level
+#           Default: 0
+                       
 AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel = 0
 
 # These Filters are boolean (0 or 1) and will disable items that are
@@ -3392,9 +3391,7 @@ AuctionHouseBot.DisableItemsAboveReqSkillRank = 0
 AuctionHouseBot.DisableTGsBelowReqSkillRank = 0
 AuctionHouseBot.DisableTGsAboveReqSkillRank = 0
 
-
-
-
+#
 ###################################################################################################
 
 
