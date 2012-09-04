@@ -3329,7 +3329,7 @@ AuctionHouseBot.DisableMoney = 0
 
 #       AuctionHouseBot.DisableMoneyLoot 
 #           Description: is a boolean value (0 or 1) that will #Disable Items that have Money as a loot
-           Default: 0
+#           Default: 0
 
 AuctionHouseBot.DisableMoneyLoot = 0
 
@@ -3353,7 +3353,7 @@ AuctionHouseBot.DisableDuration = 0
 
 #       AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel 
 #           Description: is a boolean value (0 or 1) #that will Disable items that are BOP or 
-                       Quest Item with a Required level that #is less than the Item Level
+#                        Quest Item with a Required level that #is less than the Item Level
 #           Default: 0
                        
 AuctionHouseBot.DisableBOP_Or_Quest_NoReqLevel = 0
