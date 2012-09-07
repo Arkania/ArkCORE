@@ -2916,6 +2916,7 @@ protected:
     uint32 m_AreaID;
     uint32 m_regenTimerCount;
     uint32 m_holyPowerRegenTimerCount;          // Holy power updates ticks at every 10s thats wy we need this.
+	uint32 m_focusRegenTimerCount; 				// Focus power updates ticks at every second.
     float m_powerFraction[MAX_POWERS];
     uint32 m_contestedPvPTimer;
 
