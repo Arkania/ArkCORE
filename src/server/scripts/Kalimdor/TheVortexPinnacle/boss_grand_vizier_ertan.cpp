@@ -114,11 +114,6 @@ public:
     };
 };
 
-
-/*
-* Copyright (C) 2011-2012 Molios - spell_vizier_ertan_lurking_tempest_summon
-*/
- 
 class spell_vizier_ertan_lurking_tempest_summon : public SpellScriptLoader
 {
     public:
