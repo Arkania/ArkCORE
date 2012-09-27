@@ -2,7 +2,7 @@
 -- By Mikadmin For Arkania
 
 DELETE FROM `creature_text` WHERE `entry` = 45993;
-INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES 
+INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES
 (45993, 0, 0, 'The master was clearly speaking to you, Valiona. I am far too busy to attack ANYONE !', 1, 0, 0, 0, 0, 20300, 'VO_BT_Theralion_Event01'),
 (45993, 1, 0, 'How dare you call me worthless! You will see why I am mother's favored child !', 1, 0, 0, 0, 0, 20301, 'VO_BT_Theralion_Event02'),
 (45993, 2, 0, 'Bare your soul to me, mortal.', 1, 0, 0, 0, 0, 20302, 'VO_BT_Theralion_Event03'),
