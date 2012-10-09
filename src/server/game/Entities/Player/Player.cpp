@@ -7531,7 +7531,7 @@ void Player::UpdateHonorFields ()
     {
         time_t yesterday = today - DAY;
 
-        uint16 kills_today = PAIR32_LOPART(GetUInt32Value(PLAYER_FIELD_KILLS));
+        uint16 kills_today = GetUInt16Value(PLAYER_FIELD_KILLS, 0);
 
         // update yesterday's contribution
         if (m_lastHonorUpdateTime >= yesterday)
@@ -7539,14 +7539,14 @@ void Player::UpdateHonorFields ()
             //SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION));
 
             // this is the first update today, reset today's contribution
-            //SetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, 0);
-            SetUInt32Value(PLAYER_FIELD_KILLS, MAKE_PAIR32(0, kills_today));
+            SetUInt16Value(PLAYER_FIELD_KILLS, 0, 0);
+            SetUInt16Value(PLAYER_FIELD_KILLS, 1, kills_today);
         }
         else
         {
             // no honor/kills yesterday or today, reset
             //SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
-            SetUInt32Value(PLAYER_FIELD_KILLS, 0);
+            SetUInt16Value(PLAYER_FIELD_KILLS, 0);
         }
     }
 
@@ -17549,9 +17549,9 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
             SetArenaTeamInfoField(arena_slot, ArenaTeamInfoType(j), 0);
     }
 
-    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[45].GetUInt32());
-    SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[46].GetUInt16());
-    SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[47].GetUInt16());
+    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[43].GetUInt32());
+    SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[44].GetUInt16());
+    SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[45].GetUInt16());
 
     _LoadBoundInstances(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadInstanceTimeRestrictions(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES));
