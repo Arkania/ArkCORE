@@ -7546,7 +7546,7 @@ void Player::UpdateHonorFields ()
         {
             // no honor/kills yesterday or today, reset
             //SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, 0);
-            SetUInt16Value(PLAYER_FIELD_KILLS, 0);
+            SetUInt32Value(PLAYER_FIELD_KILLS, 0);
         }
     }
 
