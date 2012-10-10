@@ -80,7 +80,6 @@ void AddSC_guards();
 void AddSC_item_scripts();
 void AddSC_npc_professions();
 void AddSC_npc_innkeeper();
-void AddSC_npc_spell_click_spells();
 void AddSC_npcs_special();
 void AddSC_npc_taxi();
 void AddSC_achievement_scripts();
@@ -751,7 +750,6 @@ void AddWorldScripts ()
     AddSC_item_scripts();
     AddSC_npc_professions();
     AddSC_npc_innkeeper();
-    AddSC_npc_spell_click_spells();
     AddSC_npcs_special();
     AddSC_npc_taxi();
     AddSC_achievement_scripts();
