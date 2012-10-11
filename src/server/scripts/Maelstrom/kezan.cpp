@@ -40,6 +40,8 @@ enum NPC_DefiantTroll
 #define SAY_WORK_6 "Sorry, mon. It won't happen again."
 #define SAY_WORK_7 "What I doin' wrong? Don't I get a lunch and two breaks a day, mon?"
 #define SAY_WORK_8 "Ouch! Dat hurt!"
+
+bool work;
  
 class npc_defiant_troll : public CreatureScript
 {
@@ -57,7 +59,6 @@ class npc_defiant_troll : public CreatureScript
  
         uint32 rebuffTimer;
         uint32 auraTimer;
-        bool work;
  
         void Reset ()
         {
@@ -117,6 +118,8 @@ class npc_defiant_troll : public CreatureScript
                 // Set timer here so he despawns in 2 minutes, set 2 sec aura timer
                 rebuffTimer = 120000; 
                 auraTimer = rebuffTimer - 2000;
+
+                work = true;
             }
         }
  
@@ -161,7 +164,7 @@ class npc_defiant_troll : public CreatureScript
  
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (player->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE)
+        if (player->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && work == false)
         {
             player->CastSpell(creature, SPELL_LIGHTNING_VISUAL, true);
             SpellEntry const* spell = sSpellStore.LookupEntry(SPELL_LIGHTNING_VISUAL);
