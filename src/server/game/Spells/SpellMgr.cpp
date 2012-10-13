@@ -3977,6 +3977,11 @@ void SpellMgr::LoadSpellCustomAttr ()
             spellInfo->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
             count++;
             break;
+        case 82898:          // Crouching Tiger, Hidden Chimera (Rank 1)
+        case 82899:          // Crouching Tiger, Hidden Chimera (Rank 2)
+            spellInfo->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
+            count++;
+            break;
         case 87934:          // Serpent Spread
         case 87935:
             spellInfo->Effect[0] = SPELL_EFFECT_APPLY_AURA;
