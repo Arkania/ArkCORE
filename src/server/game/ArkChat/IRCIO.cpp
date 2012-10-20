@@ -219,7 +219,7 @@ void IRCClient::Handle_IRC(std::string sData)
                 {
                     if(CHAT.find("\001VERSION\001") < CHAT.size())
                     {
-                        Send_IRC_Channel(szUser, MakeMsg("\001VERSION Cata-Chat %s ©2008-2010 Biglad\001", "%s" , sIRC._Mver.c_str()), true, "PRIVMSG");
+                        Send_IRC_Channel(szUser, MakeMsg("\001VERSION MGACHAT %s ©2008-2012 Biglad - http://www.mgawow.co.uk \001", "%s" , sIRC._Mver.c_str()), true, "PRIVMSG");
                     }
                     // a pm is required for certain commands
                     // such as login. to validate the command

@@ -70,7 +70,7 @@ void IRCCmd::Handle_Login(_CDATA *CD)
                         NewClient->UName    = MakeUpper(_PARAMS[0]);
                         NewClient->GMLevel  = fields[0].GetInt16();
                         _CLIENTS.push_back(NewClient);
-                        Send_IRCA(CD->USER, MakeMsg("You Are Now Logged In As %s, Welcome To Cata-Chat Admin Mode.", _PARAMS[0].c_str()), true, CD->TYPE);
+                        Send_IRCA(CD->USER, MakeMsg("You Are Now Logged In As %s, Welcome To ArkChat Admin Mode.", _PARAMS[0].c_str()), true, CD->TYPE);
 
                         if(sIRC._op_gm == 1 && GMLevel >= sIRC._op_gm_lev)
                         {
@@ -85,7 +85,7 @@ void IRCCmd::Handle_Login(_CDATA *CD)
         }else
             Send_IRCA(CD->USER, "\0034[ERROR] : You Are Already Logged In As "+ _PARAMS[0] +"!", true, "ERROR");
     }else
-         Send_IRCA(CD->USER, "\0034[ERROR] : Sorry You Are "+isbanned+". You Cannot Log In To Cata-Chat "+CD->USER.c_str()+"!", true, "ERROR");
+         Send_IRCA(CD->USER, "\0034[ERROR] : Sorry You Are "+isbanned+". You Cannot Log In To ArkChat "+CD->USER.c_str()+"!", true, "ERROR");
 }
 
 void IRCCmd::Handle_Logout(_CDATA *CD)
@@ -606,7 +606,7 @@ void IRCCmd::Help_IRC(_CDATA *CD)
                 QueryResult result = WorldDatabase.PQuery("SELECT * FROM `IRC_Commands` WHERE `gmlevel` <= %u ORDER BY `Command`", GetLevel(CD->USER));
                 if(result)
                 {
-                    std::string output = "\002Cata-Chat IRC Commands:\017 ";
+                    std::string output = "\002ArkChat IRC Commands:\017 ";
                     for (uint64 i=0; i < result->GetRowCount(); i++)
                     {
                         Field *fields = result->Fetch();
@@ -647,7 +647,7 @@ void IRCCmd::Help_IRC(_CDATA *CD)
                 QueryResult result = WorldDatabase.PQuery("SELECT * FROM `IRC_Commands` WHERE `gmlevel` = 0 ORDER BY `Command`");
                 if(result)
                 {
-                    std::string output = "\002Cata-Chat IRC Commands:\017 ";
+                    std::string output = "\002ArkChat IRC Commands:\017 ";
                     for (uint64 i=0; i < result->GetRowCount(); i++)
                     {
                         Field *fields = result->Fetch();
