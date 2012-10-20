@@ -22296,9 +22296,9 @@ void Player::ModifyMoney (int32 d)
 
                         pGuild->SetGuildMoney(GuildMoney);
                     }
+                this->SendPlayerMoneyNotify(this, d, GetGuildMoneyModifier());
                 }
             }
-            this->SendPlayerMoneyNotify(this, d, GetGuildMoneyModifier());
         }
         else
         {
