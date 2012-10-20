@@ -3325,6 +3325,13 @@ void Spell::cast (bool skipCheck)
             finish(false);
             return;
         }
+		if ((m_spellInfo->Mechanic == MECHANIC_NONE && m_spellInfo->SpellIconID == 104 || m_spellInfo->Mechanic == MECHANIC_BANDAGE) && target->HasAura(11196)) // Recently Bandaged
+		{
+			SendCastResult(SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW);
+			SendInterrupted(0);
+			finish(false);
+			return;
+		}
     }
     else
     {
@@ -3436,8 +3443,11 @@ void Spell::cast (bool skipCheck)
     {
     case SPELLFAMILY_GENERIC:
     {
-        if (m_spellInfo->Mechanic == MECHANIC_BANDAGE)          // Bandages
+        if (m_spellInfo->Mechanic == MECHANIC_NONE && m_spellInfo->SpellIconID == 104)   // Bandages << rank 12
             m_preCastSpell = 11196;          // Recently Bandaged
+		
+		if (m_spellInfo->Mechanic == MECHANIC_BANDAGE)          // Bandages >> rank 12
+			m_preCastSpell = 11196;          // Recently Bandaged
         break;
     }
     case SPELLFAMILY_MAGE:
