@@ -36,6 +36,7 @@
 #include "Player.h"
 #include "BattlegroundMgr.h"
 #include "ScriptMgr.h"
+#include "ArkChat/IRCClient.h"
 
 bool GameEventMgr::CheckOneGameEvent (uint16 entry) const
 {
@@ -1070,6 +1071,15 @@ void GameEventMgr::ApplyNewEvent (uint16 event_id)
         break;
     case 1:          // announce events
         sWorld->SendWorldText(LANG_EVENTMESSAGE, mGameEvent[event_id].description.c_str());
+		if (sIRC.Active == 1)
+		{
+			//Send message to IRC main channel
+			std::string ircchan = "#";
+			std::string irctmpmsg = "";
+			ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+			irctmpmsg += mGameEvent[event_id].description.c_str();
+			sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Event \00304,08\037/!\\\037\017 %s", "%s", irctmpmsg), true);
+		}
         break;
     }
 

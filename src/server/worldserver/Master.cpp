@@ -47,6 +47,7 @@
 #include "AuthSocket.h"
 
 #include "BigNumber.h"
+#include "ArkChat/IRCClient.h"
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
@@ -249,6 +250,15 @@ Handler.register_handler(SIGTERM, &SignalTERM);
                 sConfig->GetStringDefault("SOAP.IP", "127.0.0.1"), sConfig->GetIntDefault("SOAP.Port", 7878));
         soap_thread = new ACE_Based::Thread(runnable);
     }
+
+	// Start up ArkChat
+    if (sIRC.Active == 1)
+    {
+        ACE_Based::Thread irc(new IRCClient);
+        irc.setPriority ((ACE_Based::Priority )2);
+    }
+    else
+        sLog->outString("*** ArkChat Is Disabled. *");
 
     ///- Start up freeze catcher thread
     if (uint32 freeze_delay = sConfig->GetIntDefault("MaxCoreStuckTime", 0)) {

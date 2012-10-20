@@ -29,6 +29,7 @@
 #include "SocialMgr.h"
 #include "World.h"
 #include "DatabaseEnv.h"
+#include "ArkChat/IRCClient.h"
 
 Channel::Channel (const std::string& name, uint32 channel_id, uint32 Team) :
         m_announce(true), m_ownership(true), m_name(name), m_password(""), m_flags(0), m_channelId(channel_id), m_ownerGUID(0), m_Team(Team)
@@ -205,7 +206,10 @@ void Channel::Join (uint64 p, const char *pass)
     MakeYouJoined(&data);
     SendToOne(&data, p);
 
-    JoinNotify(p);
+    if (sIRC.Active == 1)
+		sIRC.Handle_WoW_Channel(m_name, ObjectAccessor::FindPlayer(p), CHANNEL_JOIN);
+	
+	JoinNotify(p);
 
     // Custom channel handling
     if (!IsConstant())
@@ -258,7 +262,10 @@ void Channel::Leave (uint64 p, bool send)
             SendToAll(&data);
         }
 
-        LeaveNotify(p);
+        if (sIRC.Active == 1)
+			sIRC.Handle_WoW_Channel(m_name, ObjectAccessor::FindPlayer(p), CHANNEL_LEAVE);
+
+		LeaveNotify(p);
 
         if (!IsConstant())
         {
