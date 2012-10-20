@@ -2421,6 +2421,27 @@ void Spell::EffectTriggerSpell (SpellEffIndex effIndex)
     // special cases
     switch (triggered_spell_id)
     {
+    // Tricky Treat / Out With It
+    case 42965:
+    {
+        int32 rand_eff = urand(1, 7);
+        switch (rand_eff)
+        {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                m_caster->CastSpell(m_caster, 42919, true);
+                break;
+            case 7:
+                m_caster->CastSpell(m_caster, 42966, true);
+                if (AchievementEntry const* pAE = GetAchievementStore()->LookupEntry(288)) // OUT WITH IT
+                    m_caster->ToPlayer()->CompletedAchievement(pAE, true);
+                break;
+        }
+    }
     // Mirror Image
     case 58832:
     {
