@@ -44,7 +44,7 @@ IRCClient::~IRCClient(){}
 // ZThread Entry This function is called when the thread is created in Master.cpp (trinitycore)
 void IRCClient::run()
 {
-    sIRC.iLog.WriteLog(" %s : ****** MGA-Core(TC) With Cata-Chat Has Been Started ******", sIRC.iLog.GetLogDateTimeStr().c_str());
+    sIRC.iLog.WriteLog(" %s : ****** ArkCORE(TC) With Cata-Chat Has Been Started ******", sIRC.iLog.GetLogDateTimeStr().c_str());
 
     // before we begin we wait a few 
     // mangos is still starting up.
