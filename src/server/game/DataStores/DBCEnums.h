@@ -40,7 +40,8 @@
 
 enum BattlegroundBracketId          // bracketId for level ranges
 {
-    BG_BRACKET_ID_FIRST = 0, BG_BRACKET_ID_LAST = 15
+    BG_BRACKET_ID_FIRST = 0, 
+    BG_BRACKET_ID_LAST  = 15
 };
 
 // must be max value in PvPDificulty slot+1
@@ -48,65 +49,70 @@ enum BattlegroundBracketId          // bracketId for level ranges
 
 enum AreaTeams
 {
-    AREATEAM_NONE = 0, AREATEAM_ALLY = 2, AREATEAM_HORDE = 4
+    AREATEAM_NONE  = 0, 
+    AREATEAM_ALLY  = 2, 
+    AREATEAM_HORDE = 4
 };
 
 enum AchievementFaction
 {
-    ACHIEVEMENT_FACTION_HORDE = 0, ACHIEVEMENT_FACTION_ALLIANCE = 1, ACHIEVEMENT_FACTION_ANY = -1,
+    ACHIEVEMENT_FACTION_HORDE    = 0, 
+    ACHIEVEMENT_FACTION_ALLIANCE = 1, 
+    ACHIEVEMENT_FACTION_ANY      = -1,
 };
 
 enum AchievementFlags
 {
-    ACHIEVEMENT_FLAG_COUNTER = 0x00000001,          // Just count statistic (never stop and complete)
-    ACHIEVEMENT_FLAG_HIDDEN = 0x00000002,          // Not sent to client - internal use only
-    ACHIEVEMENT_FLAG_STORE_MAX_VALUE = 0x00000004,          // Store only max value? used only in "Reach level xx"
-    ACHIEVEMENT_FLAG_SUMM = 0x00000008,          // Use summ criteria value from all reqirements (and calculate max value)
-    ACHIEVEMENT_FLAG_MAX_USED = 0x00000010,          // Show max criteria (and calculate max value ??)
-    ACHIEVEMENT_FLAG_REQ_COUNT = 0x00000020,          // Use not zero req count (and calculate max value)
-    ACHIEVEMENT_FLAG_AVERAGE = 0x00000040,          // Show as average value (value / time_in_days) depend from other flag (by def use last criteria value)
-    ACHIEVEMENT_FLAG_BAR = 0x00000080,          // Show as progress bar (value / max vale) depend from other flag (by def use last criteria value)
+    ACHIEVEMENT_FLAG_COUNTER           = 0x00000001,          // Just count statistic (never stop and complete)
+    ACHIEVEMENT_FLAG_HIDDEN            = 0x00000002,          // Not sent to client - internal use only
+    ACHIEVEMENT_FLAG_STORE_MAX_VALUE   = 0x00000004,          // Store only max value? used only in "Reach level xx"
+    ACHIEVEMENT_FLAG_SUMM              = 0x00000008,          // Use summ criteria value from all reqirements (and calculate max value)
+    ACHIEVEMENT_FLAG_MAX_USED          = 0x00000010,          // Show max criteria (and calculate max value ??)
+    ACHIEVEMENT_FLAG_REQ_COUNT         = 0x00000020,          // Use not zero req count (and calculate max value)
+    ACHIEVEMENT_FLAG_AVERAGE           = 0x00000040,          // Show as average value (value / time_in_days) depend from other flag (by def use last criteria value)
+    ACHIEVEMENT_FLAG_BAR               = 0x00000080,          // Show as progress bar (value / max vale) depend from other flag (by def use last criteria value)
     ACHIEVEMENT_FLAG_REALM_FIRST_REACH = 0x00000100,          //
-    ACHIEVEMENT_FLAG_REALM_FIRST_KILL = 0x00000200,          //
-    ACHIEVEMENT_FLAG_UNK0 = 0x00000400,          //
-    ACHIEVEMENT_FLAG_UNK1 = 0x00000800,          //
-    ACHIEVEMENT_FLAG_UNK2 = 0x00001000,          // 4.0.x
-    ACHIEVEMENT_FLAG_UNK3 = 0x00002000,          // 4.0.x
+    ACHIEVEMENT_FLAG_REALM_FIRST_KILL  = 0x00000200,          //
+    ACHIEVEMENT_FLAG_UNK0              = 0x00000400,          //
+    ACHIEVEMENT_FLAG_UNK1              = 0x00000800,          //
+    ACHIEVEMENT_FLAG_UNK2              = 0x00001000,          // 4.0.x
+    ACHIEVEMENT_FLAG_UNK3              = 0x00002000,          // 4.0.x
     ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT = 0x00004000,          //
-    ACHIEVEMENT_FLAG_UNK4 = 0x00008000,          // Guild related
+    ACHIEVEMENT_FLAG_UNK4              = 0x00008000,          // Guild related
 };
 
 #define MAX_CRITERIA_REQUIREMENTS 2
 
 enum AchievementCriteriaCondition
 {
-    ACHIEVEMENT_CRITERIA_CONDITION_NONE = 0, ACHIEVEMENT_CRITERIA_CONDITION_NO_DEATH = 1,          // reset progress on death
-    ACHIEVEMENT_CRITERIA_CONDITION_UNK1 = 2,          // only used in "Complete a daily quest every day for five consecutive days"
-    ACHIEVEMENT_CRITERIA_CONDITION_BG_MAP = 3,          // requires you to be on specific map, reset at change
-    ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE = 4,          // only used in "Win 10 arenas without losing"
-    ACHIEVEMENT_CRITERIA_CONDITION_UNK2 = 9,          // unk
-    ACHIEVEMENT_CRITERIA_CONDITION_NOT_IN_GROUP = 10,          // requires the player not to be in group
-    ACHIEVEMENT_CRITERIA_CONDITION_UNK3 = 13,          // unk
+    ACHIEVEMENT_CRITERIA_CONDITION_NONE         = 0, 
+    ACHIEVEMENT_CRITERIA_CONDITION_NO_DEATH     = 1,          // reset progress on death
+    ACHIEVEMENT_CRITERIA_CONDITION_UNK1         = 2,          // only used in "Complete a daily quest every day for five consecutive days"
+    ACHIEVEMENT_CRITERIA_CONDITION_BG_MAP       = 3,          // requires you to be on specific map, reset at change
+    ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE      = 4,          // only used in "Win 10 arenas without losing"
+    ACHIEVEMENT_CRITERIA_CONDITION_UNK2         = 9,          // unk
+    ACHIEVEMENT_CRITERIA_CONDITION_NOT_IN_GROUP = 10,         // requires the player not to be in group
+    ACHIEVEMENT_CRITERIA_CONDITION_UNK3         = 13,         // unk
 };
 
 enum AchievementCriteriaCompletionFlags
 {
     ACHIEVEMENT_CRITERIA_FLAG_SHOW_PROGRESS_BAR = 0x00000001,          // Show progress as bar
-    ACHIEVEMENT_CRITERIA_FLAG_HIDE_CRITERIA = 0x00000002,          // Not show criteria in client
-    ACHIEVEMENT_CRITERIA_FLAG_UNK3 = 0x00000004,          // BG related??
-    ACHIEVEMENT_CRITERIA_FLAG_UNK4 = 0x00000008,          //
-    ACHIEVEMENT_CRITERIA_FLAG_UNK5 = 0x00000010,          // not used
-    ACHIEVEMENT_CRITERIA_FLAG_MONEY_COUNTER = 0x00000020,          // Displays counter as money
+    ACHIEVEMENT_CRITERIA_FLAG_HIDE_CRITERIA     = 0x00000002,          // Not show criteria in client
+    ACHIEVEMENT_CRITERIA_FLAG_UNK3              = 0x00000004,          // BG related??
+    ACHIEVEMENT_CRITERIA_FLAG_UNK4              = 0x00000008,          //
+    ACHIEVEMENT_CRITERIA_FLAG_UNK5              = 0x00000010,          // not used
+    ACHIEVEMENT_CRITERIA_FLAG_MONEY_COUNTER     = 0x00000020,          // Displays counter as money
 };
 
 enum AchievementCriteriaTimedTypes
 {
-    ACHIEVEMENT_TIMED_TYPE_EVENT = 1,          // Timer is started by internal event with id in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_QUEST = 2,          // Timer is started by acceting quest with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_EVENT        = 1,          // Timer is started by internal event with id in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_QUEST        = 2,          // Timer is started by acceting quest with entry in timerStartEvent
     ACHIEVEMENT_TIMED_TYPE_SPELL_CASTER = 5,          // Timer is started by casting a spell with entry in timerStartEvent
     ACHIEVEMENT_TIMED_TYPE_SPELL_TARGET = 6,          // Timer is started by being target of spell with entry in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_CREATURE = 7,          // Timer is started by killing creature with entry in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_ITEM = 9,          // Timer is started by using item with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_CREATURE     = 7,          // Timer is started by killing creature with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_ITEM         = 9,          // Timer is started by using item with entry in timerStartEvent
 
     ACHIEVEMENT_TIMED_TYPE_MAX,
 };
@@ -308,8 +314,8 @@ enum CurrencyTypes
 
 enum DB2Types
 {
-    DB2TYPE_ITEM_SPARSE = 2442913102,          // hash of item-sparse.db2
-    DB2TYPE_ITEM = 1344507586,          // hash of item.db2
+    DB2TYPE_ITEM_SPARSE = 2442913102,                    // hash of item-sparse.db2
+    DB2TYPE_ITEM = 1344507586,                           // hash of item.db2
     ITEM_TEMPLATE_UPDATE_REGISTER = 1091717232,          // what is this for?
 };
 
