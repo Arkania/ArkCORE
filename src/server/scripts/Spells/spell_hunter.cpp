@@ -39,7 +39,8 @@ enum HunterSpells
     HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED = 54045,
     HUNTER_SPELL_INVIGORATION_TRIGGERED       = 53398,
     HUNTER_SPELL_MASTERS_CALL_TRIGGERED       = 62305,
-    HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED    = 53220
+    HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED    = 53220,
+    HUNTER_SPELL_CHIMERA_SHOT_HEALING         = 53353
 };
 
 class spell_hun_kill_command: public SpellScriptLoader
@@ -542,6 +543,48 @@ public:
     }
 };
 
+// 53209 Chimera Shot
+class spell_hun_chimera_shot : public SpellScriptLoader
+{
+public:
+    spell_hun_chimera_shot() : SpellScriptLoader("spell_hun_chimera_shot") { }
+
+    class spell_hun_chimera_shot_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
+        bool Validate(SpellEntry const* /*spellEntry*/)
+        {
+            if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_HEALING))
+                return false;
+            return true;
+        }
+
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
+
+            // Get normal serpent sting or Serpent Spread's proc result one
+            if (AuraEffect* serpentSting = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_HUNTER, 16384, 0, 0, GetCaster()->GetGUID()))
+                serpentSting->GetBase()->RefreshDuration();
+
+            GetCaster()->CastSpell(GetCaster(), HUNTER_SPELL_CHIMERA_SHOT_HEALING, true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_hun_chimera_shot_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_chimera_shot_SpellScript();
+    }
+};
+
 void AddSC_hunter_spell_scripts ()
 {
     new spell_hun_invigoration();
@@ -555,4 +598,5 @@ void AddSC_hunter_spell_scripts ()
     new spell_hun_steady_shot();
     new spell_hun_focus_fire();
     new spell_hun_kill_command();
+    new spell_hun_chimera_shot();
 }
