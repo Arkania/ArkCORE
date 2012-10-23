@@ -6814,9 +6814,7 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             case 2225: // Serpent Spread
             {
                 // Proc only on multi-shot
-                if (!target || !procSpell)
-                    return false;
-                if (procSpell->Id != 2643)
+                if (!target || procSpell->Id != 2643)
                     return false;
 
                 switch (triggerAmount)
