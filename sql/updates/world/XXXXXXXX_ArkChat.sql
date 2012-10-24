@@ -78,3 +78,11 @@ CREATE TABLE `IRC_Inchan` (
 -- Records of IRC_Inchan
 -- ----------------------------
 
+DELETE FROM `arkcore_string` WHERE `entry` in (11996,11997,11998,11999,20000,20001,20002);
+INSERT INTO `arkcore_string` VALUES (11996, '|cff60ff00[ArkCore Bar Keep]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `arkcore_string` VALUES (11997, '|cffffff00[System Message]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `arkcore_string` VALUES (11998, '|cffffff00[Server Event]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `arkcore_string` VALUES (11999, '|cfffffC00[ArkCore Announcer]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `arkcore_string` VALUES (20000, '|cffffff00[System Message]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `arkcore_string` VALUES (20001, '|cffffff00[Server Event]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `arkcore_string` VALUES (20002, '|cffffff00[Automatic]: %s|r', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
