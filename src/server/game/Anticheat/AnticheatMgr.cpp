@@ -91,7 +91,7 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         if (autojail > 2) // 0,1,2,3 - computers start count from 0
         {
         player->CastSpell(player, 642, true);
-        player->TeleportTo(13, 0, 0, 0, 0);
+        //player->TeleportTo(13, 0, 0, 0, 0); NEED TO UPDATE TO NEW JAIL WHEN FOUND
         player->SetMovement(MOVE_ROOT);
         player->CastSpell(player, 42201, true);
         player->CastSpell(player, 23775, true);
