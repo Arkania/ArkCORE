@@ -1419,6 +1419,41 @@ public:
     }
 };
 
+/*######
+ ## go_cultist_cage
+ ######*/
+// NOT SURE IF THIS IS 100% BLIZZ LIKE CANT FIND ANY DATA ON THIS QUEST
+// http://www.wowhead.com/quest=26955
+enum eCultistCage
+{
+    NPC_CAGED_BEAR = 44902,
+	NPC_ZENKIKI = 44904,
+	SPELL_HEAL_BEAR = 8070,
+};
+
+class go_cultist_cage: public GameObjectScript
+{
+public:
+    go_cultist_cage () :
+            GameObjectScript("go_cultist_cage")
+    {
+    }
+
+    bool OnGossipHello (Player *pPlayer, GameObject *pGO)
+    {
+        if (Creature *pCagedBear = pGO->FindNearestCreature(NPC_CAGED_BEAR, 8.0f, true))
+        {
+            pGO->SetGoState(GO_STATE_ACTIVE);
+			Creature * pVenKiki = pGO->SummonCreature(NPC_ZENKIKI, pPlayer->GetPositionX()-2, pPlayer->GetPositionY()+2, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000);
+			if (pVenKiki)
+				pVenKiki->CastSpell(pCagedBear,SPELL_HEAL_BEAR,true);
+        }
+
+        return true;
+    }
+};
+
+
 void AddSC_go_scripts ()
 {
     new go_cat_figurine;
@@ -1461,4 +1496,5 @@ void AddSC_go_scripts ()
 	new go_rocketsling;
 	new go_towninabox;
     new go_gnoll_cage;
+	new go_cultist_cage;
 }
