@@ -223,14 +223,11 @@ bool ChatHandler::HandleAnnounceCommand (const char* args)
     if (!*args)
         return false;
 
-    if (sIRC.Active == 1)
+    if ((sIRC.BOTMASK & 256) != 0)
 	{
-		if ((sIRC.BOTMASK & 256) != 0)
-		{
-			std::string ircchan = "#";
-			ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
-			sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 System Message \00304,08\037/!\\\037\017 %s", "%s", args), true);
-		}
+		std::string ircchan = "#";
+		ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+		sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 System Message \00304,08\037/!\\\037\017 %s", "%s", args), true);
 	}
 	
 	char buff[2048];

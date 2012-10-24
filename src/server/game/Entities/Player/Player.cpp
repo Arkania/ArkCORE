@@ -2711,22 +2711,19 @@ void Player::AddToWorld ()
         if (m_items[i])
             m_items[i]->AddToWorld();
 
-	if (sIRC.Active == 1)
+	//ARKCHAT AUTO JOIN CHANNEL
+	if(sIRC.ajoin == 1)
 	{
-		//ARKCHAT AUTO JOIN CHANNEL
-		if(sIRC.ajoin == 1)
+		//QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `name` = '%s'", Unit::GetName());
+		QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
+		if(!result)
 		{
-			//QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `name` = '%s'", Unit::GetName());
-			QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
-			if(!result)
-			{
-				// prevent invite spam
-				sIRC.AutoJoinChannel(this);
-				std::string pname = Unit::GetName();
-				std::string Channel = "world";
-				std::string query = "INSERT INTO `IRC_Inchan` VALUES (%d,'"+pname+"','"+Channel+"')";
-				WorldDatabase.PExecute(query.c_str(), GetSession()->GetPlayer()->GetGUID());
-			}
+			// prevent invite spam
+			sIRC.AutoJoinChannel(this);
+			std::string pname = Unit::GetName();
+			std::string Channel = "world";
+			std::string query = "INSERT INTO `IRC_Inchan` VALUES (%d,'"+pname+"','"+Channel+"')";
+			WorldDatabase.PExecute(query.c_str(), GetSession()->GetPlayer()->GetGUID());
 		}
 	}
 }
@@ -2767,11 +2764,8 @@ void Player::RemoveFromWorld ()
     }
 
 	//ARKCHAT AUTO JOIN CHANNEL clecn up inchan table :)
-	if (sIRC.Active == 1)
-	{
-		if(sIRC.ajoin == 1 && GetSession()->PlayerLogout())
-			WorldDatabase.PExecute("DELETE FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
-	}
+	if(sIRC.ajoin == 1 && GetSession()->PlayerLogout())
+		WorldDatabase.PExecute("DELETE FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
 }
 
 void Player::RegenerateAll ()
@@ -3436,17 +3430,15 @@ void Player::GiveLevel (uint8 level)
 
     UpdateAllStats();
 
-	if (sIRC.Active == 1)
+	if ((sIRC.BOTMASK & 256) != 0)
 	{
-		if ((sIRC.BOTMASK & 256) != 0)
-		{
-			char  temp [5];
-			sprintf(temp, "%u", level);
-			std::string plevel = temp;		
-			std::string pname = GetName();
-			sIRC.Send_IRC_Channels("\00311["+pname+"] : Has Reached Level: "+plevel);
-		}
+		char  temp [5];
+		sprintf(temp, "%u", level);
+		std::string plevel = temp;		
+		std::string pname = GetName();
+		sIRC.Send_IRC_Channels("\00311["+pname+"] : Has Reached Level: "+plevel);
 	}
+
 
     if (sWorld->getBoolConfig(CONFIG_ALWAYS_MAXSKILL))          // Max weapon skill when leveling up
         UpdateSkillsToMaxSkillsForLevel();

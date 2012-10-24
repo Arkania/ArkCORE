@@ -547,8 +547,7 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
             }
         }
 
-		if (sIRC.Active == 1)
-			sIRC.Send_WoW_IRC(_player, channel, msg);
+		sIRC.Send_WoW_IRC(_player, channel, msg);
 
         if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
         {

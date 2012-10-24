@@ -206,8 +206,7 @@ void Channel::Join (uint64 p, const char *pass)
     MakeYouJoined(&data);
     SendToOne(&data, p);
 
-    if (sIRC.Active == 1)
-		sIRC.Handle_WoW_Channel(m_name, ObjectAccessor::FindPlayer(p), CHANNEL_JOIN);
+	sIRC.Handle_WoW_Channel(m_name, ObjectAccessor::FindPlayer(p), CHANNEL_JOIN);
 	
 	JoinNotify(p);
 
@@ -262,8 +261,7 @@ void Channel::Leave (uint64 p, bool send)
             SendToAll(&data);
         }
 
-        if (sIRC.Active == 1)
-			sIRC.Handle_WoW_Channel(m_name, ObjectAccessor::FindPlayer(p), CHANNEL_LEAVE);
+		sIRC.Handle_WoW_Channel(m_name, ObjectAccessor::FindPlayer(p), CHANNEL_LEAVE);
 
 		LeaveNotify(p);
 

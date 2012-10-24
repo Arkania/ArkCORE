@@ -2798,14 +2798,13 @@ void World::SendAutoBroadcast ()
         data << msg;
         sWorld->SendGlobalMessage(&data);
     }
-	if (sIRC.Active == 1)
-	{
-		//SEND AUTOBROADCAT TO IRC
-		std::string ircchan = "#";
-		ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
-		sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Automatic System Message \00304,08\037/!\\\037\017 %s", "%s", msg.c_str()), true);
-		sLog->outDetail("AutoBroadcast: '%s'", msg.c_str());
-	}
+
+	//SEND AUTOBROADCAT TO IRC
+	std::string ircchan = "#";
+	ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+	sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Automatic System Message \00304,08\037/!\\\037\017 %s", "%s", msg.c_str()), true);
+	sLog->outDetail("AutoBroadcast: '%s'", msg.c_str());
+
 }
 
 void World::UpdateRealmCharCount (uint32 accountId)
