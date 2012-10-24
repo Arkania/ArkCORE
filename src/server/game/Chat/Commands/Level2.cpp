@@ -630,6 +630,7 @@ bool ChatHandler::HandlePInfoCommand (const char* args)
     uint8 Class;
     int64 muteTime = 0;
     int64 banTime = -1;
+	uint32 phase = 0;
 
     // get additional information from Player object
     if (target)
@@ -646,6 +647,7 @@ bool ChatHandler::HandlePInfoCommand (const char* args)
         race = target->getRace();
         Class = target->getClass();
         muteTime = target->GetSession()->m_muteTime;
+        phase = target->GetPhaseMask();
     }
     // get additional information from DB
     else
@@ -800,6 +802,8 @@ bool ChatHandler::HandlePInfoCommand (const char* args)
     uint32 silv = (money % GOLD) / SILVER;
     uint32 copp = (money % GOLD) % SILVER;
     PSendSysMessage(LANG_PINFO_LEVEL, race_s.c_str(), Class_s.c_str(), timeStr.c_str(), level, gold, silv, copp);
+    if (target)
+        PSendSysMessage(LANG_PINFO_PHASE, phase);
 
     return true;
 }
