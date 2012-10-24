@@ -2334,8 +2334,9 @@ void IRCCmd::Top_Player(_CDATA *CD)
     }
     if(_PARAMS[0] == "money")
     {
-        QueryResult result = CharacterDatabase.PQuery("SELECT name, CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1462), ' ', -1) AS UNSIGNED) AS money FROM characters ORDER BY money DESC LIMIT 0, %d ", limitr);
-        if(result)
+ //       QueryResult result = CharacterDatabase.PQuery("SELECT name, CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1462), ' ', -1) AS UNSIGNED) AS money FROM characters ORDER BY money DESC LIMIT 0, %d ", limitr);
+		QueryResult result = CharacterDatabase.PQuery("SELECT name, money FROM characters ORDER BY money DESC LIMIT 0, %d ", limitr);
+	if(result)
         {
             Field *fields = result->Fetch();
             std::string tptime = MakeMsg("\x2 Top%d Characters By Money:\x3\x31\x30 ", limitr);
