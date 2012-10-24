@@ -1506,7 +1506,14 @@ void AuraEffect::PeriodicTick (AuraApplication * aurApp, Unit * caster) const
                 damage = damageReductedArmor;
             }
 
-            // Curse of Agony damage-per-tick calculation
+            //Shadow Word Death/Mind Blast Shadow Orb Proc 10% chance in 406a
+			if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_PRIEST && (GetSpellProto()->SpellIconID == 95 || GetSpellProto()->SpellIconID == 1980)) // Mind Blast / Shadow Word Death
+			{
+				int32 orbchance = 10;
+				if (roll_chance_i(orbchance))
+					caster->CastSpell(caster, 95740, true);
+			}
+			// Curse of Agony damage-per-tick calculation
             if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_WARLOCK && (GetSpellProto()->SpellFamilyFlags[0] & 0x400) && GetSpellProto()->SpellIconID == 544)
             {
                 uint32 totalTick = GetTotalTicks();
