@@ -51,9 +51,9 @@ mcs_OnlinePlayers::~mcs_OnlinePlayers()
 
 void mcs_OnlinePlayers::run()
 {
-    /*int OnlineCount = 0;
+    int OnlineCount = 0;
     std::string IRCOut = "";
-    HashMapHolder<Player>::MapType& m = sObjectAccessor.GetPlayers();
+    HashMapHolder<Player>::MapType& m = sObjectAccessor->GetPlayers();
     for(HashMapHolder<Player>::MapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (itr->second && itr->second->GetSession()->GetPlayer() && itr->second->GetSession()->GetPlayer()->IsInWorld())
@@ -96,5 +96,5 @@ void mcs_OnlinePlayers::run()
     sIRC.Send_IRC_Channel(IRCCmd::ChanOrPM(CD), IRCCmd::MakeMsg("\002Players Online(%d):\017 %s", OnlineCount, IRCOut.c_str()), true, CD->TYPE.c_str());
 
     sIRC.Script_Lock[MCS_Players_Online] = false;
-	*/
+	
 }

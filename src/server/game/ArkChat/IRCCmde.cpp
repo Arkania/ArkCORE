@@ -533,7 +533,7 @@ void IRCCmd::Char_Player(_CDATA *CD)
         }
         if(_PARAMS[1] == "mod")
         {
-            /*if(_PARAMS[2] == "rep") TODO
+            if(_PARAMS[2] == "rep")
             {
                 uint32 factionId = atoi((char*)_PARAMS[3].c_str());
                 FactionEntry const *factionEntry = sFactionStore.LookupEntry(factionId);
@@ -546,7 +546,7 @@ void IRCCmd::Char_Player(_CDATA *CD)
                     int32 amount = atol((char*)_PARAMS[4].c_str());
                     if(amount > -39000 && amount < 43000)
                     {
-                        plr->SetFactionReputation(factionId,amount);
+						plr->SetReputation(factionId,amount);
                         Send_IRCA(ChanOrPM(CD), MakeMsg("\00313[%s] : Reputation With Faction %s Set To %s.", _PARAMS[0].c_str(), _PARAMS[3].c_str(), _PARAMS[4].c_str()), true, CD->TYPE);
                     }
                     else
@@ -554,7 +554,7 @@ void IRCCmd::Char_Player(_CDATA *CD)
                         Send_IRCA(CD->USER, "\0034[ERROR] : Reputation Value Incorrect. Must Be Between -39000 and 43000.", true, "ERROR");
                     }
                 }
-            }*/
+            }
             if(_PARAMS[2] == "morph")
             {
                 uint16 display_id = (uint16)atoi((char*)_PARAMS[3].c_str());
@@ -1912,7 +1912,7 @@ void IRCCmd::Shutdown_Trinity(_CDATA *CD)
 
 void IRCCmd::Spell_Player(_CDATA *CD)
 {
-    /*std::string* _PARAMS = getArray(CD->PARAMS, 3);
+    std::string* _PARAMS = getArray(CD->PARAMS, 3);
     if(AcctLevel(_PARAMS[0]) > GetLevel(CD->USER) && (sIRC.BOTMASK & 512)!= 0)
     {
         Send_IRCA(CD->USER, MakeMsg("\0034[ERROR] : Nice Try, This Player Has A Higher GM Level Than You! [ %i ]", AcctLevel(_PARAMS[0])), true, "ERROR");
@@ -1924,21 +1924,23 @@ void IRCCmd::Spell_Player(_CDATA *CD)
     {
         if(spellInfo)
         {
-            std::string name = spellInfo->SpellName[sWorld->GetDefaultDbcLocale()];
+            std::stringstream name;
+			name << spellInfo->SpellName[sWorld->GetDefaultDbcLocale()];
+			std::string rname = name.str().c_str();
             if(_PARAMS[1] == "cast")
             {
                 plr->CastSpell(plr, spell, true);
-                Send_IRCA(ChanOrPM(CD), "\00313["+_PARAMS[0]+"] : Has Had Spell "+name+" Casted On Them.", true, CD->TYPE);
+                Send_IRCA(ChanOrPM(CD), "\00313["+_PARAMS[0]+"] : Has Had Spell "+rname+" Casted On Them.", true, CD->TYPE);
             }
             if(_PARAMS[1] == "learn")
             {
                 plr->learnSpell(spell, true);
-                Send_IRCA(ChanOrPM(CD), "\00313["+_PARAMS[0]+"] : Has Learned Spell "+name+".", true, CD->TYPE);
+                Send_IRCA(ChanOrPM(CD), "\00313["+_PARAMS[0]+"] : Has Learned Spell "+rname+".", true, CD->TYPE);
             }
             if(_PARAMS[1] == "unlearn")
             {
                 plr->removeSpell(spell);
-                Send_IRCA(ChanOrPM(CD), "\00313["+_PARAMS[0]+"] : Has Unlearned Spell "+name+".", true, CD->TYPE);
+                Send_IRCA(ChanOrPM(CD), "\00313["+_PARAMS[0]+"] : Has Unlearned Spell "+rname+".", true, CD->TYPE);
             }
         }
         else
@@ -1947,7 +1949,6 @@ void IRCCmd::Spell_Player(_CDATA *CD)
     else
         Send_IRCA(CD->USER, "\0034[ERROR] : Player Not Online!", true, "ERROR");
 
-	*/
 }
 
 void IRCCmd::Sysmsg_Server(_CDATA *CD)

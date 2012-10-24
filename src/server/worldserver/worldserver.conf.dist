@@ -3596,6 +3596,8 @@ irc.online.result = 30
 #     wow_* - String is displayed in IRC channel
 #     irc_* - String is displayed in WOW channel
 #     Options: $Name, $Level, $Msg, $GM (not all options work in every string)
+#
+#     DO NO EDIT UNLESS KNOW IRC CODES
 ########################################################################
 
 chat.wow_irc = "<WoW>[$Name($Level)] $Msg"
