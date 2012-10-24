@@ -1361,6 +1361,32 @@ class go_rocketsling: public GameObjectScript
 
 };
 
+/*######
+## Quest 14245: It's a Town-In-A-Box
+######
+*/
+#define	TIABQUEST			14245
+#define TIABPLUNGERSPELL	68938  // gives kill credit and via spell_link_spell chnages phase to 2048
+// #define TIABSMOKESPELL		71094  // removed in spell_link_spell
+#define SMOKEBUNNYNPC		38069
+class go_towninabox : public GameObjectScript
+{
+	public:
+    go_towninabox() : GameObjectScript("go_towninabox") { }
+
+	bool OnGossipHello(Player* player, GameObject* pGO)
+	{
+    if (player->GetQuestStatus(TIABQUEST) == QUEST_STATUS_INCOMPLETE)
+		{
+			pGO->SummonCreature(SMOKEBUNNYNPC, pGO->GetPositionX(), pGO->GetPositionY(), pGO->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 10000);
+			player->CastSpell(player, TIABPLUNGERSPELL, true);
+			player->KilledMonsterCredit(UUAAKILLCREDIT,0);
+			return false;
+		}
+    return true;
+	}
+
+};
 
 void AddSC_go_scripts ()
 {
@@ -1402,4 +1428,5 @@ void AddSC_go_scripts ()
 	new go_goblincscapepod;
 	new go_kajamitedeposit;
 	new go_rocketsling;
+	new go_towninabox;
 }
