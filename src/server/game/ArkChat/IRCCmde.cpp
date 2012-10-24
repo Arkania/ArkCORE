@@ -936,8 +936,8 @@ void IRCCmd::Jail_Player(_CDATA *CD)
                 float rposx, rposy, rposz, rposo = 0;
                 uint32 rmapid = 0;
                 CharacterDatabase.EscapeString(_PARAMS[0]);
-                //QueryResult result = CharacterDatabase.PQuery( "SELECT `map`, `position_x`, `position_y`, `position_z` FROM `character_homebind` WHERE `guid` = '" UI64FMTD "'", plr->GetGUID() );
-				QueryResult result = CharacterDatabase.PQuery( "SELECT `mapId`, `posX`, `posY`, `posZ` FROM `character_homebind` WHERE `guid` = ' %d '", plr->GetGUIDLow() );
+                QueryResult result = CharacterDatabase.PQuery( "SELECT `map`, `position_x`, `position_y`, `position_z` FROM `character_homebind` WHERE `guid` = '%d'", plr->GetGUID() );
+				//QueryResult result = CharacterDatabase.PQuery( "SELECT `mapId`, `posX`, `posY`, `posZ` FROM `character_homebind` WHERE `guid` = ' %d '", plr->GetGUIDLow() );
 				//sLog->outDetail("ATTEMPT TO LOCATE HOMEBIND FOR PLAYER ID %d", plr->GetGUIDLow());
 				//sLog->outDetail("SELECT `mapId`, `posX`, `posY`, `posZ` FROM `character_homebind` WHERE `guid` = ' %d '", plr->GetGUIDLow());
                 if(result)
@@ -968,7 +968,9 @@ void IRCCmd::Jail_Player(_CDATA *CD)
             {
                 if(_PARAMS[1] == "")
                     _PARAMS[1] = "No Reason Given.";
-                plr->TeleportTo(13, 0, 0, 0, 0);
+                //plr->TeleportTo(13, 0, 0, 0, 0);
+				// TODO FIND NEW JAIL LOCATION
+				// BUT FOR NOW PLAYER IS STUCK IN SPOT CNA CANT DO ANYTHING!
                 plr->SetMovement(MOVE_ROOT);
                 plr->CastSpell(plr, 42201, true);
                 plr->CastSpell(plr, 23775, true);
