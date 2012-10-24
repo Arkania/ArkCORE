@@ -1237,6 +1237,39 @@ public:
     }
 };
 
+/*######
+## Quest 14124: Liberate the Kaja'mite
+######*/
+#define LTKQUEST       		14124
+#define KAJAMITECHUNK       195492 //Gameobject
+#define KABLOOEYBOMBSSPELL	67682 // Spell
+#define KABLOOEYBOMBSITEM	48768 // Item
+
+class go_kajamitedeposit : public GameObjectScript
+{
+	public:
+    go_kajamitedeposit() : GameObjectScript("go_kajamitedeposit") { }
+
+	bool OnGossipHello(Player* player, GameObject* pGO)
+	{
+    if (player->GetQuestStatus(LTKQUEST) == QUEST_STATUS_INCOMPLETE && player->HasItemCount(KABLOOEYBOMBSITEM, 1))
+		{
+			player->CastSpell(player, KABLOOEYBOMBSSPELL, true);
+			pGO->SummonGameObject(KAJAMITECHUNK, pGO->GetPositionX(), pGO->GetPositionY(), pGO->GetPositionZ(), 0, 0 ,0 ,0 ,0 ,300);
+			uint8 r = rand() % 3; // add some random spawn locations and a random spawn count
+			if (r < 2)
+				pGO->SummonGameObject(KAJAMITECHUNK, pGO->GetPositionX()+1, pGO->GetPositionY()+1, pGO->GetPositionZ(), 0, 0 ,0 ,0 ,0 ,300);
+			if (r > 1)
+				pGO->SummonGameObject(KAJAMITECHUNK, pGO->GetPositionX()-1, pGO->GetPositionY()-1, pGO->GetPositionZ(), 0, 0 ,0 ,0 ,0 ,300);
+			
+			pGO->Delete();
+			return false;
+		}
+    return true;
+	}
+
+};
+
 void AddSC_go_scripts ()
 {
     new go_cat_figurine;
@@ -1274,4 +1307,5 @@ void AddSC_go_scripts ()
     new go_amberpine_outhouse;
     new go_hive_pod;
     new go_massive_seaforium_charge;
+	new go_kajamitedeposit;
 }
