@@ -1238,6 +1238,45 @@ public:
 };
 
 /*######
+ ## Quest 14474 & 14001 : Goblin Escape Pods
+ ######*/
+
+#define QUESTA       14474
+#define QUESTB       14001
+#define KILLCREDIT   34748
+#define LIVESPAWN	 66137
+#define DEADSPAWN	 66138
+#define GALLWIX		 67845
+
+class go_goblincscapepod : public GameObjectScript
+{
+	public:
+    go_goblincscapepod() : GameObjectScript("go_goblincscapepod") { }
+
+bool OnGossipHello(Player* player, GameObject* pGO)
+{
+    if ((player->GetQuestStatus(QUESTA) == QUEST_STATUS_INCOMPLETE)	|| (player->GetQuestStatus(QUESTB) == QUEST_STATUS_INCOMPLETE))
+    {
+		//TODO
+		// First time you shoud get spell GALLWIX cast and this NPC has some speahc todo about ripping player off
+
+		uint8 r = rand() % 8;
+		if (r < 2) //sometimes sapwn a dead goblin and dont give credit..
+			player->CastSpell(player, DEADSPAWN, true);
+		else
+		{
+			player->CastSpell(player, LIVESPAWN, true);
+			player->KilledMonsterCredit(KILLCREDIT,0);
+		}
+		pGO->Delete();
+		return false;
+    }
+    return true;
+}
+
+};
+
+/*######
 ## Quest 14124: Liberate the Kaja'mite
 ######*/
 #define LTKQUEST       		14124
@@ -1307,5 +1346,6 @@ void AddSC_go_scripts ()
     new go_amberpine_outhouse;
     new go_hive_pod;
     new go_massive_seaforium_charge;
+	new go_goblincscapepod;
 	new go_kajamitedeposit;
 }
