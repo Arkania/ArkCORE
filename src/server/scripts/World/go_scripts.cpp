@@ -1309,6 +1309,59 @@ class go_kajamitedeposit : public GameObjectScript
 
 };
 
+/*######
+## Quest 14124: Up, Up & Away!
+######
+*/
+#define UUAAGOSSIP_GOFLY		"Up, Up & Away!"
+#define UUAAQUEST       		14244
+#define UUAAKILLCREDIT      	50046
+#define UUAA_EXPLODE_SPELL		66127
+#define UUAA_SUMMON_ROCKET		68806 // this procs 68804
+
+// search for " Up, Up & Away! " in spellwork
+
+class go_rocketsling: public GameObjectScript
+{
+	public:
+    go_rocketsling() : GameObjectScript("go_rocketsling") { }
+
+	bool OnGossipHello(Player* player, GameObject* pGO)
+	{
+		 if (player->GetQuestStatus(UUAAQUEST) == QUEST_STATUS_INCOMPLETE)
+		 {
+			 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, UUAAGOSSIP_GOFLY  ,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
+		 }
+		 player->PlayerTalkClass->SendGossipMenu(907, pGO->GetGUID());
+   
+    return true;
+	}
+
+	bool OnGossipSelect(Player* player, GameObject* pGO, uint32 /*sender*/, uint32 action)
+	{
+		player->PlayerTalkClass->ClearMenus();
+		switch(action - GOSSIP_ACTION_INFO_DEF)
+		{
+			case 1:
+				{
+					player->CLOSE_GOSSIP_MENU();
+					// the teleport can be removed once i complete this
+					// todo:
+					// mount player
+					// auto fly player on mount in a arc over river to TP location bellow
+					// at end of flight do kill credit
+					// explode rcoket
+					player->TeleportTo(648, 946.01f, 2397.09f, 2.38f, 4.4f);
+					player->KilledMonsterCredit(UUAAKILLCREDIT,0);
+					return false;
+				}
+		}
+		return true;
+	}
+
+};
+
+
 void AddSC_go_scripts ()
 {
     new go_cat_figurine;
@@ -1348,4 +1401,5 @@ void AddSC_go_scripts ()
     new go_massive_seaforium_charge;
 	new go_goblincscapepod;
 	new go_kajamitedeposit;
+	new go_rocketsling;
 }
