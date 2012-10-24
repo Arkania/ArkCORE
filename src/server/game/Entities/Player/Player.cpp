@@ -79,6 +79,7 @@
 #include "InstanceScript.h"
 #include <cmath>
 #include "OutdoorPvPWG.h"
+#include "ArkChat/IRCClient.h"
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
@@ -2696,6 +2697,22 @@ void Player::AddToWorld ()
     for (uint8 i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
         if (m_items[i])
             m_items[i]->AddToWorld();
+
+	//ARKCHAT AUTO JOIN CHANNEL
+	if(sIRC.ajoin == 1)
+	{
+		//QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `name` = '%s'", Unit::GetName());
+		QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
+		if(!result)
+		{
+			// prevent invite spam
+			sIRC.AutoJoinChannel(this);
+			std::string pname = Unit::GetName();
+			std::string Channel = "world";
+			std::string query = "INSERT INTO `IRC_Inchan` VALUES (%d,'"+pname+"','"+Channel+"')";
+			WorldDatabase.PExecute(query.c_str(), GetSession()->GetPlayer()->GetGUID());
+		}
+	}
 }
 
 void Player::RemoveFromWorld ()
@@ -2732,6 +2749,10 @@ void Player::RemoveFromWorld ()
             SetViewpoint(viewpoint, false);
         }
     }
+
+	//ARKCHAT AUTO JOIN CHANNEL clecn up inchan table :)
+	if(sIRC.ajoin == 1 && GetSession()->PlayerLogout())
+		WorldDatabase.PExecute("DELETE FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
 }
 
 void Player::RegenerateAll()
@@ -3415,6 +3436,16 @@ void Player::GiveLevel (uint8 level)
     InitGlyphsForLevel();
 
     UpdateAllStats();
+
+	if ((sIRC.BOTMASK & 256) != 0)
+	{
+		char  temp [5];
+		sprintf(temp, "%u", level);
+		std::string plevel = temp;		
+		std::string pname = GetName();
+		sIRC.Send_IRC_Channels("\00311["+pname+"] : Has Reached Level: "+plevel);
+	}
+
 
     if (sWorld->getBoolConfig(CONFIG_ALWAYS_MAXSKILL))          // Max weapon skill when leveling up
         UpdateSkillsToMaxSkillsForLevel();

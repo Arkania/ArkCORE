@@ -296,6 +296,7 @@ CREATE TABLE `characters` (
   `trans_o` float NOT NULL DEFAULT '0',
   `transguid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `extra_flags` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `stable_slots` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `at_login` smallint(5) unsigned NOT NULL DEFAULT '0',
   `zone` smallint(5) unsigned NOT NULL DEFAULT '0',
   `death_expire_time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -327,6 +328,7 @@ CREATE TABLE `characters` (
   `activespec` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `exploredZones` longtext,
   `equipmentCache` longtext,
+  `ammoId` int(10) unsigned NOT NULL DEFAULT '0',
   `knownTitles` longtext,
   `actionBars` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `deleteInfos_Account` int(10) unsigned DEFAULT NULL,
@@ -1220,10 +1222,8 @@ CREATE TABLE `guild` (
   `motd` varchar(128) NOT NULL DEFAULT '',
   `createdate` int(10) unsigned NOT NULL DEFAULT '0',
   `BankMoney` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `xp` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `todayXP` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `xp` bigint(20) unsigned NOT NULL,
   `level` int(10) unsigned NOT NULL,
-  `XPCap` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guildid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
 

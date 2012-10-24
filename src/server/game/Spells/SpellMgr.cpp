@@ -3985,7 +3985,7 @@ void SpellMgr::LoadSpellCustomAttr ()
         case 87934:          // Serpent Spread
         case 87935:
             spellInfo->Effect[0] = SPELL_EFFECT_APPLY_AURA;
-            spellInfo->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
+            spellInfo->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
             count++;
             break;
         case 88691:          // Marked for Death Tracking

@@ -702,7 +702,7 @@ void Spell::SpellDamageSchoolDmg (SpellEffIndex effIndex)
             case 589:
             case 15407:
             {
-                if (m_caster->HasSpell(95740))          // Shadow Orbs
+                if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_SHADOW)         // Shadow Orbs
                 {
                     int chance = 10;
                     if (m_caster->HasAura(33191))

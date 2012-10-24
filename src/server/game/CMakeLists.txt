@@ -20,6 +20,7 @@ file(GLOB_RECURSE sources_Accounts Accounts/*.cpp Accounts/*.h)
 file(GLOB_RECURSE sources_Achievements Achievements/*.cpp Achievements/*.h)
 file(GLOB_RECURSE sources_Addons Addons/*.cpp Addons/*.h)
 file(GLOB_RECURSE sources_AI AI/*.cpp AI/*.h)
+file(GLOB_RECURSE sources_ArkChat ArkChat/*.cpp ArkChat/*.h)
 file(GLOB_RECURSE sources_AuctionHouse AuctionHouse/*.cpp AuctionHouse/*.h)
 file(GLOB_RECURSE sources_AuctionHouseBot AuctionHouse/AuctionHouseBot/*.cpp AuctionHouse/AuctionHouseBot/*.h)
 file(GLOB_RECURSE sources_Battlegrounds Battlegrounds/*.cpp Battlegrounds/*.h)
@@ -62,6 +63,7 @@ source_group(Achievements FILES ${sources_Achievements})
 source_group(Addons FILES ${sources_Addons})
 source_group(AI FILES ${sources_AI})
 source_group(AI\\ScriptedAI FILES ${sources_AI})
+source_group(ArkChat FILES ${sources_ArkChat})
 source_group(AuctionHouse FILES ${sources_AuctionHouse})
 source_group(AuctionHouseBot FILES ${sources_AuctionHouseBot})
 source_group(Battlegrounds FILES ${sources_Battlegrounds})
@@ -114,6 +116,7 @@ set(game_STAT_SRCS
   ${sources_Achievements}
   ${sources_Addons}
   ${sources_AI}
+  ${sources_ArkChat}
   ${sources_AuctionHouse}
   ${sources_AuctionHouseBot}
   ${sources_Battlegrounds}
@@ -182,6 +185,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/AI/EventAI
   ${CMAKE_CURRENT_SOURCE_DIR}/AI/ScriptedAI
   ${CMAKE_CURRENT_SOURCE_DIR}/AI/SmartScripts
+  ${CMAKE_CURRENT_SOURCE_DIR}/ArkChat
   ${CMAKE_CURRENT_SOURCE_DIR}/AuctionHouse
   ${CMAKE_CURRENT_SOURCE_DIR}/AuctionHouse/AuctionHouseBot
   ${CMAKE_CURRENT_SOURCE_DIR}/Battlegrounds
