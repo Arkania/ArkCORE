@@ -1388,6 +1388,37 @@ class go_towninabox : public GameObjectScript
 
 };
 
+/*######
+ ## go_gnoll_cage
+ ######*/
+
+enum eGnollCage
+{
+    NPC_GNOLL_PRISIONER = 41410,
+	GNOLL_QUEST_KILL_CREDIT = 41438
+};
+
+class go_gnoll_cage: public GameObjectScript
+{
+public:
+    go_gnoll_cage () :
+            GameObjectScript("go_gnoll_cage")
+    {
+    }
+
+    bool OnGossipHello (Player *pPlayer, GameObject *pGO)
+    {
+        if (Creature *pGnollPrisoner = pGO->FindNearestCreature(NPC_GNOLL_PRISIONER, 5.0f, true))
+        {
+            pGO->SetGoState(GO_STATE_ACTIVE);
+            pPlayer->KilledMonsterCredit(GNOLL_QUEST_KILL_CREDIT, 0);
+            pGnollPrisoner->DisappearAndDie();
+        }
+
+        return true;
+    }
+};
+
 void AddSC_go_scripts ()
 {
     new go_cat_figurine;
@@ -1429,4 +1460,5 @@ void AddSC_go_scripts ()
 	new go_kajamitedeposit;
 	new go_rocketsling;
 	new go_towninabox;
+    new go_gnoll_cage;
 }
