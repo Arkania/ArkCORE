@@ -999,6 +999,18 @@ private:
     uint32 _xp;
 };
 
+struct AnticheatData
+{
+    uint32 lastOpcode;
+    MovementInfo lastMovementInfo;
+    bool disableACCheck;
+    uint32 disableACCheckTimer;
+    uint32 total_reports;
+    uint32 type_reports[5];
+    uint32 average;
+    uint64 creation_time;
+};
+
 class Player: public Unit, public GridObject<Player>
 {
     friend class WorldSession;
@@ -1008,6 +1020,8 @@ public:
     explicit Player (WorldSession *session);
     explicit Player (WorldSession &);
     ~Player ();
+
+	AnticheatData anticheatData;
 
     void CleanupsBeforeDelete (bool finalCleanup = true);
 
