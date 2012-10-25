@@ -968,13 +968,12 @@ void IRCCmd::Jail_Player(_CDATA *CD)
             {
                 if(_PARAMS[1] == "")
                     _PARAMS[1] = "No Reason Given.";
-                //plr->TeleportTo(13, 0, 0, 0, 0);
-				// TODO FIND NEW JAIL LOCATION
-				// BUT FOR NOW PLAYER IS STUCK IN SPOT CNA CANT DO ANYTHING!
+                plr->TeleportTo(1, 16220.7f, 16398.3f, -64.3786f, 0.825313f);
                 plr->SetMovement(MOVE_ROOT);
                 plr->CastSpell(plr, 42201, true);
                 plr->CastSpell(plr, 23775, true);
                 plr->CastSpell(plr, 9454, true);
+				plr->CastSpell(plr, 45472, true); // parachute
                 Send_Player(plr, MakeMsg("You Have Been Jailed By: %s. Reason: %s.", CD->USER.c_str(), _PARAMS[1].c_str()));
                 sReason = " \00313["+_PARAMS[0]+"] : Has Been Jailed By: "+CD->USER+". Reason: "+_PARAMS[1]+".";
                 Send_IRCA(ChanOrPM(CD), sReason, true, CD->TYPE);
