@@ -83,7 +83,7 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         Field *fields = result->Fetch();
         int32 autojail = fields[9].GetInt32();
         // so far never seen a flay,jump,tp hack that ones one lol)
-        // i tringer call edn also jail for  if (report_type == fly_reports || report_type == jump_reports || report_type == teleportplane_reports)
+        // i tringer call end also jail for  if (report_type == fly_reports || report_type == jump_reports || report_type == teleportplane_reports)
         if (report_type == "fly_reports" || report_type == "jump_reports" || report_type == "teleportplane_reports")
             autojail = 7; // lol juts to make sure these are very true
         if (report_type == "waterwalk_reports")

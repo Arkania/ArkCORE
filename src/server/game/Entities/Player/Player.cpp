@@ -895,6 +895,8 @@ Player::Player (WorldSession *session) :
     m_ConditionErrorMsgId = 0;
 
     SetPendingBind(NULL, 0);
+
+	sAnticheatMgr->DeletePlayerReport(this);
 }
 
 Player::Player (WorldSession &session) :
@@ -1139,9 +1141,7 @@ Player::Player (WorldSession &session) :
     m_globalCooldowns.clear();
 
     m_ConditionErrorMsgId = 0;
-
-    sAnticheatMgr->DeletePlayerReport(this);
-    
+  
     SetPendingBind(NULL, 0);
 }
 
@@ -1806,7 +1806,9 @@ void Player::Update (uint32 p_time)
     if (!IsInWorld())
         return;
 
-    // undelivered mail
+    sAnticheatMgr->HandleHackDetectionTimer(this, p_time);
+	
+	// undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= time(NULL))
     {
         SendNewMail();
