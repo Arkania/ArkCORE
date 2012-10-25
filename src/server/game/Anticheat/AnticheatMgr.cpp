@@ -84,19 +84,21 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         result = CharacterDatabase.PQuery("SELECT * FROM `players_reports_status` WHERE `guid` = '%u'",player->GetGUIDLow());
         Field *fields = result->Fetch();
         int32 autojail = fields[9].GetInt32();
-        // so far never seen a flay,jump,tp hack that ones one lol)
-        // i tringer call end also jail for  if (report_type == fly_reports || report_type == jump_reports || report_type == teleportplane_reports)
-        if (report_type == "fly_reports" || report_type == "jump_reports" || report_type == "teleportplane_reports")
+        // so far never seen a fly,jump,tp hack thats fake one lol)
+       
+        if (report_type == "fly_reports" || report_type == "jump_reports" || report_type == "teleportplane_reports" || report_type == "speed_reports")
             autojail = 7; // lol juts to make sure these are very true
         if (report_type == "waterwalk_reports")
             autojail = autojail+1; // may need taking out????
         if (autojail > 2) // 0,1,2,3 - computers start count from 0
         {
-        player->TeleportTo(1, 16222.79f, 16403.33f, -64.37f, 0);
+        player->TeleportTo(1, 16220.7f, 16398.3f, -64.3786f, 0.825313f);
         player->SetMovement(MOVE_ROOT);
         player->CastSpell(player, 42201, true);
         player->CastSpell(player, 23775, true);
         player->CastSpell(player, 9454, true);
+		player->CastSpell(player, 45472, true); // parachute
+		//player->ResurrectPlayer(100, false);
 
         ChatHandler(player->GetSession()).PSendSysMessage("You Have Been Jailed By: The Anti Cheater System.");
         ChatHandler(player->GetSession()).PSendSysMessage("Speak to a GM.");
