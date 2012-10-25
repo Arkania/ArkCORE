@@ -1376,6 +1376,7 @@ void World::LoadConfigSettings (bool reload)
     // AntiCheat system
 	m_bool_configs[CONFIG_ANTICHEAT_ENABLE] = sConfig->GetBoolDefault("Anticheat.Enable", true);
     m_int_configs[CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION] = sConfig->GetIntDefault("Anticheat.ReportsForIngameWarnings", 70);
+	AntiCheatWarnChannel = sConfig->GetStringDefault("AntiCheatWarnChannel", "#GMs");
     
     //Wintergrasp
     m_bool_configs[CONFIG_OUTDOORPVP_WINTERGRASP_ENABLED] = sConfig->GetBoolDefault("OutdoorPvP.Wintergrasp.Enabled", true);

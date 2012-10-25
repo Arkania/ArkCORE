@@ -704,6 +704,7 @@ public:
     {
         m_CleaningFlags = flags;
     }
+	std::string AntiCheatWarnChannel;
 protected:
     void _UpdateGameTime ();
     // callback for UpdateRealmCharacters
@@ -793,6 +794,7 @@ private:
     //used versions
     std::string m_DBVersion;
     std::string m_CreatureAIVersion;
+	
 
     std::list<std::string> m_Autobroadcasts;
 

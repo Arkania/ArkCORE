@@ -3691,3 +3691,9 @@ Anticheat.Enable = 0
 #        Default:     15
 
 Anticheat.ReportsForIngameWarnings = 15
+
+#    AntiCheatWarnChannel
+#       IRC Channel to send possible hack user warnings too
+#       one need to set this if you enable ArkChat
+
+AntiCheatWarnChannel = "#GAMEMASTERS"

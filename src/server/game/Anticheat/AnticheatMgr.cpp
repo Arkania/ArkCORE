@@ -22,8 +22,6 @@
 #include "Chat.h"
 #include "../ArkCHat/IRCClient.h"
 
-#define IRCWARNCHANNEL "#GMs";
-
 AnticheatMgr::AnticheatMgr()
 {
 }
@@ -69,15 +67,17 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         WorldPacket data(SMSG_NOTIFICATION, (str.size()+1));
         data << str;
         sWorld->SendGlobalGMMessage(&data);
-        // display warning to GMs in IRC.
-        std::string ircchana = IRCWARNCHANNEL;
-        std::stringstream ssa;
-        ssa << player->GetName();
-        ssa << " - Possible cheater!";
-        ssa << " - Type: ";
-        ssa << report_type;
-        sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
-        CharacterDatabase.PExecute("UPDATE players_reports_status SET autojail=(autojail+1) WHERE guid=%u",player->GetGUIDLow());
+		std::string ircchana = sWorld->AntiCheatWarnChannel;
+		std::stringstream ssa;
+		// display warning to GMs in IRC.
+		ssa << player->GetName();
+		ssa << " - Possible cheater!";
+		ssa << " - Type: ";
+		ssa << report_type;
+		if(sIRC.Active == 1)
+			sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
+        
+		CharacterDatabase.PExecute("UPDATE players_reports_status SET autojail=(autojail+1) WHERE guid=%u",player->GetGUIDLow());
         CharacterDatabase.PExecute("UPDATE players_reports_status2 SET autojail=(autojail+1) WHERE guid=%u",player->GetGUIDLow());
         player->anticheatData.total_reports = ((player->anticheatData.total_reports-sWorld->getIntConfig(CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION))+2);
         QueryResult result;
@@ -101,15 +101,17 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
 
         ChatHandler(player->GetSession()).PSendSysMessage("You Have Been Jailed By: The Anti Cheater System.");
         ChatHandler(player->GetSession()).PSendSysMessage("Speak to a GM.");
-        ssa << " *** JAILED *** ";
-        sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
-        std::string ircchan = "#";
-        ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
-        std::stringstream ss;
-        ss << player->GetName();
-        ss << " <- Has been jailed for using hacks! lol nabs";
-        sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 MGA Watcher \00304,08\037/!\\\037\017 %s", "%s", ss.str().c_str()), true);
-        sWorld->SendWorldText(5532, ss.str().c_str());
+		ssa << " *** JAILED *** ";
+		if(sIRC.Active == 1)
+			sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
+		std::string ircchan = "#";
+		ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+		std::stringstream ss;
+		ss << player->GetName();
+		ss << " <- Has been jailed for using hacks! lol nabs";
+		if(sIRC.Active == 1)
+			sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 MGA Watcher \00304,08\037/!\\\037\017 %s", "%s", ss.str().c_str()), true);
+		sWorld->SendWorldText(5532, ss.str().c_str());
         }
 		
     }
@@ -193,11 +195,12 @@ void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
 
     sLog->outError("FlyHack Player LowGuid %u",player->GetGUIDLow());
     BuildReport(player,FLY_HACK_REPORT);
-	std::string ircchana = IRCWARNCHANNEL;
+	std::string ircchana = sWorld->AntiCheatWarnChannel;
     std::stringstream ssa;
     ssa << player->GetName();
     ssa << " <- Lagging or fly hack!";
-    sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
+	if(sIRC.Active == 1)
+		sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
 }
 
 void AnticheatMgr::TeleportPlaneHackDetection(Player* player, MovementInfo movementInfo)
@@ -339,10 +342,11 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
     {
         BuildReport(player,SPEED_HACK_REPORT);
         sLog->outError("Speed Hack Player LowGuid %u",player->GetGUIDLow());
-		std::string ircchana = IRCWARNCHANNEL;
+		std::string ircchana = sWorld->AntiCheatWarnChannel;
         std::stringstream ssa;
         ssa << player->GetName();
         ssa << " <- Lagging or speed hack!";
-        sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
+		if(sIRC.Active == 1)
+			sIRC.Send_IRC_Channel(ircchana, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 AntiCheat \00304,08\037/!\\\037\017 %s", "%s", ssa.str().c_str()), true);
     }
 }
