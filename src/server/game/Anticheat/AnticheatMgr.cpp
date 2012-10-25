@@ -20,7 +20,7 @@
 #include "gamePCH.h"
 #include "AnticheatMgr.h"
 #include "Chat.h"
-#include "../ArkCHat/IRCClient.h"
+#include "../ArkChat/IRCClient.h"
 
 AnticheatMgr::AnticheatMgr()
 {
