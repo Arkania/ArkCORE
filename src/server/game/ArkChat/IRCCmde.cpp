@@ -968,9 +968,7 @@ void IRCCmd::Jail_Player(_CDATA *CD)
             {
                 if(_PARAMS[1] == "")
                     _PARAMS[1] = "No Reason Given.";
-                //plr->TeleportTo(13, 0, 0, 0, 0);
-				// TODO FIND NEW JAIL LOCATION
-				// BUT FOR NOW PLAYER IS STUCK IN SPOT CNA CANT DO ANYTHING!
+                plr->TeleportTo(1, 16222.79f, 16403.33f, -64.37f, 0);
                 plr->SetMovement(MOVE_ROOT);
                 plr->CastSpell(plr, 42201, true);
                 plr->CastSpell(plr, 23775, true);

@@ -22,6 +22,8 @@
 #include "Chat.h"
 #include "../ArkCHat/IRCClient.h"
 
+#define IRCWARNCHANNEL "#GMs";
+
 AnticheatMgr::AnticheatMgr()
 {
 }
@@ -68,7 +70,7 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         data << str;
         sWorld->SendGlobalGMMessage(&data);
         // display warning to GMs in IRC.
-        std::string ircchana = "#GMs";
+        std::string ircchana = IRCWARNCHANNEL;
         std::stringstream ssa;
         ssa << player->GetName();
         ssa << " - Possible cheater!";
@@ -91,7 +93,7 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         if (autojail > 2) // 0,1,2,3 - computers start count from 0
         {
         player->CastSpell(player, 642, true);
-        //player->TeleportTo(13, 0, 0, 0, 0); NEED TO UPDATE TO NEW JAIL WHEN FOUND
+        player->TeleportTo(1, 16222.79f, 16403.33f, -64.37f, 0);
         player->SetMovement(MOVE_ROOT);
         player->CastSpell(player, 42201, true);
         player->CastSpell(player, 23775, true);
@@ -191,7 +193,7 @@ void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
 
     sLog->outError("FlyHack Player LowGuid %u",player->GetGUIDLow());
     BuildReport(player,FLY_HACK_REPORT);
-	std::string ircchana = "#GMs";
+	std::string ircchana = IRCWARNCHANNEL;
     std::stringstream ssa;
     ssa << player->GetName();
     ssa << " <- Lagging or fly hack!";
@@ -337,7 +339,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
     {
         BuildReport(player,SPEED_HACK_REPORT);
         sLog->outError("Speed Hack Player LowGuid %u",player->GetGUIDLow());
-		std::string ircchana = "#GMs";
+		std::string ircchana = IRCWARNCHANNEL;
         std::stringstream ssa;
         ssa << player->GetName();
         ssa << " <- Lagging or speed hack!";
