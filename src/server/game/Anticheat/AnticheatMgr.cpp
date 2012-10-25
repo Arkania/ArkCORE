@@ -92,7 +92,6 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
             autojail = autojail+1; // may need taking out????
         if (autojail > 2) // 0,1,2,3 - computers start count from 0
         {
-        player->CastSpell(player, 642, true);
         player->TeleportTo(1, 16222.79f, 16403.33f, -64.37f, 0);
         player->SetMovement(MOVE_ROOT);
         player->CastSpell(player, 42201, true);
@@ -110,7 +109,7 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
 		ss << player->GetName();
 		ss << " <- Has been jailed for using hacks! lol nabs";
 		if(sIRC.Active == 1)
-			sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 MGA Watcher \00304,08\037/!\\\037\017 %s", "%s", ss.str().c_str()), true);
+			sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 ArkCORE Watcher \00304,08\037/!\\\037\017 %s", "%s", ss.str().c_str()), true);
 		sWorld->SendWorldText(5532, ss.str().c_str());
         }
 		
@@ -333,7 +332,8 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         timeDiff = 1;
 
     // this is the distance doable by the player in 1 sec, using the time done to move to this point.
-    uint32 clientSpeedRate = distance2D * 1000 / timeDiff;
+	//this has changed since 335a was 1000 in 406a its 1100
+    uint32 clientSpeedRate = distance2D * 1100 / timeDiff;
 
     //sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u timeDiff %u ",movementInfo.j_xyspeed, movementInfo.j_zspeed,distance2D,clientSpeedRate,speedRate,timeDiff);
 

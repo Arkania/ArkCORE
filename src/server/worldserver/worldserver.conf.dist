@@ -3687,7 +3687,7 @@ Anticheat.Enable = 0
 
 #     Anticheat.ReportsForIngameWarnings
 #        Description: How many reports the player must have to notify to GameMasters ingame when he generates a new report.
-#        Increase Default is you havea  slow ine speed to Prevent False / Positive
+#        Increase Default is you have a slow ine speed to Prevent False / Positive
 #        Default:     15
 
 Anticheat.ReportsForIngameWarnings = 15
