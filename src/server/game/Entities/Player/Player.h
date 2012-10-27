@@ -2542,7 +2542,7 @@ public:
 
     bool GetBGAccessByLevel(BattlegroundTypeId bgTypeId) const;
     bool isTotalImmunity();
-    bool CanUseBattlegroundObject();
+    bool CanUseBattlegroundObject(GameObject* gameobject);
     bool isTotalImmune();
     bool CanCaptureTowerPoint();
 

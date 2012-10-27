@@ -23974,21 +23974,18 @@ WorldObject* Player::GetViewpoint () const
     return NULL;
 }
 
-bool Player::CanUseBattlegroundObject ()
+bool Player::CanUseBattlegroundObject(GameObject* gameobject)
 {
-    // TODO : some spells gives player ForceReaction to one faction (ReputationMgr::ApplyForceReaction)
-    // maybe gameobject code should handle that ForceReaction usage
+    FactionTemplateEntry const* playerFaction = getFactionTemplateEntry();
+    FactionTemplateEntry const* faction = sFactionTemplateStore.LookupEntry(gameobject->GetUInt32Value(GAMEOBJECT_FACTION));
+    
+    if (playerFaction && faction && !playerFaction->IsFriendlyTo(*faction))
+        return false;
     // BUG: sometimes when player clicks on flag in AB - client won't send gameobject_use, only gameobject_report_use packet
-    return (          //InBattleground() &&                          // in battleground - not need, check in other cases
-                      //!IsMounted() && - not correct, player is dismounted when he clicks on flag
-                      //player cannot use object when he is invulnerable (immune)
-    !isTotalImmune() &&          // not totally immune
-    //i'm not sure if these two are correct, because invisible players should get visible when they click on flag
-    !HasStealthAura() &&          // not stealthed
-    !HasInvisibilityAura() &&          // not invisible
-    !HasAura(SPELL_RECENTLY_DROPPED_FLAG) &&          // can't pickup
-    isAlive()          // live player
-    );
+    // Note: Mount, stealth and invisibility will be removed when used
+    return (!isTotalImmune() &&                            // Damage immune
+            !HasAura(SPELL_RECENTLY_DROPPED_FLAG) &&       // Still has recently held flag debuff
+            isAlive());                                    // Alive
 }
 
 bool Player::CanCaptureTowerPoint ()
