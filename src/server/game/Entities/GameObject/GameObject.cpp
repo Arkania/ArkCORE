@@ -313,7 +313,7 @@ void GameObject::Update (uint32 diff)
             // Arming Time for GAMEOBJECT_TYPE_TRAP (6)
             GameObjectInfo const* goInfo = GetGOInfo();
             // Bombs
-            if (goInfo->trap.charges == 2)
+            if (goInfo->trap.type == 2)
                 m_cooldownTime = time(NULL) + 10;          // Hardcoded tooltip value
             else if (Unit* owner = GetOwner())
             {
@@ -430,7 +430,7 @@ void GameObject::Update (uint32 diff)
                     return;
 
                 // Type 2 - Bomb (will go away after casting it's spell)
-                if (goInfo->trap.charges == 2)
+                if (goInfo->trap.type == 2)
                 {
                     if (goInfo->trap.spellId)
                         CastSpell(NULL, goInfo->trap.spellId);          // FIXME: null target won't work for target type 1
@@ -1117,8 +1117,21 @@ void GameObject::Use (Unit* user)
         player->SendPreparedGossip(this);
         return;
     }
+    case GAMEOBJECT_TYPE_TRAP:                          //6 GameObjectInfo const* info = GetGOInfo();
+    {
+        GameObjectInfo const* goInfo = GetGOInfo();
+        if (goInfo->trap.spellId)
+            CastSpell(user, goInfo->trap.spellId);
+            
+        m_cooldownTime = time(NULL) + (goInfo->trap.cooldown ? goInfo->trap.cooldown :  uint32(4));   // template or 4 seconds
+        
+        if (goInfo->trap.type == 1)         // Deactivate after trigger
+            SetLootState(GO_JUST_DEACTIVATED);
+            
+        return;
+    }
         //Sitting: Wooden bench, chairs enzz
-    case GAMEOBJECT_TYPE_CHAIR:          //7
+        case GAMEOBJECT_TYPE_CHAIR:          //7
     {
         GameObjectInfo const* info = GetGOInfo();
         if (!info)

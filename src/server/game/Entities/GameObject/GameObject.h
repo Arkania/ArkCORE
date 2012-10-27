@@ -130,21 +130,21 @@ struct GameObjectInfo
         //6 GAMEOBJECT_TYPE_TRAP
         struct
         {
-            uint32 lockId;          //0 -> Lock.dbc
-            uint32 level;          //1
-            uint32 radius;          //2 radius for trap activation
-            uint32 spellId;          //3
-            uint32 charges;          //4 need respawn (if > 0)
-            uint32 cooldown;          //5 time in secs
-            int32 autoCloseTime;          //6
-            uint32 startDelay;          //7
-            uint32 serverOnly;          //8
-            uint32 stealthed;          //9
-            uint32 large;          //10
-            uint32 invisible;          //11
-            uint32 openTextID;          //12 can be used to replace castBarCaption?
-            uint32 closeTextID;          //13
-            uint32 ignoreTotems;          //14
+            uint32 lockId;                                  //0 -> Lock.dbc
+            uint32 level;                                   //1
+            uint32 radius;                                  //2 radius for trap activation
+            uint32 spellId;                                 //3
+            uint32 type;                                    //4 0 trap with no despawn after cast. 1 trap despawns after cast. 2 bomb casts on spawn.
+            uint32 cooldown;                                //5 time in secs
+            int32 autoCloseTime;                            //6
+            uint32 startDelay;                              //7
+            uint32 serverOnly;                              //8
+            uint32 stealthed;                               //9
+            uint32 large;                                   //10
+            uint32 invisible;                               //11
+            uint32 openTextID;                              //12 can be used to replace castBarCaption?
+            uint32 closeTextID;                             //13
+            uint32 ignoreTotems;                            //14
         } trap;
         //7 GAMEOBJECT_TYPE_CHAIR
         struct
