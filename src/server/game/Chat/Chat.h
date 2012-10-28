@@ -492,8 +492,8 @@ protected:
     bool HandleWintergraspTimerCommand (const char *args);
     
     //Jail
-    bool ChatHandler::HandleCharacterJailCommand (const char* args);
-    bool ChatHandler::HandleCharacterUnJailCommand (const char* args);
+    bool HandleCharacterJailCommand (const char* args);
+    bool HandleCharacterUnJailCommand (const char* args);
 
     // Stores informations about a deleted character
     struct DeletedInfo
