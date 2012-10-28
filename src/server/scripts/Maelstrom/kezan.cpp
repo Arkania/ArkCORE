@@ -28,8 +28,9 @@ enum NPC_DefiantTroll
 {
     DEFFIANT_KILL_CREDIT              = 34830,
     SPELL_LIGHTNING_VISUAL            = 45870,
+	SPELL_ENRAGE					  = 45111,
     QUEST_GOOD_HELP_IS_HARD_TO_FIND    = 14069,
-    GO_DEPOSIT                        = 195489,
+    GO_DEPOSIT                        = 195488,
 };
  
 #define SAY_WORK_1 "Oops, break's over."
@@ -80,9 +81,7 @@ class npc_defiant_troll : public CreatureScript
  
             if (spell->Id == SPELL_LIGHTNING_VISUAL && caster->GetTypeId() == TYPEID_PLAYER
                 && caster->ToPlayer()->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && work == false)
-            {
-                caster->ToPlayer()->KilledMonsterCredit(DEFFIANT_KILL_CREDIT, me->GetGUID());
- 
+            { 
                 switch (urand(0, 7))
                 {
                     case 0:
@@ -113,7 +112,7 @@ class npc_defiant_troll : public CreatureScript
                 me->RemoveAllAuras();
                 // Add Aura to Troll
                 me->AddAura(SPELL_LIGHTNING_VISUAL, me);
-                if (GameObject* Deposit = me->FindNearestGameObject(GO_DEPOSIT, 20))
+                if (GameObject* Deposit = me->FindNearestGameObject(GO_DEPOSIT, 40))
                     me->GetMotionMaster()->MovePoint(1, Deposit->GetPositionX()-1, Deposit->GetPositionY(), Deposit->GetPositionZ());
                 // Set timer here so he despawns in 2 minutes, set 2 sec aura timer
                 rebuffTimer = 120000; 
@@ -164,11 +163,12 @@ class npc_defiant_troll : public CreatureScript
  
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (player->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && work == false)
+        if (player->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && creature->HasAura(SPELL_ENRAGE))
         {
             player->CastSpell(creature, SPELL_LIGHTNING_VISUAL, true);
             SpellEntry const* spell = sSpellStore.LookupEntry(SPELL_LIGHTNING_VISUAL);
             CAST_AI(npc_defiant_troll::npc_defiant_trollAI, creature->AI())->SpellHit(player, spell);
+			player->KilledMonsterCredit(DEFFIANT_KILL_CREDIT,0);
             return true;
         }
         return false;

@@ -1426,8 +1426,8 @@ public:
 // http://www.wowhead.com/quest=26955
 enum eCultistCage
 {
-    NPC_CAGED_BEAR = 44902,
-	NPC_ZENKIKI = 44904,
+    NPC_CAGED_BEAR  = 44902,
+	NPC_ZENKIKI     = 44863,
 	SPELL_HEAL_BEAR = 8070,
 };
 
