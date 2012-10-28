@@ -35,6 +35,9 @@ void WorldSession::HandleJoinChannel (WorldPacket& recvPacket)
     std::string channelname, pass;
 
     recvPacket >> channel_id;
+    recvPacket >> unknown1 >> unknown2;
+    recvPacket >> pass;
+    recvPacket >> channelname;
 
     if (channel_id)
     {
@@ -50,9 +53,6 @@ void WorldSession::HandleJoinChannel (WorldPacket& recvPacket)
         return;
     }
 
-    recvPacket >> unknown1 >> unknown2;
-    recvPacket >> pass;
-    recvPacket >> channelname;
 
     if (channelname.empty())
     return;
