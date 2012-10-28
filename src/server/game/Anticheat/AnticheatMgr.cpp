@@ -94,10 +94,10 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         {
         player->TeleportTo(1, 16220.7f, 16398.3f, -64.3786f, 0.825313f);
         player->SetMovement(MOVE_ROOT);
-        player->CastSpell(player, 42201, true);
-        player->CastSpell(player, 23775, true);
-        player->CastSpell(player, 9454, true);
-		player->CastSpell(player, 45472, true); // parachute
+        player->CastSpell(player, 42201, true);  // Eternal Silence
+        player->CastSpell(player, 23775, true);  // Stun Forever
+        player->CastSpell(player, 9454, true);   // Freeze
+		player->CastSpell(player, 45472, true);  // parachute
 		//player->ResurrectPlayer(100, false);
 
         ChatHandler(player->GetSession()).PSendSysMessage("You Have Been Jailed By: The Anti Cheater System.");
