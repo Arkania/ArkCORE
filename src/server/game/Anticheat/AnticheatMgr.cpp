@@ -190,6 +190,8 @@ void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
     if (
         player->HasAura(34480) || // GRAVITY_LAPSE
         player->HasAura(39432) || // GRAVITY_LAPSE_AURA
+        player->HasAura(33943) || // Flight Form
+        player->HasAura(40120) || // Swift Flight Form
         player->HasAura(44227) // GRAVITY_LAPSE_FLY
         )
         return;        
