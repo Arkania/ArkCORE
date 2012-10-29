@@ -1946,3 +1946,82 @@ bool ChatHandler::HandleCharacterTitlesCommand (const char* args)
     }
     return true;
 }
+
+bool ChatHandler::HandleCharacterJailCommand (const char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* target;
+    uint64 target_guid;
+    std::string target_name;
+    if (!extractPlayerTarget((char*) args, &target, &target_guid, &target_name))
+        return false;
+    
+    uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr->GetPlayerAccountIdByGUID(target_guid);
+
+    // find only player from same account if any
+    if (!target)
+        if (WorldSession * session = sWorld->FindSession(account_id))
+            target = session->GetPlayer();
+
+    if (target)
+    {
+        target->TeleportTo(1, 16220.7f, 16398.3f, -64.3786f, 0.825313f);
+        target->SetMovement(MOVE_ROOT);
+        target->CastSpell(target, 42201, true); // Eternal Silence
+        target->CastSpell(target, 23775, true); // Stun Forever
+        target->CastSpell(target, 9454, true);  // Freeze
+        target->CastSpell(target, 45472, true); // parachute
+        
+        std::string nameLink = playerLink(target_name);
+
+        //todo send message to player, add by who and use a proper language define
+    }  
+    
+    return true;
+}
+
+bool ChatHandler::HandleCharacterUnJailCommand (const char* args)
+{
+	if (!*args)
+        return false;
+
+    Player* target;
+    uint64 target_guid;
+    std::string target_name;
+    if (!extractPlayerTarget((char*) args, &target, &target_guid, &target_name))
+        return false;
+    
+    uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr->GetPlayerAccountIdByGUID(target_guid);
+
+    // find only player from same account if any
+    if (!target)
+        if (WorldSession * session = sWorld->FindSession(account_id))
+            target = session->GetPlayer();
+    
+    if (target)
+    {
+        float rposx, rposy, rposz, rposo = 0;
+        uint32 rmapid = 0;
+        QueryResult result = CharacterDatabase.PQuery( "SELECT `map`, `position_x`, `position_y`, `position_z` FROM `character_homebind` WHERE `guid` = '%d'", target->GetGUID() );
+        if(result)
+        {
+            Field *fields = result->Fetch();
+            rmapid = fields[0].GetUInt16();
+            rposx = fields[1].GetFloat();
+            rposy = fields[2].GetFloat();
+            rposz = fields[3].GetFloat();
+            //delete result;
+            target->SetMovement(MOVE_UNROOT);
+            target->RemoveAurasDueToSpell(42201);  // Eternal Silence
+            target->RemoveAurasDueToSpell(23775);  // Stun Forever
+            target->RemoveAurasDueToSpell(9454);   // Freeze
+            //plr->RemoveAllAuras();
+            target->TeleportTo(rmapid, rposx, rposy, rposz, rposo);
+
+			//todo send message to player, add by who and use a proper language define
+        }
+	}
+	return true;
+}

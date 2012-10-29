@@ -94,10 +94,10 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         {
         player->TeleportTo(1, 16220.7f, 16398.3f, -64.3786f, 0.825313f);
         player->SetMovement(MOVE_ROOT);
-        player->CastSpell(player, 42201, true);
-        player->CastSpell(player, 23775, true);
-        player->CastSpell(player, 9454, true);
-		player->CastSpell(player, 45472, true); // parachute
+        player->CastSpell(player, 42201, true);  // Eternal Silence
+        player->CastSpell(player, 23775, true);  // Stun Forever
+        player->CastSpell(player, 9454, true);   // Freeze
+		player->CastSpell(player, 45472, true);  // parachute
 		//player->ResurrectPlayer(100, false);
 
         ChatHandler(player->GetSession()).PSendSysMessage("You Have Been Jailed By: The Anti Cheater System.");
@@ -190,6 +190,8 @@ void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
     if (
         player->HasAura(34480) || // GRAVITY_LAPSE
         player->HasAura(39432) || // GRAVITY_LAPSE_AURA
+        player->HasAura(33943) || // Flight Form
+        player->HasAura(40120) || // Swift Flight Form
         player->HasAura(44227) // GRAVITY_LAPSE_FLY
         )
         return;        
@@ -312,6 +314,10 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(13141) ||  // 13141 -> Gnomish Rocket Boots
         player->HasAura(8892)  ||  // 8892 -> Goblin Rocket Boots
         player->HasAura(51721) ||  // 51721 -> Dominion Over Acherus
+        player->HasAura(51721) ||  // 51721 -> Rocket Jump
+        player->HasAura(68992) ||  // 68992 -> Darkflight
+        player->HasAura(1850)  ||   // 1850 -> Dash
+        player->HasAura(2983)  ||   // 2983 -> Sprint
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )

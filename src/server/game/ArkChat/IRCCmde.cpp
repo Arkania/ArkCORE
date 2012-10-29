@@ -949,9 +949,9 @@ void IRCCmd::Jail_Player(_CDATA *CD)
                     rposz = fields[3].GetFloat();
                     //delete result;
                     plr->SetMovement(MOVE_UNROOT);
-                    plr->RemoveAurasDueToSpell(42201);
-                    plr->RemoveAurasDueToSpell(23775);
-                    plr->RemoveAurasDueToSpell(9454);
+                    plr->RemoveAurasDueToSpell(42201);  // Eternal Silence
+                    plr->RemoveAurasDueToSpell(23775);  // Stun Forever
+                    plr->RemoveAurasDueToSpell(9454);   // Freeze
 					//plr->RemoveAllAuras();
 					plr->TeleportTo(rmapid, rposx, rposy, rposz, rposo);
                     Send_Player(plr, MakeMsg("You Have Been Released By: %s.", CD->USER.c_str()));
@@ -970,10 +970,10 @@ void IRCCmd::Jail_Player(_CDATA *CD)
                     _PARAMS[1] = "No Reason Given.";
                 plr->TeleportTo(1, 16220.7f, 16398.3f, -64.3786f, 0.825313f);
                 plr->SetMovement(MOVE_ROOT);
-                plr->CastSpell(plr, 42201, true);
-                plr->CastSpell(plr, 23775, true);
-                plr->CastSpell(plr, 9454, true);
-				plr->CastSpell(plr, 45472, true); // parachute
+                plr->CastSpell(plr, 42201, true);  // Eternal Silence
+                plr->CastSpell(plr, 23775, true);  // Stun Forever
+                plr->CastSpell(plr, 9454, true);   // Freeze
+				plr->CastSpell(plr, 45472, true);  // parachute
                 Send_Player(plr, MakeMsg("You Have Been Jailed By: %s. Reason: %s.", CD->USER.c_str(), _PARAMS[1].c_str()));
                 sReason = " \00313["+_PARAMS[0]+"] : Has Been Jailed By: "+CD->USER+". Reason: "+_PARAMS[1]+".";
                 Send_IRCA(ChanOrPM(CD), sReason, true, CD->TYPE);
