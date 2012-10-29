@@ -312,6 +312,10 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(13141) ||  // 13141 -> Gnomish Rocket Boots
         player->HasAura(8892)  ||  // 8892 -> Goblin Rocket Boots
         player->HasAura(51721) ||  // 51721 -> Dominion Over Acherus
+        player->HasAura(51721) ||  // 51721 -> Rocket Jump
+        player->HasAura(68992) ||  // 68992 -> Darkflight
+        player->HasAura(1850)  ||   // 1850 -> Dash
+        player->HasAura(2983)  ||   // 2983 -> Sprint
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
