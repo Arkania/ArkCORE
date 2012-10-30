@@ -307,7 +307,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
     if (moveType == MOVE_RUN)
     {
         if (
-        player->HasAura(2645)  ||   // 2645 -> Ghost Worlf
+        player->HasAura(2645)  ||  // 2645 -> Ghost Worlf
         player->HasAura(17002) ||  // 17002 -> Feral Swiftness 1
         player->HasAura(24866) ||  // 24866 -> Feral Swiftness 2
         player->HasAura(32223) ||  // 32223 -> Crusader Aura < do we need this????
@@ -316,8 +316,9 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(51721) ||  // 51721 -> Dominion Over Acherus
         player->HasAura(51721) ||  // 51721 -> Rocket Jump
         player->HasAura(68992) ||  // 68992 -> Darkflight
-        player->HasAura(1850)  ||   // 1850 -> Dash
-        player->HasAura(2983)  ||   // 2983 -> Sprint
+        player->HasAura(1850)  ||  // 1850 -> Dash
+        player->HasAura(2983)  ||  // 2983 -> Sprint
+        player->HasAura(68212) ||  // 68212 -> Weed Whacker
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
