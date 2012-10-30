@@ -25,44 +25,50 @@
 #include"SpellScript.h"
 #include"SpellAuraEffects.h"
 
-enum Spells {
-    SPELL_DUST_FLAIL = 81642,
-    SPELL_SCENT_OF_BLOOD = 81690,
+enum Spells 
+{
+    SPELL_DUST_FLAIL       = 81642,
+    SPELL_SCENT_OF_BLOOD   = 81690,
     H_SPELL_SCENT_OF_BLOOD = 89998,
-    SPELL_VENOMOUS_RAGE = 81706,
-    SPELL_VISCOUS_POISON = 81630,
+    SPELL_VENOMOUS_RAGE    = 81706,
+    SPELL_VISCOUS_POISON   = 81630,
     H_SPELL_VISCOUS_POISON = 90004,
 };
 
-enum Events {
-    EVENT_DUST_FLAIL = 1,
-    EVENT_SCENT_OF_BLOOD = 2,
-    EVENT_VENOMOUS_RAGE = 3,
-    EVENT_VISCOUS_POISON = 4,
+enum Events 
+{
+    EVENT_DUST_FLAIL       = 1,
+    EVENT_SCENT_OF_BLOOD   = 2,
+    EVENT_VENOMOUS_RAGE    = 3,
+    EVENT_VISCOUS_POISON   = 4,
 };
 
-enum SummonIds {
+enum SummonIds 
+{
     NPC_FRENZIED_CROCOLISK = 43658,
 };
 
 const Position SummonLocations[4] = {
 //Frenzied Crocolisks
-        { -11033.29f, -1674.57f, -0.56f, 1.09f }, { -11029.84f, -1673.09f,
-                -0.37f, 2.33f }, { -11007.25f, -1666.37f, -0.23f, 2.46f }, {
-                -11006.83f, -1666.85f, -0.25f, 2.23f }, };
+        { -11033.29f, -1674.57f, -0.56f, 1.09f }, 
+		{ -11029.84f, -1673.09f, -0.37f, 2.33f }, 
+		{ -11007.25f, -1666.37f, -0.23f, 2.46f }, 
+		{ -11006.83f, -1666.85f, -0.25f, 2.23f }, 
+};
 
-class boss_lockmaw: public CreatureScript {
+class boss_lockmaw: public CreatureScript 
+{
 public:
-    boss_lockmaw() :
-            CreatureScript("boss_lockmaw") {
-    }
+    boss_lockmaw() : CreatureScript("boss_lockmaw") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const {
+    CreatureAI* GetAI(Creature* pCreature) const 
+	{
         return new boss_lockmawAI(pCreature);
     }
-    struct boss_lockmawAI: public ScriptedAI {
-        boss_lockmawAI(Creature* pCreature) :
-                ScriptedAI(pCreature), Summons(me) {
+    struct boss_lockmawAI: public ScriptedAI 
+	{
+        boss_lockmawAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me) 
+		{
             pInstance = pCreature->GetInstanceScript();
         }
 
@@ -71,32 +77,34 @@ public:
         SummonList Summons;
         bool check_in;
 
-        void Reset() {
+        void Reset() 
+		{
             events.Reset();
             Summons.DespawnAll();
 
-            if (pInstance
-                    && (pInstance->GetData(DATA_LOCKMAW_EVENT) != DONE
-                            && !check_in))
+            if (pInstance && (pInstance->GetData(DATA_LOCKMAW_EVENT) != DONE && !check_in))
                 pInstance->SetData(DATA_LOCKMAW_EVENT, NOT_STARTED);
 
             check_in = false;
         }
 
-        void JustDied(Unit* /*Kill*/) {
+        void JustDied(Unit* /*Kill*/) 
+		{
             Summons.DespawnAll();
             if (pInstance)
                 pInstance->SetData(DATA_LOCKMAW_EVENT, DONE);
         }
 
-        void EnterCombat(Unit* /*Ent*/) {
+        void EnterCombat(Unit* /*Ent*/) 
+		{
             if (pInstance)
                 pInstance->SetData(DATA_LOCKMAW_EVENT, IN_PROGRESS);
 
             DoZoneInCombat();
         }
 
-        void UpdateAI(const uint32 uiDiff) {
+        void UpdateAI(const uint32 uiDiff) 
+		{
             if (!UpdateVictim()) /* No target to kill */
                 return;
 
@@ -105,7 +113,8 @@ public:
             if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
-            while (uint32 eventId = events.ExecuteEvent()) {
+            while (uint32 eventId = events.ExecuteEvent()) 
+			{
                 switch (eventId) {
                 case EVENT_DUST_FLAIL:
                     DoCast(me->getVictim(), SPELL_DUST_FLAIL);
@@ -119,10 +128,9 @@ public:
                 case EVENT_SCENT_OF_BLOOD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
                         DoCast(me->getVictim(), SPELL_SCENT_OF_BLOOD);
-                    for (uint8 i = 0; i < 4; i++) {
-                        Creature* Crocolisk = me->SummonCreature(
-                                NPC_FRENZIED_CROCOLISK, SummonLocations[i],
-                                TEMPSUMMON_CORPSE_DESPAWN);
+                    for (uint8 i = 0; i < 4; i++) 
+					{
+                        Creature* Crocolisk = me->SummonCreature(NPC_FRENZIED_CROCOLISK, SummonLocations[i], TEMPSUMMON_CORPSE_DESPAWN);
                         Crocolisk->AddThreat(me->getVictim(), 0.0f);
                         DoZoneInCombat(Crocolisk);
                     }
@@ -143,6 +151,7 @@ public:
     };
 };
 
-void AddSC_boss_lockmaw() {
+void AddSC_boss_lockmaw() 
+{
     new boss_lockmaw();
 }

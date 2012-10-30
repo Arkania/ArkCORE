@@ -1237,6 +1237,223 @@ public:
     }
 };
 
+/*######
+ ## Quest 14474 & 14001 : Goblin Escape Pods
+ ######*/
+
+#define QUESTA       14474
+#define QUESTB       14001
+#define KILLCREDIT   34748
+#define LIVESPAWN	 66137
+#define DEADSPAWN	 66138
+#define GALLWIX		 67845
+
+class go_goblincscapepod : public GameObjectScript
+{
+	public:
+    go_goblincscapepod() : GameObjectScript("go_goblincscapepod") { }
+
+bool OnGossipHello(Player* player, GameObject* pGO)
+{
+    if ((player->GetQuestStatus(QUESTA) == QUEST_STATUS_INCOMPLETE)	|| (player->GetQuestStatus(QUESTB) == QUEST_STATUS_INCOMPLETE))
+    {
+		//TODO
+		// First time you shoud get spell GALLWIX cast and this NPC has some speahc todo about ripping player off
+
+		uint8 r = rand() % 8;
+		if (r < 2) //sometimes sapwn a dead goblin and dont give credit..
+			player->CastSpell(player, DEADSPAWN, true);
+		else
+		{
+			player->CastSpell(player, LIVESPAWN, true);
+			player->KilledMonsterCredit(KILLCREDIT,0);
+		}
+		pGO->Delete();
+		return false;
+    }
+    return true;
+}
+
+};
+
+/*######
+## Quest 14124: Liberate the Kaja'mite
+######*/
+#define LTKQUEST       		14124
+#define KAJAMITECHUNK       195492 //Gameobject
+#define KABLOOEYBOMBSSPELL	67682 // Spell
+#define KABLOOEYBOMBSITEM	48768 // Item
+
+class go_kajamitedeposit : public GameObjectScript
+{
+	public:
+    go_kajamitedeposit() : GameObjectScript("go_kajamitedeposit") { }
+
+	bool OnGossipHello(Player* player, GameObject* pGO)
+	{
+    if (player->GetQuestStatus(LTKQUEST) == QUEST_STATUS_INCOMPLETE && player->HasItemCount(KABLOOEYBOMBSITEM, 1))
+		{
+			player->CastSpell(player, KABLOOEYBOMBSSPELL, true);
+			pGO->SummonGameObject(KAJAMITECHUNK, pGO->GetPositionX(), pGO->GetPositionY(), pGO->GetPositionZ(), 0, 0 ,0 ,0 ,0 ,300);
+			uint8 r = rand() % 3; // add some random spawn locations and a random spawn count
+			if (r < 2)
+				pGO->SummonGameObject(KAJAMITECHUNK, pGO->GetPositionX()+1, pGO->GetPositionY()+1, pGO->GetPositionZ(), 0, 0 ,0 ,0 ,0 ,300);
+			if (r > 1)
+				pGO->SummonGameObject(KAJAMITECHUNK, pGO->GetPositionX()-1, pGO->GetPositionY()-1, pGO->GetPositionZ(), 0, 0 ,0 ,0 ,0 ,300);
+			
+			pGO->Delete();
+			return false;
+		}
+    return true;
+	}
+
+};
+
+/*######
+## Quest 14124: Up, Up & Away!
+######
+*/
+#define UUAAGOSSIP_GOFLY		"Up, Up & Away!"
+#define UUAAQUEST       		14244
+#define UUAAKILLCREDIT      	50046
+#define UUAA_EXPLODE_SPELL		66127
+#define UUAA_SUMMON_ROCKET		68806 // this procs 68804
+
+// search for " Up, Up & Away! " in spellwork
+
+class go_rocketsling: public GameObjectScript
+{
+	public:
+    go_rocketsling() : GameObjectScript("go_rocketsling") { }
+
+	bool OnGossipHello(Player* player, GameObject* pGO)
+	{
+		 if (player->GetQuestStatus(UUAAQUEST) == QUEST_STATUS_INCOMPLETE)
+		 {
+			 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, UUAAGOSSIP_GOFLY  ,GOSSIP_SENDER_MAIN ,GOSSIP_ACTION_INFO_DEF+1);
+		 }
+		 player->PlayerTalkClass->SendGossipMenu(907, pGO->GetGUID());
+   
+    return true;
+	}
+
+	bool OnGossipSelect(Player* player, GameObject* pGO, uint32 /*sender*/, uint32 action)
+	{
+		player->PlayerTalkClass->ClearMenus();
+		switch(action - GOSSIP_ACTION_INFO_DEF)
+		{
+			case 1:
+				{
+					player->CLOSE_GOSSIP_MENU();
+					// the teleport can be removed once i complete this
+					// todo:
+					// mount player
+					// auto fly player on mount in a arc over river to TP location bellow
+					// at end of flight do kill credit
+					// explode rcoket
+					player->TeleportTo(648, 946.01f, 2397.09f, 2.38f, 4.4f);
+					player->KilledMonsterCredit(UUAAKILLCREDIT,0);
+					return false;
+				}
+		}
+		return true;
+	}
+
+};
+
+/*######
+## Quest 14245: It's a Town-In-A-Box
+######
+*/
+#define	TIABQUEST			14245
+#define TIABPLUNGERSPELL	68938  // gives kill credit and via spell_link_spell chnages phase to 2048
+// #define TIABSMOKESPELL		71094  // removed in spell_link_spell
+#define SMOKEBUNNYNPC		38069
+class go_towninabox : public GameObjectScript
+{
+	public:
+    go_towninabox() : GameObjectScript("go_towninabox") { }
+
+	bool OnGossipHello(Player* player, GameObject* pGO)
+	{
+    if (player->GetQuestStatus(TIABQUEST) == QUEST_STATUS_INCOMPLETE)
+		{
+			pGO->SummonCreature(SMOKEBUNNYNPC, pGO->GetPositionX(), pGO->GetPositionY(), pGO->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 10000);
+			player->CastSpell(player, TIABPLUNGERSPELL, true);
+			player->KilledMonsterCredit(UUAAKILLCREDIT,0);
+			return false;
+		}
+    return true;
+	}
+
+};
+
+/*######
+ ## go_gnoll_cage
+ ######*/
+
+enum eGnollCage
+{
+    NPC_GNOLL_PRISIONER = 41410,
+	GNOLL_QUEST_KILL_CREDIT = 41438
+};
+
+class go_gnoll_cage: public GameObjectScript
+{
+public:
+    go_gnoll_cage () :
+            GameObjectScript("go_gnoll_cage")
+    {
+    }
+
+    bool OnGossipHello (Player *pPlayer, GameObject *pGO)
+    {
+        if (Creature *pGnollPrisoner = pGO->FindNearestCreature(NPC_GNOLL_PRISIONER, 5.0f, true))
+        {
+            pGO->SetGoState(GO_STATE_ACTIVE);
+            pPlayer->KilledMonsterCredit(GNOLL_QUEST_KILL_CREDIT, 0);
+            pGnollPrisoner->DisappearAndDie();
+        }
+
+        return true;
+    }
+};
+
+/*######
+ ## go_cultist_cage
+ ######*/
+// NOT SURE IF THIS IS 100% BLIZZ LIKE CANT FIND ANY DATA ON THIS QUEST
+// http://www.wowhead.com/quest=26955
+enum eCultistCage
+{
+    NPC_CAGED_BEAR  = 44902,
+	NPC_ZENKIKI     = 44863,
+	SPELL_HEAL_BEAR = 8070,
+};
+
+class go_cultist_cage: public GameObjectScript
+{
+public:
+    go_cultist_cage () :
+            GameObjectScript("go_cultist_cage")
+    {
+    }
+
+    bool OnGossipHello (Player *pPlayer, GameObject *pGO)
+    {
+        if (Creature *pCagedBear = pGO->FindNearestCreature(NPC_CAGED_BEAR, 8.0f, true))
+        {
+            pGO->SetGoState(GO_STATE_ACTIVE);
+			Creature * pVenKiki = pGO->SummonCreature(NPC_ZENKIKI, pPlayer->GetPositionX()-2, pPlayer->GetPositionY()+2, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000);
+			if (pVenKiki)
+				pVenKiki->CastSpell(pCagedBear,SPELL_HEAL_BEAR,true);
+        }
+
+        return true;
+    }
+};
+
+
 void AddSC_go_scripts ()
 {
     new go_cat_figurine;
@@ -1274,4 +1491,10 @@ void AddSC_go_scripts ()
     new go_amberpine_outhouse;
     new go_hive_pod;
     new go_massive_seaforium_charge;
+	new go_goblincscapepod;
+	new go_kajamitedeposit;
+	new go_rocketsling;
+	new go_towninabox;
+    new go_gnoll_cage;
+	new go_cultist_cage;
 }

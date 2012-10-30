@@ -3276,10 +3276,39 @@ bool ChatHandler::HandleResetHonorCommand (const char * args)
     if (!extractPlayerTarget((char*) args, &target))
         return false;
 
-    target->SetCurrency(CURRENCY_TYPE_HONOR_POINTS, 0);
+    target->ResetHonorPoints();
     target->SetUInt32Value(PLAYER_FIELD_KILLS, 0);
+    target->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 0);
     target->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL);
+    return true;
+}
 
+bool ChatHandler::HandleResetConquestCommand (const char * args)
+{
+    Player* target;
+    if (!extractPlayerTarget((char*)args, &target))
+        return false;
+
+    target->ResetConquestPoints();
+    return true;
+}
+
+bool ChatHandler::HandleResetValorCommand (const char * args)
+{
+    Player* target;
+    if (!extractPlayerTarget((char*)args, &target))
+        return false;
+
+    target->ResetValorPoints();
+    return true;
+}
+
+bool ChatHandler::HandleResetJusticeCommand (const char * args)
+{
+    Player* target;
+    if (!extractPlayerTarget((char*)args, &target))
+        return false;
+    target->ResetJusticePoints();
     return true;
 }
 
@@ -5318,6 +5347,94 @@ bool ChatHandler::HandleModifyGenderCommand (const char *args)
     if (needReportToTarget(player))
         ChatHandler(player).PSendSysMessage(LANG_YOUR_GENDER_CHANGED, gender_full, GetNameLink().c_str());
 
+    return true;
+}
+
+bool ChatHandler::HandleModifyHonorCommand(const char *args)
+{
+    if (!*args)
+        return false;
+
+    Player *target =getSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(target, 0))
+        return false;
+
+    uint32 amount = (uint32) atoi(args);
+    target->ModifyHonorPoints(amount);
+    return true;
+}
+
+bool ChatHandler::HandleModifyConquestCommand(const char *args)
+{
+    if (!*args)
+        return false;
+
+    Player *target =getSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(target, 0))
+        return false;
+
+    uint32 amount = (uint32) atoi(args);
+    target->ModifyConquestPoints(amount);
+    return true;
+}
+
+bool ChatHandler::HandleModifyValorCommand(const char *args)
+{
+    if (!*args)
+        return false;
+
+    Player *target =getSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(target, 0))
+        return false;
+
+    uint32 amount = (uint32) atoi(args);
+    target->ModifyValorPoints(amount);
+    return true;
+}
+
+bool ChatHandler::HandleModifyJusticeCommand(const char *args)
+{
+    if (!*args)
+        return false;
+
+    Player *target =getSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(target, 0))
+        return false;
+
+    uint32 amount = (uint32) atoi(args);
+    target->ModifyJusticePoints(amount);
     return true;
 }
 

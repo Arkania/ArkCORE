@@ -34,7 +34,7 @@ struct CreatureTextEntry
     uint32 entry;
     uint8 group;
     uint8 id;
-    std::string content_default;
+    std::string text;
     ChatMsg type;
     Language lang;
     float probability;

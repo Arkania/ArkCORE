@@ -51,6 +51,7 @@ void AddSC_example_spell_scripts ();
 void AddSC_SmartSCripts ();
 
 // Commands
+void AddSC_anticheat_commandscript();
 void AddSC_account_commandscript ();
 void AddSC_achievement_commandscript ();
 //void AddSC_gm_commandscript();
@@ -63,7 +64,7 @@ void AddSC_reload_commandscript ();
 void AddSC_titles_commandscript ();
 void AddSC_wp_commandscript ();
 void AddSC_gobject_commandscript ();
-void AddSC_honor_commandscript ();
+void AddSC_currency_commandscript();
 void AddSC_quest_commandscript ();
 void AddSC_reload_commandscript ();
 void AddSC_credits_commandscript ();
@@ -80,7 +81,6 @@ void AddSC_guards();
 void AddSC_item_scripts();
 void AddSC_npc_professions();
 void AddSC_npc_innkeeper();
-void AddSC_npc_spell_click_spells();
 void AddSC_npcs_special();
 void AddSC_npc_taxi();
 void AddSC_achievement_scripts();
@@ -133,7 +133,6 @@ void AddSC_boss_chimaeron();
 void AddSC_instance_blackwing_descent();
 void AddSC_deadmines();//Deadmines
 void AddSC_instance_deadmines();
-void AddSC_boss_mr_smite();
 void AddSC_boss_glubtok();
 void AddSC_gnomeregan();//Gnomeregan
 void AddSC_instance_gnomeregan();
@@ -734,7 +733,7 @@ void AddCommandScripts ()
     AddSC_titles_commandscript();
     AddSC_wp_commandscript();
     AddSC_gobject_commandscript();
-    AddSC_honor_commandscript();
+    AddSC_currency_commandscript();
     AddSC_quest_commandscript();
     AddSC_reload_commandscript();
 }
@@ -752,7 +751,6 @@ void AddWorldScripts ()
     AddSC_item_scripts();
     AddSC_npc_professions();
     AddSC_npc_innkeeper();
-    AddSC_npc_spell_click_spells();
     AddSC_npcs_special();
     AddSC_npc_taxi();
     AddSC_achievement_scripts();
@@ -816,7 +814,6 @@ void AddEasternKingdomsScripts ()
     AddSC_instance_blackwing_descent();
     AddSC_deadmines();//Deadmines
     AddSC_instance_deadmines();
-    AddSC_boss_mr_smite();
     AddSC_boss_glubtok();
     AddSC_gnomeregan();//Gnomeregan
     AddSC_instance_gnomeregan();

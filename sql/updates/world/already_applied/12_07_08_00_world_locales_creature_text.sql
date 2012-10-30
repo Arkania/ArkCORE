@@ -13,6 +13,3 @@ CREATE TABLE `locales_creature_text` (
   `text_loc8` longtext,
   PRIMARY KEY (`entry`,`groupid`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `locales_creature_text` 
-ADD `textGroup` LONGTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `entry` 

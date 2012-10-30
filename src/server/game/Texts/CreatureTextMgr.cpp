@@ -100,7 +100,7 @@ void CreatureTextMgr::LoadCreatureTexts ()
         temp.entry = fields[0].GetUInt32();
         temp.group = fields[1].GetUInt8();
         temp.id = fields[2].GetUInt8();
-        temp.content_default = fields[3].GetString();
+        temp.text = fields[3].GetString();
         temp.type = ChatMsg(fields[4].GetUInt8());
         temp.lang = Language(fields[5].GetUInt8());
         temp.probability = fields[6].GetFloat();
@@ -452,7 +452,7 @@ std::string CreatureTextMgr::GetLocalizedChatString(uint32 entry, uint8 textGrou
     if (groupItr == holderItr->second.end())
         return "";
 
-    std::string baseText = groupItr->content_default;
+    std::string baseText = groupItr->text;
     if (locale == DEFAULT_LOCALE)
         return baseText;
 

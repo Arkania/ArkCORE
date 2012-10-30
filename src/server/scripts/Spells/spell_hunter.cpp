@@ -39,35 +39,8 @@ enum HunterSpells
     HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED = 54045,
     HUNTER_SPELL_INVIGORATION_TRIGGERED       = 53398,
     HUNTER_SPELL_MASTERS_CALL_TRIGGERED       = 62305,
-    HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED    = 53220
-};
-
-// 13165 - Aspect of the Hawk
-class spell_hun_aspect_of_the_hawk: public SpellScriptLoader {
-public:
-  spell_hun_aspect_of_the_hawk() :
-      SpellScriptLoader("spell_hun_aspect_of_the_hawk") {
-  }
-
-  class spell_hun_aspect_of_the_hawk_AuraScript: public AuraScript {
-    PrepareAuraScript(spell_hun_aspect_of_the_hawk_AuraScript)
-    ;
-
-    void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount,  bool & /*canBeRecalculated*/) 
-    {
-      // En 4.0.6a Aspect of the Hawk provee 2000 AP en level 85 
-      // por tanto 2000 / 85 = 23.52 AP x Level 
-      amount = 23.52f * GetCaster()->getLevel();
-    }
-
-    void Register() {
-      DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_hun_aspect_of_the_hawk_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_RANGED_ATTACK_POWER);
-    }
-  };
-
-  AuraScript *GetAuraScript() const {
-    return new spell_hun_aspect_of_the_hawk_AuraScript();
-  }
+    HUNTER_SPELL_STREADY_SHOT_ATTACK_SPEED    = 53220,
+    HUNTER_SPELL_CHIMERA_SHOT_HEALING         = 53353
 };
 
 class spell_hun_kill_command: public SpellScriptLoader
@@ -117,10 +90,7 @@ public:
 class spell_hun_focus_fire: public SpellScriptLoader
 {
 public:
-    spell_hun_focus_fire () :
-            SpellScriptLoader("spell_hun_focus_fire")
-    {
-    }
+    spell_hun_focus_fire () : SpellScriptLoader("spell_hun_focus_fire") { }
 
     class spell_hun_focus_fire_SpellScript: public SpellScript
     {
@@ -172,10 +142,7 @@ public:
 class spell_hun_invigoration: public SpellScriptLoader
 {
 public:
-    spell_hun_invigoration () :
-            SpellScriptLoader("spell_hun_invigoration")
-    {
-    }
+    spell_hun_invigoration () : SpellScriptLoader("spell_hun_invigoration") { }
 
     class spell_hun_invigoration_SpellScript: public SpellScript
     {
@@ -210,10 +177,7 @@ public:
 class spell_hun_last_stand_pet: public SpellScriptLoader
 {
 public:
-    spell_hun_last_stand_pet () :
-            SpellScriptLoader("spell_hun_last_stand_pet")
-    {
-    }
+    spell_hun_last_stand_pet () : SpellScriptLoader("spell_hun_last_stand_pet") { }
 
     class spell_hun_last_stand_pet_SpellScript: public SpellScript
     {
@@ -248,10 +212,7 @@ public:
 class spell_hun_masters_call: public SpellScriptLoader
 {
 public:
-    spell_hun_masters_call () :
-            SpellScriptLoader("spell_hun_masters_call")
-    {
-    }
+    spell_hun_masters_call () :  SpellScriptLoader("spell_hun_masters_call") { }
 
     class spell_hun_masters_call_SpellScript: public SpellScript
     {
@@ -299,10 +260,7 @@ public:
 class spell_hun_readiness: public SpellScriptLoader
 {
 public:
-    spell_hun_readiness () :
-            SpellScriptLoader("spell_hun_readiness")
-    {
-    }
+    spell_hun_readiness () : SpellScriptLoader("spell_hun_readiness") { }
 
     class spell_hun_readiness_SpellScript: public SpellScript
     {
@@ -344,10 +302,7 @@ public:
 class spell_hun_scatter_shot: public SpellScriptLoader
 {
 public:
-    spell_hun_scatter_shot () :
-            SpellScriptLoader("spell_hun_scatter_shot")
-    {
-    }
+    spell_hun_scatter_shot () : SpellScriptLoader("spell_hun_scatter_shot") { }
 
     class spell_hun_scatter_shot_SpellScript: public SpellScript
     {
@@ -379,16 +334,14 @@ public:
 // 53302, 53303, 53304 Sniper Training
 enum eSniperTrainingSpells
 {
-    SPELL_SNIPER_TRAINING_R1 = 53302, SPELL_SNIPER_TRAINING_BUFF_R1 = 64418,
+	SPELL_SNIPER_TRAINING_R1      = 53302, 
+	SPELL_SNIPER_TRAINING_BUFF_R1 = 64418,
 };
 
 class spell_hun_sniper_training: public SpellScriptLoader
 {
 public:
-    spell_hun_sniper_training () :
-            SpellScriptLoader("spell_hun_sniper_training")
-    {
-    }
+    spell_hun_sniper_training () : SpellScriptLoader("spell_hun_sniper_training") { }
 
     class spell_hun_sniper_training_AuraScript: public AuraScript
     {
@@ -450,10 +403,7 @@ public:
 class spell_hun_pet_heart_of_the_phoenix: public SpellScriptLoader
 {
 public:
-    spell_hun_pet_heart_of_the_phoenix () :
-            SpellScriptLoader("spell_hun_pet_heart_of_the_phoenix")
-    {
-    }
+    spell_hun_pet_heart_of_the_phoenix () : SpellScriptLoader("spell_hun_pet_heart_of_the_phoenix") { }
 
     class spell_hun_pet_heart_of_the_phoenix_SpellScript: public SpellScript
     {
@@ -500,10 +450,7 @@ public:
 class spell_hun_pet_carrion_feeder: public SpellScriptLoader
 {
 public:
-    spell_hun_pet_carrion_feeder () :
-            SpellScriptLoader("spell_hun_pet_carrion_feeder")
-    {
-    }
+    spell_hun_pet_carrion_feeder () : SpellScriptLoader("spell_hun_pet_carrion_feeder") { }
 
     class spell_hun_pet_carrion_feeder_SpellScript: public SpellScript
     {
@@ -547,10 +494,7 @@ public:
 class spell_hun_steady_shot: public SpellScriptLoader
 {
 public:
-    spell_hun_steady_shot () :
-            SpellScriptLoader("spell_hun_steady_shot")
-    {
-    }
+    spell_hun_steady_shot () : SpellScriptLoader("spell_hun_steady_shot") { }
 
     class spell_hun_steady_shot_SpellScript: public SpellScript
     {
@@ -599,6 +543,48 @@ public:
     }
 };
 
+// 53209 Chimera Shot
+class spell_hun_chimera_shot : public SpellScriptLoader
+{
+public:
+    spell_hun_chimera_shot() : SpellScriptLoader("spell_hun_chimera_shot") { }
+
+    class spell_hun_chimera_shot_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
+        bool Validate(SpellEntry const* /*spellEntry*/)
+        {
+            if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_HEALING))
+                return false;
+            return true;
+        }
+
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
+
+            // Get normal serpent sting or Serpent Spread's proc result one
+            if (AuraEffect* serpentSting = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_HUNTER, 16384, 0, 0, GetCaster()->GetGUID()))
+                serpentSting->GetBase()->RefreshDuration();
+
+            GetCaster()->CastSpell(GetCaster(), HUNTER_SPELL_CHIMERA_SHOT_HEALING, true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_hun_chimera_shot_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_chimera_shot_SpellScript();
+    }
+};
+
 void AddSC_hunter_spell_scripts ()
 {
     new spell_hun_invigoration();
@@ -612,5 +598,5 @@ void AddSC_hunter_spell_scripts ()
     new spell_hun_steady_shot();
     new spell_hun_focus_fire();
     new spell_hun_kill_command();
-    new spell_hun_aspect_of_the_hawk();
+    new spell_hun_chimera_shot();
 }

@@ -21,6 +21,7 @@
  */
 
 #include "gamePCH.h"
+#include "AnticheatMgr.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "WorldPacket.h"
@@ -702,7 +703,7 @@ void Spell::SpellDamageSchoolDmg (SpellEffIndex effIndex)
             case 589:
             case 15407:
             {
-                if (m_caster->HasSpell(95740))          // Shadow Orbs
+                if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_SHADOW)         // Shadow Orbs
                 {
                     int chance = 10;
                     if (m_caster->HasAura(33191))
@@ -958,23 +959,22 @@ void Spell::SpellDamageSchoolDmg (SpellEffIndex effIndex)
                 break;
             }
 
-            //Shield of  Righteous
+            // Shield of Righteous
             if (m_spellInfo->Id == 53600)
             {
                 switch (m_caster->GetPower(POWER_HOLY_POWER))
                 {
                 case 0:
-                    damage = int32(damage * 1.16f);
+                    damage = damage * 1 + int32(0.1 * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
                     break;
                 case 1:
-                    damage = int32((damage * 1.16f) * 3);
+                    damage = damage * 3 + int32(0.3 * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
                     break;
                 case 2:
-                    damage = int32((damage * 1.16f) * 6);
+                    damage = damage * 6 + int32(0.6 * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
                     break;
                 }
             }
-
             break;
         }
         case SPELLFAMILY_DEATHKNIGHT:
@@ -2422,6 +2422,27 @@ void Spell::EffectTriggerSpell (SpellEffIndex effIndex)
     // special cases
     switch (triggered_spell_id)
     {
+    // Tricky Treat / Out With It
+    case 42965:
+    {
+        int32 rand_eff = urand(1, 7);
+        switch (rand_eff)
+        {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                m_caster->CastSpell(m_caster, 42919, true);
+                break;
+            case 7:
+                m_caster->CastSpell(m_caster, 42966, true);
+                if (AchievementEntry const* pAE = GetAchievementStore()->LookupEntry(288)) // OUT WITH IT
+                    m_caster->ToPlayer()->CompletedAchievement(pAE, true);
+                break;
+        }
+    }
     // Mirror Image
     case 58832:
     {
@@ -7324,6 +7345,9 @@ void Spell::EffectCharge (SpellEffIndex /*effIndex*/)
     Unit* target = m_targets.getUnitTarget();
     if (!target)
         return;
+        
+    if (m_caster->ToPlayer())
+        sAnticheatMgr->DisableAnticheatDetection(m_caster->ToPlayer());
 
     float angle = target->GetRelativeAngle(m_caster);
     Position pos;
@@ -7342,11 +7366,14 @@ void Spell::EffectChargeDest (SpellEffIndex /*effIndex*/)
 {
     if (m_targets.HasDst())
     {
-            float x, y, z;
-            m_targets.m_dstPos.GetPosition(x, y, z);
-            m_caster->GetMotionMaster()->MoveCharge(x, y, z);
-        }
+        if (m_caster->ToPlayer())
+            sAnticheatMgr->DisableAnticheatDetection(m_caster->ToPlayer());
+            
+        float x, y, z;
+        m_targets.m_dstPos.GetPosition(x, y, z);
+        m_caster->GetMotionMaster()->MoveCharge(x, y, z);
     }
+}
 
 void Spell::EffectKnockBack (SpellEffIndex effIndex)
 {
@@ -8403,11 +8430,19 @@ void Spell::EffectCastButtons (SpellEffIndex effIndex)
         if (p_caster->HasSpellCooldown(spell_id))
             continue;
 
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+         SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+        if (!spellInfo)
+            continue;
         uint32 cost = CalculatePowerCost(spellInfo, m_caster, GetSpellSchoolMask(spellInfo));
 
         if (m_caster->GetPower(POWER_MANA) < cost)
             break;
+
+        if (!m_caster->HasSpell(spell_id) || IsPassiveSpell(spellInfo))
+            continue;
+
+        if (spellInfo->TotemCategory[0] < 2 || spellInfo->TotemCategory[0] > 5)
+            continue; 
 
         m_caster->CastSpell(unitTarget, spell_id, true);
         m_caster->ModifyPower(POWER_MANA, -(int32) cost);

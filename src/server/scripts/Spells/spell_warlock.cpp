@@ -44,9 +44,10 @@ enum WarlockSpells
 };
 
 // 47236 - Demonic Pact
-class spell_warl_demonic_pact: public SpellScriptLoader {
+class spell_warl_demonic_pact: public SpellScriptLoader 
+{
 public:
-    spell_warl_demonic_pact() : SpellScriptLoader("spell_warl_demonic_pact") {}
+    spell_warl_demonic_pact() : SpellScriptLoader("spell_warl_demonic_pact") { }
 
     class spell_warl_demonic_pact_AuraScript: public AuraScript
     {
@@ -79,17 +80,20 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const {
+    AuraScript *GetAuraScript() const 
+	{
         return new spell_warl_demonic_pact_AuraScript();
     }
 };
 
 // 77799 Fel Flame
-class spell_warl_fel_flame: public SpellScriptLoader {
+class spell_warl_fel_flame: public SpellScriptLoader 
+{
 public:
-    spell_warl_fel_flame() : SpellScriptLoader("spell_warl_fel_flame") {}
+    spell_warl_fel_flame() : SpellScriptLoader("spell_warl_fel_flame") { }
 
-    class spell_warl_fel_flame_SpellScript: public SpellScript {
+    class spell_warl_fel_flame_SpellScript: public SpellScript 
+	{
         PrepareSpellScript(spell_warl_fel_flame_SpellScript)
 
         void HandleOnHit()
@@ -130,10 +134,7 @@ public:
 class spell_warl_demonic_empowerment: public SpellScriptLoader
 {
 public:
-    spell_warl_demonic_empowerment () :
-            SpellScriptLoader("spell_warl_demonic_empowerment")
-    {
-    }
+    spell_warl_demonic_empowerment () : SpellScriptLoader("spell_warl_demonic_empowerment") { }
 
     class spell_warl_demonic_empowerment_SpellScript: public SpellScript
     {
@@ -203,10 +204,7 @@ public:
 class spell_warl_everlasting_affliction: public SpellScriptLoader
 {
 public:
-    spell_warl_everlasting_affliction () :
-            SpellScriptLoader("spell_warl_everlasting_affliction")
-    {
-    }
+    spell_warl_everlasting_affliction () : SpellScriptLoader("spell_warl_everlasting_affliction") { }
 
     class spell_warl_everlasting_affliction_SpellScript: public SpellScript
     {
@@ -235,10 +233,7 @@ public:
 class spell_warl_create_healthstone: public SpellScriptLoader
 {
 public:
-    spell_warl_create_healthstone () :
-            SpellScriptLoader("spell_warl_create_healthstone")
-    {
-    }
+    spell_warl_create_healthstone () : SpellScriptLoader("spell_warl_create_healthstone") { }
 
     class spell_warl_create_healthstone_SpellScript: public SpellScript
     {
@@ -282,10 +277,10 @@ uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellS
 };
 
 // 1120 Drain Soul
- class spell_warl_drain_soul: public SpellScriptLoader {
+ class spell_warl_drain_soul: public SpellScriptLoader 
+ {
  public:
-    spell_warl_drain_soul() :
-            SpellScriptLoader("spell_warl_drain_soul") {}
+    spell_warl_drain_soul() : SpellScriptLoader("spell_warl_drain_soul") { }
 
     class spell_warl_drain_soul_AuraScript: public AuraScript {
         PrepareAuraScript(spell_warl_drain_soul_AuraScript)
@@ -325,10 +320,7 @@ uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellS
 class spell_warlock_dark_intent: public SpellScriptLoader
 {
 public:
-    spell_warlock_dark_intent () :
-            SpellScriptLoader("spell_warlock_dark_intent")
-    {
-    }
+    spell_warlock_dark_intent () : SpellScriptLoader("spell_warlock_dark_intent") { }
 
     class spell_warlock_dark_intent_SpellScript: public SpellScript
     {
@@ -361,10 +353,7 @@ public:
 class spell_warl_immolate: public SpellScriptLoader
 {
 public:
-    spell_warl_immolate () :
-            SpellScriptLoader("spell_warl_immolate")
-    {
-    }
+    spell_warl_immolate () : SpellScriptLoader("spell_warl_immolate") { }
 
     class spell_warl_immolate_SpellScript: public SpellScript
     {
@@ -402,10 +391,7 @@ public:
 class spell_warl_seed_of_corruption: public SpellScriptLoader
 {
 public:
-    spell_warl_seed_of_corruption () :
-            SpellScriptLoader("spell_warl_seed_of_corruption")
-    {
-    }
+    spell_warl_seed_of_corruption () : SpellScriptLoader("spell_warl_seed_of_corruption") { }
 
     /* Produces the following error:
 		TSCR: Spell `27243` Effect `Index: EFFECT_0 Target: 16` of script `spell_warl_seed_of_corruption` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed
@@ -439,10 +425,7 @@ public:
 class spell_warl_shadow_bite: public SpellScriptLoader
 {
 public:
-    spell_warl_shadow_bite () :
-            SpellScriptLoader("spell_warl_shadow_bite")
-    {
-    }
+    spell_warl_shadow_bite () : SpellScriptLoader("spell_warl_shadow_bite") { }
 
     class spell_warl_shadow_bite_SpellScript: public SpellScript
     {
@@ -514,10 +497,7 @@ public:
 class spell_warl_drain_life: public SpellScriptLoader
 {
 public:
-    spell_warl_drain_life () :
-            SpellScriptLoader("spell_warl_drain_life")
-    {
-    }
+    spell_warl_drain_life () : SpellScriptLoader("spell_warl_drain_life") { }
     class spell_warl_drain_life_AuraScript: public AuraScript
     {
         PrepareAuraScript(spell_warl_drain_life_AuraScript)

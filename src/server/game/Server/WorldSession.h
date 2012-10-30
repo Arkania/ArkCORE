@@ -888,6 +888,7 @@ public:
     void HandleGuildBankBuyTab (WorldPacket& recv_data);
     void HandleQueryGuildBankTabText (WorldPacket& recv_data);
     void HandleSetGuildBankTabText (WorldPacket& recv_data);
+	void HandleGuildQueryNews(WorldPacket& recv_data);
 
     // Calendar
     void HandleCalendarGetCalendar (WorldPacket& recv_data);

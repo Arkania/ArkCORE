@@ -1637,9 +1637,28 @@ void Aura::HandleAuraSpecificMods (AuraApplication const* aurApp, Unit* caster, 
         }
         break;
     case SPELLFAMILY_DRUID:
+        // Tiger's Fury
+        if (GetSpellProto()->SpellFamilyFlags[2] & 0x800)
+        {
+            //King of the Jungle
+            if (apply)
+                if (AuraEffect const * aurEff = target->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_DRUID, 2850, 1))
+                {
+                    int32 basepoints0 = aurEff->GetAmount();
+                    target->CastCustomSpell(target, 51178, &basepoints0, NULL, NULL, true, NULL, NULL, target->GetGUID());
+                }
+         }
         // Enrage
         if (GetSpellProto()->SpellFamilyFlags[0] & 0x80000)
         {
+            //King of the Jungle
+            if (apply)
+                if (AuraEffect const * aurEff = target->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_DRUID, 2850, 0))
+                {
+                    int32 basepoints0 = aurEff->GetAmount();
+                    target->CastCustomSpell(target, 51185, &basepoints0, NULL, NULL, true, NULL, NULL, target->GetGUID());
+                }
+
             if (target->HasAura(70726))          // Druid T10 Feral 4P Bonus
             {
                 if (apply)

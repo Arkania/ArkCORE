@@ -227,6 +227,7 @@ struct AchievementCriteriaEntry
         struct
         {
             uint32 mapID;          // 3 Reference to Map.dbc
+            uint32 count;          // 4 Number of times that the arena must be won.
         } win_arena;
 
         // ACHIEVEMENT_CRITERIA_TYPE_PLAY_ARENA             = 33
@@ -1601,7 +1602,7 @@ struct SkillLineAbilityEntry
     uint32 min_value;          // 11       m_trivialSkillLineRankLow
     //uint32                                                // 12
     //uint32                                                // 13       4.0.0
-    uint32 characterPoints[2];   //12 and 13
+    uint32 characterPoints[2];             // 12-13
 };
 
 struct SoundEntriesEntry

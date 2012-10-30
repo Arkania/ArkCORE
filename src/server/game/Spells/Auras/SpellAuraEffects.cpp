@@ -1506,7 +1506,14 @@ void AuraEffect::PeriodicTick (AuraApplication * aurApp, Unit * caster) const
                 damage = damageReductedArmor;
             }
 
-            // Curse of Agony damage-per-tick calculation
+            //Shadow Word Death/Mind Blast Shadow Orb Proc 10% chance in 406a
+			if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_PRIEST && (GetSpellProto()->SpellIconID == 95 || GetSpellProto()->SpellIconID == 1980)) // Mind Blast / Shadow Word Death
+			{
+				int32 orbchance = 10;
+				if (roll_chance_i(orbchance))
+					caster->CastSpell(caster, 95740, true);
+			}
+			// Curse of Agony damage-per-tick calculation
             if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_WARLOCK && (GetSpellProto()->SpellFamilyFlags[0] & 0x400) && GetSpellProto()->SpellIconID == 544)
             {
                 uint32 totalTick = GetTotalTicks();
@@ -5278,28 +5285,53 @@ void AuraEffect::HandleModTotalPercentStat (AuraApplication const *aurApp, uint8
         return;
     }
 
+
+  int32 noModifyStat = NULL;
+  int32 statToModify = GetMiscValue();
+  bool increment = false;
+  
+  // Custom Cases
+  switch (GetId())
+  {
+    // Mark of the Wild
+    case 79060:
+    case 79061:
+    {
+      statToModify = STAT_STRENGTH; 
+      noModifyStat = STAT_SPIRIT;
+      increment = true;
+      break;
+    }
+    default:
+      break;
+    break;
+  }
+
     //save current and max HP before applying aura
     uint32 curHPValue = target->GetHealth();
     uint32 maxHPValue = target->GetMaxHealth();
 
-    for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++)
+  for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++) 
+  {    
+    if ((statToModify == i || statToModify == -1)  &&  (statToModify != noModifyStat))
     {
-        if (GetMiscValue() == i || GetMiscValue() == -1)
-        {
-            target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(GetAmount()), apply);
-            if (target->GetTypeId() == TYPEID_PLAYER || target->ToCreature()->isPet())
-                target->ApplyStatPercentBuffMod(Stats(i), (float) GetAmount(), apply);
+      target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(GetAmount()), apply);
+      if (target->GetTypeId() == TYPEID_PLAYER || target->ToCreature()->isPet())
+        target->ApplyStatPercentBuffMod(Stats(i), (float) GetAmount(), apply);
+
+      //recalculate current HP/MP after applying aura modifications (only for spells with SPELL_ATTR0_UNK4 0x00000010 flag)
+      if ((statToModify == STAT_STAMINA) && (maxHPValue > 0) && (m_spellProto->Attributes & SPELL_ATTR0_UNK4)) 
+	  {
+        uint32 newHPValue = target->CountPctFromMaxHealth( int32(100.0f * curHPValue / maxHPValue));
+        if (!newHPValue)
+          newHPValue = 1;
+        target->SetHealth(newHPValue);
+      }
         }
+    if (increment)
+      statToModify++;
     }
 
-    //recalculate current HP/MP after applying aura modifications (only for spells with SPELL_ATTR0_UNK4 0x00000010 flag)
-    if ((GetMiscValue() == STAT_STAMINA) && (maxHPValue > 0) && (m_spellProto->Attributes & SPELL_ATTR0_UNK4))
-    {
-        uint32 newHPValue = target->CountPctFromMaxHealth(int32(100.0f * curHPValue / maxHPValue));
-        if (!newHPValue)
-            newHPValue = 1;
-        target->SetHealth(newHPValue);
-    }
 }
 
 void AuraEffect::HandleAuraModResistenceOfStatPercent (AuraApplication const *aurApp, uint8 mode, bool /*apply*/) const
@@ -6887,29 +6919,17 @@ void AuraEffect::HandleAuraDummy (AuraApplication const *aurApp, uint8 mode, boo
         break;
     }
     case SPELLFAMILY_MAGE:
-    {
-        if (!(mode & AURA_EFFECT_HANDLE_REAL))
-            break;
-        switch (GetId())
         {
-        //Arcane Missiles.
-        case 79683:
-        {
-            if (apply)
-                caster->CastSpell(caster, 79808, true, NULL, NULL, GetCasterGUID());
+            //if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                //break;
             break;
         }
-        case 5143:
-        {
-            caster->RemoveAurasDueToSpell(79808);
-            break;
-        }
-            break;
-        }
-        break;
-    }
     case SPELLFAMILY_PRIEST:
-        break;
+        {
+            // if (!(mode & AURA_EFFECT_HANDLE_REAL))
+                // break;
+            break;
+        }
     case SPELLFAMILY_DRUID:
     {
         if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK))

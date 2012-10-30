@@ -290,6 +290,10 @@ ChatCommand * ChatHandler::getCommandTable ()
     { "morph", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleModifyMorphCommand>, "", NULL },
     { "phase", SEC_ADMINISTRATOR, false, OldHandler<&ChatHandler::HandleModifyPhaseCommand>, "", NULL },
     { "gender", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleModifyGenderCommand>, "", NULL },
+	{ "honor",          SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },
+        { "conquest",       SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },
+        { "valor",          SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },
+        { "justice",        SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },	
     { NULL, 0, false, NULL, "", NULL } };
 
     static ChatCommand petCommandTable[] =
@@ -308,6 +312,10 @@ ChatCommand * ChatHandler::getCommandTable ()
 
     static ChatCommand resetCommandTable[] =
     {
+        { "honor",          SEC_ADMINISTRATOR,  true,  OldHandler<&ChatHandler::HandleResetHonorCommand>,          "", NULL },
+        { "conquest",       SEC_ADMINISTRATOR,  true,  OldHandler<&ChatHandler::HandleResetConquestCommand>,       "", NULL },
+        { "valor",          SEC_ADMINISTRATOR,  true,  OldHandler<&ChatHandler::HandleResetValorCommand>,          "", NULL },
+        { "justice",        SEC_ADMINISTRATOR,  true,  OldHandler<&ChatHandler::HandleResetJusticeCommand>,        "", NULL },	
     { "achievements", SEC_ADMINISTRATOR, true, OldHandler<&ChatHandler::HandleResetAchievementsCommand>, "", NULL },
     { "level", SEC_ADMINISTRATOR, true, OldHandler<&ChatHandler::HandleResetLevelCommand>, "", NULL },
     { "spells", SEC_ADMINISTRATOR, true, OldHandler<&ChatHandler::HandleResetSpellsCommand>, "", NULL },
@@ -478,6 +486,8 @@ ChatCommand * ChatHandler::getCommandTable ()
     { "save", SEC_PLAYER, false, OldHandler<&ChatHandler::HandleSaveCommand>, "", NULL },
     { "saveall", SEC_MODERATOR, true, OldHandler<&ChatHandler::HandleSaveAllCommand>, "", NULL },
     { "kick", SEC_GAMEMASTER, true, OldHandler<&ChatHandler::HandleKickPlayerCommand>, "", NULL },
+    { "jail", SEC_GAMEMASTER, true, OldHandler<&ChatHandler::HandleCharacterJailCommand>, "", NULL },
+    { "unjail", SEC_GAMEMASTER, true, OldHandler<&ChatHandler::HandleCharacterUnJailCommand>, "", NULL },
     { "ban", SEC_ADMINISTRATOR, true, NULL, "", banCommandTable },
     { "unban", SEC_ADMINISTRATOR, true, NULL, "", unbanCommandTable },
     { "baninfo", SEC_ADMINISTRATOR, false, NULL, "", baninfoCommandTable },

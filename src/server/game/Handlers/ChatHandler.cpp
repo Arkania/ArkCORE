@@ -43,6 +43,7 @@
 #include "SpellAuraEffects.h"
 #include "Util.h"
 #include "ScriptMgr.h"
+#include "ArkChat/IRCClient.h"
 
 bool WorldSession::processChatmessageFurtherAfterSecurityChecks (std::string& msg, uint32 lang)
 {
@@ -545,6 +546,8 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
                 return;
             }
         }
+
+		sIRC.Send_WoW_IRC(_player, channel, msg);
 
         if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
         {

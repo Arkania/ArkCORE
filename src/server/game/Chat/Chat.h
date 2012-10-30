@@ -312,15 +312,22 @@ protected:
     bool HandleModifyRepCommand (const char* args);
     bool HandleModifyPhaseCommand (const char* args);
     bool HandleModifyGenderCommand (const char* args);
+	bool HandleModifyHonorCommand(const char* args);
+    bool HandleModifyConquestCommand(const char* args);
+    bool HandleModifyValorCommand(const char* args);
+    bool HandleModifyJusticeCommand(const char* args);	
 
     bool HandleOpcodeTestCommand (const char* args);
 
     bool HandlePDumpLoadCommand (const char *args);
     bool HandlePDumpWriteCommand (const char *args);
 
+    bool HandleResetHonorCommand(const char * args);
+    bool HandleResetConquestCommand(const char * args);
+    bool HandleResetValorCommand(const char * args);
+    bool HandleResetJusticeCommand(const char * args);
     bool HandleResetAchievementsCommand (const char * args);
     bool HandleResetAllCommand (const char * args);
-    bool HandleResetHonorCommand (const char * args);
     bool HandleResetLevelCommand (const char * args);
     bool HandleResetSpellsCommand (const char * args);
     bool HandleResetStatsCommand (const char * args);
@@ -483,6 +490,10 @@ protected:
     bool HandleWintergraspEnableCommand (const char *args);
     bool HandleWintergraspSwitchTeamCommand (const char *args);
     bool HandleWintergraspTimerCommand (const char *args);
+    
+    //Jail
+    bool HandleCharacterJailCommand (const char* args);
+    bool HandleCharacterUnJailCommand (const char* args);
 
     // Stores informations about a deleted character
     struct DeletedInfo
