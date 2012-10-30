@@ -5989,12 +5989,6 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             triggered_spell_id = 26654;
             break;
         }
-            // Victorious
-        case 32216:
-        {
-            //RemoveAura(dummySpell->Id);
-            //return false;
-        }
             // Improved Spell Reflection
         case 59088:
         case 59089:
@@ -16281,7 +16275,7 @@ bool Unit::IsTriggeredAtSpellProcEvent (Unit *pVictim, Aura * aura, SpellEntry c
             allow = ToPlayer()->isHonorOrXPTarget(pVictim);
 
         // Shadow Word: Death & Victory Rush - can trigger from every kill
-        if (aura->GetId() == 32409 || aura->GetId() == 32215)
+        if (aura->GetId() == 32409 || (aura->GetId() == 32215 && !pVictim->isTotem()))
             allow = true;
         if (!allow)
             return false;

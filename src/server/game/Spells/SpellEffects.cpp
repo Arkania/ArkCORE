@@ -558,7 +558,7 @@ void Spell::SpellDamageSchoolDmg (SpellEffIndex effIndex)
             // Victory Rush
             else if (m_spellInfo->SpellFamilyFlags[1] & 0x100)
             {
-                damage = uint32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.56);
+                damage = uint32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * float(m_spellInfo->GetSpellEffect(0)->EffectBasePoints) / 100);
                 m_caster->RemoveAurasDueToSpell(32216);          // Victorious
             }
             // Heroic Leap
