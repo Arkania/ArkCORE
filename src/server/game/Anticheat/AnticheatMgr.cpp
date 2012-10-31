@@ -317,6 +317,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(51721) ||  // 51721 -> Rocket Jump
         player->HasAura(68992) ||  // 68992 -> Darkflight
         player->HasAura(1850)  ||  // 1850 -> Dash
+        player->HasAura(5215)  ||  // 5215 -> Prowl (Cat Form)  // seems to trigger false positive???
         player->HasAura(2983)  ||  // 2983 -> Sprint
         player->HasAura(68212) ||  // 68212 -> Weed Whacker
         player->HasAura(87840)     // 87840 -> Running Wild
