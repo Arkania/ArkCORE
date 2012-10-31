@@ -299,6 +299,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(64731) || // 64731 -> Sea Turtle
         player->HasAura(7840)  || // 7840 -> Swim Speed
         player->HasAura(88026) || // 88026 -> Silversnap Swim Tonic Master
+        player->HasAura(75627) || // 75627 -> Speedbarge Diving Helm
         player->HasAura(30430)    // 30430 -> Embrace of the Serpent
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
@@ -321,6 +322,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(5215)  ||  // 5215 -> Prowl (Cat Form)  // seems to trigger false positive???
         player->HasAura(2983)  ||  // 2983 -> Sprint
         player->HasAura(68212) ||  // 68212 -> Weed Whacker
+        player->HasAura(75627) ||  // 75627 -> Speedbarge Diving Helm
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
