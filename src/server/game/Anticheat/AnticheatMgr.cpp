@@ -192,6 +192,7 @@ void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
         player->HasAura(39432) || // GRAVITY_LAPSE_AURA
         player->HasAura(33943) || // Flight Form
         player->HasAura(40120) || // Swift Flight Form
+        player->HasAura(73446) || // The Pride Of Kezan: Flight Speed Aura
         player->HasAura(44227) // GRAVITY_LAPSE_FLY
         )
         return;        
