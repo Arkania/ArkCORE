@@ -16275,7 +16275,7 @@ bool Unit::IsTriggeredAtSpellProcEvent (Unit *pVictim, Aura * aura, SpellEntry c
             allow = ToPlayer()->isHonorOrXPTarget(pVictim);
 
         // Shadow Word: Death & Victory Rush - can trigger from every kill
-        if (aura->GetId() == 32409 || (aura->GetId() == 32215 && !pVictim->isTotem()))
+        if (aura->GetId() == 32409 || (aura->GetId() == 32215 && !pVictim->isTotem() && (pVictim->GetCreatureType() != CREATURE_TYPE_CRITTER)))
             allow = true;
         if (!allow)
             return false;
