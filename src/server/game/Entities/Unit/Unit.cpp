@@ -5989,12 +5989,6 @@ bool Unit::HandleDummyAuraProc (Unit *pVictim, uint32 damage, AuraEffect* trigge
             triggered_spell_id = 26654;
             break;
         }
-            // Victorious
-        case 32216:
-        {
-            //RemoveAura(dummySpell->Id);
-            //return false;
-        }
             // Improved Spell Reflection
         case 59088:
         case 59089:
@@ -16277,14 +16271,16 @@ bool Unit::IsTriggeredAtSpellProcEvent (Unit *pVictim, Aura * aura, SpellEntry c
     {
         bool allow = false;
 
-        if (pVictim)
-            allow = ToPlayer()->isHonorOrXPTarget(pVictim);
+		if (pVictim)
+            if (!ToPlayer()->isHonorOrXPTarget(pVictim))
+                return false;
 
         // Shadow Word: Death & Victory Rush - can trigger from every kill
-        if (aura->GetId() == 32409 || aura->GetId() == 32215)
-            allow = true;
-        if (!allow)
-            return false;
+        if (aura->GetId() == 32409 || (aura->GetId() == 32215 && !pVictim->isTotem() && (pVictim->GetCreatureType() != CREATURE_TYPE_CRITTER)))
+			allow = true;
+		
+		if (!allow)
+			return false;
     }
     // Aura added by spell can`t trigger from self (prevent drop charges/do triggers)
     // But except periodic and kill triggers (can triggered from self)

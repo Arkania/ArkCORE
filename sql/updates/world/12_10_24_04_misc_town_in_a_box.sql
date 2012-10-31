@@ -36,9 +36,12 @@ UPDATE `gameobject_template` SET `type`='10', `data0`='0', `data1`='14245', `dat
  
  
 -- spawn quest end NPC in correct phase (was missing)
+-- unable to del before insert due to other copies of this NPC id dif phases
+-- need to use GUID for this NPC???
 INSERT INTO `creature` VALUES (NULL, 36471, 648, 1, 2048, 0, 36471, 929.36, 2332.28, 5.02209, 2.87129, 300, 0, 0, 102, 0, 0, 0, 0, 0, 0);
  
 -- add aura to smoke bunny and phase aura
+DELETE FROM `creature_template_addon` WHERE `entry`='38069';
 INSERT INTO `creature_template_addon` (`entry`, `auras`) VALUES ('38069', '71094 0 68750 0');
  
 -- Remove some none needed spawns

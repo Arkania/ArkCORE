@@ -192,6 +192,7 @@ void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
         player->HasAura(39432) || // GRAVITY_LAPSE_AURA
         player->HasAura(33943) || // Flight Form
         player->HasAura(40120) || // Swift Flight Form
+        player->HasAura(73446) || // The Pride Of Kezan: Flight Speed Aura
         player->HasAura(44227) // GRAVITY_LAPSE_FLY
         )
         return;        
@@ -298,6 +299,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(64731) || // 64731 -> Sea Turtle
         player->HasAura(7840)  || // 7840 -> Swim Speed
         player->HasAura(88026) || // 88026 -> Silversnap Swim Tonic Master
+        player->HasAura(75627) || // 75627 -> Speedbarge Diving Helm
         player->HasAura(30430)    // 30430 -> Embrace of the Serpent
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
@@ -317,8 +319,10 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(51721) ||  // 51721 -> Rocket Jump
         player->HasAura(68992) ||  // 68992 -> Darkflight
         player->HasAura(1850)  ||  // 1850 -> Dash
+        player->HasAura(5215)  ||  // 5215 -> Prowl (Cat Form)  // seems to trigger false positive???
         player->HasAura(2983)  ||  // 2983 -> Sprint
         player->HasAura(68212) ||  // 68212 -> Weed Whacker
+        player->HasAura(75627) ||  // 75627 -> Speedbarge Diving Helm
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
