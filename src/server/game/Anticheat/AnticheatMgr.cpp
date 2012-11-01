@@ -269,12 +269,13 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         return;
 	if (player->IsFalling() && player->GetMapId() == 607) //False segnalation in SOTA
         return;
-    /* 
-   if (player->IsFalling())
-        return;    
+     
+    if (player->IsFalling())
+        return;  
+        
     if (player->HasAuraType(SPELL_AURA_FEATHER_FALL) || player->HasAuraType(SPELL_AURA_SAFE_FALL))
         return;
-    */
+    
         
     uint32 distance2D = (uint32)movementInfo.pos.GetExactDist2d(&player->anticheatData.lastMovementInfo.pos);
     uint8 moveType = 0;
@@ -323,6 +324,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(2983)  ||  // 2983 -> Sprint
         player->HasAura(68212) ||  // 68212 -> Weed Whacker
         player->HasAura(75627) ||  // 75627 -> Speedbarge Diving Helm
+        player->HasAura(40120) ||  // 40120 -> Swift Flight Form  // do we need this here?? 
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
         )
