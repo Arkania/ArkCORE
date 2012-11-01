@@ -1395,7 +1395,8 @@ class go_towninabox : public GameObjectScript
 enum eGnollCage
 {
     NPC_GNOLL_PRISIONER = 41410,
-	GNOLL_QUEST_KILL_CREDIT = 41438
+	GNOLL_QUEST_KILL_CREDIT = 41438,
+	GNOLL_ESCAPE_QUEST = 25867
 };
 
 class go_gnoll_cage: public GameObjectScript
@@ -1408,13 +1409,15 @@ public:
 
     bool OnGossipHello (Player *pPlayer, GameObject *pGO)
     {
-        if (Creature *pGnollPrisoner = pGO->FindNearestCreature(NPC_GNOLL_PRISIONER, 5.0f, true))
-        {
-            pGO->SetGoState(GO_STATE_ACTIVE);
-            pPlayer->KilledMonsterCredit(GNOLL_QUEST_KILL_CREDIT, 0);
-            pGnollPrisoner->DisappearAndDie();
-        }
-
+        if (pPlayer->GetQuestStatus(GNOLL_ESCAPE_QUEST) == QUEST_STATUS_INCOMPLETE)
+		{
+			if (Creature *pGnollPrisoner = pGO->FindNearestCreature(NPC_GNOLL_PRISIONER, 5.0f, true))
+			{
+				pGO->SetGoState(GO_STATE_ACTIVE);
+				pPlayer->KilledMonsterCredit(GNOLL_QUEST_KILL_CREDIT, 0);
+				pGnollPrisoner->DisappearAndDie();
+			}
+		}
         return true;
     }
 };
@@ -1429,6 +1432,7 @@ enum eCultistCage
     NPC_CAGED_BEAR  = 44902,
 	NPC_ZENKIKI     = 44863,
 	SPELL_HEAL_BEAR = 8070,
+	ZKATC_QUEST = 26955
 };
 
 class go_cultist_cage: public GameObjectScript
@@ -1441,13 +1445,16 @@ public:
 
     bool OnGossipHello (Player *pPlayer, GameObject *pGO)
     {
-        if (Creature *pCagedBear = pGO->FindNearestCreature(NPC_CAGED_BEAR, 8.0f, true))
-        {
-            pGO->SetGoState(GO_STATE_ACTIVE);
-			Creature * pVenKiki = pGO->SummonCreature(NPC_ZENKIKI, pPlayer->GetPositionX()-2, pPlayer->GetPositionY()+2, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000);
-			if (pVenKiki)
-				pVenKiki->CastSpell(pCagedBear,SPELL_HEAL_BEAR,true);
-        }
+        if (pPlayer->GetQuestStatus(ZKATC_QUEST) == QUEST_STATUS_INCOMPLETE)
+		{
+			if (Creature *pCagedBear = pGO->FindNearestCreature(NPC_CAGED_BEAR, 8.0f, true))
+			{
+				pGO->SetGoState(GO_STATE_ACTIVE);
+				Creature * pVenKiki = pGO->SummonCreature(NPC_ZENKIKI, pPlayer->GetPositionX()-2, pPlayer->GetPositionY()+2, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000);
+				if (pVenKiki)
+					pVenKiki->CastSpell(pCagedBear,SPELL_HEAL_BEAR,true);
+			}
+		}
 
         return true;
     }
@@ -1462,7 +1469,7 @@ enum eBackhoofCage
 {
     NPC_THERAMORE_PRISIONER = 23720,
 	BH_QUEST_KILL_CREDIT = 33061,
-    POTG_QUEEST = 27245
+    POTG_QUEST = 27245
 };
 
 class go_blackhoof_cage: public GameObjectScript
@@ -1475,7 +1482,7 @@ public:
 
     bool OnGossipHello (Player *pPlayer, GameObject *pGO)
     {
-        if (pPlayer->GetQuestStatus(POTG_QUEEST) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(POTG_QUEST) == QUEST_STATUS_INCOMPLETE)
 		{
             if (Creature *pTheramorePrisoner = pGO->FindNearestCreature(NPC_THERAMORE_PRISIONER, 5.0f, true))
             {
