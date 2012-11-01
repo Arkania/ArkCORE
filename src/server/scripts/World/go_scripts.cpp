@@ -1453,6 +1453,41 @@ public:
     }
 };
 
+/*######
+ ## go_blackhoof_cage
+ ## http://www.wowhead.com/quest=27245
+ ######*/
+
+enum eBackhoofCage
+{
+    NPC_THERAMORE_PRISIONER = 23720,
+	BH_QUEST_KILL_CREDIT = 33061,
+    POTG_QUEEST = 27245
+};
+
+class go_blackhoof_cage: public GameObjectScript
+{
+public:
+    go_blackhoof_cage () :
+            GameObjectScript("go_blackhoof_cage")
+    {
+    }
+
+    bool OnGossipHello (Player *pPlayer, GameObject *pGO)
+    {
+        if (pPlayer->GetQuestStatus(POTG_QUEEST) == QUEST_STATUS_INCOMPLETE)
+		{
+            if (Creature *pTheramorePrisoner = pGO->FindNearestCreature(NPC_THERAMORE_PRISIONER, 5.0f, true))
+            {
+                pGO->SetGoState(GO_STATE_ACTIVE);
+                pPlayer->KilledMonsterCredit(BH_QUEST_KILL_CREDIT, 0);
+                pTheramorePrisoner->DisappearAndDie();
+            }
+        }
+        return true;
+    }
+};
+
 
 void AddSC_go_scripts ()
 {
@@ -1497,4 +1532,5 @@ void AddSC_go_scripts ()
 	new go_towninabox;
     new go_gnoll_cage;
 	new go_cultist_cage;
+    new go_blackhoof_cage;
 }
