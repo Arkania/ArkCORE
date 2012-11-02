@@ -183,8 +183,10 @@ class instance_icecrown_citadel : public InstanceMapScript
                 PrepareGunshipEvent(); // Spawn Gunship Event
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature, bool add)
             {
+              if (!add) 
+                   return;
                 if (!TeamInInstance)
                 {
                     Map::PlayerList const &players = instance->GetPlayers();
@@ -392,7 +394,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 }
             }
 
-            void OnGameObjectCreate(GameObject* go)
+            void OnGameObjectCreate(GameObject* go, bool add)
             {
                 switch (go->GetEntry())
                 {
@@ -416,7 +418,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR:
                     case GO_ICE_WALL:
-                        AddDoor(go, true);
+                        AddDoor(go, add);
                         break;
                     // these 2 gates are functional only on 25man modes
                     case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_01:

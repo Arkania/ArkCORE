@@ -65,7 +65,7 @@ class instance_archavon : public InstanceMapScript
                 }
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature, bool /*add*/)
             {
                 switch (creature->GetEntry())
                 {

@@ -67,7 +67,7 @@ public:
             FrayerGUIDlist.clear();
         }
 
-        void OnCreatureCreate(Creature* creature)
+        void OnCreatureCreate(Creature* creature, bool /*add*/)
         {
             Map::PlayerList const &players = instance->GetPlayers();
             uint32 TeamInInstance = 0;
@@ -143,7 +143,7 @@ public:
             }
         }
 
-        void OnGameObjectCreate(GameObject *go)
+        void OnGameObjectCreate(GameObject *go, bool /*add*/)
         {
             switch (go->GetEntry())
             {

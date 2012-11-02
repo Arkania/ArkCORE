@@ -86,7 +86,7 @@ class instance_culling_of_stratholme : public InstanceMapScript
                 data << uint32(WORLDSTATE_TIME_GUARDIAN_SHOW) << uint32(0);
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature, bool /*add*/)
             {
                 switch (creature->GetEntry())
                 {
@@ -114,7 +114,7 @@ class instance_culling_of_stratholme : public InstanceMapScript
                 }
             }
 
-            void OnGameObjectCreate(GameObject* go)
+            void OnGameObjectCreate(GameObject* go, bool /*add*/)
             {
                 switch (go->GetEntry())
                 {

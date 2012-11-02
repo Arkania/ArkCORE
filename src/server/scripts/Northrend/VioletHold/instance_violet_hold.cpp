@@ -231,7 +231,7 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* creature)
+        void OnCreatureCreate(Creature* creature, bool add)
         {
             switch (creature->GetEntry())
             {
@@ -269,14 +269,14 @@ public:
                     break;
             }
 
-            if (creature->GetGUID() == uiFirstBoss || creature->GetGUID() == uiSecondBoss)
+            if (add && (creature->GetGUID() == uiFirstBoss || creature->GetGUID() == uiSecondBoss))
             {
                 creature->AllLootRemovedFromCorpse();
                 creature->RemoveLootMode(1);
             }
         }
 
-        void OnGameObjectCreate(GameObject* go)
+        void OnGameObjectCreate(GameObject* go, bool /*add*/)
         {
             switch (go->GetEntry())
             {

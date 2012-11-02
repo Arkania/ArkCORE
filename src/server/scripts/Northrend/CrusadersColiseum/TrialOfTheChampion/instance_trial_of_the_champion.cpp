@@ -116,7 +116,7 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* creature)
+        void OnCreatureCreate(Creature* creature, bool /*bAdd*/)
         {
             Map::PlayerList const &players = instance->GetPlayers();
 
@@ -236,7 +236,7 @@ public:
             }
         }
 
-        void OnGameObjectCreate(GameObject* go)
+        void OnGameObjectCreate(GameObject* go, bool /*bAdd*/)
         {
             switch (go->GetEntry())
             {
