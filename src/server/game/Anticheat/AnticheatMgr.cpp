@@ -324,6 +324,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         player->HasAura(2983)  ||  // 2983 -> Sprint
         player->HasAura(68212) ||  // 68212 -> Weed Whacker
         player->HasAura(75627) ||  // 75627 -> Speedbarge Diving Helm
+        player->HasAura(16188) ||  // 16188 -> Ancestral Swiftness // seems to trigger maybe ghost wolf???
         player->HasAura(40120) ||  // 40120 -> Swift Flight Form  // do we need this here?? 
         player->HasAura(87840)     // 87840 -> Running Wild
         // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
