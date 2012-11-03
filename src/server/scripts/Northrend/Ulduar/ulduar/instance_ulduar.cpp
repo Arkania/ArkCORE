@@ -123,7 +123,7 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* creature) {
+        void OnCreatureCreate(Creature* creature, bool /*add*/) {
             switch (creature->GetEntry()) {
             case NPC_LEVIATHAN:
                 uiLeviathanGUID = creature->GetGUID();
@@ -182,23 +182,23 @@ public:
             }
         }
 
-        void OnGameObjectCreate(GameObject* go) {
+        void OnGameObjectCreate(GameObject* go, bool add) {
             switch (go->GetEntry()) {
             case GO_KOLOGARN_CHEST_HERO:
             case GO_KOLOGARN_CHEST:
-                uiKologarnChestGUID = go->GetGUID();
+                uiKologarnChestGUID = add ? go->GetGUID() : NULL;
                 break;
             case GO_THORIM_CHEST_HERO:
             case GO_THORIM_CHEST:
-                uiThorimChestGUID = go->GetGUID();
+                uiThorimChestGUID = add ? go->GetGUID() : NULL;
                 break;
             case GO_HODIR_CHEST_HERO:
             case GO_HODIR_CHEST:
-                uiHodirChestGUID = go->GetGUID();
+                uiHodirChestGUID = add ? go->GetGUID() : NULL;
                 break;
             case GO_FREYA_CHEST_HERO:
             case GO_FREYA_CHEST:
-                uiFreyaChestGUID = go->GetGUID();
+                uiFreyaChestGUID = add ? go->GetGUID() : NULL;
                 break;
             case GO_LEVIATHAN_DOOR:
                 uiLeviathanDoor[flag] = go->GetGUID();
@@ -208,7 +208,7 @@ public:
                     flag = 0;
                 break;
             case GO_LEVIATHAN_GATE:
-                uiLeviathanGateGUID = go->GetGUID();
+                uiLeviathanGateGUID = add ? go->GetGUID() : NULL;
                 HandleGameObject(NULL, false, go);
                 break;
             case GO_VEZAX_DOOR:

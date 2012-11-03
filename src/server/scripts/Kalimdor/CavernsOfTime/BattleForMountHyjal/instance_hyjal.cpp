@@ -117,7 +117,7 @@ public:
             return false;
         }
 
-        void OnGameObjectCreate(GameObject* go)
+        void OnGameObjectCreate(GameObject* go, bool /*add*/)
         {
             switch (go->GetEntry())
             {
@@ -141,7 +141,7 @@ public:
             }
         }
 
-        void OnCreatureCreate(Creature* creature)
+        void OnCreatureCreate(Creature* creature, bool /*add*/)
         {
             switch (creature->GetEntry())
             {

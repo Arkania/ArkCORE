@@ -8460,6 +8460,30 @@ bool Unit::HandleAuraProc (Unit * pVictim, uint32 damage, Aura * triggeredByAura
     }
     case SPELLFAMILY_MAGE:
     {
+        // Improved Polymorph
+        case 118:
+        {
+            *handled = true; 
+            Unit* caster = triggeredByAura->GetCaster();
+
+            if (!caster || !pVictim)
+                return false;
+            // Rank 1          // Cooldown Marker
+            if (caster->HasAura(11210) && !pVictim->HasAura(87515, caster->GetGUID()))
+            {
+                CastSpell(this,83046,true,NULL,NULL,caster->GetGUID()); // 1.5s stun
+                CastSpell(this,87515,true,NULL,NULL,caster->GetGUID()); // Cooldown marker
+                return true;
+            }           
+            // Rank 2
+            if (caster->HasAura(12592) && !this->HasAura(87515, caster->GetGUID()))
+            {
+            CastSpell(this,83047,true,NULL,NULL,caster->GetGUID()); // 3s stun
+            CastSpell(this,87515,true,NULL,NULL,caster->GetGUID()); // Cooldown marker
+            return true;
+            }
+        break;
+        }
         // Combustion
         switch (dummySpell->Id)
         {

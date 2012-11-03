@@ -53,7 +53,7 @@ public:
                     _teamInInstance = player->GetTeam();
         }
 
-        void OnCreatureCreate(Creature* creature)
+        void OnCreatureCreate(Creature* creature, bool /*add*/)
         {
                 if (!_teamInInstance)
                 {

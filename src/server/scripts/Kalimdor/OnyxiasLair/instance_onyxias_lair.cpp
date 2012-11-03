@@ -71,7 +71,7 @@ public:
             m_uiEruptTimer = 0;
         }
 
-        void OnCreatureCreate(Creature* creature)
+        void OnCreatureCreate(Creature* creature, bool /*add*/)
         {
             switch (creature->GetEntry())
             {
@@ -81,7 +81,7 @@ public:
             }
         }
 
-        void OnGameObjectCreate(GameObject* go)
+        void OnGameObjectCreate(GameObject* go, bool add)
         {
             if ((go->GetGOInfo()->displayId == 4392 || go->GetGOInfo()->displayId == 4472) && go->GetGOInfo()->trap.spellId == 17731)
             {
@@ -103,14 +103,7 @@ public:
             }
         }
 
-        void OnGameObjectRemove(GameObject* go)
-        {
-            if ((go->GetGOInfo()->displayId == 4392 || go->GetGOInfo()->displayId == 4472) && go->GetGOInfo()->trap.spellId == 17731)
-            {
-                FloorEruptionGUID[0].erase(go->GetGUID());
-                return;
-            }
-        }
+
 
         void FloorEruption(uint64 floorEruptedGUID)
         {

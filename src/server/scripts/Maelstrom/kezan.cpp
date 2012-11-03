@@ -28,7 +28,6 @@ enum NPC_DefiantTroll
 {
     DEFFIANT_KILL_CREDIT              = 34830,
     SPELL_LIGHTNING_VISUAL            = 45870,
-	SPELL_ENRAGE					  = 45111,
     QUEST_GOOD_HELP_IS_HARD_TO_FIND    = 14069,
     GO_DEPOSIT                        = 195488,
 };
@@ -41,8 +40,8 @@ enum NPC_DefiantTroll
 #define SAY_WORK_6 "Sorry, mon. It won't happen again."
 #define SAY_WORK_7 "What I doin' wrong? Don't I get a lunch and two breaks a day, mon?"
 #define SAY_WORK_8 "Ouch! Dat hurt!"
-
-bool work;
+ 
+//bool work;
  
 class npc_defiant_troll : public CreatureScript
 {
@@ -60,6 +59,7 @@ class npc_defiant_troll : public CreatureScript
  
         uint32 rebuffTimer;
         uint32 auraTimer;
+        bool work;
  
         void Reset ()
         {
@@ -68,20 +68,22 @@ class npc_defiant_troll : public CreatureScript
             auraTimer = 0;
         }
  
-        void MovementInform(uint32 /*type*/, uint32 id)
-        {
-            if (id == 1)
-                work = true;
-        }
+        //void MovementInform(uint32 /*type*/, uint32 id)
+        //{
+        //    if (id == 1)
+        //        work = true;
+        //}
  
         void SpellHit(Unit* caster, const SpellEntry* spell)
-        {                       
+        {                   
             // Remove Aura from Player
             caster->RemoveAurasDueToSpell(SPELL_LIGHTNING_VISUAL);
  
             if (spell->Id == SPELL_LIGHTNING_VISUAL && caster->GetTypeId() == TYPEID_PLAYER
                 && caster->ToPlayer()->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && work == false)
-            { 
+            {
+                caster->ToPlayer()->KilledMonsterCredit(DEFFIANT_KILL_CREDIT, me->GetGUID());
+ 
                 switch (urand(0, 7))
                 {
                     case 0:
@@ -112,18 +114,20 @@ class npc_defiant_troll : public CreatureScript
                 me->RemoveAllAuras();
                 // Add Aura to Troll
                 me->AddAura(SPELL_LIGHTNING_VISUAL, me);
-                if (GameObject* Deposit = me->FindNearestGameObject(GO_DEPOSIT, 40))
+                // set work here so you can't gossip npc while they are walking to ore
+                work = true;
+                if (GameObject* Deposit = me->FindNearestGameObject(GO_DEPOSIT, 20))
                     me->GetMotionMaster()->MovePoint(1, Deposit->GetPositionX()-1, Deposit->GetPositionY(), Deposit->GetPositionZ());
                 // Set timer here so he despawns in 2 minutes, set 2 sec aura timer
-                rebuffTimer = 120000; 
+                rebuffTimer = 120000;
                 auraTimer = rebuffTimer - 2000;
-
-                work = true;
+ 
+                //work = true;
             }
         }
  
         void UpdateAI(const uint32 diff)
-        {           
+        {       
             if (work == true)
             {
                 me->HandleEmoteCommand(467);
@@ -163,12 +167,11 @@ class npc_defiant_troll : public CreatureScript
  
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (player->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE && creature->HasAura(SPELL_ENRAGE))
+        if (player->GetQuestStatus(QUEST_GOOD_HELP_IS_HARD_TO_FIND) == QUEST_STATUS_INCOMPLETE) // && work == false)
         {
             player->CastSpell(creature, SPELL_LIGHTNING_VISUAL, true);
             SpellEntry const* spell = sSpellStore.LookupEntry(SPELL_LIGHTNING_VISUAL);
             CAST_AI(npc_defiant_troll::npc_defiant_trollAI, creature->AI())->SpellHit(player, spell);
-			player->KilledMonsterCredit(DEFFIANT_KILL_CREDIT,0);
             return true;
         }
         return false;

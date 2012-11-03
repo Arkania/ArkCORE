@@ -1284,6 +1284,8 @@ void WorldObject::setActive (bool on)
             map->AddToActive(this->ToCreature());
         else if (GetTypeId() == TYPEID_DYNAMICOBJECT)
             map->AddToActive((DynamicObject*) this);
+        else if (GetTypeId() == TYPEID_GAMEOBJECT)
+            map->AddToActive((GameObject*)this);
     }
     else
     {
@@ -1291,6 +1293,8 @@ void WorldObject::setActive (bool on)
             map->RemoveFromActive(this->ToCreature());
         else if (GetTypeId() == TYPEID_DYNAMICOBJECT)
             map->RemoveFromActive((DynamicObject*) this);
+         else if (GetTypeId() == TYPEID_GAMEOBJECT)
+            map->RemoveFromActive((GameObject*)this);
     }
 }
 
@@ -1720,7 +1724,14 @@ bool WorldObject::canSeeOrDetect (WorldObject const* obj, bool ignoreStealth, bo
             }
         }
 
-        if (!corpseCheck && !IsWithinDist(obj, GetSightRange(obj), false))
+        WorldObject const* viewpoint = this;
+        if (Player const* player = this->ToPlayer())
+            viewpoint = player->GetViewpoint();
+            
+        if (!viewpoint)
+            viewpoint = this;
+            
+        if (!corpseCheck && !viewpoint->IsWithinDist(obj, GetSightRange(obj), false))
             return false;
     }
 

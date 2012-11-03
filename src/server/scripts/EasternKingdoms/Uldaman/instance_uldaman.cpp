@@ -102,7 +102,7 @@ class instance_uldaman : public InstanceMapScript
             uint32 m_auiEncounter[MAX_ENCOUNTER];
             std::string str_data;
 
-            void OnGameObjectCreate(GameObject* go)
+            void OnGameObjectCreate(GameObject* go, bool /*add*/)
             {
                 switch (go->GetEntry())
                 {
@@ -427,7 +427,7 @@ class instance_uldaman : public InstanceMapScript
                 OUT_LOAD_INST_DATA_COMPLETE;
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature, bool /*add*/)
             {
                 switch (creature->GetEntry()) {
                     case 4857:    // Stone Keeper

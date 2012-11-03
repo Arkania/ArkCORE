@@ -1,0 +1,1 @@
+UPDATE `gameobject_template` SET `ScriptName`='go_blackhoof_cage' WHERE `entry`='186287';

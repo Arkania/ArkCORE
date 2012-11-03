@@ -134,7 +134,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                     go->SetGoState(GO_STATE_READY);
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature, bool /*add*/)
             {
                 switch (creature->GetEntry())
                 {
@@ -184,7 +184,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                 }
             }
 
-            void OnGameObjectCreate(GameObject* go)
+            void OnGameObjectCreate(GameObject* go, bool /*add*/)
             {
                 switch (go->GetEntry())
                 {
