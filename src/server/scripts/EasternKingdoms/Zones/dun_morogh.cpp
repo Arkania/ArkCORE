@@ -144,7 +144,55 @@ public:
     };
 };
 
+/*######
+## npc_ultrasafe_personnel_launcher
+######*/
+ 
+enum eultasafeplData {
+    USPLQUEST = 25839,
+    SPELL_USPL = 77393,
+    SPELL_USPLBUFF = 80381,
+};
+class npc_ultrasafe_personnel_launcher: public CreatureScript {
+public:
+    npc_ultrasafe_personnel_launcher() :
+            CreatureScript("npc_ultrasafe_personnel_launcher") {
+    }
+ 
+    CreatureAI* GetAI(Creature* creature) const {
+        return new npc_ultrasafe_personnel_launcherAI(creature);
+    }
+ 
+    struct npc_ultrasafe_personnel_launcherAI: public ScriptedAI {
+        npc_ultrasafe_personnel_launcherAI(Creature* c) :
+                ScriptedAI(c) {
+        }
+ 
+    void Reset()
+    {
+        me->CastSpell(me, SPELL_USPLBUFF, true);
+    }
+   
+    void UpdateAI(const uint32 /*diff*/)
+    {
+        if (me->IsVehicle() && me->GetVehicleKit())
+        {
+            Unit* unit = me->GetVehicleKit()->GetPassenger(0);
+            if (unit)
+            {   
+                unit->ToPlayer()->ExitVehicle();
+                unit->ToPlayer()->SetOrientation(3.95f);
+                unit->ToPlayer()->CastSpell(unit,SPELL_USPL,true);
+            }
+        }
+ 
+    }
+ 
+    };
+};
+
 void AddSC_dun_morogh() {
     new npc_narm_faulk();
     new npc_gs_9x_multi_bot();
+	new npc_ultrasafe_personnel_launcher();
 }

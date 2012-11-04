@@ -42,9 +42,6 @@ public:
         sLog->outString("that we would like to thank for their contribution to our project, ");
         sLog->outString("whether their influence was direct or indirect.");
         sLog->outString("");
-        sLog->outString("Thanks goes out to the following people for various patches and/or code");
-        handler->PSendSysMessage("Chameleon, AlterEgo, Fabi, LordJZ, Azazel, Dvlpr, Brecky, Keany, Arktus, Sovak");
-        handler->PSendSysMessage("");
         sLog->outString("The following people have contributed directly to our project:");
         handler->PSendSysMessage("Blizz, raxume, cooler, Dekona, openmage, Venugh, Naios, billykitty, chark01, ");
         handler->PSendSysMessage("cocolino, Georgian Constantin, gpn39f, h.norrt, Maibenrai, MysteriousSoul, ");
@@ -53,7 +50,9 @@ public:
         handler->PSendSysMessage("dimiandre, Keital, Myst, PortgasDAce, Red Sonja, Redneo, Arcane, AriDEV, Bootz, ");
         handler->PSendSysMessage("DJScias, Dreadii, espargon, FailZorD, impas, Intel, JohnDeere, misimouse, ");
         handler->PSendSysMessage("Naffbeats, pek2011, PrinceCreed, sanctum32, sharq, thehacker66, Winston, ");
-        handler->PSendSysMessage("Spyder, drakeos, kraven5, Booman666, gaal, nantesfer, Mrbytes, Mikadmin.");
+        handler->PSendSysMessage("Spyder, drakeos, kraven5, Booman666, gaal, nantesfer, Mrbytes, Mikadmin, Ladel, ");
+		handler->PSendSysMessage("biglad, cybekp, Angarius, Chameleon, AlterEgo, Fabi, LordJZ, Azazel, Dvlpr, Brecky, ");
+		handler->PSendSysMessage("Keany, Arktus, Sovak");		
         handler->PSendSysMessage("");
         sLog->outString("These people have helped the project via donations:");
         handler->PSendSysMessage("akaHaki, Betaman2k, bleu, Draken, GaryZywiec, glkrlos, ppops, Spazman2c, ");
