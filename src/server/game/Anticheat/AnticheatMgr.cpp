@@ -351,7 +351,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
 	//this has changed since 335a was 1000
     uint32 clientSpeedRate = (distance2D * 1000 / timeDiff) + auraspeed;
 
-    sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u auraspeed %u timeDiff %u ",movementInfo.j_xyspeed, movementInfo.j_zspeed,distance2D,clientSpeedRate,speedRate,auraspeed,timeDiff);
+    //sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u auraspeed %u timeDiff %u ",movementInfo.j_xyspeed, movementInfo.j_zspeed,distance2D,clientSpeedRate,speedRate,auraspeed,timeDiff);
     
     // we did the (uint32) cast to accept a margin of tolerance
     if (clientSpeedRate > speedRate)
