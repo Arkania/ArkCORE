@@ -20301,11 +20301,14 @@ void Player::RemovePet (Pet* pet, PetSlot mode, bool returnreagent)
     switch (pet->GetEntry())
     {
     //warlock pets except imp are removed(?) when logging out
+    //this seems to be wrong and not blizz like
+    //need to save active pet with stable slot =100 (none hunter pet)
+    //todo save old pet action bars when lock swaps pet
     case 1860:
     case 1863:
     case 417:
     case 17252:
-        mode = PET_SLOT_DELETED;
+        mode = PET_SLOT_OTHER_PET;
         break;
     }
 

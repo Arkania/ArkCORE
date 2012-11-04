@@ -19,7 +19,11 @@
 
 #include "gamePCH.h"
 #include "AnticheatMgr.h"
+#include "Unit.h"
 #include "Chat.h"
+#include "SpellMgr.h"
+#include "SpellAuras.h"
+#include "SpellAuraEffects.h"
 #include "../ArkChat/IRCClient.h"
 
 AnticheatMgr::AnticheatMgr()
@@ -29,6 +33,7 @@ AnticheatMgr::AnticheatMgr()
 AnticheatMgr::~AnticheatMgr()
 {
 }
+
 
 void AnticheatMgr::DeletePlayerReport(Player* player)
 {
@@ -261,8 +266,8 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         return;
     if (player->isGameMaster())
         return;
-    if (player->IsMounted())
-        return;
+   // if (player->IsMounted())
+   //     return;
 	if (player->HasUnitState(UNIT_STAT_ONVEHICLE))
 	    return;
     if (player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
@@ -279,6 +284,13 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         
     uint32 distance2D = (uint32)movementInfo.pos.GetExactDist2d(&player->anticheatData.lastMovementInfo.pos);
     uint8 moveType = 0;
+	float auraspeed = 0.0f;
+	int32 main_speed_mod = 0;
+    int32 main_speed_mod_fly = 0;
+    float stack_bonus = 0.0f;
+    float stack_bonus_fly = 0.0f;
+    float non_stack_bonus = 0.0f;
+    float main_speed_mod_swim = 0.0f;
 
     // we need to know HOW is the player moving
     // TO-DO: Should we check the incoming movement flags?
@@ -290,58 +302,44 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         moveType = MOVE_WALK;
     else
         moveType = MOVE_RUN;
-
-        
+    
     if (moveType == MOVE_SWIM)
     {
-        if (
-        player->HasAura(1066) ||  // 1066 -> Aquatic form
-        player->HasAura(30174) || // 30174 -> Riding Turtle
-        player->HasAura(64731) || // 64731 -> Sea Turtle
-        player->HasAura(7840)  || // 7840 -> Swim Speed
-        player->HasAura(88026) || // 88026 -> Silversnap Swim Tonic Master
-        player->HasAura(75627) || // 75627 -> Speedbarge Diving Helm
-        player->HasAura(30430)    // 30430 -> Embrace of the Serpent
-        // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
-        )
-        return;
-    }
-    
+        // no need for mount check
+		main_speed_mod_swim = player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_INCREASE_SWIM_SPEED);
+		non_stack_bonus = (100.0f + player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_SPEED_NOT_STACK)) / 100.0f;
+		auraspeed = main_speed_mod_swim + non_stack_bonus;
+	}
+
     if (moveType == MOVE_RUN)
     {
-        if (
-        player->HasAura(2645)  ||  // 2645 -> Ghost Worlf
-        player->HasAura(17002) ||  // 17002 -> Feral Swiftness 1
-        player->HasAura(24866) ||  // 24866 -> Feral Swiftness 2
-        player->HasAura(32223) ||  // 32223 -> Crusader Aura < do we need this????
-        player->HasAura(13141) ||  // 13141 -> Gnomish Rocket Boots
-        player->HasAura(8892)  ||  // 8892 -> Goblin Rocket Boots
-        player->HasAura(51721) ||  // 51721 -> Dominion Over Acherus
-        player->HasAura(51721) ||  // 51721 -> Rocket Jump
-        player->HasAura(68992) ||  // 68992 -> Darkflight
-        player->HasAura(1850)  ||  // 1850 -> Dash
-        player->HasAura(5215)  ||  // 5215 -> Prowl (Cat Form)  // seems to trigger false positive???
-        player->HasAura(2983)  ||  // 2983 -> Sprint
-        player->HasAura(68212) ||  // 68212 -> Weed Whacker
-        player->HasAura(75627) ||  // 75627 -> Speedbarge Diving Helm
-        player->HasAura(16188) ||  // 16188 -> Ancestral Swiftness // seems to trigger maybe ghost wolf???
-        player->HasAura(40120) ||  // 40120 -> Swift Flight Form  // do we need this here?? 
-        player->HasAura(87840)     // 87840 -> Running Wild
-        // this isnt good, need way to work out speed of these auras instead of just skipping ppl with them.
-        )
-        return;
+        if (player->IsMounted())
+        {
+            main_speed_mod = player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED);
+            stack_bonus = player->GetTotalAuraMultiplier(SPELL_AURA_MOD_MOUNTED_SPEED_ALWAYS);
+            non_stack_bonus = (100.0f + player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_MOUNTED_SPEED_NOT_STACK)) / 100.0f;
+            auraspeed += main_speed_mod + stack_bonus + non_stack_bonus; 
+        }
+        else
+        {
+            main_speed_mod = player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_INCREASE_SPEED);
+            stack_bonus = player->GetTotalAuraMultiplier(SPELL_AURA_MOD_SPEED_ALWAYS);
+            non_stack_bonus = (100.0f + player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_SPEED_NOT_STACK)) / 100.0f;
+            auraspeed += main_speed_mod + stack_bonus + non_stack_bonus;
+        }
     }
 
     if (moveType == MOVE_FLIGHT)
     {
-    // do we need to check speed of flying????????
-    //if so were is dif mount speeds worked out????
-    return;
+		// no need for mount check
+		main_speed_mod_fly = player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_INCREASE_VEHICLE_FLIGHT_SPEED);
+		stack_bonus_fly = player->GetTotalAuraMultiplier(SPELL_AURA_MOD_VEHICLE_SPEED_ALWAYS);
+		non_stack_bonus = (100.0f + player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_SPEED_NOT_STACK)) / 100.0f;
+		auraspeed += main_speed_mod_fly + stack_bonus_fly + non_stack_bonus;
     }
-    
  
     // how many yards the player can do in one sec.
-    uint32 speedRate = (uint32)(player->GetSpeed(UnitMoveType(moveType)) + movementInfo.j_xyspeed);
+    uint32 speedRate = (uint32)(player->GetSpeed(UnitMoveType(moveType)) + movementInfo.j_xyspeed + auraspeed);
 
     // how long the player took to move to here.
     uint32 timeDiff = getMSTimeDiff(player->anticheatData.lastMovementInfo.time,movementInfo.time);
@@ -350,11 +348,11 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         timeDiff = 1;
 
     // this is the distance doable by the player in 1 sec, using the time done to move to this point.
-	//this has changed since 335a was 1000 in 406a its 1100
-    uint32 clientSpeedRate = distance2D * 1100 / timeDiff;
+	//this has changed since 335a was 1000
+    uint32 clientSpeedRate = (distance2D * 1000 / timeDiff) + auraspeed;
 
-    //sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u timeDiff %u ",movementInfo.j_xyspeed, movementInfo.j_zspeed,distance2D,clientSpeedRate,speedRate,timeDiff);
-
+    sLog->outError("fallxy %f fallz %f Distance2D %u clientSpeedRate %u speedRate %u auraspeed %u timeDiff %u ",movementInfo.j_xyspeed, movementInfo.j_zspeed,distance2D,clientSpeedRate,speedRate,auraspeed,timeDiff);
+    
     // we did the (uint32) cast to accept a margin of tolerance
     if (clientSpeedRate > speedRate)
     {
