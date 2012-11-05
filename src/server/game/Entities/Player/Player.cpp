@@ -6546,6 +6546,9 @@ bool Player::UpdateCraftSkill (uint32 spellid)
             }
 
             uint32 SkillGainPoints = _spell_idx->second->characterPoints[0];
+            // Some Spells dont have CharacterPoints in 406a DBC
+            // add point if neeed
+            SkillGainPoints = (SkillGainPoints <= 0 ? 1 : SkillGainPoints);
             uint32 craft_skill_gain = SkillGainPoints * sWorld->getIntConfig(CONFIG_SKILL_GAIN_CRAFTING);
 
             return UpdateSkillPro(_spell_idx->second->skillId, SkillGainChance(SkillValue, _spell_idx->second->max_value, (_spell_idx->second->max_value + _spell_idx->second->min_value) / 2, _spell_idx->second->min_value), craft_skill_gain);
