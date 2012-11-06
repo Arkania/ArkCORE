@@ -3867,6 +3867,9 @@ void SpellMgr::LoadSpellCustomAttr ()
         switch (i)
         {
             // CATACLYSM SPELLS CHANGES	
+        case 48020:          // Demonic Circle
+            spellInfo->casterAuraSpell = 0;
+            break;
         case 53592:          // Touched by The Light
             spellInfo->EffectMiscValue[2] = 2;
             count++;

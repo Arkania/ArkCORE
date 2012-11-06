@@ -2208,11 +2208,11 @@ void AuraEffect::PeriodicDummyTick (Unit *target, Unit *caster) const
             {
                 if (target->IsWithinDist(obj, GetSpellMaxRange(48020, true)))
                 {
-                    if (!target->HasAura(48018))
-                        target->CastSpell(target, 48018, true);
+                     if (!target->HasAura(62388))
+                        target->SendAuraVisualForSelf(true,62388, 1);
                 }
                 else
-                    target->RemoveAura(48018);
+                    target->SendAuraVisualForSelf(false,62388);
             }
             break;
         }

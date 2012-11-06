@@ -2120,6 +2120,8 @@ public:
         UpdateAuraForGroup(slot);
     }
 
+    void SendAuraVisualForSelf(bool apply, uint32 id, uint8 effmask = 0);
+    
     uint32 GetInterruptMask () const
     {
         return m_interruptMask;

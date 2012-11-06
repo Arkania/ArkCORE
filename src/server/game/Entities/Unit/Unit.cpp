@@ -4694,6 +4694,25 @@ int32 Unit::GetMaxNegativeAuraModifierByAffectMask (AuraType auratype, SpellEntr
     return modifier;
 }
 
+void Unit::SendAuraVisualForSelf(bool apply, uint32 id, uint8 effmask)
+{
+    WorldPacket data(SMSG_AURA_UPDATE);
+    data.append(GetPackGUID());
+    // use always free 64+ slots
+    data << uint8(MAX_AURAS);
+    if (!apply)
+    {
+        data << uint32(0);
+        SendMessageToSet(&data, true);
+        return;
+    }
+    data << uint32(id);
+    data << uint8(AFLAG_CASTER | AFLAG_POSITIVE | effmask);
+    data << uint8(getLevel());
+    data << uint8(1);
+    SendMessageToSet(&data, true);
+}
+
 void Unit::_RegisterDynObject (DynamicObject* dynObj)
 {
     m_dynObj.push_back(dynObj);
