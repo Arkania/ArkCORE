@@ -419,7 +419,7 @@ void WorldSession::HandleCharCreateOpcode (WorldPacket & recv_data)
         return;
     }
 
-    QueryResult resultacct = LoginDatabase.PQuery("SELECT IFNULL(SUM(numchars),   0) FROM realmcharacters WHERE acctid = '%d'",   GetAccountId());
+    QueryResult resultacct = LoginDatabase.PQuery("SELECT numchars FROM realmcharacters WHERE acctid = '%d'",   GetAccountId());
     if (resultacct)
     {
         Field *fields = resultacct->Fetch();
