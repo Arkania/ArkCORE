@@ -7122,6 +7122,12 @@ bool Player::IsActionButtonDataValid (uint8 button, uint32 action, uint8 type)
             return false;
         }
         break;
+    case ACTION_PETLIST:
+        if (action != 9)
+        {
+            sLog->outError("Pet list action %u not added into button %u for player %s: unknown pet list (default is 9)", action, button, GetName());
+            return false;
+        }
     default:
         break;          // other cases not checked at this moment
     }
