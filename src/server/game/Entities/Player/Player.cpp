@@ -903,7 +903,7 @@ Player::Player (WorldSession *session) :
 
     SetPendingBind(NULL, 0);
 
-	sAnticheatMgr->DeletePlayerReport(this);
+    sAnticheatMgr->DeletePlayerReport(this);
 }
 
 Player::Player (WorldSession &session) :
@@ -1801,8 +1801,8 @@ void Player::Update (uint32 p_time)
         return;
 
     sAnticheatMgr->HandleHackDetectionTimer(this, p_time);
-	
-	// undelivered mail
+
+    // undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= time(NULL))
     {
         SendNewMail();
@@ -2727,21 +2727,21 @@ void Player::AddToWorld ()
         if (m_items[i])
             m_items[i]->AddToWorld();
 
-	//ARKCHAT AUTO JOIN CHANNEL
-	if(sIRC.ajoin == 1)
-	{
-		//QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `name` = '%s'", Unit::GetName());
-		QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
-		if(!result)
-		{
-			// prevent invite spam
-			sIRC.AutoJoinChannel(this);
-			std::string pname = Unit::GetName();
-			std::string Channel = "world";
-			std::string query = "INSERT INTO `IRC_Inchan` VALUES (%d,'"+pname+"','"+Channel+"')";
-			WorldDatabase.PExecute(query.c_str(), GetSession()->GetPlayer()->GetGUID());
-		}
-	}
+    //ARKCHAT AUTO JOIN CHANNEL
+    if(sIRC.ajoin == 1)
+    {
+        //QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `name` = '%s'", Unit::GetName());
+        QueryResult result = WorldDatabase.PQuery("SELECT `name` FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
+        if(!result)
+        {
+            // prevent invite spam
+            sIRC.AutoJoinChannel(this);
+            std::string pname = Unit::GetName();
+            std::string Channel = "world";
+            std::string query = "INSERT INTO `IRC_Inchan` VALUES (%d,'"+pname+"','"+Channel+"')";
+            WorldDatabase.PExecute(query.c_str(), GetSession()->GetPlayer()->GetGUID());
+        }
+    }
 }
 
 void Player::RemoveFromWorld ()
@@ -2779,9 +2779,9 @@ void Player::RemoveFromWorld ()
         }
     }
 
-	//ARKCHAT AUTO JOIN CHANNEL clecn up inchan table :)
-	if(sIRC.ajoin == 1 && GetSession()->PlayerLogout())
-		WorldDatabase.PExecute("DELETE FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
+    //ARKCHAT AUTO JOIN CHANNEL clecn up inchan table :)
+    if(sIRC.ajoin == 1 && GetSession()->PlayerLogout())
+        WorldDatabase.PExecute("DELETE FROM `IRC_Inchan` WHERE `guid` = '%d'", GetSession()->GetPlayer()->GetGUID());
 }
 
 void Player::RegenerateAll()
@@ -3466,14 +3466,14 @@ void Player::GiveLevel (uint8 level)
 
     UpdateAllStats();
 
-	if ((sIRC.BOTMASK & 256) != 0)
-	{
-		char  temp [5];
-		sprintf(temp, "%u", level);
-		std::string plevel = temp;		
-		std::string pname = GetName();
-		sIRC.Send_IRC_Channels("\00311["+pname+"] : Has Reached Level: "+plevel);
-	}
+    if ((sIRC.BOTMASK & 256) != 0)
+    {
+        char  temp [5];
+        sprintf(temp, "%u", level);
+        std::string plevel = temp;        
+        std::string pname = GetName();
+        sIRC.Send_IRC_Channels("\00311["+pname+"] : Has Reached Level: "+plevel);
+    }
 
 
     if (sWorld->getBoolConfig(CONFIG_ALWAYS_MAXSKILL))          // Max weapon skill when leveling up
@@ -23032,23 +23032,23 @@ void Player::ResetCurrencyDatas(uint32 id)
 
     PlayerCurrenciesMap::iterator itr = m_currencies.find(id);
     if (itr != m_currencies.end())
-	{
-		itr->second.totalCount = 0;
-		itr->second.weekCount = 0;
+    {
+        itr->second.totalCount = 0;
+        itr->second.weekCount = 0;
 
-		if (itr->second.state != PLAYERCURRENCY_NEW)
-			itr->second.state = PLAYERCURRENCY_CHANGED;
+        if (itr->second.state != PLAYERCURRENCY_NEW)
+            itr->second.state = PLAYERCURRENCY_CHANGED;
 
-		// probably excessive checks
-		if (IsInWorld() && !GetSession()->PlayerLoading())
-		{
-			WorldPacket packet(SMSG_UPDATE_CURRENCY, 12);
-			packet << uint32(CURRENCY_TYPE_HONOR_POINTS);
-			packet << uint32(0);
-			packet << uint32(0);
-			GetSession()->SendPacket(&packet);
-		}
-	}
+        // probably excessive checks
+        if (IsInWorld() && !GetSession()->PlayerLoading())
+        {
+            WorldPacket packet(SMSG_UPDATE_CURRENCY, 12);
+            packet << uint32(CURRENCY_TYPE_HONOR_POINTS);
+            packet << uint32(0);
+            packet << uint32(0);
+            GetSession()->SendPacket(&packet);
+        }
+    }
 }
 
 void Player::UpdateMaxWeekRating (ConquestPointsSources source, uint8 slot)
@@ -25382,7 +25382,7 @@ void Player::_SaveBGData (SQLTransaction& trans)
 {
     if (!MapManager::IsValidMapCoord(m_bgData.joinPos.GetMapId(), m_bgData.joinPos.GetPositionX(), m_bgData.joinPos.GetPositionY(), m_bgData.joinPos.GetPositionZ()))
         return;
-		
+
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_BGDATA);
     stmt->setUInt32(0, GetGUIDLow());
     trans->Append(stmt);

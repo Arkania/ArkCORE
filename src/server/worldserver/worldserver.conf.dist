@@ -8,7 +8,7 @@
 #
 #    EXAMPLE CONFIG
 #    CONNECTIONS AND DIRECTORIES
-#	 SCRIPTING SETTINGS
+#    SCRIPTING SETTINGS
 #    PERFORMANCE SETTINGS
 #    SERVER LOGGING
 #    SERVER SETTINGS
@@ -2385,7 +2385,7 @@ LookingForGroup.CastDeserter = 1
 # LookingForGroup.CastDeserter
 # Description: Cast Cooldown spell at players who join Dungeon when in Looking For Group.
 # Default: 1 - (Enabled)
-# 	     0 - (Disabled)
+#         0 - (Disabled)
 
 LookingForGroup.CastCooldown = 1
 
@@ -3030,8 +3030,8 @@ LevelReq.Mail = 1
 #
 #   PlayersAccessToGMIsland
 #   Description: Prevent access for players to gm island
-#	Default: 0 - Disable
-#		 1 - Enable
+#   Default: 0 - Disable
+#       1 - Enable
 
 PreventPlayersAccessToGMIsland = 0
 
@@ -3052,9 +3052,9 @@ PlayerDump.DisallowOverwrite = 1
 
 #
 #   DuelResetCooldown
-#	Description: Reseting cooldown and restore health when duel finished in the follow zones:
+#   Description: Reseting cooldown and restore health when duel finished in the follow zones:
 #   Elwyn Forest, Durotar, Tirisfal, Tendrasil, Dun Morogh, Gurubashi Arena, Exodar, Mulgore
-#	Default: 1
+#   Default: 1
 #
 
 DuelResetCooldown = 1
@@ -3155,20 +3155,20 @@ OutdoorPvP.Wintergrasp.CustomHonorDamagedBuilding = 0
 OutdoorPvP.Wintergrasp.CustomHonorIntactBuilding = 0
 
 #   OutdoorPvP.Wintergrasp.Antifarm.Enable
-#		Description: Enable or Disable antifarm system
+#      Description: Enable or Disable antifarm system
 #       Prevents start WG battle event if there are too low players (see options bellow)
 #       Default: 0 - Disabled
 #                1 - Enabled
 OutdoorPvP.Wintergrasp.Antifarm.Enable = 0
 
 #   OutdoorPvP.Wintergrasp.Antifarm.Atk
-#		Description: Min count of attackers for antifarm
+#      Description: Min count of attackers for antifarm
 #              (Default: 5)
 
 OutdoorPvP.Wintergrasp.Antifarm.Atk = 15
 
 #   OutdoorPvP.Wintergrasp.Antifarm.Def
-#		Description: Min count of defenders for antifarm
+#      Description: Min count of defenders for antifarm
 #              (Default: 5)
 
 OutdoorPvP.Wintergrasp.Antifarm.Def = 15
@@ -3213,14 +3213,14 @@ AuctionHouseBot.UseBuyPriceForBuyer = 0
 
 #       AuctionHouseBot.Account 
 #           Description: is the account number (in realmd->account table) of 
-#           	 the player you want to run as the auction bot. Note: a value of 0 will #disable the bot.
+#               the player you want to run as the auction bot. Note: a value of 0 will #disable the bot.
 #           Default: 0
 
 AuctionHouseBot.Account = 0
 
 #       AuctionHouseBot.GUID
 #           Description: is the GUID (in characters->characters table) of the 
-#           	 player you want to run as the auction bot. Note: a value of 0 will disable #the bot.
+#               player you want to run as the auction bot. Note: a value of 0 will disable #the bot.
 #           Default: 0
 
 AuctionHouseBot.GUID = 0

@@ -194,5 +194,5 @@ public:
 void AddSC_dun_morogh() {
     new npc_narm_faulk();
     new npc_gs_9x_multi_bot();
-	new npc_ultrasafe_personnel_launcher();
+    new npc_ultrasafe_personnel_launcher();
 }

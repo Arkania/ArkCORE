@@ -1205,7 +1205,7 @@ void World::LoadConfigSettings (bool reload)
     m_bool_configs[CONFIG_CHATLOG_ADDON] = sConfig->GetBoolDefault("ChatLogs.Addon", false);
     m_bool_configs[CONFIG_CHATLOG_BGROUND] = sConfig->GetBoolDefault("ChatLogs.Battleground", false);
 
-	// IRC Configurations.
+    // IRC Configurations.
 
     int ConfCnt = 0;
     sIRC._chan_count = 0;
@@ -1374,9 +1374,9 @@ void World::LoadConfigSettings (bool reload)
     m_int_configs[CONFIG_DB_PING_INTERVAL] = sConfig->GetIntDefault("MaxPingTime", 30);
 
     // AntiCheat system
-	m_bool_configs[CONFIG_ANTICHEAT_ENABLE] = sConfig->GetBoolDefault("Anticheat.Enable", true);
+    m_bool_configs[CONFIG_ANTICHEAT_ENABLE] = sConfig->GetBoolDefault("Anticheat.Enable", true);
     m_int_configs[CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION] = sConfig->GetIntDefault("Anticheat.ReportsForIngameWarnings", 70);
-	AntiCheatWarnChannel = sConfig->GetStringDefault("AntiCheatWarnChannel", "#GMs");
+    AntiCheatWarnChannel = sConfig->GetStringDefault("AntiCheatWarnChannel", "#GMs");
     
     //Wintergrasp
     m_bool_configs[CONFIG_OUTDOORPVP_WINTERGRASP_ENABLED] = sConfig->GetBoolDefault("OutdoorPvP.Wintergrasp.Enabled", true);
@@ -2679,16 +2679,16 @@ void World::ShutdownMsg (bool show, Player* player)
         SendServerMessage(msgid, str.c_str(), player);
         sLog->outStaticDebug("Server is %s in %s", (m_ShutdownMask & SHUTDOWN_MASK_RESTART ? "restart" : "shuttingdown"), str.c_str());
 
-		if(sIRC.Active == 1)
-		{
-			//Send shutdown message to IRC main channel
-			std::string ircchan = "#";
-			std::string irctmpmsg = "";
-			ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
-			irctmpmsg += msgid;
-			irctmpmsg += str.c_str();
-			sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Realm Re-Start In \00304,08\037/!\\\037\017 %s", "%s", irctmpmsg), true);
-		}
+        if(sIRC.Active == 1)
+        {
+            //Send shutdown message to IRC main channel
+            std::string ircchan = "#";
+            std::string irctmpmsg = "";
+            ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+            irctmpmsg += msgid;
+            irctmpmsg += str.c_str();
+            sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Realm Re-Start In \00304,08\037/!\\\037\017 %s", "%s", irctmpmsg), true);
+        }
     }
 }
 
@@ -2804,11 +2804,11 @@ void World::SendAutoBroadcast ()
         sWorld->SendGlobalMessage(&data);
     }
 
-	//SEND AUTOBROADCAT TO IRC
-	std::string ircchan = "#";
-	ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
-	sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Automatic System Message \00304,08\037/!\\\037\017 %s", "%s", msg.c_str()), true);
-	sLog->outDetail("AutoBroadcast: '%s'", msg.c_str());
+    //SEND AUTOBROADCAT TO IRC
+    std::string ircchan = "#";
+    ircchan += sIRC._irc_chan[sIRC.anchn].c_str();
+    sIRC.Send_IRC_Channel(ircchan, sIRC.MakeMsg("\00304,08\037/!\\\037\017\00304 Automatic System Message \00304,08\037/!\\\037\017 %s", "%s", msg.c_str()), true);
+    sLog->outDetail("AutoBroadcast: '%s'", msg.c_str());
 
 }
 

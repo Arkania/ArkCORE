@@ -1021,7 +1021,7 @@ public:
     explicit Player (WorldSession &);
     ~Player ();
 
-	AnticheatData anticheatData;
+    AnticheatData anticheatData;
 
     void CleanupsBeforeDelete (bool finalCleanup = true);
 
@@ -1542,7 +1542,7 @@ public:
     void ResetWeeklyQuestStatus ();
 
     void ResetCurrencyWeekCap ();
-	void ResetCurrencyDatas(uint32 id);
+    void ResetCurrencyDatas(uint32 id);
     void UpdateMaxWeekRating (ConquestPointsSources source, uint8 slot);
 
     uint16 FindQuestSlot (uint32 quest_id) const;
@@ -2930,7 +2930,7 @@ protected:
     uint32 m_AreaID;
     uint32 m_regenTimerCount;
     uint32 m_holyPowerRegenTimerCount;          // Holy power updates ticks at every 10s thats wy we need this.
-	uint32 m_focusRegenTimerCount; 				// Focus power updates ticks at every second.
+    uint32 m_focusRegenTimerCount;                 // Focus power updates ticks at every second.
     float m_powerFraction[MAX_POWERS];
     uint32 m_contestedPvPTimer;
 
