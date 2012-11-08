@@ -4758,6 +4758,12 @@ void Spell::EffectSummonPet (SpellEffIndex effIndex)
         pet->SetName(new_name);
 
     ExecuteLogEffectSummonObject(effIndex, pet);
+    
+    if (m_caster->getClass() == CLASS_WARLOCK)
+    {
+        pet->DeleteFromDB(m_caster->GetGUIDLow());
+        pet->SavePetToDB(PET_SLOT_OTHER_PET);
+    }
 }
 
 void Spell::EffectLearnPetSpell (SpellEffIndex effIndex)
