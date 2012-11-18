@@ -4336,17 +4336,17 @@ void SpellMgr::LoadSpellCustomAttr ()
         case 48108:          // Hot Streak
         case 51124:          // Killing Machine
         case 54741:          // Firestarter
-        case 57761:          // Fireball!
+        case 57761:          // Fireball! (Triggered by Brain Freeze)
         case 39805:          // Lightning Overload
         case 64823:          // Item - Druid T8 Balance 4P Bonus
-        case 44401:
+        case 44401:          // Missile Barrage
+        case 90174:          // Divine Purpose Proc
+            spellInfo->procCharges = 1;
+            break;
             // Need this otherwise we'll be having multiple chance rolls for judgement.
         case 85117:          // Divine Purpose (Rank 1)
         case 86172:          // Divine Purpose (Rank 2)
             spellInfo->AttributesEx3 = 0;
-            break;
-        case 90174:          // Divine Purpose Proc
-            spellInfo->procCharges = 1;
             break;
         case 53390:          // Tidal Wave
             spellInfo->procCharges = 2;
