@@ -272,7 +272,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         return;
     if (player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
         return;
-    if (player->IsFalling() || (player->IsFalling() && player->GetMapId() == 607)) //False postives in SOTA
+    if ((player->IsFalling() && player->GetMapId() == 607) || player->IsFalling()) //False postives in SOTA
         return;
     if (player->HasAuraType(SPELL_AURA_FEATHER_FALL) || player->HasAuraType(SPELL_AURA_SAFE_FALL))
         return;
