@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  
- Orig author = ???
+ Orig author = maanuel
  Rcoded & updates by Biglad
  99.8% good!!!!!!
  */
@@ -272,12 +272,8 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
         return;
     if (player->HasUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT))
         return;
-    if (player->IsFalling() && player->GetMapId() == 607) //False segnalation in SOTA
+    if (player->IsFalling() || (player->IsFalling() && player->GetMapId() == 607)) //False postives in SOTA
         return;
-
-    if (player->IsFalling())
-        return;
-
     if (player->HasAuraType(SPELL_AURA_FEATHER_FALL) || player->HasAuraType(SPELL_AURA_SAFE_FALL))
         return;
 
@@ -294,6 +290,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
 
     // we need to know HOW is the player moving
     // TO-DO: Should we check the incoming movement flags?
+    // of course not the client can modify those ^
     if (player->HasUnitMovementFlag(MOVEMENTFLAG_SWIMMING))
         moveType = MOVE_SWIM;
     else if (player->IsFlying())
@@ -306,6 +303,7 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
     if (moveType == MOVE_SWIM)
     {
         // no need for mount check
+        // vashj'ir?
         main_speed_mod_swim = player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_INCREASE_SWIM_SPEED);
         non_stack_bonus = (100.0f + player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_SPEED_NOT_STACK)) / 100.0f;
         auraspeed = main_speed_mod_swim + non_stack_bonus;
@@ -356,6 +354,8 @@ void AnticheatMgr::SpeedHackDetection(Player* player,MovementInfo movementInfo)
     // we did the (uint32) cast to accept a margin of tolerance
     if (clientSpeedRate > speedRate)
     {
+        if (player->HasSpellCooldown(6544)) //heroic leap
+            return;
         BuildReport(player,SPEED_HACK_REPORT);
         sLog->outError("Speed Hack Player LowGuid %u",player->GetGUIDLow());
         std::string ircchana = sWorld->AntiCheatWarnChannel;
