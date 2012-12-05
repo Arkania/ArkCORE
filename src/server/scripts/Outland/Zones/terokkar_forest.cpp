@@ -586,6 +586,49 @@ public:
 };
 
 /*######
+## go_ancient_skull_pile
+######*/
+#define GOSSIP_S_TEROKK         "Summon Terokk"
+
+
+class go_ancient_skull_pile : public GameObjectScript
+{
+public:
+    go_ancient_skull_pile() : GameObjectScript("go_ancient_skull_pile") { }
+
+    bool OnGossipSelect(Player* pPlayer, GameObject* pGo, uint32 uiSender, uint32 uiAction)
+    {
+        pPlayer->PlayerTalkClass->ClearMenus();
+        switch (uiSender)
+        {
+            case GOSSIP_SENDER_MAIN:    SendActionMenu(pPlayer, pGo, uiAction); break;
+        }
+        return true;
+    }
+
+    bool OnGossipHello(Player* pPlayer, GameObject* pGo)
+    {
+        if ((pPlayer->GetQuestStatus(11073) == QUEST_STATUS_INCOMPLETE) || pPlayer->GetQuestRewardStatus(11073))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_S_TEROKK, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+
+        pPlayer->SEND_GOSSIP_MENU(pGo->GetGOInfo()->questgiver.gossipID, pGo->GetGUID());
+        return true;
+    }
+
+    void SendActionMenu(Player* pPlayer, GameObject* /*pGo*/, uint32 uiAction)
+    {
+        switch (uiAction)
+        {
+            case GOSSIP_ACTION_INFO_DEF + 1:
+                  pPlayer->CastSpell(pPlayer, 41004, false);
+                break;
+        }
+    }
+};
+
+/*######
 ## npc_slim
 ######*/
 
@@ -697,6 +740,7 @@ void AddSC_terokkar_forest()
     new npc_floon();
     new npc_isla_starmane();
     new go_skull_pile();
+	new go_ancient_skull_pile();
     new npc_skywing();
     new npc_slim();
     new npc_akuno();
