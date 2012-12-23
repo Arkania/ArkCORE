@@ -796,6 +796,32 @@ void WorldSession::SendListInventory (uint64 vendorguid)
 
                 // reputation discount
                 int32 price = crItem->IsGoldRequired(pProto) ? uint32(floor(pProto->BuyPrice * discountMod)) : 0;
+				
+                // Items sold out are not displayed in list
+                uint32 leftInStock = !crItem->maxcount ? 0xFFFFFFFF : pCreature->GetVendorItemCurrentCount(crItem);
+                if (!_player->isGameMaster() && !leftInStock)
+                    continue;
+
+					
+                // If the item is a guild reward, dont display it if the player does not fit the requirements
+                // ToDo: Theese items must have a flag, find it
+                if (QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", crItem->item))
+                {
+                    Guild* guild = sObjectMgr->GetGuildById(_player->GetGuildId());
+                    if (!guild)
+                        continue;
+                    Field *fields = res->Fetch();
+
+                    // Check for achievement NOT YET
+                    //if (!guild->GetAchievementMgr().HasAchieved(fields[0].GetUInt32()))
+                     //   continue;
+
+                    // Check for standing
+                    uint32 repReq = fields[1].GetUInt32();
+                    if (repReq)
+                        if (ReputationRank(repReq) > _player->GetReputationRank(1168)) // Does not have enough reputation
+                            continue;
+                }				
 
                 data << uint32(vendorslot + 1);          // client expects counting to start at 1
                 data << uint32(1);          // unknow value 4.0.1, always 1
