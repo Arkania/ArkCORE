@@ -336,342 +336,123 @@ void CharacterDatabaseConnection::DoPrepareStatements() {
 
     // Guild handling
     // 0: uint32, 1: string, 2: uint32, 3: string, 4: string, 5: uint64, 6-10: uint32, 11: uint64
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD,
-            "INSERT INTO guild (guildid, name, leaderguid, info, motd, createdate, EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor, BankMoney, xp, level) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_DEL_GUILD, "DELETE FROM guild WHERE guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32
+    PREPARE_STATEMENT(CHAR_ADD_GUILD, "INSERT INTO guild (guildid, name, leaderguid, info, motd, createdate, EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor, BankMoney, xp, level) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD, "DELETE FROM guild WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
     // 0: uint32, 1: uint32, 2: uint8, 4: string, 5: string
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_MEMBER,
-            "INSERT INTO guild_member (guildid, guid, rank, pnote, offnote) VALUES (?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_MEMBER,
-            "DELETE FROM guild_member WHERE guid = ?", CONNECTION_ASYNC);
-    // 0: uint32
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_MEMBERS,
-            "DELETE FROM guild_member WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: uint32
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_MEMBER, "INSERT INTO guild_member (guildid, guid, rank, pnote, offnote, FirstProffLevel, FirstProffSkill, FirstProffRank, SecondProffLevel, SecondProffSkill, SecondProffRank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_MEMBER, "DELETE FROM guild_member WHERE guid = ?", CONNECTION_ASYNC); // 0: uint32
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_MEMBERS, "DELETE FROM guild_member WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
     // 0: uint32, 1: uint8, 3: string, 4: uint32
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_RANK,
-            "INSERT INTO guild_rank (guildid, rid, rname, rights) VALUES (?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_RANKS,
-            "DELETE FROM guild_rank WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: uint32
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_LOWEST_RANK,
-            "DELETE FROM guild_rank WHERE guildid = ? AND rid >= ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8
-    PREPARE_STATEMENT(CHAR_ADD_GUILD_BANK_TAB,
-            "INSERT INTO guild_bank_tab (guildid, TabId) VALUES (?, ?)",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_TAB,
-            "DELETE FROM guild_bank_tab WHERE guildid = ? AND TabId = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_TABS,
-            "DELETE FROM guild_bank_tab WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: uint32
-    // 0: uint32, 1: uint8, 2: uint8, 3: uint32, 4: uint32
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_BANK_ITEM,
-            "INSERT INTO guild_bank_item (guildid, TabId, SlotId, item_guid) VALUES (?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_DEL_GUILD_BANK_ITEM,
-            "DELETE FROM guild_bank_item WHERE guildid = ? AND TabId = ? AND SlotId = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8, 2: uint8
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_ITEMS,
-            "DELETE FROM guild_bank_item WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: uint32
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_BANK_RIGHT_DEFAULT,
-            "INSERT INTO guild_bank_right (guildid, TabId, rid) VALUES (?, ?, ?)",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8, 2: uint8
-    // 0: uint32, 1: uint8, 2: uint8, 3: uint8, 4: uint32
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_BANK_RIGHT,
-            "INSERT INTO guild_bank_right (guildid, TabId, rid, gbright, SlotPerDay) VALUES (?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_DEL_GUILD_BANK_RIGHT,
-            "DELETE FROM guild_bank_right WHERE guildid = ? AND TabId = ? AND rid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8, 2: uint8
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_RIGHTS,
-            "DELETE FROM guild_bank_right WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: uint32
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_RIGHTS_FOR_RANK,
-            "DELETE FROM guild_bank_right WHERE guildid = ? AND rid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_RANK, "INSERT INTO guild_rank (guildid, rid, rname, rights) VALUES (?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_RANKS, "DELETE FROM guild_rank WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_LOWEST_RANK, "DELETE FROM guild_rank WHERE guildid = ? AND rid >= ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_BANK_TAB, "INSERT INTO guild_bank_tab (guildid, TabId) VALUES (?, ?)", CONNECTION_ASYNC); // 0: uint32, 1: uint8
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_TAB, "DELETE FROM guild_bank_tab WHERE guildid = ? AND TabId = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_TABS, "DELETE FROM guild_bank_tab WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
+     // 0: uint32, 1: uint8, 2: uint8, 3: uint32, 4: uint32
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_BANK_ITEM, "INSERT INTO guild_bank_item (guildid, TabId, SlotId, item_guid) VALUES (?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_ITEM, "DELETE FROM guild_bank_item WHERE guildid = ? AND TabId = ? AND SlotId = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8, 2: uint8
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_ITEMS, "DELETE FROM guild_bank_item WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_BANK_RIGHT_DEFAULT, "INSERT INTO guild_bank_right (guildid, TabId, rid) VALUES (?, ?, ?)", CONNECTION_ASYNC); // 0: uint32, 1: uint8, 2: uint8
+     // 0: uint32, 1: uint8, 2: uint8, 3: uint8, 4: uint32
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_BANK_RIGHT, "INSERT INTO guild_bank_right (guildid, TabId, rid, gbright, SlotPerDay) VALUES (?, ?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_RIGHT, "DELETE FROM guild_bank_right WHERE guildid = ? AND TabId = ? AND rid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8, 2: uint8
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_RIGHTS, "DELETE FROM guild_bank_right WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_RIGHTS_FOR_RANK, "DELETE FROM guild_bank_right WHERE guildid = ? AND rid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8
     // 0-1: uint32, 2-3: uint8, 4-5: uint32, 6: uint16, 7: uint8, 8: uint64
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_BANK_EVENTLOG,
-            "INSERT INTO guild_bank_eventlog (guildid, LogGuid, TabId, EventType, PlayerGuid, ItemOrMoney, ItemStackCount, DestTabId, TimeStamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_DEL_GUILD_BANK_EVENTLOG,
-            "DELETE FROM guild_bank_eventlog WHERE guildid = ? AND LogGuid = ? AND TabId = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint32, 2: uint8
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_EVENTLOGS,
-            "DELETE FROM guild_bank_eventlog WHERE guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_BANK_EVENTLOG, "INSERT INTO guild_bank_eventlog (guildid, LogGuid, TabId, EventType, PlayerGuid, ItemOrMoney, ItemStackCount, DestTabId, TimeStamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_EVENTLOG, "DELETE FROM guild_bank_eventlog WHERE guildid = ? AND LogGuid = ? AND TabId = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint32, 2: uint8
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_BANK_EVENTLOGS, "DELETE FROM guild_bank_eventlog WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
     // 0-1: uint32, 2: uint8, 3-4: uint32, 5: uint8, 6: uint64
-    PREPARE_STATEMENT(
-            CHAR_ADD_GUILD_EVENTLOG,
-            "INSERT INTO guild_eventlog (guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_EVENTLOG,
-            "DELETE FROM guild_eventlog WHERE guildid = ? AND LogGuid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint32
-    PREPARE_STATEMENT(CHAR_DEL_GUILD_EVENTLOGS,
-            "DELETE FROM guild_eventlog WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_PNOTE,
-            "UPDATE guild_member SET pnote = ? WHERE guid = ?",
-            CONNECTION_ASYNC);
-    // 0: string, 1: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_OFFNOTE,
-            "UPDATE guild_member SET offnote = ? WHERE guid = ?",
-            CONNECTION_ASYNC);
-    // 0: string, 1: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_RANK,
-            "UPDATE guild_member SET rank = ? WHERE guid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint8, 1: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_MOTD,
-            "UPDATE guild SET motd = ? WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: string, 1: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_INFO,
-            "UPDATE guild SET info = ? WHERE guildid = ?", CONNECTION_ASYNC);
-    // 0: string, 1: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_LEADER,
-            "UPDATE guild SET leaderguid = ? WHERE guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_NAME,
-            "UPDATE guild_rank SET rname = ? WHERE rid = ? AND guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: string, 1: uint8, 2: uint32
-    PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_RIGHTS,
-            "UPDATE guild_rank SET rights = ? WHERE rid = ? AND guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8, 2: uint32
-    PREPARE_STATEMENT(CHAR_GUILD_SAVE_XP,
-            "UPDATE guild SET xp = ?, level = ? WHERE guildid = ?",
-            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_ADD_GUILD_EVENTLOG, "INSERT INTO guild_eventlog (guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp) VALUES (?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_EVENTLOG, "DELETE FROM guild_eventlog WHERE guildid = ? AND LogGuid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint32
+    PREPARE_STATEMENT(CHAR_DEL_GUILD_EVENTLOGS, "DELETE FROM guild_eventlog WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_PNOTE, "UPDATE guild_member SET pnote = ? WHERE guid = ?", CONNECTION_ASYNC); // 0: string, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_OFFNOTE, "UPDATE guild_member SET offnote = ? WHERE guid = ?", CONNECTION_ASYNC); // 0: string, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_RANK, "UPDATE guild_member SET rank = ? WHERE guid = ?", CONNECTION_ASYNC); // 0: uint8, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MOTD, "UPDATE guild SET motd = ? WHERE guildid = ?", CONNECTION_ASYNC); // 0: string, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_INFO, "UPDATE guild SET info = ? WHERE guildid = ?", CONNECTION_ASYNC); // 0: string, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_LEADER, "UPDATE guild SET leaderguid = ? WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_NAME, "UPDATE guild_rank SET rname = ? WHERE rid = ? AND guildid = ?", CONNECTION_ASYNC); // 0: string, 1: uint8, 2: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_RIGHTS, "UPDATE guild_rank SET rights = ? WHERE rid = ? AND guildid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8, 2: uint32
+    PREPARE_STATEMENT(CHAR_GUILD_SAVE_XP, "UPDATE guild SET xp = ?, level = ? WHERE guildid = ?", CONNECTION_ASYNC); // 1: uint64, 2, 3: uint32
     PREPARE_STATEMENT(CHAR_LOAD_GUILD_NEWS, "SELECT type, date, value1, value2, source_guid, flags FROM guild_news WHERE guildid = ? ORDER BY date DESC", CONNECTION_SYNCH);
     PREPARE_STATEMENT(CHAR_ADD_GUILD_NEWS, "INSERT INTO guild_news (guildid, type, date, value1, value2, source_guid, flags) VALUES (?, ?, ?, ?, ?, ?, ?)", CONNECTION_ASYNC);
-    // 1: uint64, 2, 3: uint32
     // 0-5: uint32
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_EMBLEM_INFO,
-            "UPDATE guild SET EmblemStyle = ?, EmblemColor = ?, BorderStyle = ?, BorderColor = ?, BackgroundColor = ? WHERE guildid = ?",
-            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_EMBLEM_INFO, "UPDATE guild SET EmblemStyle = ?, EmblemColor = ?, BorderStyle = ?, BorderColor = ?, BackgroundColor = ? WHERE guildid = ?", CONNECTION_ASYNC);
     // 0: string, 1: string, 2: uint32, 3: uint8
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_BANK_TAB_INFO,
-            "UPDATE guild_bank_tab SET TabName = ?, TabIcon = ? WHERE guildid = ? AND TabId = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(CHAR_SET_GUILD_BANK_MONEY,
-            "UPDATE guild SET BankMoney = ? WHERE guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint64, 1: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_BANK_TAB_INFO, "UPDATE guild_bank_tab SET TabName = ?, TabIcon = ? WHERE guildid = ? AND TabId = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_BANK_MONEY, "UPDATE guild SET BankMoney = ? WHERE guildid = ?", CONNECTION_ASYNC); // 0: uint64, 1: uint32
     // 0: uint8, 1: uint32, 2: uint8, 3: uint32
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_BANK_EVENTLOG_TAB,
-            "UPDATE guild_bank_eventlog SET TabId = ? WHERE guildid = ? AND TabId = ? AND LogGuid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_MONEY,
-            "UPDATE guild_member SET BankRemMoney = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_BANK_EVENTLOG_TAB, "UPDATE guild_bank_eventlog SET TabId = ? WHERE guildid = ? AND TabId = ? AND LogGuid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_MONEY, "UPDATE guild_member SET BankRemMoney = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint32, 2: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_MONEY, "UPDATE guild_member SET BankResetTimeMoney = ?, BankRemMoney = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint32, 2: uint32, 3: uint32
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_RESET_TIME, "UPDATE guild_member SET BankResetTimeMoney = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8
+    PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_BANK_MONEY, "UPDATE guild_rank SET BankMoneyPerDay = ? WHERE rid = ? AND guildid = ?", CONNECTION_ASYNC); // 0: uint32, 1: uint8, 2: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_BANK_TAB_TEXT, "UPDATE guild_bank_tab SET TabText = ? WHERE guildid = ? AND TabId = ?", CONNECTION_ASYNC); // 0: string, 1: uint32, 2: uint8
     // 0: uint32, 1: uint32, 2: uint32
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_MONEY,
-            "UPDATE guild_member SET BankResetTimeMoney = ?, BankRemMoney = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS0, "UPDATE guild_member SET BankRemSlotsTab0 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS1, "UPDATE guild_member SET BankRemSlotsTab1 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS2, "UPDATE guild_member SET BankRemSlotsTab2 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS3, "UPDATE guild_member SET BankRemSlotsTab3 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS4, "UPDATE guild_member SET BankRemSlotsTab4 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS5, "UPDATE guild_member SET BankRemSlotsTab5 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
     // 0: uint32, 1: uint32, 2: uint32, 3: uint32
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_RESET_TIME,
-            "UPDATE guild_member SET BankResetTimeMoney = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS0, "UPDATE guild_member SET BankResetTimeTab0 = ?, BankRemSlotsTab0 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS1, "UPDATE guild_member SET BankResetTimeTab1 = ?, BankRemSlotsTab1 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS2, "UPDATE guild_member SET BankResetTimeTab2 = ?, BankRemSlotsTab2 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS3, "UPDATE guild_member SET BankResetTimeTab3 = ?, BankRemSlotsTab3 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS4, "UPDATE guild_member SET BankResetTimeTab4 = ?, BankRemSlotsTab4 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS5, "UPDATE guild_member SET BankResetTimeTab5 = ?, BankRemSlotsTab5 = ? WHERE guildid = ? AND guid = ?", CONNECTION_ASYNC);
     // 0: uint32, 1: uint8
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_RANK_BANK_MONEY,
-            "UPDATE guild_rank SET BankMoneyPerDay = ? WHERE rid = ? AND guildid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8, 2: uint32
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_BANK_TAB_TEXT,
-            "UPDATE guild_bank_tab SET TabText = ? WHERE guildid = ? AND TabId = ?",
-            CONNECTION_ASYNC);
-    // 0: string, 1: uint32, 2: uint8
-    // 0: uint32, 1: uint32, 2: uint32
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS0,
-            "UPDATE guild_member SET BankRemSlotsTab0 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS1,
-            "UPDATE guild_member SET BankRemSlotsTab1 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS2,
-            "UPDATE guild_member SET BankRemSlotsTab2 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS3,
-            "UPDATE guild_member SET BankRemSlotsTab3 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS4,
-            "UPDATE guild_member SET BankRemSlotsTab4 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_REM_SLOTS5,
-            "UPDATE guild_member SET BankRemSlotsTab5 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint32, 2: uint32, 3: uint32
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS0,
-            "UPDATE guild_member SET BankResetTimeTab0 = ?, BankRemSlotsTab0 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS1,
-            "UPDATE guild_member SET BankResetTimeTab1 = ?, BankRemSlotsTab1 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS2,
-            "UPDATE guild_member SET BankResetTimeTab2 = ?, BankRemSlotsTab2 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS3,
-            "UPDATE guild_member SET BankResetTimeTab3 = ?, BankRemSlotsTab3 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS4,
-            "UPDATE guild_member SET BankResetTimeTab4 = ?, BankRemSlotsTab4 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_SET_GUILD_MEMBER_BANK_TIME_REM_SLOTS5,
-            "UPDATE guild_member SET BankResetTimeTab5 = ?, BankRemSlotsTab5 = ? WHERE guildid = ? AND guid = ?",
-            CONNECTION_ASYNC);
-    // 0: uint32, 1: uint8
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_TIME0,
-            "UPDATE guild_member SET BankResetTimeTab0 = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_TIME1,
-            "UPDATE guild_member SET BankResetTimeTab1 = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_TIME2,
-            "UPDATE guild_member SET BankResetTimeTab2 = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_TIME3,
-            "UPDATE guild_member SET BankResetTimeTab3 = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_TIME4,
-            "UPDATE guild_member SET BankResetTimeTab4 = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_RESET_GUILD_RANK_BANK_TIME5,
-            "UPDATE guild_member SET BankResetTimeTab5 = 0 WHERE guildid = ? AND rank = ?",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILDS,
-            //          0          1       2             3              4              5              6
-            "SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
-            //   7                  8       9       10            11           12                  13  14
-            "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level "
-            "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC",
-            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_TIME0, "UPDATE guild_member SET BankResetTimeTab0 = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_TIME1, "UPDATE guild_member SET BankResetTimeTab1 = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_TIME2, "UPDATE guild_member SET BankResetTimeTab2 = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_TIME3, "UPDATE guild_member SET BankResetTimeTab3 = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_TIME4, "UPDATE guild_member SET BankResetTimeTab4 = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_RESET_GUILD_RANK_BANK_TIME5, "UPDATE guild_member SET BankResetTimeTab5 = 0 WHERE guildid = ? AND rank = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILDS,
+    //          0          1       2             3              4              5              6
+        "SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
+    //   7                  8       9       10            11           12                  13  14
+        "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level "
+        "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC", CONNECTION_SYNCH);
     //                                              0        1    2      3       4
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_RANKS,
-            "SELECT guildid, rid, rname, rights, BankMoneyPerDay FROM guild_rank ORDER BY guildid ASC, rid ASC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_CHAR_DATA_FOR_GUILD,
-            "SELECT name, level, class, zone, account FROM characters WHERE guid = ?",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_MEMBERS,
-            //          0        1        2     3      4        5                   6
-            "SELECT guildid, gm.guid, rank, pnote, offnote, BankResetTimeMoney, BankRemMoney, "
-            //   7                  8                 9                  10                11                 12
-            "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
-            //   13                 14                15                 16                17                 18
-            "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
-            //   19                 20                21                 22
-            "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
-            //   23      24       25       26      27         28
-            "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
-            "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_RIGHTS,
-            //          0        1      2    3        4
-            "SELECT guildid, TabId, rid, gbright, SlotPerDay FROM guild_bank_right ORDER BY guildid ASC, TabId ASC",
-            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_RANKS, "SELECT guildid, rid, rname, rights, BankMoneyPerDay FROM guild_rank ORDER BY guildid ASC, rid ASC", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_CHAR_DATA_FOR_GUILD, "SELECT name, level, class, zone, account FROM characters WHERE guid = ?", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_MEMBERS,
+    //          0        1        2     3      4        5                   6
+        "SELECT guildid, gm.guid, rank, pnote, offnote, BankResetTimeMoney, BankRemMoney, "
+    //   7                  8                 9                  10                11                 12
+        "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
+    //   13                 14                15                 16                17                 18
+        "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
+    //   19      20       21       22      23         24
+        "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
+        "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_BANK_RIGHTS,
+    //          0        1      2    3        4
+        "SELECT guildid, TabId, rid, gbright, SlotPerDay FROM guild_bank_right ORDER BY guildid ASC, TabId ASC", CONNECTION_SYNCH);
     //                                                  0        1      2        3        4
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_TABS,
-            "SELECT guildid, TabId, TabName, TabIcon, TabText FROM guild_bank_tab ORDER BY guildid ASC, TabId ASC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_EVENTLOGS,
-            //          0        1        2          3            4            5        6
-            "SELECT guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp FROM guild_eventlog ORDER BY TimeStamp DESC, LogGuid DESC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_EVENTLOGS,
-            //          0        1      2        3          4           5            6               7          8
-            "SELECT guildid, TabId, LogGuid, EventType, PlayerGuid, ItemOrMoney, ItemStackCount, DestTabId, TimeStamp FROM guild_bank_eventlog ORDER BY TimeStamp DESC, LogGuid DESC",
-            CONNECTION_SYNCH);
-    PREPARE_STATEMENT(
-            CHAR_LOAD_GUILD_BANK_ITEMS,
-            //          0            1                2      3         4        5      6             7                 8           9           10
-            "SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, playedTime, text, "
-            //   11       12     13      14         15
-            "guildid, TabId, SlotId, item_guid, itemEntry FROM guild_bank_item gbi INNER JOIN item_instance ii ON gbi.item_guid = ii.guid",
-            CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_BANK_TABS, "SELECT guildid, TabId, TabName, TabIcon, TabText FROM guild_bank_tab ORDER BY guildid ASC, TabId ASC", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_EVENTLOGS,
+    //          0        1        2          3            4            5        6
+        "SELECT guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp FROM guild_eventlog ORDER BY TimeStamp DESC, LogGuid DESC", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_BANK_EVENTLOGS,
+    //          0        1      2        3          4           5            6               7          8
+        "SELECT guildid, TabId, LogGuid, EventType, PlayerGuid, ItemOrMoney, ItemStackCount, DestTabId, TimeStamp FROM guild_bank_eventlog ORDER BY TimeStamp DESC, LogGuid DESC", CONNECTION_SYNCH);
+    PREPARE_STATEMENT(CHAR_LOAD_GUILD_BANK_ITEMS,
+    //          0            1                2      3         4        5      6             7                 8           9           10
+        "SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, playedTime, text, "
+    //   11       12     13      14         15
+        "guildid, TabId, SlotId, item_guid, itemEntry FROM guild_bank_item gbi INNER JOIN item_instance ii ON gbi.item_guid = ii.guid", CONNECTION_SYNCH);
 
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_RANKS,
-            "DELETE FROM guild_rank WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_MEMBERS,
-            "DELETE FROM guild_member WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_BANK_TABS,
-            "DELETE FROM guild_bank_tab WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_BANK_RIGHTS,
-            "DELETE FROM guild_bank_right WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
-    PREPARE_STATEMENT(
-            CHAR_CLEAN_GUILD_BANK_ITEMS,
-            "DELETE FROM guild_bank_item WHERE guildId NOT IN (SELECT guildid FROM guild)",
-            CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_CLEAN_GUILD_RANKS, "DELETE FROM guild_rank WHERE guildId NOT IN (SELECT guildid FROM guild)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_CLEAN_GUILD_MEMBERS, "DELETE FROM guild_member WHERE guildId NOT IN (SELECT guildid FROM guild)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_CLEAN_GUILD_BANK_TABS, "DELETE FROM guild_bank_tab WHERE guildId NOT IN (SELECT guildid FROM guild)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_CLEAN_GUILD_BANK_RIGHTS, "DELETE FROM guild_bank_right WHERE guildId NOT IN (SELECT guildid FROM guild)", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_CLEAN_GUILD_BANK_ITEMS, "DELETE FROM guild_bank_item WHERE guildId NOT IN (SELECT guildid FROM guild)", CONNECTION_ASYNC);
+
 
     // Chat channel handling
     PREPARE_STATEMENT(
