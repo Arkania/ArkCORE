@@ -427,9 +427,11 @@ void TradeData::SetAccepted (bool state, bool crosssend /*= false*/)
 // 4.3. Give reputation (player must not be on BG).
 // 4.4. Give kill credit (player must not be in group, or he must be alive or without corpse).
 // 5. Credit instance encounter.
-KillRewarder::KillRewarder (Player* killer, Unit* victim, bool isBattleGround) :
-        // 1. Initialize internal variables to default values.
-        _killer(killer), _victim(victim), _isBattleGround(isBattleGround), _isPvP(false), _group(killer->GetGroup()), _groupRate(1.0f), _maxLevel(0), _maxNotGrayMember(NULL), _count(0), _sumLevel(0), _isFullXP(false), _xp(0)
+KillRewarder::KillRewarder(Player* killer, Unit* victim, bool isBattleGround) :
+    // 1. Initialize internal variables to default values.
+    _killer(killer), _victim(victim), _group(killer->GetGroup()),
+    _groupRate(1.0f), _maxNotGrayMember(NULL), _count(0), _sumLevel(0), _xp(0),
+    _isFullXP(false), _maxLevel(0), _isBattleGround(isBattleGround), _isPvP(false)
 {
     // mark the credit as pvp if victim is player
     if (victim->GetTypeId() == TYPEID_PLAYER)
@@ -441,7 +443,7 @@ KillRewarder::KillRewarder (Player* killer, Unit* victim, bool isBattleGround) :
     _InitGroupData();
 }
 
-inline void KillRewarder::_InitGroupData ()
+inline void KillRewarder::_InitGroupData()
 {
     if (_group)
     {
@@ -472,7 +474,7 @@ inline void KillRewarder::_InitGroupData ()
         _count = 1;
 }
 
-inline void KillRewarder::_InitXP (Player* player)
+inline void KillRewarder::_InitXP(Player* player)
 {
     // Get initial value of XP for kill.
     // XP is given:
@@ -483,14 +485,14 @@ inline void KillRewarder::_InitXP (Player* player)
         _xp = Trinity::XP::Gain(player, _victim);
 }
 
-inline void KillRewarder::_RewardHonor (Player* player)
+inline void KillRewarder::_RewardHonor(Player* player)
 {
     // Rewarded player must be alive.
     if (player->isAlive())
         player->RewardHonor(_victim, _count, -1, true);
 }
 
-inline void KillRewarder::_RewardXP (Player* player, float rate)
+inline void KillRewarder::_RewardXP(Player* player, float rate)
 {
     uint32 xp(_xp);
     if (_group)
@@ -498,9 +500,11 @@ inline void KillRewarder::_RewardXP (Player* player, float rate)
         // 4.2.1. If player is in group, adjust XP:
         //        * set to 0 if player's level is more than maximum level of not gray member;
         //        * cut XP in half if _isFullXP is false.
-        if (_maxNotGrayMember && player->isAlive() && _maxNotGrayMember->getLevel() >= player->getLevel())
-            xp = _isFullXP ? uint32(xp * rate) :          // Reward FULL XP if all group members are not gray.
-            uint32(xp * rate / 2) + 1;          // Reward only HALF of XP if some of group members are gray.
+        if (_maxNotGrayMember && player->isAlive() &&
+            _maxNotGrayMember->getLevel() >= player->getLevel())
+            xp = _isFullXP ?
+                uint32(xp * rate) :             // Reward FULL XP if all group members are not gray.
+                uint32(xp * rate / 2) + 1;      // Reward only HALF of XP if some of group members are gray.
         else
             xp = 0;
     }
@@ -519,14 +523,14 @@ inline void KillRewarder::_RewardXP (Player* player, float rate)
     }
 }
 
-inline void KillRewarder::_RewardOnKill (Player* player, float rate)
+inline void KillRewarder::_RewardOnKill(Player* player, float rate)
 {
     // 4.3. Give reputation and currency (player must not be on BG).
     // Even dead players and corpses are rewarded.
     player->RewardOnKill(_victim, rate);
 }
 
-inline void KillRewarder::_RewardKillCredit (Player* player)
+inline void KillRewarder::_RewardKillCredit(Player* player)
 {
     // 4.4. Give kill credit (player must not be in group, or he must be alive or without corpse).
     if (!_group || player->isAlive() || !player->GetCorpse())
@@ -534,7 +538,7 @@ inline void KillRewarder::_RewardKillCredit (Player* player)
             player->KilledMonster(_victim->ToCreature()->GetCreatureInfo(), _victim->GetGUID());
 }
 
-void KillRewarder::_RewardPlayer (Player* player, bool isDungeon)
+void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
 {
     // 4. Reward player.
     if (!_isBattleGround)
@@ -549,8 +553,9 @@ void KillRewarder::_RewardPlayer (Player* player, bool isDungeon)
     // Give reputation and kill credit only in PvE.
     if (!_isPvP || _isBattleGround)
     {
-        const float rate = _group ? _groupRate * float(player->getLevel()) / _sumLevel :          // Group rate depends on summary level.
-        1.0f;          // Personal rate is 100%.
+        const float rate = _group ?
+            _groupRate * float(player->getLevel()) / _sumLevel : // Group rate depends on summary level.
+            1.0f;                                                // Personal rate is 100%.
         if (_xp)
             // 4.2. Give XP.
             _RewardXP(player, rate);
@@ -572,7 +577,7 @@ void KillRewarder::_RewardPlayer (Player* player, bool isDungeon)
     }
 }
 
-void KillRewarder::_RewardGroup ()
+void KillRewarder::_RewardGroup()
 {
     if (_maxLevel)
     {
@@ -595,21 +600,14 @@ void KillRewarder::_RewardGroup ()
 
             // 3.1.3. Reward each group member (even dead or corpse) within reward distance.
             for (GroupReference* itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
-            {
                 if (Player* member = itr->getSource())
-                {
                     if (member->IsAtGroupRewardDistance(_victim))
-                    {
                         _RewardPlayer(member, isDungeon);
-                        member->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_SPECIAL_PVP_KILL, 1, 0, _victim);
-                    }
-                }
-            }
         }
     }
 }
 
-void KillRewarder::Reward ()
+void KillRewarder::Reward()
 {
     // 3. Reward killer (and group, if necessary).
     if (_group)
@@ -2886,7 +2884,7 @@ void Player::Regenerate(Powers power)
             if (getLevel() < 15)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (getLevel() * 0.066f));
 
-            if (recentCast) // SkyFire Updates Mana in intervals of 2s, which is correct
+            if (recentCast) // ArkCORE Updates Mana in intervals of 2s, which is correct
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ((0.001f * m_regenTimer) + CalculatePctF(0.001f, spellHaste)) * ManaIncreaseRate;
             else
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) *  ((0.001f * m_regenTimer) + CalculatePctF(0.001f, spellHaste)) * ManaIncreaseRate;
@@ -15853,10 +15851,20 @@ void Player::RewardQuest (Quest const *pQuest, uint32 reward, Object* questGiver
         moneyRew = int32(pQuest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY));
 
     // If the player has a guild, it should gain 1/4 of his experience.
+    // Also, player should get 1/450XP as reputation.
     // Despite of him being at max level or not.
-    if (Guild * pGuild = sObjectMgr->GetGuildById(GetGuildId()))
-        pGuild->GainXP(XP / 4);
+    if (Guild* pGuild = sObjectMgr->GetGuildById(GetGuildId()))
+    {
+        uint32 guildXP = XP / 4;
+        uint32 guildRep = uint32(guildXP / 450 / 4);
 
+        if (guildRep < 1)
+            guildRep = 1;
+
+        pGuild->GainXP(guildXP);
+        GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
+    }
+	
     // Give player extra money if GetRewOrReqMoney > 0 and get ReqMoney if negative
     if (pQuest->GetRewOrReqMoney())
         moneyRew += pQuest->GetRewOrReqMoney();
@@ -17406,7 +17414,7 @@ float Player::GetFloatValueFromArray (Tokens const& data, uint16 index)
     return result;
 }
 
-Player* Player::LoadFromDB (uint32 guid, SQLQueryHolder * holder, WorldSession * session)
+Player* Player::LoadFromDB(uint32 guid, SQLQueryHolder * holder, WorldSession * session)
 {
     ////                                                     0     1        2     3     4        5      6    7      8     9           10              11
     //QueryResult *result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
@@ -17433,41 +17441,41 @@ Player* Player::LoadFromDB (uint32 guid, SQLQueryHolder * holder, WorldSession *
     uint8 pClass = fields[4].GetUInt8();
 
     Player* player = NULL;
-    switch (pClass)
+    switch(pClass)
     {
-    case CLASS_WARRIOR:
-        player = new WarriorPlayer(session);
-        break;
-    case CLASS_PALADIN:
-        player = new PaladinPlayer(session);
-        break;
-    case CLASS_HUNTER:
-        player = new HunterPlayer(session);
-        break;
-    case CLASS_ROGUE:
-        player = new RoguePlayer(session);
-        break;
-    case CLASS_PRIEST:
-        player = new PriestPlayer(session);
-        break;
-    case CLASS_DEATH_KNIGHT:
-        player = new DKPlayer(session);
-        break;
-    case CLASS_SHAMAN:
-        player = new ShamanPlayer(session);
-        break;
-    case CLASS_MAGE:
-        player = new MagePlayer(session);
-        break;
-    case CLASS_WARLOCK:
-        player = new WarlockPlayer(session);
-        break;
-    case CLASS_DRUID:
-        player = new DruidPlayer(session);
-        break;
-    default:
-        printf("\nClass %u doesn't exist.\n", pClass);
-        break;
+        case CLASS_WARRIOR:
+            player = new WarriorPlayer(session);
+            break;
+        case CLASS_PALADIN:
+            player = new PaladinPlayer(session);
+            break;
+        case CLASS_HUNTER:
+            player = new HunterPlayer(session);
+            break;
+        case CLASS_ROGUE:
+            player = new RoguePlayer(session);
+            break;
+        case CLASS_PRIEST:
+            player = new PriestPlayer(session);
+            break;
+        case CLASS_DEATH_KNIGHT:
+            player = new DKPlayer(session);
+            break;
+        case CLASS_SHAMAN:
+            player = new ShamanPlayer(session);
+            break;
+        case CLASS_MAGE:
+            player = new MagePlayer(session);
+            break;
+        case CLASS_WARLOCK:
+            player = new WarlockPlayer(session);
+            break;
+        case CLASS_DRUID:
+            player = new DruidPlayer(session);
+            break;
+        default:
+            printf("\nClass %u doesn't exist.\n", pClass);
+            break;
     }
 
     if (player && player)
@@ -17478,9 +17486,9 @@ Player* Player::LoadFromDB (uint32 guid, SQLQueryHolder * holder, WorldSession *
 }
 
 // We send the result to not waste time to do it again
-bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryResult & result)
+bool Player::_LoadFromDB(uint32 guid, SQLQueryHolder * holder, PreparedQueryResult & result)
 {
-    //TODO : drop ammoid
+    //TODO : drop ammoid & stable_slots
 
     ////                                                     0     1        2     3     4        5      6    7      8     9           10              11
     //QueryResult *result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
@@ -17514,7 +17522,8 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     m_name = fields[2].GetString();
 
     // check name limitations
-    if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS || (GetSession()->GetSecurity() == SEC_PLAYER && sObjectMgr->IsReservedName(m_name)))
+    if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS ||
+        (GetSession()->GetSecurity() == SEC_PLAYER && sObjectMgr->IsReservedName(m_name)))
     {
         CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE guid ='%u'", uint32(AT_LOGIN_RENAME), guid);
         return false;
@@ -17525,16 +17534,16 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
 
     // overwrite some data fields
     uint32 bytes0 = 0;
-    bytes0 |= fields[3].GetUInt8();          // race
-    bytes0 |= fields[4].GetUInt8() << 8;          // class
-    bytes0 |= fields[5].GetUInt8() << 16;          // gender
+    bytes0 |= fields[3].GetUInt8();                         // race
+    bytes0 |= fields[4].GetUInt8() << 8;                    // class
+    bytes0 |= fields[5].GetUInt8() << 16;                   // gender
     SetUInt32Value(UNIT_FIELD_BYTES_0, bytes0);
 
     SetUInt32Value(UNIT_FIELD_LEVEL, fields[6].GetUInt8());
     SetUInt32Value(PLAYER_XP, fields[7].GetUInt32());
 
     _LoadIntoDataField(fields[64].GetCString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
-    _LoadIntoDataField(fields[67].GetCString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2);
+    _LoadIntoDataField(fields[67].GetCString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE*2);
 
     SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, DEFAULT_WORLD_OBJECT_SIZE);
     SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
@@ -17556,10 +17565,14 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     SetUInt32Value(PLAYER_FLAGS, fields[11].GetUInt32());
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[48].GetUInt32());
 
+    //SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
+
+    //SetUInt32Value(PLAYER_AMMO_ID, fields[63].GetUInt32());
+
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
     SetByteValue(PLAYER_FIELD_BYTES, 2, fields[68].GetUInt8());
 
-    m_currentPetSlot = (PetSlot) fields[69].GetUInt32();
+    m_currentPetSlot = (PetSlot)fields[69].GetUInt32();
     m_petSlotUsed = fields[70].GetUInt32();
 
     InitDisplayIds();
@@ -17585,10 +17598,10 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     if (!_LoadHomeBind(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADHOMEBIND)))
         return false;
 
-    InitPrimaryProfessions();          // to max set before any spell loaded
+    InitPrimaryProfessions();                               // to max set before any spell loaded
 
     // init saved position, and fix it later if problematic
-    uint32 transGUID = uint32(fields[30].GetUInt64());          // field type is uint64 but lowguid is saved
+    uint32 transGUID = uint32(fields[30].GetUInt64());   // field type is uint64 but lowguid is saved
     Relocate(fields[12].GetFloat(), fields[13].GetFloat(), fields[14].GetFloat(), fields[16].GetFloat());
     uint32 mapId = fields[15].GetUInt32();
     uint32 instanceId = fields[61].GetUInt32();
@@ -17600,7 +17613,7 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     if (raidDiff >= MAX_RAID_DIFFICULTY)
         raidDiff = RAID_DIFFICULTY_10MAN_NORMAL;
     SetDungeonDifficulty(Difficulty(dungeonDiff));          // may be changed in _LoadGroup
-    SetRaidDifficulty(Difficulty(raidDiff));          // may be changed in _LoadGroup
+    SetRaidDifficulty(Difficulty(raidDiff));                // may be changed in _LoadGroup
 
     std::string taxi_nodes = fields[37].GetString();
 
@@ -17631,9 +17644,9 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
             SetArenaTeamInfoField(arena_slot, ArenaTeamInfoType(j), 0);
     }
 
-    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[43].GetUInt32());
-    SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[44].GetUInt16());
-    SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[45].GetUInt16());
+    SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, fields[45].GetUInt32());
+    SetUInt16Value(PLAYER_FIELD_KILLS, 0, fields[46].GetUInt16());
+    SetUInt16Value(PLAYER_FIELD_KILLS, 1, fields[47].GetUInt16());
 
     _LoadBoundInstances(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadInstanceTimeRestrictions(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES));
@@ -17649,7 +17662,7 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     else if (mapEntry && mapEntry->IsBattlegroundOrArena())
     {
         Battleground *currentBg = NULL;
-        if (m_bgData.bgInstanceID)          //saved in Battleground
+        if (m_bgData.bgInstanceID)                                                //saved in Battleground
             currentBg = sBattlegroundMgr->GetBattleground(m_bgData.bgInstanceID, BATTLEGROUND_TYPE_NONE);
 
         bool player_at_bg = currentBg && currentBg->IsPlayerInBattleground(GetGUID());
@@ -17676,10 +17689,9 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
 
             // Do not look for instance if bg not found
             const WorldLocation& _loc = GetBattlegroundEntryPoint();
-            mapId = _loc.GetMapId();
-            instanceId = 0;
+            mapId = _loc.GetMapId(); instanceId = 0;
 
-            if (mapId == MAPID_INVALID)          // Battleground Entry Point not found (???)
+            if (mapId == MAPID_INVALID) // Battleground Entry Point not found (???)
             {
                 sLog->outError("Player (guidlow %d) was in BG in database, but BG was not found, and entry point was invalid! Teleport to default race/class locations.", guid);
                 RelocateToHomebind();
@@ -17697,11 +17709,15 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
         m_movementInfo.t_guid = MAKE_NEW_GUID(transGUID, 0, HIGHGUID_MO_TRANSPORT);
         m_movementInfo.t_pos.Relocate(fields[26].GetFloat(), fields[27].GetFloat(), fields[28].GetFloat(), fields[29].GetFloat());
 
-        if (!Trinity::IsValidMapCoord(GetPositionX() + m_movementInfo.t_pos.m_positionX, GetPositionY() + m_movementInfo.t_pos.m_positionY, GetPositionZ() + m_movementInfo.t_pos.m_positionZ, GetOrientation() + m_movementInfo.t_pos.m_orientation) ||
-        // transport size limited
-        m_movementInfo.t_pos.m_positionX > 250 || m_movementInfo.t_pos.m_positionY > 250 || m_movementInfo.t_pos.m_positionZ > 250)
+        if (!Trinity::IsValidMapCoord(
+            GetPositionX()+m_movementInfo.t_pos.m_positionX, GetPositionY()+m_movementInfo.t_pos.m_positionY,
+            GetPositionZ()+m_movementInfo.t_pos.m_positionZ, GetOrientation()+m_movementInfo.t_pos.m_orientation) ||
+            // transport size limited
+            m_movementInfo.t_pos.m_positionX > 250 || m_movementInfo.t_pos.m_positionY > 250 || m_movementInfo.t_pos.m_positionZ > 250)
         {
-            sLog->outError("Player (guidlow %d) have invalid transport coordinates (X: %f Y: %f Z: %f O: %f). Teleport to bind location.", guid, GetPositionX() + m_movementInfo.t_pos.m_positionX, GetPositionY() + m_movementInfo.t_pos.m_positionY, GetPositionZ() + m_movementInfo.t_pos.m_positionZ, GetOrientation() + m_movementInfo.t_pos.m_orientation);
+            sLog->outError("Player (guidlow %d) have invalid transport coordinates (X: %f Y: %f Z: %f O: %f). Teleport to bind location.",
+                guid, GetPositionX()+m_movementInfo.t_pos.m_positionX, GetPositionY()+m_movementInfo.t_pos.m_positionY,
+                GetPositionZ()+m_movementInfo.t_pos.m_positionZ, GetOrientation()+m_movementInfo.t_pos.m_orientation);
 
             RelocateToHomebind();
         }
@@ -17719,7 +17735,8 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
             }
             if (!m_transport)
             {
-                sLog->outError("Player (guidlow %d) have problems with transport guid (%u). Teleport to bind location.", guid, transGUID);
+                sLog->outError("Player (guidlow %d) have problems with transport guid (%u). Teleport to bind location.",
+                    guid, transGUID);
 
                 RelocateToHomebind();
             }
@@ -17743,12 +17760,12 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
             if (uint32 node_id = m_taxi.GetTaxiSource())
                 nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
 
-            if (!nodeEntry)          // don't know taxi start node, to homebind
+            if (!nodeEntry)                                      // don't know taxi start node, to homebind
             {
                 sLog->outError("Character %u have wrong data in taxi destination list, teleport to homebind.", GetGUIDLow());
                 RelocateToHomebind();
             }
-            else          // have start node, to it
+            else                                                // have start node, to it
             {
                 sLog->outError("Character %u have too short taxi destination list, teleport to original node.", GetGUIDLow());
                 mapId = nodeEntry->map_id;
@@ -17763,7 +17780,7 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
             TaxiNodesEntry const* nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
             if (nodeEntry && nodeEntry->map_id == GetMapId())
             {
-                ASSERT(nodeEntry);          // checked in m_taxi.LoadTaxiDestinationsFromString
+                ASSERT(nodeEntry);                                  // checked in m_taxi.LoadTaxiDestinationsFromString
                 mapId = nodeEntry->map_id;
                 Relocate(nodeEntry->x, nodeEntry->y, nodeEntry->z, 0.0f);
             }
@@ -17844,7 +17861,7 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
 
     // randomize first save time in range [CONFIG_INTERVAL_SAVE] around [CONFIG_INTERVAL_SAVE]
     // this must help in case next save after mass player load after server startup
-    m_nextSave = urand(m_nextSave / 2, m_nextSave * 3 / 2);
+    m_nextSave = urand(m_nextSave/2, m_nextSave*3/2);
 
     SaveRecallPosition();
 
@@ -17852,26 +17869,26 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     time_t logoutTime = time_t(fields[22].GetUInt32());
 
     // since last logout (in seconds)
-    uint32 time_diff = uint32(now - logoutTime);          //uint64 is excessive for a time_diff in seconds.. uint32 allows for 136~ year difference.
+    uint32 time_diff = uint32(now - logoutTime); //uint64 is excessive for a time_diff in seconds.. uint32 allows for 136~ year difference.
 
     // set value, including drunk invisibility detection
     // calculate sobering. after 15 minutes logged out, the player will be sober again
     float soberFactor;
-    if (time_diff > 15 * MINUTE)
+    if (time_diff > 15*MINUTE)
         soberFactor = 0;
     else
-        soberFactor = 1 - time_diff / (15.0f * MINUTE);
-    uint16 newDrunkenValue = uint16(soberFactor * (GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE));
+        soberFactor = 1-time_diff/(15.0f*MINUTE);
+    uint16 newDrunkenValue = uint16(soberFactor*(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE));
     SetDrunkValue(newDrunkenValue);
 
     m_cinematic = fields[18].GetUInt8();
-    m_Played_time[PLAYED_TIME_TOTAL] = fields[19].GetUInt32();
-    m_Played_time[PLAYED_TIME_LEVEL] = fields[20].GetUInt32();
+    m_Played_time[PLAYED_TIME_TOTAL]= fields[19].GetUInt32();
+    m_Played_time[PLAYED_TIME_LEVEL]= fields[20].GetUInt32();
 
     m_resetTalentsCost = fields[24].GetUInt32();
     m_resetTalentsTime = time_t(fields[25].GetUInt32());
 
-    m_taxi.LoadTaxiMask(fields[17].GetCString());          // must be before InitTaxiNodesForLevel
+    m_taxi.LoadTaxiMask(fields[17].GetCString());                // must be before InitTaxiNodesForLevel
 
     uint32 extraflags = fields[31].GetUInt16();
 
@@ -17883,8 +17900,8 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     UpdateHonorFields();
 
     m_deathExpireTime = time_t(fields[36].GetUInt32());
-    if (m_deathExpireTime > now + MAX_DEATH_COUNT * DEATH_EXPIRE_STEP)
-        m_deathExpireTime = now + MAX_DEATH_COUNT * DEATH_EXPIRE_STEP - 1;
+    if (m_deathExpireTime > now+MAX_DEATH_COUNT*DEATH_EXPIRE_STEP)
+        m_deathExpireTime = now+MAX_DEATH_COUNT*DEATH_EXPIRE_STEP-1;
 
     // clear channel spell data (if saved at channel spell casting)
     SetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT, 0);
@@ -17926,14 +17943,16 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
         float bubble0 = 0.031f;
         //speed collect rest bonus in offline, in logout, in tavern, city (section/in hour)
         float bubble1 = 0.125f;
-        float bubble = fields[23].GetUInt8() > 0 ? bubble1 * sWorld->getRate(RATE_REST_OFFLINE_IN_TAVERN_OR_CITY) : bubble0 * sWorld->getRate(RATE_REST_OFFLINE_IN_WILDERNESS);
+        float bubble = fields[23].GetUInt8() > 0
+            ? bubble1*sWorld->getRate(RATE_REST_OFFLINE_IN_TAVERN_OR_CITY)
+            : bubble0*sWorld->getRate(RATE_REST_OFFLINE_IN_WILDERNESS);
 
-        SetRestBonus(GetRestBonus() + time_diff * ((float) GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000) * bubble);
+        SetRestBonus(GetRestBonus()+ time_diff*((float)GetUInt32Value(PLAYER_NEXT_LEVEL_XP)/72000)*bubble);
     }
 
     // load skills after InitStatsForLevel because it triggering aura apply also
     _LoadSkills(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADSKILLS));
-    UpdateSkillsForLevel();          //update skills after load, to make sure they are correctly update at player load
+    UpdateSkillsForLevel(); //update skills after load, to make sure they are correctly update at player load
 
     // apply original stats mods before spell loading or item equipment that call before equip _RemoveStatsMods()
 
@@ -18018,7 +18037,7 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     SetHealth(savedHealth > GetMaxHealth() ? GetMaxHealth() : savedHealth);
     for (uint8 i = 0; i < MAX_POWERS; ++i)
     {
-        uint32 savedPower = fields[51 + i].GetUInt32();
+        uint32 savedPower = fields[51+i].GetUInt32();
         SetPower(Powers(i), savedPower > GetMaxPower(Powers(i)) ? GetMaxPower(Powers(i)) : savedPower);
     }
 
@@ -18030,69 +18049,57 @@ bool Player::_LoadFromDB (uint32 guid, SQLQueryHolder * holder, PreparedQueryRes
     {
         switch (sWorld->getIntConfig(CONFIG_GM_LOGIN_STATE))
         {
-        default:
-        case 0:
-            break;          // disable
-        case 1:
-            SetGameMaster(true);
-            break;          // enable
-        case 2:          // save state
-            if (extraflags & PLAYER_EXTRA_GM_ON)
-                SetGameMaster(true);
-            break;
+            default:
+            case 0:                      break;             // disable
+            case 1: SetGameMaster(true); break;             // enable
+            case 2:                                         // save state
+                if (extraflags & PLAYER_EXTRA_GM_ON)
+                    SetGameMaster(true);
+                break;
         }
 
         switch (sWorld->getIntConfig(CONFIG_GM_VISIBLE_STATE))
         {
-        default:
-        case 0:
-            SetGMVisible(false);
-            break;          // invisible
-        case 1:
-            break;          // visible
-        case 2:          // save state
-            if (extraflags & PLAYER_EXTRA_GM_INVISIBLE)
-                SetGMVisible(false);
-            break;
+            default:
+            case 0: SetGMVisible(false); break;             // invisible
+            case 1:                      break;             // visible
+            case 2:                                         // save state
+                if (extraflags & PLAYER_EXTRA_GM_INVISIBLE)
+                    SetGMVisible(false);
+                break;
         }
 
-        /*switch (sWorld->getIntConfig(CONFIG_GM_ACCEPT_TICKETS))
-         {
-         default:
-         case 0:                        break;           // disable
-         case 1: SetAcceptTicket(true); break;           // enable
-         case 2:                                         // save state
-         if (extraflags & PLAYER_EXTRA_GM_ACCEPT_TICKETS)
-         SetAcceptTicket(true);
-         break;
-         }*/
+        /*switch(sWorld->getIntConfig(CONFIG_GM_ACCEPT_TICKETS))
+        {
+            default:
+            case 0:                        break;           // disable
+            case 1: SetAcceptTicket(true); break;           // enable
+            case 2:                                         // save state
+            if (extraflags & PLAYER_EXTRA_GM_ACCEPT_TICKETS)
+                SetAcceptTicket(true);
+            break;
+        }*/
 
         switch (sWorld->getIntConfig(CONFIG_GM_CHAT))
         {
-        default:
-        case 0:
-            break;          // disable
-        case 1:
-            SetGMChat(true);
-            break;          // enable
-        case 2:          // save state
-            if (extraflags & PLAYER_EXTRA_GM_CHAT)
-                SetGMChat(true);
-            break;
+            default:
+            case 0:                  break;                 // disable
+            case 1: SetGMChat(true); break;                 // enable
+            case 2:                                         // save state
+                if (extraflags & PLAYER_EXTRA_GM_CHAT)
+                    SetGMChat(true);
+                break;
         }
 
         switch (sWorld->getIntConfig(CONFIG_GM_WHISPERING_TO))
         {
-        default:
-        case 0:
-            break;          // disable
-        case 1:
-            SetAcceptWhispers(true);
-            break;          // enable
-        case 2:          // save state
-            if (extraflags & PLAYER_EXTRA_ACCEPT_WHISPERS)
-                SetAcceptWhispers(true);
-            break;
+            default:
+            case 0:                          break;         // disable
+            case 1: SetAcceptWhispers(true); break;         // enable
+            case 2:                                         // save state
+                if (extraflags & PLAYER_EXTRA_ACCEPT_WHISPERS)
+                    SetAcceptWhispers(true);
+                break;
         }
     }
 
@@ -19355,7 +19362,7 @@ bool Player::_LoadHomeBind (PreparedQueryResult result)
 /***                   SAVE SYSTEM                     ***/
 /*********************************************************/
 
-void Player::SaveToDB ()
+void Player::SaveToDB()
 {
     // delay auto save at any saves (manual, in code, or autosave)
     m_nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
@@ -19380,25 +19387,49 @@ void Player::SaveToDB ()
     //      drop stable_slots
     std::ostringstream ss;
     ss << "REPLACE INTO characters (guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
-            "map, instance_id, instance_mode_mask, position_x, position_y, position_z, orientation, "
-            "taximask, online, cinematic, "
-            "totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, resettalents_time, "
-            "trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, "
-            "death_expire_time, taxi_path, totalKills, "
-            "todayKills, yesterdayKills, chosenTitle, watchedFaction, drunk, health, power1, power2, power3, "
-            "power4, power5, power6, power7, power8, power9, power10, latency, speccount, activespec, exploredZones, equipmentCache, ammoId, "
-            "knownTitles, actionBars, currentPetSlot, petSlotUsed) VALUES (" << GetGUIDLow() << ", " << GetSession()->GetAccountId() << ", '" << sql_name << "', " << uint32(getRace()) << ", " << uint32(getClass()) << ", " << uint32(getGender()) << ", " << uint32(getLevel()) << ", " << GetUInt32Value(PLAYER_XP) << ", " << GetMoney() << ", " << GetUInt32Value(PLAYER_BYTES) << ", " << GetUInt32Value(PLAYER_BYTES_2) << ", " << GetUInt32Value(PLAYER_FLAGS) << ", ";
+        "map, instance_id, instance_mode_mask, position_x, position_y, position_z, orientation, "
+        "taximask, online, cinematic, "
+        "totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, resettalents_time, "
+        "trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, "
+        "death_expire_time, taxi_path, totalKills, "
+        "todayKills, yesterdayKills, chosenTitle, watchedFaction, drunk, health, power1, power2, power3, "
+        "power4, power5, power6, power7, power8, power9, power10, latency, speccount, activespec, exploredZones, equipmentCache, ammoId, "
+        "knownTitles, actionBars, currentPetSlot, petSlotUsed) VALUES ("
+        << GetGUIDLow() << ", "
+        << GetSession()->GetAccountId() << ", '"
+        << sql_name << "', "
+        << uint32(getRace()) << ", "
+        << uint32(getClass()) << ", "
+        << uint32(getGender()) << ", "
+        << uint32(getLevel()) << ", "
+        << GetUInt32Value(PLAYER_XP) << ", "
+        << GetMoney() << ", "
+        << GetUInt32Value(PLAYER_BYTES) << ", "
+        << GetUInt32Value(PLAYER_BYTES_2) << ", "
+        << GetUInt32Value(PLAYER_FLAGS) << ", ";
 
     if (!IsBeingTeleported())
     {
-        ss << GetMapId() << ", " << (uint32) GetInstanceId() << ", " << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ", " << finiteAlways(GetPositionX()) << ", " << finiteAlways(GetPositionY()) << ", " << finiteAlways(GetPositionZ()) << ", " << finiteAlways(GetOrientation()) << ", ";
+        ss << GetMapId() << ", "
+        << (uint32)GetInstanceId() << ", "
+        << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ", "
+        << finiteAlways(GetPositionX()) << ", "
+        << finiteAlways(GetPositionY()) << ", "
+        << finiteAlways(GetPositionZ()) << ", "
+        << finiteAlways(GetOrientation()) << ", ";
     }
     else
     {
-        ss << GetTeleportDest().GetMapId() << ", " << (uint32) 0 << ", " << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ", " << finiteAlways(GetTeleportDest().GetPositionX()) << ", " << finiteAlways(GetTeleportDest().GetPositionY()) << ", " << finiteAlways(GetTeleportDest().GetPositionZ()) << ", " << finiteAlways(GetTeleportDest().GetOrientation()) << ", ";
+        ss << GetTeleportDest().GetMapId() << ", "
+        << (uint32)0 << ", "
+        << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ", "
+        << finiteAlways(GetTeleportDest().GetPositionX()) << ", "
+        << finiteAlways(GetTeleportDest().GetPositionY()) << ", "
+        << finiteAlways(GetTeleportDest().GetPositionZ()) << ", "
+        << finiteAlways(GetTeleportDest().GetOrientation()) << ", ";
     }
 
-    ss << m_taxi << ", ";          // string with TaxiMaskSize numbers
+    ss << m_taxi << ", ";                                   // string with TaxiMaskSize numbers
 
     ss << (IsInWorld() ? 1 : 0) << ", ";
 
@@ -19410,8 +19441,8 @@ void Player::SaveToDB ()
     ss << finiteAlways(m_rest_bonus) << ", ";
     ss << uint32(time(NULL)) << ", ";
     ss << (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) ? 1 : 0) << ", ";
-    //save, far from tavern/city
-    //save, but in tavern/city
+                                                            //save, far from tavern/city
+                                                            //save, but in tavern/city
     ss << m_resetTalentsCost << ", ";
     ss << uint32(m_resetTalentsTime) << ", ";
 
@@ -19437,7 +19468,7 @@ void Player::SaveToDB ()
 
     ss << m_taxi.SaveTaxiDestinationsToString() << "', ";
 
-    ss << GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ", ";
+    ss << uint32(0) /*GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS)*/ << ", ";
 
     ss << GetUInt16Value(PLAYER_FIELD_KILLS, 0) << ", ";
 
@@ -19447,7 +19478,7 @@ void Player::SaveToDB ()
 
     ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ", ";
 
-    ss << (uint16) (GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE) << ", ";
+    ss << (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE) << ", ";
 
     ss << GetHealth();
 
@@ -19465,15 +19496,15 @@ void Player::SaveToDB ()
     }
 
     ss << "', '";
-    for (uint32 i = 0; i < EQUIPMENT_SLOT_END * 2; ++i)
+    for (uint32 i = 0; i < EQUIPMENT_SLOT_END * 2; ++i )
     {
         ss << GetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + i) << " ";
     }
 
     ss << "', ";
 
-    ss << uint32(0) /*GetUInt32Value(PLAYER_AMMO_ID)*/<< ", '";
-    for (uint32 i = 0; i < KNOWN_TITLES_SIZE * 2; ++i)
+    ss << uint32(0) /*GetUInt32Value(PLAYER_AMMO_ID)*/ << ", '";
+    for (uint32 i = 0; i < KNOWN_TITLES_SIZE*2; ++i)
     {
         ss << GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES + i) << " ";
     }
@@ -19488,7 +19519,7 @@ void Player::SaveToDB ()
 
     trans->Append(ss.str().c_str());
 
-    if (m_mailsUpdated)          //save mails only when needed
+    if (m_mailsUpdated)                                     //save mails only when needed
         _SaveMail(trans);
 
     _SaveBGData(trans);
@@ -19506,7 +19537,7 @@ void Player::SaveToDB ()
     m_achievementMgr.SaveToDB(trans);
     m_reputationMgr.SaveToDB(trans);
     _SaveEquipmentSets(trans);
-    GetSession()->SaveTutorialsData(trans);          // changed only while character in game
+    GetSession()->SaveTutorialsData(trans);                 // changed only while character in game
     _SaveGlyphs(trans);
     _SaveInstanceTimeRestrictions(trans);
     _SaveCurrency();
@@ -19923,7 +19954,7 @@ void Player::_SaveSpells (SQLTransaction& trans)
     }
 }
 
-void Player::_SaveCurrency ()
+void Player::_SaveCurrency()
 {
     for (PlayerCurrenciesMap::iterator itr = m_currencies.begin(); itr != m_currencies.end();)
     {
