@@ -1,229 +1,187 @@
 /*
- * Copyright (C) 2005 - 2011 MaNGOS <http://www.getmangos.org/>
- *
- * Copyright (C) 2008 - 2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2011 True Blood <http://www.trueblood-servers.com/>
+ * By Asardial
  *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
- /*
- Made By: Jenova
- Project: Atlantiss Core
- SDName: boss_rajh
- SD%Complete: 75%
- SDComment:
- SDCategory: Halls Of Origination
-
- Known Bugs:
-
- TODO:
- 1. Needs Testing
- 2. Missing ScriptTexts
- 3. Check Timers
- */
-
-#include "ScriptMgr.h"
-#include "ScriptedCreature.h"
 #include "ScriptPCH.h"
-#include "halls_of_origination.h"
+#include "ScriptedCreature.h"
+#include "Spell.h"
+#include "SpellAuraEffects.h"
+#include "SpellScript.h"
 
-enum Spells
-{
-    //Rajh
-    SPELL_SUN_STRIKE           = 73872,
-    SPELL_INFERNO_LEAP         = 87647, //Value: 32375 to 37625
-    SPELL_INFERNO_LEAP_2       = 89876, //Value: 120250 to 139750
-    SPELL_SUMMON_SUN_ORB       = 80352,
-    SPELL_BLESSING_OF_THE_SUN  = 76352,
-    SPELL_SUMMON_SOLAR_WIND    = 74104,
+#define spell_soleil 73872 // Coup de soleil 
+#define spell_invocation 80352 // Invocation d'un orbe du soleil
+#define spell_enfer 87653 // Bond du feu d'enfer
+#define spell_vent 89130 // Vents solaires
+#define spell_feu 89131 // Feu solaire
+#define spell_bene 76355 // Bénédiction du soleil
 
-    //Solar Wind
-    SPELL_SOLAR_WIND           = 89130,
-    SPELL_SOLAR_FIRE           = 89131
-};
+#define SPELL_SOLAR 74108
 
 enum Texts
 {
-    SAY_AGGRO    = 0,
-    SAY_KILL     = 1,
-    SAY_DEATH    = 2,
-    SAY_ENERGIZE = 3
+    SAY_AGGRO = 0,
+    SAY_EVENT = 1,
+    SAY_SLAY = 2,
+    SAY_DEATH = 3,
 };
 
-enum EnergizeCords
+/*******
+** Rajh
+********/
+class boss_rajh: public CreatureScript
 {
-    //Find cords for the center of room
-    X = 0,
-    Y = 0,
-    Z = 0
-};
+public: 
+ boss_rajh() : CreatureScript("boss_rajh") { } 
 
-enum Events
-{
-    EVENT_SUN_STRIKE           = 1,
-    EVENT_INFERNO_LEAP         = 2,
-    EVENT_BLESSING_OF_THE_SUN  = 3,
-    EVENT_SUMMON_SUN_ORB       = 4,
-    EVENT_SUMMON_SOLAR_WIND    = 5
-};
+ struct boss_rajhAI : public ScriptedAI
+    {
+        boss_rajhAI(Creature *c) : ScriptedAI(c) {}
 
-class boss_rajh : public CreatureScript
-{
-    public:
-        boss_rajh() : CreatureScript("boss_rajh") { }
-
-        struct boss_rajhAI : public BossAI
+		uint32 soleil;
+        uint32 invocation;
+		uint32 enfer;
+		uint32 vent;
+		uint32 feu;
+		uint32 bene;
+		uint32 slay;
+		
+        void Reset()
         {
-            boss_rajhAI(Creature* creature) : BossAI(creature, DATA_RAJH_EVENT)
-            {
-                instance = me->GetInstanceScript();
-            }
+			soleil = 5000;
+			invocation = 10000; 
+			enfer = 3000;
+			vent = 60000;
+			feu = 15000;
+			bene = 4000;	
+			slay = 9000;		   
+        }
 
-            InstanceScript* instance;
+        void EnterCombat(Unit* /*who*/) 
+        {
+			Talk(SAY_AGGRO);
+        }
 
-            void Reset()
-            {
-                if (instance)
-                    instance->SetData(DATA_RAJH_EVENT, NOT_STARTED);
+        void JustDied(Unit* /*killer*/)
+        {
+			Talk(SAY_DEATH);
+			
+        }
 
-                me->SetPower(POWER_ENERGY, me->GetMaxPower(POWER_ENERGY));
-            }
-
-            void EnterCombat(Unit* /*who*/)
-            {
-                //DoScriptText(SAY_AGGRO, me);
-
-                if (instance)
-                    instance->SetData(DATA_RAJH_EVENT, IN_PROGRESS);
-
-                me->SetPower(POWER_ENERGY, me->GetMaxPower(POWER_ENERGY));
-
-                events.ScheduleEvent(EVENT_SUN_STRIKE, 10000);
-                events.ScheduleEvent(EVENT_INFERNO_LEAP, 15000);
-                events.ScheduleEvent(EVENT_BLESSING_OF_THE_SUN, 12000);
-                events.ScheduleEvent(EVENT_SUMMON_SUN_ORB, 25000);
-                events.ScheduleEvent(EVENT_SUMMON_SOLAR_WIND, 20000);
-
-                DoZoneInCombat();
-            }
-
-            void EnergizeSun()
-            {
-                //DoScriptText(SAY_ENERGIZE, me);
-                me->GetMotionMaster()->MovePoint(0, X, Y, Z);
-                DoCastAOE(SPELL_BLESSING_OF_THE_SUN);
-            }
-
-            void UpdateAI(uint32 const diff)
-            {
+        void UpdateAI(const uint32 diff)
+        {
                 if (!UpdateVictim())
                     return;
 
-                if (me->HasUnitState(UNIT_STAT_CASTING))
-                    return;
-
-                while(uint32 eventId = events.ExecuteEvent())
-                {
-                    switch (eventId)
-                    {
-                        case EVENT_SUN_STRIKE:
-                            DoCast(me->getVictim(), SPELL_SUN_STRIKE);
-                            events.ScheduleEvent(EVENT_SUN_STRIKE, 10000);
-                            break;
-                        case EVENT_INFERNO_LEAP:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
-                                DoCast(target, SPELL_INFERNO_LEAP);
-                            events.ScheduleEvent(EVENT_INFERNO_LEAP, urand(15000, 22000));
-                            break;
-                        case EVENT_BLESSING_OF_THE_SUN:
-                            if (me->GetPower(POWER_ENERGY) == 0)
-                                EnergizeSun();
-                            events.ScheduleEvent(EVENT_BLESSING_OF_THE_SUN, 15000);
-                            break;
-                        case EVENT_SUMMON_SUN_ORB:
-                            DoCast(SPELL_SUMMON_SUN_ORB);
-                            events.ScheduleEvent(EVENT_SUMMON_SUN_ORB, 25000);
-                            break;
-                        case EVENT_SUMMON_SOLAR_WIND:
-                            DoCast(SPELL_SUMMON_SOLAR_WIND);
-                            events.ScheduleEvent(EVENT_SUMMON_SOLAR_WIND, 30000);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                DoMeleeAttackIfReady();
-            }
-
-            void JustDied(Unit* /*who*/)
+            if (soleil<= diff)
             {
-                //DoScriptText(SAY_DEATH, me);
-
-                if (instance)
-                    instance->SetData(DATA_RAJH_EVENT, DONE);
-            }
-        };
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new boss_rajhAI(creature);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, spell_soleil);
+                soleil   = 5000; 
+            } else soleil -= diff; 
+				
+            if (invocation<= diff)
+            {
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, spell_invocation);
+                invocation   = 10000; 
+            } else invocation -= diff; 
+				
+            if (enfer<= diff)
+            {
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, spell_enfer);
+                enfer   = 3000; 
+            } else enfer -= diff; 
+				
+            if (vent<= diff)
+            {
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, spell_vent);
+                vent   = 60000; 
+            } else vent -= diff; 
+				
+            if (feu<= diff)
+            {
+				Talk(SAY_EVENT);
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, spell_feu);
+                feu   = 15000; 
+            } else feu -= diff; 
+				
+            if (bene<= diff)
+            {
+                if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                DoCast(pTarget, spell_bene);
+                bene   = 4000; 
+            } else bene -= diff;
+			
+			if (slay<= diff)
+            {
+                Talk(SAY_SLAY);
+				slay   = 9000; 
+            } else slay -= diff;
+	
+			DoMeleeAttackIfReady();
         }
+    };
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new boss_rajhAI (pCreature);
+    }
+
 };
 
+/***************
+** vent Solaire
+***************/
 class mob_solar_wind : public CreatureScript
 {
 public:
     mob_solar_wind() : CreatureScript("mob_solar_wind") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new mob_solar_windAI(creature);
+        return new mob_solar_windAI(pCreature);
     }
 
     struct mob_solar_windAI : public ScriptedAI
     {
-        mob_solar_windAI(Creature* creature) : ScriptedAI(creature)
+        mob_solar_windAI(Creature* c) : ScriptedAI(c)
         {
-            m_pInstance = (InstanceScript*)creature->GetInstanceScript();
-            Reset();
-        }
+			
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            me->setFaction(16); // Same faction as bosses
+			if (IsHeroic())
+			{
+				DoCast(SPELL_SOLAR);
+			}
 
-        InstanceScript* m_pInstance;
-
-        void EnterCombat(Unit* /*who*/)
-        {
-            DoCast(me, SPELL_SOLAR_FIRE);
-        }
-
-        void Reset()
-        {
-            me->SetReactState(REACT_PASSIVE);
-        }
-
-        void JustDied(Unit* /*killer*/)
-        {
-            // used to despawn corpse immediately
-            me->DespawnOrUnsummon();
+            me->DespawnOrUnsummon(60000);
         }
     };
 };
 
-void AddSC_boss_rajh()
+void AddSC_boss_rajh() 
 {
-    new boss_rajh;
-    new mob_solar_wind;
+    new boss_rajh();
+	new mob_solar_wind();
 }

@@ -1,44 +1,29 @@
 /*
- * Copyright (C) 2005 - 2011 MaNGOS <http://www.getmangos.org/>
- *
- * Copyright (C) 2008 - 2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2011 True Blood <http://www.trueblood-servers.com/>
+ * By Asardial
  *
  * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
- /*
- Made By: Jenova
- Project: Atlantiss Core
- SDName: boss_isiset
- SD%Complete: 90%
- SDComment:
- SDCategory: Halls Of Origination
-
- Known Bugs:
-
- TODO:
- 1. Needs Testing
- 2. Missing ScriptTexts
- 3. Check Timers
- */
-
+#include "ScriptPCH.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
-#include "ScriptPCH.h"
-#include "halls_of_origination.h"
+#include "SpellScript.h"
+#include "SpellAuraEffects.h"
 
 class OrientationCheck : public std::unary_function<Unit*, bool>
 {
@@ -58,21 +43,21 @@ enum Texts
     SAY_AGGRO = 0,
     SAY_SUPERNOVA = 1,
     SAY_KILL_1 = 2,
-    SAY_KILL_2 = 3,
-    SAY_DEATH_1 = 4,
-    SAY_DEATH_2 = 5,
+    SAY_KILL_2 = 2,
+    SAY_DEATH_1 = 3,
+    SAY_DEATH_2 = 3,
 };
 
 enum Spells
 {
-    SPELL_SUPERNOVA             = 74136,
-    SPELL_ASTRAL_RAIN           = 74370,
-    SPELL_CELESTIAL_CALL_P1     = 74362,
-    SPELL_CELESTIAL_CALL_P2     = 74355,
-    SPELL_CELESTIAL_CALL_P3     = 74364,
-    SPELL_VEIL_OF_SKY_P1        = 74133,
-    SPELL_VEIL_OF_SKY_P2        = 74372,
-    SPELL_VEIL_OF_SKY_P3        = 74373,
+    SPELL_SUPERNOVA = 74136,
+    SPELL_ASTRAL_RAIN = 74370,
+    SPELL_CELESTIAL_CALL_P1 = 74362,
+    SPELL_CELESTIAL_CALL_P2 = 74355,
+    SPELL_CELESTIAL_CALL_P3 = 74364,
+    SPELL_VEIL_OF_SKY_P1 = 74133,
+    SPELL_VEIL_OF_SKY_P2 = 74372,
+    SPELL_VEIL_OF_SKY_P3 = 74373,
 };
 
 class boss_isiset : public CreatureScript
@@ -80,16 +65,16 @@ class boss_isiset : public CreatureScript
     public:
         boss_isiset() : CreatureScript("boss_isiset") { }
 
-        CreatureAI* GetAI(Creature* creature) const
+        CreatureAI* GetAI(Creature* pCreature) const
         {
-            return new boss_isisetAI(creature);
+            return new boss_isisetAI(pCreature);
         }
 
         struct boss_isisetAI : public ScriptedAI
         {
-            boss_isisetAI(Creature* creature) : ScriptedAI(creature)
+            boss_isisetAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                pInstance = creature->GetInstanceScript();
+                pInstance = pCreature->GetInstanceScript();
                 SetCombatMovement(true);
             }
 
@@ -112,17 +97,17 @@ class boss_isiset : public CreatureScript
 
             void EnterCombat(Unit *who)
             {
-                //Talk(SAY_AGGRO, 0, 0);
+                Talk(SAY_AGGRO);
             }
 
             void KilledUnit(Unit* victim)
             {
-                //Talk(RAND(SAY_KILL_1, SAY_KILL_2));
+                Talk(RAND(SAY_KILL_1, SAY_KILL_2));
             }
 
             void JustDied(Unit* Killer)
             {
-                //Talk(RAND(SAY_DEATH_1, SAY_DEATH_2));
+                Talk(RAND(SAY_DEATH_1, SAY_DEATH_2));
             }
 
             void Reset()
@@ -145,7 +130,7 @@ class boss_isiset : public CreatureScript
 
             void SummonedCreatureDespawn(Creature* summon)
             {
-                switch (summon->GetEntry())
+                switch(summon->GetEntry())
                 {
                     case 39720: // Astral Rain
                         AstralRain = false;
@@ -184,7 +169,7 @@ class boss_isiset : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-                if ((me->GetHealth() * 100 / me->GetMaxHealth() <= 66) && Phase == 0)
+                if (!HealthAbovePct(66) && Phase == 0)
                 {
                     Phase = 1;
                     Phased = true;
@@ -195,7 +180,7 @@ class boss_isiset : public CreatureScript
                     me->SummonCreature(39722, pos, TEMPSUMMON_CORPSE_DESPAWN, 1000);
                 }
 
-                if ((me->GetHealth() * 100 / me->GetMaxHealth() <= 33) && Phase == 1)
+                if (!HealthAbovePct(33) && Phase == 1)
                 {
                     Phase = 2;
                     Phased = true;
@@ -256,7 +241,7 @@ class boss_isiset : public CreatureScript
 
                 if (SupernovaTimer <= diff && Phased == false)
                 {
-                    //Talk(SAY_SUPERNOVA);
+                    Talk(SAY_SUPERNOVA);
                     DoCast(me->getVictim(), SPELL_SUPERNOVA);
                     SupernovaTimer = 15000+rand()%5000;
                 } else SupernovaTimer -= diff;
@@ -286,8 +271,8 @@ class spell_isiset_supernova : public SpellScriptLoader
 
             void Register()
             {
-                //OnUnitTargetSelect += SpellUnitTargetFn(spell_isiset_supernova_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ENEMY_SRC);
-                //OnUnitTargetSelect += SpellUnitTargetFn(spell_isiset_supernova_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_AREA_ENEMY_SRC);
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_isiset_supernova_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_AREA_ENEMY_SRC);
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_isiset_supernova_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_AREA_ENEMY_SRC);
             }
         };
 

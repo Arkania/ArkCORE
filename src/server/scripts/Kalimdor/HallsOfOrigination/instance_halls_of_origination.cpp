@@ -1,19 +1,23 @@
 /*
-* Copyright (C) 2010 - 2012 SkyFire <http://www.projectskyfire.org/>
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the
-* Free Software Foundation; either version 2 of the License, or (at your
-* option) any later version.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-* more details.
-*
-* You should have received a copy of the GNU General Public License along
-* with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2011 True Blood <http://www.trueblood-servers.com/>
+ * By Asardial
+ *
+ * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 
 #include"ScriptPCH.h"
 #include"halls_of_origination.h"
@@ -55,7 +59,6 @@ public:
         uint64 uiRajh;
         uint64 OriginationElevatorGUID;
         uint64 uiTeamInInstance;
-        uint64 uiAnhuurBridgeGUID;
 
         void Initialize()
         {
@@ -66,16 +69,15 @@ public:
             uiAmmunae = 0;
             uiSetesh = 0;
             uiRajh = 0;
-            uiAnhuurBridgeGUID = 0;
             uint64 OriginationElevatorGUID = 0;
 
-            for (uint8 i=0; i<ENCOUNTERS; ++i)
+            for(uint8 i=0; i<ENCOUNTERS; ++i)
                 uiEncounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
-            for (uint8 i=0; i<ENCOUNTERS; ++i)
+            for(uint8 i=0; i<ENCOUNTERS; ++i)
             {
                 if (uiEncounter[i] == IN_PROGRESS)
                     return true;
@@ -84,55 +86,50 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* creature, bool)
+        void OnCreatureCreate(Creature* pCreature, bool)
         {
-            switch (creature->GetEntry())
+            switch(pCreature->GetEntry())
             {
                 case BOSS_TEMPLE_GUARDIAN_ANHUUR:
-                    uiTempleGuardianAnhuur = creature->GetGUID();
+                    uiTempleGuardianAnhuur = pCreature->GetGUID();
                     break;
                 case BOSS_EARTHRAGER_PTAH:
-                    uiEarthragerPtah = creature->GetGUID();
+                    uiEarthragerPtah = pCreature->GetGUID();
                     break;
                 case BOSS_ANRAPHET:
-                    uiAnraphet = creature->GetGUID();
+                    uiAnraphet = pCreature->GetGUID();
                     break;
                 case BOSS_ISISET:
-                    uiIsiset = creature->GetGUID();
+                    uiIsiset = pCreature->GetGUID();
                     break;
                 case BOSS_AMMUNAE:
-                    uiAmmunae = creature->GetGUID();
+                    uiAmmunae = pCreature->GetGUID();
                     break;
                 case BOSS_SETESH:
-                    uiSetesh = creature->GetGUID();
+                    uiSetesh = pCreature->GetGUID();
                 case BOSS_RAJH:
-                    uiRajh = creature->GetGUID();
+                    uiRajh = pCreature->GetGUID();
             }
         }
 
-        void OnGameObjectCreate(GameObject* go)
+    void OnGameObjectCreate(GameObject* go)
         {
             switch (go->GetEntry()) /* Elevator active switch to second level. Need more info on Id */
-            {
+                {
                 case GO_ORIGINATION_ELEVATOR:
-                    OriginationElevatorGUID = go->GetGUID();
-                    if (GetData(DATA_TEMPLE_GUARDIAN_ANHUUR) == DONE && GetData(DATA_ANRAPHET) == DONE && GetData(DATA_EARTHRAGER_PTAH) == DONE)
-                        {
+                     OriginationElevatorGUID = go->GetGUID();
+                     if (GetData(DATA_TEMPLE_GUARDIAN_ANHUUR) == DONE && GetData(DATA_ANRAPHET) == DONE && GetData(DATA_EARTHRAGER_PTAH) == DONE)
+                         {
                             go->SetUInt32Value(GAMEOBJECT_LEVEL, 0);
                             go->SetGoState(GO_STATE_READY);
-                        }
-                    break;
-                case GO_ANHUUR_BRIDGE:
-                    uiAnhuurBridgeGUID = go->GetGUID();
-                    if (GetData(DATA_TEMPLE_GUARDIAN_ANHUUR) == DONE)
-                            HandleGameObject(uiAnhuurBridgeGUID, true, go);
-                    break;
-            }
+                         }
+                     break;
+                }
         }
 
         uint64 GetData64(uint32 identifier)
         {
-            switch (identifier)
+            switch(identifier)
             {
                 case DATA_TEMPLE_GUARDIAN_ANHUUR:
                     return uiTempleGuardianAnhuur;
@@ -154,7 +151,7 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            switch (type)
+            switch(type)
             {
                 case DATA_TEMPLE_GUARDIAN_ANHUUR:
                     uiEncounter[0] = data;
@@ -179,13 +176,13 @@ public:
                     break;
             }
 
-            if (data == DONE)
-                SaveToDB();
+         if (data == DONE)
+             SaveToDB();
         }
 
         uint32 GetData(uint32 type)
         {
-            switch (type)
+            switch(type)
             {
                 case DATA_TEMPLE_GUARDIAN_ANHUUR:
                     return uiEncounter[0];
@@ -244,7 +241,7 @@ public:
                 uiEncounter[5] = data5;
                 uiEncounter[6] = data6;
 
-                for (uint8 i=0; i<ENCOUNTERS; ++i)
+                for(uint8 i=0; i<ENCOUNTERS; ++i)
                     if (uiEncounter[i] == IN_PROGRESS)
                         uiEncounter[i] = NOT_STARTED;
             }
