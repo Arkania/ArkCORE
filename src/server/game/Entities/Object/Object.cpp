@@ -2219,7 +2219,7 @@ Pet* Player::SummonPet (uint32 entry, float x, float y, float z, float ang, PetT
 {
     Pet* pet = new Pet(this, petType);
 
-    if (petType == SUMMON_PET && pet->LoadPetFromDB(this, entry, 0, false, slotID))
+    if (petType == SUMMON_PET && pet->LoadPetFromDB(this, entry, 0, slotID != PET_SLOT_UNK_SLOT, slotID))
     {
         // Remove Demonic Sacrifice auras (known pet)
         Unit::AuraEffectList const& auraClassScripts = GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
@@ -2237,7 +2237,7 @@ Pet* Player::SummonPet (uint32 entry, float x, float y, float z, float ang, PetT
         if (duration > 0)
             pet->SetDuration(duration);
 
-        return pet;
+        return NULL;
     }
 
     // petentry == 0 for hunter "call pet" (current pet summoned if any)
@@ -2292,7 +2292,7 @@ Pet* Player::SummonPet (uint32 entry, float x, float y, float z, float ang, PetT
         break;
     }
 
-    //map->Add(pet->ToCreature());
+    map->Add(pet->ToCreature());
 
     switch (petType)
     {
@@ -2326,7 +2326,7 @@ Pet* Player::SummonPet (uint32 entry, float x, float y, float z, float ang, PetT
         pet->SetDuration(duration);
 
     //ObjectAccessor::UpdateObjectVisibility(pet);
-    map->Add(pet->ToCreature());
+    //map->Add(pet->ToCreature());
 
     return pet;
 }
