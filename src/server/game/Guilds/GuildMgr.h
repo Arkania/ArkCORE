@@ -1,11 +1,9 @@
 /*
- * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
- *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011-2012 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+ 
 #ifndef _GUILDMGR_H
 #define _GUILDMGR_H
 
@@ -29,9 +28,9 @@
 
 class GuildMgr
 {
-    friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex> ;
-    GuildMgr ();
-    ~GuildMgr ();
+    friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex>;
+    GuildMgr();
+    ~GuildMgr();
 
 public:
     typedef UNORDERED_MAP<uint32, Guild*> GuildContainer;
@@ -46,8 +45,7 @@ public:
     void RemoveGuild(uint32 guildId);
 
     uint32 GenerateGuildId();
-    void SetNextGuildId(uint32 Id)
-    {   NextGuildId = Id;}
+    void SetNextGuildId(uint32 Id) { NextGuildId = Id; }
 
 protected:
     uint32 NextGuildId;
