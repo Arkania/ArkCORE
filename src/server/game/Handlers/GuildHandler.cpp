@@ -537,7 +537,7 @@ void WorldSession::HandleGuildBankDepositMoney(WorldPacket & recv_data)
     recv_data >> money;
 
     if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
-        if (money && GetPlayer()->HasEnoughMoney(uint32(money)))
+        if (money && GetPlayer()->HasEnoughMoney(uint64(money)))
             if (Guild* pGuild = _GetPlayerGuild(this))
                 pGuild->HandleMemberDepositMoney(this, money);
 }

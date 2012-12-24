@@ -99,7 +99,7 @@ void WorldSession::HandlePetitionBuyOpcode (WorldPacket & recv_data)
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
     uint32 charterid = GUILD_CHARTER;
-    uint32 cost = GUILD_CHARTER_COST;
+    uint64 cost = GUILD_CHARTER_COST;
 
     if (sObjectMgr->GetGuildByName(name))
     {

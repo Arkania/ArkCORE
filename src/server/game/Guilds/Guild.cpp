@@ -1684,7 +1684,7 @@ void Guild::HandleBuyBankTab(WorldSession* session, uint8 tabId)
     if (tabId != _GetPurchasedTabsSize())
         return;
 
-    uint32 tabCost = _GetGuildBankTabPrice(tabId) * GOLD;
+    uint64 tabCost = _GetGuildBankTabPrice(tabId) * GOLD;
     if (!tabCost)
         return;
 

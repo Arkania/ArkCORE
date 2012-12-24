@@ -258,7 +258,7 @@ Handler.register_handler(SIGTERM, &SignalTERM);
         irc.setPriority ((ACE_Based::Priority )2);
     }
     else
-        sLog->outString("*** ArkChat Is Disabled. *");
+        sLog->outString("*** IRC Client (ArkChat) is Disabled, see the worldserver.conf. *");
 
     ///- Start up freeze catcher thread
     if (uint32 freeze_delay = sConfig->GetIntDefault("MaxCoreStuckTime", 0)) {
