@@ -31,7 +31,6 @@
 enum PaladinSpells
 {
     PALADIN_SPELL_DIVINE_PLEA                    = 54428,
-    PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF     = 67480,
 
     PALADIN_SPELL_HOLY_SHOCK_R1                  = 20473,
     PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE           = 25912,
@@ -41,20 +40,18 @@ enum PaladinSpells
     SPELL_BLESSING_OF_LOWER_CITY_PALADIN         = 37879,
     SPELL_BLESSING_OF_LOWER_CITY_PRIEST          = 37880,
     SPELL_BLESSING_OF_LOWER_CITY_SHAMAN          = 37881,
-
-    SPELL_DIVINE_PURPOSE_PROC                    = 90174,
+    SPELL_DIVINE_PURPOSE_PROC                    = 90174
 };
 
 // 31850 - Ardent Defender
-class spell_pal_ardent_defender: public SpellScriptLoader
+class spell_pal_ardent_defender : public SpellScriptLoader
 {
 public:
-    spell_pal_ardent_defender () : SpellScriptLoader("spell_pal_ardent_defender") { }
+    spell_pal_ardent_defender() : SpellScriptLoader("spell_pal_ardent_defender") { }
 
-    class spell_pal_ardent_defender_AuraScript: public AuraScript
+    class spell_pal_ardent_defender_AuraScript : public AuraScript
     {
-        PrepareAuraScript(spell_pal_ardent_defender_AuraScript)
-        ;
+        PrepareAuraScript(spell_pal_ardent_defender_AuraScript);
 
         uint32 absorbPct, healPct;
 
@@ -63,20 +60,20 @@ public:
             PAL_SPELL_ARDENT_DEFENDER_HEAL = 66235,
         };
 
-        bool Load ()
+        bool Load()
         {
             healPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_1);
             absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0);
             return GetUnitOwner()->ToPlayer();
         }
 
-        void CalculateAmount (AuraEffect const * /*aurEff*/, int32 & amount, bool & canBeRecalculated)
+        void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount, bool & canBeRecalculated)
         {
             // Set absorbtion amount to unlimited
             amount = -1;
         }
 
-        void Absorb (AuraEffect * aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        void Absorb(AuraEffect * aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
         {
             Unit * pVictim = GetTarget();
             int32 remainingHealth = pVictim->GetHealth() - dmgInfo.GetDamage();
@@ -90,8 +87,10 @@ public:
                 uint32 defenseSkillValue = pVictim->GetDefenseSkillValue();
                 // Max heal when defense skill denies critical hits from raid bosses
                 // Formula: max defense at level + 140 (raiting from gear)
-                uint32 reqDefForMaxHeal = pVictim->getLevel() * 5 + 140;
-                float pctFromDefense = (defenseSkillValue >= reqDefForMaxHeal) ? 1.0f : float(defenseSkillValue) / float(reqDefForMaxHeal);
+                uint32 reqDefForMaxHeal  = pVictim->getLevel() * 5 + 140;
+                float pctFromDefense = (defenseSkillValue >= reqDefForMaxHeal)
+                    ? 1.0f
+                    : float(defenseSkillValue) / float(reqDefForMaxHeal);
 
                 int32 healAmount = int32(pVictim->CountPctFromMaxHealth(uint32(healPct * pctFromDefense)));
                 pVictim->CastCustomSpell(pVictim, PAL_SPELL_ARDENT_DEFENDER_HEAL, &healAmount, NULL, NULL, true, NULL, aurEff);
@@ -100,34 +99,35 @@ public:
             else if (remainingHealth < int32(allowedHealth))
             {
                 // Reduce damage that brings us under 35% (or full damage if we are already under 35%) by x%
-                uint32 damageToReduce = (pVictim->GetHealth() < allowedHealth) ? dmgInfo.GetDamage() : allowedHealth - remainingHealth;
+                uint32 damageToReduce = (pVictim->GetHealth() < allowedHealth)
+                    ? dmgInfo.GetDamage()
+                    : allowedHealth - remainingHealth;
                 absorbAmount = CalculatePctN(damageToReduce, absorbPct);
             }
         }
 
-        void Register ()
+        void Register()
         {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_ardent_defender_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-            OnEffectAbsorb += AuraEffectAbsorbFn(spell_pal_ardent_defender_AuraScript::Absorb, EFFECT_0);
+             DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_ardent_defender_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
+             OnEffectAbsorb += AuraEffectAbsorbFn(spell_pal_ardent_defender_AuraScript::Absorb, EFFECT_0);
         }
     };
 
-    AuraScript *GetAuraScript () const
+    AuraScript *GetAuraScript() const
     {
         return new spell_pal_ardent_defender_AuraScript();
     }
 };
 
-// blesssing of faith
-class spell_pal_blessing_of_faith: public SpellScriptLoader
+class spell_pal_blessing_of_faith : public SpellScriptLoader
 {
 public:
-    spell_pal_blessing_of_faith () : SpellScriptLoader("spell_pal_blessing_of_faith") { }
+    spell_pal_blessing_of_faith() : SpellScriptLoader("spell_pal_blessing_of_faith") { }
 
-    class spell_pal_blessing_of_faith_SpellScript: public SpellScript
+    class spell_pal_blessing_of_faith_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_pal_blessing_of_faith_SpellScript)
-        bool Validate (SpellEntry const * /*spellEntry*/)
+        bool Validate(SpellEntry const * /*spellEntry*/)
         {
             if (!sSpellStore.LookupEntry(SPELL_BLESSING_OF_LOWER_CITY_DRUID))
                 return false;
@@ -140,56 +140,46 @@ public:
             return true;
         }
 
-        void HandleDummy (SpellEffIndex /*effIndex*/)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             if (Unit *unitTarget = GetHitUnit())
             {
                 uint32 spell_id = 0;
-                switch (unitTarget->getClass())
+                switch(unitTarget->getClass())
                 {
-                case CLASS_DRUID:
-                    spell_id = SPELL_BLESSING_OF_LOWER_CITY_DRUID;
-                    break;
-                case CLASS_PALADIN:
-                    spell_id = SPELL_BLESSING_OF_LOWER_CITY_PALADIN;
-                    break;
-                case CLASS_PRIEST:
-                    spell_id = SPELL_BLESSING_OF_LOWER_CITY_PRIEST;
-                    break;
-                case CLASS_SHAMAN:
-                    spell_id = SPELL_BLESSING_OF_LOWER_CITY_SHAMAN;
-                    break;
-                default:
-                    return;          // ignore for non-healing classes
+                    case CLASS_DRUID:   spell_id = SPELL_BLESSING_OF_LOWER_CITY_DRUID; break;
+                    case CLASS_PALADIN: spell_id = SPELL_BLESSING_OF_LOWER_CITY_PALADIN; break;
+                    case CLASS_PRIEST:  spell_id = SPELL_BLESSING_OF_LOWER_CITY_PRIEST; break;
+                    case CLASS_SHAMAN:  spell_id = SPELL_BLESSING_OF_LOWER_CITY_SHAMAN; break;
+                    default: return;                    // ignore for non-healing classes
                 }
 
                 GetCaster()->CastSpell(GetCaster(), spell_id, true);
             }
         }
 
-        void Register ()
+        void Register()
         {
             // add dummy effect spell handler to Blessing of Faith
             OnEffect += SpellEffectFn(spell_pal_blessing_of_faith_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
 
-    SpellScript *GetSpellScript () const
+    SpellScript *GetSpellScript() const
     {
         return new spell_pal_blessing_of_faith_SpellScript();
     }
 };
 
-// holy shock
-class spell_pal_holy_shock: public SpellScriptLoader
+class spell_pal_holy_shock : public SpellScriptLoader
 {
 public:
-    spell_pal_holy_shock () : SpellScriptLoader("spell_pal_holy_shock") { }
+    spell_pal_holy_shock() : SpellScriptLoader("spell_pal_holy_shock") { }
 
-    class spell_pal_holy_shock_SpellScript: public SpellScript
+    class spell_pal_holy_shock_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_pal_holy_shock_SpellScript)
-        bool Validate (SpellEntry const *spellEntry)
+        bool Validate(SpellEntry const *spellEntry)
         {
             if (!sSpellStore.LookupEntry(PALADIN_SPELL_HOLY_SHOCK_R1))
                 return false;
@@ -207,7 +197,7 @@ public:
             return true;
         }
 
-        void HandleDummy (SpellEffIndex /*effIndex*/)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             if (Unit *unitTarget = GetHitUnit())
             {
@@ -217,8 +207,7 @@ public:
 
                 if (caster->IsFriendlyTo(unitTarget))
                 {
-                    caster->CastSpell(unitTarget, sSpellMgr
-                    ->GetSpellWithRank(PALADIN_SPELL_HOLY_SHOCK_R1_HEALING, rank), true, 0);
+                    caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PALADIN_SPELL_HOLY_SHOCK_R1_HEALING, rank), true, 0);
 
                     if (caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
                     {
@@ -235,13 +224,27 @@ public:
                 }
 
                 else
-                caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE, rank), true, 0);
+                    caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE, rank), true, 0);
             }
+        }
+        
+        SpellCastResult CheckCast()
+        {
+            if (Player* target = GetTargetUnit()->ToPlayer())
+            {
+                Player* caster = GetCaster()->ToPlayer();
+                if (caster->GetTeam() != target->GetTeam())
+                {
+                    return SPELL_FAILED_BAD_TARGETS;
+                }
+            }
+            return SPELL_CAST_OK;
         }
 
         void Register()
         {
             // add dummy effect spell handler to Holy Shock
+            OnCheckCast += SpellCheckCastFn(spell_pal_holy_shock_SpellScript::CheckCast);
             OnEffect += SpellEffectFn(spell_pal_holy_shock_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
@@ -252,51 +255,47 @@ public:
     }
 };
 
-// Judgements of the Bold
-class spell_pal_judgements_of_the_bold: public SpellScriptLoader
+class spell_pal_judgements_of_the_bold : public SpellScriptLoader
 {
-public:
-    spell_pal_judgements_of_the_bold () : SpellScriptLoader("spell_pal_judgements_of_the_bold") { }
+    public:
+        spell_pal_judgements_of_the_bold() : SpellScriptLoader("spell_pal_judgements_of_the_bold") { }
 
-    class spell_pal_judgements_of_the_bold_AuraScript: public AuraScript
-    {
-        PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript)
-        ;
-
-        void CalculateMana (AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+        class spell_pal_judgements_of_the_bold_AuraScript : public AuraScript
         {
-            if (Unit* caster = GetCaster())
+            PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript);
+
+            void CalculateMana(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
-                canBeRecalculated = true;
-                int32 basemana = caster->ToPlayer()->GetCreateMana();
-                amount = (3 * basemana) / 100;          // 3% of base mana
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
+                    int32 basemana = caster->ToPlayer()->GetCreateMana();
+                    amount = (3 * basemana) / 100; // 3% of base mana
+                }
             }
-        }
 
-        void Register ()
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_judgements_of_the_bold_AuraScript::CalculateMana, EFFECT_0, SPELL_AURA_PERIODIC_ENERGIZE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
         {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_judgements_of_the_bold_AuraScript::CalculateMana, EFFECT_0, SPELL_AURA_PERIODIC_ENERGIZE);
+            return new spell_pal_judgements_of_the_bold_AuraScript();
         }
-    };
-
-    AuraScript* GetAuraScript () const
-    {
-        return new spell_pal_judgements_of_the_bold_AuraScript();
-    }
 };
 
-// cleanse
-class spell_pal_cleanse: public SpellScriptLoader
+class spell_pal_cleanse : public SpellScriptLoader
 {
 public:
-    spell_pal_cleanse () : SpellScriptLoader("spell_pal_cleanse") { }
-
-    class spell_pal_cleanse_SpellScript: public SpellScript
+    spell_pal_cleanse() : SpellScriptLoader("spell_pal_cleanse") { }
+ 
+    class spell_pal_cleanse_SpellScript : public SpellScript
     {
-        PrepareSpellScript(spell_pal_cleanse_SpellScript)
-        ;
+        PrepareSpellScript(spell_pal_cleanse_SpellScript);
 
-        void RemoveSnare ()
+        void RemoveSnare()
         {
             Unit* caster = GetCaster();
             Unit* target = GetHitUnit();
@@ -304,44 +303,43 @@ public:
             if (!caster || !target)
                 return;
 
-            if (caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PALADIN, 3022, 0) && caster == target && caster->HasAuraType(SPELL_AURA_MOD_ROOT) || caster->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED))
-
-                caster->RemoveAurasWithMechanic((1 << MECHANIC_ROOT) | (1 << MECHANIC_SNARE), AURA_REMOVE_BY_DEFAULT, 0, 1);
+            if (caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PALADIN, 3022, 0) && caster == target
+                && caster->HasAuraType(SPELL_AURA_MOD_ROOT) || caster->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED))
+                
+                caster->RemoveAurasWithMechanic((1<<MECHANIC_ROOT)|(1<<MECHANIC_SNARE),AURA_REMOVE_BY_DEFAULT,0,1);
         }
-
-        void Register ()
+ 
+        void Register()
         {
             AfterHit += SpellHitFn(spell_pal_cleanse_SpellScript::RemoveSnare);
         }
     };
-
-    SpellScript* GetSpellScript () const
+ 
+    SpellScript* GetSpellScript() const
     {
         return new spell_pal_cleanse_SpellScript();
     }
 };
 
-// Word of Glory
-class spell_pal_word_of_glory: public SpellScriptLoader
+class spell_pal_word_of_glory : public SpellScriptLoader
 {
 public:
-    spell_pal_word_of_glory () : SpellScriptLoader("spell_pal_word_of_glory") { }
-
-    class spell_pal_word_of_glory_heal_SpellScript: public SpellScript
+    spell_pal_word_of_glory() : SpellScriptLoader("spell_pal_word_of_glory") { }
+ 
+    class spell_pal_word_of_glory_heal_SpellScript : public SpellScript
     {
-        PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript)
-        ;
-
+        PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript);
+ 
         uint32 totalheal;
 
-        bool Load ()
+        bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
             return true;
         }
 
-        void ChangeHeal (SpellEffIndex /*effIndex*/)
+        void ChangeHeal(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
             Unit* target = GetHitUnit();
@@ -364,21 +362,21 @@ public:
 
             switch (caster->GetPower(POWER_HOLY_POWER))
             {
-            case 0:          // 1 Holy Power
-            {
-                totalheal = GetHitHeal();
-                break;
-            }
-            case 1:          // 2 Holy Power
-            {
-                totalheal = GetHitHeal() * 2;
-                break;
-            }
-            case 2:          // 3 Holy Power
-            {
-                totalheal = GetHitHeal() * 3;
-                break;
-            }
+                case 0: // 1 Holy Power
+                {
+                    totalheal = GetHitHeal();
+                    break;
+                }
+                case 1: // 2 Holy Power
+                {
+                    totalheal = GetHitHeal() * 2;
+                    break;
+                }
+                case 2: // 3 Holy Power
+                {
+                    totalheal = GetHitHeal() * 3;
+                    break;
+                }
             }
             // Selfless Healer
             if (AuraEffect const* auraEff = caster->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 3924, EFFECT_0))
@@ -388,174 +386,167 @@ public:
             SetHitHeal(totalheal);
         }
 
-        void Register ()
+        void Register()
         {
             OnEffect += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
         }
     };
 
-    SpellScript* GetSpellScript () const
+    SpellScript* GetSpellScript() const
     {
         return new spell_pal_word_of_glory_heal_SpellScript();
     }
 };
 
-// Selfless Healer
-class spell_pal_selfless_healer: public SpellScriptLoader
+class spell_pal_selfless_healer : public SpellScriptLoader
 {
-public:
-    spell_pal_selfless_healer () : SpellScriptLoader("spell_pal_selfless_healer") { }
+    public:
+        spell_pal_selfless_healer() : SpellScriptLoader("spell_pal_selfless_healer") { }
 
-    class spell_pal_selfless_healer_AuraScript: public AuraScript
-    {
-        PrepareAuraScript(spell_pal_selfless_healer_AuraScript)
-        ;
-
-        void CalculateBonus (AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+        class spell_pal_selfless_healer_AuraScript : public AuraScript
         {
-            if (Unit* caster = GetCaster())
+            PrepareAuraScript(spell_pal_selfless_healer_AuraScript);
+
+            void CalculateBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
-                canBeRecalculated = true;
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
 
-                if (caster->HasAura(SPELL_DIVINE_PURPOSE_PROC))
-                {
-                    amount = 12;
-                    return;
-                }
+                    if (caster->HasAura(SPELL_DIVINE_PURPOSE_PROC))
+                    {
+                        amount = 12;
+                        return;
+                    }
 
-                switch (caster->GetPower(POWER_HOLY_POWER))
-                {
-                case 0:          // 1 Holy Power
-                {
-                    amount = 4;
-                    break;
-                }
-                case 1:          // 2 Holy Power
-                {
-                    amount = 8;
-                    break;
-                }
-                case 2:          // 3 Holy Power
-                {
-                    amount = 12;
-                    break;
-                }
+                    switch (caster->GetPower(POWER_HOLY_POWER))
+                    {
+                        case 0: // 1 Holy Power
+                        {
+                            amount = 4;
+                            break;
+                        }
+                        case 1: // 2 Holy Power
+                        {
+                            amount = 8;
+                            break;
+                        }
+                        case 2: // 3 Holy Power
+                        {
+                            amount = 12;
+                            break;
+                        }
+                    }
                 }
             }
-        }
 
-        void Register ()
-        {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_selfless_healer_AuraScript::CalculateBonus, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
-        }
-    };
-
-    AuraScript* GetAuraScript () const
-    {
-        return new spell_pal_selfless_healer_AuraScript();
-    }
-};
-
-// Judgements of the Wise
-class spell_pal_judgements_of_the_wise: public SpellScriptLoader
-{
-public:
-    spell_pal_judgements_of_the_wise () : SpellScriptLoader("spell_pal_judgements_of_the_wise") { }
-
-    class spell_pal_judgements_of_the_wise_AuraScript: public AuraScript
-    {
-        PrepareAuraScript(spell_pal_judgements_of_the_wise_AuraScript)
-        ;
-
-        void CalculateMana (AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
-        {
-            if (Unit* caster = GetCaster())
+            void Register()
             {
-                canBeRecalculated = true;
-                int32 basemana = caster->ToPlayer()->GetCreateMana();
-                amount = (3 * basemana) / 100;          // 3% of base mana
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_selfless_healer_AuraScript::CalculateBonus, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
             }
-        }
+        };
 
-        void Register ()
+        AuraScript* GetAuraScript() const
         {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_judgements_of_the_wise_AuraScript::CalculateMana, EFFECT_0, SPELL_AURA_PERIODIC_ENERGIZE);
+            return new spell_pal_selfless_healer_AuraScript();
         }
-    };
-
-    AuraScript* GetAuraScript () const
-    {
-        return new spell_pal_judgements_of_the_wise_AuraScript();
-    }
 };
 
-// Light of Dawn
-class spell_pal_light_of_dawn: public SpellScriptLoader
+// 63521 Guarded by The Light
+class spell_pal_guarded_by_the_light : public SpellScriptLoader
 {
 public:
-    spell_pal_light_of_dawn () : SpellScriptLoader("spell_pal_light_of_dawn") { }
+    spell_pal_guarded_by_the_light() : SpellScriptLoader("spell_pal_guarded_by_the_light") { }
 
-    class spell_pal_light_of_dawn_SpellScript: public SpellScript
+    class spell_pal_guarded_by_the_light_SpellScript : public SpellScript
     {
-        PrepareSpellScript(spell_pal_light_of_dawn_SpellScript)
-        ;
-
-        uint32 totalheal;
-
-        bool Load ()
+        PrepareSpellScript(spell_pal_guarded_by_the_light_SpellScript)
+        bool Validate(SpellEntry const* /*spellEntry*/)
         {
-            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+            if (!sSpellStore.LookupEntry(PALADIN_SPELL_DIVINE_PLEA))
                 return false;
-
             return true;
         }
 
-        void ChangeHeal (SpellEffIndex /*effIndex*/)
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            Unit* caster = GetCaster();
-            Unit* target = GetHitUnit();
-
-            if (!target)
-                return;
-
-            if (target == caster)
-                return;
-
-            switch (caster->GetPower(POWER_HOLY_POWER))
-            {
-            case 0:          // 1 Holy Power
-            {
-                totalheal = GetHitHeal();
-                break;
-            }
-            case 1:          // 2 Holy Power
-            {
-                totalheal = GetHitHeal() * 2;
-                break;
-            }
-            case 2:          // 3 Holy Power
-            {
-                totalheal = GetHitHeal() * 3;
-                break;
-            }
-            }
-            SetHitHeal(totalheal);
-            caster->SetPower(POWER_HOLY_POWER, 0);
+            // Divine Plea
+            if (Aura* aura = GetCaster()->GetAura(PALADIN_SPELL_DIVINE_PLEA))
+                aura->RefreshDuration();
         }
 
-        void Register ()
+        void Register()
         {
-            OnEffect += SpellEffectFn(spell_pal_light_of_dawn_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+            OnEffectHitTarget += SpellEffectFn(spell_pal_guarded_by_the_light_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
 
-    SpellScript* GetSpellScript () const
+    SpellScript* GetSpellScript() const
     {
-        return new spell_pal_light_of_dawn_SpellScript();
+        return new spell_pal_guarded_by_the_light_SpellScript();
     }
 };
 
-void AddSC_paladin_spell_scripts ()
+class spell_pal_judgement_of_command : public SpellScriptLoader
+{
+public:
+    spell_pal_judgement_of_command() : SpellScriptLoader("spell_pal_judgement_of_command") { }
+
+    class spell_pal_judgement_of_command_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_judgement_of_command_SpellScript)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* unitTarget = GetHitUnit())
+                if (SpellEntry const* spell_proto = sSpellStore.LookupEntry(GetEffectValue()))
+                    GetCaster()->CastSpell(unitTarget, spell_proto, true, NULL);
+        }
+
+        void Register()
+        {
+            // add dummy effect spell handler to Judgement of Command
+            OnEffectHitTarget += SpellEffectFn(spell_pal_judgement_of_command_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_judgement_of_command_SpellScript();
+    }
+};
+
+class spell_pal_judgements_of_the_wise : public SpellScriptLoader
+{
+    public:
+        spell_pal_judgements_of_the_wise() : SpellScriptLoader("spell_pal_judgements_of_the_wise") { }
+
+        class spell_pal_judgements_of_the_wise_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_pal_judgements_of_the_wise_AuraScript);
+
+            void CalculateMana(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
+                    int32 basemana = caster->ToPlayer()->GetCreateMana();
+                    amount = (3 * basemana) / 100; // 3% of base mana
+                }
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_judgements_of_the_wise_AuraScript::CalculateMana, EFFECT_0, SPELL_AURA_PERIODIC_ENERGIZE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_pal_judgements_of_the_wise_AuraScript();
+        }
+};
+
+void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
     new spell_pal_blessing_of_faith();
@@ -564,6 +555,7 @@ void AddSC_paladin_spell_scripts ()
     new spell_pal_cleanse();
     new spell_pal_word_of_glory();
     new spell_pal_selfless_healer();
+    new spell_pal_guarded_by_the_light();
+    new spell_pal_judgement_of_command();
     new spell_pal_judgements_of_the_wise();
-    new spell_pal_light_of_dawn();
 }
