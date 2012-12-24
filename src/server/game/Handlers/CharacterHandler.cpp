@@ -898,10 +898,15 @@ void WorldSession::HandlePlayerLogin (LoginQueryHolder * holder)
             uint32 PlayersNum = sWorld->GetPlayerCount();
             uint32 MaxPlayersNum = sWorld->GetMaxPlayerCount();
             std::string uptime = secsToTimeString(sWorld->GetUptime());
-
+			
+			chH.PSendSysMessage(".........................................");
             chH.PSendSysMessage(_CLIENT_BUILD_REVISION,   _FULLVERSION);
             chH.PSendSysMessage(LANG_CONNECTED_PLAYERS,   PlayersNum,   MaxPlayersNum);
             chH.PSendSysMessage(LANG_UPTIME,   uptime.c_str());
+			chH.PSendSysMessage(".........................................");
+			chH.PSendSysMessage("ARKANIA.NET Community <http://arkania.net/>");
+			chH.PSendSysMessage("Type: .credits for read the info.");
+			chH.PSendSysMessage(".........................................");
 
             sLog->outStaticDebug("WORLD: Sent server info");
         }

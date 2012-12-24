@@ -31,6 +31,7 @@
 #include "LootMgr.h"
 #include "QueryResult.h"
 #include "SharedDefines.h"
+#include "../Battlefields/Battlefield.h" // TODO: Fix this!
 
 class Creature;
 class GroupReference;
@@ -237,6 +238,7 @@ public:
 
     // some additional raid methods
     void SetBattlegroundGroup(Battleground *bg);
+	void SetBattlefieldGroup(Battlefield* bf);
     GroupJoinBattlegroundResult CanJoinBattlegroundQueue(Battleground const* bgOrTemplate, BattlegroundQueueTypeId bgQueueTypeId, uint32 MinPlayerCount, uint32 MaxPlayerCount, bool isRated, uint32 arenaSlot);
 
     void ChangeMembersGroup(const uint64 &guid, const uint8 &group);
@@ -332,6 +334,7 @@ protected:
     Difficulty m_dungeonDifficulty;
     Difficulty m_raidDifficulty;
     Battleground* m_bgGroup;
+	Battlefield*  m_bfGroup;
     uint64 m_targetIcons[TARGETICONCOUNT];
     LootMethod m_lootMethod;
     uint64 m_looterGuid;

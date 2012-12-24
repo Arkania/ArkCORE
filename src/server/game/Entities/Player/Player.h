@@ -2830,6 +2830,7 @@ public:
 
     // Battleground Group System
     void SetBattlegroundRaid(Group *group, int8 subgroup = -1);
+	void SetBattlegroundOrBattlefieldRaid(Group *group, int8 subgroup = -1);
     void RemoveFromBattlegroundRaid();
     Group * GetOriginalGroup()
     {   return m_originalGroup.getTarget();}
