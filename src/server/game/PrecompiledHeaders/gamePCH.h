@@ -38,6 +38,7 @@
 #include "SharedDefines.h"
 #include "ObjectMgr.h"
 #include "Util.h"
+#include "Calendar.h"
 
 #endif /* ARKCORE_COREPCH */
 #endif  /* _GAMEPCH_H */
