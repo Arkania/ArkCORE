@@ -2543,9 +2543,9 @@ Tol Barad.PlayerMin = 0
 #
 #    Tol Barad.PlayerMinLvl
 #         Min player level allowed in Tol Barad
-#         Default: 85
+#         Default: 80
 
-Tol Barad.PlayerMinLvl = 85
+Tol Barad.PlayerMinLvl = 80
 
 #
 #    Tol Barad.BattleTimer

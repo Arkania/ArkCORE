@@ -31,6 +31,8 @@ void AddSC_example_misc ();
 //player scripts
 void AddSC_player_mage_scripts ();
 void AddSC_example_commandscript ();
+// Custom
+void AddSC_transmogrify_script();
 
 // spells
 void AddSC_deathknight_spell_scripts ();
@@ -604,6 +606,18 @@ void AddSC_shadowmoon_valley();
 void AddSC_shattrath_city();
 void AddSC_terokkar_forest();
 void AddSC_zangarmarsh();
+
+// Boss Faction
+void AddSC_boss_baine_sabot_de_sang();  // Boss Faction
+void AddSC_boss_dame_sylvanas_coursevent();
+void AddSC_boss_falstad_marteau_hardi();
+void AddSC_boss_garrosh_hurlenfer();
+void AddSC_boss_grand_magistere_rommath();
+void AddSC_boss_prophete_velen();
+void AddSC_boss_tyrande_murmevent();
+void AddSC_boss_varian_wrynn();
+void AddSC_mob_orgrimmar();
+void AddSC_mob_hurlevent();
 
 // Cataclysm Scripts
 
@@ -1329,6 +1343,18 @@ void AddNorthrendScripts ()
     AddSC_crystalsong_forest();
     AddSC_isle_of_conquest();
     AddSC_wintergrasp();
+	
+    // Boss Faction
+    AddSC_boss_baine_sabot_de_sang();  // Boss Faction
+    AddSC_boss_dame_sylvanas_coursevent();
+    AddSC_boss_falstad_marteau_hardi();
+    AddSC_boss_garrosh_hurlenfer();
+    AddSC_boss_grand_magistere_rommath();
+    AddSC_boss_prophete_velen();
+    AddSC_boss_tyrande_murmevent();
+    AddSC_boss_varian_wrynn();
+    AddSC_mob_orgrimmar();
+    AddSC_mob_hurlevent();	
 
     // Cataclysm Scripts
 	AddSC_boss_azil();//TheStonecore
@@ -1429,6 +1455,7 @@ void AddCustomScripts ()
 {
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
+	AddSC_transmogrify_script();
 
 #endif
 }
