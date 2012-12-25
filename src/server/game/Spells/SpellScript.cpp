@@ -579,6 +579,26 @@ bool AuraScript::_Validate (SpellEntry const * entry)
     return _SpellScript::_Validate(entry);
 }
 
+AuraScript::CheckAreaTargetHandler::CheckAreaTargetHandler(AuraCheckAreaTargetFnType _pHandlerScript)
+{
+    pHandlerScript = _pHandlerScript;
+}
+
+bool AuraScript::CheckAreaTargetHandler::Call(AuraScript* auraScript, Unit* _target)
+{
+    return (auraScript->*pHandlerScript)(_target);
+}
+
+AuraScript::AuraDispelHandler::AuraDispelHandler(AuraDispelFnType _pHandlerScript)
+{
+    pHandlerScript = _pHandlerScript;
+}
+
+void AuraScript::AuraDispelHandler::Call(AuraScript* auraScript, DispelInfo* _dispelInfo)
+{
+    (auraScript->*pHandlerScript)(_dispelInfo);
+}
+
 AuraScript::EffectBase::EffectBase (uint8 _effIndex, uint16 _effName) :
         _SpellScript::EffectAuraNameCheck(_effName), _SpellScript::EffectHook(_effIndex)
 {
