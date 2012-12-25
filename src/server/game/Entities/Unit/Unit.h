@@ -1200,6 +1200,10 @@ public:
     {
         return uint32(float(pct) * GetMaxHealth() / 100.0f);
     }
+    inline uint32 CountPctFromCurHealth (int32 pct) const
+    {
+        return uint32(float(pct) * GetMaxHealth() / 100.0f);
+    }
 
     void SetHealth (uint32 val);
     void SetMaxHealth (uint32 val);
