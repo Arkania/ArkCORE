@@ -1252,6 +1252,8 @@ bool Player::Create (uint32 guidlow, const std::string& name, uint8 race, uint8 
     }
     SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_REGENERATE_POWER);
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);          // fix cast time showed in spell tooltip on client
+    SetFloatValue(PLAYER_FIELD_MOD_HASTE, 1.0f);
+    SetFloatValue(PLAYER_FIELD_MOD_RANGED_HASTE, 1.0f);	
     SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 1.0f);          // default for players in 3.0.3
 
     // -1 is default value
@@ -3559,7 +3561,9 @@ void Player::InitStatsForLevel (bool reapplyMods)
     UpdateSkillsForLevel();
 
     // set default cast time multiplier
-    SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
+    SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f); //Spell
+    SetFloatValue(PLAYER_FIELD_MOD_HASTE, 1.0f); // Melee
+    SetFloatValue(PLAYER_FIELD_MOD_RANGED_HASTE, 1.0f); // Ranged	
 
     // reset size before reapply auras
     SetFloatValue(OBJECT_FIELD_SCALE_X, 1.0f);
@@ -4964,6 +4968,8 @@ void Player::InitVisibleBits ()
     updateVisualBits.SetBit(UNIT_DYNAMIC_FLAGS);
     updateVisualBits.SetBit(UNIT_CHANNEL_SPELL);
     updateVisualBits.SetBit(UNIT_MOD_CAST_SPEED);
+    updateVisualBits.SetBit(PLAYER_FIELD_MOD_HASTE);
+    updateVisualBits.SetBit(PLAYER_FIELD_MOD_RANGED_HASTE);	
     updateVisualBits.SetBit(UNIT_FIELD_BASE_MANA);
     updateVisualBits.SetBit(UNIT_FIELD_BYTES_2);
     updateVisualBits.SetBit(UNIT_FIELD_HOVERHEIGHT);
