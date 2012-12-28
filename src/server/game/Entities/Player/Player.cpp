@@ -23941,6 +23941,16 @@ bool Player::isUsingLfg ()
     return sLFGMgr->GetState(guid) != LFG_STATE_NONE;
 }
 
+void Player::SetBattlegroundOrBattlefieldRaid(Group* group, int8 subgroup)
+{
+    //we must move references from m_group to m_originalGroup
+    SetOriginalGroup(GetGroup(), GetSubGroup());
+
+    m_group.unlink();
+    m_group.link(group, this);
+    m_group.setSubGroup((uint8)subgroup);
+}
+
 void Player::SetBattlegroundRaid (Group* group, int8 subgroup)
 {
     //we must move references from m_group to m_originalGroup
