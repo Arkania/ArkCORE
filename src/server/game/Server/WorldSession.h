@@ -39,9 +39,6 @@ struct AuctionEntry;
 struct DeclinedName;
 struct MovementInfo;
 
-class CalendarEvent;
-class CalendarInvite;
-class InstanceSave;
 class Creature;
 class Item;
 class Object;
@@ -920,22 +917,7 @@ public:
     void HandleCalendarEventModeratorStatus (WorldPacket& recv_data);
     void HandleCalendarComplain (WorldPacket& recv_data);
     void HandleCalendarGetNumPending (WorldPacket& recv_data);
-	void HandleCalendarEventSignup(WorldPacket& recvData);
 
-    void SendCalendarEvent(CalendarEvent const& calendarEvent, CalendarSendEventType sendEventType);
-    void SendCalendarEventInvite(CalendarInvite const& invite, bool pending);
-    void SendCalendarEventInviteAlert(CalendarEvent const& calendarEvent, CalendarInvite const& calendarInvite);
-    void SendCalendarEventInviteRemove(CalendarInvite const& invite, uint32 flags);
-    void SendCalendarEventInviteRemoveAlert(CalendarEvent const& calendarEvent, CalendarInviteStatus status);
-    void SendCalendarEventRemovedAlert(CalendarEvent const& calendarEvent);
-    void SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, CalendarSendEventType sendEventType);
-    void SendCalendarEventStatus(CalendarEvent const& calendarEvent, CalendarInvite const& invite);
-    void SendCalendarEventModeratorStatusAlert(CalendarInvite const& invite);
-    void SendCalendarCommandResult(CalendarError err, char const* param = NULL);
-    void SendCalendarRaidLockout(InstanceSave const* save, bool add);
-    void SendCalendarRaidLockoutUpdated(InstanceSave const* save);
-    void SendCalendarClearActionPending();
-	
     void HandleSpellClick (WorldPacket& recv_data);
     void HandleMirrrorImageDataRequest (WorldPacket & recv_data);
     void HandleAlterAppearance (WorldPacket& recv_data);
