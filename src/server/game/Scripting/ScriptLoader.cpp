@@ -33,6 +33,7 @@ void AddSC_player_mage_scripts ();
 void AddSC_example_commandscript ();
 // Custom
 void AddSC_transmogrify_script();
+void AddSC_BountyHunter();
 
 // spells
 void AddSC_deathknight_spell_scripts ();
@@ -1456,6 +1457,7 @@ void AddCustomScripts ()
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
 	AddSC_transmogrify_script();
+	AddSC_BountyHunter();
 
 #endif
 }
