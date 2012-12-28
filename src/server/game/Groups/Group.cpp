@@ -2111,11 +2111,6 @@ void Group::SetBattlegroundGroup (Battleground *bg)
     m_bgGroup = bg;
 }
 
-void Group::SetBattlefieldGroup(Battlefield *bg)
-{
-    m_bfGroup = bg;
-}
-
 void Group::SetAssistant (uint64 guid, const bool &apply)
 {
     if (!isRaidGroup())
