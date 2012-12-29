@@ -53,7 +53,6 @@
 #include "MapManager.h"
 #include "CreatureAIRegistry.h"
 #include "BattlegroundMgr.h"
-#include "../Battlefields/BattlefieldMgr.h" // ToDo: fixme
 #include "OutdoorPvPMgr.h"
 #include "TemporarySummon.h"
 #include "WaypointMovementGenerator.h"
@@ -1402,14 +1401,6 @@ void World::LoadConfigSettings (bool reload)
     // Looking For Group
     m_bool_configs[CONFIG_LFG_CAST_DESERTER] = sConfig->GetBoolDefault("LookingForGroup.CastDeserter", true);
     m_bool_configs[CONFIG_LFG_CAST_COOLDOWN] = sConfig->GetBoolDefault("LookingForGroup.CastCooldown", true);
-	
-    // TOL BARAD
-    m_bool_configs[CONFIG_TOL_BARAD_ENABLE] = sConfig->GetBoolDefault("Tol Barad.Enable", false);
-    m_int_configs[CONFIG_TOL_BARAD_PLR_MAX] = sConfig->GetIntDefault("Tol Barad.PlayerMax", 100);
-    m_int_configs[CONFIG_TOL_BARAD_PLR_MIN] = sConfig->GetIntDefault("Tol Barad.PlayerMin", 0);
-    m_int_configs[CONFIG_TOL_BARAD_PLR_MIN_LVL] = sConfig->GetIntDefault("Tol Barad.PlayerMinLvl", 80);
-    m_int_configs[CONFIG_TOL_BARAD_BATTLETIME] = sConfig->GetIntDefault("Tol Barad.BattleTimer", 30);
-    m_int_configs[CONFIG_TOL_BARAD_NOBATTLETIME] = sConfig->GetIntDefault("Tol Barad.NoBattleTimer", 150);	
 
     sScriptMgr->OnConfigLoad(reload);
 }
