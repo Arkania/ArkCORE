@@ -392,6 +392,7 @@ Item::Item ()
     m_refundRecipient = 0;
     m_paidMoney = 0;
     m_paidExtendedCost = 0;
+	m_fakeDisplayEntry = 0;
 }
 
 bool Item::Create (uint32 guidlow, uint32 itemid, Player const* owner)
@@ -595,6 +596,10 @@ bool Item::LoadFromDB (uint32 guid, uint64 owner_guid, Field* fields, uint32 ent
 
     SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, fields[9].GetUInt32());
     SetText(fields[10].GetString());
+	
+    if (uint32 fakeEntry = sObjectMgr->GetFakeItemEntry(guid))
+        SetFakeDisplay(fakeEntry);
+	
 
     if (need_save)          // normal item changed state set not work at loading
     {
@@ -611,6 +616,8 @@ bool Item::LoadFromDB (uint32 guid, uint64 owner_guid, Field* fields, uint32 ent
 
 void Item::DeleteFromDB (SQLTransaction& trans)
 {
+	sObjectMgr->RemoveFakeItem(GetGUIDLow());
+	RemoveFakeDisplay();
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
     stmt->setUInt32(0, GetGUIDLow());
     trans->Append(stmt);
@@ -618,6 +625,8 @@ void Item::DeleteFromDB (SQLTransaction& trans)
 
 void Item::DeleteFromInventoryDB (SQLTransaction& trans)
 {
+	sObjectMgr->RemoveFakeItem(GetGUIDLow());
+	RemoveFakeDisplay();
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVENTORY_ITEM);
     stmt->setUInt32(0, GetGUIDLow());
     trans->Append(stmt);
@@ -1364,6 +1373,7 @@ bool Item::CheckSoulboundTradeExpire ()
 
     return false;
 }
+
 
 FakeResult Item::SetFakeDisplay(uint32 iEntry)
 {
