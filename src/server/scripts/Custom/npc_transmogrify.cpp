@@ -62,25 +62,25 @@ class npc_transmogrify : public CreatureScript
             switch (result)
             {
                 case FAKE_ERR_CANT_FIND_ITEM:
-                    handler.PSendSysMessage("Your item is not found!");
+                    handler.PSendSysMessage("Your item was not found!");
                     break;
-/*
-//                case FAKE_ERR_WRONG_QUALITY:
-//                    handler.PSendSysMessage("Votre item n'est pas de bonne qualité!");
-//                    break;
-*/
+
+                case FAKE_ERR_WRONG_QUALITY:
+                    handler.PSendSysMessage("The item is of incorrect quality!");
+                    break;
+
                 case FAKE_ERR_DIFF_SLOTS:
-                    handler.PSendSysMessage("Your item is of a different type!");
+                    handler.PSendSysMessage("The items are for different slots!");
                     break;
-/*
-//                case FAKE_ERR_DIFF_CLASS:
-//                    handler.PSendSysMessage("Votre item n'est pas pour votre Classe!");
-//                    break;
-//
-//                case FAKE_ERR_DIFF_RACE:
-//                    handler.PSendSysMessage("Votre item n'est pas pour votre Race!");
-//                    break;
-*/
+
+                case FAKE_ERR_DIFF_CLASS:
+                    handler.PSendSysMessage("Item is for a different class!");
+                    break;
+
+                case FAKE_ERR_DIFF_RACE:
+                    handler.PSendSysMessage("Item is for a different race!");
+                    break;
+
                 case FAKE_ERR_OK:
                 {
                     WorldPacket data;
@@ -90,7 +90,6 @@ class npc_transmogrify : public CreatureScript
 
                     player->ModifyMoney(-1 * PriceInGold);
                     creature->GetAI()->DoCast(63491);
-
                     break;
                 }
             }

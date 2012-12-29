@@ -34,7 +34,7 @@ source_group(Examples FILES ${scripts_examples})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
   set(scripts_STAT_SRCS
-    PrecompiledHeaders/ScriptPCH.cpp
+  PrecompiledHeaders/ScriptPCH.cpp
   PrecompiledHeaders/ScriptPCH.h)
 
 message(STATUS "SCRIPT PREPARATIONS")
