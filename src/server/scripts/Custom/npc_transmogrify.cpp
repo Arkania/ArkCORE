@@ -11,7 +11,7 @@ enum TransmogrifyActions {
     ACTION_TRANSMOGRIFY_REMOVE_DISPLAY
 };
 
-const uint64 PriceInGold = 1000 * 100 * 100; // 1k golds
+const uint16 PriceInGold = 1000 * 100 * 100; // 1k golds
 
 class npc_transmogrify : public CreatureScript
 {

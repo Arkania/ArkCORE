@@ -1561,9 +1561,6 @@ void World::SetInitialWorldSettings ()
 
     sLog->outString("Loading Equipment templates...");
     sObjectMgr->LoadEquipmentTemplates();
-	
-    sLog->outString("Loading fake items...");
-    sObjectMgr->LoadFakeItems();
 
     sLog->outString("Loading Creature templates...");
     sObjectMgr->LoadCreatureTemplates();
