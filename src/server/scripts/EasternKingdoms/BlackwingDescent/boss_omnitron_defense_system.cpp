@@ -524,22 +524,22 @@ public:
                 activated = false;
                 isMovingHome = true;
 
-                switch(omnotron->GetEntry())
+                switch(me->GetEntry())
                 {
                     case NPC_MAGMATRON:
-                        omnotron->CastSpell(omnotron, SPELL_REGEN_EFFECT_MAGMATRON, true);
+                        me->CastSpell(me, SPELL_REGEN_EFFECT_MAGMATRON, true);
                         break;
 
                     case NPC_TOXITRON:
-                        omnotron->CastSpell(omnotron, SPELL_REGEN_EFFECT_TOXITRON, true);
+                        me->CastSpell(me, SPELL_REGEN_EFFECT_TOXITRON, true);
                         break;
 
                     case NPC_ELECTRON:
-                        omnotron->CastSpell(omnotron, SPELL_REGEN_EFFECT_ELECTRON, true);
+                        me->CastSpell(me, SPELL_REGEN_EFFECT_ELECTRON, true);
                         break;
 
                     case NPC_ARCANOTRON:
-                        omnotron->CastSpell(omnotron, SPELL_REGEN_EFFECT_ARCANOTRON, true);
+                        me->CastSpell(me, SPELL_REGEN_EFFECT_ARCANOTRON, true);
                         break;
                 }
                 return;

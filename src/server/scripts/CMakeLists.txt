@@ -34,7 +34,7 @@ source_group(Examples FILES ${scripts_examples})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
   set(scripts_STAT_SRCS
-    PrecompiledHeaders/ScriptPCH.cpp
+  PrecompiledHeaders/ScriptPCH.cpp
   PrecompiledHeaders/ScriptPCH.h)
 
 message(STATUS "SCRIPT PREPARATIONS")
@@ -94,8 +94,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/game/AI/ScriptedAI
   ${CMAKE_SOURCE_DIR}/src/server/game/AI/SmartScripts
   ${CMAKE_SOURCE_DIR}/src/server/game/AuctionHouse
-  ${CMAKE_SOURCE_DIR}/src/server/game/Battlefields
-  ${CMAKE_SOURCE_DIR}/src/server/game/Battlefields/Zones   
   ${CMAKE_SOURCE_DIR}/src/server/game/Battlegrounds
   ${CMAKE_SOURCE_DIR}/src/server/game/Battlegrounds/Zones
   ${CMAKE_SOURCE_DIR}/src/server/game/Calendar

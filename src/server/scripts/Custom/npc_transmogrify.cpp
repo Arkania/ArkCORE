@@ -1,9 +1,21 @@
 /*
-* Copyright (C) 2011-2012 ProjectStudioMirage <http://www.studio-mirage.fr/>
-* Copyright (C) 2011-2012 https://github.com/Asardial
+* Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+// original author unknown
 #include "ScriptPCH.h"
 
 enum TransmogrifyActions {
@@ -11,7 +23,7 @@ enum TransmogrifyActions {
     ACTION_TRANSMOGRIFY_REMOVE_DISPLAY
 };
 
-const uint16 PriceInGold = 1000 * 100 * 100; // 1k golds
+const int32 PriceInGold = 10000000; // 1k gold
 
 class npc_transmogrify : public CreatureScript
 {
@@ -62,25 +74,25 @@ class npc_transmogrify : public CreatureScript
             switch (result)
             {
                 case FAKE_ERR_CANT_FIND_ITEM:
-                    handler.PSendSysMessage("Your item is not found!");
+                    handler.PSendSysMessage("Your item was not found!");
                     break;
-/*
-//                case FAKE_ERR_WRONG_QUALITY:
-//                    handler.PSendSysMessage("Votre item n'est pas de bonne qualité!");
-//                    break;
-*/
+
+                case FAKE_ERR_WRONG_QUALITY:
+                    handler.PSendSysMessage("The item is of incorrect quality!");
+                    break;
+
                 case FAKE_ERR_DIFF_SLOTS:
-                    handler.PSendSysMessage("Your item is of a different type!");
+                    handler.PSendSysMessage("The items are for different slots!");
                     break;
-/*
-//                case FAKE_ERR_DIFF_CLASS:
-//                    handler.PSendSysMessage("Votre item n'est pas pour votre Classe!");
-//                    break;
-//
-//                case FAKE_ERR_DIFF_RACE:
-//                    handler.PSendSysMessage("Votre item n'est pas pour votre Race!");
-//                    break;
-*/
+
+                case FAKE_ERR_DIFF_CLASS:
+                    handler.PSendSysMessage("Item is for a different class!");
+                    break;
+
+                case FAKE_ERR_DIFF_RACE:
+                    handler.PSendSysMessage("Item is for a different race!");
+                    break;
+
                 case FAKE_ERR_OK:
                 {
                     WorldPacket data;
@@ -90,7 +102,6 @@ class npc_transmogrify : public CreatureScript
 
                     player->ModifyMoney(-1 * PriceInGold);
                     creature->GetAI()->DoCast(63491);
-
                     break;
                 }
             }
@@ -102,7 +113,7 @@ class npc_transmogrify : public CreatureScript
             Item *trItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, INVENTORY_SLOT_ITEM_START);
             if (!trItem)
             {
-                handler.PSendSysMessage("Put the item in the first slot of your bag");
+                handler.PSendSysMessage("Put the item in the first slot of your bag!");
                 return;
             }
 

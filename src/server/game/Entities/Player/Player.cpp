@@ -13021,7 +13021,7 @@ void Player::SetVisibleItemSlot (uint8 slot, Item *pItem)
 {
     if (pItem)
     {
-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
+        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), (pItem->GetFakeDisplayEntry()) ? pItem->GetFakeDisplayEntry() : pItem->GetEntry());
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
     }
@@ -23939,16 +23939,6 @@ bool Player::isUsingLfg ()
 {
     uint64 guid = GetGUID();
     return sLFGMgr->GetState(guid) != LFG_STATE_NONE;
-}
-
-void Player::SetBattlegroundOrBattlefieldRaid(Group* group, int8 subgroup)
-{
-    //we must move references from m_group to m_originalGroup
-    SetOriginalGroup(GetGroup(), GetSubGroup());
-
-    m_group.unlink();
-    m_group.link(group, this);
-    m_group.setSubGroup((uint8)subgroup);
 }
 
 void Player::SetBattlegroundRaid (Group* group, int8 subgroup)

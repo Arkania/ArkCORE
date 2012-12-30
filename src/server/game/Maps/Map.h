@@ -542,7 +542,7 @@ public:
 
     template<class T> void SwitchGridContainers (T* obj, bool active);
     template<class NOTIFIER> void VisitAll (const float &x, const float &y, float radius, NOTIFIER &notifier);
-	template<class NOTIFIER> void VisitFirstFound(const float &x, const float &y, float radius, NOTIFIER &notifier);
+    template<class NOTIFIER> void VisitFirstFound(const float &x, const float &y, float radius, NOTIFIER &notifier);
     template<class NOTIFIER> void VisitWorld (const float &x, const float &y, float radius, NOTIFIER &notifier);
     template<class NOTIFIER> void VisitGrid (const float &x, const float &y, float radius, NOTIFIER &notifier);
     CreatureGroupHolderType CreatureGroupHolder;
@@ -834,7 +834,7 @@ inline void Map::VisitAll (const float &x, const float &y, float radius, NOTIFIE
 template<class NOTIFIER>
 inline void Map::VisitFirstFound(const float &x, const float &y, float radius, NOTIFIER &notifier)
 {
-    CellCoord p(Trinity::ComputeCellPair(x, y));
+    CellPair p(Trinity::ComputeCellPair(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
