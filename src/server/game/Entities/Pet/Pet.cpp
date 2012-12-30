@@ -150,7 +150,7 @@ bool Pet::LoadPetFromDB (Player* owner, uint32 petentry, uint32 petnumber, bool 
         return false;
     }
 
-    uint32 summon_spell_id = fields[15].GetUInt32();
+    uint32 summon_spell_id = fields[17].GetUInt32();
     SpellEntry const* spellInfo = sSpellStore.LookupEntry(summon_spell_id);
 
     bool is_temporary_summoned = spellInfo && GetSpellDuration(spellInfo) > 0;
@@ -162,7 +162,7 @@ bool Pet::LoadPetFromDB (Player* owner, uint32 petentry, uint32 petnumber, bool 
         return false;
     }
 
-    PetType pet_type = PetType(fields[16].GetUInt8());
+    PetType pet_type = PetType(fields[18].GetUInt8());
     if (pet_type == HUNTER_PET)
     {
         CreatureInfo const* creatureInfo = ObjectMgr::GetCreatureTemplate(petentry);
@@ -207,7 +207,7 @@ bool Pet::LoadPetFromDB (Player* owner, uint32 petentry, uint32 petnumber, bool 
         return false;
     }
 
-    SetEntry(petentry);
+    //SetEntry(petentry);
     setPetType(pet_type);
     setFaction(owner->getFaction());
     SetUInt32Value(UNIT_CREATED_BY_SPELL, summon_spell_id);
