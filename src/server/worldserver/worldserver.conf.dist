@@ -3420,7 +3420,7 @@ irc.icc = 001
 #     IRC server to have TriniChat connect to
 #
 
-irc.host = "irc.freenode.net"
+irc.host = "irc.arkania.net"
 
 # irc.port
 #     IRC server port to use
