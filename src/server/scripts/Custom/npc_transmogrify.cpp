@@ -32,8 +32,8 @@ class npc_transmogrify : public CreatureScript
 
         bool OnGossipHello(Player* pPlayer, Creature* pCreature)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Transmogrifer!", GOSSIP_SENDER_MAIN, ACTION_TRANSMOGRIFY_ADD_DISPLAY);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Remove Transmogrifer", GOSSIP_SENDER_MAIN, ACTION_TRANSMOGRIFY_REMOVE_DISPLAY);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Transmogrify!", GOSSIP_SENDER_MAIN, ACTION_TRANSMOGRIFY_ADD_DISPLAY);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Remove Transmogrification", GOSSIP_SENDER_MAIN, ACTION_TRANSMOGRIFY_REMOVE_DISPLAY);
             pPlayer->SEND_GOSSIP_MENU(51000, pCreature->GetGUID());
             return true;
         }
@@ -45,9 +45,11 @@ class npc_transmogrify : public CreatureScript
             {
                 case ACTION_TRANSMOGRIFY_ADD_DISPLAY:
                     TransmogrifyItem(player, creature);
+                    player->PlayerTalkClass->CloseGossip();
                     break;
                 case ACTION_TRANSMOGRIFY_REMOVE_DISPLAY:
                     ClearItem(player, creature);
+                    player->PlayerTalkClass->CloseGossip();
                     break;
             }
             return true;
@@ -60,13 +62,13 @@ class npc_transmogrify : public CreatureScript
             Item *displayItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, INVENTORY_SLOT_ITEM_START + 1);
             if (!trItem || !displayItem)
             {
-                handler.PSendSysMessage("Put your items in slot 1 and 2 in your bag!");
+                handler.PSendSysMessage(LANG_FAKEITEM_MISSING_ITEMS);
                 return;
             }
 
             if (!player->HasEnoughMoney(PriceInGold))
             {
-                handler.PSendSysMessage("It costs %u gold!", PriceInGold);
+                handler.PSendSysMessage(LANG_FAKEITEM_MISSING_MONEY, PriceInGold);
                 return;
             }
 
@@ -74,23 +76,31 @@ class npc_transmogrify : public CreatureScript
             switch (result)
             {
                 case FAKE_ERR_CANT_FIND_ITEM:
-                    handler.PSendSysMessage("Your item was not found!");
+                    handler.PSendSysMessage(LANG_FAKEITEM_MISSING_ITEM);
                     break;
 
                 case FAKE_ERR_WRONG_QUALITY:
-                    handler.PSendSysMessage("The item is of incorrect quality!");
+                    handler.PSendSysMessage(LANG_FAKEITEM_INVALID_QUALITY);
                     break;
 
-                case FAKE_ERR_DIFF_SLOTS:
-                    handler.PSendSysMessage("The items are for different slots!");
+                case FAKE_ERR_DIFF_INVENTORYTYPE:
+                    handler.PSendSysMessage(LANG_FAKEITEM_DIFF_TYPE);
                     break;
 
                 case FAKE_ERR_DIFF_CLASS:
-                    handler.PSendSysMessage("Item is for a different class!");
+                    handler.PSendSysMessage(LANG_FAKEITEM_DIFF_CLASS);
                     break;
 
                 case FAKE_ERR_DIFF_RACE:
-                    handler.PSendSysMessage("Item is for a different race!");
+                    handler.PSendSysMessage(LANG_FAKEITEM_DIFF_RACE);
+                    break;
+
+                case FAKE_ERR_INVALID_CLASS:
+                    handler.PSendSysMessage(LANG_FAKEITEM_INVALID_TYPE);
+                    break;
+
+                case FAKE_ERR_DIFF_SUBCLASS:
+                    handler.PSendSysMessage(LANG_FAKEITEM_DIFF_TYPE);
                     break;
 
                 case FAKE_ERR_OK:
@@ -113,7 +123,7 @@ class npc_transmogrify : public CreatureScript
             Item *trItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, INVENTORY_SLOT_ITEM_START);
             if (!trItem)
             {
-                handler.PSendSysMessage("Put the item in the first slot of your bag!");
+                handler.PSendSysMessage(LANG_FAKEITEM_CLEARITEM);
                 return;
             }
 
