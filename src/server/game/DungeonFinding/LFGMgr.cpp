@@ -1331,6 +1331,10 @@ void LFGMgr::UpdateProposal (uint32 proposalId, const uint64& guid, bool accept)
                 waitTimesMap[(*it)->GetGUID()] = int32(joinTime - itQueue->second->joinTime);
         }
 
+        // Set the dungeon difficulty
+        LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(pProposal->dungeonId);
+        ASSERT(dungeon);
+
         // Create a new group (if needed)
         LfgUpdateData updateData = LfgUpdateData(LFG_UPDATETYPE_GROUP_FOUND);
         Group* grp = pProposal->groupLowGuid ? sObjectMgr->GetGroupByGUID(pProposal->groupLowGuid) : NULL;
@@ -1382,11 +1386,12 @@ void LFGMgr::UpdateProposal (uint32 proposalId, const uint64& guid, bool accept)
             }
             grp->SetLfgRoles(pguid, pProposal->players[pguid]->role);
             SetState(pguid, LFG_STATE_DUNGEON);
+            
+            // Add the cooldown spell if queued for a random dungeon
+            if (dungeon->type == LFG_TYPE_RANDOM)
+                plr->CastSpell(plr, LFG_SPELL_DUNGEON_COOLDOWN, false);			
         }
 
-        // Set the dungeon difficulty
-        LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(pProposal->dungeonId);
-        ASSERT(dungeon);
         grp->SetDungeonDifficulty(Difficulty(dungeon->difficulty));
         uint64 gguid = grp->GetGUID();
         SetDungeon(gguid, dungeon->Entry());

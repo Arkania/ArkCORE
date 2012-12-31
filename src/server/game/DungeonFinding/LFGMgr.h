@@ -299,13 +299,13 @@ public:
     uint8 GetKicksLeft (const uint64& gguid);
     uint8 GetVotesNeeded (const uint64& gguid);
     void SetRoles (const uint64& guid, uint8 roles);
+	void SetState (const uint64& guid, LfgState state);
 
 private:
 
     uint8 GetRoles (const uint64& guid);
     const std::string& GetComment (const uint64& gguid);
     void RestoreState (const uint64& guid);
-    void SetState (const uint64& guid, LfgState state);
     void SetDungeon (const uint64& guid, uint32 dungeon);
     void SetSelectedDungeons (const uint64& guid, const LfgDungeonSet& dungeons);
     void SetLockedDungeons (const uint64& guid, const LfgLockMap& lock);

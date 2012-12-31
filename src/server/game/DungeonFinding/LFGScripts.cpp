@@ -91,14 +91,16 @@ void LFGScripts::OnRemoveMember (Group* group, uint64 guid, RemoveMethod& method
         sLFGMgr->InitBoot(group, kicker, guid, str_reason);
         return;
     }
-
+    
+	uint32 state = sLFGMgr->GetState(gguid);
     sLFGMgr->ClearState(guid);
+	sLFGMgr->SetState(guid, LFG_STATE_NONE);
     if (Player * plr = sObjectMgr->GetPlayer(guid))
     {
         // Add deserter flag
-        if (sLFGMgr->GetState(guid) != LFG_STATE_FINISHED_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
+        if (state != LFG_STATE_FINISHED_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
             plr->CastSpell(plr, LFG_SPELL_DUNGEON_DESERTER, true);
-        if (sLFGMgr->GetState(guid) == LFG_TYPE_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
+        if (state == LFG_TYPE_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
             plr->RemoveAura(LFG_SPELL_LUCK_OF_THE_DRAW);// Remove Luck of the Draw aura.
         /*
          else if (group->isLfgKickActive())
@@ -111,7 +113,7 @@ void LFGScripts::OnRemoveMember (Group* group, uint64 guid, RemoveMethod& method
             sLFGMgr->TeleportPlayer(plr, true);
     }
 
-    if (sLFGMgr->GetState(gguid) != LFG_STATE_FINISHED_DUNGEON)          // Need more players to finish the dungeon
+    if (state != LFG_STATE_FINISHED_DUNGEON)// Need more players to finish the dungeon
         sLFGMgr->OfferContinue(group);
 }
 
