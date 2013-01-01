@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
  *
- * Copyright (C) 2011-2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011- 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
