@@ -131,7 +131,7 @@ int Master::Run() {
             sLog->outString("   _/_/_/_/  _/_/      _/_/      _/        _/    _/  _/_/_/    _/_/_/      ");
             sLog->outString("  _/    _/  _/        _/  _/    _/        _/    _/  _/    _/  _/           ");
             sLog->outString(" _/    _/  _/        _/    _/    _/_/_/    _/_/    _/    _/  _/_/_/_/  	");
-            sLog->outString(" Arkania Community (c) 2012");
+            sLog->outString(" Arkania Community (c) 2013");
             sLog->outString("      <http://arkania.net/>");
             sLog->outString(" ");
             sLog->outString("<Ctrl-C> to stop.\n");

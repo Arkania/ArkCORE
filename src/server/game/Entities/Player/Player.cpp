@@ -15985,12 +15985,6 @@ void Player::RewardQuest (Quest const *pQuest, uint32 reward, Object* questGiver
     m_RewardedQuests.insert(quest_id);
     m_RewardedQuestsSave[quest_id] = true;
 
-    // StoreNewItem, mail reward, etc. save data directly to the database
-    // to prevent exploitable data desynchronisation we save the quest status to the database too
-    // (to prevent rewarding this quest another time while rewards were already given out)
-    SQLTransaction trans = SQLTransaction(NULL);
-    _SaveQuestStatus(trans);
-	
     if (announce)
         SendQuestReward(pQuest, XP, questGiver);
 
@@ -19877,11 +19871,6 @@ void Player::_SaveMail (SQLTransaction& trans)
 
 void Player::_SaveQuestStatus (SQLTransaction& trans)
 {
-
-    bool isTransaction = !trans.null();
-    if (!isTransaction)
-        trans = CharacterDatabase.BeginTransaction();
-
     QuestStatusSaveMap::iterator saveItr;
     QuestStatusMap::iterator statusItr;
 
