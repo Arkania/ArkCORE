@@ -331,13 +331,17 @@ public:
 
         bool CheckRequiredBosses(uint32 bossId, Player const* player = NULL) const
         {
-            if ((player->GetSession()->GetSecurity() > SEC_GAMEMASTER ))
-                return true;
+                if ((player->GetSession()->GetSecurity() > SEC_GAMEMASTER ))
+                    return true;
 
-            /*switch (bossId)
-            {
-
-            }*/
+                switch (bossId)
+                {
+                    case DATA_MAGMAW:
+                    case DATA_MALORIAK:
+                    case DATA_ATRAMEDES:
+                    default:
+                        break;
+                }
 
             return true;
         }

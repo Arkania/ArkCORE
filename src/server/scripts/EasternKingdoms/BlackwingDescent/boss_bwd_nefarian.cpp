@@ -223,7 +223,7 @@ public:
         {
             Talk(SAY_DEATH);
             _JustDied();
-//            DespawnMinions();
+            //DespawnMinions();
         }
 
         void UpdateAI(const uint32 diff)
@@ -432,12 +432,16 @@ public:
             events.Reset();
 
             DespawnMinions();
-            pNefarian->SetPhaseMask(2, true);
 			
             if (instance)
-            if (Creature *pNefarian = me->GetCreature(*me, instance->GetData64(DATA_NEFARIAN)))
-                if (pNefarian->AI())
-                pNefarian->AI()->DoAction(ACTION_ONYXIA_RESET);
+          {
+                if (Creature *pNefarian = me->GetCreature(*me, instance->GetData64(DATA_NEFARIAN)))
+              {
+                        if (pNefarian->AI())
+                          pNefarian->AI()->DoAction(ACTION_ONYXIA_RESET);
+                      pNefarian->SetPhaseMask(2, true);
+              }
+          }
         }
 		
         void EnterCombat(Unit* who)
