@@ -434,7 +434,7 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
     {
         if (GetPlayer()->GetGuildId())
         {
-            if (Guild * guild = sObjectMgr->GetGuildById(GetPlayer()->GetGuildId()))
+            if (Guild * guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
             {
                 sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
@@ -448,7 +448,7 @@ void WorldSession::HandleMessagechatOpcode (WorldPacket & recv_data)
     {
         if (GetPlayer()->GetGuildId())
         {
-            if (Guild * guild = sObjectMgr->GetGuildById(GetPlayer()->GetGuildId()))
+            if (Guild * guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
             {
                 sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 

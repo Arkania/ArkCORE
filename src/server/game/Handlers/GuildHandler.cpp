@@ -48,7 +48,7 @@
 inline Guild* _GetPlayerGuild(WorldSession* session, bool sendError = false)
 {
     if (uint32 guildId = session->GetPlayer()->GetGuildId())    // If guild id = 0, player is not in guild
-        if (Guild* pGuild = sObjectMgr->GetGuildById(guildId))   // Find guild by id
+        if (Guild* pGuild = sGuildMgr->GetGuildById(guildId))   // Find guild by id
             return pGuild;
     if (sendError)
         Guild::SendCommandResult(session, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
@@ -66,7 +66,7 @@ void WorldSession::HandleGuildQueryOpcode(WorldPacket& recvPacket)
     recvPacket >> player;
     // Use received guild id to access guild method (not player's guild id)
     uint32 lowGuildId = GUID_LOPART(guildId);
-    if (Guild *pGuild = sObjectMgr->GetGuildById(lowGuildId))
+    if (Guild *pGuild = sGuildMgr->GetGuildById(lowGuildId))
         pGuild->HandleQuery(this);
     else
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
@@ -84,7 +84,7 @@ void WorldSession::HandleGuildCreateOpcode(WorldPacket& recvPacket)
     {
         Guild* pGuild = new Guild();
         if (pGuild->Create(GetPlayer(), name))
-            sObjectMgr->AddGuild(pGuild);
+            sGuildMgr->AddGuild(pGuild);
         else
             delete pGuild;
     }
@@ -127,7 +127,7 @@ void WorldSession::HandleGuildAcceptOpcode(WorldPacket& recvPacket)
     // Player cannot be in guild
     if (!GetPlayer()->GetGuildId())
         // Guild where player was invited must exist
-        if (Guild* pGuild = sObjectMgr->GetGuildById(GetPlayer()->GetGuildIdInvited()))
+        if (Guild* pGuild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildIdInvited()))
             pGuild->HandleAcceptMember(this);
 }
 
@@ -253,14 +253,14 @@ void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint64>();
 
-    if (Guild* pGuild = sObjectMgr->GetGuildById(_player->GetGuildId()))
+    if (Guild* pGuild = sGuildMgr->GetGuildById(_player->GetGuildId()))
     {
         WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-        data << uint64(0x37); // max daily xp
-        data << uint64(pGuild->GetNextLevelXP()); // next level XP
-        data << uint64(0x37); // weekly xp
-        data << uint64(pGuild->GetCurrentXP()); // Curr exp
-        data << uint64(0); // Today exp (unsupported)
+        data << uint64(pGuild->GetXPCap());                                  // max daily xp
+        data << uint64(pGuild->GetNextLevelXP() - pGuild->GetCurrentXP());    // next level XP
+        data << uint64(pGuild->GetXPCap());                                  // weekly xp
+        data << uint64(pGuild->GetCurrentXP());                              // Curr exp
+        data << uint64(pGuild->GetTodayXP());                                // Today exp
         SendPacket(&data);
     }
 }
@@ -269,9 +269,12 @@ void WorldSession::HandleGuildMaxExperienceOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint64>();
 
-    WorldPacket data(SMSG_GUILD_MAX_DAILY_XP, 8);
-    data << uint64(67800000); // Constant value for now
-    SendPacket(&data);
+    if (Guild* pGuild = sGuildMgr->GetGuildById(_player->GetGuildId()))
+    {
+        WorldPacket data(SMSG_GUILD_MAX_DAILY_XP, 8);
+        data << uint64(pGuild->GetXPCap());
+        SendPacket(&data);
+    }
 }
 
 void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
@@ -281,31 +284,31 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
 
     recvPacket.read_skip<uint64>();
 
-    ObjectMgr::GuildRewardsVector const& vec = sObjectMgr->GetGuildRewards();
+    GuildRewardsVector const& vec = sGuildMgr->GetGuildRewards();
     if (vec.empty())
         return;
 
-    WorldPacket data(SMSG_GUILD_REWARDS_LIST, 8);
+    WorldPacket data(SMSG_GUILD_REWARDS_LIST, 4 + 4 + ((4 + 4 + 8 + 4 + 4 + 4) * vec.size()));
     data << uint32(_player->GetGuildId()) ;
     data << uint32(vec.size()); // counter
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(0); // unk (only found 0 in retail logs)
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(0); // unk
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint64(vec[i]->price); // money price
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint64(vec[i].price); // money price
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->achievement); // Achievement requirement
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint32(vec[i].achievement); // Achievement requirement
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->standing); // // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint32(vec[i].standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->item); // item entry
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint32(vec[i].item); // item entry
     SendPacket(&data);
 }
 

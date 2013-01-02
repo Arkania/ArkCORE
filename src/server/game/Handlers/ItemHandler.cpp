@@ -807,7 +807,7 @@ void WorldSession::SendListInventory (uint64 vendorguid)
                 // ToDo: Theese items must have a flag, find it
                 if (QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", crItem->item))
                 {
-                    Guild* guild = sObjectMgr->GetGuildById(_player->GetGuildId());
+                    Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId());
                     if (!guild)
                         continue;
                     Field *fields = res->Fetch();

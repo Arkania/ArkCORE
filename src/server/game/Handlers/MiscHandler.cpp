@@ -312,7 +312,7 @@ void WorldSession::HandleWhoOpcode (WorldPacket & recv_data)
         if (!(wplayer_name.empty() || wpname.find(wplayer_name) != std::wstring::npos))
         continue;
 
-        std::string gname = sObjectMgr->GetGuildNameById(itr->second->GetGuildId());
+        std::string gname = sGuildMgr->GetGuildNameById(itr->second->GetGuildId());
         std::wstring wgname;
         if (!Utf8toWStr(gname, wgname))
         continue;
@@ -1262,7 +1262,7 @@ void WorldSession::HandleInspectOpcode (WorldPacket& recv_data)
     plr->BuildEnchantmentsInfoData(&data);
     if (uint32 guildId = plr->GetGuildId())
     {
-        if (Guild* pGuild = sObjectMgr->GetGuildById(guildId))
+        if (Guild* pGuild = sGuildMgr->GetGuildById(guildId))
         {
             data << uint64(pGuild->GetId());            // not sure
             data << uint32(pGuild->GetLevel());         // guild level

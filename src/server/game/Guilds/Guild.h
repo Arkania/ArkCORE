@@ -362,7 +362,7 @@ private:
         void ResetTabTimes();
         void ResetMoneyTime();
 
-        inline Player* FindPlayer() const { return sObjectMgr->GetPlayer(m_guid); }
+        inline Player* FindPlayer() const { return ObjectAccessor::FindPlayer(m_guid); }
 
     private:
         uint32 m_guildId;
@@ -749,6 +749,7 @@ public:
     void DeleteMember(const uint64& guid, bool isDisbanding = false, bool isKicked = false);
     bool ChangeMemberRank(const uint64& guid, uint8 newRank);
     RankInfo & GetRankInfo(uint32 rankId) {return m_ranks[rankId]; }
+	Members GetMembers() { return m_members; }
 
     // Bank
     void SwapItems(Player* player, uint8 tabId, uint8 slotId, uint8 destTabId, uint8 destSlotId, uint32 splitedAmount);
@@ -760,12 +761,17 @@ public:
     // Guild advancement
     uint8 GetLevel() { return m_level; }
     uint64 GetCurrentXP() { return m_xp; }
+    uint64 GetTodayXP() { return m_today_xp; }
+    uint64 GetXPCap() { return m_xp_cap; }
     uint64 GetNextLevelXP() { return m_nextLevelXP; }
     uint64 GetGuildMoney() { return m_bankMoney; }
     uint64 SetGuildMoney(uint64 add) { return m_bankMoney += add; }
 
     void GainXP(uint64 xp);
     void LevelUp();
+    void ResetTodayXP() { m_today_xp = 0; }
+    void GenerateXPCap();
+    void AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags = 0);
 
 protected:
     uint32 m_id;
@@ -778,6 +784,8 @@ protected:
     uint8 m_level;
     uint64 m_xp;
     uint64 m_nextLevelXP;
+    uint64 m_today_xp;
+    uint64 m_xp_cap;
 
     EmblemInfo m_emblemInfo;
     uint32 m_accountsNumber;

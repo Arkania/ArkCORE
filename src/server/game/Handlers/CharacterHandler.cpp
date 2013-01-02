@@ -733,7 +733,7 @@ void WorldSession::HandleCharDeleteOpcode (WorldPacket & recv_data)
     std::string name;
 
     // is guild leader
-    if (sObjectMgr->GetGuildByLeader(guid))
+    if (sGuildMgr->GetGuildByLeader(guid))
     {
         WorldPacket data(SMSG_CHAR_DELETE,   1);
         data << (uint8) CHAR_DELETE_FAILED_GUILD_LEADER;
@@ -922,7 +922,7 @@ void WorldSession::HandlePlayerLogin (LoginQueryHolder * holder)
 
     if (pCurrChar->GetGuildId() != 0)
     {
-        if (Guild * pGuild = sObjectMgr->GetGuildById(pCurrChar->GetGuildId()))
+        if (Guild * pGuild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
         {
             pGuild->SendLoginInfo(this);
             pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL,   uint32(pGuild->GetLevel()));

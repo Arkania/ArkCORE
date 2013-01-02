@@ -101,7 +101,7 @@ void WorldSession::HandlePetitionBuyOpcode (WorldPacket & recv_data)
     uint32 charterid = GUILD_CHARTER;
     uint64 cost = GUILD_CHARTER_COST;
 
-    if (sObjectMgr->GetGuildByName(name))
+    if (sGuildMgr->GetGuildByName(name))
     {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, name);
         return;
@@ -295,7 +295,7 @@ void WorldSession::HandlePetitionRenameOpcode (WorldPacket & recv_data)
     if (!item)
         return;
 
-    if (sObjectMgr->GetGuildByName(newname))
+    if (sGuildMgr->GetGuildByName(newname))
     {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, newname);
         return;
@@ -544,7 +544,7 @@ void WorldSession::HandleTurnInPetitionOpcode (WorldPacket & recv_data)
         return;
     }
 
-    if (sObjectMgr->GetGuildByName(name))
+    if (sGuildMgr->GetGuildByName(name))
     {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, name);
         return;
@@ -566,7 +566,7 @@ void WorldSession::HandleTurnInPetitionOpcode (WorldPacket & recv_data)
     }
 
     // register guild and add guildmaster
-    sObjectMgr->AddGuild(guild);
+    sGuildMgr->AddGuild(guild);
 
     // add members
     for (uint8 i = 0; i < signs; ++i)
