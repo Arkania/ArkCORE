@@ -1390,7 +1390,7 @@ FakeResult Item::SetFakeDisplay(uint32 iEntry)
         return FAKE_ERR_DIFF_INVENTORYTYPE;
     
     // Valid classes are weapons and armor
-    if ((myTmpl->Class != 2) && (myTmpl->Class != 4) || (otherTmpl->Class != 2) && (otherTmpl->Class != 4))
+    if (((myTmpl->Class != 2) && (myTmpl->Class != 4)) || ((otherTmpl->Class != 2) && (otherTmpl->Class != 4)))
         return FAKE_ERR_INVALID_CLASS;
 
     // Subclasses should match (eg, no axe->mace)
