@@ -1385,12 +1385,21 @@ FakeResult Item::SetFakeDisplay(uint32 iEntry)
     if (!otherTmpl)
         return FAKE_ERR_CANT_FIND_ITEM;
 
+    // Inventory slot must match
     if (myTmpl->InventoryType != otherTmpl->InventoryType)
-        return FAKE_ERR_DIFF_SLOTS;
+        return FAKE_ERR_DIFF_INVENTORYTYPE;
+    
+    // Valid classes are weapons and armor
+    if (((myTmpl->Class != 2) && (myTmpl->Class != 4)) || ((otherTmpl->Class != 2) && (otherTmpl->Class != 4)))
+        return FAKE_ERR_INVALID_CLASS;
+
+    // Subclasses should match (eg, no axe->mace)
+    if (myTmpl->SubClass != otherTmpl->SubClass)
+        return FAKE_ERR_DIFF_SUBCLASS;
 
     if (m_fakeDisplayEntry != iEntry)
     {
-        sObjectMgr->SetFekeItem(GetGUIDLow(), iEntry);
+        sObjectMgr->SetFakeItem(GetGUIDLow(), iEntry);
 
         (!m_fakeDisplayEntry) ? CharacterDatabase.PExecute("INSERT INTO fake_items VALUES (%u, %u)", GetGUIDLow(), iEntry) :
                                 CharacterDatabase.PExecute("UPDATE fake_items SET fakeEntry = %u WHERE guid = %u", iEntry, GetGUIDLow());

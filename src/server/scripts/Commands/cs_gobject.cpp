@@ -225,64 +225,62 @@ public:
         if (*args)
         {
             // number or [name] Shift-click form |color|Hgameobject_entry:go_id|h[name]|h|r
-                char* cId = handler->extractKeyFromLink((char*)args, "Hgameobject_entry");
-                if (!cId)
-                return false;
+            char* cId = handler->extractKeyFromLink((char*)args, "Hgameobject_entry");
+            if (!cId)
+            return false;
 
-                uint32 id = atol(cId);
+            uint32 id = atol(cId);
 
-                if (id)
-                result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, orientation, map, phaseMask, (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ FROM gameobject WHERE map = '%i' AND id = '%u' ORDER BY order_ ASC LIMIT 1",
-                        pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), pl->GetMapId(), id);
-                else
-                {
-                    std::string name = cId;
-                    WorldDatabase.EscapeString(name);
-                    result = WorldDatabase.PQuery(
-                            "SELECT guid, id, position_x, position_y, position_z, orientation, map, phaseMask, (POW(position_x - %f, 2) + POW(position_y - %f, 2) + POW(position_z - %f, 2)) AS order_ "
-                            "FROM gameobject, gameobject_template WHERE gameobject_template.entry = gameobject.id AND map = %i AND name "_LIKE_" "_CONCAT3_("'%%'", "'%s'", "'%%'")" ORDER BY order_ ASC LIMIT 1",
-                            pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), pl->GetMapId(), name.c_str());
-                }
-            }
+            if (id)
+            result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, orientation, map, phaseMask, (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ FROM gameobject WHERE map = '%i' AND id = '%u' ORDER BY order_ ASC LIMIT 1",
+                    pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), pl->GetMapId(), id);
             else
             {
-                std::ostringstream eventFilter;
-                eventFilter << " AND (event IS NULL ";
-                bool initString = true;
-
-                for (GameEventMgr::ActiveEvents::const_iterator itr = activeEventsList.begin(); itr != activeEventsList.end(); ++itr)
-                {
-                    if (initString)
-                    {
-                        eventFilter << "OR event IN (" <<*itr;
-                        initString =false;
-                    }
-                    else
-                    eventFilter << ", " << *itr;
-                }
-
-                if (!initString)
-                eventFilter << "))";
-                else
-                eventFilter << ")";
-
-                result = WorldDatabase.PQuery("SELECT gameobject.guid, id, position_x, position_y, position_z, orientation, map, phaseMask, "
-                        "(POW(position_x - %f, 2) + POW(position_y - %f, 2) + POW(position_z - %f, 2)) AS order_ FROM gameobject "
-                        "LEFT OUTER JOIN game_event_gameobject on gameobject.guid = game_event_gameobject.guid WHERE map = '%i' %s ORDER BY order_ ASC LIMIT 10",
-                        handler->GetSession()->GetPlayer()->GetPositionX(), handler->GetSession()->GetPlayer()->GetPositionY(), handler->GetSession()->GetPlayer()->GetPositionZ(),
-                        handler->GetSession()->GetPlayer()->GetMapId(), eventFilter.str().c_str());
+                std::string name = cId;
+                WorldDatabase.EscapeString(name);
+                result = WorldDatabase.PQuery(
+                        "SELECT guid, id, position_x, position_y, position_z, orientation, map, phaseMask, (POW(position_x - %f, 2) + POW(position_y - %f, 2) + POW(position_z - %f, 2)) AS order_ "
+                        "FROM gameobject, gameobject_template WHERE gameobject_template.entry = gameobject.id AND map = %i AND name "_LIKE_" "_CONCAT3_("'%%'", "'%s'", "'%%'")" ORDER BY order_ ASC LIMIT 1",
+                        pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), pl->GetMapId(), name.c_str());
             }
+        }
+        else
+        {
+            std::ostringstream eventFilter;
+            eventFilter << " AND (event IS NULL ";
+            bool initString = true;
 
-            if (!result)
+            for (GameEventMgr::ActiveEvents::const_iterator itr = activeEventsList.begin(); itr != activeEventsList.end(); ++itr)
             {
-                handler->SendSysMessage(LANG_COMMAND_TARGETOBJNOTFOUND);
-                return true;
+                if (initString)
+                {
+                    eventFilter << "OR event IN (" <<*itr;
+                    initString =false;
+                }
+                else
+                eventFilter << ", " << *itr;
             }
 
-            bool found = false;
-            float x, y
-, z       ,
-        o;
+            if (!initString)
+            eventFilter << "))";
+            else
+            eventFilter << ")";
+
+            result = WorldDatabase.PQuery("SELECT gameobject.guid, id, position_x, position_y, position_z, orientation, map, phaseMask, "
+                    "(POW(position_x - %f, 2) + POW(position_y - %f, 2) + POW(position_z - %f, 2)) AS order_ FROM gameobject "
+                    "LEFT OUTER JOIN game_event_gameobject on gameobject.guid = game_event_gameobject.guid WHERE map = '%i' %s ORDER BY order_ ASC LIMIT 10",
+                    handler->GetSession()->GetPlayer()->GetPositionX(), handler->GetSession()->GetPlayer()->GetPositionY(), handler->GetSession()->GetPlayer()->GetPositionZ(),
+                    handler->GetSession()->GetPlayer()->GetMapId(), eventFilter.str().c_str());
+        }
+
+        if (!result)
+        {
+            handler->SendSysMessage(LANG_COMMAND_TARGETOBJNOTFOUND);
+            return true;
+        }
+
+        bool found = false;
+        float x, y, z, o;
         uint32 lowguid, id;
         uint16 mapid, phase;
         uint32 pool_id;
