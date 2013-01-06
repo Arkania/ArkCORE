@@ -411,106 +411,6 @@ bool ChatHandler::HandleGUIDCommand (const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleModifyRepCommand (const char * args)
-{
-    if (!*args)
-        return false;
-
-    Player* target = NULL;
-    target = getSelectedPlayer();
-
-    if (!target)
-    {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    // check online security
-    if (HasLowerSecurity(target, 0))
-        return false;
-
-    char* factionTxt = extractKeyFromLink((char*) args, "Hfaction");
-    if (!factionTxt)
-        return false;
-
-    uint32 factionId = atoi(factionTxt);
-
-    int32 amount = 0;
-    char *rankTxt = strtok(NULL, " ");
-    if (!factionTxt || !rankTxt)
-        return false;
-
-    amount = atoi(rankTxt);
-    if ((amount == 0) && (rankTxt[0] != '-') && !isdigit(rankTxt[0]))
-    {
-        std::string rankStr = rankTxt;
-        std::wstring wrankStr;
-        if (!Utf8toWStr(rankStr, wrankStr))
-            return false;
-        wstrToLower(wrankStr);
-
-        int r = 0;
-        amount = -42000;
-        for (; r < MAX_REPUTATION_RANK; ++r)
-        {
-            std::string rank = GetArkCoreString(ReputationRankStrIndex[r]);
-            if (rank.empty())
-                continue;
-
-            std::wstring wrank;
-            if (!Utf8toWStr(rank, wrank))
-                continue;
-
-            wstrToLower(wrank);
-
-            if (wrank.substr(0, wrankStr.size()) == wrankStr)
-            {
-                char *deltaTxt = strtok(NULL, " ");
-                if (deltaTxt)
-                {
-                    int32 delta = atoi(deltaTxt);
-                    if ((delta < 0) || (delta > ReputationMgr::PointsInRank[r] - 1))
-                    {
-                        PSendSysMessage(LANG_COMMAND_FACTION_DELTA, (ReputationMgr::PointsInRank[r] - 1));
-                        SetSentErrorMessage(true);
-                        return false;
-                    }
-                    amount += delta;
-                }
-                break;
-            }
-            amount += ReputationMgr::PointsInRank[r];
-        }
-        if (r >= MAX_REPUTATION_RANK)
-        {
-            PSendSysMessage(LANG_COMMAND_FACTION_INVPARAM, rankTxt);
-            SetSentErrorMessage(true);
-            return false;
-        }
-    }
-
-    FactionEntry const *factionEntry = sFactionStore.LookupEntry(factionId);
-
-    if (!factionEntry)
-    {
-        PSendSysMessage(LANG_COMMAND_FACTION_UNKNOWN, factionId);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (factionEntry->reputationListID < 0)
-    {
-        PSendSysMessage(LANG_COMMAND_FACTION_NOREP_ERROR, factionEntry->name, factionId);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    target->GetReputationMgr().SetReputation(factionEntry, amount);
-    PSendSysMessage(LANG_COMMAND_MODIFY_REP, factionEntry->name, factionId, GetNameLink(target).c_str(), target->GetReputationMgr().GetReputation(factionEntry));
-    return true;
-}
-
 //move item to other slot
 bool ChatHandler::HandleItemMoveCommand (const char* args)
 {
@@ -558,27 +458,6 @@ bool ChatHandler::HandleDeMorphCommand (const char* /*args*/)
         return false;
 
     target->DeMorph();
-
-    return true;
-}
-
-//morph creature or player
-bool ChatHandler::HandleModifyMorphCommand (const char* args)
-{
-    if (!*args)
-        return false;
-
-    uint16 display_id = (uint16) atoi((char*) args);
-
-    Unit *target = getSelectedUnit();
-    if (!target)
-        target = m_session->GetPlayer();
-
-    // check online security
-    else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*) target, 0))
-        return false;
-
-    target->SetDisplayId(display_id);
 
     return true;
 }
@@ -808,27 +687,6 @@ bool ChatHandler::HandlePInfoCommand (const char* args)
     return true;
 }
 
-//set temporary phase mask for player
-bool ChatHandler::HandleModifyPhaseCommand (const char* args)
-{
-    if (!*args)
-        return false;
-
-    uint32 phasemask = (uint32) atoi((char*) args);
-
-    Unit *target = getSelectedUnit();
-    if (!target)
-        target = m_session->GetPlayer();
-
-    // check online security
-    else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*) target, 0))
-        return false;
-
-    target->SetPhaseMask(phasemask, true);
-
-    return true;
-}
-
 //rename characters
 bool ChatHandler::HandleCharacterRenameCommand (const char* args)
 {
@@ -981,18 +839,6 @@ bool ChatHandler::HandleCharacterReputationCommand (const char* args)
 
         SendSysMessage(ss.str().c_str());
     }
-    return true;
-}
-
-//change standstate
-bool ChatHandler::HandleModifyStandStateCommand (const char* args)
-{
-    if (!*args)
-        return false;
-
-    uint32 anim_id = atoi((char*) args);
-    m_session->GetPlayer()->SetUInt32Value(UNIT_NPC_EMOTESTATE, anim_id);
-
     return true;
 }
 

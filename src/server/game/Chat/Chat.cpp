@@ -263,39 +263,7 @@ ChatCommand * ChatHandler::getCommandTable ()
     { "map", SEC_ADMINISTRATOR, true, OldHandler<&ChatHandler::HandleLookupMapCommand>, "", NULL },
     { "npc", SEC_ADMINISTRATOR, true, OldHandler<&ChatHandler::HandleLookupCreatureCommand>, "", NULL },
     { NULL, 0, false, NULL, "", NULL } };
-
-    static ChatCommand modifyCommandTable[] =
-    {
-    { "hp", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyHPCommand>, "", NULL },
-    { "mana", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyManaCommand>, "", NULL },
-    { "rage", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyRageCommand>, "", NULL },
-    { "runicpower", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyRunicPowerCommand>, "", NULL },
-    { "energy", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyEnergyCommand>, "", NULL },
-    { "money", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyMoneyCommand>, "", NULL },
-    { "speed", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifySpeedCommand>, "", NULL },
-    { "swim", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifySwimCommand>, "", NULL },
-    { "scale", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyScaleCommand>, "", NULL },
-    { "bit", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyBitCommand>, "", NULL },
-    { "bwalk", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyBWalkCommand>, "", NULL },
-    { "fly", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyFlyCommand>, "", NULL },
-    { "aspeed", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyASpeedCommand>, "", NULL },
-    { "faction", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyFactionCommand>, "", NULL },
-    { "spell", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifySpellCommand>, "", NULL },
-    { "tp", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyTalentCommand>, "", NULL },
-    { "mount", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyMountCommand>, "", NULL },
-    { "currency", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyCurrencyCommand>, "", NULL },
-    { "rep", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleModifyRepCommand>, "", NULL },
-    { "drunk", SEC_MODERATOR, false, OldHandler<&ChatHandler::HandleModifyDrunkCommand>, "", NULL },
-    { "standstate", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleModifyStandStateCommand>, "", NULL },
-    { "morph", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleModifyMorphCommand>, "", NULL },
-    { "phase", SEC_ADMINISTRATOR, false, OldHandler<&ChatHandler::HandleModifyPhaseCommand>, "", NULL },
-    { "gender", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleModifyGenderCommand>, "", NULL },
-	{ "honor",          SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },
-        { "conquest",       SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },
-        { "valor",          SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },
-        { "justice",        SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleModifyHonorCommand>,         "", NULL },	
-    { NULL, 0, false, NULL, "", NULL } };
-
+    
     static ChatCommand petCommandTable[] =
     {
     { "create", SEC_GAMEMASTER, false, OldHandler<&ChatHandler::HandleCreatePetCommand>, "", NULL },
@@ -437,7 +405,6 @@ ChatCommand * ChatHandler::getCommandTable ()
     { "gm", SEC_MODERATOR, true, NULL, "", gmCommandTable },
     { "go", SEC_MODERATOR, false, NULL, "", goCommandTable },
     { "learn", SEC_MODERATOR, false, NULL, "", learnCommandTable },
-    { "modify", SEC_MODERATOR, false, NULL, "", modifyCommandTable },
     { "tele", SEC_MODERATOR, true, NULL, "", teleCommandTable },
     { "character", SEC_GAMEMASTER, true, NULL, "", characterCommandTable },
     { "event", SEC_GAMEMASTER, false, NULL, "", eventCommandTable },
