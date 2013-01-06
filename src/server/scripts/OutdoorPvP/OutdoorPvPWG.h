@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2013 Trinity <http://www.trinitycore.org/>
  *
  * Copyright (C) 2012 Patch supported by ChaosUA & TCRU community http://trinity-core.ru/
  *

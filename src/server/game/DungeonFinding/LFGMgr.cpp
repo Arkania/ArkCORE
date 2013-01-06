@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2013 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2013 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010 - 2013 ProjectSkyfire <http://www.projectskyfire.org/>
  *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1331,6 +1331,10 @@ void LFGMgr::UpdateProposal (uint32 proposalId, const uint64& guid, bool accept)
                 waitTimesMap[(*it)->GetGUID()] = int32(joinTime - itQueue->second->joinTime);
         }
 
+        // Set the dungeon difficulty
+        LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(pProposal->dungeonId);
+        ASSERT(dungeon);
+
         // Create a new group (if needed)
         LfgUpdateData updateData = LfgUpdateData(LFG_UPDATETYPE_GROUP_FOUND);
         Group* grp = pProposal->groupLowGuid ? sObjectMgr->GetGroupByGUID(pProposal->groupLowGuid) : NULL;
@@ -1382,11 +1386,12 @@ void LFGMgr::UpdateProposal (uint32 proposalId, const uint64& guid, bool accept)
             }
             grp->SetLfgRoles(pguid, pProposal->players[pguid]->role);
             SetState(pguid, LFG_STATE_DUNGEON);
+            
+            // Add the cooldown spell if queued for a random dungeon
+            if (dungeon->type == LFG_TYPE_RANDOM)
+                plr->CastSpell(plr, LFG_SPELL_DUNGEON_COOLDOWN, false);			
         }
 
-        // Set the dungeon difficulty
-        LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(pProposal->dungeonId);
-        ASSERT(dungeon);
         grp->SetDungeonDifficulty(Difficulty(dungeon->difficulty));
         uint64 gguid = grp->GetGUID();
         SetDungeon(gguid, dungeon->Entry());

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2011-2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011- 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,20 @@
 
 #include "Guild.h"
 
+struct GuildRewardsEntry
+{
+    uint32 item;
+    uint32 price;
+    uint32 achievement;
+    uint32 standing;
+};
+typedef std::vector<GuildRewardsEntry> GuildRewardsVector;
+
 class GuildMgr
 {
     friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex>;
+
+private:
     GuildMgr();
     ~GuildMgr();
 
@@ -39,6 +50,7 @@ public:
     Guild* GetGuildById(uint32 guildId) const;
     Guild* GetGuildByName(const std::string& guildName) const;
     std::string GetGuildNameById(uint32 guildId) const;
+	GuildRewardsVector const& GetGuildRewards() { return mGuildRewards; }
 
     void LoadGuilds();
     void AddGuild(Guild* guild);
@@ -46,10 +58,12 @@ public:
 
     uint32 GenerateGuildId();
     void SetNextGuildId(uint32 Id) { NextGuildId = Id; }
+	void LoadGuildRewards();
 
 protected:
     uint32 NextGuildId;
     GuildContainer GuildStore;
+	GuildRewardsVector  mGuildRewards;
 };
 
 #define sGuildMgr ACE_Singleton<GuildMgr, ACE_Null_Mutex>::instance()

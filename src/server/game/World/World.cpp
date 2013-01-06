@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2013 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2013 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2010 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -863,7 +863,7 @@ void World::LoadConfigSettings (bool reload)
     m_bool_configs[CONFIG_ALL_TAXI_PATHS] = sConfig->GetBoolDefault("AllFlightPaths", false);
     m_bool_configs[CONFIG_INSTANT_TAXI] = sConfig->GetBoolDefault("InstantFlightPaths", false);
 
-    m_bool_configs[CONFIG_GUILD_ADVANCEMENT_ENABLED] = sConfig->GetBoolDefault("GuildAdvancement.Enabled", false);          // Not yet complete
+    m_bool_configs[CONFIG_GUILD_ADVANCEMENT_ENABLED] = sConfig->GetBoolDefault("GuildAdvancement.Enabled", true);          // Almost done
     m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] = sConfig->GetIntDefault("GuildAdvancement.MaxLevel", 25);
     if (m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] == 0 || m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] > 255)
     {
@@ -1730,10 +1730,11 @@ void World::SetInitialWorldSettings ()
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
-    sObjectMgr->LoadGuilds();
+    sLog->outString("Loading Guilds...");
+    sGuildMgr->LoadGuilds();
 
     sLog->outString("Loading Guild Rewards...");
-    sObjectMgr->LoadGuildRewards();
+    sGuildMgr->LoadGuildRewards();
 
     sLog->outString("Loading ArenaTeams...");
     sObjectMgr->LoadArenaTeams();

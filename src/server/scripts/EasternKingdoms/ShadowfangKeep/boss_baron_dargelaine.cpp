@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Project TBEmu <http://www.trueblood-servers.com/>
+ * Copyright (C) 2010- 2013 Project TBEmu <http://www.trueblood-servers.com/>
  * by JeanClaude
  */
 

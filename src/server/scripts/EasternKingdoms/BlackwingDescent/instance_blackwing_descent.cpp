@@ -2,7 +2,7 @@
  * Copyright (C) 2011 True Blood <http://www.trueblood-servers.com/>
  * By Asardial
  *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -331,13 +331,17 @@ public:
 
         bool CheckRequiredBosses(uint32 bossId, Player const* player = NULL) const
         {
-            if ((player->GetSession()->GetSecurity() > SEC_GAMEMASTER ))
-                return true;
+                if ((player->GetSession()->GetSecurity() > SEC_GAMEMASTER ))
+                    return true;
 
-            /*switch (bossId)
-            {
-
-            }*/
+                switch (bossId)
+                {
+                    case DATA_MAGMAW:
+                    case DATA_MALORIAK:
+                    case DATA_ATRAMEDES:
+                    default:
+                        break;
+                }
 
             return true;
         }

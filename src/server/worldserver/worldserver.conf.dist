@@ -1283,11 +1283,9 @@ Guild.BankEventLogRecordsCount = 25
 #
 #    GuildAdvancement.Enabled
 #        Enables the cataclysm guild leveling system. 
-#        It's currently far from being complete. 
-#        Use on your own risk!
-#        Default: 0 - disabled
+#        Default: 1 - enabled
 
-GuildAdvancement.Enabled = 0
+GuildAdvancement.Enabled = 1
 
 #        
 #    GuildAdvancement.MaxLevel
@@ -3420,7 +3418,7 @@ irc.icc = 001
 #     IRC server to have TriniChat connect to
 #
 
-irc.host = "irc.freenode.net"
+irc.host = "irc.arkania.net"
 
 # irc.port
 #     IRC server port to use

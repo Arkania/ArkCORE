@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2013 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2013 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010 - 2013 ProjectSkyfire <http://www.projectskyfire.org/>
  *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,14 +91,16 @@ void LFGScripts::OnRemoveMember (Group* group, uint64 guid, RemoveMethod& method
         sLFGMgr->InitBoot(group, kicker, guid, str_reason);
         return;
     }
-
+    
+	uint32 state = sLFGMgr->GetState(gguid);
     sLFGMgr->ClearState(guid);
+	sLFGMgr->SetState(guid, LFG_STATE_NONE);
     if (Player * plr = sObjectMgr->GetPlayer(guid))
     {
         // Add deserter flag
-        if (sLFGMgr->GetState(guid) != LFG_STATE_FINISHED_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
+        if (state != LFG_STATE_FINISHED_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
             plr->CastSpell(plr, LFG_SPELL_DUNGEON_DESERTER, true);
-        if (sLFGMgr->GetState(guid) == LFG_TYPE_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
+        if (state == LFG_TYPE_DUNGEON && method == GROUP_REMOVEMETHOD_LEAVE && plr)
             plr->RemoveAura(LFG_SPELL_LUCK_OF_THE_DRAW);// Remove Luck of the Draw aura.
         /*
          else if (group->isLfgKickActive())
@@ -111,7 +113,7 @@ void LFGScripts::OnRemoveMember (Group* group, uint64 guid, RemoveMethod& method
             sLFGMgr->TeleportPlayer(plr, true);
     }
 
-    if (sLFGMgr->GetState(gguid) != LFG_STATE_FINISHED_DUNGEON)          // Need more players to finish the dungeon
+    if (state != LFG_STATE_FINISHED_DUNGEON)// Need more players to finish the dungeon
         sLFGMgr->OfferContinue(group);
 }
 

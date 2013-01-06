@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2013 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2013 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010 - 2013 ProjectSkyfire <http://www.projectskyfire.org/>
  *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -733,7 +733,7 @@ void WorldSession::HandleCharDeleteOpcode (WorldPacket & recv_data)
     std::string name;
 
     // is guild leader
-    if (sObjectMgr->GetGuildByLeader(guid))
+    if (sGuildMgr->GetGuildByLeader(guid))
     {
         WorldPacket data(SMSG_CHAR_DELETE,   1);
         data << (uint8) CHAR_DELETE_FAILED_GUILD_LEADER;
@@ -922,7 +922,7 @@ void WorldSession::HandlePlayerLogin (LoginQueryHolder * holder)
 
     if (pCurrChar->GetGuildId() != 0)
     {
-        if (Guild * pGuild = sObjectMgr->GetGuildById(pCurrChar->GetGuildId()))
+        if (Guild * pGuild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
         {
             pGuild->SendLoginInfo(this);
             pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL,   uint32(pGuild->GetLevel()));

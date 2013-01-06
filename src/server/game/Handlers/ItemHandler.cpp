@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2005 - 2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2005 - 2013 MaNGOS <http://www.getmangos.com/>
  *
- * Copyright (C) 2008 - 2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008 - 2013 Trinity <http://www.trinitycore.org/>
  *
- * Copyright (C) 2010 - 2012 ProjectSkyfire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010 - 2013 ProjectSkyfire <http://www.projectskyfire.org/>
  *
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -807,7 +807,7 @@ void WorldSession::SendListInventory (uint64 vendorguid)
                 // ToDo: Theese items must have a flag, find it
                 if (QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", crItem->item))
                 {
-                    Guild* guild = sObjectMgr->GetGuildById(_player->GetGuildId());
+                    Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId());
                     if (!guild)
                         continue;
                     Field *fields = res->Fetch();

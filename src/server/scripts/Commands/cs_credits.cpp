@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 - 2012 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2011 - 2013 ArkCORE <http://www.arkania.net/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,13 @@ public:
     {
         handler->PSendSysMessage("");
         handler->PSendSysMessage("__[ArkCORE Credits]______________________________________________");
-        sLog->outString("This command lists the people, projects, and urls");
-        sLog->outString("that we would like to thank for their contribution to our project, ");
-        sLog->outString("whether their influence was direct or indirect.");
-        sLog->outString("");
-        sLog->outString("The following people have contributed directly to our project:");
+		handler->PSendSysMessage("ARKANIA.NET Community <http://arkania.net/>");
+		handler->PSendSysMessage("");
+        handler->PSendSysMessage("This command lists the people, projects, and urls");
+        handler->PSendSysMessage("that we would like to thank for their contribution to our project, ");
+        handler->PSendSysMessage("whether their influence was direct or indirect.");
+        handler->PSendSysMessage("");
+        handler->PSendSysMessage("The following people have contributed directly to our project:");
         handler->PSendSysMessage("Blizz, raxume, cooler, Dekona, openmage, Venugh, Naios, billykitty, chark01, ");
         handler->PSendSysMessage("cocolino, Georgian Constantin, gpn39f, h.norrt, Maibenrai, MysteriousSoul, ");
         handler->PSendSysMessage("Nation, robo2104, Theoderic, wazy, Yuniorvoltes, zxelf, Aegwynn, BladeFight, ");
@@ -52,13 +54,10 @@ public:
         handler->PSendSysMessage("Naffbeats, pek2011, PrinceCreed, sanctum32, sharq, thehacker66, Winston, ");
         handler->PSendSysMessage("Spyder, drakeos, kraven5, Booman666, gaal, nantesfer, Mrbytes, Mikadmin, Ladel, ");
 		handler->PSendSysMessage("biglad, cybekp, Angarius, Chameleon, AlterEgo, Fabi, LordJZ, Azazel, Dvlpr, Brecky, ");
-		handler->PSendSysMessage("Keany, Arktus, Sovak");		
+		handler->PSendSysMessage("Keany, Arktus, Sovak, Asardial, akaHaki, Betaman2k, bleu, Draken, GaryZywiec, glkrlos, ");
+		handler->PSendSysMessage("ppops, Spazman2c, Swiss-Rainbow.");
         handler->PSendSysMessage("");
-        sLog->outString("These people have helped the project via donations:");
-        handler->PSendSysMessage("akaHaki, Betaman2k, bleu, Draken, GaryZywiec, glkrlos, ppops, Spazman2c, ");
-        handler->PSendSysMessage("Swiss-Rainbow.");
-        handler->PSendSysMessage("");
-        sLog->outString("We would also like to thank the following Sites/Communities:");
+        handler->PSendSysMessage("We would also like to thank the following Sites/Communities:");
         handler->PSendSysMessage("ProjectSkyfire: http://www.projectskyfire.org");
         handler->PSendSysMessage("TrinityCore: http://www.trinitycore.org");
         handler->PSendSysMessage("Mangos: http://www.getmangos.com");

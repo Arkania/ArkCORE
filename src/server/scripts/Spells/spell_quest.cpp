@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011-2012 ArkCORE <http://www.arkania.net/>
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2011- 2013 ArkCORE <http://www.arkania.net/>
+ * Copyright (C) 2010- 2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2006- 2013 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

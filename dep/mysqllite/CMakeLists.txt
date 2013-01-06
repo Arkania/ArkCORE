@@ -1,6 +1,6 @@
 # Copyright (C) 2006 MySQL AB
-# Copyright (C) 2008 - 2012 TrinityCore <http://www.trinitycore.org/>
-# Copyright (C) 2010 - 2012 ArkCORE <http://www.arkania.net/>
+# Copyright (C) 2008 - 2013 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2010 - 2013 ArkCORE <http://www.arkania.net/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without

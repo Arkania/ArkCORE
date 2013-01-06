@@ -1,0 +1,7 @@
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+
+ALTER TABLE `guild` 
+	ADD COLUMN `m_today_xp` bigint(20)   NOT NULL after `level`, 
+	ADD COLUMN `m_xp_cap` bigint(20)   NOT NULL after `m_today_xp`;
+
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
