@@ -1560,6 +1560,7 @@ void Guild::HandleSetMOTD(WorldSession* session, const std::string& motd)
 
         _BroadcastEvent(GE_MOTD, 0, motd.c_str());
     }
+	HandleRoster();
 }
 
 void Guild::HandleSetInfo(WorldSession* session, const std::string& info)
@@ -1581,6 +1582,7 @@ void Guild::HandleSetInfo(WorldSession* session, const std::string& info)
         stmt->setUInt32(1, m_id);
         CharacterDatabase.Execute(stmt);
     }
+	HandleRoster();
 }
 
 void Guild::HandleSetEmblem(WorldSession* session, const EmblemInfo& emblemInfo)
@@ -1625,6 +1627,7 @@ void Guild::HandleSetLeader(WorldSession* session, const std::string& name)
     }
     else
         SendCommandResult(session, GUILD_INVITE_S, ERR_GUILD_PERMISSIONS);
+    HandleRoster();
 }
 
 void Guild::HandleSetBankTabInfo(WorldSession* session, uint8 tabId, const std::string& name, const std::string& icon)
@@ -1701,6 +1704,7 @@ void Guild::HandleBuyBankTab(WorldSession* session, uint8 tabId)
 void Guild::HandleInviteMember(WorldSession* session, const std::string& name)
 {
     Player* pInvitee = sObjectAccessor->FindPlayerByName(name.c_str());
+
     if (!pInvitee)
     {
         SendCommandResult(session, GUILD_INVITE_S, ERR_GUILD_PLAYER_NOT_FOUND_S, name);
@@ -1711,6 +1715,7 @@ void Guild::HandleInviteMember(WorldSession* session, const std::string& name)
     // Do not show invitations from ignored players
     if (pInvitee->GetSocial()->HasIgnore(player->GetGUIDLow()))
         return;
+
     if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) && pInvitee->GetTeam() != player->GetTeam())
     {
         SendCommandResult(session, GUILD_INVITE_S, ERR_GUILD_NOT_ALLIED, name);
@@ -1742,35 +1747,45 @@ void Guild::HandleInviteMember(WorldSession* session, const std::string& name)
 
     uint64 guid = MAKE_NEW_GUID(m_id, 0, HIGHGUID_GUILD);
     WorldPacket data(SMSG_GUILD_INVITE, 8 + 10);              // Guess size
-    data << uint32(0); // unk
-    data << uint32(0); // unk
-    data << uint32(0); // unk
-    data << uint32(0); // unk
+    data << uint32(1); // unk
+    data << uint32(2); // unk
+    data << uint32(3); // unk
+    data << uint32(4); // unk
     data << uint64(player->GetGUID());
     data << pInvitee->GetName();
     data << player->GetName();
-    data << uint32(0);
-    data << uint32(0);
+    data << uint32(5);
+    data << uint32(m_level);
     data << uint64(guid);
     data << std::string(GetName());
     pInvitee->GetSession()->SendPacket(&data);
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent (SMSG_GUILD_INVITE)");
+    HandleRoster();
+    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_INVITE)");
 }
 
 void Guild::HandleAcceptMember(WorldSession* session)
 {
     Player* player = session->GetPlayer();
+
     if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) &&
         player->GetTeam() != sObjectMgr->GetPlayerTeamByGUID(GetLeaderGUID()))
         return;
 
     if (AddMember(player->GetGUID()))
     {
+        player->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(GetLevel()));
+        player->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
+        /// Learn perks to him
+        for (int i = 0; i < GetLevel()-1; ++i)
+            if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
+                player->learnSpell(perk->SpellId, true);
+
         _LogEvent(GUILD_EVENT_LOG_JOIN_GUILD, player->GetGUIDLow());
         _BroadcastEvent(GE_JOINED, player->GetGUID(), player->GetName());
-        player->SetReputation(1168, 1);
+		player->SetReputation(1168, 1);
     }
+    HandleRoster();
 }
 
 void Guild::HandleLeaveMember(WorldSession* session)
@@ -1796,6 +1811,7 @@ void Guild::HandleLeaveMember(WorldSession* session)
 
         SendCommandResult(session, GUILD_QUIT_S, ERR_PLAYER_NO_MORE_IN_GUILD, m_name);
     }
+    HandleRoster();	
 }
 
 void Guild::HandleRemoveMember(WorldSession* session, uint64 guid)
@@ -1824,6 +1840,7 @@ void Guild::HandleRemoveMember(WorldSession* session, uint64 guid)
             player->SetReputation(1168, -1);
         }
     }
+    HandleRoster();	
 }
 
 void Guild::HandleUpdateMemberRank(WorldSession* session, uint64 guid, bool demote)
@@ -1955,6 +1972,7 @@ void Guild::HandleMemberDepositMoney(WorldSession* session, uint32 amount)
     SendBankTabsInfo(session);
     _SendBankContent(session, 0);
     _SendBankMoneyUpdate(session);
+	HandleRoster();
 }
 
 bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool repair)
@@ -2004,6 +2022,7 @@ bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool
         _SendBankMoneyUpdate(session);
     }
     return true;
+	HandleRoster();
 }
 
 void Guild::HandleMemberLogout(WorldSession* session)
@@ -2016,6 +2035,7 @@ void Guild::HandleMemberLogout(WorldSession* session)
         pMember->ResetFlags();
     }
     _BroadcastEvent(GE_SIGNED_OFF, player->GetGUID(), player->GetName());
+	HandleRoster();
 }
 
 void Guild::HandleDisband(WorldSession* session)
@@ -2573,7 +2593,13 @@ void Guild::DeleteMember(const uint64& guid, bool isDisbanding, bool isKicked)
         // remove all spells that related to this skill
         for (uint32 i = 0; i < sGuildPerksStore.GetNumRows(); ++i)
             if (GuildPerksEntry const *pAbility = sGuildPerksStore.LookupEntry(i))
-                    player->removeSpell(pAbility->SpellId);
+                player->removeSpell(pAbility->SpellId);
+    } 
+    else 
+    {
+        for (uint32 i = 0; i < sGuildPerksStore.GetNumRows(); ++i)
+            if (GuildPerksEntry const *pAbility = sGuildPerksStore.LookupEntry(i))
+                CharacterDatabase.PExecute("DELETE FROM character_spell WHERE spell=%u AND guid=%u",pAbility->SpellId,guid);  
     }
 
     _DeleteMemberFromDB(lowguid);
