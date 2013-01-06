@@ -186,7 +186,7 @@ void PetAI::UpdateAI(const uint32 diff)
             // Fix to allow pets on STAY to autocast
             if (me->getVictim() && _CanAttack(me->getVictim()) && spell->CanAutoCast(me->getVictim()))
             {
-                targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(me->getVictim(), spell));
+                targetSpellStore.push_back(std::make_pair(me->getVictim(), spell));
                 continue;
             }
             else
@@ -202,7 +202,7 @@ void PetAI::UpdateAI(const uint32 diff)
 
                     if (spell->CanAutoCast(Target))
                     {
-                        targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(Target, spell));
+                        targetSpellStore.push_back(std::make_pair(Target, spell));
                         spellUsed = true;
                         break;
                     }

@@ -291,32 +291,6 @@ protected:
     bool HandleLookupMapCommand (const char* args);
     bool HandleLookupTitleCommand (const char * args);
 
-    bool HandleModifyHPCommand (const char* args);
-    bool HandleModifyManaCommand (const char* args);
-    bool HandleModifyRageCommand (const char* args);
-    bool HandleModifyRunicPowerCommand (const char* args);
-    bool HandleModifyEnergyCommand (const char* args);
-    bool HandleModifyMoneyCommand (const char* args);
-    bool HandleModifyASpeedCommand (const char* args);
-    bool HandleModifySpeedCommand (const char* args);
-    bool HandleModifyBWalkCommand (const char* args);
-    bool HandleModifyFlyCommand (const char* args);
-    bool HandleModifySwimCommand (const char* args);
-    bool HandleModifyScaleCommand (const char* args);
-    bool HandleModifyMountCommand (const char* args);
-    bool HandleModifyBitCommand (const char* args);
-    bool HandleModifyFactionCommand (const char* args);
-    bool HandleModifySpellCommand (const char* args);
-    bool HandleModifyTalentCommand (const char* args);
-    bool HandleModifyCurrencyCommand (const char* args);
-    bool HandleModifyRepCommand (const char* args);
-    bool HandleModifyPhaseCommand (const char* args);
-    bool HandleModifyGenderCommand (const char* args);
-	bool HandleModifyHonorCommand(const char* args);
-    bool HandleModifyConquestCommand(const char* args);
-    bool HandleModifyValorCommand(const char* args);
-    bool HandleModifyJusticeCommand(const char* args);	
-
     bool HandleOpcodeTestCommand (const char* args);
 
     bool HandlePDumpLoadCommand (const char *args);
