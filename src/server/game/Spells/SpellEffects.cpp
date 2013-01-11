@@ -742,12 +742,13 @@ void Spell::SpellDamageSchoolDmg (SpellEffIndex effIndex)
                     uint32 pct = stack * 10;
 
                     // Mastery
-                    if (m_caster->HasAuraType(SPELL_AURA_MASTERY))
+                    if (m_caster->HasAuraType(SPELL_AURA_MASTERY)){
                         if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_SHADOW)
                             pct += 1.5f * m_caster->ToPlayer()->GetMasteryPoints();
-
+				 }
                     AddPctN(damage, pct);
                     m_caster->RemoveAurasDueToSpell(77487);
+					m_caster->CastSpell(m_caster, 95799, true);//Give "Empowered Shadow" - ID:95799
                 }
 
                 //Mind Melt Aura remove
