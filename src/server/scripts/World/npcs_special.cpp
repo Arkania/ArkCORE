@@ -1290,6 +1290,11 @@ public:
             else
                 canBuy = true;
             break;
+            case 48510:                                          //Kall Worthaton
+                if (pPlayer->GetReputationRank(1133) != REP_EXALTED && race != RACE_GOBLIN)
+                    pPlayer->SEND_GOSSIP_MENU(5840, pCreature->GetGUID());
+                else canBuy = true;
+                break;			
         case 7955:          //Milli Featherwhistle
             if (pPlayer->GetReputationRank(54) != REP_EXALTED && race != RACE_GNOME)
                 pPlayer->SEND_GOSSIP_MENU(5857, pCreature->GetGUID());

@@ -7759,7 +7759,7 @@ bool Player::RewardHonor (Unit *uVictim, uint32 groupsize, int32 honor, bool pvp
     GetSession()->SendPacket(&data);
 
     // add honor points
-    AddHonorPoints(int32(honor));
+    AddHonorPoints(int32(honor) * 3.5);
 
     //ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
 
