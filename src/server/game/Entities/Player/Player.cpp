@@ -950,6 +950,8 @@ Player::Player (WorldSession &session) :
 
     m_regenTimer = 0;
     m_regenTimerCount = 0;
+    m_holyPowerRegenTimerCount = 0;
+    m_focusRegenTimerCount = 0;
     m_weaponChangeTimer = 0;
 
     m_zoneUpdateId = 0;
